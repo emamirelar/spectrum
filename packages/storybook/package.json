@@ -1,0 +1,37 @@
+{
+  "name": "@spectrum/storybook",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "storybook.run": "storybook dev -p 6006",
+    "storybook": "concurrently \"(cd ../core/ && npm start)\" \"npm run storybook.run\"",
+    "build-storybook": "storybook build",
+    "build-storybook-ci": "BASE_PATH=/stencil-storybook-boilerplate/ storybook build",
+    "preview-storybook": "npx http-server storybook-static",
+    "update": "npx npm-check-updates -u"
+  },
+  "dependencies": {
+    "@stencil-storybook-boilerplate/core": "*",
+    "lit": "^3.2.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.4.7",
+    "@storybook/addon-essentials": "^8.4.5",
+    "@storybook/addon-links": "^8.4.5",
+    "@storybook/blocks": "^8.4.5",
+    "@storybook/test": "^8.4.5",
+    "@storybook/web-components": "^8.4.5",
+    "@storybook/web-components-vite": "^8.4.5",
+    "concurrently": "^9.1.0",
+    "http-server": "^14.1.1",
+    "storybook": "^8.4.5",
+    "vite": "^5.4.11"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.27.3"
+  }
+}
