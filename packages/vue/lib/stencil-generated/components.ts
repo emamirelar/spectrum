@@ -10,7 +10,10 @@ import type { JSX } from '@stencil-storybook-boilerplate/core';
 
 export const UnopsButton = /*@__PURE__*/ defineContainer<JSX.UnopsButton>('unops-button', undefined, [
   'label',
+  'ariaLabel',
   'variant',
+  'disabled',
+  'tabIndex',
   'buttonPressed'
 ]);
 

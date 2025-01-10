@@ -12,7 +12,8 @@
     "build-storybook": "storybook build",
     "build-storybook-ci": "BASE_PATH=/stencil-storybook-boilerplate/ storybook build",
     "preview-storybook": "npx http-server storybook-static",
-    "update": "npx npm-check-updates -u"
+    "update": "npx npm-check-updates -u",
+    "test-storybook": "test-storybook"
   },
   "dependencies": {
     "@stencil-storybook-boilerplate/core": "*",

@@ -15,6 +15,11 @@ button {
   border-radius: 0em;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 button[data-variant="primary"] {
   background-color: #0092d1;
   border: none;
@@ -51,10 +56,10 @@ button[data-variant="destructive"] {
   color: white;
 }
 
-button:hover {
+button:hover:not([disabled]) {
   border-radius: 1em;
 }
 
-button:active {
+button:active:not([disabled]) {
   border-radius: 2em;
 }

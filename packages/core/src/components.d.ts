@@ -10,11 +10,23 @@ export { buttonVariant } from "./components/unops-button/buttonVariant";
 export namespace Components {
     interface UnopsButton {
         /**
-          * The button label
+          * The button aria-label Default: this.label
+         */
+        "ariaLabel": string;
+        /**
+          * If true, the button is disabled Default: false
+         */
+        "disabled": boolean;
+        /**
+          * The button label Default: Button
          */
         "label": string;
         /**
-          * The button variant
+          * The tab index of the button Default: 0
+         */
+        "tabIndex": number;
+        /**
+          * The button variant Default: primary
          */
         "variant": buttonVariant;
     }
@@ -48,12 +60,27 @@ declare global {
 declare namespace LocalJSX {
     interface UnopsButton {
         /**
-          * The button label
+          * The button aria-label Default: this.label
+         */
+        "ariaLabel"?: string;
+        /**
+          * If true, the button is disabled Default: false
+         */
+        "disabled"?: boolean;
+        /**
+          * The button label Default: Button
          */
         "label"?: string;
+        /**
+          * Emitted when the button is pressed
+         */
         "onButtonPressed"?: (event: UnopsButtonCustomEvent<boolean>) => void;
         /**
-          * The button variant
+          * The tab index of the button Default: 0
+         */
+        "tabIndex"?: number;
+        /**
+          * The button variant Default: primary
          */
         "variant"?: buttonVariant;
     }
