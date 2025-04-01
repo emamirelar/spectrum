@@ -2,5 +2,7 @@
 import * as d from './components';
 
 export const DIRECTIVES = [
-  d.UnopsButton
+  d.SpectrumCarousel,
+  d.SpectrumConversationPanel,
+  d.SpectrumMegamenu
 ];

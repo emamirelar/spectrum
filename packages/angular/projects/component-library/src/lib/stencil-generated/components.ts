@@ -1,37 +1,75 @@
 /* tslint:disable */
 /* auto-generated angular directive proxies */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone } from '@angular/core';
 
-import { ProxyCmp, proxyOutputs } from './angular-component-lib/utils';
+import { ProxyCmp } from './angular-component-lib/utils';
 
 import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['ariaLabel', 'disabled', 'label', 'tabIndex', 'variant']
+  inputs: ['animationtime', 'autoplay', 'content', 'gap', 'hoverpause', 'show']
 })
 @Component({
-  selector: 'unops-button',
+  selector: 'spectrum-carousel',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['ariaLabel', 'disabled', 'label', 'tabIndex', 'variant'],
+  inputs: ['animationtime', 'autoplay', 'content', 'gap', 'hoverpause', 'show'],
 })
-export class UnopsButton {
+export class SpectrumCarousel {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['buttonPressed']);
   }
 }
 
 
-export declare interface UnopsButton extends Components.UnopsButton {
-  /**
-   * Emitted when the button is pressed
-   */
-  buttonPressed: EventEmitter<CustomEvent<boolean>>;
+export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
+
+
+@ProxyCmp({
+  inputs: ['actions', 'conversationtitle', 'messages', 'sources']
+})
+@Component({
+  selector: 'spectrum-conversation-panel',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
+})
+export class SpectrumConversationPanel {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
 }
+
+
+export declare interface SpectrumConversationPanel extends Components.SpectrumConversationPanel {}
+
+
+@ProxyCmp({
+  inputs: ['closeicon', 'content', 'megamenutitle', 'openicon', 'width']
+})
+@Component({
+  selector: 'spectrum-megamenu',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['closeicon', 'content', 'megamenutitle', 'openicon', 'width'],
+})
+export class SpectrumMegamenu {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 

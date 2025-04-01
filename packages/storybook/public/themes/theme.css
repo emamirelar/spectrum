@@ -1,0 +1,81 @@
+:root {
+    --unops-color-white: #f6f6f6;
+    --unops-color-black: #333333;
+    --unops-color-gray: #f6f6f6;
+    --unops-color-blue: #0070d2;
+    --unops-color-midnight: #005fb2;
+  
+    --spectrum-sys-color-primary: var(--unops-color-blue);
+    --spectrum-sys-color-secondary: var(--unops-color-midnight);
+    --spectrum-sys-color-background: var(--unops-color-white);
+    --spectrum-sys-color-surface: var(--unops-color-gray);
+    --spectrum-sys-color-text: var(--unops-color-black);
+    --spectrum-sys-color-on-primary: var(--unops-color-white);
+    --spectrum-sys-color-on-secondary: var(--unops-color-white);
+    --spectrum-sys-color-on-surface: var(--unops-color-black);
+  
+    --spectrum-sys-font-family: 'Noto Sans', sans-serif;
+    --spectrum-sys-font-size: 16px;
+    --spectrum-sys-font-weight-light: 300;
+    --spectrum-sys-font-weight-regular: 400;
+    --spectrum-sys-font-weight-medium: 500;
+    --spectrum-sys-font-weight-bold: 700;
+  
+    --spectrum-sys-spacing: 8px;
+    --spectrum-sys-spacing-large: calc(var(--spectrum-sys-spacing) * 2);
+    --spectrum-sys-spacing-x-large: calc(var(--spectrum-sys-spacing) * 3);
+    --spectrum-sys-spacing-xx-large: calc(var(--spectrum-sys-spacing) * 4);
+    --spectrum-sys-spacing-small: calc(var(--spectrum-sys-spacing) / 2);
+  
+    --spectrum-sys-border: 1px;
+    --spectrum-sys-border-radius: 4px;
+  
+    --spectrum-sys-animation-duration: 300ms;
+    --spectrum-sys-animation-duration-fast: 200ms;
+    --spectrum-sys-animation-duration-slow: 400ms;
+  
+    --spectrum-sys-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  
+    --spectrum-comp-megamenu-background-color: color-mix(in srgb, var(--spectrum-sys-color-background) 80%, transparent);
+    --spectrum-comp-megamenu-background-filter: blur(5px);
+    --spectrum-comp-megamenu-width: 60em;
+
+      /* Colors */
+      --primary: rgba(0, 0, 0, 0);
+      --onPrimary: rgba(0, 0, 0, 0);
+      --secondary: rgba(0, 0, 0, 0);
+      --onSecondary: rgba(0, 0, 0, 0);
+      --surface: white;
+      --frostColor: rgba(255, 255, 255, 0.6);
+      
+      /* Sizing */
+      --baseSize: 8px;
+      --buttonSize: calc(var(--baseSize) * 6);
+      --standard-padding: 24px;
+      
+      /* Effects */
+      --frostBlur: 6px;
+      --animationTime: 0.33s;
+      --wallpaper: url('https://images.unsplash.com/photo-1732660122434-775d5af17735?q=80&w=3544&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  
+    display: block;
+    font-family: var(--spectrum-sys-font-family);
+  }
+
+  .wallpaper {
+    display: flex;
+    flex-direction: row;
+    gap: var(--standard-padding);
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-image: var(--wallpaper);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    justify-content: center;
+    align-items: center;  
+    padding: calc(var(--standard-padding) * 2);
+  }

@@ -7,18 +7,42 @@
 
 /* eslint-disable */
 
-import { UnopsButton as UnopsButtonElement, defineCustomElement as defineUnopsButton } from "@spectrum/core/dist/components/unops-button.js";
-import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
+import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@spectrum/core/dist/components/spectrum-carousel.js";
+import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@spectrum/core/dist/components/spectrum-conversation-panel.js";
+import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@spectrum/core/dist/components/spectrum-megamenu.js";
+import type { StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
 import React from 'react';
 
-type UnopsButtonEvents = { onButtonPressed: EventName<CustomEvent<boolean>> };
+type SpectrumCarouselEvents = NonNullable<unknown>;
 
-export const UnopsButton: StencilReactComponent<UnopsButtonElement, UnopsButtonEvents> = /*@__PURE__*/ createComponent<UnopsButtonElement, UnopsButtonEvents>({
-    tagName: 'unops-button',
-    elementClass: UnopsButtonElement,
+export const SpectrumCarousel: StencilReactComponent<SpectrumCarouselElement, SpectrumCarouselEvents> = /*@__PURE__*/ createComponent<SpectrumCarouselElement, SpectrumCarouselEvents>({
+    tagName: 'spectrum-carousel',
+    elementClass: SpectrumCarouselElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: { onButtonPressed: 'buttonPressed' } as UnopsButtonEvents,
-    defineCustomElement: defineUnopsButton
+    events: {} as SpectrumCarouselEvents,
+    defineCustomElement: defineSpectrumCarousel
+});
+
+type SpectrumConversationPanelEvents = NonNullable<unknown>;
+
+export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents> = /*@__PURE__*/ createComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents>({
+    tagName: 'spectrum-conversation-panel',
+    elementClass: SpectrumConversationPanelElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumConversationPanelEvents,
+    defineCustomElement: defineSpectrumConversationPanel
+});
+
+type SpectrumMegamenuEvents = NonNullable<unknown>;
+
+export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, SpectrumMegamenuEvents> = /*@__PURE__*/ createComponent<SpectrumMegamenuElement, SpectrumMegamenuEvents>({
+    tagName: 'spectrum-megamenu',
+    elementClass: SpectrumMegamenuElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumMegamenuEvents,
+    defineCustomElement: defineSpectrumMegamenu
 });

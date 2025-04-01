@@ -5,94 +5,179 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { buttonVariant } from "./components/unops-button/buttonVariant";
-export { buttonVariant } from "./components/unops-button/buttonVariant";
 export namespace Components {
-    interface UnopsButton {
+    interface SpectrumCarousel {
         /**
-          * The button aria-label Default: this.label
+          * animationtime The time in milliseconds for the slide transition animation Default: 1000
          */
-        "ariaLabel": string;
+        "animationtime": number;
         /**
-          * If true, the button is disabled Default: false
+          * autoplay  The time in milliseconds between slide transitions 0 indicates no autoplay Default: 0
          */
-        "disabled": boolean;
+        "autoplay": number;
         /**
-          * The button label Default: Button
+          * content The carousel content as a json structure of slides each with an image, optional link and optiopnal text { "image": "url", "link": "url", "text": "text" } Default: []
          */
-        "label": string;
+        "content": string;
         /**
-          * The tab index of the button Default: 0
+          * gap The gap between slides in pixels Default: 0
          */
-        "tabIndex": number;
+        "gap": number;
         /**
-          * The button variant Default: primary
+          * hobverpause Pause the carousel when the mouse is over it Default: true
          */
-        "variant": buttonVariant;
+        "hoverpause": boolean;
+        /**
+          * Show The number of slides to show at once Default: 3
+         */
+        "show": number;
     }
-}
-export interface UnopsButtonCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUnopsButtonElement;
+    interface SpectrumConversationPanel {
+        /**
+          * The actions to display in the messages Default: null
+         */
+        "actions": string;
+        /**
+          * The title to display in the conversation panel Default: null
+         */
+        "conversationtitle": string;
+        /**
+          * The messsages to display in the conversation panel Default: null
+         */
+        "messages": string;
+        /**
+          * The sources to display in the messages Default: null
+         */
+        "sources": string;
+    }
+    interface SpectrumMegamenu {
+        /**
+          * The megamenu close button icon Default: close
+         */
+        "closeicon": string;
+        /**
+          * The megamenu content as a json structure of sections and links sections are objects with a title and links links are an array of objects with a title and href optionally text can be added to a section  with a title and text pair Default: []
+         */
+        "content": string;
+        /**
+          * The megamenu title text Default: Mega Menu
+         */
+        "megamenutitle": string;
+        /**
+          * The megamenu open button icon Default: menu
+         */
+        "openicon": string;
+        /**
+          * A custom width for the megamenu Default: null
+         */
+        "width": string;
+    }
 }
 declare global {
-    interface HTMLUnopsButtonElementEventMap {
-        "buttonPressed": boolean;
+    interface HTMLSpectrumCarouselElement extends Components.SpectrumCarousel, HTMLStencilElement {
     }
-    interface HTMLUnopsButtonElement extends Components.UnopsButton, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLUnopsButtonElementEventMap>(type: K, listener: (this: HTMLUnopsButtonElement, ev: UnopsButtonCustomEvent<HTMLUnopsButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLUnopsButtonElementEventMap>(type: K, listener: (this: HTMLUnopsButtonElement, ev: UnopsButtonCustomEvent<HTMLUnopsButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    var HTMLSpectrumCarouselElement: {
+        prototype: HTMLSpectrumCarouselElement;
+        new (): HTMLSpectrumCarouselElement;
+    };
+    interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
     }
-    var HTMLUnopsButtonElement: {
-        prototype: HTMLUnopsButtonElement;
-        new (): HTMLUnopsButtonElement;
+    var HTMLSpectrumConversationPanelElement: {
+        prototype: HTMLSpectrumConversationPanelElement;
+        new (): HTMLSpectrumConversationPanelElement;
+    };
+    interface HTMLSpectrumMegamenuElement extends Components.SpectrumMegamenu, HTMLStencilElement {
+    }
+    var HTMLSpectrumMegamenuElement: {
+        prototype: HTMLSpectrumMegamenuElement;
+        new (): HTMLSpectrumMegamenuElement;
     };
     interface HTMLElementTagNameMap {
-        "unops-button": HTMLUnopsButtonElement;
+        "spectrum-carousel": HTMLSpectrumCarouselElement;
+        "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
+        "spectrum-megamenu": HTMLSpectrumMegamenuElement;
     }
 }
 declare namespace LocalJSX {
-    interface UnopsButton {
+    interface SpectrumCarousel {
         /**
-          * The button aria-label Default: this.label
+          * animationtime The time in milliseconds for the slide transition animation Default: 1000
          */
-        "ariaLabel"?: string;
+        "animationtime"?: number;
         /**
-          * If true, the button is disabled Default: false
+          * autoplay  The time in milliseconds between slide transitions 0 indicates no autoplay Default: 0
          */
-        "disabled"?: boolean;
+        "autoplay"?: number;
         /**
-          * The button label Default: Button
+          * content The carousel content as a json structure of slides each with an image, optional link and optiopnal text { "image": "url", "link": "url", "text": "text" } Default: []
          */
-        "label"?: string;
+        "content"?: string;
         /**
-          * Emitted when the button is pressed
+          * gap The gap between slides in pixels Default: 0
          */
-        "onButtonPressed"?: (event: UnopsButtonCustomEvent<boolean>) => void;
+        "gap"?: number;
         /**
-          * The tab index of the button Default: 0
+          * hobverpause Pause the carousel when the mouse is over it Default: true
          */
-        "tabIndex"?: number;
+        "hoverpause"?: boolean;
         /**
-          * The button variant Default: primary
+          * Show The number of slides to show at once Default: 3
          */
-        "variant"?: buttonVariant;
+        "show"?: number;
+    }
+    interface SpectrumConversationPanel {
+        /**
+          * The actions to display in the messages Default: null
+         */
+        "actions"?: string;
+        /**
+          * The title to display in the conversation panel Default: null
+         */
+        "conversationtitle"?: string;
+        /**
+          * The messsages to display in the conversation panel Default: null
+         */
+        "messages"?: string;
+        /**
+          * The sources to display in the messages Default: null
+         */
+        "sources"?: string;
+    }
+    interface SpectrumMegamenu {
+        /**
+          * The megamenu close button icon Default: close
+         */
+        "closeicon"?: string;
+        /**
+          * The megamenu content as a json structure of sections and links sections are objects with a title and links links are an array of objects with a title and href optionally text can be added to a section  with a title and text pair Default: []
+         */
+        "content"?: string;
+        /**
+          * The megamenu title text Default: Mega Menu
+         */
+        "megamenutitle"?: string;
+        /**
+          * The megamenu open button icon Default: menu
+         */
+        "openicon"?: string;
+        /**
+          * A custom width for the megamenu Default: null
+         */
+        "width"?: string;
     }
     interface IntrinsicElements {
-        "unops-button": UnopsButton;
+        "spectrum-carousel": SpectrumCarousel;
+        "spectrum-conversation-panel": SpectrumConversationPanel;
+        "spectrum-megamenu": SpectrumMegamenu;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "unops-button": LocalJSX.UnopsButton & JSXBase.HTMLAttributes<HTMLUnopsButtonElement>;
+            "spectrum-carousel": LocalJSX.SpectrumCarousel & JSXBase.HTMLAttributes<HTMLSpectrumCarouselElement>;
+            "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
+            "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
         }
     }
 }
