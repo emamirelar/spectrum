@@ -44,6 +44,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@glidejs/glide": "^3.7.1"
+    "@glidejs/glide": "^3.7.1",
+    "@material/material-color-utilities": "^0.3.0",
+    "colorthief": "^2.6.0"
   }
 }

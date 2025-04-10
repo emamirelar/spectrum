@@ -8,9 +8,10 @@
   --unops-color-gray: #f6f6f6;
   --unops-color-blue: #0070d2;
   --unops-color-midnight: #005fb2;
+  --test-color-red: #ff0000;
 
   --spectrum-sys-color-primary: var(--unops-color-blue);
-  --spectrum-sys-color-secondary: var(--unops-color-midnight);
+  --spectrum-sys-color-secondary: var(--test-color-red);
   --spectrum-sys-color-background: var(--unops-color-white);
   --spectrum-sys-color-surface: var(--unops-color-gray);
   --spectrum-sys-color-text: var(--unops-color-black);

@@ -10,7 +10,8 @@
 import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@spectrum/core/dist/components/spectrum-carousel.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@spectrum/core/dist/components/spectrum-conversation-panel.js";
 import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@spectrum/core/dist/components/spectrum-megamenu.js";
-import type { StencilReactComponent } from '@stencil/react-output-target/runtime';
+import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@spectrum/core/dist/components/spectrum-wallpaper.js";
+import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
 import React from 'react';
 
@@ -25,14 +26,14 @@ export const SpectrumCarousel: StencilReactComponent<SpectrumCarouselElement, Sp
     defineCustomElement: defineSpectrumCarousel
 });
 
-type SpectrumConversationPanelEvents = NonNullable<unknown>;
+type SpectrumConversationPanelEvents = { onExplorationSelected: EventName<CustomEvent<string>> };
 
 export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents> = /*@__PURE__*/ createComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents>({
     tagName: 'spectrum-conversation-panel',
     elementClass: SpectrumConversationPanelElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: {} as SpectrumConversationPanelEvents,
+    events: { onExplorationSelected: 'explorationSelected' } as SpectrumConversationPanelEvents,
     defineCustomElement: defineSpectrumConversationPanel
 });
 
@@ -45,4 +46,15 @@ export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, Sp
     react: React,
     events: {} as SpectrumMegamenuEvents,
     defineCustomElement: defineSpectrumMegamenu
+});
+
+type SpectrumWallpaperEvents = NonNullable<unknown>;
+
+export const SpectrumWallpaper: StencilReactComponent<SpectrumWallpaperElement, SpectrumWallpaperEvents> = /*@__PURE__*/ createComponent<SpectrumWallpaperElement, SpectrumWallpaperEvents>({
+    tagName: 'spectrum-wallpaper',
+    elementClass: SpectrumWallpaperElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumWallpaperEvents,
+    defineCustomElement: defineSpectrumWallpaper
 });

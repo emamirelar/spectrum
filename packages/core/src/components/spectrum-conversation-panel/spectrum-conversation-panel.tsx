@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'spectrum-conversation-panel',
@@ -34,6 +34,13 @@ export class SpectrumConversationPanel {
    * Default: null
   **/
   @Prop() sources: string = '';
+
+  @State() sourcesExpanded: boolean = false;
+  @State() explorationsExpanded: boolean = false;
+  @State() activeAccordion: 'sources' | 'explorations' | null = null;
+
+  @Event() explorationSelected: EventEmitter<string>;
+
   /** 
    * RenderMessages - render messages in the conversation panel
    * @param messages - the messages to render
@@ -91,23 +98,51 @@ export class SpectrumConversationPanel {
    * @param response 
    */
   renderResponse(response: any) {
-    return (
+    return [
       <div class="message-wrapper response">
         <div class="agentIcon"></div>
         <div class="message">
-          {response.message}
+          <div innerHTML={response.message}></div>
           <div class="actions">
             {this.renderActions(this.actions)}
           </div>
-          <div class="sources">
-            {response.sources ? this.renderSources(response.sources) : null}
+          <div class="accordion-row">
+            <button 
+              class="button border" 
+              onClick={() => this.toggleAccordion('explorations')}
+            >
+              <span class="button-label">Dive Deeper</span>
+              <span class="button-icon material-symbols-outlined">
+                {this.activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
+              </span>
+            </button>
+            <button 
+              class="button border" 
+              onClick={() => this.toggleAccordion('sources')}
+            >
+              <span class="button-label">Sources and related content</span>
+              <span class="button-icon material-symbols-outlined">
+                {this.activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
+              </span>
+            </button>
           </div>
-          <div class="explorations">
+        </div>
+      </div>,
+      this.activeAccordion === 'explorations' && (
+        <div class="accordion-content expanded">
+          <div class="scroll-container">
             {response.explorations ? this.renderExplorations(response.explorations) : null}
           </div>
         </div>
-      </div>
-    );
+      ),
+      this.activeAccordion === 'sources' && (
+        <div class="accordion-content expanded">
+          <div class="scroll-container">
+            {response.sources ? this.renderSources(response.sources) : null}
+          </div>
+        </div>
+      )
+    ];
   }
 
   /**
@@ -119,11 +154,9 @@ export class SpectrumConversationPanel {
    */
   renderActions(actions: any) {
     var actionsArray = JSON.parse(actions);
-    console.log('Actions...', actionsArray);
     return (
         <div class="actions">
         {actionsArray.map((action) => {
-          console.log('action', action);
           return (
             <div class="action">
               <button class="clear"><span class="material-symbols-outlined">{action.icon}</span></button>
@@ -139,17 +172,31 @@ export class SpectrumConversationPanel {
    * @param sources 
    */
   renderSources(sources: any) {
-    return (
-      <div class="sources">
-        {sources.map((source) => {
-          return (
-            <div class="source">
-              {source.label}
-            </div>
-          );
-        })}
-      </div>
-    );
+    return sources.map((source, index) => {
+      let displayUrl = source.value;
+      try {
+        const url = new URL(source.value);
+        displayUrl = url.hostname;
+      } catch (error) {
+        // If URL parsing fails, just use the original URL string
+        console.warn(`Invalid URL: ${source.value}`);
+      }
+      
+      return (
+        <a 
+          href={source.value} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="content-card"
+        >
+          <div class="number">{index + 1}</div>
+          <div class="card-content">
+            <div class="title">{source.label}</div>
+            <div class="subtitle">{displayUrl}</div>
+          </div>
+        </a>
+      );
+    });
   }
 
   /**
@@ -158,16 +205,27 @@ export class SpectrumConversationPanel {
    */
   renderExplorations(explorations: any) {
     return (
-      <div class="explorations">
-        {explorations.map((exploration) => {
-          return (
-            <div class="exploration">
-              {exploration.label}
-            </div>
-          );
-        })}
+      <div class="explorations-container">
+        {explorations.map((exploration) => (
+          <button 
+            class="exploration-chip"
+            onClick={() => this.explorationSelected.emit(exploration.value)}
+          >
+            <span class="material-symbols-outlined">prompt_suggestion</span>
+
+            <span class="chip-label">{exploration.label}</span>
+          </button>
+        ))}
       </div>
     );
+  }
+
+  toggleAccordion(accordion: 'sources' | 'explorations') {
+    if (this.activeAccordion === accordion) {
+      this.activeAccordion = null;
+    } else {
+      this.activeAccordion = accordion;
+    }
   }
 
   render() {

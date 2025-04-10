@@ -72,6 +72,28 @@ export namespace Components {
          */
         "width": string;
     }
+    interface SpectrumWallpaper {
+        /**
+          * The background value (color, gradient, or image URL)
+         */
+        "background": string;
+        /**
+          * The background image position
+         */
+        "backgroundPosition": string;
+        /**
+          * The background image size
+         */
+        "backgroundSize": string;
+        /**
+          * Whether to show the theme color swatches
+         */
+        "showSwatches": boolean;
+    }
+}
+export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumConversationPanelElement;
 }
 declare global {
     interface HTMLSpectrumCarouselElement extends Components.SpectrumCarousel, HTMLStencilElement {
@@ -80,7 +102,18 @@ declare global {
         prototype: HTMLSpectrumCarouselElement;
         new (): HTMLSpectrumCarouselElement;
     };
+    interface HTMLSpectrumConversationPanelElementEventMap {
+        "explorationSelected": string;
+    }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumConversationPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumConversationPanelElement, ev: SpectrumConversationPanelCustomEvent<HTMLSpectrumConversationPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumConversationPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumConversationPanelElement, ev: SpectrumConversationPanelCustomEvent<HTMLSpectrumConversationPanelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLSpectrumConversationPanelElement: {
         prototype: HTMLSpectrumConversationPanelElement;
@@ -92,10 +125,17 @@ declare global {
         prototype: HTMLSpectrumMegamenuElement;
         new (): HTMLSpectrumMegamenuElement;
     };
+    interface HTMLSpectrumWallpaperElement extends Components.SpectrumWallpaper, HTMLStencilElement {
+    }
+    var HTMLSpectrumWallpaperElement: {
+        prototype: HTMLSpectrumWallpaperElement;
+        new (): HTMLSpectrumWallpaperElement;
+    };
     interface HTMLElementTagNameMap {
         "spectrum-carousel": HTMLSpectrumCarouselElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
+        "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
     }
 }
 declare namespace LocalJSX {
@@ -138,6 +178,7 @@ declare namespace LocalJSX {
           * The messsages to display in the conversation panel Default: null
          */
         "messages"?: string;
+        "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         /**
           * The sources to display in the messages Default: null
          */
@@ -165,10 +206,29 @@ declare namespace LocalJSX {
          */
         "width"?: string;
     }
+    interface SpectrumWallpaper {
+        /**
+          * The background value (color, gradient, or image URL)
+         */
+        "background"?: string;
+        /**
+          * The background image position
+         */
+        "backgroundPosition"?: string;
+        /**
+          * The background image size
+         */
+        "backgroundSize"?: string;
+        /**
+          * Whether to show the theme color swatches
+         */
+        "showSwatches"?: boolean;
+    }
     interface IntrinsicElements {
         "spectrum-carousel": SpectrumCarousel;
         "spectrum-conversation-panel": SpectrumConversationPanel;
         "spectrum-megamenu": SpectrumMegamenu;
+        "spectrum-wallpaper": SpectrumWallpaper;
     }
 }
 export { LocalJSX as JSX };
@@ -178,6 +238,7 @@ declare module "@stencil/core" {
             "spectrum-carousel": LocalJSX.SpectrumCarousel & JSXBase.HTMLAttributes<HTMLSpectrumCarouselElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
+            "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
         }
     }
 }

@@ -15,6 +15,13 @@
 | `sources`           | `sources`           | The sources to display in the messages Default: null             | `string` | `''`                  |
 
 
+## Events
+
+| Event                 | Description | Type                  |
+| --------------------- | ----------- | --------------------- |
+| `explorationSelected` |             | `CustomEvent<string>` |
+
+
 ----------------------------------------------
 
 
