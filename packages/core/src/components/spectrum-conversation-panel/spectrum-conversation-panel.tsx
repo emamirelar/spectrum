@@ -238,8 +238,7 @@ export class SpectrumConversationPanel {
 
   render() {
     return (
-      <Host>
-        <slot>
+      <Host class="conversation-panel-host">
           <div class="panel frost">
             <div class="header">
               <h2 class="conversation-title">
@@ -248,7 +247,6 @@ export class SpectrumConversationPanel {
             </div>
             {this.renderMessages(this.messages)}
           </div>
-        </slot>
       </Host>
     );
   }

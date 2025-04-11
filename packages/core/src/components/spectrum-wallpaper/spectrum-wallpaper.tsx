@@ -273,14 +273,7 @@ export class SpectrumWallpaper {
     const style = {
       background: this.background,
       backgroundPosition: this.backgroundposition,
-      backgroundSize: this.backgroundsize,
-      backgroundRepeat: 'no-repeat',
-      width: '100%',
-      height: '100%',
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundSize: this.backgroundsize
     };
 
     return (
@@ -291,3 +284,12 @@ export class SpectrumWallpaper {
     );
   }
 } 
+
+
+// backgroundRepeat: 'no-repeat',
+//       width: '100%',
+//       height: '100%',
+//       minHeight: '100vh',
+//       display: 'flex',
+//       alignItems: 'center',
+//       justifyContent: 'center',

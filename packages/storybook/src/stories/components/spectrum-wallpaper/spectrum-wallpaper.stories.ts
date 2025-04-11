@@ -17,7 +17,7 @@ const meta = {
       backgroundposition=${args.backgroundposition}
       backgroundsize=${args.backgroundsize}
     >
-      <div style="background: white; padding: 2rem; border-radius: 0.5rem;">
+      <div style="background: white; padding: 2rem; border-radius: 0.5rem; flex-grow: 1;">
         <h2>Content</h2>
         <p>This content is centered in the wallpaper</p>
       </div>

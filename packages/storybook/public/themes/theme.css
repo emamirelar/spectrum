@@ -62,20 +62,3 @@
     display: block;
     font-family: var(--spectrum-sys-font-family);
   }
-
-  .wallpaper {
-    display: flex;
-    flex-direction: row;
-    gap: var(--standard-padding);
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    background-image: var(--wallpaper);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    justify-content: center;
-    align-items: center;  
-    padding: calc(var(--standard-padding) * 2);
-  }

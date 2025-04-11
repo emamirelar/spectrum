@@ -124,13 +124,11 @@ export const ConversationPanel = {
         .backgroundPosition=${backgroundPosition}
         .backgroundSize=${backgroundSize}
         .showSwatches=${false}
-        style="width: 100%; height: 100vh;"
       >
         <spectrum-conversation-panel 
           messages="${messages}"
           actions="${actions}"
           conversationtitle="${conversationtitle}"
-          style="display: block; width: 100%; height: 100%;"
         ></spectrum-conversation-panel>
       </spectrum-wallpaper>`
 } satisfies StoryObj<SpectrumConversationPanel>
