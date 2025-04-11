@@ -119,15 +119,37 @@ button {
 .message {
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 0.75rem;
   padding: 8px;
   will-change: transform;
   box-sizing: border-box;
   
   .actions {
     display: flex;
-    flex-direction: row;
-    gap: 8px;
+    gap: 0.5rem;
+    margin-top: 0;
+
+    .action {
+      button {
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: all 0.2s ease-in-out;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--spectrum-color-surface);
+        }
+
+        span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--spectrum-color-on-surface);
+        }
+      }
+    }
   }
 }
 
@@ -213,8 +235,8 @@ button {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    padding: 16px;
-    padding-right: 32px;
+    scroll-padding: 8px;
+    padding: 8px;
     gap: 16px;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
