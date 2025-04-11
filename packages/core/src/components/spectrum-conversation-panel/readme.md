@@ -19,7 +19,9 @@
 
 | Event                 | Description | Type                  |
 | --------------------- | ----------- | --------------------- |
+| `action`              |             | `CustomEvent<string>` |
 | `explorationSelected` |             | `CustomEvent<string>` |
+| `explore`             |             | `CustomEvent<string>` |
 
 
 ----------------------------------------------

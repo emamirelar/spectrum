@@ -44,7 +44,7 @@ export class SpectrumConversationPanel {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['explorationSelected']);
+    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore']);
   }
 }
 
@@ -52,6 +52,10 @@ export class SpectrumConversationPanel {
 export declare interface SpectrumConversationPanel extends Components.SpectrumConversationPanel {
 
   explorationSelected: EventEmitter<CustomEvent<string>>;
+
+  action: EventEmitter<CustomEvent<string>>;
+
+  explore: EventEmitter<CustomEvent<string>>;
 }
 
 
@@ -78,14 +82,14 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
-  inputs: ['background', 'backgroundPosition', 'backgroundSize', 'showSwatches']
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches']
 })
 @Component({
   selector: 'spectrum-wallpaper',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['background', 'backgroundPosition', 'backgroundSize', 'showSwatches'],
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches'],
 })
 export class SpectrumWallpaper {
   protected el: HTMLElement;

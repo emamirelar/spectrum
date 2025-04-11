@@ -80,11 +80,11 @@ export namespace Components {
         /**
           * The background image position
          */
-        "backgroundPosition": string;
+        "backgroundposition": string;
         /**
           * The background image size
          */
-        "backgroundSize": string;
+        "backgroundsize": string;
         /**
           * Whether to show the theme color swatches
          */
@@ -104,6 +104,8 @@ declare global {
     };
     interface HTMLSpectrumConversationPanelElementEventMap {
         "explorationSelected": string;
+        "action": string;
+        "explore": string;
     }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumConversationPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumConversationPanelElement, ev: SpectrumConversationPanelCustomEvent<HTMLSpectrumConversationPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -178,7 +180,9 @@ declare namespace LocalJSX {
           * The messsages to display in the conversation panel Default: null
          */
         "messages"?: string;
+        "onAction"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
+        "onExplore"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         /**
           * The sources to display in the messages Default: null
          */
@@ -214,11 +218,11 @@ declare namespace LocalJSX {
         /**
           * The background image position
          */
-        "backgroundPosition"?: string;
+        "backgroundposition"?: string;
         /**
           * The background image size
          */
-        "backgroundSize"?: string;
+        "backgroundsize"?: string;
         /**
           * Whether to show the theme color swatches
          */

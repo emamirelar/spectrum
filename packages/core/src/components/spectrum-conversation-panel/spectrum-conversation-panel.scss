@@ -3,27 +3,6 @@
   flex-grow: 2;
 }
 
-/* CSS Custom Properties */
-:host {
-  /* Colors */
-  --primary: var(--spectrum-sys-color-primary);
-  --onPrimary: var(--spectrum-sys-color-on-primary);
-  --secondary: var(--spectrum-sys-color-secondary);
-  --onSecondary: var(--spectrum-sys-color-on-secondary);
-  --surface: var(--spectrum-sys-color-surface);
-  --frostColor: rgba(255, 255, 255, 0.6);
-  
-  /* Sizing */
-  --baseSize: 8px;
-  --buttonSize: calc(var(--baseSize) * 6);
-  --standard-padding: 24px;
-  
-  /* Effects */
-  --frostBlur: 6px;
-  --animationTime: 0.33s;
-  --wallpaper: ;
-}
-
 /* Base Styles */
 body {
   margin: 0;
@@ -46,10 +25,10 @@ body {
 /* Button Styles */
 button {
   border: 0;
-  min-width: var(--buttonSize);
-  min-height: var(--buttonSize);
+  min-width: 48px;
+  min-height: 48px;
   width: auto;
-  border-radius: calc(var(--buttonSize) / 2);
+  border-radius: 24px;
   display: flex;
   flex-direction: row;
   gap: 8px;
@@ -67,7 +46,7 @@ button {
   }
 
   &.border {
-    border: 1px solid black;
+    border: 1px solid var(--spectrum-color-outline);
   }
 
   .button-label {
@@ -85,15 +64,15 @@ button {
 
 /* Utility Classes */
 .frost {
-  background: var(--frostColor);
-  backdrop-filter: blur(var(--frostBlur));
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
 }
 
 /* Panel and Message Styles */
 .panel {
   flex-grow: 2;
   border-radius: 48px;
-  border: 1px solid black;
+  border: 1px solid var(--spectrum-color-outline);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -106,6 +85,7 @@ button {
 .conversation-title {
   padding: 8px;
   font-size: 1.5em;
+  color: var(--spectrum-color-on-surface);
 }
 
 .message-wrapper {
@@ -140,15 +120,9 @@ button {
   display: flex;
   flex-direction: column;
   gap: 1em;
-  background: var(--spectrum-sys-color-surface);
-  color: black;
   padding: 8px;
   will-change: transform;
   box-sizing: border-box;
-  
-  * {
-    margin: 0;
-  }
   
   .actions {
     display: flex;
@@ -160,13 +134,18 @@ button {
 .request .message {
   border-radius: 16px 16px 0 16px;
   backdrop-filter: brightness(10%);
-  background: var(--primary);
-  color: var(--onPrimary);
+  background: var(--spectrum-color-primary);
+  color: var(--spectrum-color-on-primary);
 }
 
 .response .message {
   border-radius: 0 16px 16px 16px;
   background: transparent;
+  color: var(--spectrum-color-on-surface);
+  
+  ul {
+    color: var(--spectrum-color-on-surface-variant);
+  }
 }
 
 /* Accordion Styles */
@@ -181,36 +160,46 @@ button {
     align-items: center;
     gap: 8px;
     padding: 12px 16px;
-    background: var(--primary);
+    background: transparent;
+    color: var(--spectrum-color-on-primary-container);
     border-radius: 32px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     min-width: 0;
     width: auto;
     transition: all 0.2s ease;
-    border: none;
+    border: 1px solid var(--spectrum-color-on-primary-container);
 
     .button-label {
       white-space: nowrap;
-      color: color-contrast(var(--primary) vs #FFF, #000);
-      transition: color 0.2s ease;
+      color: inherit;
     }
 
     .button-icon {
       flex-shrink: 1;
-      color: color-contrast(var(--primary) vs #FFF, #000);
-      transition: color 0.2s ease;
+      color: inherit;
+    }
+
+    &:hover {
+      background: var(--spectrum-color-secondary);
+      color: var(--spectrum-color-on-secondary);
+      border-color: var(--spectrum-color-secondary);
     }
 
     &.border {
-      &:hover {
-        --hover-mix: color-mix(in srgb, var(--primary) 85%, white);
-        background: var(--hover-mix);
+      background: transparent;
+      color: var(--spectrum-color-on-primary-container);
+      border: 1px solid var(--spectrum-color-on-primary-container);
 
-        .button-label,
-        .button-icon {
-          color: color-contrast(var(--hover-mix) vs #FFF, #000);
-        }
+      &:hover {
+        background: var(--spectrum-color-secondary);
+        color: var(--spectrum-color-on-secondary);
+        border-color: var(--spectrum-color-secondary);
       }
+    }
+
+    &[aria-expanded="true"] {
+      background: var(--spectrum-color-secondary);
+      color: var(--spectrum-color-on-secondary);
+      border-color: var(--spectrum-color-secondary);
     }
   }
 }
@@ -245,17 +234,18 @@ button {
   align-items: flex-start;
   gap: 16px;
   padding: 16px;
-  background: white;
+  background: var(--spectrum-color-surface);
+  color: var(--spectrum-color-on-surface);
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px var(--spectrum-color-shadow);
+  border: 1px solid var(--spectrum-color-outline-variant);
   text-decoration: none;
-  color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--spectrum-color-shadow);
   }
 
   .number {
@@ -265,8 +255,8 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--primary);
-    color: var(--onPrimary);
+    background: var(--spectrum-color-primary);
+    color: var(--spectrum-color-on-primary);
     border-radius: 50%;
     font-size: 16px;
   }
@@ -280,7 +270,7 @@ button {
 
     .title {
       font-weight: 500;
-      color: rgba(0, 0, 0, 0.8);
+      color: var(--spectrum-color-on-surface);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -288,7 +278,7 @@ button {
 
     .subtitle {
       font-size: 14px;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--spectrum-color-on-surface-variant);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -306,13 +296,14 @@ button {
 }
 
 .exploration-chip {
-  display: inline-flex;
+  background: var(--spectrum-color-primary-container);
+  color: var(--spectrum-color-on-primary-container);
+  border: none;
+  border-radius: 16px;
+  padding: 8px 16px;
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 32px;
   cursor: pointer;
   transition: all 0.2s ease;
   width: auto;
@@ -321,20 +312,24 @@ button {
   font-family: 'Noto Sans', sans-serif;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    transform: translateX(4px);
+    background: var(--spectrum-color-primary);
+    color: var(--spectrum-color-on-primary);
+
+    .material-symbols-outlined, .chip-label {
+      color: var(--spectrum-color-on-primary);
+    }
   }
 
   .material-symbols-outlined {
     font-size: 20px;
     font-family: 'Material Symbols Outlined';
-    color: rgba(0, 0, 0, 0.8);
+    color: var(--spectrum-color-on-primary-container);
   }
 
   .chip-label {
     font-family: 'Noto Sans', sans-serif;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.8);
+    color: var(--spectrum-color-on-primary-container);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

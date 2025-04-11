@@ -8,77 +8,95 @@ import type { SpectrumWallpaper } from "@stencil-storybook-boilerplate/core/src/
 
 const meta = {
   title: 'Components/Spectrum Wallpaper',
+  component: 'spectrum-wallpaper',
   tags: ['autodocs'],
+  render: (args) => html`
+    <spectrum-wallpaper
+      background=${args.background}
+      show-swatches=${args['show-swatches']}
+      backgroundposition=${args.backgroundposition}
+      backgroundsize=${args.backgroundsize}
+    >
+      <div style="background: white; padding: 2rem; border-radius: 0.5rem;">
+        <h2>Content</h2>
+        <p>This content is centered in the wallpaper</p>
+      </div>
+    </spectrum-wallpaper>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        component: 'A dynamic wallpaper component that extracts the dominant color from images or gradients and generates a Material Design 3 theme.'
+      }
+    }
+  },
   args: {
     background: 'url(https://images.unsplash.com/photo-1682687220063-4742bd7fd538)',
-    showSwatches: true,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
+    'show-swatches': true,
+    backgroundposition: 'center',
+    backgroundsize: 'cover',
   },
   argTypes: {
     background: {
-      type: {
-        required: true,
-      },
+      description: 'The background value (color, gradient, or image URL)',
+      control: 'text',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+      }
     },
-    showSwatches: {
-      type: {
-        required: false,
-      },
+    'show-swatches': {
+      description: 'Whether to show the theme color swatches',
+      control: 'boolean',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      }
     },
-    backgroundPosition: {
-      type: {
-        required: false,
-      },
+    backgroundposition: {
+      description: 'The background image position',
+      control: 'select',
+      options: ['center', 'top', 'bottom', 'left', 'right'],
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'center' },
+      }
     },
-    backgroundSize: {
-      type: {
-        required: false,
-      },
+    backgroundsize: {
+      description: 'The background image size',
+      control: 'select',
+      options: ['cover', 'contain', 'auto'],
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'cover' },
+      }
     },
   }
-} satisfies Meta<SpectrumWallpaper>
+} satisfies Meta<SpectrumWallpaper>;
 
-export default meta
+export default meta;
 
-const getCssValue = (variable: string) => {
-  const value = getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
-  return value || 'Not Set';
+export const Default: StoryObj<SpectrumWallpaper> = {
+  name: 'With Image',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example using an image background. The component will extract the dominant color and generate a theme.'
+      }
+    }
+  }
 };
 
-export const Default = {
-  render: ({ background, showSwatches, backgroundPosition, backgroundSize }) =>
-    html`
-      <spectrum-wallpaper
-        background=${background}
-        .showSwatches=${showSwatches}
-        background-position=${backgroundPosition}
-        background-size=${backgroundSize}
-      >
-        <div style="background: white; padding: 2rem; border-radius: 0.5rem;">
-          <h2>Content</h2>
-          <p>This content is centered in the wallpaper</p>
-        </div>
-      </spectrum-wallpaper>
-    `,
-} satisfies StoryObj<SpectrumWallpaper>
-
-export const Gradient = {
+export const Gradient: StoryObj<SpectrumWallpaper> = {
+  name: 'With Gradient',
   args: {
     background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
   },
-  render: ({ background, showSwatches, backgroundPosition, backgroundSize }) =>
-    html`
-      <spectrum-wallpaper
-        background=${background}
-        .showSwatches=${showSwatches}
-        background-position=${backgroundPosition}
-        background-size=${backgroundSize}
-      >
-        <div style="background: white; padding: 2rem; border-radius: 0.5rem;">
-          <h2>Content</h2>
-          <p>This content is centered in the gradient wallpaper</p>
-        </div>
-      </spectrum-wallpaper>
-    `,
-} satisfies StoryObj<SpectrumWallpaper> 
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example using a gradient background. The component will extract the first color from the gradient to generate the theme.'
+      }
+    }
+  }
+}; 

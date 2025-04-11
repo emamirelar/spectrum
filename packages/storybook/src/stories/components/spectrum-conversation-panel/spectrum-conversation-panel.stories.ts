@@ -120,10 +120,10 @@ export default meta
 export const ConversationPanel = {
   render: ({ messages, actions, conversationtitle, backgroundColor, backgroundImage, backgroundPosition, backgroundSize }) =>
       html`<spectrum-wallpaper
-        background-color="${backgroundColor}"
-        background-image="${backgroundImage}"
-        background-position="${backgroundPosition}"
-        background-size="${backgroundSize}"
+        background=${backgroundImage ? `url(${backgroundImage})` : backgroundColor}
+        .backgroundPosition=${backgroundPosition}
+        .backgroundSize=${backgroundSize}
+        .showSwatches=${false}
         style="width: 100%; height: 100vh;"
       >
         <spectrum-conversation-panel 

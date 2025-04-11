@@ -50,38 +50,21 @@
   gap: 0.5rem;
   min-width: 100px;
   cursor: help;
-  transition: all 0.2s ease-in-out;
 }
 
 .swatch-color {
   width: 50px;
   height: 50px;
   border-radius: 4px;
-  background-color: var(--spectrum-color-primary-container);
-  border: none;
-  transition: all 0.2s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--spectrum-color-on-primary-container);
-}
-
-.swatch:hover .swatch-color {
-  background-color: var(--spectrum-color-primary);
-  color: var(--spectrum-color-on-primary);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .swatch-label {
-  color: var(--spectrum-color-on-primary-container);
+  color: #333;
   font-size: 0.75rem;
   text-align: center;
   max-width: 100px;
   word-break: break-word;
-  transition: color 0.2s ease-in-out;
-}
-
-.swatch:hover .swatch-label {
-  color: var(--spectrum-color-on-primary);
 }
 
 .variable-name {

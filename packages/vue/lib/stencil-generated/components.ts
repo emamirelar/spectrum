@@ -23,7 +23,9 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'conversationtitle',
   'actions',
   'sources',
-  'explorationSelected'
+  'explorationSelected',
+  'action',
+  'explore'
 ]);
 
 
@@ -39,7 +41,7 @@ export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegame
 export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallpaper>('spectrum-wallpaper', undefined, [
   'background',
   'showSwatches',
-  'backgroundPosition',
-  'backgroundSize'
+  'backgroundposition',
+  'backgroundsize'
 ]);
 

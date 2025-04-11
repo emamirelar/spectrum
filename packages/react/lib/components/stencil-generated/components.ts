@@ -26,14 +26,22 @@ export const SpectrumCarousel: StencilReactComponent<SpectrumCarouselElement, Sp
     defineCustomElement: defineSpectrumCarousel
 });
 
-type SpectrumConversationPanelEvents = { onExplorationSelected: EventName<CustomEvent<string>> };
+type SpectrumConversationPanelEvents = {
+    onExplorationSelected: EventName<CustomEvent<string>>,
+    onAction: EventName<CustomEvent<string>>,
+    onExplore: EventName<CustomEvent<string>>
+};
 
 export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents> = /*@__PURE__*/ createComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents>({
     tagName: 'spectrum-conversation-panel',
     elementClass: SpectrumConversationPanelElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: { onExplorationSelected: 'explorationSelected' } as SpectrumConversationPanelEvents,
+    events: {
+        onExplorationSelected: 'explorationSelected',
+        onAction: 'action',
+        onExplore: 'explore'
+    } as SpectrumConversationPanelEvents,
     defineCustomElement: defineSpectrumConversationPanel
 });
 

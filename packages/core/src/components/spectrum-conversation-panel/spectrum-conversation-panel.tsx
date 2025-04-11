@@ -3,7 +3,7 @@ import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/c
 @Component({
   tag: 'spectrum-conversation-panel',
   styleUrl: 'spectrum-conversation-panel.scss',
-  shadow: true,
+  shadow: false,
 })
 export class SpectrumConversationPanel {
 
@@ -40,6 +40,8 @@ export class SpectrumConversationPanel {
   @State() activeAccordion: 'sources' | 'explorations' | null = null;
 
   @Event() explorationSelected: EventEmitter<string>;
+  @Event() action: EventEmitter<string>;
+  @Event() explore: EventEmitter<string>;
 
   /** 
    * RenderMessages - render messages in the conversation panel
@@ -110,6 +112,7 @@ export class SpectrumConversationPanel {
             <button 
               class="button border" 
               onClick={() => this.toggleAccordion('explorations')}
+              aria-expanded={this.activeAccordion === 'explorations' ? 'true' : 'false'}
             >
               <span class="button-label">Dive Deeper</span>
               <span class="button-icon material-symbols-outlined">
@@ -119,6 +122,7 @@ export class SpectrumConversationPanel {
             <button 
               class="button border" 
               onClick={() => this.toggleAccordion('sources')}
+              aria-expanded={this.activeAccordion === 'sources' ? 'true' : 'false'}
             >
               <span class="button-label">Sources and related content</span>
               <span class="button-icon material-symbols-outlined">
@@ -159,7 +163,12 @@ export class SpectrumConversationPanel {
         {actionsArray.map((action) => {
           return (
             <div class="action">
-              <button class="clear"><span class="material-symbols-outlined">{action.icon}</span></button>
+              <button 
+                class="clear" 
+                onClick={() => this.action.emit(action.value)}
+              >
+                <span class="material-symbols-outlined">{action.icon}</span>
+              </button>
             </div>
           )
         })}
@@ -209,10 +218,9 @@ export class SpectrumConversationPanel {
         {explorations.map((exploration) => (
           <button 
             class="exploration-chip"
-            onClick={() => this.explorationSelected.emit(exploration.value)}
+            onClick={() => this.explore.emit(exploration.value)}
           >
             <span class="material-symbols-outlined">prompt_suggestion</span>
-
             <span class="chip-label">{exploration.label}</span>
           </button>
         ))}

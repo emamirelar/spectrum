@@ -7,7 +7,7 @@ import {
 
 @Component({
   tag: 'spectrum-wallpaper',
-  styleUrl: 'spectrum-wallpaper.css',
+  styleUrl: 'spectrum-wallpaper.scss',
   shadow: false,
 })
 export class SpectrumWallpaper {
@@ -24,17 +24,17 @@ export class SpectrumWallpaper {
   /**
    * Whether to show the theme color swatches
    */
-  @Prop() showSwatches: boolean = false;
+  @Prop({ attribute: 'show-swatches' }) showSwatches: boolean = false;
 
   /**
    * The background image position
    */
-  @Prop() backgroundPosition: string = 'center';
+  @Prop({ attribute: 'backgroundposition' }) backgroundposition: string = 'center';
 
   /**
    * The background image size
    */
-  @Prop() backgroundSize: string = 'cover';
+  @Prop({ attribute: 'backgroundsize' }) backgroundsize: string = 'cover';
 
   componentWillLoad() {
     console.log('Component will load, background:', this.background);
@@ -45,7 +45,7 @@ export class SpectrumWallpaper {
 
   @Watch('background')
   async extractDominantColor() {
-    console.log('Extracting dominant color for background:', this.background);
+    // console.log('Extracting dominant color for background:', this.background);
     if (!this.background) return;
 
     // If we already have a loading promise, wait for it to complete
@@ -63,9 +63,9 @@ export class SpectrumWallpaper {
       this.imageLoadPromise = new Promise((resolve) => {
         img.onload = async () => {
           try {
-            console.log('Image loaded successfully');
+            // console.log('Image loaded successfully');
             const color = await this.extractColorFromImage(img);
-            console.log('Extracted color:', color);
+            // console.log('Extracted color:', color);
             this.dominantColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
             this.generateTheme(color[0], color[1], color[2]);
             resolve();
@@ -86,7 +86,7 @@ export class SpectrumWallpaper {
       try {
         // Set the source and wait for it to load
         img.src = this.background.slice(4, -1); // Remove 'url(' and ')'
-        console.log('Waiting for image to load...');
+        // console.log('Waiting for image to load...');
         await this.imageLoadPromise;
       } catch (error) {
         console.error('Error in image loading process:', error);
@@ -272,8 +272,8 @@ export class SpectrumWallpaper {
   render() {
     const style = {
       background: this.background,
-      backgroundPosition: this.backgroundPosition,
-      backgroundSize: this.backgroundSize,
+      backgroundPosition: this.backgroundposition,
+      backgroundSize: this.backgroundsize,
       backgroundRepeat: 'no-repeat',
       width: '100%',
       height: '100%',
