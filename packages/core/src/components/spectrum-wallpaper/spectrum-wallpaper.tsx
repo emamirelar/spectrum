@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Element, Watch } from '@stencil/core';
+import { Component, h, Host, Prop, State, Element, Watch } from '@stencil/core';
 import {
   argbFromRgb,
   themeFromSourceColor,
@@ -277,10 +277,12 @@ export class SpectrumWallpaper {
     };
 
     return (
+      <Host class="wallpaper-host">
       <div class="wallpaper" style={style}>
         <slot></slot>
         {this.renderSwatches()}
       </div>
+      </Host>
     );
   }
 } 

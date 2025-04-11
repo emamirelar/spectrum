@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, h, Prop, State, Event, EventEmitter, Element } from '@stencil/core';
 
 @Component({
   tag: 'spectrum-conversation-panel',
@@ -6,6 +6,8 @@ import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/c
   shadow: false,
 })
 export class SpectrumConversationPanel {
+  @Element() el: HTMLElement;
+  private conversationPanelRef: HTMLDivElement;
 
   /**
      * Note that prop names are all lowercase to accomodate Storybook's args.
@@ -43,21 +45,32 @@ export class SpectrumConversationPanel {
   @Event() action: EventEmitter<string>;
   @Event() explore: EventEmitter<string>;
 
+  private scrollToBottom() {
+    if (this.conversationPanelRef) {
+      this.conversationPanelRef.scrollTo({
+        top: this.conversationPanelRef.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  componentDidLoad() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
   /** 
    * RenderMessages - render messages in the conversation panel
    * @param messages - the messages to render
   **/
   renderMessages(messages: string) {
-
-    // console.log(messages);
-
     var messageArray = JSON.parse(messages);
-
-    // console.log(messageArray);
     return (
-      <div class="conversationPanel">
+      <div class="conversation-panel" ref={(el) => this.conversationPanelRef = el}>
         {messageArray.map((message) => {
-          // console.log(message);
           return this.renderMessage(message, message.sender);
         })}
       </div>
@@ -240,12 +253,10 @@ export class SpectrumConversationPanel {
     return (
       <Host class="conversation-panel-host">
           <div class="panel frost">
-            <div class="header">
               <h2 class="conversation-title">
                 {this.conversationtitle}
               </h2>
-            </div>
-            {this.renderMessages(this.messages)}
+              {this.renderMessages(this.messages)}
           </div>
       </Host>
     );
