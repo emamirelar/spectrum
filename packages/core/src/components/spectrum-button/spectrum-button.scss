@@ -10,11 +10,12 @@
   font-weight: var(--spectrum-sys-font-weight-medium);
   border: var(--spectrum-sys-border) solid transparent;
   border-radius: 24px;
+  padding:  1em;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
   gap: var(--spectrum-sys-spacing);
-  min-height: calc(var(--spectrum-sys-spacing) * 5); // 40px
+  min-height: 2rem;
   transition: all 0.2s ease-in-out;
   position: relative;
   overflow: hidden;
@@ -40,20 +41,15 @@
 
   // Base styles
   &--base {
-    padding: var(--spectrum-sys-spacing) var(--spectrum-sys-spacing-x-large);
     font-size: var(--spectrum-sys-font-size);
   }
 
   &--sm {
-    padding: var(--spectrum-sys-spacing-small) var(--spectrum-sys-spacing-large);
     font-size: calc(var(--spectrum-sys-font-size) * 0.875);
-    min-height: calc(var(--spectrum-sys-spacing) * 4); // 32px
   }
 
   &--lg {
-    padding: var(--spectrum-sys-spacing-large) var(--spectrum-sys-spacing-xx-large);
     font-size: calc(var(--spectrum-sys-font-size) * 1.125);
-    min-height: calc(var(--spectrum-sys-spacing) * 6); // 48px
   }
 
   // Variant styles
@@ -128,6 +124,70 @@
 
       &:hover::before {
         background-color: rgba(186, 5, 23, 0.1);
+      }
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: var(--spectrum-sys-color-text);
+    border: none;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &.spectrum-button--primary {
+      color: var(--spectrum-sys-color-primary);
+      &:hover {
+        background-color: rgba(0, 112, 210, 0.1);
+      }
+      &:active {
+        background-color: rgba(0, 112, 210, 0.2);
+      }
+    }
+
+    &.spectrum-button--secondary {
+      color: var(--spectrum-sys-color-secondary);
+      &:hover {
+        background-color: rgba(0, 95, 178, 0.1);
+      }
+      &:active {
+        background-color: rgba(0, 95, 178, 0.2);
+      }
+    }
+
+    &.spectrum-button--success {
+      color: var(--spectrum-sys-color-success);
+      &:hover {
+        background-color: rgba(46, 132, 74, 0.1);
+      }
+      &:active {
+        background-color: rgba(46, 132, 74, 0.2);
+      }
+    }
+
+    &.spectrum-button--warning {
+      color: var(--spectrum-sys-color-warning);
+      &:hover {
+        background-color: rgba(255, 153, 0, 0.1);
+      }
+      &:active {
+        background-color: rgba(255, 153, 0, 0.2);
+      }
+    }
+
+    &.spectrum-button--danger {
+      color: var(--spectrum-sys-color-danger);
+      &:hover {
+        background-color: rgba(186, 5, 23, 0.1);
+      }
+      &:active {
+        background-color: rgba(186, 5, 23, 0.2);
       }
     }
   }

@@ -8,7 +8,7 @@ import { Component, Host, h, Prop, State, Watch, Element } from '@stencil/core';
 export class SpectrumButton {
   @Element() el: HTMLElement;
 
-  @Prop() variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' = 'primary';
   @Prop() size: 'sm' | 'base' | 'lg' = 'base';
   @Prop() state: 'default' | 'hover' | 'active' | 'disabled' = 'default';
   @Prop() outline: boolean = false;
@@ -33,8 +33,10 @@ export class SpectrumButton {
     // Add variant class
     classes.push(`spectrum-button--${this.variant}`);
     
-    // Add size class
-    classes.push(`spectrum-button--${this.size}`);
+    // Add size class - ensure size is not empty
+    if (this.size) {
+      classes.push(`spectrum-button--${this.size}`);
+    }
     
     // Add state class
     classes.push(`spectrum-button--${this.currentState}`);
