@@ -37,7 +37,7 @@ export class SpectrumWallpaper {
   @Prop({ attribute: 'backgroundsize' }) backgroundsize: string = 'cover';
 
   componentWillLoad() {
-    console.log('Component will load, background:', this.background);
+    // console.log('Component will load, background:', this.background);
     if (this.background) {
       this.extractDominantColor();
     }
@@ -222,6 +222,12 @@ export class SpectrumWallpaper {
     });
   }
 
+  // Copy the variable to the clipboard
+  private swatchClicked(variable: string) {
+    navigator.clipboard.writeText(variable);
+  }
+
+
   private renderSwatches() {
     if (!this.showSwatches) return null;
 
@@ -260,7 +266,7 @@ export class SpectrumWallpaper {
     return (
       <div class="swatches">
         {swatches.map(({ label, variable }) => (
-          <div class="swatch" title={variable}>
+          <div class="swatch" title={variable} onClick={() => this.swatchClicked(variable)}>
             <div class="swatch-color" style={{ backgroundColor: `var(${variable})` }}></div>
             <div class="swatch-label">{label}</div>
           </div>

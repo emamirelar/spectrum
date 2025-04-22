@@ -1,0 +1,33 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Storybook Stories Rule
+
+Components need storybook stories that demonstrate their functionality and variants.
+
+## Story Location
+- Stories should be placed in `packages/storybook/src/stories/components/{component-name}`
+- The path should mirror the component's location in the core package
+- For example:
+  - Component: `packages/core/src/components/spectrum-button/spectrum-button.tsx`
+  - Story: `packages/storybook/src/stories/components/spectrum-button/spectrum-button.stories.tsx`
+
+## Story Requirements
+- Each component should have a comprehensive story file
+- Stories should demonstrate all variants, states, and use cases
+- Keep stories up to date with component changes
+- Use proper TypeScript types and Storybook controls
+- Include examples of all component features
+
+## Best Practices
+- Use meaningful story titles that reflect the component hierarchy
+- Group related stories using the `title` property
+- Provide controls for all component props
+- Include documentation and usage examples
+- Test all component states and variants
+
+- You can @ files here
+- You can use markdown but dont have to

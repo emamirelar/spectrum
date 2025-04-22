@@ -7,6 +7,7 @@
 
 /* eslint-disable */
 
+import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@spectrum/core/dist/components/spectrum-button.js";
 import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@spectrum/core/dist/components/spectrum-carousel.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@spectrum/core/dist/components/spectrum-conversation-panel.js";
 import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@spectrum/core/dist/components/spectrum-megamenu.js";
@@ -14,6 +15,17 @@ import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as d
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
 import React from 'react';
+
+type SpectrumButtonEvents = NonNullable<unknown>;
+
+export const SpectrumButton: StencilReactComponent<SpectrumButtonElement, SpectrumButtonEvents> = /*@__PURE__*/ createComponent<SpectrumButtonElement, SpectrumButtonEvents>({
+    tagName: 'spectrum-button',
+    elementClass: SpectrumButtonElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumButtonEvents,
+    defineCustomElement: defineSpectrumButton
+});
 
 type SpectrumCarouselEvents = NonNullable<unknown>;
 

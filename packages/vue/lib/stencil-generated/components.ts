@@ -8,6 +8,21 @@ import type { JSX } from '@stencil-storybook-boilerplate/core';
 
 
 
+export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>('spectrum-button', undefined, [
+  'variant',
+  'size',
+  'state',
+  'outline',
+  'iconOnly',
+  'showButtonText',
+  'buttonText',
+  'showLeftIcon',
+  'leftIcon',
+  'showRightIcon',
+  'rightIcon'
+]);
+
+
 export const SpectrumCarousel = /*@__PURE__*/ defineContainer<JSX.SpectrumCarousel>('spectrum-carousel', undefined, [
   'content',
   'show',

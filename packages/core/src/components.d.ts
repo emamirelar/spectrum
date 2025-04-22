@@ -6,6 +6,19 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface SpectrumButton {
+        "buttonText": string;
+        "iconOnly": boolean;
+        "leftIcon": string;
+        "outline": boolean;
+        "rightIcon": string;
+        "showButtonText": boolean;
+        "showLeftIcon": boolean;
+        "showRightIcon": boolean;
+        "size": 'sm' | 'base' | 'lg';
+        "state": 'default' | 'hover' | 'active' | 'disabled';
+        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+    }
     interface SpectrumCarousel {
         /**
           * animationtime The time in milliseconds for the slide transition animation Default: 1000
@@ -96,6 +109,12 @@ export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> 
     target: HTMLSpectrumConversationPanelElement;
 }
 declare global {
+    interface HTMLSpectrumButtonElement extends Components.SpectrumButton, HTMLStencilElement {
+    }
+    var HTMLSpectrumButtonElement: {
+        prototype: HTMLSpectrumButtonElement;
+        new (): HTMLSpectrumButtonElement;
+    };
     interface HTMLSpectrumCarouselElement extends Components.SpectrumCarousel, HTMLStencilElement {
     }
     var HTMLSpectrumCarouselElement: {
@@ -134,6 +153,7 @@ declare global {
         new (): HTMLSpectrumWallpaperElement;
     };
     interface HTMLElementTagNameMap {
+        "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-carousel": HTMLSpectrumCarouselElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
@@ -141,6 +161,19 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface SpectrumButton {
+        "buttonText"?: string;
+        "iconOnly"?: boolean;
+        "leftIcon"?: string;
+        "outline"?: boolean;
+        "rightIcon"?: string;
+        "showButtonText"?: boolean;
+        "showLeftIcon"?: boolean;
+        "showRightIcon"?: boolean;
+        "size"?: 'sm' | 'base' | 'lg';
+        "state"?: 'default' | 'hover' | 'active' | 'disabled';
+        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+    }
     interface SpectrumCarousel {
         /**
           * animationtime The time in milliseconds for the slide transition animation Default: 1000
@@ -229,6 +262,7 @@ declare namespace LocalJSX {
         "showSwatches"?: boolean;
     }
     interface IntrinsicElements {
+        "spectrum-button": SpectrumButton;
         "spectrum-carousel": SpectrumCarousel;
         "spectrum-conversation-panel": SpectrumConversationPanel;
         "spectrum-megamenu": SpectrumMegamenu;
@@ -239,6 +273,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "spectrum-button": LocalJSX.SpectrumButton & JSXBase.HTMLAttributes<HTMLSpectrumButtonElement>;
             "spectrum-carousel": LocalJSX.SpectrumCarousel & JSXBase.HTMLAttributes<HTMLSpectrumCarouselElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
