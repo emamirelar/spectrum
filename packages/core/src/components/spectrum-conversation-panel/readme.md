@@ -24,6 +24,32 @@
 | `explore`             |             | `CustomEvent<string>` |
 
 
+## Methods
+
+### `scrollToLatest() => Promise<void>`
+
+Scrolls the conversation panel to the latest message
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
+## Dependencies
+
+### Depends on
+
+- [spectrum-button](../spectrum-button)
+
+### Graph
+```mermaid
+graph TD;
+  spectrum-conversation-panel --> spectrum-button
+  style spectrum-conversation-panel fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

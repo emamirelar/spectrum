@@ -175,16 +175,31 @@ export default meta
 
 export const ConversationPanel = {
   render: ({ messages, actions, conversationtitle, backgroundColor, backgroundImage, backgroundPosition, backgroundSize }) =>
-      html`<spectrum-wallpaper
-        background=${backgroundImage ? `url(${backgroundImage})` : backgroundColor}
-        .backgroundPosition=${backgroundPosition}
-        .backgroundSize=${backgroundSize}
-        .showSwatches=${false}
-      >
-        <spectrum-conversation-panel 
-          messages="${messages}"
-          actions="${actions}"
-          conversationtitle="${conversationtitle}"
-        ></spectrum-conversation-panel>
-      </spectrum-wallpaper>`
+      html`<div>
+        <spectrum-wallpaper
+          background=${backgroundImage ? `url(${backgroundImage})` : backgroundColor}
+          .backgroundPosition=${backgroundPosition}
+          .backgroundSize=${backgroundSize}
+          .showSwatches=${false}
+        >
+          <spectrum-conversation-panel 
+            messages="${messages}"
+            actions="${actions}"
+            conversationtitle="${conversationtitle}"
+            id="conversation-panel"
+          ></spectrum-conversation-panel>
+        </spectrum-wallpaper>
+        <div style="margin-top: 1rem; text-align: center;">
+          <spectrum-button 
+            variant="primary" 
+            button-text="Scroll to Latest"
+            @click=${() => {
+              const panel = document.getElementById('conversation-panel');
+              if (panel) {
+                (panel as any).scrollToLatest();
+              }
+            }}
+          ></spectrum-button>
+        </div>
+      </div>`
 } satisfies StoryObj<SpectrumConversationPanel>

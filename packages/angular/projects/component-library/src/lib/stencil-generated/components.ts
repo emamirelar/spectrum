@@ -52,7 +52,8 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
 
 
 @ProxyCmp({
-  inputs: ['actions', 'conversationtitle', 'messages', 'sources']
+  inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
+  methods: ['scrollToLatest']
 })
 @Component({
   selector: 'spectrum-conversation-panel',

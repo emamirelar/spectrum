@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, State, Event, EventEmitter, Element } from '@stencil/core';
+import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Method, Watch } from '@stencil/core';
 
 @Component({
   tag: 'spectrum-conversation-panel',
@@ -39,13 +39,40 @@ export class SpectrumConversationPanel {
 
   @State() sourcesExpanded: boolean = false;
   @State() explorationsExpanded: boolean = false;
-  @State() activeAccordion: 'sources' | 'explorations' | null = null;
+  @State() expandedMessageId: string | null = null;
+  @State() expandedAccordionType: 'sources' | 'explorations' | null = null;
+  @State() messageArray: any[] = [];
+  private messageIdMap: Map<number, string> = new Map();
 
   @Event() explorationSelected: EventEmitter<string>;
   @Event() action: EventEmitter<string>;
   @Event() explore: EventEmitter<string>;
 
-  private scrollToBottom() {
+  @Watch('messages')
+  messagesChanged(newValue: string) {
+    this.updateMessages(newValue);
+  }
+
+  private updateMessages(messages: string) {
+    try {
+      const parsedMessages = JSON.parse(messages);
+      this.messageArray = parsedMessages;
+      this.messageIdMap.clear();
+      parsedMessages.forEach((_, index) => {
+        this.messageIdMap.set(index, `msg-${index}`);
+      });
+    } catch (error) {
+      console.error('Failed to parse messages:', error);
+      this.messageArray = [];
+      this.messageIdMap.clear();
+    }
+  }
+
+  /**
+   * Scrolls the conversation panel to the latest message
+   */
+  @Method()
+  async scrollToLatest() {
     if (this.conversationPanelRef) {
       this.conversationPanelRef.scrollTo({
         top: this.conversationPanelRef.scrollHeight,
@@ -55,23 +82,18 @@ export class SpectrumConversationPanel {
   }
 
   componentDidLoad() {
-    this.scrollToBottom();
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom();
+    this.updateMessages(this.messages);
+    this.scrollToLatest();
   }
 
   /** 
    * RenderMessages - render messages in the conversation panel
-   * @param messages - the messages to render
   **/
-  renderMessages(messages: string) {
-    var messageArray = JSON.parse(messages);
+  renderMessages() {
     return (
       <div class="conversation-panel" ref={(el) => this.conversationPanelRef = el}>
-        {messageArray.map((message) => {
-          return this.renderMessage(message, message.sender);
+        {this.messageArray.map((message, index) => {
+          return this.renderMessage(message, message.sender, index);
         })}
       </div>
     );
@@ -82,24 +104,26 @@ export class SpectrumConversationPanel {
    * use renderRequest or renderResponse depending on the message type
    * @param message - the message to render
    * @param sender - the sender of the message
+   * @param index - the index of the message in the array
   **/
-  renderMessage(message: object, sender: string) {
+  renderMessage(message: object, sender: string, index: number) {
     if (sender === 'request') {
-      return this.renderRequest(message);
+      return this.renderRequest(message, index);
     } else if (sender === 'response') {
-      return this.renderResponse(message);
+      return this.renderResponse(message, index);
     }
     return null;
   }
 
   /**
    * RenderRequest - render a request in the conversation panel
-   * @param request 
+   * @param request - the request to render
+   * @param index - the index of the message in the array
    */
-  renderRequest(request: any) {
-
+  renderRequest(request: any, index: number) {
+    const messageId = this.messageIdMap.get(index);
     return (
-      <div class="message-wrapper request">
+      <div class="message-wrapper request" id={`message-${messageId}`}>
         <div class="message">
           {request.message}
         </div>
@@ -112,9 +136,13 @@ export class SpectrumConversationPanel {
    * RenderResponse - render a response in the conversation panel
    * @param response 
    */
-  renderResponse(response: any) {
+  renderResponse(response: any, index: number) {
+    const messageId = this.messageIdMap.get(index);
+    const isExpanded = this.expandedMessageId === messageId;
+    const activeAccordion = isExpanded ? this.expandedAccordionType : null;
+
     return [
-      <div class="message-wrapper response">
+      <div class="message-wrapper response" id={`message-${messageId}`}>
         <div class="agentIcon"></div>
         <div class="message">
           <div innerHTML={response.message}></div>
@@ -124,36 +152,38 @@ export class SpectrumConversationPanel {
           <div class="accordion-row">
             <button 
               class="button border" 
-              onClick={() => this.toggleAccordion('explorations')}
-              aria-expanded={this.activeAccordion === 'explorations' ? 'true' : 'false'}
+              id={`explorations-${messageId}`}
+              onClick={() => this.toggleAccordion(messageId, 'explorations')}
+              aria-expanded={activeAccordion === 'explorations' ? 'true' : 'false'}
             >
               <span class="button-label">Dive Deeper</span>
               <span class="button-icon material-symbols-outlined">
-                {this.activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
+                {activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
               </span>
             </button>
             <button 
               class="button border" 
-              onClick={() => this.toggleAccordion('sources')}
-              aria-expanded={this.activeAccordion === 'sources' ? 'true' : 'false'}
+              id={`sources-${messageId}`}
+              onClick={() => this.toggleAccordion(messageId, 'sources')}
+              aria-expanded={activeAccordion === 'sources' ? 'true' : 'false'}
             >
               <span class="button-label">Sources and related content</span>
               <span class="button-icon material-symbols-outlined">
-                {this.activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
+                {activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
               </span>
             </button>
           </div>
         </div>
       </div>,
-      this.activeAccordion === 'explorations' && (
-        <div class="accordion-content expanded">
+      activeAccordion === 'explorations' && (
+        <div class="accordion-content expanded" id={`explorations-content-${messageId}`}>
           <div class="scroll-container">
             {response.explorations ? this.renderExplorations(response.explorations) : null}
           </div>
         </div>
       ),
-      this.activeAccordion === 'sources' && (
-        <div class="accordion-content expanded">
+      activeAccordion === 'sources' && (
+        <div class="accordion-content expanded" id={`sources-content-${messageId}`}>
           <div class="scroll-container">
             {response.sources ? this.renderSources(response.sources) : null}
           </div>
@@ -176,12 +206,12 @@ export class SpectrumConversationPanel {
         {actionsArray.map((action) => {
           return (
             <div class="action">
-              <button 
-                class="clear" 
+              <spectrum-button 
+                variant="ghost"
+                iconOnly={true}
+                leftIcon={action.icon}
                 onClick={() => this.action.emit(action.value)}
-              >
-                <span class="material-symbols-outlined">{action.icon}</span>
-              </button>
+              />
             </div>
           )
         })}
@@ -241,11 +271,15 @@ export class SpectrumConversationPanel {
     );
   }
 
-  toggleAccordion(accordion: 'sources' | 'explorations') {
-    if (this.activeAccordion === accordion) {
-      this.activeAccordion = null;
+  toggleAccordion(messageId: string, accordion: 'sources' | 'explorations') {
+    if (this.expandedMessageId === messageId && this.expandedAccordionType === accordion) {
+      // If clicking the same accordion, collapse it
+      this.expandedMessageId = null;
+      this.expandedAccordionType = null;
     } else {
-      this.activeAccordion = accordion;
+      // Otherwise, expand the clicked accordion
+      this.expandedMessageId = messageId;
+      this.expandedAccordionType = accordion;
     }
   }
 
@@ -256,7 +290,7 @@ export class SpectrumConversationPanel {
               <h2 class="conversation-title">
                 {this.conversationtitle}
               </h2>
-              {this.renderMessages(this.messages)}
+              {this.renderMessages()}
           </div>
       </Host>
     );

@@ -59,6 +59,10 @@ export namespace Components {
          */
         "messages": string;
         /**
+          * Scrolls the conversation panel to the latest message
+         */
+        "scrollToLatest": () => Promise<void>;
+        /**
           * The sources to display in the messages Default: null
          */
         "sources": string;
