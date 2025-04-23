@@ -61,6 +61,16 @@
     --spectrum-sys-font-weight-medium: 500;
     --spectrum-sys-font-weight-bold: 700;
   
+    /* Material Symbols font settings */
+    --spectrum-sys-icon-font-family: 'Material Symbols Outlined';
+    --spectrum-sys-icon-font-size: 20px;
+    --spectrum-sys-icon-font-weight: 400;
+    --spectrum-sys-icon-line-height: 1;
+    --spectrum-sys-icon-fill: 0;
+    --spectrum-sys-icon-weight: 400;
+    --spectrum-sys-icon-grade: 0;
+    --spectrum-sys-icon-optical-size: 24;
+  
     --spectrum-sys-spacing: 8px;
     --spectrum-sys-spacing-large: calc(var(--spectrum-sys-spacing) * 2);
     --spectrum-sys-spacing-x-large: calc(var(--spectrum-sys-spacing) * 3);

@@ -45,6 +45,40 @@ export namespace Components {
          */
         "show": number;
     }
+    interface SpectrumChip {
+        /**
+          * Whether the chip is disabled
+         */
+        "disabled": boolean;
+        /**
+          * The label text of the chip
+         */
+        "label": string;
+        /**
+          * Optional leading icon
+         */
+        "leadingIcon": string;
+        /**
+          * Whether the chip is outlined
+         */
+        "outline": boolean;
+        /**
+          * Whether the chip is selected
+         */
+        "selected": boolean;
+        /**
+          * Whether to show the trailing icon
+         */
+        "showTrailingIcon": boolean;
+        /**
+          * Optional trailing icon (usually for removal)
+         */
+        "trailingIcon": string;
+        /**
+          * The variant of the chip
+         */
+        "variant": 'primary' | 'secondary';
+    }
     interface SpectrumConversationPanel {
         /**
           * The actions to display in the messages Default: null
@@ -108,6 +142,10 @@ export namespace Components {
         "showSwatches": boolean;
     }
 }
+export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumChipElement;
+}
 export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
@@ -124,6 +162,24 @@ declare global {
     var HTMLSpectrumCarouselElement: {
         prototype: HTMLSpectrumCarouselElement;
         new (): HTMLSpectrumCarouselElement;
+    };
+    interface HTMLSpectrumChipElementEventMap {
+        "chipSelect": boolean;
+        "chipRemove": void;
+    }
+    interface HTMLSpectrumChipElement extends Components.SpectrumChip, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumChipElementEventMap>(type: K, listener: (this: HTMLSpectrumChipElement, ev: SpectrumChipCustomEvent<HTMLSpectrumChipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumChipElementEventMap>(type: K, listener: (this: HTMLSpectrumChipElement, ev: SpectrumChipCustomEvent<HTMLSpectrumChipElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumChipElement: {
+        prototype: HTMLSpectrumChipElement;
+        new (): HTMLSpectrumChipElement;
     };
     interface HTMLSpectrumConversationPanelElementEventMap {
         "explorationSelected": string;
@@ -159,6 +215,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-carousel": HTMLSpectrumCarouselElement;
+        "spectrum-chip": HTMLSpectrumChipElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
@@ -203,6 +260,48 @@ declare namespace LocalJSX {
           * Show The number of slides to show at once Default: 3
          */
         "show"?: number;
+    }
+    interface SpectrumChip {
+        /**
+          * Whether the chip is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * The label text of the chip
+         */
+        "label"?: string;
+        /**
+          * Optional leading icon
+         */
+        "leadingIcon"?: string;
+        /**
+          * Emitted when the chip is removed (clicked on trailing icon)
+         */
+        "onChipRemove"?: (event: SpectrumChipCustomEvent<void>) => void;
+        /**
+          * Emitted when the chip is selected/deselected
+         */
+        "onChipSelect"?: (event: SpectrumChipCustomEvent<boolean>) => void;
+        /**
+          * Whether the chip is outlined
+         */
+        "outline"?: boolean;
+        /**
+          * Whether the chip is selected
+         */
+        "selected"?: boolean;
+        /**
+          * Whether to show the trailing icon
+         */
+        "showTrailingIcon"?: boolean;
+        /**
+          * Optional trailing icon (usually for removal)
+         */
+        "trailingIcon"?: string;
+        /**
+          * The variant of the chip
+         */
+        "variant"?: 'primary' | 'secondary';
     }
     interface SpectrumConversationPanel {
         /**
@@ -268,6 +367,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "spectrum-button": SpectrumButton;
         "spectrum-carousel": SpectrumCarousel;
+        "spectrum-chip": SpectrumChip;
         "spectrum-conversation-panel": SpectrumConversationPanel;
         "spectrum-megamenu": SpectrumMegamenu;
         "spectrum-wallpaper": SpectrumWallpaper;
@@ -279,6 +379,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "spectrum-button": LocalJSX.SpectrumButton & JSXBase.HTMLAttributes<HTMLSpectrumButtonElement>;
             "spectrum-carousel": LocalJSX.SpectrumCarousel & JSXBase.HTMLAttributes<HTMLSpectrumCarouselElement>;
+            "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;

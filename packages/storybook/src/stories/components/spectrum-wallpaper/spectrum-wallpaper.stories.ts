@@ -7,7 +7,7 @@ import type { SpectrumWallpaper } from "@stencil-storybook-boilerplate/core/src/
 // More on how to set up stories at: https://storybook.js.org/docs/web-components/writing-stories/introduction
 
 const meta = {
-  title: 'Components/Spectrum Wallpaper',
+  title: 'Components/SpectrumWallpaper',
   component: 'spectrum-wallpaper',
   tags: ['autodocs'],
   render: (args) => html`

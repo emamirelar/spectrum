@@ -52,6 +52,38 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
 
 
 @ProxyCmp({
+  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
+})
+@Component({
+  selector: 'spectrum-chip',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
+})
+export class SpectrumChip {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['chipSelect', 'chipRemove']);
+  }
+}
+
+
+export declare interface SpectrumChip extends Components.SpectrumChip {
+  /**
+   * Emitted when the chip is selected/deselected
+   */
+  chipSelect: EventEmitter<CustomEvent<boolean>>;
+  /**
+   * Emitted when the chip is removed (clicked on trailing icon)
+   */
+  chipRemove: EventEmitter<CustomEvent<void>>;
+}
+
+
+@ProxyCmp({
   inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
   methods: ['scrollToLatest']
 })
