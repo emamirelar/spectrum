@@ -150,28 +150,32 @@ export class SpectrumConversationPanel {
             {this.renderActions(this.actions)}
           </div>
           <div class="accordion-row">
-            <button 
-              class="button border" 
-              id={`explorations-${messageId}`}
+            <spectrum-button 
+              variant="secondary"
+              outline={true}
+              size="sm"
+              showButtonText={true}
+              showLeftIcon={true}
+              buttonText="Dive Deeper"
+              leftIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
               onClick={() => this.toggleAccordion(messageId, 'explorations')}
               aria-expanded={activeAccordion === 'explorations' ? 'true' : 'false'}
             >
-              <span class="button-label">Dive Deeper</span>
-              <span class="button-icon material-symbols-outlined">
-                {activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
-              </span>
-            </button>
-            <button 
-              class="button border" 
-              id={`sources-${messageId}`}
+              Dive Deeper
+            </spectrum-button>
+            <spectrum-button 
+              variant="secondary"
+              outline={true}
+              size="sm"
+              showButtonText={true}
+              showLeftIcon={true}
+              buttonText="Sources and related content"
+              leftIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
               onClick={() => this.toggleAccordion(messageId, 'sources')}
               aria-expanded={activeAccordion === 'sources' ? 'true' : 'false'}
             >
-              <span class="button-label">Sources and related content</span>
-              <span class="button-icon material-symbols-outlined">
-                {activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
-              </span>
-            </button>
+              Sources and related content
+            </spectrum-button>
           </div>
         </div>
       </div>,
