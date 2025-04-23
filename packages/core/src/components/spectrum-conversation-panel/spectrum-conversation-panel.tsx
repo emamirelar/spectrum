@@ -150,31 +150,22 @@ export class SpectrumConversationPanel {
             {this.renderActions(this.actions)}
           </div>
           <div class="accordion-row">
-            <spectrum-button 
+            <spectrum-chip 
               variant="secondary"
               outline={true}
-              size="sm"
-              showButtonText={true}
-              showLeftIcon={true}
-              buttonText="Dive Deeper"
-              leftIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
+              label="Dive Deeper"
+              leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
               onClick={() => this.toggleAccordion(messageId, 'explorations')}
-              aria-expanded={activeAccordion === 'explorations' ? 'true' : 'false'}
-            >
-              Dive Deeper
-            </spectrum-button>
-            <spectrum-button 
+              selected={activeAccordion === 'explorations'}
+            />
+            <spectrum-chip 
               variant="secondary"
               outline={true}
-              size="sm"
-              showButtonText={true}
-              showLeftIcon={true}
-              buttonText="Sources and related content"
-              leftIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
+              label="Sources and related content"
+              leadingIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
               onClick={() => this.toggleAccordion(messageId, 'sources')}
-            >
-              Sources and related content
-            </spectrum-button>
+              selected={activeAccordion === 'sources'}
+            />
           </div>
         </div>
       </div>,

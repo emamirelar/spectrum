@@ -41,11 +41,13 @@ Type: `Promise<void>`
 
 ### Depends on
 
+- [spectrum-chip](../spectrum-chip)
 - [spectrum-button](../spectrum-button)
 
 ### Graph
 ```mermaid
 graph TD;
+  spectrum-conversation-panel --> spectrum-chip
   spectrum-conversation-panel --> spectrum-button
   style spectrum-conversation-panel fill:#f9f,stroke:#333,stroke-width:4px
 ```

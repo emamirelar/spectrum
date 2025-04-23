@@ -27,6 +27,19 @@
 | `chipSelect` | Emitted when the chip is selected/deselected                | `CustomEvent<boolean>` |
 
 
+## Dependencies
+
+### Used by
+
+ - [spectrum-conversation-panel](../spectrum-conversation-panel)
+
+### Graph
+```mermaid
+graph TD;
+  spectrum-conversation-panel --> spectrum-chip
+  style spectrum-chip fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 
