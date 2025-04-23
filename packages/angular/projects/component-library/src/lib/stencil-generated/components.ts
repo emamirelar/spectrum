@@ -8,28 +8,153 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['label', 'variant']
+  inputs: ['buttonText', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
 })
 @Component({
-  selector: 'unops-button',
+  selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['label', 'variant'],
+  inputs: ['buttonText', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
 })
-export class UnopsButton {
+export class SpectrumButton {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['buttonPressed']);
   }
 }
 
 
-export declare interface UnopsButton extends Components.UnopsButton {
+export declare interface SpectrumButton extends Components.SpectrumButton {}
 
-  buttonPressed: EventEmitter<CustomEvent<boolean>>;
+
+@ProxyCmp({
+  inputs: ['animationtime', 'autoplay', 'content', 'gap', 'hoverpause', 'show']
+})
+@Component({
+  selector: 'spectrum-carousel',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['animationtime', 'autoplay', 'content', 'gap', 'hoverpause', 'show'],
+})
+export class SpectrumCarousel {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
 }
+
+
+export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
+
+
+@ProxyCmp({
+  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
+})
+@Component({
+  selector: 'spectrum-chip',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
+})
+export class SpectrumChip {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['chipSelect', 'chipRemove']);
+  }
+}
+
+
+export declare interface SpectrumChip extends Components.SpectrumChip {
+  /**
+   * Emitted when the chip is selected/deselected
+   */
+  chipSelect: EventEmitter<CustomEvent<boolean>>;
+  /**
+   * Emitted when the chip is removed (clicked on trailing icon)
+   */
+  chipRemove: EventEmitter<CustomEvent<void>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
+  methods: ['scrollToLatest']
+})
+@Component({
+  selector: 'spectrum-conversation-panel',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
+})
+export class SpectrumConversationPanel {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore']);
+  }
+}
+
+
+export declare interface SpectrumConversationPanel extends Components.SpectrumConversationPanel {
+
+  explorationSelected: EventEmitter<CustomEvent<string>>;
+
+  action: EventEmitter<CustomEvent<string>>;
+
+  explore: EventEmitter<CustomEvent<string>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['closeicon', 'content', 'megamenutitle', 'openicon', 'width']
+})
+@Component({
+  selector: 'spectrum-megamenu',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['closeicon', 'content', 'megamenutitle', 'openicon', 'width'],
+})
+export class SpectrumMegamenu {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
+
+
+@ProxyCmp({
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches']
+})
+@Component({
+  selector: 'spectrum-wallpaper',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches'],
+})
+export class SpectrumWallpaper {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumWallpaper extends Components.SpectrumWallpaper {}
 
 

@@ -1,0 +1,312 @@
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+.conversation-panel-host {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-grow: 1;
+}
+
+/* Material Icons */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  font-size: 20px;
+  font-family: 'Material Symbols Outlined';
+}
+
+/* Button Styles */
+button {
+  border: 0;
+  min-width: 48px;
+  min-height: 48px;
+  width: auto;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  font-family: 'Material Icons';
+  
+  &.small {
+    min-width: 24px;
+    min-height: 24px;
+    height: 24px;
+    width: 24px;
+    border-radius: 12px;
+  }
+
+  &.border {
+    border: 1px solid var(--spectrum-color-outline);
+  }
+
+  .button-label {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    width: auto;
+    flex-grow: 1;
+  }
+
+  .button-icon {
+    flex-shrink: 1;
+  }
+}
+
+/* Utility Classes */
+.frost {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+}
+
+/* Panel and Message Styles */
+.panel {
+  flex-grow: 2;
+  border-radius: 48px;
+  border: 1px solid var(--spectrum-color-outline);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  will-change: transform;
+  overflow-y: clip;
+  position: relative;
+  min-height: 0;
+}
+
+.conversation-title {
+  padding: 1rem 2rem;
+  font-size: 1.5em;
+  color: var(--spectrum-color-on-surface);
+  flex-shrink: 1;
+}
+
+.message-wrapper {
+  width: 100%;
+  will-change: transform;
+  
+  &.request {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .message {
+      max-width: 66%;
+    }
+  }
+  
+  &.response {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .message {
+      flex: 1;
+      max-width: 100%;
+      position: relative;
+    }
+  }
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  will-change: transform;
+  box-sizing: border-box;
+  
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0;
+  }
+}
+
+.request .message {
+  border-radius: 16px 16px 0 16px;
+  backdrop-filter: brightness(10%);
+  background: var(--spectrum-color-primary);
+  color: var(--spectrum-color-on-primary);
+  padding: 1rem 1.5rem;
+}
+
+.response .message {
+  border-radius: 0 16px 16px 16px;
+  background: transparent;
+  color: var(--spectrum-color-on-surface);
+  
+  ul {
+    color: var(--spectrum-color-on-surface-variant);
+  }
+}
+
+/* Accordion Styles */
+.accordion-row {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  margin-top: 1rem;
+
+  spectrum-chip {
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+.accordion-content {
+  position: relative;
+  background: transparent;
+  width: 100%;
+
+  .scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 8px;
+    padding: 8px;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+/* Content Card Styles */
+.content-card {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--spectrum-color-surface);
+  color: var(--spectrum-color-on-surface);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px var(--spectrum-color-shadow);
+  border: 1px solid var(--spectrum-color-outline-variant);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--spectrum-color-shadow);
+  }
+
+  .number {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--spectrum-color-primary);
+    color: var(--spectrum-color-on-primary);
+    border-radius: 50%;
+    font-size: 16px;
+  }
+
+  .card-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .title {
+      font-weight: 500;
+      color: var(--spectrum-color-on-surface);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--spectrum-color-on-surface-variant);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+
+/* Exploration Styles */
+.explorations-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+.exploration-chip {
+  background: var(--spectrum-color-primary-container);
+  color: var(--spectrum-color-on-primary-container);
+  border: none;
+  border-radius: 16px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto;
+  min-width: 0;
+  text-align: left;
+  font-family: 'Noto Sans', sans-serif;
+
+  &:hover {
+    background: var(--spectrum-color-primary);
+    color: var(--spectrum-color-on-primary);
+
+    .material-symbols-outlined, .chip-label {
+      color: var(--spectrum-color-on-primary);
+    }
+  }
+
+  .material-symbols-outlined {
+    color: var(--spectrum-color-on-primary-container);
+  }
+
+  .chip-label {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    color: var(--spectrum-color-on-primary-container);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.conversation-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0 2rem 2rem 2rem;
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+}

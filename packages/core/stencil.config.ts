@@ -1,12 +1,17 @@
 import { Config } from '@stencil/core';
+import tailwind from 'stencil-tailwind-plugin';
 import { reactOutputTarget } from '@stencil/react-output-target';
 import { angularOutputTarget } from '@stencil/angular-output-target';
 import { vueOutputTarget } from '@stencil/vue-output-target';
 import { sass } from '@stencil/sass';
 
 export const config: Config = {
-  namespace: 'stencil-storybook-boilerplate',
-  plugins: [sass()],
+  namespace: 'spectrum',
+  plugins: [
+    sass(),
+    tailwind(),
+  ],
+  globalStyle: 'src/global/global.css',
   outputTargets: [
     {
       type: 'dist',

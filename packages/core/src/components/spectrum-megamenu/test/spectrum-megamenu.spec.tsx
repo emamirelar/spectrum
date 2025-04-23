@@ -1,18 +1,18 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { UnopsButton } from '../unops-button';
+import { SpectrumMegamenu } from '../spectrum-megamenu';
 
-describe('unops-button', () => {
+describe('spectrum-megamenu', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [UnopsButton],
-      html: `<unops-button></unops-button>`,
+      components: [SpectrumMegamenu],
+      html: `<spectrum-megamenu></spectrum-megamenu>`,
     });
     expect(page.root).toEqualHtml(`
-      <unops-button>
+      <spectrum-megamenu>
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
-      </unops-button>
+      </spectrum-megamenu>
     `);
   });
 });

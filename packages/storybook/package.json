@@ -12,7 +12,9 @@
     "build-storybook": "storybook build",
     "build-storybook-ci": "BASE_PATH=/stencil-storybook-boilerplate/ storybook build",
     "preview-storybook": "npx http-server storybook-static",
-    "update": "npx npm-check-updates -u"
+    "update": "npx npm-check-updates -u",
+    "test-storybook": "test-storybook",
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "dependencies": {
     "@stencil-storybook-boilerplate/core": "*",
@@ -23,6 +25,7 @@
     "@storybook/addon-essentials": "^8.4.5",
     "@storybook/addon-links": "^8.4.5",
     "@storybook/blocks": "^8.4.5",
+    "@storybook/storybook-deployer": "^2.8.16",
     "@storybook/test": "^8.4.5",
     "@storybook/web-components": "^8.4.5",
     "@storybook/web-components-vite": "^8.4.5",

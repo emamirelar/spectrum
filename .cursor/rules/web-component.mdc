@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+
+# Your rule content
+Components are created by:
+
+Navigating to the stencil core package: cd /packages/core
+Generating a new component with npm run generate <component-nam>
+
+Do not create new directories.
+Do not create components without running npm run generate

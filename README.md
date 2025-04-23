@@ -1,4 +1,4 @@
-# UNOPS Rosetta Design System
+# UNOPS 🌈 Spectrum Design System
 
 Inspired by - [stencil-storybook-boilerplate](https://artursopelnik.github.io/stencil-storybook-boilerplate/)
 
@@ -38,7 +38,7 @@ npm run generate <sub-folder>
 - Please make sure to update tests as appropriate.
 
 ## 📩 Contact
-📧 justinwa@unops.org or emamirelar@unops.org
+📧 [Ema Rogobete](emamirelar@unops.org) or [Justin Waugh](justinwa@unops.org)
 
 ## License
-MIT &copy; [Artur Sopelnik](https://github.com/artursopelnik/)
+MIT &copy; [UNOPS](https://www.unops.org)
