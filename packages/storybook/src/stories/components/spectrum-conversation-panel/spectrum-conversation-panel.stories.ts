@@ -29,11 +29,11 @@ const meta = {
     messages: `[
       {
         "sender": "request",
-        "message": "When did man land on the moon?"
+        "message": "When did man land on the moon? Please go into excruciating detail. Just don't stop giving me the details. More details, more details, more details. like a broken record. Just keeping going and going and going and going - like say... someone who talks a lot."
       },
       {
         "sender": "response",
-        "message": "This historic event occurred during the Apollo 11 mission, where American astronauts Neil Armstrong and Buzz Aldrin landed the lunar module 'Eagle' on the Moon's surface. Neil Armstrong became the first human to step onto the Moon at 02:56 UTC on July 21, 1969.<ul><li>Neil Armstrong</li><li>Buzz Aldrin</li><li>Michael Collins</li></ul>",
+        "message": "This historic event occurred during the Apollo 11 mission, where American astronauts Neil Armstrong and Buzz Aldrin landed the lunar module 'Eagle' on the Moon's surface. Neil Armstrong became the first human to step onto the Moon at 02:56 UTC on July 21, 1969.<ul><li>Neil Armstrong</li><li>Buzz Aldrin</li><li>Michael Collins</li></ul><p>Some more stuff.</p>",
         "sources": [
           {
             "label": "NASA History",

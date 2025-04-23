@@ -18,10 +18,8 @@ body {
 /* Material Icons */
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-  
-  &.small {
-    font-size: 16px;
-  }
+  font-size: 20px;
+  font-family: 'Material Symbols Outlined';
 }
 
 /* Button Styles */
@@ -78,16 +76,15 @@ button {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 16px;
+  padding: 0;
   will-change: transform;
   overflow-y: clip;
   position: relative;
   min-height: 0;
-  // height: 100%;
 }
 
 .conversation-title {
-  padding: 8px;
+  padding: 1rem 2rem;
   font-size: 1.5em;
   color: var(--spectrum-color-on-surface);
   flex-shrink: 1;
@@ -125,7 +122,6 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 8px;
   will-change: transform;
   box-sizing: border-box;
   
@@ -133,28 +129,6 @@ button {
     display: flex;
     gap: 0.5rem;
     margin-top: 0;
-
-    .action {
-      button {
-        padding: 0.5rem;
-        border-radius: 50%;
-        transition: all 0.2s ease-in-out;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-
-        &:hover {
-          background-color: var(--spectrum-color-surface);
-        }
-
-        span {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--spectrum-color-on-surface);
-        }
-      }
-    }
   }
 }
 
@@ -163,6 +137,7 @@ button {
   backdrop-filter: brightness(10%);
   background: var(--spectrum-color-primary);
   color: var(--spectrum-color-on-primary);
+  padding: 1rem 1.5rem;
 }
 
 .response .message {
@@ -179,8 +154,7 @@ button {
 .accordion-row {
   display: flex;
   gap: 12px;
-  margin: 16px 0;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .accordion-content {
@@ -300,8 +274,6 @@ button {
   }
 
   .material-symbols-outlined {
-    font-size: 20px;
-    font-family: 'Material Symbols Outlined';
     color: var(--spectrum-color-on-primary-container);
   }
 
@@ -318,9 +290,8 @@ button {
 .conversation-panel {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  padding-right: 2rem;
+  gap: 2rem;
+  padding: 0 2rem 2rem 2rem;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;

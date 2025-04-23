@@ -172,7 +172,6 @@ export class SpectrumConversationPanel {
               buttonText="Sources and related content"
               leftIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
               onClick={() => this.toggleAccordion(messageId, 'sources')}
-              aria-expanded={activeAccordion === 'sources' ? 'true' : 'false'}
             >
               Sources and related content
             </spectrum-button>

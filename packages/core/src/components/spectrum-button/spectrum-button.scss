@@ -10,11 +10,11 @@
   font-weight: var(--spectrum-sys-font-weight-medium);
   border: var(--spectrum-sys-border) solid transparent;
   border-radius: 24px;
-  padding:  1em;
+  padding: var(--spectrum-sys-spacing) var(--spectrum-sys-spacing) var(--spectrum-sys-spacing) var(--spectrum-sys-spacing-small);
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
-  gap: var(--spectrum-sys-spacing);
+  gap: var(--spectrum-sys-spacing-small);
   min-height: 2rem;
   transition: all 0.2s ease-in-out;
   position: relative;
