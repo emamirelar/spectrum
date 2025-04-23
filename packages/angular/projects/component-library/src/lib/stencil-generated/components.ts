@@ -137,6 +137,33 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
+  inputs: ['maxLines'],
+  methods: ['setFocus']
+})
+@Component({
+  selector: 'spectrum-search-input',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['maxLines'],
+})
+export class SpectrumSearchInput {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['searchSubmit']);
+  }
+}
+
+
+export declare interface SpectrumSearchInput extends Components.SpectrumSearchInput {
+
+  searchSubmit: EventEmitter<CustomEvent<string>>;
+}
+
+
+@ProxyCmp({
   inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches']
 })
 @Component({

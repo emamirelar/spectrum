@@ -1,0 +1,129 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.spectrum-search-input {
+  width: 100%;
+  
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: var(--spectrum-sys-spacing-small);
+    background-color: var(--spectrum-sys-color-surface);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 9999px;
+    padding: 0;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: 56px;
+    position: relative;
+    
+    &:hover {
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+    }
+    
+    &:focus-within {
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    &--multiline {
+      height: auto;
+      min-height: 56px;
+      border-radius: 28px;
+
+      .spectrum-search-input__buttons {
+        align-self: flex-end;
+        position: static;
+        transform: none;
+        margin-bottom: 8px;
+      }
+
+      .spectrum-search-input__field {
+        padding-right: 24px;
+      }
+    }
+  }
+  
+  &__field {
+    flex: 1;
+    height: 24px;
+    max-height: 150px;
+    padding: 16px 24px;
+    padding-right: 100px; /* Make space for buttons */
+    border: none;
+    background: none;
+    font-family: var(--spectrum-sys-font-family);
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.87);
+    resize: none;
+    overflow-y: hidden;
+    margin: 0;
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.54);
+    }
+    
+    &:focus {
+      outline: none;
+    }
+
+    /* Webkit scrollbar styles */
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+  }
+  
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: auto;
+    background: linear-gradient(to left, var(--spectrum-sys-color-surface) 70%, transparent);
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+
+    spectrum-button {
+      --button-size: 40px;
+      flex-shrink: 0;
+    }
+
+    spectrum-button[variant="ghost"] {
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    spectrum-button[variant="primary"] {
+      background-color: var(--spectrum-sys-color-primary);
+      color: var(--spectrum-sys-color-on-primary);
+      border-radius: 50%;
+      min-width: var(--button-size);
+      height: var(--button-size);
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: var(--spectrum-sys-color-primary-hover);
+      }
+    }
+  }
+}

@@ -123,6 +123,10 @@ export namespace Components {
          */
         "width": string;
     }
+    interface SpectrumSearchInput {
+        "maxLines": number;
+        "setFocus": () => Promise<void>;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -149,6 +153,10 @@ export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
+}
+export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumSearchInputElement;
 }
 declare global {
     interface HTMLSpectrumButtonElement extends Components.SpectrumButton, HTMLStencilElement {
@@ -206,6 +214,23 @@ declare global {
         prototype: HTMLSpectrumMegamenuElement;
         new (): HTMLSpectrumMegamenuElement;
     };
+    interface HTMLSpectrumSearchInputElementEventMap {
+        "searchSubmit": string;
+    }
+    interface HTMLSpectrumSearchInputElement extends Components.SpectrumSearchInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumSearchInputElementEventMap>(type: K, listener: (this: HTMLSpectrumSearchInputElement, ev: SpectrumSearchInputCustomEvent<HTMLSpectrumSearchInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumSearchInputElementEventMap>(type: K, listener: (this: HTMLSpectrumSearchInputElement, ev: SpectrumSearchInputCustomEvent<HTMLSpectrumSearchInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumSearchInputElement: {
+        prototype: HTMLSpectrumSearchInputElement;
+        new (): HTMLSpectrumSearchInputElement;
+    };
     interface HTMLSpectrumWallpaperElement extends Components.SpectrumWallpaper, HTMLStencilElement {
     }
     var HTMLSpectrumWallpaperElement: {
@@ -218,6 +243,7 @@ declare global {
         "spectrum-chip": HTMLSpectrumChipElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
+        "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
     }
 }
@@ -346,6 +372,10 @@ declare namespace LocalJSX {
          */
         "width"?: string;
     }
+    interface SpectrumSearchInput {
+        "maxLines"?: number;
+        "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -370,6 +400,7 @@ declare namespace LocalJSX {
         "spectrum-chip": SpectrumChip;
         "spectrum-conversation-panel": SpectrumConversationPanel;
         "spectrum-megamenu": SpectrumMegamenu;
+        "spectrum-search-input": SpectrumSearchInput;
         "spectrum-wallpaper": SpectrumWallpaper;
     }
 }
@@ -382,6 +413,7 @@ declare module "@stencil/core" {
             "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
+            "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
         }
     }
