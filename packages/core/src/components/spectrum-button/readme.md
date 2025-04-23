@@ -27,11 +27,13 @@
 ### Used by
 
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
+ - [spectrum-search-input](../spectrum-search-input)
 
 ### Graph
 ```mermaid
 graph TD;
   spectrum-conversation-panel --> spectrum-button
+  spectrum-search-input --> spectrum-button
   style spectrum-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

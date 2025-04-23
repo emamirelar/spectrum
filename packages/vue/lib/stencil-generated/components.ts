@@ -67,6 +67,12 @@ export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegame
 ]);
 
 
+export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchInput>('spectrum-search-input', undefined, [
+  'maxLines',
+  'searchSubmit'
+]);
+
+
 export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallpaper>('spectrum-wallpaper', undefined, [
   'background',
   'showSwatches',

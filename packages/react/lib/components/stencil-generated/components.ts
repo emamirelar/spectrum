@@ -12,6 +12,7 @@ import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as def
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@spectrum/core/dist/components/spectrum-chip.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@spectrum/core/dist/components/spectrum-conversation-panel.js";
 import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@spectrum/core/dist/components/spectrum-megamenu.js";
+import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@spectrum/core/dist/components/spectrum-search-input.js";
 import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@spectrum/core/dist/components/spectrum-wallpaper.js";
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
@@ -84,6 +85,17 @@ export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, Sp
     react: React,
     events: {} as SpectrumMegamenuEvents,
     defineCustomElement: defineSpectrumMegamenu
+});
+
+type SpectrumSearchInputEvents = { onSearchSubmit: EventName<CustomEvent<string>> };
+
+export const SpectrumSearchInput: StencilReactComponent<SpectrumSearchInputElement, SpectrumSearchInputEvents> = /*@__PURE__*/ createComponent<SpectrumSearchInputElement, SpectrumSearchInputEvents>({
+    tagName: 'spectrum-search-input',
+    elementClass: SpectrumSearchInputElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onSearchSubmit: 'searchSubmit' } as SpectrumSearchInputEvents,
+    defineCustomElement: defineSpectrumSearchInput
 });
 
 type SpectrumWallpaperEvents = NonNullable<unknown>;
