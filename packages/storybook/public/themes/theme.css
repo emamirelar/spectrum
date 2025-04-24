@@ -55,7 +55,7 @@
     --spectrum-color-inverse-primary: #a8c8ff;
   
     --spectrum-sys-font-family: 'Noto Sans', sans-serif;
-    --spectrum-sys-font-size: 14px;
+    --spectrum-sys-font-size: 16px;
     --spectrum-sys-font-weight-light: 300;
     --spectrum-sys-font-weight-regular: 400;
     --spectrum-sys-font-weight-medium: 500;
@@ -71,7 +71,7 @@
     --spectrum-sys-icon-grade: 0;
     --spectrum-sys-icon-optical-size: 24;
   
-    --spectrum-sys-spacing: 8px;
+    --spectrum-sys-spacing: 1em;
     --spectrum-sys-spacing-large: calc(var(--spectrum-sys-spacing) * 2);
     --spectrum-sys-spacing-x-large: calc(var(--spectrum-sys-spacing) * 3);
     --spectrum-sys-spacing-xx-large: calc(var(--spectrum-sys-spacing) * 4);
