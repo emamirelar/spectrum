@@ -134,61 +134,62 @@
     border: none;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: var(--spectrum-sys-color-surface-hover);
+      transform: none;
+      box-shadow: none;
     }
 
     &:active {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: var(--spectrum-sys-color-surface-active);
+      transform: none;
+      box-shadow: none;
     }
 
     &.spectrum-button--primary {
       color: var(--spectrum-sys-color-primary);
-      &:hover {
-        background-color: rgba(0, 112, 210, 0.1);
-      }
-      &:active {
-        background-color: rgba(0, 112, 210, 0.2);
-      }
     }
 
     &.spectrum-button--secondary {
       color: var(--spectrum-sys-color-secondary);
-      &:hover {
-        background-color: rgba(0, 95, 178, 0.1);
-      }
-      &:active {
-        background-color: rgba(0, 95, 178, 0.2);
-      }
     }
 
     &.spectrum-button--success {
       color: var(--spectrum-sys-color-success);
-      &:hover {
-        background-color: rgba(46, 132, 74, 0.1);
-      }
-      &:active {
-        background-color: rgba(46, 132, 74, 0.2);
-      }
     }
 
     &.spectrum-button--warning {
       color: var(--spectrum-sys-color-warning);
-      &:hover {
-        background-color: rgba(255, 153, 0, 0.1);
-      }
-      &:active {
-        background-color: rgba(255, 153, 0, 0.2);
-      }
     }
 
     &.spectrum-button--danger {
       color: var(--spectrum-sys-color-danger);
-      &:hover {
-        background-color: rgba(186, 5, 23, 0.1);
-      }
-      &:active {
-        background-color: rgba(186, 5, 23, 0.2);
-      }
+    }
+  }
+
+  // FAB variant
+  &--fab {
+    background-color: var(--spectrum-sys-color-surface);
+    color: var(--spectrum-sys-color-on-surface);
+    border-radius: 12px;
+    padding: var(--spectrum-sys-spacing);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background-color: var(--spectrum-sys-color-surface-hover);
+      transform: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      background-color: var(--spectrum-sys-color-surface-active);
+      transform: none;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    &.spectrum-button--icon-only {
+      width: 48px;
+      height: 48px;
+      padding: 12px;
     }
   }
 

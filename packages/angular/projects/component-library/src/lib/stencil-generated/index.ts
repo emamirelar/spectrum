@@ -7,6 +7,7 @@ export const DIRECTIVES = [
   d.SpectrumChip,
   d.SpectrumConversationPanel,
   d.SpectrumMegamenu,
+  d.SpectrumRail,
   d.SpectrumSearchInput,
   d.SpectrumWallpaper
 ];

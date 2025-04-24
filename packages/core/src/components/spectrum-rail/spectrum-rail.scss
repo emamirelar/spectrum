@@ -1,0 +1,110 @@
+:host {
+  display: block;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--spectrum-sys-color-surface);
+  border-radius: 100vw; // Fully rounded caps
+  padding: var(--spectrum-sys-spacing);
+  width: 64px;
+  min-height: 200px;
+  box-sizing: border-box;
+  gap: var(--spectrum-sys-spacing);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative; // For tooltip positioning
+}
+
+.rail-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spectrum-sys-spacing);
+  
+  &.menu {
+    margin-bottom: var(--spectrum-sys-spacing);
+  }
+  
+  &.fab {
+    margin-bottom: var(--spectrum-sys-spacing-double);
+  }
+  
+  &.top {
+    flex-grow: 0;
+    margin-bottom: auto;
+  }
+  
+  &.bottom {
+    margin-top: auto;
+  }
+}
+
+.rail-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  padding: 0;
+  margin: 0 auto;
+  position: relative; // For tooltip positioning
+  
+  &::after {
+    content: attr(title);
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--spectrum-sys-color-gray-900);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  &.fab-item {
+    background-color: #FFB6B6; // Darker pink for FAB button
+    border-radius: 12px;
+    
+    &:hover {
+      background-color: darken(#FFB6B6, 5%);
+    }
+  }
+}
+
+.icon {
+  font-size: 24px;
+  color: #4A4A4A;
+}
+
+// Override spectrum-button styles for rail items
+::slotted(spectrum-button) {
+  &.rail-item:not(.fab-item) {
+    background-color: transparent;
+
+    &:hover {
+      background-color: var(--spectrum-sys-color-surface-hover);
+      border-radius: 12px;
+    }
+
+    &:active {
+      background-color: var(--spectrum-sys-color-surface-active);
+    }
+  }
+}
