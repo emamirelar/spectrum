@@ -1,19 +1,45 @@
 :host {
+  --rail-width: 64px;
+  --rail-min-height: 200px;
+  --rail-border-radius: calc(var(--rail-width) / 2);
+  --rail-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --rail-item-size: 48px;
+  --rail-item-border-radius: 12px;
+  --rail-tooltip-background: var(--spectrum-color-surface);
+  --rail-tooltip-text: var(--spectrum-color-on-surface);
+  --rail-tooltip-padding: 4px 8px;
+  --rail-tooltip-border-radius: 4px;
+  --rail-tooltip-font-size: 12px;
+  --rail-icon-size: 24px;
+  --rail-icon-color: #4A4A4A;
+
   display: block;
 }
 
 .rail {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   background-color: var(--spectrum-sys-color-surface);
-  border-radius: 100vw; // Fully rounded caps
+  border: 1px solid color(from var(--spectrum-sys-color-on-surface) srgb r g b / 0.3);
+  border-radius: var(--rail-border-radius);
   padding: var(--spectrum-sys-spacing);
-  width: 64px;
-  min-height: 200px;
+  width: var(--rail-width);
+  min-height: var(--rail-min-height);
   box-sizing: border-box;
   gap: var(--spectrum-sys-spacing);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: relative; // For tooltip positioning
+  box-shadow: var(--rail-shadow);
+  position: relative;
+  transition: all var(--animationTime) ease-in-out;
+  will-change: transform;
+  margin-left: calc(var(--spectrum-sys-spacing) * 2);
+}
+
+.rail:hover {
+  height: 100%;
+  width: 288px;
+  border-radius: 0 48px 48px 0;
+  margin-left: 0;
 }
 
 .rail-section {
@@ -26,16 +52,16 @@
   }
   
   &.fab {
-    margin-bottom: var(--spectrum-sys-spacing-double);
+    margin-bottom: var(--spectrum-sys-spacing-large);
   }
   
   &.top {
     flex-grow: 0;
-    margin-bottom: auto;
+    margin-bottom: var(--spectrum-sys-spacing-xx-large);
   }
   
   &.bottom {
-    margin-top: auto;
+    margin-top: var(--spectrum-sys-spacing-xx-large);
   }
 }
 
@@ -43,45 +69,45 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: var(--rail-item-size);
+  height: var(--rail-item-size);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--rail-item-border-radius);
   background: transparent;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--spectrum-sys-animation-duration-fast);
   padding: 0;
   margin: 0 auto;
-  position: relative; // For tooltip positioning
+  position: relative;
   
   &::after {
     content: attr(title);
     position: absolute;
-    left: calc(100% + 8px);
+    left: calc(100% + var(--spectrum-sys-spacing));
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--spectrum-sys-color-gray-900);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
+    background-color: var(--rail-tooltip-background);
+    color: var(--rail-tooltip-text);
+    padding: var(--rail-tooltip-padding);
+    border-radius: var(--rail-tooltip-border-radius);
+    font-size: var(--rail-tooltip-font-size);
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.2s, visibility 0.2s;
+    transition: opacity var(--spectrum-sys-animation-duration-fast), visibility var(--spectrum-sys-animation-duration-fast);
     pointer-events: none;
     z-index: 1000;
   }
+}
 
-  &:hover::after {
-    opacity: 1;
-    visibility: visible;
-  }
+.rail:hover .rail-item::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 .icon {
-  font-size: 24px;
-  color: #4A4A4A;
+  font-size: var(--rail-icon-size);
+  color: var(--rail-icon-color);
 }
 
 // Override spectrum-button styles for rail items
@@ -91,7 +117,7 @@
 
     &:hover {
       background-color: var(--spectrum-sys-color-surface-hover);
-      border-radius: 12px;
+      border-radius: var(--rail-item-border-radius);
     }
 
     &:active {

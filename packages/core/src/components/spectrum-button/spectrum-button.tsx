@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, State, Watch, Element } from '@stencil/core';
+import { Component, Host, h, Fragment, Prop, State, Watch, Element } from '@stencil/core';
 
 @Component({
   tag: 'spectrum-button',
@@ -21,11 +21,34 @@ export class SpectrumButton {
   @Prop() rightIcon: string = '';
 
   @State() currentState: string = 'default';
+  @State() isHovered: boolean = false;
+  @State() isActive: boolean = false;
 
   @Watch('state')
   handleStateChange(newValue: string) {
     this.currentState = newValue;
   }
+
+  private handleMouseEnter = () => {
+    if (this.currentState !== 'disabled') {
+      this.isHovered = true;
+    }
+  };
+
+  private handleMouseLeave = () => {
+    this.isHovered = false;
+    this.isActive = false;
+  };
+
+  private handleMouseDown = () => {
+    if (this.currentState !== 'disabled') {
+      this.isActive = true;
+    }
+  };
+
+  private handleMouseUp = () => {
+    this.isActive = false;
+  };
 
   private getButtonClasses(): string {
     const classes = ['spectrum-button'];
@@ -33,13 +56,20 @@ export class SpectrumButton {
     // Add variant class
     classes.push(`spectrum-button--${this.variant}`);
     
-    // Add size class - ensure size is not empty
+    // Add size class
     if (this.size) {
       classes.push(`spectrum-button--${this.size}`);
     }
     
     // Add state class
-    classes.push(`spectrum-button--${this.currentState}`);
+    if (this.isActive) {
+      classes.push('spectrum-button--active');
+    } else if (this.isHovered) {
+      classes.push('spectrum-button--hover');
+    }
+    if (this.currentState === 'disabled') {
+      classes.push('spectrum-button--disabled');
+    }
     
     // Add outline class if needed
     if (this.outline) {
@@ -72,24 +102,35 @@ export class SpectrumButton {
           class={this.getButtonClasses()}
           style={this.getButtonStyles()}
           disabled={this.currentState === 'disabled'}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+          onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMouseUp}
         >
-          {this.showLeftIcon && !this.iconOnly && (
-            <span class="spectrum-button__icon spectrum-button__icon--left">
+          {/* Show icon in icon-only mode */}
+          {this.iconOnly && (
+            <span class="spectrum-button__icon">
               <span class="material-symbols-outlined">{this.leftIcon}</span>
             </span>
           )}
-          {this.showButtonText && !this.iconOnly && (
-            <span class="spectrum-button__text">{this.buttonText}</span>
-          )}
-          {this.showRightIcon && !this.iconOnly && (
-            <span class="spectrum-button__icon spectrum-button__icon--right">
-              <span class="material-symbols-outlined">{this.rightIcon}</span>
-            </span>
-          )}
-          {this.iconOnly && (
-            <span class="spectrum-button__icon">
-              <span class="material-symbols-outlined">{this.leftIcon || this.rightIcon}</span>
-            </span>
+          
+          {/* Show left icon, text, and right icon in regular mode */}
+          {!this.iconOnly && (
+            <Fragment>
+              {this.showLeftIcon && (
+                <span class="spectrum-button__icon">
+                  <span class="material-symbols-outlined">{this.leftIcon}</span>
+                </span>
+              )}
+              {this.showButtonText && (
+                <span class="spectrum-button__text">{this.buttonText}</span>
+              )}
+              {this.showRightIcon && (
+                <span class="spectrum-button__icon">
+                  <span class="material-symbols-outlined">{this.rightIcon}</span>
+                </span>
+              )}
+            </Fragment>
           )}
         </button>
       </Host>
