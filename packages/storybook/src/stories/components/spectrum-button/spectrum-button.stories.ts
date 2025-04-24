@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 
 interface SpectrumButtonArgs {
-  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';
+  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
   size: 'sm' | 'base' | 'lg';
   state: 'default' | 'hover' | 'active' | 'disabled';
   outline: boolean;
@@ -13,6 +13,8 @@ interface SpectrumButtonArgs {
   leftIcon: string;
   showRightIcon: boolean;
   rightIcon: string;
+  debug: boolean;
+  ripple: boolean;
 }
 
 const meta = {
@@ -31,12 +33,14 @@ const meta = {
       left-icon=${args.leftIcon}
       ?show-right-icon=${args.showRightIcon}
       right-icon=${args.rightIcon}
+      ?debug=${args.debug}
+      ?ripple=${args.ripple}
     ></spectrum-button>
   `,
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost'],
+      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost', 'fab'],
     },
     size: {
       control: { type: 'select' },
@@ -45,6 +49,14 @@ const meta = {
     state: {
       control: { type: 'select' },
       options: ['default', 'hover', 'active', 'disabled'],
+    },
+    debug: {
+      control: 'boolean',
+      description: 'Enable debug logging in the console',
+    },
+    ripple: {
+      control: 'boolean',
+      description: 'Enable ripple effect on click',
     },
   },
 } satisfies Meta<SpectrumButtonArgs>;
@@ -59,6 +71,7 @@ export const Default: Story = {
     size: 'base',
     buttonText: 'Button',
     showButtonText: true,
+    debug: false,
   },
 };
 
@@ -70,6 +83,7 @@ export const Outline: Story = {
     outline: true,
     buttonText: 'Outline Button',
     showButtonText: true,
+    debug: false,
   },
 };
 
@@ -84,6 +98,7 @@ export const WithIcons: Story = {
     leftIcon: 'add',
     showRightIcon: true,
     rightIcon: 'arrow_forward',
+    debug: false,
   },
 };
 
@@ -95,6 +110,7 @@ export const IconOnly: Story = {
     iconOnly: true,
     showLeftIcon: true,
     leftIcon: 'settings',
+    debug: false,
   },
 };
 
@@ -106,6 +122,7 @@ export const FAB: Story = {
     iconOnly: true,
     showLeftIcon: true,
     leftIcon: 'add',
+    debug: false,
   },
 };
 
@@ -116,6 +133,7 @@ export const Ghost: Story = {
     size: 'base',
     buttonText: 'Ghost Button',
     showButtonText: true,
+    debug: false,
   },
 };
 
@@ -127,5 +145,66 @@ export const GhostIconOnly: Story = {
     iconOnly: true,
     showLeftIcon: true,
     leftIcon: 'settings',
+    debug: false,
+  },
+};
+
+// Debug Mode
+export const DebugMode: Story = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    buttonText: 'Debug Button',
+    showButtonText: true,
+    debug: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with debug mode enabled. Check the browser console to see debug logs for state changes and interactions.',
+      },
+    },
+  },
+};
+
+// Ripple Effect
+export const WithRipple: Story = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    buttonText: 'Click for Ripple',
+    showButtonText: true,
+    ripple: true,
+    debug: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with ripple effect enabled. Click the button to see the ripple animation.',
+      },
+    },
+  },
+};
+
+// Ripple with Icons
+export const RippleWithIcons: Story = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    buttonText: 'Ripple with Icons',
+    showButtonText: true,
+    showLeftIcon: true,
+    leftIcon: 'add',
+    showRightIcon: true,
+    rightIcon: 'arrow_forward',
+    ripple: true,
+    debug: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with ripple effect and icons. The ripple effect works with all button variants and sizes.',
+      },
+    },
   },
 };

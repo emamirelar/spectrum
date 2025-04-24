@@ -8,18 +8,26 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { RailItem } from "./components/spectrum-rail/spectrum-rail";
 export { RailItem } from "./components/spectrum-rail/spectrum-rail";
 export namespace Components {
+    /**
+     * Spectrum Button Component
+     * A versatile button component with multiple variants, sizes, and states.
+     * Supports icons, text, and various interactive states.
+     */
     interface SpectrumButton {
         "buttonText": string;
+        "debug": boolean;
+        "disabled": boolean;
         "iconOnly": boolean;
         "leftIcon": string;
         "outline": boolean;
         "rightIcon": string;
+        "ripple": boolean;
         "showButtonText": boolean;
         "showLeftIcon": boolean;
         "showRightIcon": boolean;
         "size": 'sm' | 'base' | 'lg';
         "state": 'default' | 'hover' | 'active' | 'disabled';
-        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
+        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline';
     }
     interface SpectrumCarousel {
         /**
@@ -183,6 +191,11 @@ export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     target: HTMLSpectrumSearchInputElement;
 }
 declare global {
+    /**
+     * Spectrum Button Component
+     * A versatile button component with multiple variants, sizes, and states.
+     * Supports icons, text, and various interactive states.
+     */
     interface HTMLSpectrumButtonElement extends Components.SpectrumButton, HTMLStencilElement {
     }
     var HTMLSpectrumButtonElement: {
@@ -290,18 +303,26 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * Spectrum Button Component
+     * A versatile button component with multiple variants, sizes, and states.
+     * Supports icons, text, and various interactive states.
+     */
     interface SpectrumButton {
         "buttonText"?: string;
+        "debug"?: boolean;
+        "disabled"?: boolean;
         "iconOnly"?: boolean;
         "leftIcon"?: string;
         "outline"?: boolean;
         "rightIcon"?: string;
+        "ripple"?: boolean;
         "showButtonText"?: boolean;
         "showLeftIcon"?: boolean;
         "showRightIcon"?: boolean;
         "size"?: 'sm' | 'base' | 'lg';
         "state"?: 'default' | 'hover' | 'active' | 'disabled';
-        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
+        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline';
     }
     interface SpectrumCarousel {
         /**
@@ -473,6 +494,11 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * Spectrum Button Component
+             * A versatile button component with multiple variants, sizes, and states.
+             * Supports icons, text, and various interactive states.
+             */
             "spectrum-button": LocalJSX.SpectrumButton & JSXBase.HTMLAttributes<HTMLSpectrumButtonElement>;
             "spectrum-carousel": LocalJSX.SpectrumCarousel & JSXBase.HTMLAttributes<HTMLSpectrumCarouselElement>;
             "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
