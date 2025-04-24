@@ -7,7 +7,7 @@
     --unops-color-success: #2d844a;
     --unops-color-warning: #cc6900;
     --unops-color-danger: #c41e3a;
-  
+/*   
     --spectrum-sys-color-primary: var(--unops-color-blue);
     --spectrum-sys-color-secondary: var(--unops-color-midnight);
     --spectrum-sys-color-success: var(--unops-color-success);
@@ -21,7 +21,7 @@
     --spectrum-sys-color-on-success: var(--unops-color-white);
     --spectrum-sys-color-on-warning: var(--unops-color-white);
     --spectrum-sys-color-on-danger: var(--unops-color-white);
-    --spectrum-sys-color-on-surface: var(--unops-color-black);
+    --spectrum-sys-color-on-surface: var(--unops-color-black); */
   
     /* Default theme colors - used when spectrum-wallpaper is not present */
     --spectrum-color-primary: #0070d2;
