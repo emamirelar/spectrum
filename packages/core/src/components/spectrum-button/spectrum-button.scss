@@ -1,34 +1,115 @@
+// Root variables and custom properties
 :host {
   display: inline-block;
-  --button-background: var(--spectrum-sys-color-primary, #0070d2);
-  --button-color: var(--spectrum-sys-color-on-primary, #ffffff);
+  // Core button properties
+  --button-background: var(--spectrum-color-primary, #0070d2);
+  --button-color: var(--spectrum-color-on-primary, #ffffff);
   --button-border-radius: 100vw;
   --button-padding: var(--spectrum-sys-spacing, 8px);
   --button-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
   --button-font-size: var(--spectrum-sys-font-size, 16px);
   --button-min-height: 2rem;
+  --button-border: var(--spectrum-sys-border, 1px);
+  --button-spacing-small: var(--spectrum-sys-spacing-small, 4px);
+  --button-font-weight: var(--spectrum-sys-font-weight-medium, 500);
+  --button-gap: var(--button-spacing-small);
+
+  // Interactive states
+  --button-surface-hover: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.05));
+  --button-surface-active: var(--spectrum-color-surface-active, rgba(0, 0, 0, 0.1));
+  --button-background-hover: var(--spectrum-color-primary-hover);
+  --button-background-active: var(--spectrum-color-primary-active);
+  --button-focus-background: var(--spectrum-color-background, #ffffff);
+  --button-focus-outline: var(--spectrum-color-primary, #0070d2);
+  --button-disabled-opacity: 0.5;
+
+  // Animation and transitions
+  --button-transition: all 0.2s ease-in-out;
+  --button-transition-duration: 0.2s;
+  --button-transition-timing: ease-in-out;
+  --button-transition-property: all;
+  --button-hover-transform: translateY(-1px);
+  --button-active-transform: translateY(1px);
+  --button-hover-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --button-active-shadow: none;
+  --button-focus-outline-width: 2px;
+  --button-focus-outline-offset: 2px;
+
+  // Size variations
+  --button-size-base: 2rem;
+  --button-size-sm: 1.75rem;
+  --button-size-lg: 2.25rem;
+  --button-size-fab: 3rem;
+  --button-size-icon-only: 2.5rem;
+  --button-size-icon-only-sm: 2rem;
+  --button-size-icon-only-lg: 3rem;
+
+  // Padding variations
+  --button-padding-base: var(--spectrum-sys-spacing, 8px);
+  --button-padding-sm: calc(var(--button-padding-base) * 0.75);
+  --button-padding-lg: calc(var(--button-padding-base) * 1.25);
+  --button-padding-icon-only: var(--button-padding-base);
+  --button-padding-icon-only-sm: var(--button-spacing-small);
+  --button-padding-icon-only-lg: calc(var(--button-padding-base) * 1.25);
+
+  // Font size variations
+  --button-font-size-base: var(--spectrum-sys-font-size, 16px);
+  --button-font-size-sm: calc(var(--button-font-size-base) * 0.875);
+  --button-font-size-lg: calc(var(--button-font-size-base) * 1.125);
+
+  // Icon properties
+  --button-icon-size: 1.5em;
+  --button-icon-size-base: 1.5em;
+  --button-icon-size-sm: 1.25em;
+  --button-icon-size-lg: 1.75em;
+  --button-icon-only-min-width: calc(var(--button-padding) * 5);
+  --button-icon-only-min-width-sm: calc(var(--button-padding) * 4);
+  --button-icon-only-min-width-lg: calc(var(--button-padding) * 6);
+
+  // FAB (Floating Action Button) specific
+  --button-fab-border-radius: 12px;
+  --button-fab-size: 48px;
+  --button-fab-padding: var(--button-padding);
+  --button-fab-min-width: 48px;
+
+  // Button variants
+  --button-primary-background: var(--spectrum-color-primary, #0070d2);
+  --button-primary-color: var(--spectrum-color-on-primary, #ffffff);
+  --button-secondary-background: var(--spectrum-color-secondary, #005fb2);
+  --button-secondary-color: var(--spectrum-color-on-secondary, #ffffff);
+  --button-success-background: var(--spectrum-color-success, #2e844a);
+  --button-success-color: var(--spectrum-color-on-success, #ffffff);
+  --button-warning-background: var(--spectrum-color-warning, #ff9900);
+  --button-warning-color: var(--spectrum-color-on-warning, #ffffff);
+  --button-danger-background: var(--spectrum-color-danger, #ba0517);
+  --button-danger-color: var(--spectrum-color-on-danger, #ffffff);
+  --button-ghost-background: transparent;
+  --button-ghost-color: var(--spectrum-color-text, #333333);
+  --button-ghost-hover: var(--button-surface-hover);
+  --button-ghost-active: var(--button-surface-active);
 }
 
+// Base button styles
 .spectrum-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-family: var(--button-font-family);
-  font-weight: var(--spectrum-sys-font-weight-medium, 500);
-  border: var(--spectrum-sys-border, 1px) solid transparent;
+  font-weight: var(--button-font-weight);
+  letter-spacing: .06em;
+  border: var(--button-border) solid transparent;
   border-radius: var(--button-border-radius);
-  padding: var(--button-padding);
+  padding: 0 var(--button-padding);
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
-  gap: var(--spectrum-sys-spacing-small, 4px);
+  gap: var(--button-gap);
   min-height: var(--button-min-height);
-  transition: all 0.2s ease-in-out;
+  transition: var(--button-transition);
   position: relative;
   overflow: hidden;
-  background-color: var(--button-background);
-  color: var(--button-color);
 
+  // Hover and active overlay
   &::before {
     content: '';
     position: absolute;
@@ -37,123 +118,116 @@
     right: 0;
     bottom: 0;
     background-color: transparent;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color var(--button-transition-duration) var(--button-transition-timing);
   }
 
   &:hover::before {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
   }
 
   &:active::before {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.4);
   }
 
-  // Base styles
+  // Size variations
   &--base {
-    font-size: var(--button-font-size);
+    font-size: var(--button-font-size-base);
+    min-height: var(--button-size-base);
+    padding: 0 var(--button-padding-base);
+    
+    .spectrum-button__icon {
+      font-size: var(--button-icon-size-base);
+    }
   }
 
   &--sm {
-    font-size: calc(var(--button-font-size) * 0.875);
-    padding: calc(var(--button-padding) * 0.75);
+    font-size: var(--button-font-size-sm);
+    min-height: var(--button-size-sm);
+    padding: 0 var(--button-padding-sm);
+    
+    .spectrum-button__icon {
+      font-size: var(--button-icon-size-sm);
+    }
   }
 
   &--lg {
-    font-size: calc(var(--button-font-size) * 1.125);
-    padding: calc(var(--button-padding) * 1.25);
+    font-size: var(--button-font-size-lg);
+    min-height: var(--button-size-lg);
+    padding: 0 var(--button-padding-lg);
+    
+    .spectrum-button__icon {
+      font-size: var(--button-icon-size-lg);
+    }
   }
 
-  // Variant styles
+  // Button variants
   &--primary {
-    --button-background: var(--spectrum-sys-color-primary, #0070d2);
-    --button-color: var(--spectrum-sys-color-on-primary, #ffffff);
-
-    &.spectrum-button--outline {
-      background-color: transparent;
-      border-color: var(--button-background);
-      color: var(--button-background);
-    }
+    background-color: var(--button-primary-background);
+    color: var(--button-primary-color);
   }
 
   &--secondary {
-    --button-background: var(--spectrum-sys-color-secondary, #005fb2);
-    --button-color: var(--spectrum-sys-color-on-secondary, #ffffff);
-
-    &.spectrum-button--outline {
-      background-color: transparent;
-      border-color: var(--button-background);
-      color: var(--button-background);
-    }
+    background-color: var(--button-secondary-background);
+    color: var(--button-secondary-color);
   }
 
   &--success {
-    --button-background: var(--spectrum-sys-color-success, #2e844a);
-    --button-color: var(--spectrum-sys-color-on-success, #ffffff);
-
-    &.spectrum-button--outline {
-      background-color: transparent;
-      border-color: var(--button-background);
-      color: var(--button-background);
-    }
+    background-color: var(--button-success-background);
+    color: var(--button-success-color);
   }
 
   &--warning {
-    --button-background: var(--spectrum-sys-color-warning, #ff9900);
-    --button-color: var(--spectrum-sys-color-on-warning, #000000);
-
-    &.spectrum-button--outline {
-      background-color: transparent;
-      border-color: var(--button-background);
-      color: var(--button-background);
-    }
+    background-color: var(--button-warning-background);
+    color: var(--button-warning-color);
   }
 
   &--danger {
-    --button-background: var(--spectrum-sys-color-danger, #ba0517);
-    --button-color: var(--spectrum-sys-color-on-danger, #ffffff);
-
-    &.spectrum-button--outline {
-      background-color: transparent;
-      border-color: var(--button-background);
-      color: var(--button-background);
-    }
+    background-color: var(--button-danger-background);
+    color: var(--button-danger-color);
   }
 
   &--ghost {
-    --button-background: transparent;
-    --button-color: var(--spectrum-sys-color-text, #333333);
+    background-color: var(--button-ghost-background);
+    color: var(--button-ghost-color);
     border: none;
 
     &:hover {
-      background-color: var(--spectrum-sys-color-surface-hover, rgba(0, 0, 0, 0.05));
+      background-color: var(--button-ghost-hover);
     }
 
     &:active {
-      background-color: var(--spectrum-sys-color-surface-active, rgba(0, 0, 0, 0.1));
+      background-color: var(--button-ghost-active);
     }
   }
 
-  // FAB variant
+  // Outline variant
+  &--outline {
+    background-color: transparent;
+    border-color: currentColor;
+    color: inherit;
+  }
+
+  // FAB (Floating Action Button) variant
   &--fab {
-    background-color: var(--spectrum-sys-color-primary);
-    color: var(--spectrum-sys-color-on-primary);
-    border-radius: 12px;
+    background-color: var(--button-background);
+    color: var(--button-color);
+    border-radius: var(--button-border-radius-fab);
     border: none;
     box-shadow: none;
 
     &:hover::before {
-      background-color: var(--spectrum-sys-color-primary-hover);
+      background-color: var(--button-background-hover);
     }
 
     &:active::before {
-      background-color: var(--spectrum-sys-color-primary-active);
+      background-color: var(--button-background-active);
     }
 
     &.spectrum-button--icon-only {
-      width: 48px;
-      height: 48px;
-      padding: var(--spectrum-sys-spacing);
-      min-width: 48px;
+      width: var(--button-size-fab);
+      height: var(--button-size-fab);
+      padding: var(--button-padding-icon-only);
+      min-width: var(--button-size-fab);
     }
   }
 
@@ -165,12 +239,14 @@
     line-height: 1;
     position: relative;
     z-index: 1;
+    width: 1em;
+    height: 1em;
     
     .material-symbols-outlined {
       font-family: 'Material Symbols Outlined';
       font-weight: normal;
       font-style: normal;
-      font-size: 20px;
+      font-size: inherit;
       line-height: 1;
       letter-spacing: normal;
       text-transform: none;
@@ -184,48 +260,44 @@
     }
   }
 
+  // Text styles
   &__text {
     font-family: var(--button-font-family);
     font-size: inherit;
     line-height: 1;
     position: relative;
     z-index: 1;
+    padding: var(--button-padding) 0;
   }
 
-  // Icon only styles
+  // Icon-only variant
   &--icon-only {
-    padding: var(--button-padding);
+    padding: 0;
     aspect-ratio: 1;
-    min-width: calc(var(--spectrum-sys-spacing, 8px) * 5); // 40px
+    min-width: var(--button-size-icon-only);
     
     &.spectrum-button--sm {
-      padding: var(--spectrum-sys-spacing-small, 4px);
-      min-width: calc(var(--spectrum-sys-spacing, 8px) * 4); // 32px
+      min-width: var(--button-size-icon-only-sm);
     }
 
     &.spectrum-button--lg {
-      padding: calc(var(--button-padding) * 1.25);
-      min-width: calc(var(--spectrum-sys-spacing, 8px) * 6); // 48px
-    }
-    
-    .spectrum-button__icon {
-      margin: 0;
+      min-width: var(--button-size-icon-only-lg);
     }
   }
 
   // State styles
   &--hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: var(--button-hover-transform);
+    box-shadow: var(--button-hover-shadow);
   }
 
   &--active {
-    transform: translateY(1px);
-    box-shadow: none;
+    transform: var(--button-active-transform);
+    box-shadow: var(--button-active-shadow);
   }
 
   &--disabled {
-    opacity: 0.5;
+    opacity: var(--button-disabled-opacity);
     pointer-events: none;
     cursor: not-allowed;
   }
@@ -236,7 +308,28 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px var(--spectrum-sys-color-background, #ffffff),
-                0 0 0 4px var(--spectrum-sys-color-primary, #0070d2);
+    box-shadow: 0 0 0 var(--button-focus-outline-width) var(--button-focus-background),
+                0 0 0 calc(var(--button-focus-outline-width) + var(--button-focus-outline-offset)) var(--button-focus-outline);
+  }
+
+  // Ripple effect
+  &__ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    background-color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+  }
+
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
   }
 }

@@ -8,14 +8,14 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['buttonText', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
+  inputs: ['buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['buttonText', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
+  inputs: ['buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLElement;
