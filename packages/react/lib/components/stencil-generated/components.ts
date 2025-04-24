@@ -12,6 +12,7 @@ import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as def
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@spectrum/core/dist/components/spectrum-chip.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@spectrum/core/dist/components/spectrum-conversation-panel.js";
 import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@spectrum/core/dist/components/spectrum-megamenu.js";
+import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@spectrum/core/dist/components/spectrum-rail.js";
 import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@spectrum/core/dist/components/spectrum-search-input.js";
 import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@spectrum/core/dist/components/spectrum-wallpaper.js";
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
@@ -85,6 +86,17 @@ export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, Sp
     react: React,
     events: {} as SpectrumMegamenuEvents,
     defineCustomElement: defineSpectrumMegamenu
+});
+
+type SpectrumRailEvents = { onRailAction: EventName<CustomEvent<{ action: string, label: string }>> };
+
+export const SpectrumRail: StencilReactComponent<SpectrumRailElement, SpectrumRailEvents> = /*@__PURE__*/ createComponent<SpectrumRailElement, SpectrumRailEvents>({
+    tagName: 'spectrum-rail',
+    elementClass: SpectrumRailElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onRailAction: 'railAction' } as SpectrumRailEvents,
+    defineCustomElement: defineSpectrumRail
 });
 
 type SpectrumSearchInputEvents = { onSearchSubmit: EventName<CustomEvent<string>> };

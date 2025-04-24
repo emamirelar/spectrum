@@ -5,6 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { RailItem } from "./components/spectrum-rail/spectrum-rail";
+export { RailItem } from "./components/spectrum-rail/spectrum-rail";
 export namespace Components {
     interface SpectrumButton {
         "buttonText": string;
@@ -17,7 +19,7 @@ export namespace Components {
         "showRightIcon": boolean;
         "size": 'sm' | 'base' | 'lg';
         "state": 'default' | 'hover' | 'active' | 'disabled';
-        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';
+        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
     }
     interface SpectrumCarousel {
         /**
@@ -123,6 +125,24 @@ export namespace Components {
          */
         "width": string;
     }
+    interface SpectrumRail {
+        /**
+          * Bottom section items
+         */
+        "bottomItems": RailItem[];
+        /**
+          * Optional FAB (Floating Action Button) item
+         */
+        "fabItem"?: RailItem;
+        /**
+          * Optional menu item at the top
+         */
+        "menuItem"?: RailItem;
+        /**
+          * Top section items
+         */
+        "topItems": RailItem[];
+    }
     interface SpectrumSearchInput {
         "maxLines": number;
         "setFocus": () => Promise<void>;
@@ -153,6 +173,10 @@ export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
+}
+export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumRailElement;
 }
 export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -214,6 +238,23 @@ declare global {
         prototype: HTMLSpectrumMegamenuElement;
         new (): HTMLSpectrumMegamenuElement;
     };
+    interface HTMLSpectrumRailElementEventMap {
+        "railAction": { action: string, label: string };
+    }
+    interface HTMLSpectrumRailElement extends Components.SpectrumRail, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumRailElementEventMap>(type: K, listener: (this: HTMLSpectrumRailElement, ev: SpectrumRailCustomEvent<HTMLSpectrumRailElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumRailElementEventMap>(type: K, listener: (this: HTMLSpectrumRailElement, ev: SpectrumRailCustomEvent<HTMLSpectrumRailElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumRailElement: {
+        prototype: HTMLSpectrumRailElement;
+        new (): HTMLSpectrumRailElement;
+    };
     interface HTMLSpectrumSearchInputElementEventMap {
         "searchSubmit": string;
     }
@@ -243,6 +284,7 @@ declare global {
         "spectrum-chip": HTMLSpectrumChipElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
+        "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
     }
@@ -259,7 +301,7 @@ declare namespace LocalJSX {
         "showRightIcon"?: boolean;
         "size"?: 'sm' | 'base' | 'lg';
         "state"?: 'default' | 'hover' | 'active' | 'disabled';
-        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';
+        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
     }
     interface SpectrumCarousel {
         /**
@@ -372,6 +414,28 @@ declare namespace LocalJSX {
          */
         "width"?: string;
     }
+    interface SpectrumRail {
+        /**
+          * Bottom section items
+         */
+        "bottomItems"?: RailItem[];
+        /**
+          * Optional FAB (Floating Action Button) item
+         */
+        "fabItem"?: RailItem;
+        /**
+          * Optional menu item at the top
+         */
+        "menuItem"?: RailItem;
+        /**
+          * Emits when a rail item is clicked
+         */
+        "onRailAction"?: (event: SpectrumRailCustomEvent<{ action: string, label: string }>) => void;
+        /**
+          * Top section items
+         */
+        "topItems"?: RailItem[];
+    }
     interface SpectrumSearchInput {
         "maxLines"?: number;
         "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
@@ -400,6 +464,7 @@ declare namespace LocalJSX {
         "spectrum-chip": SpectrumChip;
         "spectrum-conversation-panel": SpectrumConversationPanel;
         "spectrum-megamenu": SpectrumMegamenu;
+        "spectrum-rail": SpectrumRail;
         "spectrum-search-input": SpectrumSearchInput;
         "spectrum-wallpaper": SpectrumWallpaper;
     }
@@ -413,6 +478,7 @@ declare module "@stencil/core" {
             "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
+            "spectrum-rail": LocalJSX.SpectrumRail & JSXBase.HTMLAttributes<HTMLSpectrumRailElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
         }

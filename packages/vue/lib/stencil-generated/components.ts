@@ -67,6 +67,15 @@ export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegame
 ]);
 
 
+export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spectrum-rail', undefined, [
+  'menuItem',
+  'fabItem',
+  'topItems',
+  'bottomItems',
+  'railAction'
+]);
+
+
 export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchInput>('spectrum-search-input', undefined, [
   'maxLines',
   'searchSubmit'
