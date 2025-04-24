@@ -168,28 +168,25 @@
 
   // FAB variant
   &--fab {
-    background-color: var(--spectrum-sys-color-surface);
-    color: var(--spectrum-sys-color-on-surface);
+    background-color: var(--spectrum-sys-color-primary);
+    color: var(--spectrum-sys-color-on-primary);
     border-radius: 12px;
-    padding: var(--spectrum-sys-spacing);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    box-shadow: none;
 
-    &:hover {
-      background-color: var(--spectrum-sys-color-surface-hover);
-      transform: none;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    &:hover::before {
+      background-color: var(--spectrum-sys-color-primary-hover);
     }
 
-    &:active {
-      background-color: var(--spectrum-sys-color-surface-active);
-      transform: none;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    &:active::before {
+      background-color: var(--spectrum-sys-color-primary-active);
     }
 
     &.spectrum-button--icon-only {
       width: 48px;
       height: 48px;
-      padding: 12px;
+      padding: var(--spectrum-sys-spacing);
+      min-width: 48px;
     }
   }
 

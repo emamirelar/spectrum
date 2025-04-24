@@ -77,15 +77,6 @@
     opacity: 1;
     visibility: visible;
   }
-  
-  &.fab-item {
-    background-color: #FFB6B6; // Darker pink for FAB button
-    border-radius: 12px;
-    
-    &:hover {
-      background-color: darken(#FFB6B6, 5%);
-    }
-  }
 }
 
 .icon {
@@ -106,5 +97,15 @@
     &:active {
       background-color: var(--spectrum-sys-color-surface-active);
     }
+  }
+
+  &.rail-item.fab-item {
+    --spectrum-button-background-color: var(--spectrum-sys-color-primary);
+    --spectrum-button-background-color-hover: var(--spectrum-sys-color-primary-hover);
+    --spectrum-button-background-color-active: var(--spectrum-sys-color-primary-active);
+    --spectrum-button-border-color: transparent;
+    --spectrum-button-border-color-hover: transparent;
+    --spectrum-button-border-color-active: transparent;
+    box-shadow: none;
   }
 }

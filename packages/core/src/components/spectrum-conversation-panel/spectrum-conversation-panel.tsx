@@ -141,6 +141,8 @@ export class SpectrumConversationPanel {
     const isExpanded = this.expandedMessageId === messageId;
     const activeAccordion = isExpanded ? this.expandedAccordionType : null;
 
+    console.log('Rendering response:', { messageId, isExpanded, activeAccordion });
+
     return [
       <div class="message-wrapper response" id={`message-${messageId}`}>
         <div class="agentIcon"></div>
@@ -155,7 +157,7 @@ export class SpectrumConversationPanel {
               outline={true}
               label="Dive Deeper"
               leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
-              onClick={() => this.toggleAccordion(messageId, 'explorations')}
+              onClick={() => this.handleExplorationsClick(messageId)}
               selected={activeAccordion === 'explorations'}
             />
             <spectrum-chip 
@@ -163,7 +165,7 @@ export class SpectrumConversationPanel {
               outline={true}
               label="Sources and related content"
               leadingIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
-              onClick={() => this.toggleAccordion(messageId, 'sources')}
+              onClick={() => this.handleSourcesClick(messageId)}
               selected={activeAccordion === 'sources'}
             />
           </div>
@@ -265,16 +267,35 @@ export class SpectrumConversationPanel {
     );
   }
 
+  private handleExplorationsClick = (messageId: string) => {
+    this.toggleAccordion(messageId, 'explorations');
+  }
+
+  private handleSourcesClick = (messageId: string) => {
+    this.toggleAccordion(messageId, 'sources');
+  }
+
   toggleAccordion(messageId: string, accordion: 'sources' | 'explorations') {
+    console.log('Toggle accordion called:', { messageId, accordion });
+    console.log('Current state:', { 
+      expandedMessageId: this.expandedMessageId, 
+      expandedAccordionType: this.expandedAccordionType 
+    });
+
     if (this.expandedMessageId === messageId && this.expandedAccordionType === accordion) {
-      // If clicking the same accordion, collapse it
+      // Clicking the same accordion - collapse it
       this.expandedMessageId = null;
       this.expandedAccordionType = null;
     } else {
-      // Otherwise, expand the clicked accordion
+      // Expanding a different accordion
       this.expandedMessageId = messageId;
       this.expandedAccordionType = accordion;
     }
+
+    console.log('New state:', { 
+      expandedMessageId: this.expandedMessageId, 
+      expandedAccordionType: this.expandedAccordionType 
+    });
   }
 
   render() {

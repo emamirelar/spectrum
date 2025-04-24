@@ -52,128 +52,43 @@ const meta = {
 export default meta;
 type Story = StoryObj<SpectrumButtonArgs>;
 
-// Base Variants
-export const Primary: Story = {
+// Base Button
+export const Default: Story = {
   args: {
     variant: 'primary',
     size: 'base',
-    buttonText: 'Primary Button',
+    buttonText: 'Button',
     showButtonText: true,
   },
 };
 
-export const Secondary: Story = {
-  args: {
-    variant: 'secondary',
-    size: 'base',
-    buttonText: 'Secondary Button',
-    showButtonText: true,
-  },
-};
-
-export const Success: Story = {
-  args: {
-    variant: 'success',
-    size: 'base',
-    buttonText: 'Success Button',
-    showButtonText: true,
-  },
-};
-
-export const Warning: Story = {
-  args: {
-    variant: 'warning',
-    size: 'base',
-    buttonText: 'Warning Button',
-    showButtonText: true,
-  },
-};
-
-export const Danger: Story = {
-  args: {
-    variant: 'danger',
-    size: 'base',
-    buttonText: 'Danger Button',
-    showButtonText: true,
-  },
-};
-
-// Outline Variants
-export const PrimaryOutline: Story = {
+// Outline Button
+export const Outline: Story = {
   args: {
     variant: 'primary',
     size: 'base',
     outline: true,
-    buttonText: 'Primary Outline',
-    showButtonText: true,
-  },
-};
-
-export const SecondaryOutline: Story = {
-  args: {
-    variant: 'secondary',
-    size: 'base',
-    outline: true,
-    buttonText: 'Secondary Outline',
-    showButtonText: true,
-  },
-};
-
-export const SuccessOutline: Story = {
-  args: {
-    variant: 'success',
-    size: 'base',
-    outline: true,
-    buttonText: 'Success Outline',
-    showButtonText: true,
-  },
-};
-
-export const WarningOutline: Story = {
-  args: {
-    variant: 'warning',
-    size: 'base',
-    outline: true,
-    buttonText: 'Warning Outline',
-    showButtonText: true,
-  },
-};
-
-export const DangerOutline: Story = {
-  args: {
-    variant: 'danger',
-    size: 'base',
-    outline: true,
-    buttonText: 'Danger Outline',
+    buttonText: 'Outline Button',
     showButtonText: true,
   },
 };
 
 // With Icons
-export const WithLeftIcon: Story = {
+export const WithIcons: Story = {
   args: {
     variant: 'primary',
     size: 'base',
-    buttonText: 'Button with Left Icon',
+    buttonText: 'Button with Icons',
     showButtonText: true,
     showLeftIcon: true,
     leftIcon: 'add',
-  },
-};
-
-export const WithRightIcon: Story = {
-  args: {
-    variant: 'primary',
-    size: 'base',
-    buttonText: 'Button with Right Icon',
-    showButtonText: true,
     showRightIcon: true,
     rightIcon: 'arrow_forward',
   },
 };
 
-// Icon Only Variants
-export const IconOnlyPrimary: Story = {
+// Icon Only
+export const IconOnly: Story = {
   args: {
     variant: 'primary',
     size: 'base',
@@ -183,47 +98,18 @@ export const IconOnlyPrimary: Story = {
   },
 };
 
-export const IconOnlySecondary: Story = {
+// FAB (Floating Action Button)
+export const FAB: Story = {
   args: {
-    variant: 'secondary',
-    size: 'base',
+    variant: 'primary',
+    size: 'lg',
     iconOnly: true,
     showLeftIcon: true,
-    leftIcon: 'settings',
+    leftIcon: 'add',
   },
 };
 
-export const IconOnlySuccess: Story = {
-  args: {
-    variant: 'success',
-    size: 'base',
-    iconOnly: true,
-    showLeftIcon: true,
-    leftIcon: 'check',
-  },
-};
-
-export const IconOnlyWarning: Story = {
-  args: {
-    variant: 'warning',
-    size: 'base',
-    iconOnly: true,
-    showLeftIcon: true,
-    leftIcon: 'warning',
-  },
-};
-
-export const IconOnlyDanger: Story = {
-  args: {
-    variant: 'danger',
-    size: 'base',
-    iconOnly: true,
-    showLeftIcon: true,
-    leftIcon: 'error',
-  },
-};
-
-// Ghost Variants
+// Ghost Button
 export const Ghost: Story = {
   args: {
     variant: 'ghost',
@@ -233,6 +119,7 @@ export const Ghost: Story = {
   },
 };
 
+// Ghost Icon Only
 export const GhostIconOnly: Story = {
   args: {
     variant: 'ghost',
