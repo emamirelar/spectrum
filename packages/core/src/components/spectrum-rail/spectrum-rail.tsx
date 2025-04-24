@@ -62,7 +62,7 @@ export class SpectrumRail {
             <div class="rail-section fab">
               <spectrum-button
                 class="rail-item fab-item"
-                variant="fab"
+                variant="primary"
                 iconOnly={true}
                 leftIcon={this.fabItem.icon}
                 onClick={() => this.handleItemClick(this.fabItem)}
