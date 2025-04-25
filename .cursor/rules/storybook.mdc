@@ -22,6 +22,9 @@ Components need storybook stories that demonstrate their functionality and varia
 - Use proper TypeScript types and Storybook controls
 - Include examples of all component features
 
+## Story Name
+- Stories are prefixed with Spectrum, SpectrumButton as an example
+
 ## Best Practices
 - Use meaningful story titles that reflect the component hierarchy
 - Group related stories using the `title` property
@@ -29,5 +32,3 @@ Components need storybook stories that demonstrate their functionality and varia
 - Include documentation and usage examples
 - Test all component states and variants
 
-- You can @ files here
-- You can use markdown but dont have to

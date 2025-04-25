@@ -5,26 +5,34 @@
 <!-- Auto Generated Below -->
 
 
+## Overview
+
+Spectrum Chip Component
+A versatile chip component that can be used for tags, filters, and selections.
+Supports leading/trailing icons, selection states, and various interactive behaviors.
+
 ## Properties
 
-| Property           | Attribute            | Description                                  | Type                       | Default     |
-| ------------------ | -------------------- | -------------------------------------------- | -------------------------- | ----------- |
-| `disabled`         | `disabled`           | Whether the chip is disabled                 | `boolean`                  | `false`     |
-| `label`            | `label`              | The label text of the chip                   | `string`                   | `''`        |
-| `leadingIcon`      | `leading-icon`       | Optional leading icon                        | `string`                   | `''`        |
-| `outline`          | `outline`            | Whether the chip is outlined                 | `boolean`                  | `false`     |
-| `selected`         | `selected`           | Whether the chip is selected                 | `boolean`                  | `false`     |
-| `showTrailingIcon` | `show-trailing-icon` | Whether to show the trailing icon            | `boolean`                  | `false`     |
-| `trailingIcon`     | `trailing-icon`      | Optional trailing icon (usually for removal) | `string`                   | `'close'`   |
-| `variant`          | `variant`            | The variant of the chip                      | `"primary" \| "secondary"` | `'primary'` |
+| Property           | Attribute            | Description | Type                                                                          | Default     |
+| ------------------ | -------------------- | ----------- | ----------------------------------------------------------------------------- | ----------- |
+| `debug`            | `debug`              |             | `boolean`                                                                     | `false`     |
+| `disabled`         | `disabled`           |             | `boolean`                                                                     | `false`     |
+| `label`            | `label`              |             | `string`                                                                      | `''`        |
+| `leadingIcon`      | `leading-icon`       |             | `string`                                                                      | `''`        |
+| `outline`          | `outline`            |             | `boolean`                                                                     | `false`     |
+| `ripple`           | `ripple`             |             | `boolean`                                                                     | `false`     |
+| `selected`         | `selected`           |             | `boolean`                                                                     | `false`     |
+| `showTrailingIcon` | `show-trailing-icon` |             | `boolean`                                                                     | `false`     |
+| `trailingIcon`     | `trailing-icon`      |             | `string`                                                                      | `'close'`   |
+| `variant`          | `variant`            |             | `"assist" \| "filter" \| "input" \| "primary" \| "secondary" \| "suggestion"` | `'primary'` |
 
 
 ## Events
 
-| Event        | Description                                                 | Type                   |
-| ------------ | ----------------------------------------------------------- | ---------------------- |
-| `chipRemove` | Emitted when the chip is removed (clicked on trailing icon) | `CustomEvent<void>`    |
-| `chipSelect` | Emitted when the chip is selected/deselected                | `CustomEvent<boolean>` |
+| Event        | Description | Type                   |
+| ------------ | ----------- | ---------------------- |
+| `chipRemove` |             | `CustomEvent<void>`    |
+| `chipSelect` |             | `CustomEvent<boolean>` |
 
 
 ## Dependencies

@@ -37,14 +37,16 @@ export const SpectrumCarousel = /*@__PURE__*/ defineContainer<JSX.SpectrumCarous
 
 
 export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spectrum-chip', undefined, [
+  'debug',
   'variant',
   'selected',
   'disabled',
+  'outline',
+  'ripple',
   'label',
   'leadingIcon',
   'trailingIcon',
   'showTrailingIcon',
-  'outline',
   'chipSelect',
   'chipRemove'
 ]);

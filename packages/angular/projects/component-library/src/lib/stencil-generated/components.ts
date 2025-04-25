@@ -52,14 +52,14 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
 
 
 @ProxyCmp({
-  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
+  inputs: ['debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
 })
 @Component({
   selector: 'spectrum-chip',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
+  inputs: ['debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
 })
 export class SpectrumChip {
   protected el: HTMLElement;
@@ -72,13 +72,9 @@ export class SpectrumChip {
 
 
 export declare interface SpectrumChip extends Components.SpectrumChip {
-  /**
-   * Emitted when the chip is selected/deselected
-   */
+
   chipSelect: EventEmitter<CustomEvent<boolean>>;
-  /**
-   * Emitted when the chip is removed (clicked on trailing icon)
-   */
+
   chipRemove: EventEmitter<CustomEvent<void>>;
 }
 

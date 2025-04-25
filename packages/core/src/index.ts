@@ -13,3 +13,5 @@ export type * from './components.d.ts';
 
 // Export components
 export { SpectrumWallpaper } from './components/spectrum-wallpaper/spectrum-wallpaper';
+export { SpectrumButton } from './components/spectrum-button/spectrum-button';
+export { SpectrumSearchInput } from './components/spectrum-search-input/spectrum-search-input';

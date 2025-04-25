@@ -38,6 +38,31 @@ export class SpectrumRail {
     });
   }
 
+  private renderRailItem(item: RailItem, variant: 'ghost' | 'primary' = 'ghost') {
+    return (
+      <div class="rail-item-wrapper">
+        <spectrum-button
+          class="rail-item"
+          variant={variant}
+          size="base"
+          iconOnly={true}
+          showLeftIcon={true}
+          leftIcon={item.icon}
+          onClick={() => this.handleItemClick(item)}
+          title={item.label}
+          aria-label={item.label}
+        />
+        <button 
+          class="rail-label"
+          onClick={() => this.handleItemClick(item)}
+          aria-label={item.label}
+        >
+          {item.label}
+        </button>
+      </div>
+    );
+  }
+
   render() {
     return (
       <Host>
@@ -45,64 +70,28 @@ export class SpectrumRail {
           {/* Menu Item */}
           {this.menuItem && (
             <div class="rail-section menu">
-              <spectrum-button
-                class="rail-item"
-                variant="ghost"
-                iconOnly={true}
-                leftIcon={this.menuItem.icon}
-                onClick={() => this.handleItemClick(this.menuItem)}
-                title={this.menuItem.label}
-                aria-label={this.menuItem.label}
-              />
+              {this.renderRailItem(this.menuItem)}
             </div>
           )}
 
           {/* FAB Item */}
           {this.fabItem && (
             <div class="rail-section fab">
-              <spectrum-button
-                class="rail-item fab-item"
-                variant="primary"
-                iconOnly={true}
-                leftIcon={this.fabItem.icon}
-                onClick={() => this.handleItemClick(this.fabItem)}
-                title={this.fabItem.label}
-                aria-label={this.fabItem.label}
-              />
+              {this.renderRailItem(this.fabItem, 'primary')}
             </div>
           )}
 
           {/* Top Items */}
           {this.topItems.length > 0 && (
             <div class="rail-section top">
-              {this.topItems.map((item) => (
-                <spectrum-button
-                  class="rail-item"
-                  variant="ghost"
-                  iconOnly={true}
-                  leftIcon={item.icon}
-                  onClick={() => this.handleItemClick(item)}
-                  title={item.label}
-                  aria-label={item.label}
-                />
-              ))}
+              {this.topItems.map((item) => this.renderRailItem(item))}
             </div>
           )}
 
           {/* Bottom Items */}
           {this.bottomItems.length > 0 && (
             <div class="rail-section bottom">
-              {this.bottomItems.map((item) => (
-                <spectrum-button
-                  class="rail-item"
-                  variant="ghost"
-                  iconOnly={true}
-                  leftIcon={item.icon}
-                  onClick={() => this.handleItemClick(item)}
-                  title={item.label}
-                  aria-label={item.label}
-                />
-              ))}
+              {this.bottomItems.map((item) => this.renderRailItem(item))}
             </div>
           )}
         </div>

@@ -55,39 +55,22 @@ export namespace Components {
          */
         "show": number;
     }
+    /**
+     * Spectrum Chip Component
+     * A versatile chip component that can be used for tags, filters, and selections.
+     * Supports leading/trailing icons, selection states, and various interactive behaviors.
+     */
     interface SpectrumChip {
-        /**
-          * Whether the chip is disabled
-         */
+        "debug": boolean;
         "disabled": boolean;
-        /**
-          * The label text of the chip
-         */
         "label": string;
-        /**
-          * Optional leading icon
-         */
         "leadingIcon": string;
-        /**
-          * Whether the chip is outlined
-         */
         "outline": boolean;
-        /**
-          * Whether the chip is selected
-         */
+        "ripple": boolean;
         "selected": boolean;
-        /**
-          * Whether to show the trailing icon
-         */
         "showTrailingIcon": boolean;
-        /**
-          * Optional trailing icon (usually for removal)
-         */
         "trailingIcon": string;
-        /**
-          * The variant of the chip
-         */
-        "variant": 'primary' | 'secondary';
+        "variant": 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
     interface SpectrumConversationPanel {
         /**
@@ -212,6 +195,11 @@ declare global {
         "chipSelect": boolean;
         "chipRemove": void;
     }
+    /**
+     * Spectrum Chip Component
+     * A versatile chip component that can be used for tags, filters, and selections.
+     * Supports leading/trailing icons, selection states, and various interactive behaviors.
+     */
     interface HTMLSpectrumChipElement extends Components.SpectrumChip, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumChipElementEventMap>(type: K, listener: (this: HTMLSpectrumChipElement, ev: SpectrumChipCustomEvent<HTMLSpectrumChipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -350,47 +338,24 @@ declare namespace LocalJSX {
          */
         "show"?: number;
     }
+    /**
+     * Spectrum Chip Component
+     * A versatile chip component that can be used for tags, filters, and selections.
+     * Supports leading/trailing icons, selection states, and various interactive behaviors.
+     */
     interface SpectrumChip {
-        /**
-          * Whether the chip is disabled
-         */
+        "debug"?: boolean;
         "disabled"?: boolean;
-        /**
-          * The label text of the chip
-         */
         "label"?: string;
-        /**
-          * Optional leading icon
-         */
         "leadingIcon"?: string;
-        /**
-          * Emitted when the chip is removed (clicked on trailing icon)
-         */
         "onChipRemove"?: (event: SpectrumChipCustomEvent<void>) => void;
-        /**
-          * Emitted when the chip is selected/deselected
-         */
         "onChipSelect"?: (event: SpectrumChipCustomEvent<boolean>) => void;
-        /**
-          * Whether the chip is outlined
-         */
         "outline"?: boolean;
-        /**
-          * Whether the chip is selected
-         */
+        "ripple"?: boolean;
         "selected"?: boolean;
-        /**
-          * Whether to show the trailing icon
-         */
         "showTrailingIcon"?: boolean;
-        /**
-          * Optional trailing icon (usually for removal)
-         */
         "trailingIcon"?: string;
-        /**
-          * The variant of the chip
-         */
-        "variant"?: 'primary' | 'secondary';
+        "variant"?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
     interface SpectrumConversationPanel {
         /**
@@ -501,6 +466,11 @@ declare module "@stencil/core" {
              */
             "spectrum-button": LocalJSX.SpectrumButton & JSXBase.HTMLAttributes<HTMLSpectrumButtonElement>;
             "spectrum-carousel": LocalJSX.SpectrumCarousel & JSXBase.HTMLAttributes<HTMLSpectrumCarouselElement>;
+            /**
+             * Spectrum Chip Component
+             * A versatile chip component that can be used for tags, filters, and selections.
+             * Supports leading/trailing icons, selection states, and various interactive behaviors.
+             */
             "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
