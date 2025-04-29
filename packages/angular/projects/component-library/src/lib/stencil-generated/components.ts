@@ -188,6 +188,28 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
 
 
 @ProxyCmp({
+  inputs: ['color', 'config', 'dark', 'showSwatches']
+})
+@Component({
+  selector: 'spectrum-theme',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['color', 'config', 'dark', 'showSwatches'],
+})
+export class SpectrumTheme {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumTheme extends Components.SpectrumTheme {}
+
+
+@ProxyCmp({
   inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches']
 })
 @Component({

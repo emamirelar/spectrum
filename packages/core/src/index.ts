@@ -15,3 +15,7 @@ export type * from './components.d.ts';
 export { SpectrumWallpaper } from './components/spectrum-wallpaper/spectrum-wallpaper';
 export { SpectrumButton } from './components/spectrum-button/spectrum-button';
 export { SpectrumSearchInput } from './components/spectrum-search-input/spectrum-search-input';
+export { SpectrumTheme } from './components/spectrum-theme/spectrum-theme';
+
+// Export CSS variables for independent use
+import './styles/spectrum-variables.css';

@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+:root {
+  --unops-color-white: #ffffff;
+  --unops-color-black: #333333;
+  --unops-color-gray: #f6f6f6;
+  --unops-color-blue: #0070d2;
+  --unops-color-midnight: #005fb2;
+  --unops-color-success: #2d844a;
+  --unops-color-warning: #cc6900;
+  --unops-color-danger: #c41e3a;
+
+  --spectrum-sys-color-primary: var(--unops-color-blue);
+  --spectrum-sys-color-secondary: var(--unops-color-midnight);
+  --spectrum-sys-color-success: var(--unops-color-success);
+  --spectrum-sys-color-warning: var(--unops-color-warning);
+  --spectrum-sys-color-danger: var(--unops-color-danger);
+  --spectrum-sys-color-background: var(--unops-color-white);
+  --spectrum-sys-color-surface: var(--unops-color-gray);
+  --spectrum-sys-color-text: var(--unops-color-black);
+  --spectrum-sys-color-on-primary: var(--unops-color-white);
+  --spectrum-sys-color-on-secondary: var(--unops-color-white);
+  --spectrum-sys-color-on-success: var(--unops-color-white);
+  --spectrum-sys-color-on-warning: var(--unops-color-white);
+  --spectrum-sys-color-on-danger: var(--unops-color-white);
+  --spectrum-sys-color-on-surface: var(--unops-color-black);
+
+  /* Default theme colors - used when spectrum-wallpaper is not present */
+  --spectrum-color-primary: #0070d2;
+  --spectrum-color-on-primary: #ffffff;
+  --spectrum-color-primary-container: #d0e4ff;
+  --spectrum-color-on-primary-container: #001c3a;
+  --spectrum-color-secondary: #005fb2;
+  --spectrum-color-on-secondary: #ffffff;
+  --spectrum-color-secondary-container: #d1e4ff;
+  --spectrum-color-on-secondary-container: #001c3a;
+  --spectrum-color-tertiary: #7f525d;
+  --spectrum-color-on-tertiary: #ffffff;
+  --spectrum-color-tertiary-container: #ffd9e2;
+  --spectrum-color-on-tertiary-container: #321018;
+  --spectrum-color-error: #ba1a1a;
+  --spectrum-color-on-error: #ffffff;
+  --spectrum-color-error-container: #ffdad6;
+  --spectrum-color-on-error-container: #410002;
+  --spectrum-color-background: #f6f6f6;
+  --spectrum-color-on-background: #333333;
+  --spectrum-color-surface: #f6f6f6;
+  --spectrum-color-on-surface: #333333;
+  --spectrum-color-surface-variant: #dfe2eb;
+  --spectrum-color-on-surface-variant: #42474e;
+  --spectrum-color-outline: #72777f;
+  --spectrum-color-outline-variant: #c2c7cf;
+  --spectrum-color-shadow: #000000;
+  --spectrum-color-scrim: #000000;
+  --spectrum-color-inverse-surface: #2f3033;
+  --spectrum-color-inverse-on-surface: #f1f0f4;
+  --spectrum-color-inverse-primary: #a8c8ff;
+
+  --spectrum-sys-font-family: 'Noto Sans', sans-serif;
+  --spectrum-sys-font-size: 16px;
+  --spectrum-sys-font-size-small: calc(var(--spectrum-sys-font-size) * 0.875);
+  --spectrum-sys-font-size-large: calc(var(--spectrum-sys-font-size) * 1.25);
+  --spectrum-sys-font-size-x-large: calc(var(--spectrum-sys-font-size) * 1.5);
+  --spectrum-sys-font-weight-light: 300;
+  --spectrum-sys-font-weight-regular: 400;
+  --spectrum-sys-font-weight-medium: 500;
+  --spectrum-sys-font-weight-bold: 700;
+
+  /* Material Symbols font settings */
+  --spectrum-sys-icon-font-family: 'Material Symbols Outlined';
+  --spectrum-sys-icon-font-size: 20px;
+  --spectrum-sys-icon-font-weight: 400;
+  --spectrum-sys-icon-line-height: 1;
+  --spectrum-sys-icon-fill: 0;
+  --spectrum-sys-icon-weight: 400;
+  --spectrum-sys-icon-grade: 0;
+  --spectrum-sys-icon-optical-size: 24;
+
+  --spectrum-sys-spacing: 1em;
+  --spectrum-sys-spacing-large: calc(var(--spectrum-sys-spacing) * 2);
+  --spectrum-sys-spacing-x-large: calc(var(--spectrum-sys-spacing) * 3);
+  --spectrum-sys-spacing-xx-large: calc(var(--spectrum-sys-spacing) * 4);
+  --spectrum-sys-spacing-small: calc(var(--spectrum-sys-spacing) / 2);
+
+  --spectrum-sys-border: 1px;
+  --spectrum-sys-border-radius: 4px;
+
+  --spectrum-sys-animation-duration: 300ms;
+  --spectrum-sys-animation-duration-fast: 200ms;
+  --spectrum-sys-animation-duration-slow: 400ms;
+
+  --spectrum-sys-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --spectrum-comp-megamenu-background-color: color-mix(in srgb, var(--spectrum-sys-color-background) 80%, transparent);
+  --spectrum-comp-megamenu-background-filter: blur(5px);
+  --spectrum-comp-megamenu-width: 60em;
+
+  /* Colors */
+  --primary: rgba(0, 0, 0, 0);
+  --onPrimary: rgba(0, 0, 0, 0);
+  --secondary: rgba(0, 0, 0, 0);
+  --onSecondary: rgba(0, 0, 0, 0);
+  --surface: white;
+  --frostColor: rgba(255, 255, 255, 0.6);
+  
+  /* Sizing */
+  --baseSize: 8px;
+  --buttonSize: calc(var(--baseSize) * 6);
+  --standard-padding: 24px;
+  
+  /* Effects */
+  --frostBlur: 6px;
+  --animationTime: 0.33s;
+  --wallpaper: url('https://images.unsplash.com/photo-1732660122434-775d5af17735?q=80&w=3544&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+} 

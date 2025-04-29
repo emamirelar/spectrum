@@ -87,6 +87,14 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
 ]);
 
 
+export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('spectrum-theme', undefined, [
+  'color',
+  'dark',
+  'showSwatches',
+  'config'
+]);
+
+
 export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallpaper>('spectrum-wallpaper', undefined, [
   'background',
   'showSwatches',

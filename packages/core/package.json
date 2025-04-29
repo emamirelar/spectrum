@@ -1,7 +1,6 @@
 {
-  "name": "@spectrum/core",
-  "private": true,
-  "version": "0.0.1",
+  "name": "@unops/cpit-spectrum",
+  "version": "0.0.2-alpha.1",
   "description": "Spectrum, UNOPS Design System Core Components",
   "author": "Justin Waugh <justinwa@unops.org>",
   "main": "dist/index.cjs.js",
@@ -18,6 +17,7 @@
   ],
   "scripts": {
     "build": "stencil build --docs",
+    "prepare": "npm run build",
     "start": "stencil build --docs --watch",
     "test": "npm run test.spec && npm run test.e2e",
     "test.spec": "stencil test --spec",

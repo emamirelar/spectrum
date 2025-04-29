@@ -41,6 +41,13 @@ export class SpectrumButton {
   @State() ripples: { x: number; y: number; id: number }[] = [];
   private rippleId: number = 0;
 
+  @Watch('iconOnly')
+  handleIconOnlyChange(newValue: boolean) {
+    if (newValue && this.leftIcon) {
+      this.showLeftIcon = true;
+    }
+  }
+
   // ============== Debug Helpers ==============
   private log(message: string, data?: any) {
     if (this.debug) {

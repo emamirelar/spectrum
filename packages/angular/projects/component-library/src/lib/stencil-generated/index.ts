@@ -9,5 +9,6 @@ export const DIRECTIVES = [
   d.SpectrumMegamenu,
   d.SpectrumRail,
   d.SpectrumSearchInput,
+  d.SpectrumTheme,
   d.SpectrumWallpaper
 ];

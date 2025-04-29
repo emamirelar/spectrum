@@ -138,6 +138,24 @@ export namespace Components {
         "maxLines": number;
         "setFocus": () => Promise<void>;
     }
+    interface SpectrumTheme {
+        /**
+          * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
+         */
+        "color": string;
+        /**
+          * Theme configuration object for custom overrides
+         */
+        "config": string;
+        /**
+          * Whether to use dark mode
+         */
+        "dark": boolean;
+        /**
+          * Whether to show theme color swatches (useful for development)
+         */
+        "showSwatches": boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -273,6 +291,12 @@ declare global {
         prototype: HTMLSpectrumSearchInputElement;
         new (): HTMLSpectrumSearchInputElement;
     };
+    interface HTMLSpectrumThemeElement extends Components.SpectrumTheme, HTMLStencilElement {
+    }
+    var HTMLSpectrumThemeElement: {
+        prototype: HTMLSpectrumThemeElement;
+        new (): HTMLSpectrumThemeElement;
+    };
     interface HTMLSpectrumWallpaperElement extends Components.SpectrumWallpaper, HTMLStencilElement {
     }
     var HTMLSpectrumWallpaperElement: {
@@ -287,6 +311,7 @@ declare global {
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
+        "spectrum-theme": HTMLSpectrumThemeElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
     }
 }
@@ -426,6 +451,24 @@ declare namespace LocalJSX {
         "maxLines"?: number;
         "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
     }
+    interface SpectrumTheme {
+        /**
+          * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
+         */
+        "color"?: string;
+        /**
+          * Theme configuration object for custom overrides
+         */
+        "config"?: string;
+        /**
+          * Whether to use dark mode
+         */
+        "dark"?: boolean;
+        /**
+          * Whether to show theme color swatches (useful for development)
+         */
+        "showSwatches"?: boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -452,6 +495,7 @@ declare namespace LocalJSX {
         "spectrum-megamenu": SpectrumMegamenu;
         "spectrum-rail": SpectrumRail;
         "spectrum-search-input": SpectrumSearchInput;
+        "spectrum-theme": SpectrumTheme;
         "spectrum-wallpaper": SpectrumWallpaper;
     }
 }
@@ -476,6 +520,7 @@ declare module "@stencil/core" {
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
             "spectrum-rail": LocalJSX.SpectrumRail & JSXBase.HTMLAttributes<HTMLSpectrumRailElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
+            "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
         }
     }

@@ -205,6 +205,7 @@ export class SpectrumConversationPanel {
               <spectrum-button 
                 variant="ghost"
                 iconOnly={true}
+                showLeftIcon={true}
                 leftIcon={action.icon}
                 onClick={() => this.action.emit(action.value)}
               />
