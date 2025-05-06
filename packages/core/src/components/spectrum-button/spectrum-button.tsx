@@ -1,4 +1,4 @@
-import { Component, Host, h, Fragment, Prop, State, Watch, Element } from '@stencil/core';
+import { Component, Host, h, Fragment, Prop, State, Watch, Element, Event, EventEmitter } from '@stencil/core';
 
 /**
  * Spectrum Button Component
@@ -13,6 +13,7 @@ import { Component, Host, h, Fragment, Prop, State, Watch, Element } from '@sten
 export class SpectrumButton {
   // ============== Component Properties ==============
   @Element() el: HTMLElement;
+  @Event() buttonAction: EventEmitter<{ action?: string; label: string }>;
 
   // Debug Mode
   @Prop() debug: boolean = false;
@@ -24,6 +25,7 @@ export class SpectrumButton {
   @Prop() iconOnly: boolean = false;
   @Prop() disabled: boolean = false;
   @Prop() ripple: boolean = false;
+  @Prop() action: string = '';
 
   // Button Content
   @Prop() showButtonText: boolean = true;
@@ -40,6 +42,13 @@ export class SpectrumButton {
   @State() isActive: boolean = false;
   @State() ripples: { x: number; y: number; id: number }[] = [];
   private rippleId: number = 0;
+
+  @Watch('iconOnly')
+  handleIconOnlyChange(newValue: boolean) {
+    if (newValue && this.leftIcon) {
+      this.showLeftIcon = true;
+    }
+  }
 
   // ============== Debug Helpers ==============
   private log(message: string, data?: any) {
@@ -97,6 +106,13 @@ export class SpectrumButton {
       setTimeout(() => {
         this.ripples = this.ripples.filter(r => r.id !== id);
       }, 600);
+    }
+
+    if (!this.disabled && this.buttonText) {
+      this.buttonAction.emit({
+        action: this.action || undefined,
+        label: this.buttonText
+      });
     }
   };
 

@@ -1,74 +1,122 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Element, State, Watch } from '@stencil/core';
 
+/**
+ * Spectrum Chip Component
+ * A versatile chip component that can be used for tags, filters, and selections.
+ * Supports leading/trailing icons, selection states, and various interactive behaviors.
+ */
 @Component({
   tag: 'spectrum-chip',
   styleUrl: 'spectrum-chip.scss',
   shadow: true,
 })
 export class SpectrumChip {
-  /**
-   * The variant of the chip
-   */
-  @Prop() variant: 'primary' | 'secondary' = 'primary';
+  // ============== Component Properties ==============
+  @Element() el: HTMLElement;
 
-  /**
-   * Whether the chip is selected
-   */
+  // Debug Mode
+  @Prop() debug: boolean = false;
+
+  // Chip Variants and Appearance
+  @Prop() variant: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion' = 'primary';
   @Prop() selected: boolean = false;
-
-  /**
-   * Whether the chip is disabled
-   */
   @Prop() disabled: boolean = false;
+  @Prop() outline: boolean = false;
+  @Prop() ripple: boolean = false;
+  @Prop() action: string = '';
 
-  /**
-   * The label text of the chip
-   */
+  // Chip Content
   @Prop() label: string = '';
-
-  /**
-   * Optional leading icon
-   */
   @Prop() leadingIcon: string = '';
-
-  /**
-   * Optional trailing icon (usually for removal)
-   */
   @Prop() trailingIcon: string = 'close';
-
-  /**
-   * Whether to show the trailing icon
-   */
   @Prop() showTrailingIcon: boolean = false;
 
-  /**
-   * Whether the chip is outlined
-   */
-  @Prop() outline: boolean = false;
+  // Chip State
+  @State() isHovered: boolean = false;
+  @State() isActive: boolean = false;
+  @State() ripples: { x: number; y: number; id: number }[] = [];
+  private rippleId: number = 0;
 
-  /**
-   * Emitted when the chip is selected/deselected
-   */
-  @Event() chipSelect: EventEmitter<boolean>;
+  // Events
+  @Event() chipAction: EventEmitter<{ action?: string; label: string }>;
 
-  /**
-   * Emitted when the chip is removed (clicked on trailing icon)
-   */
-  @Event() chipRemove: EventEmitter<void>;
+  // ============== Debug Helpers ==============
+  private log(message: string, data?: any) {
+    if (this.debug) {
+      console.log(`[SpectrumChip] ${message}`, data ? data : '');
+    }
+  }
 
-  private handleClick = () => {
+  // ============== State Management ==============
+  @Watch('selected')
+  handleSelectedChange(newValue: boolean) {
+    this.log('Selected state changed', { from: this.selected, to: newValue });
+  }
+
+  // ============== Event Handlers ==============
+  private handleMouseEnter = () => {
     if (!this.disabled) {
-      this.chipSelect.emit(!this.selected);
+      this.log('Mouse entered');
+      this.isHovered = true;
+    }
+  };
+
+  private handleMouseLeave = () => {
+    this.log('Mouse left');
+    this.isHovered = false;
+    this.isActive = false;
+  };
+
+  private handleMouseDown = () => {
+    if (!this.disabled) {
+      this.log('Mouse down');
+      this.isActive = true;
+    }
+  };
+
+  private handleMouseUp = () => {
+    this.log('Mouse up');
+    this.isActive = false;
+  };
+
+  private handleClick = (event: MouseEvent) => {
+    if (this.ripple && !this.disabled) {
+      const chip = this.el.shadowRoot?.querySelector('.spectrum-chip');
+      if (!chip) return;
+
+      const rect = chip.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const id = this.rippleId++;
+      
+      this.ripples = [...this.ripples, { x, y, id }];
+      
+      // Remove ripple after animation completes
+      setTimeout(() => {
+        this.ripples = this.ripples.filter(r => r.id !== id);
+      }, 600);
+    }
+
+    if (!this.disabled && this.label) {
+      this.chipAction.emit({
+        action: this.action || undefined,
+        label: this.label
+      });
     }
   };
 
   private handleRemove = (e: Event) => {
     e.stopPropagation();
     if (!this.disabled) {
-      this.chipRemove.emit();
+      this.log('Chip remove clicked');
+      this.chipAction.emit({
+        action: 'remove',
+        label: this.label
+      });
     }
   };
 
+  // ============== Style Helpers ==============
   private getChipClasses(): string {
     const classes = ['spectrum-chip'];
     
@@ -85,10 +133,33 @@ export class SpectrumChip {
       classes.push('spectrum-chip--disabled');
     }
 
+    this.log('Generated classes', { classes });
     return classes.join(' ');
   }
 
+  // ============== Lifecycle Methods ==============
+  componentWillLoad() {
+    this.log('Component will load', {
+      variant: this.variant,
+      selected: this.selected,
+      disabled: this.disabled,
+      outline: this.outline,
+      ripple: this.ripple
+    });
+  }
+
+  componentDidLoad() {
+    this.log('Component did load');
+  }
+
+  // ============== Render Methods ==============
   render() {
+    this.log('Rendering component', {
+      selected: this.selected,
+      isHovered: this.isHovered,
+      isActive: this.isActive
+    });
+
     return (
       <Host>
         <div 
@@ -96,7 +167,20 @@ export class SpectrumChip {
           role="button"
           tabindex={this.disabled ? -1 : 0}
           onClick={this.handleClick}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+          onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMouseUp}
         >
+          {this.ripple && this.ripples.map(ripple => (
+            <span
+              class="spectrum-chip__ripple"
+              style={{
+                left: `${ripple.x}px`,
+                top: `${ripple.y}px`,
+              }}
+            />
+          ))}
           {this.leadingIcon && (
             <span class="spectrum-chip__icon spectrum-chip__icon--leading">
               <span class="material-symbols-outlined">{this.leadingIcon}</span>

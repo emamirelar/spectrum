@@ -116,6 +116,7 @@ export class SpectrumSearchInput {
                   iconOnly={true}
                   size="base"
                   leftIcon="mic"
+                  showLeftIcon={true}
                   onClick={this.handleVoiceInput}
                   state={this.isListening ? 'active' : 'default'}
                   aria-label="Voice search"
@@ -126,6 +127,7 @@ export class SpectrumSearchInput {
                 iconOnly={true}
                 size="base"
                 leftIcon="search"
+                showLeftIcon={true}
                 onClick={this.handleSearch}
                 aria-label="Search"
               />

@@ -8,25 +8,29 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
+  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['buttonAction']);
   }
 }
 
 
-export declare interface SpectrumButton extends Components.SpectrumButton {}
+export declare interface SpectrumButton extends Components.SpectrumButton {
+
+  buttonAction: EventEmitter<CustomEvent<{ action?: string; label: string }>>;
+}
 
 
 @ProxyCmp({
@@ -52,34 +56,28 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
 
 
 @ProxyCmp({
-  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
 })
 @Component({
   selector: 'spectrum-chip',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['disabled', 'label', 'leadingIcon', 'outline', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
 })
 export class SpectrumChip {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['chipSelect', 'chipRemove']);
+    proxyOutputs(this, this.el, ['chipAction']);
   }
 }
 
 
 export declare interface SpectrumChip extends Components.SpectrumChip {
-  /**
-   * Emitted when the chip is selected/deselected
-   */
-  chipSelect: EventEmitter<CustomEvent<boolean>>;
-  /**
-   * Emitted when the chip is removed (clicked on trailing icon)
-   */
-  chipRemove: EventEmitter<CustomEvent<void>>;
+
+  chipAction: EventEmitter<CustomEvent<{ action?: string; label: string }>>;
 }
 
 
@@ -99,7 +97,7 @@ export class SpectrumConversationPanel {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore']);
+    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore', 'sourceClick']);
   }
 }
 
@@ -108,9 +106,11 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
   explorationSelected: EventEmitter<CustomEvent<string>>;
 
-  action: EventEmitter<CustomEvent<string>>;
+  action: EventEmitter<CustomEvent<{type: string, value: string}>>;
 
   explore: EventEmitter<CustomEvent<string>>;
+
+  sourceClick: EventEmitter<CustomEvent<{label: string, value: string}>>;
 }
 
 
@@ -189,6 +189,28 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
 
   searchSubmit: EventEmitter<CustomEvent<string>>;
 }
+
+
+@ProxyCmp({
+  inputs: ['color', 'config', 'dark', 'showSwatches']
+})
+@Component({
+  selector: 'spectrum-theme',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['color', 'config', 'dark', 'showSwatches'],
+})
+export class SpectrumTheme {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumTheme extends Components.SpectrumTheme {}
 
 
 @ProxyCmp({

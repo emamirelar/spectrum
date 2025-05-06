@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  position: relative;
+  isolation: isolate;
 }
 
 .wallpaper {
@@ -13,6 +15,13 @@
   align-items: stretch;
   justify-content: stretch;
   padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.wallpaper-host ::slotted(*) {
+  color: inherit;
+  background-color: inherit;
 }
 
 .swatches {
@@ -30,6 +39,7 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 
 .swatches::-webkit-scrollbar {

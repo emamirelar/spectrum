@@ -37,7 +37,7 @@ export class SpectrumWallpaper {
   @Prop({ attribute: 'backgroundsize' }) backgroundsize: string = 'cover';
 
   componentWillLoad() {
-    // console.log('Component will load, background:', this.background);
+    console.log('[SpectrumWallpaper] Component will load, background:', this.background);
     if (this.background) {
       this.extractDominantColor();
     }
@@ -45,7 +45,7 @@ export class SpectrumWallpaper {
 
   @Watch('background')
   async extractDominantColor() {
-    // console.log('Extracting dominant color for background:', this.background);
+    console.log('[SpectrumWallpaper] Extracting dominant color for background:', this.background);
     if (!this.background) return;
 
     // If we already have a loading promise, wait for it to complete
@@ -63,21 +63,21 @@ export class SpectrumWallpaper {
       this.imageLoadPromise = new Promise((resolve) => {
         img.onload = async () => {
           try {
-            // console.log('Image loaded successfully');
+            console.log('[SpectrumWallpaper] Image loaded successfully');
             const color = await this.extractColorFromImage(img);
-            // console.log('Extracted color:', color);
+            console.log('[SpectrumWallpaper] Extracted color:', color);
             this.dominantColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
             this.generateTheme(color[0], color[1], color[2]);
             resolve();
           } catch (error) {
-            console.error('Error extracting color:', error);
+            console.error('[SpectrumWallpaper] Error extracting color:', error);
             this.extractColorFromBackground();
             resolve();
           }
         };
 
         img.onerror = (error) => {
-          console.error('Error loading image:', error);
+          console.error('[SpectrumWallpaper] Error loading image:', error);
           this.extractColorFromBackground();
           resolve();
         };
@@ -86,10 +86,10 @@ export class SpectrumWallpaper {
       try {
         // Set the source and wait for it to load
         img.src = this.background.slice(4, -1); // Remove 'url(' and ')'
-        // console.log('Waiting for image to load...');
+        console.log('[SpectrumWallpaper] Waiting for image to load...');
         await this.imageLoadPromise;
       } catch (error) {
-        console.error('Error in image loading process:', error);
+        console.error('[SpectrumWallpaper] Error in image loading process:', error);
         this.extractColorFromBackground();
       } finally {
         this.imageLoadPromise = null;
@@ -137,6 +137,7 @@ export class SpectrumWallpaper {
   }
 
   private extractColorFromBackground() {
+    console.log('[SpectrumWallpaper] Extracting color from background:', this.background);
     if (!this.background) return;
 
     // Handle different background formats
@@ -144,43 +145,48 @@ export class SpectrumWallpaper {
       // For gradients, extract the first color
       const match = this.background.match(/rgba?\([^)]+\)|#[a-f\d]{3,8}/gi);
       if (match && match.length > 0) {
+        console.log('[SpectrumWallpaper] Extracted color from gradient:', match[0]);
         this.dominantColor = match[0];
         this.generateThemeFromCssColor(this.dominantColor);
       }
     } else {
       // For solid colors
+      console.log('[SpectrumWallpaper] Using solid color:', this.background);
       this.dominantColor = this.background;
       this.generateThemeFromCssColor(this.background);
     }
   }
 
   private generateThemeFromCssColor(cssColor: string) {
+    console.log('[SpectrumWallpaper] Generating theme from CSS color:', cssColor);
     // Handle different color formats
     if (cssColor.startsWith('#')) {
       // Convert hex to RGB
       const r = parseInt(cssColor.slice(1, 3), 16);
       const g = parseInt(cssColor.slice(3, 5), 16);
       const b = parseInt(cssColor.slice(5, 7), 16);
+      console.log('[SpectrumWallpaper] Converted hex to RGB:', { r, g, b });
       this.generateTheme(r, g, b);
     } else if (cssColor.startsWith('rgb')) {
       // Extract RGB values
       const match = cssColor.match(/\d+/g);
       if (match && match.length >= 3) {
-        this.generateTheme(
-          parseInt(match[0]),
-          parseInt(match[1]),
-          parseInt(match[2])
-        );
+        const [r, g, b] = match.map(Number);
+        console.log('[SpectrumWallpaper] Extracted RGB values:', { r, g, b });
+        this.generateTheme(r, g, b);
       }
     }
   }
 
   private generateTheme(r: number, g: number, b: number) {
+    console.log('[SpectrumWallpaper] Generating theme from RGB:', { r, g, b });
     // Convert RGB to ARGB (Android RGB)
     const argb = argbFromRgb(r, g, b);
+    console.log('[SpectrumWallpaper] Converted to ARGB:', argb);
     
     // Generate theme from source color
     const theme = themeFromSourceColor(argb);
+    console.log('[SpectrumWallpaper] Generated theme:', theme);
 
     // Convert theme colors to CSS custom properties
     const customProperties = {
@@ -215,10 +221,21 @@ export class SpectrumWallpaper {
       '--spectrum-color-inverse-primary': hexFromArgb(theme.schemes.light.inversePrimary),
     };
 
-    // Apply custom properties to the document root
-    const root = document.documentElement;
+    console.log('[SpectrumWallpaper] Generated custom properties:', customProperties);
+
+    // Apply custom properties to the host element instead of document root
     Object.entries(customProperties).forEach(([property, value]) => {
-      root.style.setProperty(property, value);
+      console.log(`[SpectrumWallpaper] Setting CSS property: ${property} = ${value}`);
+      this.hostElement.style.setProperty(property, value);
+    });
+
+    // Log the current computed styles to verify the theme was applied
+    const computedStyles = getComputedStyle(this.hostElement);
+    console.log('[SpectrumWallpaper] Current theme values:', {
+      primary: computedStyles.getPropertyValue('--spectrum-color-primary'),
+      onPrimary: computedStyles.getPropertyValue('--spectrum-color-on-primary'),
+      background: computedStyles.getPropertyValue('--spectrum-color-background'),
+      onBackground: computedStyles.getPropertyValue('--spectrum-color-on-background'),
     });
   }
 

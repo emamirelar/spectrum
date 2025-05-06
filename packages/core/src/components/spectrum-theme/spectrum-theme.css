@@ -1,0 +1,51 @@
+@import '../../styles/spectrum-variables.css';
+
+:host {
+  display: block;
+  /* Inherit system variables from global.css */
+  font-family: var(--spectrum-sys-font-family);
+  font-size: var(--spectrum-sys-font-size);
+  /* Apply theme colors */
+  background: var(--spectrum-color-background);
+  color: var(--spectrum-color-on-background);
+}
+
+/* Theme swatches display */
+.theme-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spectrum-sys-spacing);
+  padding: var(--spectrum-sys-spacing);
+}
+
+.theme-swatch {
+  padding: var(--spectrum-sys-spacing);
+  border-radius: var(--spectrum-sys-border-radius, 4px);
+  cursor: pointer;
+  transition: transform var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function);
+}
+
+.theme-swatch:hover {
+  transform: translateY(-2px);
+}
+
+/* Apply background and text colors based on data-variable attribute */
+.theme-swatch[data-variable*="primary"] {
+  background: var(--spectrum-color-primary);
+  color: var(--spectrum-color-on-primary);
+}
+
+.theme-swatch[data-variable*="secondary"] {
+  background: var(--spectrum-color-secondary);
+  color: var(--spectrum-color-on-secondary);
+}
+
+.theme-swatch[data-variable*="surface"] {
+  background: var(--spectrum-color-surface);
+  color: var(--spectrum-color-on-surface);
+}
+
+.theme-swatch[data-variable*="background"] {
+  background: var(--spectrum-color-background);
+  color: var(--spectrum-color-on-background);
+} 

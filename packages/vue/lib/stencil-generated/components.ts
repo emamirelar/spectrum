@@ -16,13 +16,15 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'iconOnly',
   'disabled',
   'ripple',
+  'action',
   'showButtonText',
   'buttonText',
   'showLeftIcon',
   'leftIcon',
   'showRightIcon',
   'rightIcon',
-  'state'
+  'state',
+  'buttonAction'
 ]);
 
 
@@ -37,16 +39,18 @@ export const SpectrumCarousel = /*@__PURE__*/ defineContainer<JSX.SpectrumCarous
 
 
 export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spectrum-chip', undefined, [
+  'debug',
   'variant',
   'selected',
   'disabled',
+  'outline',
+  'ripple',
+  'action',
   'label',
   'leadingIcon',
   'trailingIcon',
   'showTrailingIcon',
-  'outline',
-  'chipSelect',
-  'chipRemove'
+  'chipAction'
 ]);
 
 
@@ -57,7 +61,8 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'sources',
   'explorationSelected',
   'action',
-  'explore'
+  'explore',
+  'sourceClick'
 ]);
 
 
@@ -82,6 +87,14 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
 export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchInput>('spectrum-search-input', undefined, [
   'maxLines',
   'searchSubmit'
+]);
+
+
+export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('spectrum-theme', undefined, [
+  'color',
+  'dark',
+  'showSwatches',
+  'config'
 ]);
 
 

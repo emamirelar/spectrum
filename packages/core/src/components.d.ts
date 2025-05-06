@@ -14,6 +14,7 @@ export namespace Components {
      * Supports icons, text, and various interactive states.
      */
     interface SpectrumButton {
+        "action": string;
         "buttonText": string;
         "debug": boolean;
         "disabled": boolean;
@@ -55,39 +56,23 @@ export namespace Components {
          */
         "show": number;
     }
+    /**
+     * Spectrum Chip Component
+     * A versatile chip component that can be used for tags, filters, and selections.
+     * Supports leading/trailing icons, selection states, and various interactive behaviors.
+     */
     interface SpectrumChip {
-        /**
-          * Whether the chip is disabled
-         */
+        "action": string;
+        "debug": boolean;
         "disabled": boolean;
-        /**
-          * The label text of the chip
-         */
         "label": string;
-        /**
-          * Optional leading icon
-         */
         "leadingIcon": string;
-        /**
-          * Whether the chip is outlined
-         */
         "outline": boolean;
-        /**
-          * Whether the chip is selected
-         */
+        "ripple": boolean;
         "selected": boolean;
-        /**
-          * Whether to show the trailing icon
-         */
         "showTrailingIcon": boolean;
-        /**
-          * Optional trailing icon (usually for removal)
-         */
         "trailingIcon": string;
-        /**
-          * The variant of the chip
-         */
-        "variant": 'primary' | 'secondary';
+        "variant": 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
     interface SpectrumConversationPanel {
         /**
@@ -155,6 +140,24 @@ export namespace Components {
         "maxLines": number;
         "setFocus": () => Promise<void>;
     }
+    interface SpectrumTheme {
+        /**
+          * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
+         */
+        "color": string;
+        /**
+          * Theme configuration object for custom overrides
+         */
+        "config": string;
+        /**
+          * Whether to use dark mode
+         */
+        "dark": boolean;
+        /**
+          * Whether to show theme color swatches (useful for development)
+         */
+        "showSwatches": boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -174,6 +177,10 @@ export namespace Components {
         "showSwatches": boolean;
     }
 }
+export interface SpectrumButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumButtonElement;
+}
 export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumChipElement;
@@ -191,12 +198,23 @@ export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     target: HTMLSpectrumSearchInputElement;
 }
 declare global {
+    interface HTMLSpectrumButtonElementEventMap {
+        "buttonAction": { action?: string; label: string };
+    }
     /**
      * Spectrum Button Component
      * A versatile button component with multiple variants, sizes, and states.
      * Supports icons, text, and various interactive states.
      */
     interface HTMLSpectrumButtonElement extends Components.SpectrumButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumButtonElementEventMap>(type: K, listener: (this: HTMLSpectrumButtonElement, ev: SpectrumButtonCustomEvent<HTMLSpectrumButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumButtonElementEventMap>(type: K, listener: (this: HTMLSpectrumButtonElement, ev: SpectrumButtonCustomEvent<HTMLSpectrumButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLSpectrumButtonElement: {
         prototype: HTMLSpectrumButtonElement;
@@ -209,9 +227,13 @@ declare global {
         new (): HTMLSpectrumCarouselElement;
     };
     interface HTMLSpectrumChipElementEventMap {
-        "chipSelect": boolean;
-        "chipRemove": void;
+        "chipAction": { action?: string; label: string };
     }
+    /**
+     * Spectrum Chip Component
+     * A versatile chip component that can be used for tags, filters, and selections.
+     * Supports leading/trailing icons, selection states, and various interactive behaviors.
+     */
     interface HTMLSpectrumChipElement extends Components.SpectrumChip, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumChipElementEventMap>(type: K, listener: (this: HTMLSpectrumChipElement, ev: SpectrumChipCustomEvent<HTMLSpectrumChipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -228,8 +250,9 @@ declare global {
     };
     interface HTMLSpectrumConversationPanelElementEventMap {
         "explorationSelected": string;
-        "action": string;
+        "action": {type: string, value: string};
         "explore": string;
+        "sourceClick": {label: string, value: string};
     }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumConversationPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumConversationPanelElement, ev: SpectrumConversationPanelCustomEvent<HTMLSpectrumConversationPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -285,6 +308,12 @@ declare global {
         prototype: HTMLSpectrumSearchInputElement;
         new (): HTMLSpectrumSearchInputElement;
     };
+    interface HTMLSpectrumThemeElement extends Components.SpectrumTheme, HTMLStencilElement {
+    }
+    var HTMLSpectrumThemeElement: {
+        prototype: HTMLSpectrumThemeElement;
+        new (): HTMLSpectrumThemeElement;
+    };
     interface HTMLSpectrumWallpaperElement extends Components.SpectrumWallpaper, HTMLStencilElement {
     }
     var HTMLSpectrumWallpaperElement: {
@@ -299,6 +328,7 @@ declare global {
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
+        "spectrum-theme": HTMLSpectrumThemeElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
     }
 }
@@ -309,11 +339,13 @@ declare namespace LocalJSX {
      * Supports icons, text, and various interactive states.
      */
     interface SpectrumButton {
+        "action"?: string;
         "buttonText"?: string;
         "debug"?: boolean;
         "disabled"?: boolean;
         "iconOnly"?: boolean;
         "leftIcon"?: string;
+        "onButtonAction"?: (event: SpectrumButtonCustomEvent<{ action?: string; label: string }>) => void;
         "outline"?: boolean;
         "rightIcon"?: string;
         "ripple"?: boolean;
@@ -350,47 +382,24 @@ declare namespace LocalJSX {
          */
         "show"?: number;
     }
+    /**
+     * Spectrum Chip Component
+     * A versatile chip component that can be used for tags, filters, and selections.
+     * Supports leading/trailing icons, selection states, and various interactive behaviors.
+     */
     interface SpectrumChip {
-        /**
-          * Whether the chip is disabled
-         */
+        "action"?: string;
+        "debug"?: boolean;
         "disabled"?: boolean;
-        /**
-          * The label text of the chip
-         */
         "label"?: string;
-        /**
-          * Optional leading icon
-         */
         "leadingIcon"?: string;
-        /**
-          * Emitted when the chip is removed (clicked on trailing icon)
-         */
-        "onChipRemove"?: (event: SpectrumChipCustomEvent<void>) => void;
-        /**
-          * Emitted when the chip is selected/deselected
-         */
-        "onChipSelect"?: (event: SpectrumChipCustomEvent<boolean>) => void;
-        /**
-          * Whether the chip is outlined
-         */
+        "onChipAction"?: (event: SpectrumChipCustomEvent<{ action?: string; label: string }>) => void;
         "outline"?: boolean;
-        /**
-          * Whether the chip is selected
-         */
+        "ripple"?: boolean;
         "selected"?: boolean;
-        /**
-          * Whether to show the trailing icon
-         */
         "showTrailingIcon"?: boolean;
-        /**
-          * Optional trailing icon (usually for removal)
-         */
         "trailingIcon"?: string;
-        /**
-          * The variant of the chip
-         */
-        "variant"?: 'primary' | 'secondary';
+        "variant"?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
     interface SpectrumConversationPanel {
         /**
@@ -405,9 +414,10 @@ declare namespace LocalJSX {
           * The messsages to display in the conversation panel Default: null
          */
         "messages"?: string;
-        "onAction"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
+        "onAction"?: (event: SpectrumConversationPanelCustomEvent<{type: string, value: string}>) => void;
         "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         "onExplore"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
+        "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{label: string, value: string}>) => void;
         /**
           * The sources to display in the messages Default: null
          */
@@ -461,6 +471,24 @@ declare namespace LocalJSX {
         "maxLines"?: number;
         "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
     }
+    interface SpectrumTheme {
+        /**
+          * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
+         */
+        "color"?: string;
+        /**
+          * Theme configuration object for custom overrides
+         */
+        "config"?: string;
+        /**
+          * Whether to use dark mode
+         */
+        "dark"?: boolean;
+        /**
+          * Whether to show theme color swatches (useful for development)
+         */
+        "showSwatches"?: boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -487,6 +515,7 @@ declare namespace LocalJSX {
         "spectrum-megamenu": SpectrumMegamenu;
         "spectrum-rail": SpectrumRail;
         "spectrum-search-input": SpectrumSearchInput;
+        "spectrum-theme": SpectrumTheme;
         "spectrum-wallpaper": SpectrumWallpaper;
     }
 }
@@ -501,11 +530,17 @@ declare module "@stencil/core" {
              */
             "spectrum-button": LocalJSX.SpectrumButton & JSXBase.HTMLAttributes<HTMLSpectrumButtonElement>;
             "spectrum-carousel": LocalJSX.SpectrumCarousel & JSXBase.HTMLAttributes<HTMLSpectrumCarouselElement>;
+            /**
+             * Spectrum Chip Component
+             * A versatile chip component that can be used for tags, filters, and selections.
+             * Supports leading/trailing icons, selection states, and various interactive behaviors.
+             */
             "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
             "spectrum-rail": LocalJSX.SpectrumRail & JSXBase.HTMLAttributes<HTMLSpectrumRailElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
+            "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
         }
     }

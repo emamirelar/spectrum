@@ -45,8 +45,14 @@ export class SpectrumConversationPanel {
   private messageIdMap: Map<number, string> = new Map();
 
   @Event() explorationSelected: EventEmitter<string>;
-  @Event() action: EventEmitter<string>;
+  @Event({
+    eventName: 'action',
+    bubbles: true,
+    composed: true,
+    cancelable: true
+  }) action: EventEmitter<{type: string, value: string}>;
   @Event() explore: EventEmitter<string>;
+  @Event() sourceClick: EventEmitter<{label: string, value: string}>;
 
   @Watch('messages')
   messagesChanged(newValue: string) {
@@ -141,15 +147,13 @@ export class SpectrumConversationPanel {
     const isExpanded = this.expandedMessageId === messageId;
     const activeAccordion = isExpanded ? this.expandedAccordionType : null;
 
-    console.log('Rendering response:', { messageId, isExpanded, activeAccordion });
-
     return [
       <div class="message-wrapper response" id={`message-${messageId}`}>
         <div class="agentIcon"></div>
         <div class="message">
           <div innerHTML={response.message}></div>
           <div class="actions">
-            {this.renderActions(this.actions)}
+            {this.renderActions()}
           </div>
           <div class="accordion-row">
             <spectrum-chip 
@@ -195,24 +199,32 @@ export class SpectrumConversationPanel {
    * to the component as a prop
    * @param actions 
    */
-  renderActions(actions: any) {
-    var actionsArray = JSON.parse(actions);
-    return (
-        <div class="actions">
-        {actionsArray.map((action) => {
-          return (
-            <div class="action">
-              <spectrum-button 
-                variant="ghost"
-                iconOnly={true}
-                leftIcon={action.icon}
-                onClick={() => this.action.emit(action.value)}
-              />
-            </div>
-          )
-        })}
-      </div>
-    );
+  private renderActions() {
+    if (!this.actions) return null;
+
+    try {
+      const actionsList = JSON.parse(this.actions);
+      return (
+        <div class="spectrum-conversation-panel__actions">
+          {actionsList.map((action: any) => (
+            <spectrum-button
+              variant="ghost"
+              iconOnly={true}
+              showLeftIcon={true}
+              leftIcon={action.icon}
+              action={action.value}
+              onClick={() => this.action.emit({
+                type: 'action',
+                value: action.value
+              })}
+            />
+          ))}
+        </div>
+      );
+    } catch (error) {
+      console.error('Error parsing actions:', error);
+      return null;
+    }
   }
 
   /**
@@ -236,6 +248,14 @@ export class SpectrumConversationPanel {
           target="_blank" 
           rel="noopener noreferrer" 
           class="content-card"
+          onClick={(e: MouseEvent) => {
+            e.preventDefault();
+            this.sourceClick.emit({
+              label: source.label,
+              value: source.value
+            });
+            window.open(source.value, '_blank');
+          }}
         >
           <div class="number">{index + 1}</div>
           <div class="card-content">
@@ -257,7 +277,10 @@ export class SpectrumConversationPanel {
         {explorations.map((exploration) => (
           <button 
             class="exploration-chip"
-            onClick={() => this.explore.emit(exploration.value)}
+            onClick={() => this.action.emit({
+              type: 'exploration-action',
+              value: exploration.label
+            })}
           >
             <span class="material-symbols-outlined">prompt_suggestion</span>
             <span class="chip-label">{exploration.label}</span>
@@ -276,12 +299,6 @@ export class SpectrumConversationPanel {
   }
 
   toggleAccordion(messageId: string, accordion: 'sources' | 'explorations') {
-    console.log('Toggle accordion called:', { messageId, accordion });
-    console.log('Current state:', { 
-      expandedMessageId: this.expandedMessageId, 
-      expandedAccordionType: this.expandedAccordionType 
-    });
-
     if (this.expandedMessageId === messageId && this.expandedAccordionType === accordion) {
       // Clicking the same accordion - collapse it
       this.expandedMessageId = null;
@@ -291,11 +308,6 @@ export class SpectrumConversationPanel {
       this.expandedMessageId = messageId;
       this.expandedAccordionType = accordion;
     }
-
-    console.log('New state:', { 
-      expandedMessageId: this.expandedMessageId, 
-      expandedAccordionType: this.expandedAccordionType 
-    });
   }
 
   render() {

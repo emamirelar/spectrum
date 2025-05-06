@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Components should emit events. Event names should be camel-case. Events should contain - an action attribute, and potentially other attributes as needed by the component.
