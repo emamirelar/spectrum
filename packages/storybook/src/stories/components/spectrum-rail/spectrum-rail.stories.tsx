@@ -1,18 +1,54 @@
-import { html } from 'lit-html';
-import { Meta, StoryFn } from '@storybook/web-components';
+import type { Meta, StoryObj } from '@storybook/web-components';
+import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 
-interface RailActionEvent extends CustomEvent {
-  detail: {
-    action: string;
-    label: string;
-  };
+interface RailItem {
+  icon: string;
+  label: string;
+  action: string;
 }
 
-export default {
+interface SpectrumRailArgs {
+  menuItem?: RailItem;
+  fabItem?: RailItem;
+  topItems: RailItem[];
+  bottomItems: RailItem[];
+}
+
+const meta = {
   title: 'Components/SpectrumRail',
-  component: 'spectrum-rail',
   tags: ['autodocs'],
+  args: {
+    menuItem: {
+      icon: 'menu_open',
+      label: 'Menu',
+      action: 'menu'
+    },
+    fabItem: {
+      icon: 'add_circle',
+      label: 'Add',
+      action: 'add'
+    },
+    topItems: [
+      {
+        icon: 'history',
+        label: 'Recent',
+        action: 'recent'
+      }
+    ],
+    bottomItems: [
+      {
+        icon: 'help_outline',
+        label: 'Help',
+        action: 'help'
+      },
+      {
+        icon: 'settings',
+        label: 'Settings',
+        action: 'settings'
+      }
+    ]
+  },
   argTypes: {
     menuItem: { 
       control: 'object',
@@ -53,19 +89,9 @@ export default {
           detail: '{ icon: string; label: string; action: string; }[]'
         }
       }
-    },
-    onRailAction: {
-      action: 'railAction',
-      description: 'Event emitted when a rail item is clicked',
-      table: {
-        type: { summary: 'CustomEvent<{ action: string; label: string; }>' }
-      }
     }
   },
   parameters: {
-    actions: {
-      handles: ['railAction']
-    },
     docs: {
       description: {
         component: `
@@ -89,76 +115,42 @@ export default {
       }
     }
   }
-} as Meta;
+} satisfies Meta<SpectrumRailArgs>;
 
-const Template: StoryFn = (args) => {
-  const handleRailAction = (e: RailActionEvent) => {
-    action('railAction')({
-      action: e.detail.action,
-      label: e.detail.label
-    });
-  };
+export default meta;
+type Story = StoryObj<SpectrumRailArgs>;
 
-  return html`
+// Default Rail
+export const Default: Story = {
+  render: (args) => html`
     <div style="height: 600px; padding: 2rem;">
       <spectrum-rail
         .menuItem=${args.menuItem}
         .fabItem=${args.fabItem}
         .topItems=${args.topItems}
         .bottomItems=${args.bottomItems}
-        @railAction=${handleRailAction}
+        @railAction=${(e: CustomEvent) => action('railAction')(e.detail)}
       ></spectrum-rail>
     </div>
-  `;
+  `
 };
 
-export const Default = Template.bind({});
-Default.args = {
-  menuItem: {
-    icon: 'menu_open',
-    label: 'Menu',
-    action: 'menu'
-  },
-  fabItem: {
-    icon: 'add_circle',
-    label: 'Add',
-    action: 'add'
-  },
-  topItems: [
-    {
-      icon: 'history',
-      label: 'Recent',
-      action: 'recent'
-    }
-  ],
-  bottomItems: [
-    {
-      icon: 'help_outline',
-      label: 'Help',
-      action: 'help'
-    },
-    {
-      icon: 'settings',
-      label: 'Settings',
-      action: 'settings'
-    }
-  ]
-};
-
-export const MinimalRail = Template.bind({});
-MinimalRail.args = {
-  topItems: [
-    {
-      icon: 'history',
-      label: 'Recent',
-      action: 'recent'
-    }
-  ],
-  bottomItems: [
-    {
-      icon: 'settings',
-      label: 'Settings',
-      action: 'settings'
-    }
-  ]
+// Minimal Rail
+export const MinimalRail: Story = {
+  args: {
+    topItems: [
+      {
+        icon: 'history',
+        label: 'Recent',
+        action: 'recent'
+      }
+    ],
+    bottomItems: [
+      {
+        icon: 'settings',
+        label: 'Settings',
+        action: 'settings'
+      }
+    ]
+  }
 }; 
