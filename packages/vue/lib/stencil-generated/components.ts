@@ -16,13 +16,15 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'iconOnly',
   'disabled',
   'ripple',
+  'action',
   'showButtonText',
   'buttonText',
   'showLeftIcon',
   'leftIcon',
   'showRightIcon',
   'rightIcon',
-  'state'
+  'state',
+  'buttonAction'
 ]);
 
 

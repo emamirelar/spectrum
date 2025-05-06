@@ -45,7 +45,12 @@ export class SpectrumConversationPanel {
   private messageIdMap: Map<number, string> = new Map();
 
   @Event() explorationSelected: EventEmitter<string>;
-  @Event() action: EventEmitter<string>;
+  @Event({
+    eventName: 'action',
+    bubbles: true,
+    composed: true,
+    cancelable: true
+  }) action: EventEmitter<{type: string, value: string}>;
   @Event() explore: EventEmitter<string>;
 
   @Watch('messages')
@@ -149,7 +154,7 @@ export class SpectrumConversationPanel {
         <div class="message">
           <div innerHTML={response.message}></div>
           <div class="actions">
-            {this.renderActions(this.actions)}
+            {this.renderActions()}
           </div>
           <div class="accordion-row">
             <spectrum-chip 
@@ -195,25 +200,32 @@ export class SpectrumConversationPanel {
    * to the component as a prop
    * @param actions 
    */
-  renderActions(actions: any) {
-    var actionsArray = JSON.parse(actions);
-    return (
-        <div class="actions">
-        {actionsArray.map((action) => {
-          return (
-            <div class="action">
-              <spectrum-button 
-                variant="ghost"
-                iconOnly={true}
-                showLeftIcon={true}
-                leftIcon={action.icon}
-                onClick={() => this.action.emit(action.value)}
-              />
-            </div>
-          )
-        })}
-      </div>
-    );
+  private renderActions() {
+    if (!this.actions) return null;
+
+    try {
+      const actionsList = JSON.parse(this.actions);
+      return (
+        <div class="spectrum-conversation-panel__actions">
+          {actionsList.map((action: any) => (
+            <spectrum-button
+              variant="ghost"
+              iconOnly={true}
+              showLeftIcon={true}
+              leftIcon={action.icon}
+              action={action.value}
+              onClick={() => this.action.emit({
+                type: 'action',
+                value: action.value
+              })}
+            />
+          ))}
+        </div>
+      );
+    } catch (error) {
+      console.error('Error parsing actions:', error);
+      return null;
+    }
   }
 
   /**
@@ -258,7 +270,10 @@ export class SpectrumConversationPanel {
         {explorations.map((exploration) => (
           <button 
             class="exploration-chip"
-            onClick={() => this.explore.emit(exploration.value)}
+            onClick={() => this.action.emit({
+              type: 'exploration-action',
+              value: exploration.label
+            })}
           >
             <span class="material-symbols-outlined">prompt_suggestion</span>
             <span class="chip-label">{exploration.label}</span>

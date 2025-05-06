@@ -92,6 +92,15 @@ export class SpectrumTheme {
       '--spectrum-sys-spacing-x-large': this.themeConfig.spacing?.['x-large'] || 'calc(var(--spectrum-sys-spacing) * 3)',
       '--spectrum-sys-animation-duration': this.themeConfig.effects?.['animation-duration'] || '200ms',
       '--spectrum-sys-animation-timing-function': this.themeConfig.effects?.['animation-timing-function'] || 'ease-out',
+      // Material Symbols font settings
+      '--spectrum-sys-icon-font-family': 'Material Symbols Outlined',
+      '--spectrum-sys-icon-font-size': '20px',
+      '--spectrum-sys-icon-font-weight': '400',
+      '--spectrum-sys-icon-line-height': '1',
+      '--spectrum-sys-icon-fill': '0',
+      '--spectrum-sys-icon-weight': '400',
+      '--spectrum-sys-icon-grade': '0',
+      '--spectrum-sys-icon-optical-size': '24'
     };
 
     // Theme color properties

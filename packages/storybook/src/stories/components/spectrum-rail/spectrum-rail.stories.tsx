@@ -12,6 +12,7 @@ interface RailActionEvent extends CustomEvent {
 export default {
   title: 'Components/SpectrumRail',
   component: 'spectrum-rail',
+  tags: ['autodocs'],
   argTypes: {
     menuItem: { 
       control: 'object',

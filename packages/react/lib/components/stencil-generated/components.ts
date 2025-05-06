@@ -20,14 +20,14 @@ import { SpectrumTheme as SpectrumThemeElement, defineCustomElement as defineSpe
 import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@unops/cpit-spectrum/dist/components/spectrum-wallpaper.js";
 import React from 'react';
 
-type SpectrumButtonEvents = NonNullable<unknown>;
+type SpectrumButtonEvents = { onButtonAction: EventName<CustomEvent<{ action?: string; label: string }>> };
 
 export const SpectrumButton: StencilReactComponent<SpectrumButtonElement, SpectrumButtonEvents> = /*@__PURE__*/ createComponent<SpectrumButtonElement, SpectrumButtonEvents>({
     tagName: 'spectrum-button',
     elementClass: SpectrumButtonElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: {} as SpectrumButtonEvents,
+    events: { onButtonAction: 'buttonAction' } as SpectrumButtonEvents,
     defineCustomElement: defineSpectrumButton
 });
 
@@ -61,7 +61,7 @@ export const SpectrumChip: StencilReactComponent<SpectrumChipElement, SpectrumCh
 
 type SpectrumConversationPanelEvents = {
     onExplorationSelected: EventName<CustomEvent<string>>,
-    onAction: EventName<CustomEvent<string>>,
+    onAction: EventName<CustomEvent<{ type: string, value: string }>>,
     onExplore: EventName<CustomEvent<string>>
 };
 

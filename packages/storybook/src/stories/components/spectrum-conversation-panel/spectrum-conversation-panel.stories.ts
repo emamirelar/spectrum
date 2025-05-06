@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { action } from '@storybook/addon-actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
 import type { SpectrumConversationPanel } from "@stencil-storybook-boilerplate/core/src/components/spectrum-conversation-panel/spectrum-conversation-panel";
@@ -13,17 +14,17 @@ const meta = {
       {
         "label": "Share",
         "icon": "share",
-        "value": "action1"
+        "value": "shareAction"
       },
       {
         "label": "Regenerate",
         "icon": "refresh",
-        "value": "action2"
+        "value": "regenerateAction"
       },
       {
         "label": "Copy",
         "icon": "content_copy",
-        "value": "action3"
+        "value": "copyAction"
       }
     ]`,
     messages: `[
@@ -187,6 +188,14 @@ export const ConversationPanel = {
             actions="${actions}"
             conversationtitle="${conversationtitle}"
             id="conversation-panel"
+            @action=${(e: CustomEvent) => {
+              const { type, value } = e.detail;
+              if (type === 'action') {
+                action('action')(value);
+              } else if (type === 'exploration-action') {
+                action('exploration-action')(value);
+              }
+            }}
           ></spectrum-conversation-panel>
         </spectrum-wallpaper>
         <div style="margin-top: 1rem; text-align: center;">

@@ -14,6 +14,7 @@ export namespace Components {
      * Supports icons, text, and various interactive states.
      */
     interface SpectrumButton {
+        "action": string;
         "buttonText": string;
         "debug": boolean;
         "disabled": boolean;
@@ -175,6 +176,10 @@ export namespace Components {
         "showSwatches": boolean;
     }
 }
+export interface SpectrumButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumButtonElement;
+}
 export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumChipElement;
@@ -192,12 +197,23 @@ export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     target: HTMLSpectrumSearchInputElement;
 }
 declare global {
+    interface HTMLSpectrumButtonElementEventMap {
+        "buttonAction": { action?: string; label: string };
+    }
     /**
      * Spectrum Button Component
      * A versatile button component with multiple variants, sizes, and states.
      * Supports icons, text, and various interactive states.
      */
     interface HTMLSpectrumButtonElement extends Components.SpectrumButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumButtonElementEventMap>(type: K, listener: (this: HTMLSpectrumButtonElement, ev: SpectrumButtonCustomEvent<HTMLSpectrumButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumButtonElementEventMap>(type: K, listener: (this: HTMLSpectrumButtonElement, ev: SpectrumButtonCustomEvent<HTMLSpectrumButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLSpectrumButtonElement: {
         prototype: HTMLSpectrumButtonElement;
@@ -234,7 +250,7 @@ declare global {
     };
     interface HTMLSpectrumConversationPanelElementEventMap {
         "explorationSelected": string;
-        "action": string;
+        "action": {type: string, value: string};
         "explore": string;
     }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
@@ -322,11 +338,13 @@ declare namespace LocalJSX {
      * Supports icons, text, and various interactive states.
      */
     interface SpectrumButton {
+        "action"?: string;
         "buttonText"?: string;
         "debug"?: boolean;
         "disabled"?: boolean;
         "iconOnly"?: boolean;
         "leftIcon"?: string;
+        "onButtonAction"?: (event: SpectrumButtonCustomEvent<{ action?: string; label: string }>) => void;
         "outline"?: boolean;
         "rightIcon"?: string;
         "ripple"?: boolean;
@@ -395,7 +413,7 @@ declare namespace LocalJSX {
           * The messsages to display in the conversation panel Default: null
          */
         "messages"?: string;
-        "onAction"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
+        "onAction"?: (event: SpectrumConversationPanelCustomEvent<{type: string, value: string}>) => void;
         "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         "onExplore"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         /**

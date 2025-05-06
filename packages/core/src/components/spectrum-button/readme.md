@@ -15,6 +15,7 @@ Supports icons, text, and various interactive states.
 
 | Property         | Attribute          | Description | Type                                                                                     | Default     |
 | ---------------- | ------------------ | ----------- | ---------------------------------------------------------------------------------------- | ----------- |
+| `action`         | `action`           |             | `string`                                                                                 | `''`        |
 | `buttonText`     | `button-text`      |             | `string`                                                                                 | `''`        |
 | `debug`          | `debug`            |             | `boolean`                                                                                | `false`     |
 | `disabled`       | `disabled`         |             | `boolean`                                                                                | `false`     |
@@ -29,6 +30,13 @@ Supports icons, text, and various interactive states.
 | `size`           | `size`             |             | `"base" \| "lg" \| "sm"`                                                                 | `'base'`    |
 | `state`          | `state`            |             | `"active" \| "default" \| "disabled" \| "hover"`                                         | `'default'` |
 | `variant`        | `variant`          |             | `"danger" \| "ghost" \| "outline" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
+
+
+## Events
+
+| Event          | Description | Type                                               |
+| -------------- | ----------- | -------------------------------------------------- |
+| `buttonAction` |             | `CustomEvent<{ action?: string; label: string; }>` |
 
 
 ## Dependencies

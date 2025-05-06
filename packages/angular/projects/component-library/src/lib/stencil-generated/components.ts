@@ -8,25 +8,29 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
+  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['buttonAction']);
   }
 }
 
 
-export declare interface SpectrumButton extends Components.SpectrumButton {}
+export declare interface SpectrumButton extends Components.SpectrumButton {
+
+  buttonAction: EventEmitter<CustomEvent<{ action?: string; label: string }>>;
+}
 
 
 @ProxyCmp({
@@ -104,7 +108,7 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
   explorationSelected: EventEmitter<CustomEvent<string>>;
 
-  action: EventEmitter<CustomEvent<string>>;
+  action: EventEmitter<CustomEvent<{type: string, value: string}>>;
 
   explore: EventEmitter<CustomEvent<string>>;
 }
