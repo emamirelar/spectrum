@@ -252,6 +252,7 @@ declare global {
         "explorationSelected": string;
         "action": {type: string, value: string};
         "explore": string;
+        "sourceClick": {label: string, value: string};
     }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumConversationPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumConversationPanelElement, ev: SpectrumConversationPanelCustomEvent<HTMLSpectrumConversationPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -416,6 +417,7 @@ declare namespace LocalJSX {
         "onAction"?: (event: SpectrumConversationPanelCustomEvent<{type: string, value: string}>) => void;
         "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         "onExplore"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
+        "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{label: string, value: string}>) => void;
         /**
           * The sources to display in the messages Default: null
          */

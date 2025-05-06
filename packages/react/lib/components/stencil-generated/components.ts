@@ -56,7 +56,8 @@ export const SpectrumChip: StencilReactComponent<SpectrumChipElement, SpectrumCh
 type SpectrumConversationPanelEvents = {
     onExplorationSelected: EventName<CustomEvent<string>>,
     onAction: EventName<CustomEvent<{ type: string, value: string }>>,
-    onExplore: EventName<CustomEvent<string>>
+    onExplore: EventName<CustomEvent<string>>,
+    onSourceClick: EventName<CustomEvent<{ label: string, value: string }>>
 };
 
 export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents> = /*@__PURE__*/ createComponent<SpectrumConversationPanelElement, SpectrumConversationPanelEvents>({
@@ -67,7 +68,8 @@ export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversati
     events: {
         onExplorationSelected: 'explorationSelected',
         onAction: 'action',
-        onExplore: 'explore'
+        onExplore: 'explore',
+        onSourceClick: 'sourceClick'
     } as SpectrumConversationPanelEvents,
     defineCustomElement: defineSpectrumConversationPanel
 });

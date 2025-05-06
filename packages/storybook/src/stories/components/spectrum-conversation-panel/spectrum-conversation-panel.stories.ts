@@ -5,6 +5,13 @@ import { action } from '@storybook/addon-actions';
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
 import type { SpectrumConversationPanel } from "@stencil-storybook-boilerplate/core/src/components/spectrum-conversation-panel/spectrum-conversation-panel";
 
+interface SpectrumConversationPanelArgs {
+  messages: string;
+  conversationtitle: string;
+  actions: string;
+  sources: string;
+}
+
 const meta = {
   title: 'Components/SpectrumConversationPanel',
   // TODO: for now we won't use autodocs but will in the future when we right a template
@@ -129,86 +136,94 @@ const meta = {
         ]
       }
     ]`,
-    conversationtitle: 'Apollo 11 Moon Landing',
-    backgroundColor: '#667eea',
-    backgroundImage: 'https://images.unsplash.com/photo-1742302954292-1f903368084e?q=80&w=3687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    backgroundPosition: 'center',
-    backgroundSize: 'cover'
+    conversationtitle: 'Apollo 11 Moon Landing'
   },
   argTypes: {
     messages: {
-      type: {
-        required: true,
-      },
-    },
-    actions: {
-      type: {
-        required: true,
-      },
+      control: 'object',
+      description: 'The messages to display in the conversation panel',
+      table: {
+        type: { 
+          summary: 'string',
+          detail: 'JSON string containing an array of message objects'
+        }
+      }
     },
     conversationtitle: {
-      type: {
-        required: true,
-      },
-    },
-    backgroundColor: {
-      control: 'color',
-      description: 'The background color of the wallpaper',
-    },
-    backgroundImage: {
       control: 'text',
-      description: 'The background image URL',
+      description: 'The title to display in the conversation panel',
+      table: {
+        type: { summary: 'string' }
+      }
     },
-    backgroundPosition: {
-      control: 'select',
-      options: ['center', 'top', 'bottom', 'left', 'right', 'top left', 'top right', 'bottom left', 'bottom right'],
-      description: 'The background image position',
+    actions: {
+      control: 'object',
+      description: 'The actions to display in the messages',
+      table: {
+        type: { 
+          summary: 'string',
+          detail: 'JSON string containing an array of action objects'
+        }
+      }
     },
-    backgroundSize: {
-      control: 'select',
-      options: ['cover', 'contain', 'auto', '100% 100%'],
-      description: 'The background image size',
+    sources: {
+      control: 'object',
+      description: 'The sources to display in the messages',
+      table: {
+        type: { 
+          summary: 'string',
+          detail: 'JSON string containing an array of source objects'
+        }
+      }
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: `
+          A conversation panel component that displays messages, actions, sources, and explorations.
+          Emits various events for user interactions:
+          - action: When action buttons are clicked
+          - explorationSelected: When an exploration is selected
+          - explore: When exploring content
+          
+          Example:
+          \`\`\`html
+          <spectrum-conversation-panel
+            @action={(e) => {
+              console.log('Action:', e.detail);
+            }}
+            @explorationSelected={(e) => {
+              console.log('Exploration selected:', e.detail);
+            }}
+            @explore={(e) => {
+              console.log('Explore:', e.detail);
+            }}
+          />
+          \`\`\`
+        `
+      }
     }
   }
-} satisfies Meta<SpectrumConversationPanel>
+} satisfies Meta<SpectrumConversationPanelArgs>;
 
-export default meta
+export default meta;
+type Story = StoryObj<SpectrumConversationPanelArgs>;
 
-export const ConversationPanel = {
-  render: ({ messages, actions, conversationtitle, backgroundColor, backgroundImage, backgroundPosition, backgroundSize }) =>
-      html`<div>
-        <spectrum-wallpaper
-          background=${backgroundImage ? `url(${backgroundImage})` : backgroundColor}
-          .backgroundPosition=${backgroundPosition}
-          .backgroundSize=${backgroundSize}
-          .showSwatches=${false}
-        >
-          <spectrum-conversation-panel 
-            messages="${messages}"
-            actions="${actions}"
-            conversationtitle="${conversationtitle}"
-            id="conversation-panel"
-            @action=${(e: CustomEvent) => {
-              const { type, value } = e.detail;
-              if (type === 'action') {
-                action('action')(value);
-              } else if (type === 'exploration-action') {
-                action('exploration-action')(value);
-              }
-            }}
-          ></spectrum-conversation-panel>
-        </spectrum-wallpaper>
-        <div style="margin-top: 1rem; text-align: center;">
-          <spectrum-button 
-            variant="primary" 
-            button-text="Scroll to Latest"
-            @click=${() => {
-              const panel = document.getElementById('conversation-panel');
-              if (panel) {
-                (panel as any).scrollToLatest();
-              }
-            }}
-          ></spectrum-button>
-        </div>
-      </div>`
-} satisfies StoryObj<SpectrumConversationPanel>
+// Default Conversation Panel
+export const Default: Story = {
+  render: (args) => html`
+    <div style="height: 600px; padding: 2rem;">
+      <spectrum-conversation-panel
+        .messages=${args.messages}
+        .conversationtitle=${args.conversationtitle}
+        .actions=${args.actions}
+        .sources=${args.sources}
+        @action=${(e: CustomEvent) => action('action')(e.detail)}
+        @explorationSelected=${(e: CustomEvent) => action('explorationSelected')(e.detail)}
+        @explore=${(e: CustomEvent) => action('explore')(e.detail)}
+        @sourceClick=${(e: CustomEvent) => action('sourceClick')(e.detail)}
+      ></spectrum-conversation-panel>
+    </div>
+  `
+};

@@ -17,11 +17,12 @@
 
 ## Events
 
-| Event                 | Description | Type                                            |
-| --------------------- | ----------- | ----------------------------------------------- |
-| `action`              |             | `CustomEvent<{ type: string; value: string; }>` |
-| `explorationSelected` |             | `CustomEvent<string>`                           |
-| `explore`             |             | `CustomEvent<string>`                           |
+| Event                 | Description | Type                                             |
+| --------------------- | ----------- | ------------------------------------------------ |
+| `action`              |             | `CustomEvent<{ type: string; value: string; }>`  |
+| `explorationSelected` |             | `CustomEvent<string>`                            |
+| `explore`             |             | `CustomEvent<string>`                            |
+| `sourceClick`         |             | `CustomEvent<{ label: string; value: string; }>` |
 
 
 ## Methods

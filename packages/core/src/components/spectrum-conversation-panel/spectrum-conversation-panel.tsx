@@ -52,6 +52,7 @@ export class SpectrumConversationPanel {
     cancelable: true
   }) action: EventEmitter<{type: string, value: string}>;
   @Event() explore: EventEmitter<string>;
+  @Event() sourceClick: EventEmitter<{label: string, value: string}>;
 
   @Watch('messages')
   messagesChanged(newValue: string) {
@@ -145,8 +146,6 @@ export class SpectrumConversationPanel {
     const messageId = this.messageIdMap.get(index);
     const isExpanded = this.expandedMessageId === messageId;
     const activeAccordion = isExpanded ? this.expandedAccordionType : null;
-
-    console.log('Rendering response:', { messageId, isExpanded, activeAccordion });
 
     return [
       <div class="message-wrapper response" id={`message-${messageId}`}>
@@ -249,6 +248,14 @@ export class SpectrumConversationPanel {
           target="_blank" 
           rel="noopener noreferrer" 
           class="content-card"
+          onClick={(e: MouseEvent) => {
+            e.preventDefault();
+            this.sourceClick.emit({
+              label: source.label,
+              value: source.value
+            });
+            window.open(source.value, '_blank');
+          }}
         >
           <div class="number">{index + 1}</div>
           <div class="card-content">
@@ -292,12 +299,6 @@ export class SpectrumConversationPanel {
   }
 
   toggleAccordion(messageId: string, accordion: 'sources' | 'explorations') {
-    console.log('Toggle accordion called:', { messageId, accordion });
-    console.log('Current state:', { 
-      expandedMessageId: this.expandedMessageId, 
-      expandedAccordionType: this.expandedAccordionType 
-    });
-
     if (this.expandedMessageId === messageId && this.expandedAccordionType === accordion) {
       // Clicking the same accordion - collapse it
       this.expandedMessageId = null;
@@ -307,11 +308,6 @@ export class SpectrumConversationPanel {
       this.expandedMessageId = messageId;
       this.expandedAccordionType = accordion;
     }
-
-    console.log('New state:', { 
-      expandedMessageId: this.expandedMessageId, 
-      expandedAccordionType: this.expandedAccordionType 
-    });
   }
 
   render() {

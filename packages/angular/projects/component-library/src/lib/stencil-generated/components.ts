@@ -97,7 +97,7 @@ export class SpectrumConversationPanel {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore']);
+    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore', 'sourceClick']);
   }
 }
 
@@ -109,6 +109,8 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
   action: EventEmitter<CustomEvent<{type: string, value: string}>>;
 
   explore: EventEmitter<CustomEvent<string>>;
+
+  sourceClick: EventEmitter<CustomEvent<{label: string, value: string}>>;
 }
 
 
