@@ -56,30 +56,28 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
 
 
 @ProxyCmp({
-  inputs: ['debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
 })
 @Component({
   selector: 'spectrum-chip',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
 })
 export class SpectrumChip {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['chipSelect', 'chipRemove']);
+    proxyOutputs(this, this.el, ['chipAction']);
   }
 }
 
 
 export declare interface SpectrumChip extends Components.SpectrumChip {
 
-  chipSelect: EventEmitter<CustomEvent<boolean>>;
-
-  chipRemove: EventEmitter<CustomEvent<void>>;
+  chipAction: EventEmitter<CustomEvent<{ action?: string; label: string }>>;
 }
 
 

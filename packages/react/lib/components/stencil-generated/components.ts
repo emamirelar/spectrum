@@ -42,20 +42,14 @@ export const SpectrumCarousel: StencilReactComponent<SpectrumCarouselElement, Sp
     defineCustomElement: defineSpectrumCarousel
 });
 
-type SpectrumChipEvents = {
-    onChipSelect: EventName<CustomEvent<boolean>>,
-    onChipRemove: EventName<CustomEvent<void>>
-};
+type SpectrumChipEvents = { onChipAction: EventName<CustomEvent<{ action?: string; label: string }>> };
 
 export const SpectrumChip: StencilReactComponent<SpectrumChipElement, SpectrumChipEvents> = /*@__PURE__*/ createComponent<SpectrumChipElement, SpectrumChipEvents>({
     tagName: 'spectrum-chip',
     elementClass: SpectrumChipElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: {
-        onChipSelect: 'chipSelect',
-        onChipRemove: 'chipRemove'
-    } as SpectrumChipEvents,
+    events: { onChipAction: 'chipAction' } as SpectrumChipEvents,
     defineCustomElement: defineSpectrumChip
 });
 

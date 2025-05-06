@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
+import { action } from '@storybook/addon-actions';
 
 interface SpectrumChipArgs {
   variant: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
@@ -12,25 +13,25 @@ interface SpectrumChipArgs {
   trailingIcon: string;
   showTrailingIcon: boolean;
   debug: boolean;
+  action: string;
 }
 
 const meta = {
   title: 'Components/SpectrumChip',
   tags: ['autodocs'],
-  render: (args) => html`
-    <spectrum-chip
-      variant=${args.variant}
-      ?selected=${args.selected}
-      ?disabled=${args.disabled}
-      ?outline=${args.outline}
-      ?ripple=${args.ripple}
-      label=${args.label}
-      leading-icon=${args.leadingIcon}
-      trailing-icon=${args.trailingIcon}
-      ?show-trailing-icon=${args.showTrailingIcon}
-      ?debug=${args.debug}
-    ></spectrum-chip>
-  `,
+  args: {
+    variant: 'primary',
+    selected: false,
+    disabled: false,
+    outline: false,
+    ripple: false,
+    label: 'Chip',
+    leadingIcon: '',
+    trailingIcon: '',
+    showTrailingIcon: false,
+    debug: false,
+    action: 'custom'
+  },
   argTypes: {
     variant: {
       control: { type: 'select' },
@@ -72,7 +73,11 @@ const meta = {
       control: 'boolean',
       description: 'Enable debug logging',
     },
-  },
+    action: {
+      control: 'text',
+      description: 'Optional action to emit with the chip click',
+    }
+  }
 } satisfies Meta<SpectrumChipArgs>;
 
 export default meta;
@@ -80,18 +85,22 @@ type Story = StoryObj<SpectrumChipArgs>;
 
 // Default Chip
 export const Default: Story = {
-  args: {
-    variant: 'primary',
-    selected: false,
-    disabled: false,
-    outline: false,
-    ripple: false,
-    label: 'Chip',
-    leadingIcon: '',
-    trailingIcon: '',
-    showTrailingIcon: false,
-    debug: false,
-  },
+  render: (args) => html`
+    <spectrum-chip
+      variant=${args.variant}
+      ?selected=${args.selected}
+      ?disabled=${args.disabled}
+      ?outline=${args.outline}
+      ?ripple=${args.ripple}
+      label=${args.label}
+      leading-icon=${args.leadingIcon}
+      trailing-icon=${args.trailingIcon}
+      ?show-trailing-icon=${args.showTrailingIcon}
+      ?debug=${args.debug}
+      action=${args.action}
+      @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
+    ></spectrum-chip>
+  `
 };
 
 // Primary Chip

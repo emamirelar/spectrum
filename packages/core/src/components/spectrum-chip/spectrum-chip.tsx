@@ -23,6 +23,7 @@ export class SpectrumChip {
   @Prop() disabled: boolean = false;
   @Prop() outline: boolean = false;
   @Prop() ripple: boolean = false;
+  @Prop() action: string = '';
 
   // Chip Content
   @Prop() label: string = '';
@@ -37,8 +38,7 @@ export class SpectrumChip {
   private rippleId: number = 0;
 
   // Events
-  @Event() chipSelect: EventEmitter<boolean>;
-  @Event() chipRemove: EventEmitter<void>;
+  @Event() chipAction: EventEmitter<{ action?: string; label: string }>;
 
   // ============== Debug Helpers ==============
   private log(message: string, data?: any) {
@@ -97,9 +97,11 @@ export class SpectrumChip {
       }, 600);
     }
 
-    if (!this.disabled) {
-      this.log('Chip clicked', { currentSelected: this.selected });
-      this.chipSelect.emit(!this.selected);
+    if (!this.disabled && this.label) {
+      this.chipAction.emit({
+        action: this.action || undefined,
+        label: this.label
+      });
     }
   };
 
@@ -107,7 +109,10 @@ export class SpectrumChip {
     e.stopPropagation();
     if (!this.disabled) {
       this.log('Chip remove clicked');
-      this.chipRemove.emit();
+      this.chipAction.emit({
+        action: 'remove',
+        label: this.label
+      });
     }
   };
 

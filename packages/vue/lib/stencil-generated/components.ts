@@ -45,12 +45,12 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
   'disabled',
   'outline',
   'ripple',
+  'action',
   'label',
   'leadingIcon',
   'trailingIcon',
   'showTrailingIcon',
-  'chipSelect',
-  'chipRemove'
+  'chipAction'
 ]);
 
 

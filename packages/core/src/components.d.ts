@@ -62,6 +62,7 @@ export namespace Components {
      * Supports leading/trailing icons, selection states, and various interactive behaviors.
      */
     interface SpectrumChip {
+        "action": string;
         "debug": boolean;
         "disabled": boolean;
         "label": string;
@@ -226,8 +227,7 @@ declare global {
         new (): HTMLSpectrumCarouselElement;
     };
     interface HTMLSpectrumChipElementEventMap {
-        "chipSelect": boolean;
-        "chipRemove": void;
+        "chipAction": { action?: string; label: string };
     }
     /**
      * Spectrum Chip Component
@@ -387,12 +387,12 @@ declare namespace LocalJSX {
      * Supports leading/trailing icons, selection states, and various interactive behaviors.
      */
     interface SpectrumChip {
+        "action"?: string;
         "debug"?: boolean;
         "disabled"?: boolean;
         "label"?: string;
         "leadingIcon"?: string;
-        "onChipRemove"?: (event: SpectrumChipCustomEvent<void>) => void;
-        "onChipSelect"?: (event: SpectrumChipCustomEvent<boolean>) => void;
+        "onChipAction"?: (event: SpectrumChipCustomEvent<{ action?: string; label: string }>) => void;
         "outline"?: boolean;
         "ripple"?: boolean;
         "selected"?: boolean;

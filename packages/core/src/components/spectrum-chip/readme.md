@@ -15,6 +15,7 @@ Supports leading/trailing icons, selection states, and various interactive behav
 
 | Property           | Attribute            | Description | Type                                                                          | Default     |
 | ------------------ | -------------------- | ----------- | ----------------------------------------------------------------------------- | ----------- |
+| `action`           | `action`             |             | `string`                                                                      | `''`        |
 | `debug`            | `debug`              |             | `boolean`                                                                     | `false`     |
 | `disabled`         | `disabled`           |             | `boolean`                                                                     | `false`     |
 | `label`            | `label`              |             | `string`                                                                      | `''`        |
@@ -29,10 +30,9 @@ Supports leading/trailing icons, selection states, and various interactive behav
 
 ## Events
 
-| Event        | Description | Type                   |
-| ------------ | ----------- | ---------------------- |
-| `chipRemove` |             | `CustomEvent<void>`    |
-| `chipSelect` |             | `CustomEvent<boolean>` |
+| Event        | Description | Type                                               |
+| ------------ | ----------- | -------------------------------------------------- |
+| `chipAction` |             | `CustomEvent<{ action?: string; label: string; }>` |
 
 
 ## Dependencies
