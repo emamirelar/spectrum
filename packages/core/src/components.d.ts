@@ -5,7 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { RailItem } from "./components/spectrum-rail/spectrum-rail";
+export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { RailItem } from "./components/spectrum-rail/spectrum-rail";
 export namespace Components {
     /**
@@ -73,6 +75,16 @@ export namespace Components {
         "showTrailingIcon": boolean;
         "trailingIcon": string;
         "variant": 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
+    }
+    interface SpectrumCollapsibleList {
+        /**
+          * Context actions for all leaf nodes
+         */
+        "contextActions": { label: string; icon: string; value: string }[];
+        /**
+          * The nested data structure for the list
+         */
+        "items": CollapsibleListItem[];
     }
     interface SpectrumConversationPanel {
         /**
@@ -185,6 +197,10 @@ export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumChipElement;
 }
+export interface SpectrumCollapsibleListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumCollapsibleListElement;
+}
 export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
@@ -247,6 +263,26 @@ declare global {
     var HTMLSpectrumChipElement: {
         prototype: HTMLSpectrumChipElement;
         new (): HTMLSpectrumChipElement;
+    };
+    interface HTMLSpectrumCollapsibleListElementEventMap {
+        "child-action": { action: string; label: string; };
+        "expand-action": { label: string; };
+        "contract-action": { label: string; };
+        "context-action": { value: string; label: string };
+    }
+    interface HTMLSpectrumCollapsibleListElement extends Components.SpectrumCollapsibleList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumCollapsibleListElementEventMap>(type: K, listener: (this: HTMLSpectrumCollapsibleListElement, ev: SpectrumCollapsibleListCustomEvent<HTMLSpectrumCollapsibleListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumCollapsibleListElementEventMap>(type: K, listener: (this: HTMLSpectrumCollapsibleListElement, ev: SpectrumCollapsibleListCustomEvent<HTMLSpectrumCollapsibleListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumCollapsibleListElement: {
+        prototype: HTMLSpectrumCollapsibleListElement;
+        new (): HTMLSpectrumCollapsibleListElement;
     };
     interface HTMLSpectrumConversationPanelElementEventMap {
         "explorationSelected": string;
@@ -324,6 +360,7 @@ declare global {
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-carousel": HTMLSpectrumCarouselElement;
         "spectrum-chip": HTMLSpectrumChipElement;
+        "spectrum-collapsible-list": HTMLSpectrumCollapsibleListElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
@@ -400,6 +437,32 @@ declare namespace LocalJSX {
         "showTrailingIcon"?: boolean;
         "trailingIcon"?: string;
         "variant"?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
+    }
+    interface SpectrumCollapsibleList {
+        /**
+          * Context actions for all leaf nodes
+         */
+        "contextActions"?: { label: string; icon: string; value: string }[];
+        /**
+          * The nested data structure for the list
+         */
+        "items"?: CollapsibleListItem[];
+        /**
+          * Event emitted when a child node is clicked
+         */
+        "onChild-action"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; }>) => void;
+        /**
+          * Event emitted when a context action is clicked
+         */
+        "onContext-action"?: (event: SpectrumCollapsibleListCustomEvent<{ value: string; label: string }>) => void;
+        /**
+          * Event emitted when a parent node is contracted
+         */
+        "onContract-action"?: (event: SpectrumCollapsibleListCustomEvent<{ label: string; }>) => void;
+        /**
+          * Event emitted when a parent node is expanded
+         */
+        "onExpand-action"?: (event: SpectrumCollapsibleListCustomEvent<{ label: string; }>) => void;
     }
     interface SpectrumConversationPanel {
         /**
@@ -511,6 +574,7 @@ declare namespace LocalJSX {
         "spectrum-button": SpectrumButton;
         "spectrum-carousel": SpectrumCarousel;
         "spectrum-chip": SpectrumChip;
+        "spectrum-collapsible-list": SpectrumCollapsibleList;
         "spectrum-conversation-panel": SpectrumConversationPanel;
         "spectrum-megamenu": SpectrumMegamenu;
         "spectrum-rail": SpectrumRail;
@@ -536,6 +600,7 @@ declare module "@stencil/core" {
              * Supports leading/trailing icons, selection states, and various interactive behaviors.
              */
             "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
+            "spectrum-collapsible-list": LocalJSX.SpectrumCollapsibleList & JSXBase.HTMLAttributes<HTMLSpectrumCollapsibleListElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
             "spectrum-rail": LocalJSX.SpectrumRail & JSXBase.HTMLAttributes<HTMLSpectrumRailElement>;

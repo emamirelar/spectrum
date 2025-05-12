@@ -82,6 +82,46 @@ export declare interface SpectrumChip extends Components.SpectrumChip {
 
 
 @ProxyCmp({
+  inputs: ['contextActions', 'items']
+})
+@Component({
+  selector: 'spectrum-collapsible-list',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['contextActions', 'items'],
+})
+export class SpectrumCollapsibleList {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['child-action', 'expand-action', 'contract-action', 'context-action']);
+  }
+}
+
+
+export declare interface SpectrumCollapsibleList extends Components.SpectrumCollapsibleList {
+  /**
+   * Event emitted when a child node is clicked
+   */
+  'child-action': EventEmitter<CustomEvent<{ action: string; label: string; }>>;
+  /**
+   * Event emitted when a parent node is expanded
+   */
+  'expand-action': EventEmitter<CustomEvent<{ label: string; }>>;
+  /**
+   * Event emitted when a parent node is contracted
+   */
+  'contract-action': EventEmitter<CustomEvent<{ label: string; }>>;
+  /**
+   * Event emitted when a context action is clicked
+   */
+  'context-action': EventEmitter<CustomEvent<{ value: string; label: string }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
   methods: ['scrollToLatest']
 })

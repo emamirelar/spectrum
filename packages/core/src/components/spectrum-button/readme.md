@@ -43,6 +43,7 @@ Supports icons, text, and various interactive states.
 
 ### Used by
 
+ - [spectrum-collapsible-list](../spectrum-collapsible-list)
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
  - [spectrum-rail](../spectrum-rail)
  - [spectrum-search-input](../spectrum-search-input)
@@ -50,6 +51,7 @@ Supports icons, text, and various interactive states.
 ### Graph
 ```mermaid
 graph TD;
+  spectrum-collapsible-list --> spectrum-button
   spectrum-conversation-panel --> spectrum-button
   spectrum-rail --> spectrum-button
   spectrum-search-input --> spectrum-button

@@ -12,6 +12,7 @@ import { createComponent } from '@stencil/react-output-target/runtime';
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops/cpit-spectrum/dist/components/spectrum-carousel.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops/cpit-spectrum/dist/components/spectrum-chip.js";
+import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustomElement as defineSpectrumCollapsibleList } from "@unops/cpit-spectrum/dist/components/spectrum-collapsible-list.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@unops/cpit-spectrum/dist/components/spectrum-conversation-panel.js";
 import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@unops/cpit-spectrum/dist/components/spectrum-megamenu.js";
 import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops/cpit-spectrum/dist/components/spectrum-rail.js";
@@ -51,6 +52,27 @@ export const SpectrumChip: StencilReactComponent<SpectrumChipElement, SpectrumCh
     react: React,
     events: { onChipAction: 'chipAction' } as SpectrumChipEvents,
     defineCustomElement: defineSpectrumChip
+});
+
+type SpectrumCollapsibleListEvents = {
+    onChildAction: EventName<CustomEvent<{ action: string; label: string; }>>,
+    onExpandAction: EventName<CustomEvent<{ label: string; }>>,
+    onContractAction: EventName<CustomEvent<{ label: string; }>>,
+    onContextAction: EventName<CustomEvent<{ value: string; label: string }>>
+};
+
+export const SpectrumCollapsibleList: StencilReactComponent<SpectrumCollapsibleListElement, SpectrumCollapsibleListEvents> = /*@__PURE__*/ createComponent<SpectrumCollapsibleListElement, SpectrumCollapsibleListEvents>({
+    tagName: 'spectrum-collapsible-list',
+    elementClass: SpectrumCollapsibleListElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {
+        onChildAction: 'child-action',
+        onExpandAction: 'expand-action',
+        onContractAction: 'contract-action',
+        onContextAction: 'context-action'
+    } as SpectrumCollapsibleListEvents,
+    defineCustomElement: defineSpectrumCollapsibleList
 });
 
 type SpectrumConversationPanelEvents = {

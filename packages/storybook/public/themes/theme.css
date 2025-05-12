@@ -116,6 +116,8 @@
     --spectrum-color-inverse-on-surface: #f1f0f4;
     --spectrum-color-inverse-primary: #a8c8ff;
 
+    --spectrum-color-surface-hover: rgba(0, 0, 0, 0.01);
+
     --spectrum-color-success: var(--unops-color-green-500);
     --spectrum-color-on-success: white;
     --spectrum-color-warning: var(--unops-color-orange-400);

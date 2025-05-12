@@ -5,6 +5,7 @@ export const DIRECTIVES = [
   d.SpectrumButton,
   d.SpectrumCarousel,
   d.SpectrumChip,
+  d.SpectrumCollapsibleList,
   d.SpectrumConversationPanel,
   d.SpectrumMegamenu,
   d.SpectrumRail,

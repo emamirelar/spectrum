@@ -54,6 +54,16 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
 ]);
 
 
+export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.SpectrumCollapsibleList>('spectrum-collapsible-list', undefined, [
+  'items',
+  'contextActions',
+  'child-action',
+  'expand-action',
+  'contract-action',
+  'context-action'
+]);
+
+
 export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumConversationPanel>('spectrum-conversation-panel', undefined, [
   'messages',
   'conversationtitle',

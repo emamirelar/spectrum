@@ -1,0 +1,9 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Please use BEM @https://getbem.com/ for CSS naming conventions.
+Please use local variables for the component, assign values to them using the theme level variables.
+Please document the CSS.
+Favour responsive approaches that use flex and grid.
