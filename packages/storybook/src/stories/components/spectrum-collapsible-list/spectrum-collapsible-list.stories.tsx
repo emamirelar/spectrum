@@ -5,9 +5,25 @@ import { action } from '@storybook/addon-actions';
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
 import type { SpectrumCollapsibleList } from "@stencil-storybook-boilerplate/core/src/components/spectrum-collapsible-list/spectrum-collapsible-list";
 
+interface CollapsibleListItem {
+  label: string;
+  icon: string;
+  expanded?: boolean;
+  action?: string;
+  ripple?: boolean;
+  children?: CollapsibleListItem[];
+}
+
+interface ContextAction {
+  label: string;
+  icon: string;
+  value: string;
+  ripple?: boolean;
+}
+
 interface SpectrumCollapsibleListArgs {
-  items: any[];
-  contextActions: { label: string; icon: string; value: string }[];
+  items: CollapsibleListItem[];
+  contextActions?: ContextAction[];
 }
 
 const meta = {
@@ -48,16 +64,38 @@ const meta = {
   argTypes: {
     items: {
       control: 'object',
-      description: 'The nested data structure for the list',
+      description: 'The nested data structure for the list. Each item can have a label, icon, action, and children.',
       table: {
-        type: { summary: 'CollapsibleListItem[]' }
+        type: { 
+          summary: 'CollapsibleListItem[]',
+          detail: `
+            interface CollapsibleListItem {
+              label: string;
+              icon: string;
+              expanded?: boolean;
+              action?: string;
+              ripple?: boolean;
+              children?: CollapsibleListItem[];
+            }
+          `
+        }
       }
     },
     contextActions: {
       control: 'object',
       description: 'Context actions for all leaf nodes. Each action should have a label, icon, and value.',
       table: {
-        type: { summary: '{ label: string; icon: string; value: string }[]' }
+        type: { 
+          summary: '{ label: string; icon: string; value: string }[]',
+          detail: `
+            interface ContextAction {
+              label: string;
+              icon: string;
+              value: string;
+              ripple?: boolean;
+            }
+          `
+        }
       }
     }
   },
@@ -86,14 +124,25 @@ const meta = {
       }
     }
   }
-} satisfies Meta<SpectrumCollapsibleListArgs>;
+} satisfies Meta<SpectrumCollapsibleList>;
 
 export default meta;
 
-type Story = StoryObj<SpectrumCollapsibleListArgs>;
+const renderList = (args: SpectrumCollapsibleListArgs) => html`
+  <div style="width: 340px; height: 320px; margin: 2rem auto; background: none; overflow: auto; scrollbar-gutter: stable;">
+    <spectrum-collapsible-list
+      .items=${args.items}
+      .contextActions=${args.contextActions}
+      @child-action=${(e: CustomEvent) => {
+        setTimeout(() => action('child-action')(e.detail), 500);
+      }}
+      @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
+      @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
+    ></spectrum-collapsible-list>
+  </div>
+`;
 
-// Default story with nested items
-export const Default: Story = {
+export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
       {
@@ -121,20 +170,10 @@ export const Default: Story = {
       }
     ]
   },
-  render: (args) => html`
-    <div style="width: 340px; height: 320px; margin: 2rem auto; background: none; overflow: auto; scrollbar-gutter: stable;">
-      <spectrum-collapsible-list
-        .items=${args.items}
-        @child-action=${(e: CustomEvent) => action('child-action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-      ></spectrum-collapsible-list>
-    </div>
-  `
+  render: renderList
 };
 
-// Single level list
-export const SingleLevel: Story = {
+export const SingleLevel: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
       {
@@ -154,20 +193,10 @@ export const SingleLevel: Story = {
       }
     ]
   },
-  render: (args) => html`
-    <div style="width: 340px; margin: 2rem auto; background: none;">
-      <spectrum-collapsible-list
-        .items=${args.items}
-        @child-action=${(e: CustomEvent) => action('child-action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-      ></spectrum-collapsible-list>
-    </div>
-  `
+  render: renderList
 };
 
-// Deep nested list
-export const DeepNested: Story = {
+export const DeepNested: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
       {
@@ -195,102 +224,89 @@ export const DeepNested: Story = {
       }
     ]
   },
-  render: (args) => html`
-    <div style="width: 340px; margin: 2rem auto; background: none;">
-      <spectrum-collapsible-list
-        .items=${args.items}
-        @child-action=${(e: CustomEvent) => action('child-action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-      ></spectrum-collapsible-list>
-    </div>
-  `
+  render: renderList
 };
 
-// Custom icons
-export const CustomIcons: Story = {
+export const CustomIcons: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
       {
         label: 'Documents',
         icon: 'folder',
-        expanded: true,
         children: [
           {
-            label: 'Report.pdf',
-            icon: 'picture_as_pdf',
-            action: 'open-pdf'
-          },
-          {
-            label: 'Spreadsheet.xlsx',
-            icon: 'table_chart',
-            action: 'open-xlsx'
-          },
-          {
-            label: 'Presentation.pptx',
-            icon: 'slideshow',
-            action: 'open-pptx'
-          }
-        ]
-      }
-    ]
-  },
-  render: (args) => html`
-    <div style="width: 340px; margin: 2rem auto; background: none;">
-      <spectrum-collapsible-list
-        .items=${args.items}
-        @child-action=${(e: CustomEvent) => action('child-action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-      ></spectrum-collapsible-list>
-    </div>
-  `
-};
-
-// Pre-expanded items
-export const PreExpanded: Story = {
-  args: {
-    items: [
-      {
-        label: 'Section 1',
-        icon: 'folder',
-        expanded: true,
-        children: [
-          {
-            label: 'Item 1.1',
+            label: 'Reports',
             icon: 'description',
-            action: 'item-1-1'
+            action: 'reports'
+          },
+          {
+            label: 'Presentations',
+            icon: 'slideshow',
+            action: 'presentations'
           }
         ]
       },
       {
-        label: 'Section 2',
-        icon: 'folder',
-        expanded: true,
+        label: 'Settings',
+        icon: 'settings',
         children: [
           {
-            label: 'Item 2.1',
-            icon: 'description',
-            action: 'item-2-1'
+            label: 'Account',
+            icon: 'person',
+            action: 'account'
+          },
+          {
+            label: 'Preferences',
+            icon: 'tune',
+            action: 'preferences'
           }
         ]
       }
     ]
   },
-  render: (args) => html`
-    <div style="width: 340px; margin: 2rem auto; background: none;">
-      <spectrum-collapsible-list
-        .items=${args.items}
-        @child-action=${(e: CustomEvent) => action('child-action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-      ></spectrum-collapsible-list>
-    </div>
-  `
+  render: renderList
+};
+
+// Pre-expanded items
+export const PreExpanded: StoryObj<SpectrumCollapsibleListArgs> = {
+  args: {
+    items: [
+      {
+        label: 'Parent Item 1',
+        icon: 'folder',
+        expanded: true,
+        children: [
+          {
+            label: 'Child Item 1.1',
+            icon: 'description',
+            action: 'child-1-1'
+          },
+          {
+            label: 'Child Item 1.2',
+            icon: 'description',
+            action: 'child-1-2'
+          }
+        ]
+      },
+      {
+        label: 'Parent Item 2',
+        icon: 'folder',
+        expanded: true,
+        children: [
+          {
+            label: 'Child Item 2.1',
+            icon: 'description',
+            action: 'child-2-1'
+          }
+        ]
+      }
+    ]
+  },
+  render: renderList
 };
 
 // Example: Child node inherits parent icon
-export const InheritParentIcon: Story = {
+export const InheritParentIcon: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
       {
@@ -300,7 +316,7 @@ export const InheritParentIcon: Story = {
         children: [
           {
             label: 'Child Inherits Icon',
-            // No icon specified, should inherit 'folder' from parent
+            icon: 'folder',
             action: 'child-inherit'
           },
           {
@@ -312,20 +328,11 @@ export const InheritParentIcon: Story = {
       }
     ]
   },
-  render: (args) => html`
-    <div style="width: 340px; margin: 2rem auto; background: none;">
-      <spectrum-collapsible-list
-        .items=${args.items}
-        @child-action=${(e: CustomEvent) => action('child-action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-      ></spectrum-collapsible-list>
-    </div>
-  `
+  render: renderList
 };
 
 // Context actions on leaf nodes with popover menu
-export const ContextActions: Story = {
+export const ContextActions: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
       {
@@ -336,17 +343,20 @@ export const ContextActions: Story = {
           {
             label: 'Report.pdf',
             icon: 'picture_as_pdf',
-            action: 'open-pdf'
+            action: 'open-pdf',
+            ripple: true
           },
           {
             label: 'Notes.txt',
             icon: 'description',
-            action: 'open-txt'
+            action: 'open-txt',
+            ripple: true
           },
           {
             label: 'Presentation.pptx',
             icon: 'slideshow',
-            action: 'open-pptx'
+            action: 'open-pptx',
+            ripple: true
           }
         ]
       },
@@ -357,34 +367,24 @@ export const ContextActions: Story = {
           {
             label: 'Old Data.csv',
             icon: 'table_chart',
-            action: 'open-csv'
+            action: 'open-csv',
+            ripple: true
           }
         ]
       }
     ],
     contextActions: [
-      { label: 'Download', icon: 'download', value: 'download' },
-      { label: 'Share', icon: 'share', value: 'share' },
-      { label: 'Delete', icon: 'delete', value: 'delete' }
+      { label: 'Download', icon: 'download', value: 'download', ripple: true },
+      { label: 'Share', icon: 'share', value: 'share', ripple: true },
+      { label: 'Delete', icon: 'delete', value: 'delete', ripple: true }
     ]
   },
-  render: (args) => html`
-    <div style="width: 340px; margin: 2rem auto; background: none;">
-      <spectrum-collapsible-list
-        .items=${args.items}
-        .contextActions=${args.contextActions}
-        @child-action=${(e: CustomEvent) => action('child-action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-        @context-action=${(e: CustomEvent) => action('context-action')(e.detail)}
-      ></spectrum-collapsible-list>
-    </div>
-  `,
+  render: renderList,
   parameters: {
     docs: {
       description: {
         story: `
-This story demonstrates context actions on leaf nodes. Only leaf nodes with actions show the three-dot icon. Clicking the icon opens a native popover menu. Selecting an action emits the **context-action** event with the action value and the node label.
+This story demonstrates context actions on leaf nodes with ripple effects. Only leaf nodes with actions show the three-dot icon. Clicking the icon opens a native popover menu. Selecting an action emits the **context-action** event with the action value and the node label. All actions have ripple effects enabled for better visual feedback. The context menu has a 500ms delay before closing to make the ripple effect visible.
         `
       }
     }

@@ -20,6 +20,7 @@ interface SpectrumButtonArgs {
   debug: boolean;
   ripple: boolean;
   action: string;
+  disabled: boolean;
 }
 
 const meta = {
@@ -105,26 +106,28 @@ const meta = {
 
 export default meta;
 
-export const Default: StoryObj<SpectrumButton> = {
-  render: (args) => html`
-    <spectrum-button
-      button-text=${args.buttonText}
-      variant=${args.variant}
-      size=${args.size}
-      ?outline=${args.outline}
-      ?icon-only=${args.iconOnly}
-      ?disabled=${args.disabled}
-      ?ripple=${args.ripple}
-      ?show-button-text=${args.showButtonText}
-      ?show-left-icon=${args.showLeftIcon}
-      left-icon=${args.leftIcon}
-      ?show-right-icon=${args.showRightIcon}
-      right-icon=${args.rightIcon}
-      ?debug=${args.debug}
-      action=${args.action}
-      @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
-    ></spectrum-button>
-  `
+const renderButton = (args: SpectrumButtonArgs) => html`
+  <spectrum-button
+    button-text=${args.buttonText}
+    variant=${args.variant}
+    size=${args.size}
+    ?outline=${args.outline}
+    ?icon-only=${args.iconOnly}
+    ?disabled=${args.disabled}
+    ?ripple=${args.ripple}
+    ?show-button-text=${args.showButtonText}
+    ?show-left-icon=${args.showLeftIcon}
+    left-icon=${args.leftIcon}
+    ?show-right-icon=${args.showRightIcon}
+    right-icon=${args.rightIcon}
+    ?debug=${args.debug}
+    action=${args.action}
+    @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
+  ></spectrum-button>
+`;
+
+export const Default: StoryObj<SpectrumButtonArgs> = {
+  render: renderButton
 };
 
 // Outline Button
@@ -137,6 +140,7 @@ export const Outline: StoryObj<SpectrumButtonArgs> = {
     showButtonText: true,
     debug: false,
   },
+  render: renderButton
 };
 
 // With Icons
@@ -152,6 +156,7 @@ export const WithIcons: StoryObj<SpectrumButtonArgs> = {
     rightIcon: 'arrow_forward',
     debug: false,
   },
+  render: renderButton
 };
 
 // Icon Only
@@ -164,6 +169,7 @@ export const IconOnly: StoryObj<SpectrumButtonArgs> = {
     leftIcon: 'settings',
     debug: false,
   },
+  render: renderButton
 };
 
 // FAB (Floating Action Button)
@@ -176,6 +182,7 @@ export const FAB: StoryObj<SpectrumButtonArgs> = {
     leftIcon: 'add',
     debug: false,
   },
+  render: renderButton
 };
 
 // Ghost Button
@@ -187,6 +194,7 @@ export const Ghost: StoryObj<SpectrumButtonArgs> = {
     showButtonText: true,
     debug: false,
   },
+  render: renderButton
 };
 
 // Ghost Icon Only
@@ -199,6 +207,7 @@ export const GhostIconOnly: StoryObj<SpectrumButtonArgs> = {
     leftIcon: 'settings',
     debug: false,
   },
+  render: renderButton
 };
 
 // Debug Mode
@@ -210,6 +219,7 @@ export const DebugMode: StoryObj<SpectrumButtonArgs> = {
     showButtonText: true,
     debug: true,
   },
+  render: renderButton,
   parameters: {
     docs: {
       description: {
@@ -229,6 +239,7 @@ export const WithRipple: StoryObj<SpectrumButtonArgs> = {
     ripple: true,
     debug: false,
   },
+  render: renderButton,
   parameters: {
     docs: {
       description: {
@@ -252,32 +263,7 @@ export const RippleWithIcons: StoryObj<SpectrumButtonArgs> = {
     ripple: true,
     debug: false,
   },
-  parameters: {
-    docs: {
-      description: {
-        story: 'A button with ripple effect and icons. The ripple effect works with all button variants and sizes.',
-      },
-    },
-  },
-};
-
-// Custom Action Button
-export const WithCustomAction: StoryObj<SpectrumButtonArgs> = {
-  args: {
-    variant: 'primary',
-    size: 'base',
-    buttonText: 'Custom Action Button',
-    showButtonText: true,
-    customAction: 'custom-action-value',
-    debug: false,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'A button that emits a custom action value when clicked.',
-      },
-    },
-  },
+  render: renderButton
 };
 
 // Action Button

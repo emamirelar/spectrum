@@ -1,0 +1,87 @@
+:root {
+  /* 2Blue Colors */
+  --unops-color-2blue-50: #bfd9e6;
+  --unops-color-2blue-100: #99c2d7;
+  --unops-color-2blue-200: #73abc7;
+  --unops-color-2blue-300: #4d94b8;
+  --unops-color-2blue-400: #00669a;
+  --unops-color-2blue-500: #005783;
+  --unops-color-2blue-600: #00476c;
+  --unops-color-2blue-700: #003855;
+  --unops-color-2blue-800: #00293e;
+  --unops-color-2blue-900: #001a27;
+
+  /* Ocean Colors */
+  --unops-color-ocean-50: #d3f0f7;
+  --unops-color-ocean-100: #b8e7f3;
+  --unops-color-ocean-200: #9edeee;
+  --unops-color-ocean-300: #83d5e9;
+  --unops-color-ocean-400: #4ec3e0;
+  --unops-color-ocean-500: #42a6be;
+  --unops-color-ocean-600: #37899d;
+  --unops-color-ocean-700: #2b6b7b;
+  --unops-color-ocean-800: #1f4e5a;
+  --unops-color-ocean-900: #143138;
+
+  /* Teal Colors */
+  --unops-color-teal-50: #bfeae5;
+  --unops-color-teal-100: #99ddd5;
+  --unops-color-teal-200: #73d0c6;
+  --unops-color-teal-300: #4dc3b6;
+  --unops-color-teal-400: #00a997;
+  --unops-color-teal-500: #009080;
+  --unops-color-teal-600: #00766a;
+  --unops-color-teal-700: #005d53;
+  --unops-color-teal-800: #00443c;
+  --unops-color-teal-900: #00121e;
+
+  /* Orange Colors */
+  --unops-color-orange-50: #f9d6c3;
+  --unops-color-orange-100: #f6be9f;
+  --unops-color-orange-200: #f2a57a;
+  --unops-color-orange-300: #ef8d56;
+  --unops-color-orange-400: #eb7432;
+  --unops-color-orange-500: #c54e0c;
+  --unops-color-orange-600: #a2400a;
+  --unops-color-orange-700: #803308;
+  --unops-color-orange-800: #5d2506;
+  --unops-color-orange-900: #3a1704;
+
+  /* Red Colors */
+  --unops-color-red-50: #f6cac6;
+  --unops-color-red-100: #f0a9a4;
+  --unops-color-red-200: #eb8982;
+  --unops-color-red-300: #e56960;
+  --unops-color-red-400: #e0493e;
+  --unops-color-red-500: #da291c;
+  --unops-color-red-600: #991d14;
+  --unops-color-red-700: #78170f;
+  --unops-color-red-800: #57100b;
+  --unops-color-red-900: #370a07;
+
+  /* Green Colors */
+  --unops-color-green-50: #d2e7cd;
+  --unops-color-green-100: #b7d9af;
+  --unops-color-green-200: #9dca92;
+  --unops-color-green-300: #82bc74;
+  --unops-color-green-400: #67ad56;
+  --unops-color-green-500: #4c9f38;
+  --unops-color-green-600: #418730;
+  --unops-color-green-700: #2a571f;
+  --unops-color-green-800: #1e4016;
+  --unops-color-green-900: #13280e;
+
+  /* Neutral Colors */
+  --unops-color-n-cold: #EBF1F8;
+  --unops-color-n-warm: #ECEFEF;
+
+  /* Gradients */
+  --unops-gradient-1: linear-gradient(83deg, #00A997 9%, #C4D600 77%, #F8EA44 100%);
+  --unops-gradient-2: linear-gradient(83deg, #4FC3DD 9%, #C4D600 77%, #F8EA44 100%);
+  --unops-gradient-3: radial-gradient(circle at 99.95% 7.97%, #FFA65D 5%, #FFC215 18%, #C4D600 37%, #96C93D 49%, #0092D1 89%);
+  --unops-gradient-4: linear-gradient(87deg, #00A997 15%, #26A2D8 69%, #0092D1 100%);
+  --unops-gradient-5: radial-gradient(circle at 49.15% 18.90%, #F8EA44 10%, #E85C0E 47%, #991E66 93%);
+  --unops-gradient-6: linear-gradient(90deg, #991E66 3%, #C43C3E 52%, #E85C0E 100%);
+  --unops-gradient-7: linear-gradient(90deg, #FFC215 0%, #E85C0E 100%);
+  --unops-gradient-8: linear-gradient(80deg, #991E66 0%, #0092D1 100%);
+} 
