@@ -82,6 +82,10 @@ export namespace Components {
          */
         "contextActions": { label: string; icon: string; value: string }[];
         /**
+          * Filter value to filter list items
+         */
+        "filter": string;
+        /**
           * The nested data structure for the list
          */
         "items": CollapsibleListItem[];
@@ -443,6 +447,10 @@ declare namespace LocalJSX {
           * Context actions for all leaf nodes
          */
         "contextActions"?: { label: string; icon: string; value: string }[];
+        /**
+          * Filter value to filter list items
+         */
+        "filter"?: string;
         /**
           * The nested data structure for the list
          */

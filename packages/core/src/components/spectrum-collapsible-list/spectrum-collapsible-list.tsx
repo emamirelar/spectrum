@@ -1,4 +1,4 @@
-import { Component, h, Prop, Event, EventEmitter, State, Host } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment } from '@stencil/core';
 
 /**
  * Collapsible List Item interface
@@ -23,6 +23,11 @@ export class SpectrumCollapsibleList {
   @Prop() items: CollapsibleListItem[] = [];
 
   /**
+   * Filter value to filter list items
+   */
+  @Prop() filter: string = '';
+
+  /**
    * Context actions for all leaf nodes
    */
   @Prop() contextActions: { label: string; icon: string; value: string }[] = [];
@@ -31,6 +36,11 @@ export class SpectrumCollapsibleList {
    * Internal state for expanded nodes (by label path)
    */
   @State() expandedMap: { [key: string]: boolean } = {};
+
+  /**
+   * Original items before filtering
+   */
+  @State() originalItems: CollapsibleListItem[] = [];
 
   /**
    * Event emitted when a child node is clicked
@@ -86,6 +96,18 @@ export class SpectrumCollapsibleList {
 
   disconnectedCallback() {
     window.removeEventListener('click', this.outsideClickHandler, true);
+  }
+
+  componentWillLoad() {
+    // Store original items when component loads
+    this.originalItems = [...this.items];
+  }
+
+  componentWillUpdate() {
+    // Update original items when items prop changes
+    if (JSON.stringify(this.items) !== JSON.stringify(this.originalItems)) {
+      this.originalItems = [...this.items];
+    }
   }
 
   private setPopoverRef = (key: string) => (el: HTMLUListElement | null) => {
@@ -210,90 +232,83 @@ export class SpectrumCollapsibleList {
 
   private hostElement!: HTMLElement;
 
-  private renderList(items: CollapsibleListItem[], parentKey = '', parentIcon?: string) {
-    return (
-      <ul class="spectrum-collapsible-list__list">
-        {items.map(item => {
-          const key = this.getNodeKey(item, parentKey);
-          const isParent = !!item.children && item.children.length > 0;
-          const isLeafWithActions = !isParent && Array.isArray(this.contextActions) && this.contextActions.length > 0;
-          const isExpanded = this.expandedMap[key] ?? !!item.expanded;
-          const icon = item.icon || parentIcon;
-          return (
-            <li
-              class={{
-                'spectrum-collapsible-list__item': true,
-                'spectrum-collapsible-list__item--parent': isParent,
-                'spectrum-collapsible-list__item--expanded': isParent && isExpanded,
-              }}
-              tabIndex={0}
-              onClick={e => {
-                e.stopPropagation();
-                if (isParent) {
-                  this.handleParentClick(item, key, parentKey);
-                } else {
-                  this.handleChildClick(item);
-                }
-              }}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  if (isParent) {
-                    this.handleParentClick(item, key, parentKey);
-                  } else {
-                    this.handleChildClick(item);
-                  }
-                }
-              }}
-            >
-              <div class="spectrum-collapsible-list__row">
-                {this.renderIcon(icon, !item.icon && !!parentIcon)}
-                <span class="spectrum-collapsible-list__label">{item.label}</span>
-                {isParent && [
-                  <span class="spectrum-collapsible-list__child-count">
-                    {item.children!.length}
-                  </span>,
-                  <spectrum-button
-                    variant="ghost"
-                    iconOnly
-                    leftIcon={isExpanded ? 'expand_less' : 'expand_more'}
-                    showLeftIcon={true}
-                    aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                    onClick={e => {
-                      e.stopPropagation();
-                      this.handleParentClick(item, key, parentKey);
-                    }}
-                    tabIndex={0}
-                  />
-                ]}
-                {isLeafWithActions && [
-                  <spectrum-button
-                    variant="ghost"
-                    iconOnly
-                    leftIcon="more_vert"
-                    showLeftIcon={true}
-                    aria-label="Show actions"
-                    id={`anchor-${key.replace(/\s+/g, '-')}`}
-                    // @ts-ignore
-                    anchor-name={`--anchor-${key.replace(/\s+/g, '-')}`}
-                    // @ts-ignore
-                    popovertarget={`popover-${key.replace(/\s+/g, '-')}`}
-                    onClick={e => this.handleActionsIconClick(e, key)}
-                    ref={this.setTriggerRef(key)}
-                  />,
-                  this.renderPopoverMenu(item, key)
-                ]}
-              </div>
-              {isParent && isExpanded && (
-                <div class="spectrum-collapsible-list__children">
-                  {this.renderList(item.children!, key, icon)}
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
+  private filterItems(items: CollapsibleListItem[], filter: string): CollapsibleListItem[] {
+    if (!filter) return items;
+    
+    const lowerFilter = filter.toLowerCase();
+    
+    return items.map(item => {
+      // Always include parent items, but with filtered children
+      if (item.children && item.children.length > 0) {
+        const filteredChildren = this.filterItems(item.children, filter)
+          .filter(child => child !== null) as CollapsibleListItem[];
+        
+        // Only return parent if it has matching children or its label matches
+        if (filteredChildren.length > 0 || item.label.toLowerCase().includes(lowerFilter)) {
+          return {
+            ...item,
+            children: filteredChildren
+          };
+        }
+        // Return parent with empty children if it matches the filter
+        else if (item.label.toLowerCase().includes(lowerFilter)) {
+          return {
+            ...item,
+            children: []
+          };
+        }
+        // Skip parent if it has no matching children and doesn't match itself
+        return null;
+      }
+      
+      // For leaf items, only include if label matches filter
+      return item.label.toLowerCase().includes(lowerFilter) ? item : null;
+    }).filter(Boolean) as CollapsibleListItem[];
+  }
+
+  private renderItems(items: CollapsibleListItem[], parentKey = '') {
+    const filteredItems = this.filterItems(items, this.filter);
+    
+    return filteredItems.map(item => {
+      const key = this.getNodeKey(item, parentKey);
+      const isParent = Array.isArray(item.children);
+      const isExpanded = this.expandedMap[key] ?? !!item.expanded;
+
+      return (
+        <li class={`spectrum-collapsible-list__item ${isParent ? 'spectrum-collapsible-list__item--parent' : ''} ${isExpanded ? 'spectrum-collapsible-list__item--expanded' : ''}`}>
+          <div 
+            class="spectrum-collapsible-list__row"
+            onClick={() => isParent ? this.handleParentClick(item, key, parentKey) : this.handleChildClick(item)}
+            ref={this.setTriggerRef(key)}
+          >
+            {this.renderIcon(item.icon)}
+            <span class="spectrum-collapsible-list__label">{item.label}</span>
+            {isParent && (
+              <>
+                <span class="spectrum-collapsible-list__child-count">{item.children?.length}</span>
+                <span class={`spectrum-collapsible-list__icon spectrum-collapsible-list__expand-icon spectrum-collapsible-list__icon--outlined ${isExpanded ? 'spectrum-collapsible-list__icon--expanded' : ''}`}>
+                  {isExpanded ? 'expand_less' : 'expand_more'}
+                </span>
+              </>
+            )}
+            {!isParent && this.contextActions?.length > 0 && (
+              <span 
+                class="spectrum-collapsible-list__icon spectrum-collapsible-list__icon--outlined"
+                onClick={(e) => this.handleActionsIconClick(e, key)}
+              >
+                more_vert
+              </span>
+            )}
+          </div>
+          {isParent && isExpanded && item.children && (
+            <div class="spectrum-collapsible-list__children">
+              {this.renderItems(item.children, key)}
+            </div>
+          )}
+          {this.renderPopoverMenu(item, key)}
+        </li>
+      );
+    });
   }
 
   private positionPopoverMenu(key: string) {
@@ -332,9 +347,9 @@ export class SpectrumCollapsibleList {
   render() {
     return (
       <Host>
-        <nav class="spectrum-collapsible-list">
-          {this.renderList(this.items)}
-        </nav>
+        <ul class="spectrum-collapsible-list__list">
+          {this.renderItems(this.originalItems)}
+        </ul>
       </Host>
     );
   }

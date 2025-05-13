@@ -10,6 +10,7 @@
 | Property         | Attribute | Description                            | Type                                                | Default |
 | ---------------- | --------- | -------------------------------------- | --------------------------------------------------- | ------- |
 | `contextActions` | --        | Context actions for all leaf nodes     | `{ label: string; icon: string; value: string; }[]` | `[]`    |
+| `filter`         | --        | Filter value to filter list items      | `string`                                            | `''`    |
 | `items`          | --        | The nested data structure for the list | `CollapsibleListItem[]`                             | `[]`    |
 
 
@@ -22,19 +23,6 @@
 | `contract-action` | Event emitted when a parent node is contracted | `CustomEvent<{ label: string; }>`                 |
 | `expand-action`   | Event emitted when a parent node is expanded   | `CustomEvent<{ label: string; }>`                 |
 
-
-## Dependencies
-
-### Depends on
-
-- [spectrum-button](../spectrum-button)
-
-### Graph
-```mermaid
-graph TD;
-  spectrum-collapsible-list --> spectrum-button
-  style spectrum-collapsible-list fill:#f9f,stroke:#333,stroke-width:4px
-```
 
 ----------------------------------------------
 

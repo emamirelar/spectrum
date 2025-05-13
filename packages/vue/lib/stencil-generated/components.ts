@@ -56,6 +56,7 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
 
 export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.SpectrumCollapsibleList>('spectrum-collapsible-list', undefined, [
   'items',
+  'filter',
   'contextActions',
   'child-action',
   'expand-action',

@@ -24,6 +24,7 @@ interface ContextAction {
 interface SpectrumCollapsibleListArgs {
   items: CollapsibleListItem[];
   contextActions?: ContextAction[];
+  filter?: string;
 }
 
 const meta = {
@@ -97,6 +98,10 @@ const meta = {
           `
         }
       }
+    },
+    filter: {
+      control: 'text',
+      description: 'Filter the list based on a keyword'
     }
   },
   parameters: {
@@ -133,6 +138,7 @@ const renderList = (args: SpectrumCollapsibleListArgs) => html`
     <spectrum-collapsible-list
       .items=${args.items}
       .contextActions=${args.contextActions}
+      .filter=${args.filter}
       @child-action=${(e: CustomEvent) => {
         setTimeout(() => action('child-action')(e.detail), 500);
       }}
@@ -385,6 +391,84 @@ export const ContextActions: StoryObj<SpectrumCollapsibleListArgs> = {
       description: {
         story: `
 This story demonstrates context actions on leaf nodes with ripple effects. Only leaf nodes with actions show the three-dot icon. Clicking the icon opens a native popover menu. Selecting an action emits the **context-action** event with the action value and the node label. All actions have ripple effects enabled for better visual feedback. The context menu has a 500ms delay before closing to make the ripple effect visible.
+        `
+      }
+    }
+  }
+};
+
+export const WithFiltering: StoryObj<SpectrumCollapsibleListArgs> = {
+  args: {
+    items: [
+      {
+        label: 'Documents',
+        icon: 'folder',
+        expanded: true,
+        children: [
+          {
+            label: 'Reports',
+            icon: 'description',
+            action: 'reports'
+          },
+          {
+            label: 'Presentations',
+            icon: 'slideshow',
+            action: 'presentations'
+          },
+          {
+            label: 'Meeting Notes',
+            icon: 'description',
+            action: 'meeting-notes'
+          }
+        ]
+      },
+      {
+        label: 'Settings',
+        icon: 'settings',
+        expanded: true,
+        children: [
+          {
+            label: 'Account',
+            icon: 'person',
+            action: 'account'
+          },
+          {
+            label: 'Preferences',
+            icon: 'tune',
+            action: 'preferences'
+          }
+        ]
+      },
+      {
+        label: 'Reports',  // This parent matches the filter
+        icon: 'assessment',
+        expanded: true,
+        children: [
+          {
+            label: 'Financial Reports',
+            icon: 'attach_money',
+            action: 'financial-reports'
+          },
+          {
+            label: 'Analytics',
+            icon: 'insights',
+            action: 'analytics'
+          }
+        ]
+      }
+    ],
+    filter: 'reports'
+  },
+  render: renderList,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates filtering functionality. When a filter value is provided:
+- Items (parent or child) with labels containing the filter text are shown
+- Parent items with matching children are shown with only their matching children
+- Parent items without matching children and that don't match themselves are hidden
+- The filter is case-insensitive for better user experience
         `
       }
     }
