@@ -1,6 +1,7 @@
 :host {
   --rail-width: 64px;
   --rail-min-height: 100%;
+  --rail-contracted-height: auto;
   --rail-border-radius: 28px;
   --rail-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --rail-item-size: 48px;
@@ -18,7 +19,8 @@
   --rail-spacing: var(--spectrum-sys-spacing, 8px);
   --rail-spacing-lg: var(--spectrum-sys-spacing-large, 16px);
 
-  display: block;
+  display: flex;
+  align-items: center;
   height: 100%;
 }
 
@@ -31,7 +33,7 @@
   border-radius: var(--rail-border-radius);
   padding: var(--rail-spacing);
   width: var(--rail-width);
-  height: var(--rail-min-height);
+  height: var(--rail-contracted-height);
   box-sizing: border-box;
   gap: var(--rail-spacing);
   box-shadow: var(--rail-shadow);
@@ -39,6 +41,7 @@
   overflow: hidden;
   transition: 
     width var(--rail-transition-duration) var(--rail-transition-timing),
+    height var(--rail-transition-duration) var(--rail-transition-timing),
     border-radius var(--rail-transition-duration) var(--rail-transition-timing);
   
   /* Centering for the fixed-width rail */
@@ -54,6 +57,7 @@
 
   &--expanded {
     width: var(--rail-expanded-width);
+    height: var(--rail-min-height);
     align-items: stretch;
     border-radius: 0;
     
