@@ -129,7 +129,8 @@ export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, Sp
 type SpectrumRailEvents = {
     onExpandedChange: EventName<CustomEvent<boolean>>,
     onSearchChange: EventName<CustomEvent<{ value: string }>>,
-    onRailAction: EventName<CustomEvent<{ action: string, label: string }>>
+    onRailAction: EventName<CustomEvent<{ action: string, label: string }>>,
+    onAddAction: EventName<CustomEvent<void>>
 };
 
 export const SpectrumRail: StencilReactComponent<SpectrumRailElement, SpectrumRailEvents> = /*@__PURE__*/ createComponent<SpectrumRailElement, SpectrumRailEvents>({
@@ -140,7 +141,8 @@ export const SpectrumRail: StencilReactComponent<SpectrumRailElement, SpectrumRa
     events: {
         onExpandedChange: 'expandedChange',
         onSearchChange: 'searchChange',
-        onRailAction: 'railAction'
+        onRailAction: 'railAction',
+        onAddAction: 'addAction'
     } as SpectrumRailEvents,
     defineCustomElement: defineSpectrumRail
 });

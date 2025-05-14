@@ -16,7 +16,7 @@ export class SpectrumRail {
   @Prop() appName: string = '';
   
   /** Expanded width for the rail (with units like px, rem, etc.) */
-  @Prop() expandedWidth: string = '288px';
+  @Prop() expandedWidth: string = '340px';
   
   /** More section label (displayed in expanded state) */
   @Prop() moreLabel: string = 'Explore more';
@@ -24,6 +24,12 @@ export class SpectrumRail {
   /** Whether the rail should be initially expanded */
   @Prop() initialExpanded: boolean = false;
 
+  /** Whether to show the add button in the rail */
+  @Prop() showAddButton = true;
+  
+  /** Add button label (displayed in expanded state) */
+  @Prop() addLabel: string = 'Add new';
+  
   /** Current expanded state of the rail */
   @State() expanded: boolean = false;
 
@@ -38,6 +44,9 @@ export class SpectrumRail {
 
   /** Emits when a rail action is triggered */
   @Event() railAction: EventEmitter<{ action: string, label: string }>;
+
+  /** Emits when the add button is clicked */
+  @Event() addAction: EventEmitter<void>;
 
   private searchInputRef?: HTMLElement;
 
@@ -71,6 +80,15 @@ export class SpectrumRail {
         }
       }, 300);
     }
+  }
+
+  /** Handle add button click */
+  private handleAddClick() {
+    this.addAction.emit();
+    this.railAction.emit({
+      action: 'add',
+      label: this.addLabel
+    });
   }
 
   /** Handle search input value change */
@@ -172,13 +190,24 @@ export class SpectrumRail {
     this.notifySlottedComponents(expanded);
     return expanded;
   }
+  
+  /**
+   * Method to programmatically control the add button visibility
+   */
+  @Method()
+  async setShowAddButton(show: boolean) {
+    this.showAddButton = show;
+    return this.showAddButton;
+  }
 
   componentWillLoad() {
     console.log('SpectrumRail props on load:', {
       appName: this.appName,
       moreLabel: this.moreLabel,
+      addLabel: this.addLabel,
       initialExpanded: this.initialExpanded,
-      expandedWidth: this.expandedWidth
+      expandedWidth: this.expandedWidth,
+      showAddButton: this.showAddButton
     });
   }
 
@@ -198,14 +227,18 @@ export class SpectrumRail {
     console.log('SpectrumRail props loaded:', {
       appName: this.appName,
       moreLabel: this.moreLabel,
+      addLabel: this.addLabel,
       initialExpanded: this.initialExpanded,
-      expandedWidth: this.expandedWidth
+      expandedWidth: this.expandedWidth,
+      showAddButton: this.showAddButton
     });
   }
 
   @Watch('appName')
   @Watch('moreLabel')
-  propChanged(newValue: string, oldValue: string, propName: string) {
+  @Watch('addLabel')
+  @Watch('showAddButton')
+  propChanged(newValue: string | boolean, oldValue: string | boolean, propName: string) {
     console.log(`SpectrumRail ${propName} changed:`, { oldValue, newValue });
   }
 
@@ -215,12 +248,16 @@ export class SpectrumRail {
     
     console.log('Rail rendering with props:', {
       appName: this.appName,
-      moreLabel: this.moreLabel
+      moreLabel: this.moreLabel,
+      addLabel: this.addLabel,
+      showAddButton: this.showAddButton,
+      expanded: this.expanded
     });
 
     // Create text spans directly to ensure text rendering
     const menuText = <span>{this.appName}</span>;
     const moreText = <span>{this.moreLabel}</span>;
+    const addText = <span>{this.addLabel}</span>;
 
     return (
       <Host>
@@ -286,12 +323,47 @@ export class SpectrumRail {
               <div class="search-expanded">
                 <spectrum-search-input 
                   ref={(el) => this.searchInputRef = el as HTMLElement}
+                  maxLines={1}
+                  enableVoiceInput={false}
+                  placeholder="Search conversations"
                   onSearchSubmit={(e: CustomEvent) => this.handleSearchChange(e.detail)}
                   onSearchInput={(e: CustomEvent) => this.handleSearchChange(e.detail)}
                 />
               </div>
             )}
           </div>
+
+          {/* Add Section */}
+          {this.showAddButton && (
+            <div class="rail-section add">
+              {!this.expanded ? (
+                <spectrum-button
+                  class="rail-icon-only"
+                  variant="ghost"
+                  size="base"
+                  iconOnly={true}
+                  showLeftIcon={true}
+                  leftIcon="add"
+                  onClick={() => this.handleAddClick()}
+                  title={this.addLabel}
+                  aria-label={this.addLabel}
+                />
+              ) : (
+                <spectrum-button
+                  class="add-button"
+                  variant="ghost"
+                  size="base"
+                  showLeftIcon={true}
+                  leftIcon="add"
+                  buttonText={this.addLabel}
+                  showButtonText={true}
+                  onClick={() => this.handleAddClick()}
+                >
+                  {addText}
+                </spectrum-button>
+              )}
+            </div>
+          )}
 
           {/* Items Section */}
           <div class="rail-section items">

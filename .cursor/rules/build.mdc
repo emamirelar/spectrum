@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Do not run builds yourself unless asked to do so. This includes storybook builds and core builds.

@@ -210,22 +210,22 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
-  inputs: ['appName', 'expandedWidth', 'initialExpanded', 'moreLabel'],
-  methods: ['setExpanded']
+  inputs: ['addLabel', 'appName', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
+  methods: ['setExpanded', 'setShowAddButton']
 })
 @Component({
   selector: 'spectrum-rail',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['appName', 'expandedWidth', 'initialExpanded', 'moreLabel'],
+  inputs: ['addLabel', 'appName', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
 })
 export class SpectrumRail {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['expandedChange', 'searchChange', 'railAction']);
+    proxyOutputs(this, this.el, ['expandedChange', 'searchChange', 'railAction', 'addAction']);
   }
 }
 
@@ -243,6 +243,10 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
    * Emits when a rail action is triggered
    */
   railAction: EventEmitter<CustomEvent<{ action: string, label: string }>>;
+  /**
+   * Emits when the add button is clicked
+   */
+  addAction: EventEmitter<CustomEvent<void>>;
 }
 
 

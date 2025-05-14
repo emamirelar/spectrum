@@ -180,6 +180,10 @@ export namespace Components {
      */
     interface SpectrumRail {
         /**
+          * Add button label (displayed in expanded state)
+         */
+        "addLabel": string;
+        /**
           * Application name to display in expanded menu
          */
         "appName": string;
@@ -199,6 +203,14 @@ export namespace Components {
           * Method that can be called by parent components to programmatically  control the expanded state
          */
         "setExpanded": (expanded: boolean) => Promise<boolean>;
+        /**
+          * Method to programmatically control the add button visibility
+         */
+        "setShowAddButton": (show: boolean) => Promise<boolean>;
+        /**
+          * Whether to show the add button in the rail
+         */
+        "showAddButton": boolean;
     }
     /**
      * Spectrum Rail Item Component
@@ -427,6 +439,7 @@ declare global {
         "expandedChange": boolean;
         "searchChange": { value: string };
         "railAction": { action: string, label: string };
+        "addAction": void;
     }
     /**
      * Spectrum Rail Component
@@ -681,6 +694,10 @@ declare namespace LocalJSX {
      */
     interface SpectrumRail {
         /**
+          * Add button label (displayed in expanded state)
+         */
+        "addLabel"?: string;
+        /**
           * Application name to display in expanded menu
          */
         "appName"?: string;
@@ -697,6 +714,10 @@ declare namespace LocalJSX {
          */
         "moreLabel"?: string;
         /**
+          * Emits when the add button is clicked
+         */
+        "onAddAction"?: (event: SpectrumRailCustomEvent<void>) => void;
+        /**
           * Emits when the rail changes expanded state
          */
         "onExpandedChange"?: (event: SpectrumRailCustomEvent<boolean>) => void;
@@ -708,6 +729,10 @@ declare namespace LocalJSX {
           * Emits when the search value changes
          */
         "onSearchChange"?: (event: SpectrumRailCustomEvent<{ value: string }>) => void;
+        /**
+          * Whether to show the add button in the rail
+         */
+        "showAddButton"?: boolean;
     }
     /**
      * Spectrum Rail Item Component

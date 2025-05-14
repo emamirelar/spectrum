@@ -7,6 +7,7 @@ interface SpectrumRailArgs {
   expandedWidth: string;
   moreLabel: string;
   initialExpanded?: boolean;
+  showAddButton?: boolean;
 }
 
 // Define interface for the rail element to help TypeScript understand the setExpanded method
@@ -19,9 +20,10 @@ const meta = {
   tags: ['autodocs'],
   args: {
     appName: 'PleaseAI',
-    expandedWidth: '288px',
+    expandedWidth: '340px',
     moreLabel: 'Explore more',
-    initialExpanded: false
+    initialExpanded: false,
+    showAddButton: true
   },
   argTypes: {
     appName: { 
@@ -37,7 +39,7 @@ const meta = {
       description: 'Width of the rail when expanded',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: '288px' }
+        defaultValue: { summary: '340px' }
       }
     },
     moreLabel: { 
@@ -55,6 +57,14 @@ const meta = {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
       }
+    },
+    showAddButton: {
+      control: 'boolean',
+      description: 'Whether to show the add button in the expanded search section',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
     }
   },
   parameters: {
@@ -65,7 +75,7 @@ const meta = {
           The rail has four main sections arranged vertically:
           
           1. Menu: Toggles the expanded/contracted state
-          2. Search: Provides search functionality
+          2. Search: Provides search functionality (with optional add button)
           3. Items: Displays navigation items (using a collapsible list)
           4. More: Provides additional options
           
@@ -73,6 +83,7 @@ const meta = {
           - Two states: expanded and contracted (default)
           - Menu button that toggles expanded state and shows app name in expanded mode
           - Search input that sets a rail-level filter
+          - Optional add button in the search section
           - Collapsible list integration with filtering
           - Animated transitions between states
           
@@ -83,6 +94,7 @@ const meta = {
           - \`railAction\`: Emitted when rail actions are triggered
           - \`searchChange\`: Emitted when the search text changes
           - \`expandedChange\`: Emitted when the rail changes expanded state
+          - \`addAction\`: Emitted when the add button is clicked
           
           ## Collapsible List Actions
           The rail works seamlessly with the spectrum-collapsible-list component to provide navigation:
@@ -212,10 +224,10 @@ export const Default: Story = {
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
       <spectrum-rail
-        .appName="${args.appName}"
-        .expandedWidth="${args.expandedWidth}"
-        .moreLabel="${args.moreLabel}"
-        .initialExpanded="${args.initialExpanded}"
+        appName="${args.appName}"
+        expandedWidth="${args.expandedWidth}"
+        moreLabel="${args.moreLabel}"
+        initialExpanded="${args.initialExpanded}"
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -227,6 +239,7 @@ export const Default: Story = {
           }
         }}
         @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
+        @addAction=${() => action('Add Button Clicked')()}
       >
         <spectrum-collapsible-list 
           slot="items"
@@ -247,32 +260,53 @@ export const Default: Story = {
         <li>Click on child items to trigger their actions (visible in Actions panel)</li>
         <li>Right-click on items to see context menu actions</li>
         <li>Use search to filter the list</li>
+        <li>Click the add button to trigger the add action</li>
       </ul>
     </div>
-  `
+  `,
 };
 
-// Demo Rail showing all features in expanded state
-export const Expanded: Story = {
+// Story with rail in expanded state initially
+export const InitiallyExpanded: Story = {
   args: {
+    initialExpanded: true,
+  },
+  render: Default.render,
+};
+
+// Story with no add button
+export const WithoutAddButton: Story = {
+  args: {
+    showAddButton: false,
     initialExpanded: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'The rail without the add button in the search section.'
+      }
+    }
   },
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
       <spectrum-rail
-        .appName="${args.appName}"
-        .expandedWidth="${args.expandedWidth}"
-        .moreLabel="${args.moreLabel}"
-        .initialExpanded="${args.initialExpanded}"
+        appName="${args.appName}"
+        expandedWidth="${args.expandedWidth}"
+        moreLabel="${args.moreLabel}"
+        initialExpanded="${args.initialExpanded}"
+        showAddButton="false"
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
+          // Update filter on collapsible list
           const list = document.querySelector('spectrum-collapsible-list');
           if (list) {
             list.setAttribute('filter', e.detail.value);
+            console.log('Storybook: Setting filter attribute on collapsible list:', e.detail.value);
           }
         }}
         @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
+        @addAction=${() => action('Add Button Clicked')()}
       >
         <spectrum-collapsible-list 
           slot="items"
@@ -285,5 +319,58 @@ export const Expanded: Story = {
         ></spectrum-collapsible-list>
       </spectrum-rail>
     </div>
-  `
+  `,
+};
+
+// Custom rail with button to programmatically expand/collapse
+export const ProgrammaticControl: Story = {
+  render: (args) => html`
+    <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
+      <div style="margin-bottom: 1rem;">
+        <button id="toggle-rail" style="padding: 8px 16px; border-radius: 4px; background-color: #0070d2; color: white; border: none; cursor: pointer;">
+          Toggle Rail State
+        </button>
+      </div>
+      
+      <spectrum-rail
+        id="controlled-rail"
+        .appName="${args.appName}"
+        .expandedWidth="${args.expandedWidth}"
+        .moreLabel="${args.moreLabel}"
+        .initialExpanded="${args.initialExpanded}"
+        .showAddButton="${args.showAddButton}"
+        @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
+        @searchChange=${(e: CustomEvent) => action('Search Changed')({ value: e.detail.value })}
+        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
+        @addAction=${() => action('Add Button Clicked')()}
+      >
+        <spectrum-collapsible-list 
+          slot="items"
+          .items=${sampleItems}
+          .contextActions=${contextActions}
+          @child-action=${handleChildAction}
+          @expand-action=${handleExpandAction}
+          @contract-action=${handleContractAction}
+          @context-action=${handleContextAction}
+        ></spectrum-collapsible-list>
+      </spectrum-rail>
+    </div>
+    
+    <script>
+      // Add click handler after a small delay to ensure components are defined
+      setTimeout(() => {
+        const button = document.getElementById('toggle-rail');
+        const rail = document.getElementById('controlled-rail');
+        let isExpanded = ${args.initialExpanded};
+        
+        if (button && rail) {
+          button.addEventListener('click', () => {
+            isExpanded = !isExpanded;
+            rail.setExpanded(isExpanded);
+            console.log('Toggled rail to:', isExpanded ? 'expanded' : 'collapsed');
+          });
+        }
+      }, 100);
+    </script>
+  `,
 }; 

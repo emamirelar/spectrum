@@ -8,7 +8,7 @@
   --rail-tooltip-padding: 4px 8px;
   --rail-tooltip-border-radius: 4px;
   --rail-tooltip-font-size: 12px;
-  --rail-expanded-width: 288px;
+  --rail-expanded-width: 340px;
   --rail-transition-duration: 300ms;
   --rail-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
   --rail-bg-color: var(--spectrum-sys-color-surface-subtle, #f1f5f9);
@@ -146,10 +146,36 @@
     .search-expanded {
       width: 100%;
       padding-right: var(--rail-spacing);
+      display: flex;
+      align-items: center;
+      gap: var(--rail-spacing);
+      position: relative;
       
       spectrum-search-input {
         width: 100%;
+        flex-grow: 1;
         display: block;
+      }
+      
+      .add-button {
+        flex-shrink: 0;
+        width: var(--rail-item-size);
+        height: var(--rail-item-size);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        visibility: visible;
+        opacity: 1;
+        
+        &:hover {
+          background-color: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.03));
+        }
+        
+        &:active {
+          background-color: var(--spectrum-color-surface-active, rgba(0, 0, 0, 0.1));
+        }
       }
     }
 
