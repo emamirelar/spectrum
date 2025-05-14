@@ -140,8 +140,8 @@ const meta = {
   },
   argTypes: {
     messages: {
-      control: 'object',
-      description: 'The messages to display in the conversation panel',
+      control: 'text',
+      description: 'JSON string containing an array of message objects with sender, message, sources, and explorations',
       table: {
         type: { 
           summary: 'string',
@@ -157,8 +157,8 @@ const meta = {
       }
     },
     actions: {
-      control: 'object',
-      description: 'The actions to display in the messages',
+      control: 'text',
+      description: 'JSON string containing an array of action objects with label, icon, and value',
       table: {
         type: { 
           summary: 'string',
@@ -167,8 +167,8 @@ const meta = {
       }
     },
     sources: {
-      control: 'object',
-      description: 'The sources to display in the messages',
+      control: 'text',
+      description: 'JSON string containing an array of source objects with label and value',
       table: {
         type: { 
           summary: 'string',
@@ -186,6 +186,7 @@ const meta = {
           - action: When action buttons are clicked
           - explorationSelected: When an exploration is selected
           - explore: When exploring content
+          - sourceClick: When a source link is clicked
           
           Example:
           \`\`\`html
@@ -199,31 +200,34 @@ const meta = {
             @explore={(e) => {
               console.log('Explore:', e.detail);
             }}
+            @sourceClick={(e) => {
+              console.log('Source clicked:', e.detail);
+            }}
           />
           \`\`\`
         `
       }
     }
   }
-} satisfies Meta<SpectrumConversationPanelArgs>;
+} satisfies Meta<SpectrumConversationPanel>;
 
 export default meta;
-type Story = StoryObj<SpectrumConversationPanelArgs>;
 
-// Default Conversation Panel
-export const Default: Story = {
-  render: (args) => html`
-    <div style="height: 600px; padding: 2rem;">
-      <spectrum-conversation-panel
-        .messages=${args.messages}
-        .conversationtitle=${args.conversationtitle}
-        .actions=${args.actions}
-        .sources=${args.sources}
-        @action=${(e: CustomEvent) => action('action')(e.detail)}
-        @explorationSelected=${(e: CustomEvent) => action('explorationSelected')(e.detail)}
-        @explore=${(e: CustomEvent) => action('explore')(e.detail)}
-        @sourceClick=${(e: CustomEvent) => action('sourceClick')(e.detail)}
-      ></spectrum-conversation-panel>
-    </div>
-  `
+const renderPanel = (args: SpectrumConversationPanelArgs) => html`
+  <div style="height: 600px; padding: 2rem;">
+    <spectrum-conversation-panel
+      .messages=${args.messages}
+      .conversationtitle=${args.conversationtitle}
+      .actions=${args.actions}
+      .sources=${args.sources}
+      @action=${(e: CustomEvent) => action('action')(e.detail)}
+      @explorationSelected=${(e: CustomEvent) => action('explorationSelected')(e.detail)}
+      @explore=${(e: CustomEvent) => action('explore')(e.detail)}
+      @sourceClick=${(e: CustomEvent) => action('sourceClick')(e.detail)}
+    ></spectrum-conversation-panel>
+  </div>
+`;
+
+export const Default: StoryObj<SpectrumConversationPanelArgs> = {
+  render: renderPanel
 };

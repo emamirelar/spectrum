@@ -54,6 +54,27 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
 ]);
 
 
+export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.SpectrumCollapsibleList>('spectrum-collapsible-list', undefined, [
+  'items',
+  'filter',
+  'contextActions',
+  'child-action',
+  'expand-action',
+  'contract-action',
+  'context-action'
+]);
+
+
+export const SpectrumContextMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumContextMenu>('spectrum-context-menu', undefined, [
+  'actions',
+  'targetKey',
+  'isOpen',
+  'position',
+  'action-click',
+  'menu-close'
+]);
+
+
 export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumConversationPanel>('spectrum-conversation-panel', undefined, [
   'messages',
   'conversationtitle',
@@ -76,17 +97,33 @@ export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegame
 
 
 export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spectrum-rail', undefined, [
-  'menuItem',
-  'fabItem',
-  'topItems',
-  'bottomItems',
-  'railAction'
+  'appName',
+  'expandedWidth',
+  'moreLabel',
+  'initialExpanded',
+  'showAddButton',
+  'addLabel',
+  'expandedChange',
+  'searchChange',
+  'railAction',
+  'addAction'
+]);
+
+
+export const SpectrumRailItem = /*@__PURE__*/ defineContainer<JSX.SpectrumRailItem>('spectrum-rail-item', undefined, [
+  'icon',
+  'label',
+  'action',
+  'expanded'
 ]);
 
 
 export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchInput>('spectrum-search-input', undefined, [
   'maxLines',
-  'searchSubmit'
+  'placeholder',
+  'enableVoiceInput',
+  'searchSubmit',
+  'searchInput'
 ]);
 
 

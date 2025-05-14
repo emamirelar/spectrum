@@ -14,6 +14,7 @@ Components need storybook stories that demonstrate their functionality and varia
 - For example:
   - Component: `packages/core/src/components/spectrum-button/spectrum-button.tsx`
   - Story: `packages/storybook/src/stories/components/spectrum-button/spectrum-button.stories.tsx`
+- Titles should be of the form `Components/{component-name}`
 
 ## Story Requirements
 - Each component should have a comprehensive story file

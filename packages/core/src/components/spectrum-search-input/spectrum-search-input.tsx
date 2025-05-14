@@ -1,4 +1,4 @@
-import { Component, Host, h, State, Event, EventEmitter, Method, Element, Prop } from '@stencil/core';
+import { Component, Host, h, State, Event, EventEmitter, Method, Element, Prop, Watch } from '@stencil/core';
 
 @Component({
   tag: 'spectrum-search-input',
@@ -10,6 +10,16 @@ export class SpectrumSearchInput {
   
   @Prop() maxLines: number = 4;
   
+  /**
+   * Placeholder text for the search input
+   */
+  @Prop() placeholder: string = 'Ask anything...';
+  
+  /**
+   * Whether to enable voice input capabilities (speech recognition)
+   */
+  @Prop() enableVoiceInput: boolean = true;
+  
   @State() searchText: string = '';
   @State() isListening: boolean = false;
   @State() isSpeechAvailable: boolean = false;
@@ -17,13 +27,38 @@ export class SpectrumSearchInput {
   
   @Event() searchSubmit: EventEmitter<string>;
   
+  /** Emits when input value changes, for real-time filtering */
+  @Event() searchInput: EventEmitter<string>;
+  
   private inputRef?: HTMLTextAreaElement;
   private recognition: any;
   private lineHeight: number = 24; // Line height in pixels
   
-  componentWillLoad() {
-    // Initialize speech recognition if available
-    if ('webkitSpeechRecognition' in window) {
+  /**
+   * Watch for changes to enableVoiceInput property
+   */
+  @Watch('enableVoiceInput')
+  handleEnableVoiceInputChange(newValue: boolean) {
+    console.log(`Voice input ${newValue ? 'enabled' : 'disabled'}`);
+    
+    if (newValue) {
+      // Initialize speech recognition if newly enabled
+      this.initSpeechRecognition();
+    } else {
+      // Disable speech recognition
+      this.isSpeechAvailable = false;
+      if (this.isListening && this.recognition) {
+        this.recognition.abort();
+        this.isListening = false;
+      }
+    }
+  }
+  
+  /**
+   * Initialize speech recognition if available and enabled
+   */
+  private initSpeechRecognition() {
+    if (this.enableVoiceInput && 'webkitSpeechRecognition' in window) {
       this.recognition = new (window as any).webkitSpeechRecognition();
       this.recognition.continuous = false;
       this.recognition.interimResults = false;
@@ -39,7 +74,14 @@ export class SpectrumSearchInput {
       this.recognition.onend = () => {
         this.isListening = false;
       };
+    } else {
+      this.isSpeechAvailable = false;
     }
+  }
+  
+  componentWillLoad() {
+    // Initialize speech recognition if available and enabled
+    this.initSpeechRecognition();
   }
   
   @Method()
@@ -51,6 +93,9 @@ export class SpectrumSearchInput {
     const textarea = event.target as HTMLTextAreaElement;
     this.searchText = textarea.value;
     this.adjustTextareaHeight();
+    
+    // Emit the input event for real-time filtering
+    this.searchInput.emit(this.searchText);
   };
   
   private adjustTextareaHeight = () => {
@@ -105,12 +150,12 @@ export class SpectrumSearchInput {
               class="spectrum-search-input__field"
               value={this.searchText}
               onInput={this.handleInput}
-              placeholder="Ask anything..."
+              placeholder={this.placeholder}
               rows={1}
               aria-label="Search input"
             />
             <div class="spectrum-search-input__buttons">
-              {this.isSpeechAvailable && (
+              {this.enableVoiceInput && this.isSpeechAvailable && (
                 <spectrum-button
                   variant="ghost"
                   iconOnly={true}

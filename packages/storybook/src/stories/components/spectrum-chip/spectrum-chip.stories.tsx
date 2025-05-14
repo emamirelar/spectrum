@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 
+// @ts-ignore because VSCode does not understand imports within Lerna monorepos
+import type { SpectrumChip } from "@stencil-storybook-boilerplate/core/src/components/spectrum-chip/spectrum-chip";
+
 interface SpectrumChipArgs {
   variant: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
   selected: boolean;
@@ -36,75 +39,75 @@ const meta = {
     variant: {
       control: { type: 'select' },
       options: ['primary', 'secondary', 'assist', 'filter', 'input', 'suggestion'],
+      description: 'The visual style variant of the chip'
     },
     selected: {
       control: 'boolean',
-      description: 'Whether the chip is selected',
+      description: 'Whether the chip is selected'
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the chip is disabled',
+      description: 'Whether the chip is disabled'
     },
     outline: {
       control: 'boolean',
-      description: 'Whether the chip is outlined',
+      description: 'Whether the chip is outlined'
     },
     ripple: {
       control: 'boolean',
-      description: 'Enable ripple effect on click',
+      description: 'Enable ripple effect on click'
     },
     label: {
       control: 'text',
-      description: 'The label text of the chip',
+      description: 'The label text of the chip'
     },
     leadingIcon: {
       control: 'text',
-      description: 'Optional leading icon',
+      description: 'Optional leading icon'
     },
     trailingIcon: {
       control: 'text',
-      description: 'Optional trailing icon (usually for removal)',
+      description: 'Optional trailing icon (usually for removal)'
     },
     showTrailingIcon: {
       control: 'boolean',
-      description: 'Whether to show the trailing icon',
+      description: 'Whether to show the trailing icon'
     },
     debug: {
       control: 'boolean',
-      description: 'Enable debug logging',
+      description: 'Enable debug logging'
     },
     action: {
       control: 'text',
-      description: 'Optional action to emit with the chip click',
+      description: 'Optional action to emit with the chip click'
     }
   }
-} satisfies Meta<SpectrumChipArgs>;
+} satisfies Meta<SpectrumChip>;
 
 export default meta;
-type Story = StoryObj<SpectrumChipArgs>;
 
-// Default Chip
-export const Default: Story = {
-  render: (args) => html`
-    <spectrum-chip
-      variant=${args.variant}
-      ?selected=${args.selected}
-      ?disabled=${args.disabled}
-      ?outline=${args.outline}
-      ?ripple=${args.ripple}
-      label=${args.label}
-      leading-icon=${args.leadingIcon}
-      trailing-icon=${args.trailingIcon}
-      ?show-trailing-icon=${args.showTrailingIcon}
-      ?debug=${args.debug}
-      action=${args.action}
-      @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-    ></spectrum-chip>
-  `
+const renderChip = (args: SpectrumChipArgs) => html`
+  <spectrum-chip
+    variant=${args.variant}
+    ?selected=${args.selected}
+    ?disabled=${args.disabled}
+    ?outline=${args.outline}
+    ?ripple=${args.ripple}
+    label=${args.label}
+    leading-icon=${args.leadingIcon}
+    trailing-icon=${args.trailingIcon}
+    ?show-trailing-icon=${args.showTrailingIcon}
+    ?debug=${args.debug}
+    action=${args.action}
+    @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
+  ></spectrum-chip>
+`;
+
+export const Default: StoryObj<SpectrumChipArgs> = {
+  render: renderChip
 };
 
-// Primary Chip
-export const Primary: Story = {
+export const Primary: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'primary',
     selected: false,
@@ -117,10 +120,10 @@ export const Primary: Story = {
     showTrailingIcon: false,
     debug: false,
   },
+  render: renderChip
 };
 
-// Secondary Chip
-export const Secondary: Story = {
+export const Secondary: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'secondary',
     selected: false,
@@ -133,10 +136,10 @@ export const Secondary: Story = {
     showTrailingIcon: false,
     debug: false,
   },
+  render: renderChip
 };
 
-// With Icons
-export const WithIcons: Story = {
+export const WithIcons: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'primary',
     selected: false,
@@ -149,10 +152,10 @@ export const WithIcons: Story = {
     showTrailingIcon: true,
     debug: false,
   },
+  render: renderChip
 };
 
-// Selected
-export const Selected: Story = {
+export const Selected: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'primary',
     selected: true,
@@ -165,10 +168,10 @@ export const Selected: Story = {
     showTrailingIcon: false,
     debug: false,
   },
+  render: renderChip
 };
 
-// Disabled
-export const Disabled: Story = {
+export const Disabled: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'primary',
     selected: false,
@@ -181,10 +184,10 @@ export const Disabled: Story = {
     showTrailingIcon: false,
     debug: false,
   },
+  render: renderChip
 };
 
-// Outline
-export const Outline: Story = {
+export const Outline: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'primary',
     selected: false,
@@ -197,10 +200,10 @@ export const Outline: Story = {
     showTrailingIcon: false,
     debug: false,
   },
+  render: renderChip
 };
 
-// With Ripple
-export const WithRipple: Story = {
+export const WithRipple: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'primary',
     selected: false,
@@ -213,4 +216,5 @@ export const WithRipple: Story = {
     showTrailingIcon: false,
     debug: false,
   },
+  render: renderChip
 }; 

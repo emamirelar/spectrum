@@ -19,7 +19,7 @@ export class SpectrumButton {
   @Prop() debug: boolean = false;
 
   // Button Variants and Appearance
-  @Prop() variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab' = 'primary';
   @Prop() size: 'sm' | 'base' | 'lg' = 'base';
   @Prop() outline: boolean = false;
   @Prop() iconOnly: boolean = false;
@@ -47,6 +47,17 @@ export class SpectrumButton {
   handleIconOnlyChange(newValue: boolean) {
     if (newValue && this.leftIcon) {
       this.showLeftIcon = true;
+    }
+  }
+
+  @Watch('variant')
+  handleVariantChange(newValue: string) {
+    if (newValue === 'fab') {
+      this.ripple = true;
+      if (this.leftIcon) {
+        this.iconOnly = true;
+        this.showLeftIcon = true;
+      }
     }
   }
 

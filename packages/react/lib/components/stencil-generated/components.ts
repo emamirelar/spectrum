@@ -12,8 +12,11 @@ import { createComponent } from '@stencil/react-output-target/runtime';
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops/cpit-spectrum/dist/components/spectrum-carousel.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops/cpit-spectrum/dist/components/spectrum-chip.js";
+import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustomElement as defineSpectrumCollapsibleList } from "@unops/cpit-spectrum/dist/components/spectrum-collapsible-list.js";
+import { SpectrumContextMenu as SpectrumContextMenuElement, defineCustomElement as defineSpectrumContextMenu } from "@unops/cpit-spectrum/dist/components/spectrum-context-menu.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@unops/cpit-spectrum/dist/components/spectrum-conversation-panel.js";
 import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@unops/cpit-spectrum/dist/components/spectrum-megamenu.js";
+import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops/cpit-spectrum/dist/components/spectrum-rail-item.js";
 import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops/cpit-spectrum/dist/components/spectrum-rail.js";
 import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@unops/cpit-spectrum/dist/components/spectrum-search-input.js";
 import { SpectrumTheme as SpectrumThemeElement, defineCustomElement as defineSpectrumTheme } from "@unops/cpit-spectrum/dist/components/spectrum-theme.js";
@@ -53,6 +56,44 @@ export const SpectrumChip: StencilReactComponent<SpectrumChipElement, SpectrumCh
     defineCustomElement: defineSpectrumChip
 });
 
+type SpectrumCollapsibleListEvents = {
+    onChildAction: EventName<CustomEvent<{ action: string; label: string; }>>,
+    onExpandAction: EventName<CustomEvent<{ label: string; }>>,
+    onContractAction: EventName<CustomEvent<{ label: string; }>>,
+    onContextAction: EventName<CustomEvent<{ value: string; label: string }>>
+};
+
+export const SpectrumCollapsibleList: StencilReactComponent<SpectrumCollapsibleListElement, SpectrumCollapsibleListEvents> = /*@__PURE__*/ createComponent<SpectrumCollapsibleListElement, SpectrumCollapsibleListEvents>({
+    tagName: 'spectrum-collapsible-list',
+    elementClass: SpectrumCollapsibleListElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {
+        onChildAction: 'child-action',
+        onExpandAction: 'expand-action',
+        onContractAction: 'contract-action',
+        onContextAction: 'context-action'
+    } as SpectrumCollapsibleListEvents,
+    defineCustomElement: defineSpectrumCollapsibleList
+});
+
+type SpectrumContextMenuEvents = {
+    onActionClick: EventName<CustomEvent<{ value: string; targetKey: string }>>,
+    onMenuClose: EventName<CustomEvent<void>>
+};
+
+export const SpectrumContextMenu: StencilReactComponent<SpectrumContextMenuElement, SpectrumContextMenuEvents> = /*@__PURE__*/ createComponent<SpectrumContextMenuElement, SpectrumContextMenuEvents>({
+    tagName: 'spectrum-context-menu',
+    elementClass: SpectrumContextMenuElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {
+        onActionClick: 'action-click',
+        onMenuClose: 'menu-close'
+    } as SpectrumContextMenuEvents,
+    defineCustomElement: defineSpectrumContextMenu
+});
+
 type SpectrumConversationPanelEvents = {
     onExplorationSelected: EventName<CustomEvent<string>>,
     onAction: EventName<CustomEvent<{ type: string, value: string }>>,
@@ -85,25 +126,52 @@ export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, Sp
     defineCustomElement: defineSpectrumMegamenu
 });
 
-type SpectrumRailEvents = { onRailAction: EventName<CustomEvent<{ action: string, label: string }>> };
+type SpectrumRailEvents = {
+    onExpandedChange: EventName<CustomEvent<boolean>>,
+    onSearchChange: EventName<CustomEvent<{ value: string }>>,
+    onRailAction: EventName<CustomEvent<{ action: string, label: string }>>,
+    onAddAction: EventName<CustomEvent<void>>
+};
 
 export const SpectrumRail: StencilReactComponent<SpectrumRailElement, SpectrumRailEvents> = /*@__PURE__*/ createComponent<SpectrumRailElement, SpectrumRailEvents>({
     tagName: 'spectrum-rail',
     elementClass: SpectrumRailElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: { onRailAction: 'railAction' } as SpectrumRailEvents,
+    events: {
+        onExpandedChange: 'expandedChange',
+        onSearchChange: 'searchChange',
+        onRailAction: 'railAction',
+        onAddAction: 'addAction'
+    } as SpectrumRailEvents,
     defineCustomElement: defineSpectrumRail
 });
 
-type SpectrumSearchInputEvents = { onSearchSubmit: EventName<CustomEvent<string>> };
+type SpectrumRailItemEvents = NonNullable<unknown>;
+
+export const SpectrumRailItem: StencilReactComponent<SpectrumRailItemElement, SpectrumRailItemEvents> = /*@__PURE__*/ createComponent<SpectrumRailItemElement, SpectrumRailItemEvents>({
+    tagName: 'spectrum-rail-item',
+    elementClass: SpectrumRailItemElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumRailItemEvents,
+    defineCustomElement: defineSpectrumRailItem
+});
+
+type SpectrumSearchInputEvents = {
+    onSearchSubmit: EventName<CustomEvent<string>>,
+    onSearchInput: EventName<CustomEvent<string>>
+};
 
 export const SpectrumSearchInput: StencilReactComponent<SpectrumSearchInputElement, SpectrumSearchInputEvents> = /*@__PURE__*/ createComponent<SpectrumSearchInputElement, SpectrumSearchInputEvents>({
     tagName: 'spectrum-search-input',
     elementClass: SpectrumSearchInputElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: { onSearchSubmit: 'searchSubmit' } as SpectrumSearchInputEvents,
+    events: {
+        onSearchSubmit: 'searchSubmit',
+        onSearchInput: 'searchInput'
+    } as SpectrumSearchInputEvents,
     defineCustomElement: defineSpectrumSearchInput
 });
 

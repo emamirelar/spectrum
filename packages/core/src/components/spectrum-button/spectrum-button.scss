@@ -15,7 +15,7 @@
   --button-gap: var(--button-spacing-small);
 
   // Interactive states
-  --button-surface-hover: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.05));
+  --button-surface-hover: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.03));
   --button-surface-active: var(--spectrum-color-surface-active, rgba(0, 0, 0, 0.1));
   --button-background-hover: var(--spectrum-color-primary-hover);
   --button-background-active: var(--spectrum-color-primary-active);
@@ -39,7 +39,9 @@
   --button-size-base: 2rem;
   --button-size-sm: 1.75rem;
   --button-size-lg: 2.25rem;
-  --button-size-fab: 3rem;
+  --button-size-fab: 3.5rem;
+  --button-size-fab-sm: 2.5rem;
+  --button-size-fab-lg: 4rem;
   --button-size-icon-only: 2.5rem;
   --button-size-icon-only-sm: 2rem;
   --button-size-icon-only-lg: 3rem;
@@ -67,10 +69,16 @@
   --button-icon-only-min-width-lg: calc(var(--button-padding) * 6);
 
   // FAB (Floating Action Button) specific
-  --button-fab-border-radius: 12px;
-  --button-fab-size: 48px;
+  --button-fab-border-radius: 50%;
+  --button-fab-elevation: 0 2px 10px rgba(0, 0, 0, 0.2);
+  --button-fab-elevation-hover: 0 4px 15px rgba(0, 0, 0, 0.25);
+  --button-fab-size: var(--button-size-fab);
+  --button-fab-size-sm: var(--button-size-fab-sm);
+  --button-fab-size-lg: var(--button-size-fab-lg);
   --button-fab-padding: var(--button-padding);
-  --button-fab-min-width: 48px;
+  --button-fab-icon-size: calc(var(--button-icon-size) * 1.25);
+  --button-fab-icon-size-sm: calc(var(--button-icon-size-sm) * 1.25);
+  --button-fab-icon-size-lg: calc(var(--button-icon-size-lg) * 1.25);
 
   // Button variants
   --button-primary-background: var(--spectrum-color-primary, #0070d2);
@@ -87,6 +95,8 @@
   --button-ghost-color: var(--spectrum-color-text, #333333);
   --button-ghost-hover: var(--button-surface-hover);
   --button-ghost-active: var(--button-surface-active);
+  --button-fab-background: var(--button-primary-background);
+  --button-fab-color: var(--button-primary-color);
 }
 
 // Base button styles
@@ -209,25 +219,82 @@
 
   // FAB (Floating Action Button) variant
   &--fab {
-    background-color: var(--button-background);
-    color: var(--button-color);
-    border-radius: var(--button-border-radius-fab);
+    background-color: var(--button-fab-background);
+    color: var(--button-fab-color);
+    border-radius: var(--button-fab-border-radius);
     border: none;
-    box-shadow: none;
+    box-shadow: var(--button-fab-elevation);
+    position: relative;
+    z-index: 1;
+    transition: all var(--button-transition-duration) var(--button-transition-timing);
+
+    &:hover {
+      box-shadow: var(--button-fab-elevation-hover);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0px);
+      box-shadow: var(--button-fab-elevation);
+    }
 
     &:hover::before {
-      background-color: var(--button-background-hover);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     &:active::before {
-      background-color: var(--button-background-active);
+      background-color: rgba(0, 0, 0, 0.1);
     }
 
     &.spectrum-button--icon-only {
-      width: var(--button-size-fab);
-      height: var(--button-size-fab);
-      padding: var(--button-padding-icon-only);
-      min-width: var(--button-size-fab);
+      width: var(--button-fab-size);
+      height: var(--button-fab-size);
+      padding: 0;
+      min-width: var(--button-fab-size);
+      
+      .spectrum-button__icon {
+        font-size: var(--button-fab-icon-size);
+      }
+      
+      &.spectrum-button--sm {
+        width: var(--button-fab-size-sm);
+        height: var(--button-fab-size-sm);
+        min-width: var(--button-fab-size-sm);
+        
+        .spectrum-button__icon {
+          font-size: var(--button-fab-icon-size-sm);
+        }
+      }
+      
+      &.spectrum-button--lg {
+        width: var(--button-fab-size-lg);
+        height: var(--button-fab-size-lg);
+        min-width: var(--button-fab-size-lg);
+        
+        .spectrum-button__icon {
+          font-size: var(--button-fab-icon-size-lg);
+        }
+      }
+    }
+
+    &:not(.spectrum-button--icon-only) {
+      border-radius: 100vw;
+      padding: 0 calc(var(--button-padding) * 1.5);
+      height: var(--button-min-height);
+      width: auto;
+      aspect-ratio: auto;
+      
+      &.spectrum-button--sm {
+        height: var(--button-size-sm);
+      }
+      
+      &.spectrum-button--lg {
+        height: var(--button-size-lg);
+      }
+      
+      .spectrum-button__text {
+        white-space: nowrap;
+      }
     }
   }
 
