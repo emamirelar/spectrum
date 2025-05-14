@@ -328,6 +328,7 @@ export class SpectrumRail {
                   placeholder="Search conversations"
                   onSearchSubmit={(e: CustomEvent) => this.handleSearchChange(e.detail)}
                   onSearchInput={(e: CustomEvent) => this.handleSearchChange(e.detail)}
+                  class="search-input-expanded"
                 />
               </div>
             )}
@@ -339,8 +340,8 @@ export class SpectrumRail {
               {!this.expanded ? (
                 <spectrum-button
                   class="rail-icon-only"
-                  variant="ghost"
-                  size="base"
+                  variant="fab"
+                  size="sm"
                   iconOnly={true}
                   showLeftIcon={true}
                   leftIcon="add"
@@ -351,8 +352,8 @@ export class SpectrumRail {
               ) : (
                 <spectrum-button
                   class="add-button"
-                  variant="ghost"
-                  size="base"
+                  variant="fab"
+                  size="sm"
                   showLeftIcon={true}
                   leftIcon="add"
                   buttonText={this.addLabel}
