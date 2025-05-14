@@ -45,6 +45,7 @@ Supports icons, text, and various interactive states.
 
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
  - [spectrum-rail](../spectrum-rail)
+ - [spectrum-rail-item](../spectrum-rail-item)
  - [spectrum-search-input](../spectrum-search-input)
 
 ### Graph
@@ -52,6 +53,7 @@ Supports icons, text, and various interactive states.
 graph TD;
   spectrum-conversation-panel --> spectrum-button
   spectrum-rail --> spectrum-button
+  spectrum-rail-item --> spectrum-button
   spectrum-search-input --> spectrum-button
   style spectrum-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -1,4 +1,5 @@
-import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment, Listen, Element } from '@stencil/core';
+import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
 
 /**
  * Collapsible List Item interface
@@ -30,7 +31,7 @@ export class SpectrumCollapsibleList {
   /**
    * Context actions for all leaf nodes
    */
-  @Prop() contextActions: { label: string; icon: string; value: string }[] = [];
+  @Prop() contextActions: ContextMenuAction[] = [];
 
   /**
    * Internal state for expanded nodes (by label path)
@@ -41,6 +42,16 @@ export class SpectrumCollapsibleList {
    * Original items before filtering
    */
   @State() originalItems: CollapsibleListItem[] = [];
+
+  /**
+   * Currently open context menu key
+   */
+  @State() openContextMenuKey?: string;
+
+  /**
+   * Host element reference
+   */
+  @Element() hostElement!: HTMLElement;
 
   /**
    * Event emitted when a child node is clicked
@@ -62,40 +73,43 @@ export class SpectrumCollapsibleList {
    */
   @Event({ eventName: 'context-action' }) contextAction: EventEmitter<{ value: string; label: string }>; // eslint-disable-line
 
-  @State() openPopoverKey?: string;
-
-  private popoverRefs: { [key: string]: HTMLUListElement | null } = {};
+  // Reference to the single context menu instance
+  private contextMenuRef: HTMLSpectrumContextMenuElement | null = null;
+  
+  // Store references to context menu trigger icons by key
+  private contextMenuIconRefs: { [key: string]: HTMLElement | null } = {};
+  
+  // Generic trigger references for list items
   private triggerRefs: { [key: string]: HTMLElement | null } = {};
-  private outsideClickHandler = (event: MouseEvent) => {
-    if (!this.openPopoverKey) return;
-    const popover = this.popoverRefs[this.openPopoverKey];
-    const trigger = this.triggerRefs[this.openPopoverKey];
-    const path = event.composedPath();
-    if (
-      popover && !path.includes(popover) &&
-      trigger && !path.includes(trigger)
-    ) {
-      this.openPopoverKey = undefined;
-    }
-  };
+
+  /**
+   * Listen for context menu action clicks
+   */
+  @Listen('action-click')
+  handleActionClick(event: CustomEvent<{ value: string; targetKey: string }>) {
+    // Extract the item from the targetKey
+    const targetKey = event.detail.targetKey;
+    const itemPath = targetKey.split(' > ');
+    const itemLabel = itemPath[itemPath.length - 1];
+    
+    this.contextAction.emit({ 
+      value: event.detail.value, 
+      label: itemLabel 
+    });
+    
+    this.openContextMenuKey = undefined;
+  }
+
+  /**
+   * Listen for context menu close events
+   */
+  @Listen('menu-close')
+  handleMenuClose() {
+    this.openContextMenuKey = undefined;
+  }
 
   componentDidLoad() {
-    this.hostElement = (this as any).el || (this as any).host || (this as any).base || (this as any).root || (this as any);
-  }
-
-  componentDidUpdate() {
-    if (this.openPopoverKey) {
-      window.addEventListener('click', this.outsideClickHandler, true);
-      this.positionPopoverMenu(this.openPopoverKey);
-    } else {
-      window.removeEventListener('click', this.outsideClickHandler, true);
-      // Reset all popover positions
-      Object.keys(this.popoverRefs).forEach(key => this.resetPopoverMenuPosition(key));
-    }
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener('click', this.outsideClickHandler, true);
+    // No need to store the host element anymore
   }
 
   componentWillLoad() {
@@ -110,24 +124,37 @@ export class SpectrumCollapsibleList {
     }
   }
 
-  private setPopoverRef = (key: string) => (el: HTMLUListElement | null) => {
-    if (el) {
-      this.popoverRefs[key] = el;
-      el.addEventListener('close', this.handlePopoverClose);
-    } else if (this.popoverRefs[key]) {
-      this.popoverRefs[key]?.removeEventListener('close', this.handlePopoverClose);
-      this.popoverRefs[key] = null;
-    }
+  /**
+   * Set reference to the context menu component
+   */
+  private setContextMenuRef = (el: HTMLSpectrumContextMenuElement | null) => {
+    this.contextMenuRef = el;
   };
 
+  /**
+   * Set reference to a context menu icon for a specific item key
+   */
+  private setContextMenuIconRef = (key: string) => (el: HTMLElement | null) => {
+    this.contextMenuIconRefs[key] = el;
+  };
+
+  /**
+   * Set reference to a list item row
+   */
   private setTriggerRef = (key: string) => (el: HTMLElement | null) => {
     this.triggerRefs[key] = el;
   };
 
+  /**
+   * Get a unique key for a node based on its path
+   */
   private getNodeKey(item: CollapsibleListItem, parentKey: string) {
     return parentKey ? `${parentKey} > ${item.label}` : item.label;
   }
 
+  /**
+   * Handle click on a parent node (expand/collapse)
+   */
   private handleParentClick(item: CollapsibleListItem, key: string, parentKey = '') {
     const isExpanded = this.expandedMap[key] ?? !!item.expanded;
     if (!isExpanded) {
@@ -149,67 +176,90 @@ export class SpectrumCollapsibleList {
     }
   }
 
+  /**
+   * Handle click on a child (leaf) node
+   */
   private handleChildClick(item: CollapsibleListItem) {
     if (item.action) {
       this.childAction.emit({ action: item.action, label: item.label });
     }
   }
 
-  private handleContextActionClick(item: CollapsibleListItem, action: { label: string; icon: string; value: string }) {
-    this.contextAction.emit({ value: action.value, label: item.label });
-    this.openPopoverKey = undefined;
-  }
-
-  private handlePopoverClose = () => {
-    console.log('Popover close event fired');
-    this.openPopoverKey = undefined;
-  };
-
+  /**
+   * Handle click on the context menu icon
+   */
   private handleActionsIconClick(e: Event, key: string) {
     e.stopPropagation();
-    if (this.openPopoverKey === key) {
-      this.openPopoverKey = undefined;
-    } else {
-      this.openPopoverKey = key;
-      // Show the popover programmatically
-      setTimeout(() => {
-        const popover = this.hostElement.shadowRoot?.getElementById(`popover-${key.replace(/\s+/g, '-')}`) as any;
-        if (popover && typeof popover.showPopover === 'function') {
-          popover.showPopover();
-        }
-      }, 0);
+    e.preventDefault();
+    
+    // If the same menu is already open, close it
+    if (this.openContextMenuKey === key) {
+      this.contextMenuRef?.close();
+      this.openContextMenuKey = undefined;
+      return;
     }
+    
+    // Close any open menu
+    if (this.openContextMenuKey && this.contextMenuRef) {
+      this.contextMenuRef.close();
+    }
+    
+    // Get the icon element for this item
+    const iconElement = this.contextMenuIconRefs[key];
+    if (!iconElement || !this.contextMenuRef) {
+      console.warn('Missing icon element or context menu for key:', key);
+      return;
+    }
+    
+    // Get the icon position
+    const iconRect = iconElement.getBoundingClientRect();
+    
+    // Calculate the menu position - to the right of the icon, centered vertically
+    const menuX = iconRect.right;
+    const menuY = iconRect.top + (iconRect.height / 2);
+    
+    // Set the target key for the context menu
+    this.contextMenuRef.targetKey = key;
+    
+    console.log(`Opening context menu for key ${key} at position:`, { 
+      x: menuX, 
+      y: menuY, 
+      iconRect: {
+        left: Math.round(iconRect.left),
+        top: Math.round(iconRect.top),
+        right: Math.round(iconRect.right),
+        bottom: Math.round(iconRect.bottom),
+        width: Math.round(iconRect.width),
+        height: Math.round(iconRect.height)
+      }
+    });
+    
+    // First set the trigger reference
+    this.contextMenuRef.setTriggerRef(iconElement)
+      .then(() => {
+        // Open the menu (this renders the menu element)
+        return this.contextMenuRef?.open();
+      })
+      .then(() => {
+        // Position directly using coordinates after a short delay to ensure the menu is rendered
+        setTimeout(() => {
+          this.contextMenuRef?.positionAtCoordinates(menuX, menuY)
+            .then(() => {
+              this.openContextMenuKey = key;
+            })
+            .catch(err => {
+              console.error('Error positioning menu at coordinates:', err);
+            });
+        }, 10);
+      })
+      .catch(err => {
+        console.error('Error opening context menu:', err);
+      });
   }
 
-  private renderPopoverMenu(item: CollapsibleListItem, key: string) {
-    if (!Array.isArray(this.contextActions) || this.contextActions.length === 0) return null;
-    if (this.openPopoverKey !== key) return null;
-    return (
-      <ul
-        popover=""
-        id={`popover-${key.replace(/\s+/g, '-')}`}
-        class="spectrum-collapsible-list__popover-menu"
-        style={{ '--popover-anchor': `--anchor-${key.replace(/\s+/g, '-')}` }}
-        onFocusout={this.handlePopoverClose}
-        ref={this.setPopoverRef(key)}
-      >
-        {this.contextActions.map((action) => (
-          <li 
-            class="spectrum-collapsible-list__popover-menu-item" 
-            key={action.value}
-            onClick={e => {
-              e.stopPropagation();
-              this.handleContextActionClick(item, action);
-            }}
-          >
-            {this.renderIcon(action.icon)}
-            <span>{action.label}</span>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
+  /**
+   * Render an icon with Material Symbols
+   */
   private renderIcon(icon: string, outlined = false) {
     // Use Material Symbols Outlined, outlined if requested
     return (
@@ -230,8 +280,9 @@ export class SpectrumCollapsibleList {
     );
   }
 
-  private hostElement!: HTMLElement;
-
+  /**
+   * Filter items based on search term
+   */
   private filterItems(items: CollapsibleListItem[], filter: string): CollapsibleListItem[] {
     if (!filter) return items;
     
@@ -266,6 +317,9 @@ export class SpectrumCollapsibleList {
     }).filter(Boolean) as CollapsibleListItem[];
   }
 
+  /**
+   * Render a list of items with proper hierarchy
+   */
   private renderItems(items: CollapsibleListItem[], parentKey = '') {
     const filteredItems = this.filterItems(items, this.filter);
     
@@ -273,6 +327,7 @@ export class SpectrumCollapsibleList {
       const key = this.getNodeKey(item, parentKey);
       const isParent = Array.isArray(item.children);
       const isExpanded = this.expandedMap[key] ?? !!item.expanded;
+      const contextIconId = `context-icon-${key.replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`;
 
       return (
         <li class={`spectrum-collapsible-list__item ${isParent ? 'spectrum-collapsible-list__item--parent' : ''} ${isExpanded ? 'spectrum-collapsible-list__item--expanded' : ''}`}>
@@ -293,8 +348,10 @@ export class SpectrumCollapsibleList {
             )}
             {!isParent && this.contextActions?.length > 0 && (
               <span 
-                class="spectrum-collapsible-list__icon spectrum-collapsible-list__icon--outlined"
+                class="spectrum-collapsible-list__icon spectrum-collapsible-list__icon--outlined spectrum-collapsible-list__context-icon"
                 onClick={(e) => this.handleActionsIconClick(e, key)}
+                ref={this.setContextMenuIconRef(key)}
+                id={contextIconId}
               >
                 more_vert
               </span>
@@ -305,43 +362,9 @@ export class SpectrumCollapsibleList {
               {this.renderItems(item.children, key)}
             </div>
           )}
-          {this.renderPopoverMenu(item, key)}
         </li>
       );
     });
-  }
-
-  private positionPopoverMenu(key: string) {
-    const popover = this.popoverRefs[key];
-    const trigger = this.triggerRefs[key];
-    if (popover && trigger) {
-      // Only update the gap using the theme variable
-      let spacing = 8;
-      const computedStyle = window.getComputedStyle(trigger);
-      const spacingVar = computedStyle.getPropertyValue('--collapsible-list-spacing');
-      if (spacingVar) {
-        const parsed = parseFloat(spacingVar);
-        if (!isNaN(parsed)) spacing = parsed;
-      }
-      const triggerRect = trigger.getBoundingClientRect();
-      const popoverRect = popover.getBoundingClientRect();
-      const left = triggerRect.right + spacing;
-      const top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
-      popover.style.position = 'fixed';
-      popover.style.left = `${left}px`;
-      popover.style.top = `${top}px`;
-      popover.style.zIndex = '9999';
-    }
-  }
-
-  private resetPopoverMenuPosition(key: string) {
-    const popover = this.popoverRefs[key];
-    if (popover) {
-      popover.style.position = '';
-      popover.style.left = '';
-      popover.style.top = '';
-      popover.style.zIndex = '';
-    }
   }
 
   render() {
@@ -350,6 +373,17 @@ export class SpectrumCollapsibleList {
         <ul class="spectrum-collapsible-list__list">
           {this.renderItems(this.originalItems)}
         </ul>
+        
+        {/* Single reusable context menu for all items */}
+        {this.contextActions?.length > 0 && (
+          <spectrum-context-menu
+            ref={this.setContextMenuRef}
+            actions={this.contextActions}
+            targetKey=""
+            isOpen={false}
+            position="right"
+          ></spectrum-context-menu>
+        )}
       </Host>
     );
   }

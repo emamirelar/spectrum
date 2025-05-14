@@ -15,6 +15,8 @@
   --collapsible-list-label-font: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
   --collapsible-list-label-size: var(--spectrum-sys-font-size, 16px);
   --collapsible-list-transition: var(--spectrum-sys-animation-duration, 200ms) var(--spectrum-sys-animation-timing-function, ease-out);
+  // Ensure the context menu is above all other content
+  --context-menu-z-index: 9999;
 }
 
 .spectrum-collapsible-list {
@@ -98,6 +100,23 @@
   display: inline-block;
 }
 
+.spectrum-collapsible-list__context-icon {
+  margin-left: 0.75em;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--collapsible-list-transition), 
+              background-color var(--collapsible-list-transition),
+              color var(--collapsible-list-transition);
+  padding: 0.25em;
+  border-radius: 50%;
+}
+
+.spectrum-collapsible-list__context-icon:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--collapsible-list-hover-text);
+}
+
 .spectrum-collapsible-list__children {
   margin-left: 0;
   border-left: none;
@@ -132,54 +151,22 @@
   border-radius: 999px;
 }
 
-.spectrum-collapsible-list__popover-menu {
-  background: #fff;
-  color: var(--collapsible-list-text);
-  border-radius: var(--collapsible-list-border-radius);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  padding: 0.25em 0;
-  margin: 0;
-  font-family: var(--collapsible-list-label-font);
-  font-size: var(--collapsible-list-label-size);
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border: 1px solid #e0e0e0;
-  list-style: none;
-  width: max-content;
-}
-
-.spectrum-collapsible-list__popover-menu-item {
-  padding: 0.5em 1.25em;
-  cursor: pointer;
-  background: none;
-  border: none;
-  text-align: left;
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  transition: background var(--collapsible-list-transition), color var(--collapsible-list-transition);
-  outline: none;
-  border-radius: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.75em;
-  box-sizing: border-box;
-  white-space: nowrap;
-
-  span {
-    /* Remove flex and ellipsis for popover menu label */
-    /* flex: 1; */
-    /* min-width: 0; */
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
-    white-space: nowrap;
+// Debug mode styles
+:host-context(.development-mode) {
+  .spectrum-collapsible-list__context-icon {
+    position: relative;
   }
-
-  &:hover,
-  &:focus {
-    background: var(--collapsible-list-hover-bg, #f5f5f5);
-    color: var(--collapsible-list-hover-text);
+  
+  .spectrum-collapsible-list__context-icon::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    border: 1px dashed rgba(0, 0, 0, 0.3);
+    pointer-events: none;
   }
 }
 
@@ -191,6 +178,5 @@
 // .spectrum-collapsible-list__icon--outlined: Outlined fallback icon
 // .spectrum-collapsible-list__label: Item label
 // .spectrum-collapsible-list__expand-icon: Expand/collapse chevron
+// .spectrum-collapsible-list__context-icon: Context menu trigger icon
 // .spectrum-collapsible-list__children: Container for child nodes (scrollable)
-// .spectrum-collapsible-list__popover-menu: Popover menu container for context actions
-// .spectrum-collapsible-list__popover-menu-item: Popover menu item

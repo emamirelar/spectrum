@@ -122,6 +122,39 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
 
 
 @ProxyCmp({
+  inputs: ['actions', 'isOpen', 'position', 'targetKey'],
+  methods: ['setTriggerRef', 'open', 'close', 'positionAtCoordinates']
+})
+@Component({
+  selector: 'spectrum-context-menu',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['actions', 'isOpen', 'position', 'targetKey'],
+})
+export class SpectrumContextMenu {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['action-click', 'menu-close']);
+  }
+}
+
+
+export declare interface SpectrumContextMenu extends Components.SpectrumContextMenu {
+  /**
+   * Event emitted when an action is clicked
+   */
+  'action-click': EventEmitter<CustomEvent<{ value: string; targetKey: string }>>;
+  /**
+   * Event emitted when the menu is closed
+   */
+  'menu-close': EventEmitter<CustomEvent<void>>;
+}
+
+
+@ProxyCmp({
   inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
   methods: ['scrollToLatest']
 })
@@ -177,31 +210,63 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
-  inputs: ['bottomItems', 'fabItem', 'menuItem', 'topItems']
+  inputs: ['appName', 'expandedWidth', 'initialExpanded', 'moreLabel'],
+  methods: ['setExpanded']
 })
 @Component({
   selector: 'spectrum-rail',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['bottomItems', 'fabItem', 'menuItem', 'topItems'],
+  inputs: ['appName', 'expandedWidth', 'initialExpanded', 'moreLabel'],
 })
 export class SpectrumRail {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['railAction']);
+    proxyOutputs(this, this.el, ['expandedChange', 'searchChange', 'railAction']);
   }
 }
 
 
 export declare interface SpectrumRail extends Components.SpectrumRail {
   /**
-   * Emits when a rail item is clicked
+   * Emits when the rail changes expanded state
+   */
+  expandedChange: EventEmitter<CustomEvent<boolean>>;
+  /**
+   * Emits when the search value changes
+   */
+  searchChange: EventEmitter<CustomEvent<{ value: string }>>;
+  /**
+   * Emits when a rail action is triggered
    */
   railAction: EventEmitter<CustomEvent<{ action: string, label: string }>>;
 }
+
+
+@ProxyCmp({
+  inputs: ['action', 'expanded', 'icon', 'label'],
+  methods: ['onRailExpandedChange']
+})
+@Component({
+  selector: 'spectrum-rail-item',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['action', 'expanded', 'icon', 'label'],
+})
+export class SpectrumRailItem {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
 
 
 @ProxyCmp({
@@ -220,7 +285,7 @@ export class SpectrumSearchInput {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['searchSubmit']);
+    proxyOutputs(this, this.el, ['searchSubmit', 'searchInput']);
   }
 }
 
@@ -228,6 +293,10 @@ export class SpectrumSearchInput {
 export declare interface SpectrumSearchInput extends Components.SpectrumSearchInput {
 
   searchSubmit: EventEmitter<CustomEvent<string>>;
+  /**
+   * Emits when input value changes, for real-time filtering
+   */
+  searchInput: EventEmitter<CustomEvent<string>>;
 }
 
 

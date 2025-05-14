@@ -17,6 +17,9 @@ export class SpectrumSearchInput {
   
   @Event() searchSubmit: EventEmitter<string>;
   
+  /** Emits when input value changes, for real-time filtering */
+  @Event() searchInput: EventEmitter<string>;
+  
   private inputRef?: HTMLTextAreaElement;
   private recognition: any;
   private lineHeight: number = 24; // Line height in pixels
@@ -51,6 +54,9 @@ export class SpectrumSearchInput {
     const textarea = event.target as HTMLTextAreaElement;
     this.searchText = textarea.value;
     this.adjustTextareaHeight();
+    
+    // Emit the input event for real-time filtering
+    this.searchInput.emit(this.searchText);
   };
   
   private adjustTextareaHeight = () => {

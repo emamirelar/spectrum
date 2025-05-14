@@ -1,0 +1,47 @@
+:host {
+  --rail-item-size: 48px;
+  --rail-transition-duration: 300ms;
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  transition: all var(--rail-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:host(.rail-item--expanded) {
+  flex-direction: row;
+  justify-content: flex-start;
+  
+  .rail-item-label {
+    opacity: 1;
+    position: static;
+    margin-left: var(--spectrum-sys-spacing, 8px);
+    font-size: 14px;
+    color: var(--spectrum-sys-color-neutral-900, #0f172a);
+  }
+}
+
+.rail-item-icon {
+  flex-shrink: 0;
+  width: var(--rail-item-size);
+  height: var(--rail-item-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rail-item-label {
+  opacity: 0;
+  position: absolute;
+  left: -9999px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: 
+    opacity var(--rail-transition-duration) cubic-bezier(0.4, 0, 0.2, 1),
+    margin var(--rail-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  font-family: var(--spectrum-font-family, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif);
+} 

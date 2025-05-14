@@ -1,7 +1,7 @@
 :host {
-  --rail-width: 96px;
-  --rail-min-height: 200px;
-  --rail-border-radius: calc(var(--rail-width) / 2);
+  --rail-width: 64px;
+  --rail-min-height: 100%;
+  --rail-border-radius: 28px;
   --rail-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --rail-item-size: 48px;
   --rail-tooltip-text: var(--spectrum-color-on-surface);
@@ -10,76 +10,217 @@
   --rail-tooltip-font-size: 12px;
   --rail-expanded-width: 288px;
   --rail-transition-duration: 300ms;
+  --rail-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --rail-bg-color: var(--spectrum-sys-color-surface-subtle, #f1f5f9);
+  --rail-border-color: var(--spectrum-sys-color-border-subtle, #cbd5e1);
+  --rail-font-family: var(--spectrum-sys-font-family);
+  --rail-font-size: var(--spectrum-sys-font-size);
+  --rail-spacing: var(--spectrum-sys-spacing, 8px);
+  --rail-spacing-lg: var(--spectrum-sys-spacing-large, 16px);
 
   display: block;
+  height: 100%;
 }
 
 .rail {
   display: flex;
   flex-direction: column;
-  background-color: var(--spectrum-sys-color-surface);
-  border: 1px solid color(from var(--spectrum-sys-color-on-surface) srgb r g b / 0.3);
+  align-items: center;
+  background-color: var(--rail-bg-color);
+  border: 1px solid var(--rail-border-color);
   border-radius: var(--rail-border-radius);
-  padding: var(--spectrum-sys-spacing);
+  padding: var(--rail-spacing);
   width: var(--rail-width);
-  min-height: var(--rail-min-height);
+  height: var(--rail-min-height);
   box-sizing: border-box;
-  gap: var(--spectrum-sys-spacing);
+  gap: var(--rail-spacing);
   box-shadow: var(--rail-shadow);
   position: relative;
-  transition: all var(--rail-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
-  margin-left: calc(var(--spectrum-sys-spacing) * 2);
-}
-
-.rail:hover {
-  width: var(--rail-expanded-width);
-  height: 100%;
-  border-radius: 0;
-  margin-left: 0;
-
-  .rail-section {
-    align-items: flex-start;
+  overflow: hidden;
+  transition: 
+    width var(--rail-transition-duration) var(--rail-transition-timing),
+    border-radius var(--rail-transition-duration) var(--rail-transition-timing);
+  
+  /* Centering for the fixed-width rail */
+  margin: 0 auto;
+  
+  /* Position absolute can be used if needed for specific layouts */
+  &.rail--absolute {
+    position: absolute;
+    top: var(--spectrum-sys-spacing-xl, 16px);
+    left: var(--spectrum-sys-spacing-xl, 16px);
+    height: calc(100% - 32px);
   }
 
-  .rail-label {
-    opacity: 1;
+  &--expanded {
+    width: var(--rail-expanded-width);
+    align-items: stretch;
+    border-radius: 0;
+    
+    .rail-expanded-content {
+      opacity: 1;
+      width: calc(100% - var(--rail-item-size) - var(--rail-spacing));
+      pointer-events: all;
+      transform: translateX(0);
+    }
+    
+    .rail-icon-only {
+      margin-right: var(--rail-spacing);
+    }
+
+    /* Show menu button text in expanded state */
+    .menu-button {
+      display: flex;
+      width: 100%;
+      
+      .spectrum-button__text {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    /* Show more button text in expanded state */
+    .more-button {
+      display: flex;
+      width: 100%;
+      
+      .spectrum-button__text {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    
+    /* Force direct span children to be visible in expanded mode */
+    spectrum-button span {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      color: inherit !important;
+    }
   }
 }
 
 .rail-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--spectrum-sys-spacing);
-  transition: all var(--rail-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
+  justify-content: center;
+  transition: all var(--rail-transition-duration) var(--rail-transition-timing);
   
   &.menu {
-    margin-bottom: var(--spectrum-sys-spacing);
+    margin-bottom: var(--rail-spacing);
+    
+    .menu-expanded {
+      width: 100%;
+      display: flex;
+      
+      .menu-button {
+        width: 100%;
+        justify-content: flex-start;
+        border-radius: 24px;
+        overflow: hidden;
+        
+        &::part(text) {
+          display: block !important;
+        }
+        
+        span {
+          display: inline-block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+      }
+    }
   }
   
-  &.fab {
-    margin-bottom: var(--spectrum-sys-spacing-large);
-  }
-  
-  &.top {
-    flex-grow: 0;
-    margin-bottom: var(--spectrum-sys-spacing-xx-large);
-  }
-  
-  &.bottom {
-    margin-top: auto;
-    padding-bottom: var(--spectrum-sys-spacing);
-  }
-}
+  &.search {
+    margin-bottom: var(--rail-spacing-lg);
+    position: relative;
+    width: 100%;
 
-.rail-item-wrapper {
-  position: relative;
-  width: var(--rail-width);
-  height: var(--rail-item-size);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    .search-expanded {
+      width: 100%;
+      padding-right: var(--rail-spacing);
+      
+      spectrum-search-input {
+        width: 100%;
+        display: block;
+      }
+    }
+
+    .rail-expanded-content {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+      transition: 
+        opacity var(--rail-transition-duration) var(--rail-transition-timing),
+        width var(--rail-transition-duration) var(--rail-transition-timing),
+        transform var(--rail-transition-duration) var(--rail-transition-timing);
+      transform: translateX(-10px);
+      pointer-events: none;
+      flex-grow: 1;
+      
+      spectrum-search-input {
+        width: 100%;
+        display: block;
+      }
+    }
+    
+    .rail-icon-only {
+      transition: margin var(--rail-transition-duration) var(--rail-transition-timing);
+    }
+  }
+  
+  &.items {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 48px;
+    overflow-y: auto;
+    transition: all var(--rail-transition-duration) var(--rail-transition-timing);
+    margin-bottom: var(--rail-spacing-lg);
+    max-height: calc(100% - 200px); /* Ensure there's space for other sections */
+    
+    ::slotted(*) {
+      width: 100%;
+      max-height: 100%;
+      overflow-y: auto;
+      transition: opacity var(--rail-transition-duration) var(--rail-transition-timing);
+    }
+  }
+  
+  &.more {
+    margin-top: auto;
+    padding-top: var(--rail-spacing);
+    flex-shrink: 0;
+    
+    .more-button {
+      width: 100%;
+      justify-content: space-between;
+      padding: var(--rail-spacing);
+      
+      .spectrum-button__text {
+        flex-grow: 1;
+        text-align: left;
+      }
+      
+      span {
+        display: inline-block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    }
+  }
+
+  /* Reset justification for expanded state */
+  .rail--expanded & {
+    justify-content: flex-start;
+    padding-right: var(--rail-spacing);
+  }
 }
 
 .rail-item {
@@ -91,40 +232,62 @@
   flex-shrink: 0;
 }
 
-.rail-label {
-  position: absolute;
-  left: calc(var(--rail-width) / 1.5);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--rail-tooltip-text);
-  padding: var(--rail-tooltip-padding);
-  font-size: var(--rail-tooltip-font-size);
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity var(--rail-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
-  margin-left: var(--spectrum-sys-spacing);
+.rail-icon-only {
+  width: var(--rail-item-size);
+  height: var(--rail-item-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
 
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus {
-    outline: none;
-    text-decoration: underline;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--spectrum-sys-color-focus-ring);
-    outline-offset: 2px;
-    border-radius: 2px;
+/* Class that can be used by components to implement icon-only mode */
+.rail-item-icon-only {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 100%;
+  
+  /* Default state - hide the label */
+  .rail-item-label {
+    opacity: 0;
+    position: absolute;
+    left: -9999px;
+    transition: opacity var(--rail-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+/* Menu button text specific styling to ensure visibility */
+.menu-button .spectrum-button__text,
+.menu-button span {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: var(--spectrum-color-text, #000) !important;
+  margin-left: var(--rail-spacing) !important;
+}
+
+/* More button text specific styling to ensure visibility */
+.more-button .spectrum-button__text,
+.more-button span {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: var(--spectrum-color-text, #000) !important;
+}
+
+/* Force all children spans to be visible */
+spectrum-button:not([icon-only]) span {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Styling for buttons in slots */
 ::slotted(spectrum-button) {
   width: var(--rail-item-size) !important;
   height: var(--rail-item-size) !important;
@@ -133,4 +296,23 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+/* Ensure slotted collapsible list is displayed correctly */
+::slotted(spectrum-collapsible-list) {
+  max-height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  display: block;
+}
+
+/* Animation helpers for expanding/collapsing elements */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-10px); }
+  to { transform: translateX(0); }
 }

@@ -6,9 +6,11 @@ export const DIRECTIVES = [
   d.SpectrumCarousel,
   d.SpectrumChip,
   d.SpectrumCollapsibleList,
+  d.SpectrumContextMenu,
   d.SpectrumConversationPanel,
   d.SpectrumMegamenu,
   d.SpectrumRail,
+  d.SpectrumRailItem,
   d.SpectrumSearchInput,
   d.SpectrumTheme,
   d.SpectrumWallpaper
