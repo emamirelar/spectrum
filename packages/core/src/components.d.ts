@@ -32,7 +32,7 @@ export namespace Components {
         "showRightIcon": boolean;
         "size": 'sm' | 'base' | 'lg';
         "state": 'default' | 'hover' | 'active' | 'disabled';
-        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline';
+        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
     }
     interface SpectrumCarousel {
         /**
@@ -537,7 +537,7 @@ declare namespace LocalJSX {
         "showRightIcon"?: boolean;
         "size"?: 'sm' | 'base' | 'lg';
         "state"?: 'default' | 'hover' | 'active' | 'disabled';
-        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline';
+        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
     }
     interface SpectrumCarousel {
         /**

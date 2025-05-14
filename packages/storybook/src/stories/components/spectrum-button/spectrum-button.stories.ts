@@ -49,7 +49,7 @@ const meta = {
     },
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost', 'outline'],
+      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost', 'outline', 'fab'],
       description: 'The visual style variant of the button',
     },
     size: {
@@ -175,14 +175,66 @@ export const IconOnly: StoryObj<SpectrumButtonArgs> = {
 // FAB (Floating Action Button)
 export const FAB: StoryObj<SpectrumButtonArgs> = {
   args: {
-    variant: 'primary',
+    variant: 'fab',
     size: 'lg',
     iconOnly: true,
     showLeftIcon: true,
     leftIcon: 'add',
+    ripple: true,
     debug: false,
   },
-  render: renderButton
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A Floating Action Button (FAB) designed for primary actions. Typically used with an icon only.',
+      },
+    },
+  },
+};
+
+// Small FAB
+export const SmallFAB: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'fab',
+    size: 'sm',
+    iconOnly: true,
+    showLeftIcon: true,
+    leftIcon: 'edit',
+    ripple: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A smaller Floating Action Button for secondary actions or space-constrained areas.',
+      },
+    },
+  },
+};
+
+// FAB with Text
+export const FABWithText: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'fab',
+    size: 'base',
+    iconOnly: false,
+    showButtonText: true,
+    buttonText: 'Create',
+    showLeftIcon: true,
+    leftIcon: 'add',
+    ripple: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A FAB with text. This configuration uses a pill shape with appropriate spacing.',
+      },
+    },
+  },
 };
 
 // Ghost Button
