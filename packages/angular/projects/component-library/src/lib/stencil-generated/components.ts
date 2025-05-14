@@ -270,7 +270,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
 
 
 @ProxyCmp({
-  inputs: ['maxLines'],
+  inputs: ['enableVoiceInput', 'maxLines', 'placeholder'],
   methods: ['setFocus']
 })
 @Component({
@@ -278,7 +278,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['maxLines'],
+  inputs: ['enableVoiceInput', 'maxLines', 'placeholder'],
 })
 export class SpectrumSearchInput {
   protected el: HTMLElement;

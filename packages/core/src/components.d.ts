@@ -228,7 +228,15 @@ export namespace Components {
         "onRailExpandedChange": (expanded: boolean) => Promise<boolean>;
     }
     interface SpectrumSearchInput {
+        /**
+          * Whether to enable voice input capabilities (speech recognition)
+         */
+        "enableVoiceInput": boolean;
         "maxLines": number;
+        /**
+          * Placeholder text for the search input
+         */
+        "placeholder": string;
         "setFocus": () => Promise<void>;
     }
     interface SpectrumTheme {
@@ -725,12 +733,20 @@ declare namespace LocalJSX {
         "label": string;
     }
     interface SpectrumSearchInput {
+        /**
+          * Whether to enable voice input capabilities (speech recognition)
+         */
+        "enableVoiceInput"?: boolean;
         "maxLines"?: number;
         /**
           * Emits when input value changes, for real-time filtering
          */
         "onSearchInput"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
         "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
+        /**
+          * Placeholder text for the search input
+         */
+        "placeholder"?: string;
     }
     interface SpectrumTheme {
         /**

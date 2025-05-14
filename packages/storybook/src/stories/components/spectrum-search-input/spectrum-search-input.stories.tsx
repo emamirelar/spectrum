@@ -4,13 +4,17 @@ import { action } from '@storybook/addon-actions';
 
 interface SpectrumSearchInputArgs {
   maxLines: number;
+  placeholder: string;
+  enableVoiceInput: boolean;
 }
 
 const meta = {
   title: 'Components/SpectrumSearchInput',
   tags: ['autodocs'],
   args: {
-    maxLines: 4
+    maxLines: 4,
+    placeholder: 'Ask anything...',
+    enableVoiceInput: true
   },
   argTypes: {
     maxLines: {
@@ -19,6 +23,22 @@ const meta = {
       table: {
         type: { summary: 'number' },
         defaultValue: { summary: '4' }
+      }
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder text for the search input',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Ask anything...' }
+      }
+    },
+    enableVoiceInput: {
+      control: 'boolean',
+      description: 'Whether to enable voice input capabilities (speech recognition)',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
       }
     }
   },
@@ -32,6 +52,8 @@ const meta = {
           Example:
           \`\`\`html
           <spectrum-search-input
+            placeholder="Search for documents..."
+            enableVoiceInput={false}
             @searchSubmit={(e) => {
               console.log('Search query:', e.detail);
             }}
@@ -52,7 +74,47 @@ export const Default: Story = {
     <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
       <spectrum-search-input
         .maxLines=${args.maxLines}
+        placeholder=${args.placeholder}
+        .enableVoiceInput=${args.enableVoiceInput}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+      ></spectrum-search-input>
+    </div>
+  `
+};
+
+// Custom Placeholder Example
+export const CustomPlaceholder: Story = {
+  args: {
+    placeholder: 'Search for documents...'
+  },
+  render: (args) => html`
+    <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
+      <spectrum-search-input
+        .maxLines=${args.maxLines}
+        placeholder=${args.placeholder}
+        .enableVoiceInput=${args.enableVoiceInput}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+      ></spectrum-search-input>
+    </div>
+  `
+};
+
+// Without Voice Input Example
+export const WithoutVoiceInput: Story = {
+  args: {
+    enableVoiceInput: false
+  },
+  render: (args) => html`
+    <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
+      <h3>Microphone button should not appear:</h3>
+      <spectrum-search-input
+        .maxLines=${args.maxLines}
+        placeholder=${args.placeholder}
+        .enableVoiceInput=${args.enableVoiceInput}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
     </div>
   `

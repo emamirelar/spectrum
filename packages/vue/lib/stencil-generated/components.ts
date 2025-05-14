@@ -117,6 +117,8 @@ export const SpectrumRailItem = /*@__PURE__*/ defineContainer<JSX.SpectrumRailIt
 
 export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchInput>('spectrum-search-input', undefined, [
   'maxLines',
+  'placeholder',
+  'enableVoiceInput',
   'searchSubmit',
   'searchInput'
 ]);
