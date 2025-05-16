@@ -1,6 +1,6 @@
-import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
+import { action } from '@storybook/addon-actions';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 // Define the type for context menu actions
@@ -13,44 +13,46 @@ interface ContextMenuAction {
 
 // Define the type for our component meta
 interface SpectrumContextMenuArgs {
-  actions: ContextMenuAction[];
+  actions: any[];
   targetKey: string;
   isOpen: boolean;
-  position: 'left' | 'right' | 'top' | 'bottom';
-  showTrigger: boolean;
+  position?: string;
 }
 
 // Define story meta
-const meta: Meta<SpectrumContextMenuArgs> = {
+const meta = {
   title: 'Components/SpectrumContextMenu',
-  argTypes: {
-    actions: { control: 'object' },
-    targetKey: { control: 'text' },
-    isOpen: { control: 'boolean' },
-    position: {
-      control: { type: 'select' },
-      options: ['left', 'right', 'top', 'bottom'],
-    },
-    showTrigger: { control: 'boolean' },
-  },
+  tags: ['autodocs'],
   args: {
     actions: [
-      { label: 'Edit', icon: 'edit', value: 'edit', ripple: true },
+      { label: 'Edit', icon: 'edit', value: 'edit' },
       { label: 'Delete', icon: 'delete', value: 'delete' },
-      { label: 'Duplicate', icon: 'content_copy', value: 'duplicate' },
-      { label: 'Share', icon: 'share', value: 'share' },
+      { label: 'Share', icon: 'share', value: 'share' }
     ],
-    targetKey: 'demo-item',
-    isOpen: false,
-    position: 'right',
-    showTrigger: true,
+    targetKey: 'item-1',
+    isOpen: true,
+    position: 'right'
   },
-  parameters: {
+  argTypes: {
     actions: {
-      handles: ['action-click', 'menu-close'],
+      control: 'object',
+      description: 'Array of action items to display in the menu'
     },
+    targetKey: {
+      control: 'text',
+      description: 'Key of the item that triggered the menu'
+    },
+    isOpen: {
+      control: 'boolean',
+      description: 'Whether the menu is currently open'
+    },
+    position: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the menu relative to the trigger'
+    }
   }
-};
+} satisfies Meta;
 
 export default meta;
 type Story = StoryObj<SpectrumContextMenuArgs>;
@@ -82,45 +84,27 @@ const setupEventListeners = (menuId: string) => {
 // Basic story with trigger
 export const Default: Story = {
   render: (args) => {
-    // This function handles showing the menu
-    const showMenu = () => {
-      // Get references to elements
-      const button = document.getElementById('trigger-button');
-      const menu = document.getElementById('context-menu');
-      
-      if (button && menu) {
-        // Set the trigger reference
-        (menu as any).setTriggerRef(button)
-          .then(() => {
-            // Open the menu
-            return (menu as any).open();
-          })
-          .catch((err: any) => {
-            console.error('Error opening menu:', err);
-          });
+    setTimeout(() => {
+      const menu = document.querySelector('spectrum-context-menu');
+      if (menu) {
+        menu.addEventListener('action-click', ((e: Event) => {
+          action('Action Clicked')((e as CustomEvent).detail);
+        }) as EventListener);
+        menu.addEventListener('menu-close', (() => {
+          action('Menu Closed')();
+        }) as EventListener);
       }
-    };
-    
-    // Setup event listeners
-    setTimeout(() => setupEventListeners('context-menu'), 100);
-    
+    }, 100);
+
     return html`
-      <div style="padding: 50px; position: relative; min-height: 200px;">
-        ${args.showTrigger ? html`
-          <spectrum-button 
-            id="trigger-button"
-            variant="primary"
-            buttonText="Show Context Menu"
-            @buttonAction=${showMenu}
-          ></spectrum-button>
-        ` : ''}
-        
+      <div style="padding: 2rem; background-color: #f0f0f0;">
         <spectrum-context-menu
-          id="context-menu"
           .actions=${args.actions}
           .targetKey=${args.targetKey}
           ?isOpen=${args.isOpen}
           position=${ifDefined(args.position)}
+          @action-click=${(e: CustomEvent) => action('Action Clicked')(e.detail)}
+          @menu-close=${() => action('Menu Closed')()}
         ></spectrum-context-menu>
       </div>
     `;
@@ -131,7 +115,6 @@ export const Default: Story = {
 export const PreviewOpen: Story = {
   args: {
     isOpen: true,
-    showTrigger: false,
   },
   render: (args) => {
     // Force position in preview mode
@@ -161,9 +144,7 @@ export const PreviewOpen: Story = {
 
 // Demonstration of usage with collapsible list
 export const WithCollapsibleList: Story = {
-  args: {
-    showTrigger: false,
-  },
+  args: {},
   render: (args) => {
     const listItems = [
       {
@@ -189,7 +170,6 @@ export const WithCollapsibleList: Story = {
     const handleContextAction = (e: CustomEvent) => {
       const { value, label } = e.detail;
       action('Context Action')({ action: value, item: label });
-      console.log('context-action event captured:', e.detail);
     };
     
     return html`
@@ -214,7 +194,6 @@ export const CustomActions: Story = {
       { label: 'Mark as Important', icon: 'star', value: 'mark-important' },
       { label: 'Report Issue', icon: 'flag', value: 'report' },
     ],
-    showTrigger: false,
     isOpen: true,
   },
   render: (args) => {
@@ -240,4 +219,4 @@ export const CustomActions: Story = {
       </div>
     `;
   }
-}; 
+};

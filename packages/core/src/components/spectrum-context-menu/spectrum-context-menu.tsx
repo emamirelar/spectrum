@@ -34,30 +34,16 @@ export interface ContextMenuAction {
 export class SpectrumContextMenu {
   @Element() el: HTMLElement;
 
-  /**
-   * Array of action objects to display in the menu
-   */
-  @Prop() actions: ContextMenuAction[] = [];
+  @State() isOpen: boolean = false;
+  @State() actions: any[] = [];
+  @State() x: number = 0;
+  @State() y: number = 0;
+  @State() targetKey: string = '';
 
   /**
    * The key identifying the target component that triggered this menu
    */
-  @Prop({ mutable: true }) targetKey: string = '';
-
-  /**
-   * Whether the menu is currently open
-   */
-  @Prop({ mutable: true }) isOpen: boolean = false;
-
-  /**
-   * Position of the menu relative to the trigger element
-   */
-  @Prop() position: 'left' | 'right' | 'top' | 'bottom' = 'right';
-
-  /**
-   * Reference to the element that triggered the menu
-   */
-  @State() triggerElement: HTMLElement | null = null;
+  @Prop({ mutable: true }) position: 'left' | 'right' | 'top' | 'bottom' = 'right';
 
   /**
    * Debug mode
@@ -84,29 +70,46 @@ export class SpectrumContextMenu {
     bubbles: true
   }) menuClose: EventEmitter<void>;
 
-  private log(message: string, data?: any) {
+  private log(_message: string, _data?: any) {
     if (this.debug) {
-      console.log(`[SpectrumContextMenu] ${message}`, data ? data : '');
+      // Debug logging disabled
     }
   }
 
-  /**
-   * Listen for clicks outside the menu to close it
-   */
-  @Listen('click', { target: 'window' })
-  handleWindowClick(event: MouseEvent) {
+  @Method()
+  async show(actions: any[], x: number, y: number, targetKey: string) {
+    this.actions = actions;
+    this.targetKey = targetKey;
+    this.x = x;
+    this.y = y;
+    this.isOpen = true;
+    this.el.dispatchEvent(new CustomEvent('menu-open', { detail: { targetKey } }));
+  }
+
+  @Method()
+  async hide() {
+    this.isOpen = false;
+  }
+
+  private handleActionClick(action: any) {
+    this.el.dispatchEvent(new CustomEvent('action-click', { 
+      detail: { value: action.value, targetKey: this.targetKey }
+    }));
+    this.hide();
+  }
+
+  private handleWindowClick = (event: MouseEvent) => {
     if (!this.isOpen) return;
-    
-    // Check if the click was inside the menu
-    const clickedInside = this.el.contains(event.target as Node);
-    
-    // Also check if the click was on the trigger element (which we want to ignore for closing)
-    const clickedOnTrigger = this.triggerElement && this.triggerElement.contains(event.target as Node);
-    
-    if (!clickedInside && !clickedOnTrigger) {
-      this.log('Click outside detected, closing menu');
-      this.close();
+    if (!this.el.shadowRoot.contains(event.target as Node)) {
+      this.hide();
     }
+  };
+
+  componentDidLoad() {
+    window.addEventListener('click', this.handleWindowClick);
+  }
+  disconnectedCallback() {
+    window.removeEventListener('click', this.handleWindowClick);
   }
 
   /**
@@ -119,61 +122,12 @@ export class SpectrumContextMenu {
     if (event.key === 'Escape') {
       this.log('Escape key pressed, closing menu');
       event.preventDefault();
-      this.close();
+      this.hide();
     } else if (event.key === 'Tab') {
       // Close the menu when tabbing out
       this.log('Tab key pressed, closing menu');
-      this.close();
+      this.hide();
     }
-  }
-
-  /**
-   * Set the trigger element reference
-   */
-  @Method()
-  async setTriggerRef(element: HTMLElement) {
-    this.triggerElement = element;
-    this.log('Trigger element set', element);
-    return true;
-  }
-
-  /**
-   * Open the menu
-   */
-  @Method()
-  async open() {
-    if (!this.triggerElement) {
-      this.log('Cannot open menu: No trigger element set');
-      return false;
-    }
-    
-    this.isOpen = true;
-    
-    // Position the menu relative to the trigger after a short delay
-    // to ensure the menu is rendered in the DOM
-    setTimeout(() => {
-      this.positionMenu();
-    }, 10);
-    
-    this.log('Menu opened');
-    return true;
-  }
-
-  /**
-   * Close the menu
-   */
-  @Method()
-  async close() {
-    if (!this.isOpen) return true;
-    
-    this.isOpen = false;
-    
-    // Emit the menu-close event
-    this.log('Emitting menu-close event');
-    const event = this.menuClose.emit();
-    this.log('Menu closed, event emitted:', { event });
-    
-    return true;
   }
 
   /**
@@ -223,111 +177,42 @@ export class SpectrumContextMenu {
     return true;
   }
 
-  /**
-   * Position the menu relative to the trigger element
-   */
-  private positionMenu() {
-    if (!this.triggerElement) {
-      this.log('Cannot position menu: No trigger element set');
-      return;
-    }
-    
-    const menuElement = this.el.shadowRoot?.querySelector('.spectrum-context-menu') as HTMLElement;
-    if (!menuElement) {
-      this.log('Cannot position menu: Menu element not found');
-      return;
-    }
-    
-    // Get the trigger element's position
-    const triggerRect = this.triggerElement.getBoundingClientRect();
-    
-    // Position based on the specified position prop
-    switch (this.position) {
-      case 'right':
-        this.positionAtCoordinates(triggerRect.right, triggerRect.top + triggerRect.height / 2);
-        break;
-      case 'left':
-        this.positionAtCoordinates(triggerRect.left - menuElement.offsetWidth, triggerRect.top + triggerRect.height / 2);
-        break;
-      case 'top':
-        this.positionAtCoordinates(triggerRect.left + triggerRect.width / 2, triggerRect.top - menuElement.offsetHeight / 2);
-        break;
-      case 'bottom':
-        this.positionAtCoordinates(triggerRect.left + triggerRect.width / 2, triggerRect.bottom + menuElement.offsetHeight / 2);
-        break;
-      default:
-        this.positionAtCoordinates(triggerRect.right, triggerRect.top + triggerRect.height / 2);
-    }
-  }
-
-  /**
-   * Handle click on a menu action
-   */
-  private handleActionClick(action: ContextMenuAction, event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    this.log('Action clicked, emitting event for action:', action);
-    
-    // Emit the action-click event with the action value and target key
-    const eventData = {
-      value: action.value,
-      targetKey: this.targetKey
-    };
-    
-    const emitted = this.actionClick.emit(eventData);
-    
-    this.log('Action event emitted:', { emitted, eventData });
-    
-    // Close the menu after clicking an action
-    this.close();
-  }
-  
-  /**
-   * Render an action item
-   */
-  private renderActionItem(action: ContextMenuAction, index: number) {
-    return (
-      <li 
-        class="spectrum-context-menu__item" 
-        onClick={(e) => this.handleActionClick(action, e)}
-        role="menuitem"
-        tabindex="0"
-        key={`action-${index}-${action.value}`}
-        data-value={action.value}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.handleActionClick(action, e as unknown as MouseEvent);
-          }
-        }}
-      >
-        <span class="spectrum-context-menu__icon material-symbols-outlined">
-          {action.icon}
-        </span>
-        <span class="spectrum-context-menu__label">
-          {action.label}
-        </span>
-        {action.ripple && (
-          <span class="spectrum-context-menu__ripple" />
-        )}
-      </li>
-    );
-  }
-
   render() {
     this.log('Rendering context menu', { isOpen: this.isOpen, actions: this.actions });
     
     return (
       <Host>
         {this.isOpen && (
-          <div 
+          <div
             class="spectrum-context-menu"
+            style={{
+              position: 'fixed',
+              left: `${this.x}px`,
+              top: `${this.y}px`,
+              zIndex: '9999',
+            }}
             role="menu"
             aria-orientation="vertical"
           >
             <ul class="spectrum-context-menu__list">
-              {this.actions.map((action, index) => this.renderActionItem(action, index))}
+              {this.actions.map((action) => (
+                <li
+                  class="spectrum-context-menu__item"
+                  onClick={() => this.handleActionClick(action)}
+                  role="menuitem"
+                  tabindex="0"
+                  key={`action-${action.value}`}
+                  data-value={action.value}
+                >
+                  <span class="spectrum-context-menu__icon material-symbols-outlined">
+                    {action.icon}
+                  </span>
+                  <span class="spectrum-context-menu__label">
+                    {action.label}
+                  </span>
+                  {action.ripple && <span class="spectrum-context-menu__ripple" />}
+                </li>
+              ))}
             </ul>
           </div>
         )}

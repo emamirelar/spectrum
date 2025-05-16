@@ -1,9 +1,4 @@
 import { Component, h, Host, Prop, State, Element, Watch } from '@stencil/core';
-import {
-  argbFromRgb,
-  themeFromSourceColor,
-  hexFromArgb,
-} from '@material/material-color-utilities';
 
 @Component({
   tag: 'spectrum-wallpaper',
@@ -37,7 +32,6 @@ export class SpectrumWallpaper {
   @Prop({ attribute: 'backgroundsize' }) backgroundsize: string = 'cover';
 
   componentWillLoad() {
-    console.log('[SpectrumWallpaper] Component will load, background:', this.background);
     if (this.background) {
       this.extractDominantColor();
     }
@@ -45,81 +39,70 @@ export class SpectrumWallpaper {
 
   @Watch('background')
   async extractDominantColor() {
-    console.log('[SpectrumWallpaper] Extracting dominant color for background:', this.background);
     if (!this.background) return;
 
     // If we already have a loading promise, wait for it to complete
     if (this.imageLoadPromise) {
       await this.imageLoadPromise;
-      return;
     }
 
-    if (this.background.startsWith('url(')) {
-      // Handle image URL
+    // Start new loading process
+    this.imageLoadPromise = new Promise<void>((resolve) => {
       const img = new Image();
-      img.crossOrigin = 'Anonymous';
+      img.crossOrigin = 'anonymous';
       
-      // Create a promise to handle the image load
-      this.imageLoadPromise = new Promise((resolve) => {
-        img.onload = async () => {
-          try {
-            console.log('[SpectrumWallpaper] Image loaded successfully');
-            const color = await this.extractColorFromImage(img);
-            console.log('[SpectrumWallpaper] Extracted color:', color);
-            this.dominantColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-            this.generateTheme(color[0], color[1], color[2]);
-            resolve();
-          } catch (error) {
-            console.error('[SpectrumWallpaper] Error extracting color:', error);
-            this.extractColorFromBackground();
-            resolve();
-          }
-        };
+      img.onload = () => {
+        const color = this.extractColorFromImage(img);
+        this.updateTheme(color);
+        resolve();
+      };
 
-        img.onerror = (error) => {
-          console.error('[SpectrumWallpaper] Error loading image:', error);
-          this.extractColorFromBackground();
-          resolve();
-        };
-      });
+      img.onerror = () => {
+        // If image fails to load, try to extract color from background string
+        const color = this.extractColorFromBackground(this.background);
+        this.updateTheme(color);
+        resolve();
+      };
 
-      try {
-        // Set the source and wait for it to load
-        img.src = this.background.slice(4, -1); // Remove 'url(' and ')'
-        console.log('[SpectrumWallpaper] Waiting for image to load...');
-        await this.imageLoadPromise;
-      } catch (error) {
-        console.error('[SpectrumWallpaper] Error in image loading process:', error);
-        this.extractColorFromBackground();
-      } finally {
-        this.imageLoadPromise = null;
-      }
-    } else {
-      // Handle color or gradient
-      this.extractColorFromBackground();
-    }
+      img.src = this.background;
+    });
+
+    await this.imageLoadPromise;
   }
 
-  private async extractColorFromImage(img: HTMLImageElement): Promise<[number, number, number]> {
-    // Create a canvas to analyze the image
+  private extractColorFromImage(img: HTMLImageElement): string {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('Could not get canvas context');
+    if (!ctx) return '#000000';
 
-    // Set canvas size to a reasonable size for analysis
-    const maxSize = 100;
-    const scale = Math.min(maxSize / img.width, maxSize / img.height);
-    canvas.width = img.width * scale;
-    canvas.height = img.height * scale;
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
 
-    // Draw the image
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    // Get image data
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
+    const color = this.getAverageColor(imageData);
+    return color;
+  }
 
-    // Calculate average color
+  private extractColorFromBackground(background: string): string {
+    // Try to extract color from gradient
+    const gradientMatch = background.match(/linear-gradient\([^)]+\)/);
+    if (gradientMatch) {
+      return this.extractColorFromGradient(gradientMatch[0]);
+    }
+
+    // Try to use as solid color
+    return this.background;
+  }
+
+  private extractColorFromGradient(gradient: string): string {
+    // Extract first color from gradient
+    const colorMatch = gradient.match(/#[0-9a-fA-F]{6}/);
+    return colorMatch ? colorMatch[0] : '#000000';
+  }
+
+  private getAverageColor(imageData: ImageData): string {
+    const data = imageData.data;
     let r = 0, g = 0, b = 0;
     const pixelCount = data.length / 4;
 
@@ -129,114 +112,102 @@ export class SpectrumWallpaper {
       b += data[i + 2];
     }
 
-    return [
-      Math.round(r / pixelCount),
-      Math.round(g / pixelCount),
-      Math.round(b / pixelCount)
-    ];
+    r = Math.round(r / pixelCount);
+    g = Math.round(g / pixelCount);
+    b = Math.round(b / pixelCount);
+
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   }
 
-  private extractColorFromBackground() {
-    console.log('[SpectrumWallpaper] Extracting color from background:', this.background);
-    if (!this.background) return;
-
-    // Handle different background formats
-    if (this.background.startsWith('linear-gradient')) {
-      // For gradients, extract the first color
-      const match = this.background.match(/rgba?\([^)]+\)|#[a-f\d]{3,8}/gi);
-      if (match && match.length > 0) {
-        console.log('[SpectrumWallpaper] Extracted color from gradient:', match[0]);
-        this.dominantColor = match[0];
-        this.generateThemeFromCssColor(this.dominantColor);
-      }
-    } else {
-      // For solid colors
-      console.log('[SpectrumWallpaper] Using solid color:', this.background);
-      this.dominantColor = this.background;
-      this.generateThemeFromCssColor(this.background);
-    }
+  private updateTheme(color: string) {
+    const theme = this.generateThemeFromColor(color);
+    this.applyTheme(theme);
   }
 
-  private generateThemeFromCssColor(cssColor: string) {
-    console.log('[SpectrumWallpaper] Generating theme from CSS color:', cssColor);
-    // Handle different color formats
-    if (cssColor.startsWith('#')) {
-      // Convert hex to RGB
-      const r = parseInt(cssColor.slice(1, 3), 16);
-      const g = parseInt(cssColor.slice(3, 5), 16);
-      const b = parseInt(cssColor.slice(5, 7), 16);
-      console.log('[SpectrumWallpaper] Converted hex to RGB:', { r, g, b });
-      this.generateTheme(r, g, b);
-    } else if (cssColor.startsWith('rgb')) {
-      // Extract RGB values
-      const match = cssColor.match(/\d+/g);
-      if (match && match.length >= 3) {
-        const [r, g, b] = match.map(Number);
-        console.log('[SpectrumWallpaper] Extracted RGB values:', { r, g, b });
-        this.generateTheme(r, g, b);
-      }
-    }
-  }
+  private generateThemeFromColor(color: string): any {
+    // Convert hex to RGB
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
 
-  private generateTheme(r: number, g: number, b: number) {
-    console.log('[SpectrumWallpaper] Generating theme from RGB:', { r, g, b });
-    // Convert RGB to ARGB (Android RGB)
-    const argb = argbFromRgb(r, g, b);
-    console.log('[SpectrumWallpaper] Converted to ARGB:', argb);
-    
-    // Generate theme from source color
-    const theme = themeFromSourceColor(argb);
-    console.log('[SpectrumWallpaper] Generated theme:', theme);
+    // Convert to ARGB for Material theme
+    const argb = (255 << 24) | (r << 16) | (g << 8) | b;
 
-    // Convert theme colors to CSS custom properties
-    const customProperties = {
-      '--spectrum-color-primary': hexFromArgb(theme.schemes.light.primary),
-      '--spectrum-color-on-primary': hexFromArgb(theme.schemes.light.onPrimary),
-      '--spectrum-color-primary-container': hexFromArgb(theme.schemes.light.primaryContainer),
-      '--spectrum-color-on-primary-container': hexFromArgb(theme.schemes.light.onPrimaryContainer),
-      '--spectrum-color-secondary': hexFromArgb(theme.schemes.light.secondary),
-      '--spectrum-color-on-secondary': hexFromArgb(theme.schemes.light.onSecondary),
-      '--spectrum-color-secondary-container': hexFromArgb(theme.schemes.light.secondaryContainer),
-      '--spectrum-color-on-secondary-container': hexFromArgb(theme.schemes.light.onSecondaryContainer),
-      '--spectrum-color-tertiary': hexFromArgb(theme.schemes.light.tertiary),
-      '--spectrum-color-on-tertiary': hexFromArgb(theme.schemes.light.onTertiary),
-      '--spectrum-color-tertiary-container': hexFromArgb(theme.schemes.light.tertiaryContainer),
-      '--spectrum-color-on-tertiary-container': hexFromArgb(theme.schemes.light.onTertiaryContainer),
-      '--spectrum-color-error': hexFromArgb(theme.schemes.light.error),
-      '--spectrum-color-on-error': hexFromArgb(theme.schemes.light.onError),
-      '--spectrum-color-error-container': hexFromArgb(theme.schemes.light.errorContainer),
-      '--spectrum-color-on-error-container': hexFromArgb(theme.schemes.light.onErrorContainer),
-      '--spectrum-color-background': hexFromArgb(theme.schemes.light.background),
-      '--spectrum-color-on-background': hexFromArgb(theme.schemes.light.onBackground),
-      '--spectrum-color-surface': hexFromArgb(theme.schemes.light.surface),
-      '--spectrum-color-on-surface': hexFromArgb(theme.schemes.light.onSurface),
-      '--spectrum-color-surface-variant': hexFromArgb(theme.schemes.light.surfaceVariant),
-      '--spectrum-color-on-surface-variant': hexFromArgb(theme.schemes.light.onSurfaceVariant),
-      '--spectrum-color-outline': hexFromArgb(theme.schemes.light.outline),
-      '--spectrum-color-outline-variant': hexFromArgb(theme.schemes.light.outlineVariant),
-      '--spectrum-color-shadow': hexFromArgb(theme.schemes.light.shadow),
-      '--spectrum-color-scrim': hexFromArgb(theme.schemes.light.scrim),
-      '--spectrum-color-inverse-surface': hexFromArgb(theme.schemes.light.inverseSurface),
-      '--spectrum-color-inverse-on-surface': hexFromArgb(theme.schemes.light.inverseOnSurface),
-      '--spectrum-color-inverse-primary': hexFromArgb(theme.schemes.light.inversePrimary),
+    // Generate theme
+    return {
+      primary: argb,
+      onPrimary: 0xFFFFFFFF,
+      primaryContainer: argb,
+      onPrimaryContainer: 0xFFFFFFFF,
+      secondary: argb,
+      onSecondary: 0xFFFFFFFF,
+      secondaryContainer: argb,
+      onSecondaryContainer: 0xFFFFFFFF,
+      tertiary: argb,
+      onTertiary: 0xFFFFFFFF,
+      tertiaryContainer: argb,
+      onTertiaryContainer: 0xFFFFFFFF,
+      error: 0xFFB32620,
+      onError: 0xFFFFFFFF,
+      errorContainer: 0xFFF2B8B5,
+      onErrorContainer: 0xFF410E0B,
+      background: 0xFFFFFBFE,
+      onBackground: 0xFF1C1B1F,
+      surface: 0xFFFFFBFE,
+      onSurface: 0xFF1C1B1F,
+      surfaceVariant: 0xFFE7E0EC,
+      onSurfaceVariant: 0xFF49454F,
+      outline: 0xFF79747E,
+      outlineVariant: 0xFFCAC4D0,
+      shadow: 0xFF000000,
+      scrim: 0xFF000000,
+      inverseSurface: 0xFF313033,
+      inverseOnSurface: 0xFFF4EFF4,
+      inversePrimary: argb,
+      surfaceTint: argb,
     };
+  }
 
-    console.log('[SpectrumWallpaper] Generated custom properties:', customProperties);
-
-    // Apply custom properties to the host element instead of document root
+  private applyTheme(theme: any) {
+    const customProperties = this.generateCustomProperties(theme);
     Object.entries(customProperties).forEach(([property, value]) => {
-      console.log(`[SpectrumWallpaper] Setting CSS property: ${property} = ${value}`);
       this.hostElement.style.setProperty(property, value);
     });
+  }
 
-    // Log the current computed styles to verify the theme was applied
-    const computedStyles = getComputedStyle(this.hostElement);
-    console.log('[SpectrumWallpaper] Current theme values:', {
-      primary: computedStyles.getPropertyValue('--spectrum-color-primary'),
-      onPrimary: computedStyles.getPropertyValue('--spectrum-color-on-primary'),
-      background: computedStyles.getPropertyValue('--spectrum-color-background'),
-      onBackground: computedStyles.getPropertyValue('--spectrum-color-on-background'),
-    });
+  private generateCustomProperties(theme: any): Record<string, string> {
+    return {
+      '--md-sys-color-primary': `#${theme.primary.toString(16).slice(2)}`,
+      '--md-sys-color-on-primary': `#${theme.onPrimary.toString(16).slice(2)}`,
+      '--md-sys-color-primary-container': `#${theme.primaryContainer.toString(16).slice(2)}`,
+      '--md-sys-color-on-primary-container': `#${theme.onPrimaryContainer.toString(16).slice(2)}`,
+      '--md-sys-color-secondary': `#${theme.secondary.toString(16).slice(2)}`,
+      '--md-sys-color-on-secondary': `#${theme.onSecondary.toString(16).slice(2)}`,
+      '--md-sys-color-secondary-container': `#${theme.secondaryContainer.toString(16).slice(2)}`,
+      '--md-sys-color-on-secondary-container': `#${theme.onSecondaryContainer.toString(16).slice(2)}`,
+      '--md-sys-color-tertiary': `#${theme.tertiary.toString(16).slice(2)}`,
+      '--md-sys-color-on-tertiary': `#${theme.onTertiary.toString(16).slice(2)}`,
+      '--md-sys-color-tertiary-container': `#${theme.tertiaryContainer.toString(16).slice(2)}`,
+      '--md-sys-color-on-tertiary-container': `#${theme.onTertiaryContainer.toString(16).slice(2)}`,
+      '--md-sys-color-error': `#${theme.error.toString(16).slice(2)}`,
+      '--md-sys-color-on-error': `#${theme.onError.toString(16).slice(2)}`,
+      '--md-sys-color-error-container': `#${theme.errorContainer.toString(16).slice(2)}`,
+      '--md-sys-color-on-error-container': `#${theme.onErrorContainer.toString(16).slice(2)}`,
+      '--md-sys-color-background': `#${theme.background.toString(16).slice(2)}`,
+      '--md-sys-color-on-background': `#${theme.onBackground.toString(16).slice(2)}`,
+      '--md-sys-color-surface': `#${theme.surface.toString(16).slice(2)}`,
+      '--md-sys-color-on-surface': `#${theme.onSurface.toString(16).slice(2)}`,
+      '--md-sys-color-surface-variant': `#${theme.surfaceVariant.toString(16).slice(2)}`,
+      '--md-sys-color-on-surface-variant': `#${theme.onSurfaceVariant.toString(16).slice(2)}`,
+      '--md-sys-color-outline': `#${theme.outline.toString(16).slice(2)}`,
+      '--md-sys-color-outline-variant': `#${theme.outlineVariant.toString(16).slice(2)}`,
+      '--md-sys-color-shadow': `#${theme.shadow.toString(16).slice(2)}`,
+      '--md-sys-color-scrim': `#${theme.scrim.toString(16).slice(2)}`,
+      '--md-sys-color-inverse-surface': `#${theme.inverseSurface.toString(16).slice(2)}`,
+      '--md-sys-color-inverse-on-surface': `#${theme.inverseOnSurface.toString(16).slice(2)}`,
+      '--md-sys-color-inverse-primary': `#${theme.inversePrimary.toString(16).slice(2)}`,
+      '--md-sys-color-surface-tint': `#${theme.surfaceTint.toString(16).slice(2)}`,
+    };
   }
 
   // Copy the variable to the clipboard

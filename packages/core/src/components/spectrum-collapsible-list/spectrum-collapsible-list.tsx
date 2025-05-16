@@ -1,4 +1,4 @@
-import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment, Listen, Element } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment, Element } from '@stencil/core';
 import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
 
 /**
@@ -10,6 +10,7 @@ export interface CollapsibleListItem {
   action?: string;
   expanded?: boolean;
   children?: CollapsibleListItem[];
+  contextActions?: ContextMenuAction[]; // Optional per-parent context actions
 }
 
 @Component({
@@ -34,6 +35,12 @@ export class SpectrumCollapsibleList {
   @Prop() contextActions: ContextMenuAction[] = [];
 
   /**
+   * Controls whether expanding one parent collapses other parents at the same level
+   * Default is true (mutually exclusive expansion)
+   */
+  @Prop() mutuallyExclusive: boolean = true;
+
+  /**
    * Internal state for expanded nodes (by label path)
    */
   @State() expandedMap: { [key: string]: boolean } = {};
@@ -42,11 +49,6 @@ export class SpectrumCollapsibleList {
    * Original items before filtering
    */
   @State() originalItems: CollapsibleListItem[] = [];
-
-  /**
-   * Currently open context menu key
-   */
-  @State() openContextMenuKey?: string;
 
   /**
    * Host element reference
@@ -73,41 +75,6 @@ export class SpectrumCollapsibleList {
    */
   @Event({ eventName: 'context-action' }) contextAction: EventEmitter<{ value: string; label: string }>; // eslint-disable-line
 
-  // Reference to the single context menu instance
-  private contextMenuRef: HTMLSpectrumContextMenuElement | null = null;
-  
-  // Store references to context menu trigger icons by key
-  private contextMenuIconRefs: { [key: string]: HTMLElement | null } = {};
-  
-  // Generic trigger references for list items
-  private triggerRefs: { [key: string]: HTMLElement | null } = {};
-
-  /**
-   * Listen for context menu action clicks
-   */
-  @Listen('action-click')
-  handleActionClick(event: CustomEvent<{ value: string; targetKey: string }>) {
-    // Extract the item from the targetKey
-    const targetKey = event.detail.targetKey;
-    const itemPath = targetKey.split(' > ');
-    const itemLabel = itemPath[itemPath.length - 1];
-    
-    this.contextAction.emit({ 
-      value: event.detail.value, 
-      label: itemLabel 
-    });
-    
-    this.openContextMenuKey = undefined;
-  }
-
-  /**
-   * Listen for context menu close events
-   */
-  @Listen('menu-close')
-  handleMenuClose() {
-    this.openContextMenuKey = undefined;
-  }
-
   componentDidLoad() {
     // No need to store the host element anymore
   }
@@ -125,27 +92,6 @@ export class SpectrumCollapsibleList {
   }
 
   /**
-   * Set reference to the context menu component
-   */
-  private setContextMenuRef = (el: HTMLSpectrumContextMenuElement | null) => {
-    this.contextMenuRef = el;
-  };
-
-  /**
-   * Set reference to a context menu icon for a specific item key
-   */
-  private setContextMenuIconRef = (key: string) => (el: HTMLElement | null) => {
-    this.contextMenuIconRefs[key] = el;
-  };
-
-  /**
-   * Set reference to a list item row
-   */
-  private setTriggerRef = (key: string) => (el: HTMLElement | null) => {
-    this.triggerRefs[key] = el;
-  };
-
-  /**
    * Get a unique key for a node based on its path
    */
   private getNodeKey(item: CollapsibleListItem, parentKey: string) {
@@ -157,20 +103,28 @@ export class SpectrumCollapsibleList {
    */
   private handleParentClick(item: CollapsibleListItem, key: string, parentKey = '') {
     const isExpanded = this.expandedMap[key] ?? !!item.expanded;
+    
     if (!isExpanded) {
-      // Collapse all siblings at this level
+      // Create a new map to avoid direct mutation
       const newMap = { ...this.expandedMap };
-      const siblingPrefix = parentKey ? parentKey + ' > ' : '';
-      Object.keys(newMap).forEach(k => {
-        // Only collapse direct siblings (not grandchildren)
-        if (k.startsWith(siblingPrefix) && k.split(' > ').length === key.split(' > ').length) {
-          newMap[k] = false;
-        }
-      });
+      
+      // If mutually exclusive, collapse siblings at this level
+      if (this.mutuallyExclusive) {
+        const siblingPrefix = parentKey ? parentKey + ' > ' : '';
+        Object.keys(newMap).forEach(k => {
+          // Only collapse direct siblings (not descendants)
+          if (k.startsWith(siblingPrefix) && k.split(' > ').length === key.split(' > ').length) {
+            newMap[k] = false;
+          }
+        });
+      }
+      
+      // Expand the clicked item
       newMap[key] = true;
       this.expandedMap = newMap;
       this.expandAction.emit({ label: item.label });
     } else {
+      // Just collapse this item
       this.expandedMap = { ...this.expandedMap, [key]: false };
       this.contractAction.emit({ label: item.label });
     }
@@ -188,89 +142,46 @@ export class SpectrumCollapsibleList {
   /**
    * Handle click on the context menu icon
    */
-  private handleActionsIconClick(e: Event, key: string) {
+  private handleActionsIconClick(e: MouseEvent, key: string, actions?: ContextMenuAction[]) {
     e.stopPropagation();
     e.preventDefault();
-    
-    // If the same menu is already open, close it
-    if (this.openContextMenuKey === key) {
-      this.contextMenuRef?.close();
-      this.openContextMenuKey = undefined;
+    const iconElement = e.currentTarget as HTMLElement;
+    if (!iconElement) {
+      console.warn('Missing icon element for key:', key);
       return;
     }
-    
-    // Close any open menu
-    if (this.openContextMenuKey && this.contextMenuRef) {
-      this.contextMenuRef.close();
-    }
-    
-    // Get the icon element for this item
-    const iconElement = this.contextMenuIconRefs[key];
-    if (!iconElement || !this.contextMenuRef) {
-      console.warn('Missing icon element or context menu for key:', key);
-      return;
-    }
-    
+
     // Get the icon position
     const iconRect = iconElement.getBoundingClientRect();
-    
-    // Calculate the menu position - to the right of the icon, centered vertically
-    const menuX = iconRect.right;
-    const menuY = iconRect.top + (iconRect.height / 2);
-    
-    // Set the target key for the context menu
-    this.contextMenuRef.targetKey = key;
-    
-    console.log(`Opening context menu for key ${key} at position:`, { 
-      x: menuX, 
-      y: menuY, 
-      iconRect: {
-        left: Math.round(iconRect.left),
-        top: Math.round(iconRect.top),
-        right: Math.round(iconRect.right),
-        bottom: Math.round(iconRect.bottom),
-        width: Math.round(iconRect.width),
-        height: Math.round(iconRect.height)
-      }
-    });
-    
-    // First set the trigger reference
-    this.contextMenuRef.setTriggerRef(iconElement)
-      .then(() => {
-        // Open the menu (this renders the menu element)
-        return this.contextMenuRef?.open();
-      })
-      .then(() => {
-        // Position directly using coordinates after a short delay to ensure the menu is rendered
-        setTimeout(() => {
-          this.contextMenuRef?.positionAtCoordinates(menuX, menuY)
-            .then(() => {
-              this.openContextMenuKey = key;
-            })
-            .catch(err => {
-              console.error('Error positioning menu at coordinates:', err);
-            });
-        }, 10);
-      })
-      .catch(err => {
-        console.error('Error opening context menu:', err);
-      });
+
+    // Create or get the global context menu
+    let menu = document.querySelector('spectrum-context-menu') as any;
+    if (!menu) {
+      menu = document.createElement('spectrum-context-menu');
+      document.body.appendChild(menu);
+    }
+
+    if (typeof menu['show'] === 'function') {
+      menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, key);
+    } else {
+      console.warn('Global context menu exists but show method is not available');
+    }
   }
 
   /**
    * Render an icon with Material Symbols
    */
-  private renderIcon(icon: string, outlined = false) {
-    // Use Material Symbols Outlined, outlined if requested
+  private renderIcon(icon: string, isChild = false, outlined = false) {
+    // Use Material Symbols Outlined, outlined if requested or if it's a child node
     return (
       <span
         class={{
           'spectrum-collapsible-list__icon': true,
           'material-symbols-outlined': true,
-          'spectrum-collapsible-list__icon--outlined': outlined,
+          'spectrum-collapsible-list__icon--outlined': isChild || outlined,
         }}
         style={{
-          fontVariationSettings: outlined
+          fontVariationSettings: (isChild || outlined)
             ? '"FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24'
             : '"FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24',
         }}
@@ -320,7 +231,7 @@ export class SpectrumCollapsibleList {
   /**
    * Render a list of items with proper hierarchy
    */
-  private renderItems(items: CollapsibleListItem[], parentKey = '') {
+  private renderItems(items: CollapsibleListItem[], parentKey = '', parentContextActions?: ContextMenuAction[]) {
     const filteredItems = this.filterItems(items, this.filter);
     
     return filteredItems.map(item => {
@@ -328,15 +239,16 @@ export class SpectrumCollapsibleList {
       const isParent = Array.isArray(item.children);
       const isExpanded = this.expandedMap[key] ?? !!item.expanded;
       const contextIconId = `context-icon-${key.replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`;
+      // Determine context actions for this branch
+      const currentContextActions = item.contextActions || parentContextActions || this.contextActions;
 
       return (
         <li class={`spectrum-collapsible-list__item ${isParent ? 'spectrum-collapsible-list__item--parent' : ''} ${isExpanded ? 'spectrum-collapsible-list__item--expanded' : ''}`}>
           <div 
             class="spectrum-collapsible-list__row"
             onClick={() => isParent ? this.handleParentClick(item, key, parentKey) : this.handleChildClick(item)}
-            ref={this.setTriggerRef(key)}
           >
-            {this.renderIcon(item.icon)}
+            {this.renderIcon(item.icon, !isParent)}
             <span class="spectrum-collapsible-list__label">{item.label}</span>
             {isParent && (
               <>
@@ -346,11 +258,10 @@ export class SpectrumCollapsibleList {
                 </span>
               </>
             )}
-            {!isParent && this.contextActions?.length > 0 && (
+            {!isParent && currentContextActions?.length > 0 && (
               <span 
                 class="spectrum-collapsible-list__icon spectrum-collapsible-list__icon--outlined spectrum-collapsible-list__context-icon"
-                onClick={(e) => this.handleActionsIconClick(e, key)}
-                ref={this.setContextMenuIconRef(key)}
+                onClick={(e) => this.handleActionsIconClick(e, key, currentContextActions)}
                 id={contextIconId}
               >
                 more_vert
@@ -359,7 +270,10 @@ export class SpectrumCollapsibleList {
           </div>
           {isParent && isExpanded && item.children && (
             <div class="spectrum-collapsible-list__children">
-              {this.renderItems(item.children, key)}
+              {this.renderItems(item.children.map(child => ({
+                ...child,
+                icon: child.icon || item.icon // Inherit parent's icon if child doesn't have one
+              })), key, item.contextActions || parentContextActions)}
             </div>
           )}
         </li>
@@ -373,17 +287,7 @@ export class SpectrumCollapsibleList {
         <ul class="spectrum-collapsible-list__list">
           {this.renderItems(this.originalItems)}
         </ul>
-        
-        {/* Single reusable context menu for all items */}
-        {this.contextActions?.length > 0 && (
-          <spectrum-context-menu
-            ref={this.setContextMenuRef}
-            actions={this.contextActions}
-            targetKey=""
-            isOpen={false}
-            position="right"
-          ></spectrum-context-menu>
-        )}
+        {/* No context menu rendered here; singleton is used globally */}
       </Host>
     );
   }

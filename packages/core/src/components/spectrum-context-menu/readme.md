@@ -12,12 +12,9 @@ A popup menu for contextual actions that can be attached to any element.
 
 ## Properties
 
-| Property    | Attribute    | Description                                                       | Type                                     | Default   |
-| ----------- | ------------ | ----------------------------------------------------------------- | ---------------------------------------- | --------- |
-| `actions`   | --           | Array of action objects to display in the menu                    | `ContextMenuAction[]`                    | `[]`      |
-| `isOpen`    | `is-open`    | Whether the menu is currently open                                | `boolean`                                | `false`   |
-| `position`  | `position`   | Position of the menu relative to the trigger element              | `"bottom" \| "left" \| "right" \| "top"` | `'right'` |
-| `targetKey` | `target-key` | The key identifying the target component that triggered this menu | `string`                                 | `''`      |
+| Property   | Attribute  | Description                                                       | Type                                     | Default   |
+| ---------- | ---------- | ----------------------------------------------------------------- | ---------------------------------------- | --------- |
+| `position` | `position` | The key identifying the target component that triggered this menu | `"bottom" \| "left" \| "right" \| "top"` | `'right'` |
 
 
 ## Events
@@ -30,23 +27,13 @@ A popup menu for contextual actions that can be attached to any element.
 
 ## Methods
 
-### `close() => Promise<boolean>`
+### `hide() => Promise<void>`
 
-Close the menu
+
 
 #### Returns
 
-Type: `Promise<boolean>`
-
-
-
-### `open() => Promise<boolean>`
-
-Open the menu
-
-#### Returns
-
-Type: `Promise<boolean>`
+Type: `Promise<void>`
 
 
 
@@ -67,19 +54,22 @@ Type: `Promise<boolean>`
 
 
 
-### `setTriggerRef(element: HTMLElement) => Promise<boolean>`
+### `show(actions: any[], x: number, y: number, targetKey: string) => Promise<void>`
 
-Set the trigger element reference
+
 
 #### Parameters
 
-| Name      | Type          | Description |
-| --------- | ------------- | ----------- |
-| `element` | `HTMLElement` |             |
+| Name        | Type     | Description |
+| ----------- | -------- | ----------- |
+| `actions`   | `any[]`  |             |
+| `x`         | `number` |             |
+| `y`         | `number` |             |
+| `targetKey` | `string` |             |
 
 #### Returns
 
-Type: `Promise<boolean>`
+Type: `Promise<void>`
 
 
 

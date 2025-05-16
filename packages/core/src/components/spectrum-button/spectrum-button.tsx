@@ -62,9 +62,9 @@ export class SpectrumButton {
   }
 
   // ============== Debug Helpers ==============
-  private log(message: string, data?: any) {
+  private log(_message: string, _data?: any) {
     if (this.debug) {
-      console.log(`[SpectrumButton] ${message}`, data ? data : '');
+      // Debug logging disabled
     }
   }
 

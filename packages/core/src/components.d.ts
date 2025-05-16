@@ -7,10 +7,8 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
-import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
-export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 export namespace Components {
     /**
      * Spectrum Button Component
@@ -91,44 +89,26 @@ export namespace Components {
           * The nested data structure for the list
          */
         "items": CollapsibleListItem[];
+        /**
+          * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
+         */
+        "mutuallyExclusive": boolean;
     }
     /**
      * Spectrum Context Menu Component
      * A popup menu for contextual actions that can be attached to any element.
      */
     interface SpectrumContextMenu {
+        "hide": () => Promise<void>;
         /**
-          * Array of action objects to display in the menu
-         */
-        "actions": ContextMenuAction1[];
-        /**
-          * Close the menu
-         */
-        "close": () => Promise<boolean>;
-        /**
-          * Whether the menu is currently open
-         */
-        "isOpen": boolean;
-        /**
-          * Open the menu
-         */
-        "open": () => Promise<boolean>;
-        /**
-          * Position of the menu relative to the trigger element
+          * The key identifying the target component that triggered this menu
          */
         "position": 'left' | 'right' | 'top' | 'bottom';
         /**
           * Position the menu at specific coordinates
          */
         "positionAtCoordinates": (x: number, y: number) => Promise<boolean>;
-        /**
-          * Set the trigger element reference
-         */
-        "setTriggerRef": (element: HTMLElement) => Promise<boolean>;
-        /**
-          * The key identifying the target component that triggered this menu
-         */
-        "targetKey": string;
+        "show": (actions: any[], x: number, y: number, targetKey: string) => Promise<void>;
     }
     interface SpectrumConversationPanel {
         /**
@@ -598,6 +578,10 @@ declare namespace LocalJSX {
          */
         "items"?: CollapsibleListItem[];
         /**
+          * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
+         */
+        "mutuallyExclusive"?: boolean;
+        /**
           * Event emitted when a child node is clicked
          */
         "onChild-action"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; }>) => void;
@@ -620,14 +604,6 @@ declare namespace LocalJSX {
      */
     interface SpectrumContextMenu {
         /**
-          * Array of action objects to display in the menu
-         */
-        "actions"?: ContextMenuAction1[];
-        /**
-          * Whether the menu is currently open
-         */
-        "isOpen"?: boolean;
-        /**
           * Event emitted when an action is clicked
          */
         "onAction-click"?: (event: SpectrumContextMenuCustomEvent<{ value: string; targetKey: string }>) => void;
@@ -636,13 +612,9 @@ declare namespace LocalJSX {
          */
         "onMenu-close"?: (event: SpectrumContextMenuCustomEvent<void>) => void;
         /**
-          * Position of the menu relative to the trigger element
-         */
-        "position"?: 'left' | 'right' | 'top' | 'bottom';
-        /**
           * The key identifying the target component that triggered this menu
          */
-        "targetKey"?: string;
+        "position"?: 'left' | 'right' | 'top' | 'bottom';
     }
     interface SpectrumConversationPanel {
         /**

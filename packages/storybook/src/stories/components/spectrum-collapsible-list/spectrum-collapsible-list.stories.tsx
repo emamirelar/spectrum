@@ -25,6 +25,7 @@ interface SpectrumCollapsibleListArgs {
   items: CollapsibleListItem[];
   contextActions?: ContextAction[];
   filter?: string;
+  mutuallyExclusive?: boolean;
 }
 
 const meta = {
@@ -60,7 +61,8 @@ const meta = {
           }
         ]
       }
-    ]
+    ],
+    mutuallyExclusive: true
   },
   argTypes: {
     items: {
@@ -102,6 +104,11 @@ const meta = {
     filter: {
       control: 'text',
       description: 'Filter the list based on a keyword'
+    },
+    mutuallyExclusive: {
+      control: 'boolean',
+      description: 'Controls whether expanding one parent collapses other parents at the same level',
+      defaultValue: true
     }
   },
   parameters: {
@@ -111,9 +118,14 @@ const meta = {
           A collapsible list component that supports nested items with icons and actions.
           Parent items can be expanded/collapsed, and child items can trigger actions.
           
+          By default, the list operates in "mutually exclusive" mode where expanding one parent
+          automatically collapses other parents at the same level. This can be disabled by setting
+          the \`mutuallyExclusive\` property to \`false\`.
+          
           Example:
           \`\`\`html
           <spectrum-collapsible-list
+            .mutuallyExclusive=${true}
             @child-action={(e) => {
               console.log('Child action:', e.detail);
             }}
@@ -139,6 +151,7 @@ const renderList = (args: SpectrumCollapsibleListArgs) => html`
       .items=${args.items}
       .contextActions=${args.contextActions}
       .filter=${args.filter}
+      .mutuallyExclusive=${args.mutuallyExclusive}
       @child-action=${(e: CustomEvent) => {
         setTimeout(() => action('child-action')(e.detail), 500);
       }}
@@ -176,7 +189,16 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
       }
     ]
   },
-  render: renderList
+  render: (args) => html`
+    <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
+      <spectrum-collapsible-list
+        .items=${args.items}
+        @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
+        @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
+        @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+      ></spectrum-collapsible-list>
+    </div>
+  `
 };
 
 export const SingleLevel: StoryObj<SpectrumCollapsibleListArgs> = {
@@ -469,6 +491,77 @@ This story demonstrates filtering functionality. When a filter value is provided
 - Parent items with matching children are shown with only their matching children
 - Parent items without matching children and that don't match themselves are hidden
 - The filter is case-insensitive for better user experience
+        `
+      }
+    }
+  }
+};
+
+// Example showing both mutually exclusive and non-exclusive behavior
+export const ExpansionBehavior: StoryObj<SpectrumCollapsibleListArgs> = {
+  render: (args) => html`
+    <div style="display: flex; gap: 40px; justify-content: center;">
+      <div style="width: 340px;">
+        <h3 style="text-align: center; margin-bottom: 10px;">Mutually Exclusive (Default)</h3>
+        <div style="height: 320px; background: none; overflow: auto; scrollbar-gutter: stable;">
+          <spectrum-collapsible-list
+            .items=${args.items}
+            .mutuallyExclusive=${true}
+            @expand-action=${(e: CustomEvent) => action('expand-action (exclusive)')(e.detail)}
+            @contract-action=${(e: CustomEvent) => action('contract-action (exclusive)')(e.detail)}
+          ></spectrum-collapsible-list>
+        </div>
+      </div>
+      <div style="width: 340px;">
+        <h3 style="text-align: center; margin-bottom: 10px;">Non-Exclusive</h3>
+        <div style="height: 320px; background: none; overflow: auto; scrollbar-gutter: stable;">
+          <spectrum-collapsible-list
+            .items=${args.items}
+            .mutuallyExclusive=${false}
+            @expand-action=${(e: CustomEvent) => action('expand-action (non-exclusive)')(e.detail)}
+            @contract-action=${(e: CustomEvent) => action('contract-action (non-exclusive)')(e.detail)}
+          ></spectrum-collapsible-list>
+        </div>
+      </div>
+    </div>
+  `,
+  args: {
+    items: [
+      {
+        label: 'Section 1',
+        icon: 'folder',
+        children: [
+          { label: 'Item 1.1', icon: 'description', action: 'item-1-1' },
+          { label: 'Item 1.2', icon: 'description', action: 'item-1-2' }
+        ]
+      },
+      {
+        label: 'Section 2',
+        icon: 'folder',
+        children: [
+          { label: 'Item 2.1', icon: 'description', action: 'item-2-1' },
+          { label: 'Item 2.2', icon: 'description', action: 'item-2-2' }
+        ]
+      },
+      {
+        label: 'Section 3',
+        icon: 'folder',
+        children: [
+          { label: 'Item 3.1', icon: 'description', action: 'item-3-1' },
+          { label: 'Item 3.2', icon: 'description', action: 'item-3-2' }
+        ]
+      }
+    ]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates the two expansion behaviors:
+- **Mutually Exclusive (Default)**: When one parent item is expanded, other parents at the same level are automatically collapsed.
+- **Non-Exclusive**: Multiple parent items can be expanded simultaneously.
+
+The \`mutuallyExclusive\` property controls this behavior, defaulting to \`true\`.
         `
       }
     }

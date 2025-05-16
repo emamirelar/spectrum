@@ -39,8 +39,6 @@ export class SpectrumSearchInput {
    */
   @Watch('enableVoiceInput')
   handleEnableVoiceInputChange(newValue: boolean) {
-    console.log(`Voice input ${newValue ? 'enabled' : 'disabled'}`);
-    
     if (newValue) {
       // Initialize speech recognition if newly enabled
       this.initSpeechRecognition();
