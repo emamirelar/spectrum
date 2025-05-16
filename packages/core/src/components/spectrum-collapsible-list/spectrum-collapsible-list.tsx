@@ -34,6 +34,12 @@ export class SpectrumCollapsibleList {
   @Prop() contextActions: ContextMenuAction[] = [];
 
   /**
+   * Controls whether expanding one parent collapses other parents at the same level
+   * Default is true (mutually exclusive expansion)
+   */
+  @Prop() mutuallyExclusive: boolean = true;
+
+  /**
    * Internal state for expanded nodes (by label path)
    */
   @State() expandedMap: { [key: string]: boolean } = {};
@@ -157,20 +163,28 @@ export class SpectrumCollapsibleList {
    */
   private handleParentClick(item: CollapsibleListItem, key: string, parentKey = '') {
     const isExpanded = this.expandedMap[key] ?? !!item.expanded;
+    
     if (!isExpanded) {
-      // Collapse all siblings at this level
+      // Create a new map to avoid direct mutation
       const newMap = { ...this.expandedMap };
-      const siblingPrefix = parentKey ? parentKey + ' > ' : '';
-      Object.keys(newMap).forEach(k => {
-        // Only collapse direct siblings (not grandchildren)
-        if (k.startsWith(siblingPrefix) && k.split(' > ').length === key.split(' > ').length) {
-          newMap[k] = false;
-        }
-      });
+      
+      // If mutually exclusive, collapse siblings at this level
+      if (this.mutuallyExclusive) {
+        const siblingPrefix = parentKey ? parentKey + ' > ' : '';
+        Object.keys(newMap).forEach(k => {
+          // Only collapse direct siblings (not descendants)
+          if (k.startsWith(siblingPrefix) && k.split(' > ').length === key.split(' > ').length) {
+            newMap[k] = false;
+          }
+        });
+      }
+      
+      // Expand the clicked item
       newMap[key] = true;
       this.expandedMap = newMap;
       this.expandAction.emit({ label: item.label });
     } else {
+      // Just collapse this item
       this.expandedMap = { ...this.expandedMap, [key]: false };
       this.contractAction.emit({ label: item.label });
     }

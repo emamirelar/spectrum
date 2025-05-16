@@ -401,20 +401,22 @@ export class SpectrumRail {
                 aria-label={this.moreLabel}
               />
             ) : (
-              <spectrum-button
-                class="more-button"
-                variant="ghost"
-                size="base"
-                showLeftIcon={true}
-                leftIcon="settings"
-                buttonText={this.moreLabel || 'Explore more'}
-                showButtonText={true}
-                showRightIcon={true}
-                rightIcon="chevron_right"
-                onClick={() => this.handleMoreClick()}
-              >
-                {moreText}
-              </spectrum-button>
+              <div class="more-expanded">
+                <spectrum-button
+                  class="more-button"
+                  variant="ghost"
+                  size="base"
+                  showLeftIcon={true}
+                  leftIcon="settings"
+                  buttonText={this.moreLabel || 'Explore more'}
+                  showButtonText={true}
+                  showRightIcon={true}
+                  rightIcon="chevron_right"
+                  onClick={() => this.handleMoreClick()}
+                >
+                  {moreText}
+                </spectrum-button>
+              </div>
             )}
           </div>
         </div>

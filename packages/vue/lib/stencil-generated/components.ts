@@ -58,6 +58,7 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'items',
   'filter',
   'contextActions',
+  'mutuallyExclusive',
   'child-action',
   'expand-action',
   'contract-action',

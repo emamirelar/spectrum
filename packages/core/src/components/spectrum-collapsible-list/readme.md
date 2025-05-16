@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property         | Attribute | Description                            | Type                    | Default |
-| ---------------- | --------- | -------------------------------------- | ----------------------- | ------- |
-| `contextActions` | --        | Context actions for all leaf nodes     | `ContextMenuAction[]`   | `[]`    |
-| `filter`         | `filter`  | Filter value to filter list items      | `string`                | `''`    |
-| `items`          | --        | The nested data structure for the list | `CollapsibleListItem[]` | `[]`    |
+| Property            | Attribute            | Description                                                                                                                    | Type                    | Default |
+| ------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- | ------- |
+| `contextActions`    | --                   | Context actions for all leaf nodes                                                                                             | `ContextMenuAction[]`   | `[]`    |
+| `filter`            | `filter`             | Filter value to filter list items                                                                                              | `string`                | `''`    |
+| `items`             | --                   | The nested data structure for the list                                                                                         | `CollapsibleListItem[]` | `[]`    |
+| `mutuallyExclusive` | `mutually-exclusive` | Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion) | `boolean`               | `true`  |
 
 
 ## Events

@@ -82,14 +82,14 @@ export declare interface SpectrumChip extends Components.SpectrumChip {
 
 
 @ProxyCmp({
-  inputs: ['contextActions', 'filter', 'items']
+  inputs: ['contextActions', 'filter', 'items', 'mutuallyExclusive']
 })
 @Component({
   selector: 'spectrum-collapsible-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['contextActions', 'filter', 'items'],
+  inputs: ['contextActions', 'filter', 'items', 'mutuallyExclusive'],
 })
 export class SpectrumCollapsibleList {
   protected el: HTMLElement;

@@ -91,6 +91,10 @@ export namespace Components {
           * The nested data structure for the list
          */
         "items": CollapsibleListItem[];
+        /**
+          * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
+         */
+        "mutuallyExclusive": boolean;
     }
     /**
      * Spectrum Context Menu Component
@@ -597,6 +601,10 @@ declare namespace LocalJSX {
           * The nested data structure for the list
          */
         "items"?: CollapsibleListItem[];
+        /**
+          * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
+         */
+        "mutuallyExclusive"?: boolean;
         /**
           * Event emitted when a child node is clicked
          */

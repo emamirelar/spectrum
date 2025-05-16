@@ -20,7 +20,7 @@
 }
 
 .spectrum-collapsible-list {
-  width: 100%;
+  // width: 100%;
   background: transparent !important;
   color: var(--collapsible-list-text);
   border-radius: var(--collapsible-list-border-radius);
@@ -43,7 +43,7 @@
   flex-direction: column;
   align-items: stretch;
   gap: 0;
-  padding: var(--collapsible-list-spacing) calc(var(--collapsible-list-spacing) * 1.5);
+  // padding: var(--collapsible-list-spacing) calc(var(--collapsible-list-spacing) * 1.5);
   border-radius: var(--collapsible-list-border-radius);
   font-family: var(--collapsible-list-label-font);
   font-size: var(--collapsible-list-label-size);
@@ -128,6 +128,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  font-weight: 400;
 }
 
 .spectrum-collapsible-list__children .spectrum-collapsible-list__item {
