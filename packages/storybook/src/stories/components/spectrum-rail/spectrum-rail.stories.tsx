@@ -250,54 +250,69 @@ const handleContextAction = (e: CustomEvent) => {
 
 // Demo Rail showing all features in collapsed state (default)
 export const Default: Story = {
-  render: (args) => html`
-    <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
-      <spectrum-rail
-        appName="${args.appName}"
-        expandedWidth="${args.expandedWidth}"
-        moreLabel="${args.moreLabel}"
-        initialExpanded="${args.initialExpanded}"
-        @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
-        @searchChange=${(e: CustomEvent) => {
-          action('Search Changed')({ value: e.detail.value });
-          // Update filter on the collapsible list
-          const list = document.querySelector('spectrum-collapsible-list');
-          if (list) {
-            list.setAttribute('filter', e.detail.value);
-          }
-        }}
-        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
-        @addAction=${() => action('Add Button Clicked')()}
-      >
-        <spectrum-collapsible-list 
-          slot="items"
-          .items=${sampleItems}
-          @child-action=${handleChildAction}
-          @expand-action=${handleExpandAction}
-          @contract-action=${handleContractAction}
-          @context-action=${handleContextAction}
-        ></spectrum-collapsible-list>
-      </spectrum-rail>
-    </div>
-    <div style="margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
-      <p><strong>Instructions:</strong></p>
-      <ul style="margin: 0; padding-left: 1.5rem;">
-        <li>Click on the rail items to expand/collapse the rail</li>
-        <li>Click on the Pinned or Recent folders to expand/collapse them</li>
-        <li>Click on any of the 20 items in each category to trigger their actions (visible in Actions panel)</li>
-        <li>Right-click on items to see context menu actions:
-          <ul>
-            <li><strong>Pinned items</strong>: Unpin, Rename, Delete</li>
-            <li><strong>Recent items</strong>: Pin, Rename, Delete</li>
-          </ul>
-        </li>
-        <li>Use search to filter through the 40 total items across both categories</li>
-        <li>Try searching for terms like "design", "report", or "documentation" to see how filtering works</li>
-        <li>Scroll through the expanded list to see all items in each category</li>
-        <li>Click the add button to trigger the add action</li>
-      </ul>
-    </div>
-  `,
+  render: (args) => {
+    setTimeout(() => {
+      // Listen for context menu open
+      const list = document.querySelector('spectrum-collapsible-list');
+      if (list) {
+        list.addEventListener('context-menu-open', (e) => {
+          action('Context Menu Open')((e as CustomEvent).detail);
+        });
+      }
+      // Listen for context menu action globally
+      window.addEventListener('action-click', (e) => {
+        action('Context Menu Action')((e as CustomEvent).detail);
+      });
+    }, 500);
+    return html`
+      <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
+        <spectrum-rail
+          appName="${args.appName}"
+          expandedWidth="${args.expandedWidth}"
+          moreLabel="${args.moreLabel}"
+          initialExpanded="${args.initialExpanded}"
+          @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
+          @searchChange=${(e: CustomEvent) => {
+            action('Search Changed')({ value: e.detail.value });
+            // Update filter on the collapsible list
+            const list = document.querySelector('spectrum-collapsible-list');
+            if (list) {
+              list.setAttribute('filter', e.detail.value);
+            }
+          }}
+          @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
+          @addAction=${() => action('Add Button Clicked')()}
+        >
+          <spectrum-collapsible-list 
+            slot="items"
+            .items=${sampleItems}
+            @child-action=${handleChildAction}
+            @expand-action=${handleExpandAction}
+            @contract-action=${handleContractAction}
+            @context-action=${handleContextAction}
+          ></spectrum-collapsible-list>
+        </spectrum-rail>
+      </div>
+      <div style="margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
+        <p><strong>Instructions:</strong></p>
+        <ul style="margin: 0; padding-left: 1.5rem;">
+          <li>Click on the rail items to expand/collapse the rail</li>
+          <li>Click on the Pinned or Recent folders to expand/collapse them</li>
+          <li>Click on any of the 20 items in each category to trigger their actions (visible in Actions panel)</li>
+          <li>Right-click on items to see context menu actions:
+            <ul>
+              <li><strong>Pinned items</strong>: Unpin, Rename, Delete</li>
+              <li><strong>Recent items</strong>: Pin, Rename, Delete</li>
+            </ul>
+          </li>
+          <li>Use search to filter through the 40 total items across both categories</li>
+          <li>Try searching for terms like "design", "report", or "documentation" to see how filtering works</li>
+          <li>Scroll through the expanded list to see all items in each category</li>
+          <li>Click the add button to trigger the add action</li>
+        </ul>
+      </div>
+    `;
+  },
 };
 
 // Pinned items with their specific context actions 

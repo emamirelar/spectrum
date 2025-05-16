@@ -91,6 +91,7 @@ export class SpectrumContextMenu {
   }
 
   private handleActionClick(action) {
+    console.log('[spectrum-context-menu] dispatching action-click', { value: action.value, targetKey: this.targetKey });
     this.el.dispatchEvent(new CustomEvent('action-click', {
       detail: { value: action.value, targetKey: this.targetKey },
       bubbles: true,

@@ -153,6 +153,14 @@ export class SpectrumCollapsibleList {
       console.warn('Missing icon element for key:', key);
       return;
     }
+    // Emit a custom event for Storybook Actions tab
+    this.hostElement.dispatchEvent(
+      new CustomEvent('context-menu-open', {
+        detail: { key },
+        bubbles: true,
+        composed: true,
+      })
+    );
     // Get the icon position
     const iconRect = iconElement.getBoundingClientRect();
     // Ensure the global context menu exists
