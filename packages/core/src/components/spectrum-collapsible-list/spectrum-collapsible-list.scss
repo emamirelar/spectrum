@@ -4,6 +4,7 @@
 
 :host {
   display: block;
+  height: 100%;
   // Set background to transparent by default for clean embedding in any context
   --collapsible-list-bg: transparent;
   --collapsible-list-text: var(--spectrum-color-on-surface, #333);
@@ -21,6 +22,7 @@
 
 .spectrum-collapsible-list {
   // width: 100%;
+  height: 100%;
   background: transparent !important;
   color: var(--collapsible-list-text);
   border-radius: var(--collapsible-list-border-radius);
@@ -36,6 +38,15 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.spectrum-collapsible-list__list {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .spectrum-collapsible-list__item {
@@ -121,7 +132,7 @@
   margin-left: 0;
   border-left: none;
   padding-left: 0;
-  max-height: 200px;
+  // max-height: 200px;
   overflow-y: auto;
   width: 100%;
   scrollbar-gutter: stable;
