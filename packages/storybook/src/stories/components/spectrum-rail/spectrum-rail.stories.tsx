@@ -127,7 +127,7 @@ const pinnedItems = [
   {
     label: 'Pinned',
     icon: 'push_pin',
-    expanded: true,
+    expanded: false,
     children: [
       { label: 'UX Design Framework', action: 'open-ux-framework' },
       { label: 'Budget Planning', action: 'open-budget-planning' },
@@ -158,7 +158,7 @@ const recentItems = [
   {
     label: 'Recent',
     icon: 'schedule',
-    expanded: true,
+    expanded: false,
     children: [
       { label: 'Q4 Financial Report', action: 'open-q4-financial' },
       { label: 'Product Launch Plan', action: 'open-product-launch' },
