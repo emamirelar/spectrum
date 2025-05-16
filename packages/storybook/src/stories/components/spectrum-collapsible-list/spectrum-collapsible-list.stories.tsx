@@ -189,7 +189,16 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
       }
     ]
   },
-  render: renderList
+  render: (args) => html`
+    <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
+      <spectrum-collapsible-list
+        .items=${args.items}
+        @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
+        @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
+        @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+      ></spectrum-collapsible-list>
+    </div>
+  `
 };
 
 export const SingleLevel: StoryObj<SpectrumCollapsibleListArgs> = {

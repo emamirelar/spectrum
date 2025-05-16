@@ -218,9 +218,6 @@ const handleChildAction = (e: CustomEvent) => {
     label, 
     timestamp: new Date().toISOString() 
   });
-  
-  // In a real app, you would navigate or perform an action here
-  console.log(`Action triggered: ${action} for item: ${label}`);
 };
 
 // Function to handle expand/contract events
@@ -447,7 +444,6 @@ export const WithoutAddButton: Story = {
           const list = document.querySelector('spectrum-collapsible-list');
           if (list) {
             list.setAttribute('filter', e.detail.value);
-            console.log('Storybook: Setting filter attribute on collapsible list:', e.detail.value);
           }
         }}
         @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
@@ -510,7 +506,6 @@ export const ProgrammaticControl: Story = {
           button.addEventListener('click', () => {
             isExpanded = !isExpanded;
             rail.setExpanded(isExpanded);
-            console.log('Toggled rail to:', isExpanded ? 'expanded' : 'collapsed');
           });
         }
       }, 100);

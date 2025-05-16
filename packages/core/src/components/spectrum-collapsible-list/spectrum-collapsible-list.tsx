@@ -142,41 +142,29 @@ export class SpectrumCollapsibleList {
   /**
    * Handle click on the context menu icon
    */
-  private handleActionsIconClick(e: Event, key: string, actions?: ContextMenuAction[]) {
-    console.log('[handleActionsIconClick] called for key:', key);
+  private handleActionsIconClick(e: MouseEvent, key: string, actions?: ContextMenuAction[]) {
     e.stopPropagation();
     e.preventDefault();
-    // Use the event's currentTarget as the icon element
     const iconElement = e.currentTarget as HTMLElement;
-    console.log('[handleActionsIconClick] iconElement:', iconElement);
     if (!iconElement) {
       console.warn('Missing icon element for key:', key);
       return;
     }
-    // Emit a custom event for Storybook Actions tab
-    this.hostElement.dispatchEvent(
-      new CustomEvent('context-menu-open', {
-        detail: { key },
-        bubbles: true,
-        composed: true,
-      })
-    );
+
     // Get the icon position
     const iconRect = iconElement.getBoundingClientRect();
-    // Ensure the global context menu exists
-    let menu = document.getElementById('global-context-menu');
+
+    // Create or get the global context menu
+    let menu = document.querySelector('spectrum-context-menu') as any;
     if (!menu) {
       menu = document.createElement('spectrum-context-menu');
-      menu.id = 'global-context-menu';
       document.body.appendChild(menu);
-      console.log('[handleActionsIconClick] Created global context menu');
     }
-    console.log('[handleActionsIconClick] menu:', menu, 'show:', menu && typeof menu['show']);
+
     if (typeof menu['show'] === 'function') {
-      console.log('[handleActionsIconClick] calling menu.show with:', actions, iconRect.right, iconRect.top + iconRect.height / 2, key);
       menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, key);
     } else {
-      console.warn('[handleActionsIconClick] global context menu exists but show method is not available');
+      console.warn('Global context menu exists but show method is not available');
     }
   }
 

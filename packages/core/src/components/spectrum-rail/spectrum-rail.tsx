@@ -93,38 +93,25 @@ export class SpectrumRail {
 
   /** Handle search input value change */
   private handleSearchChange(value: string) {
-    console.log('Search value changed:', value);
     this.filter = value;
     this.searchChange.emit({ value: this.filter });
     
-    // Update filter on collapsible list directly
     const slotElement = this.el.shadowRoot?.querySelector('slot[name="items"]') as HTMLSlotElement;
     if (slotElement) {
       const elements = slotElement.assignedElements();
-      console.log('Slot elements:', elements);
-      
       if (elements.length > 0) {
         const collapsibleList = elements[0] as HTMLElement;
-        console.log('First slot element:', collapsibleList);
-        
         if (collapsibleList && collapsibleList.tagName.toLowerCase() === 'spectrum-collapsible-list') {
-          console.log('Setting filter on collapsible list:', value);
           collapsibleList.setAttribute('filter', value);
-          
-          // Also try to set the property directly
           try {
             (collapsibleList as any).filter = value;
-          } catch (err) {
-            console.error('Failed to set filter property:', err);
+          } catch (error) {
+            console.error('Failed to set filter property:', error);
           }
         } else {
-          console.warn('First slotted element is not a spectrum-collapsible-list:', collapsibleList?.tagName);
+          console.warn('First slotted element is not a spectrum-collapsible-list');
         }
-      } else {
-        console.warn('No elements found in the items slot');
       }
-    } else {
-      console.warn('Could not find items slot element');
     }
   }
 
@@ -201,14 +188,10 @@ export class SpectrumRail {
   }
 
   componentWillLoad() {
-    console.log('SpectrumRail props on load:', {
-      appName: this.appName,
-      moreLabel: this.moreLabel,
-      addLabel: this.addLabel,
-      initialExpanded: this.initialExpanded,
-      expandedWidth: this.expandedWidth,
-      showAddButton: this.showAddButton
-    });
+    if (this.initialExpanded) {
+      this.expanded = true;
+      this.notifySlottedComponents(true);
+    }
   }
 
   componentDidLoad() {
@@ -223,37 +206,20 @@ export class SpectrumRail {
       this.expandedChange.emit(true);
       this.notifySlottedComponents(true);
     }
-
-    console.log('SpectrumRail props loaded:', {
-      appName: this.appName,
-      moreLabel: this.moreLabel,
-      addLabel: this.addLabel,
-      initialExpanded: this.initialExpanded,
-      expandedWidth: this.expandedWidth,
-      showAddButton: this.showAddButton
-    });
   }
 
   @Watch('appName')
   @Watch('moreLabel')
   @Watch('addLabel')
   @Watch('showAddButton')
-  propChanged(newValue: string | boolean, oldValue: string | boolean, propName: string) {
-    console.log(`SpectrumRail ${propName} changed:`, { oldValue, newValue });
+  propChanged() {
+    // Property changed handler
   }
 
   render() {
     // Default icon, ideally would be dynamically pulled from first item
     const firstIconInList = 'folder';
     
-    console.log('Rail rendering with props:', {
-      appName: this.appName,
-      moreLabel: this.moreLabel,
-      addLabel: this.addLabel,
-      showAddButton: this.showAddButton,
-      expanded: this.expanded
-    });
-
     // Create text spans directly to ensure text rendering
     const menuText = <span>{this.appName}</span>;
     const moreText = <span>{this.moreLabel}</span>;

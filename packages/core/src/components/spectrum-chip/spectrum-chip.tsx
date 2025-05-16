@@ -41,9 +41,9 @@ export class SpectrumChip {
   @Event() chipAction: EventEmitter<{ action?: string; label: string }>;
 
   // ============== Debug Helpers ==============
-  private log(message: string, data?: any) {
+  private log(_message: string, _data?: any) {
     if (this.debug) {
-      console.log(`[SpectrumChip] ${message}`, data ? data : '');
+      // Debug logging disabled
     }
   }
 

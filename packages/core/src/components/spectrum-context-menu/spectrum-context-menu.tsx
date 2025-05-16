@@ -70,19 +70,20 @@ export class SpectrumContextMenu {
     bubbles: true
   }) menuClose: EventEmitter<void>;
 
-  private log(message: string, data?: any) {
+  private log(_message: string, _data?: any) {
     if (this.debug) {
-      console.log(`[SpectrumContextMenu] ${message}`, data ? data : '');
+      // Debug logging disabled
     }
   }
 
   @Method()
   async show(actions: any[], x: number, y: number, targetKey: string) {
     this.actions = actions;
+    this.targetKey = targetKey;
     this.x = x;
     this.y = y;
-    this.targetKey = targetKey;
     this.isOpen = true;
+    this.el.dispatchEvent(new CustomEvent('menu-open', { detail: { targetKey } }));
   }
 
   @Method()
@@ -90,12 +91,9 @@ export class SpectrumContextMenu {
     this.isOpen = false;
   }
 
-  private handleActionClick(action) {
-    console.log('[spectrum-context-menu] dispatching action-click', { value: action.value, targetKey: this.targetKey });
-    this.el.dispatchEvent(new CustomEvent('action-click', {
-      detail: { value: action.value, targetKey: this.targetKey },
-      bubbles: true,
-      composed: true,
+  private handleActionClick(action: any) {
+    this.el.dispatchEvent(new CustomEvent('action-click', { 
+      detail: { value: action.value, targetKey: this.targetKey }
     }));
     this.hide();
   }

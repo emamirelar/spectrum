@@ -71,16 +71,15 @@ type Story = StoryObj<SpectrumSearchInputArgs>;
 // Default Search Input
 export const Default: Story = {
   render: (args) => html`
-    <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
+    <div style="padding: 2rem; background-color: #f0f0f0;">
       <spectrum-search-input
-        .maxLines=${args.maxLines}
-        placeholder=${args.placeholder}
-        .enableVoiceInput=${args.enableVoiceInput}
+        placeholder="${args.placeholder}"
+        ?enableVoiceInput="${args.enableVoiceInput}"
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
     </div>
-  `
+  `,
 };
 
 // Custom Placeholder Example
