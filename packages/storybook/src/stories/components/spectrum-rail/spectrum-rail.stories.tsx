@@ -184,15 +184,9 @@ const recentItems = [
   }
 ];
 
-// Sample data combining both types for the default view
-const sampleItems = [
-  ...pinnedItems,
-  ...recentItems
-];
-
 // Context actions for Pinned items
 const pinnedContextActions = [
-  { label: 'Unpin', icon: 'unpublished', value: 'unpin' },
+  { label: 'Unpin', icon: 'push_pin', value: 'unpin' },
   { label: 'Rename', icon: 'edit', value: 'rename' },
   { label: 'Delete', icon: 'delete', value: 'delete' }
 ];
@@ -202,6 +196,18 @@ const recentContextActions = [
   { label: 'Pin', icon: 'push_pin', value: 'pin' },
   { label: 'Rename', icon: 'edit', value: 'rename' },
   { label: 'Delete', icon: 'delete', value: 'delete' }
+];
+
+// Sample data combining both types for the default view, now with per-parent contextActions
+const sampleItems = [
+  {
+    ...pinnedItems[0],
+    contextActions: pinnedContextActions
+  },
+  {
+    ...recentItems[0],
+    contextActions: recentContextActions
+  }
 ];
 
 // Function to handle child action events
@@ -254,11 +260,10 @@ export const Default: Story = {
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
-          // Update filter on collapsible list
+          // Update filter on the collapsible list
           const list = document.querySelector('spectrum-collapsible-list');
           if (list) {
             list.setAttribute('filter', e.detail.value);
-            console.log('Storybook: Setting filter attribute on collapsible list:', e.detail.value);
           }
         }}
         @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}

@@ -122,15 +122,15 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
 
 
 @ProxyCmp({
-  inputs: ['actions', 'isOpen', 'position', 'targetKey'],
-  methods: ['setTriggerRef', 'open', 'close', 'positionAtCoordinates']
+  inputs: ['position'],
+  methods: ['show', 'hide', 'positionAtCoordinates']
 })
 @Component({
   selector: 'spectrum-context-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['actions', 'isOpen', 'position', 'targetKey'],
+  inputs: ['position'],
 })
 export class SpectrumContextMenu {
   protected el: HTMLElement;
