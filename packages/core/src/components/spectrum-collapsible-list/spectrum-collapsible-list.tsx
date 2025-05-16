@@ -274,17 +274,17 @@ export class SpectrumCollapsibleList {
   /**
    * Render an icon with Material Symbols
    */
-  private renderIcon(icon: string, outlined = false) {
-    // Use Material Symbols Outlined, outlined if requested
+  private renderIcon(icon: string, isChild = false, outlined = false) {
+    // Use Material Symbols Outlined, outlined if requested or if it's a child node
     return (
       <span
         class={{
           'spectrum-collapsible-list__icon': true,
           'material-symbols-outlined': true,
-          'spectrum-collapsible-list__icon--outlined': outlined,
+          'spectrum-collapsible-list__icon--outlined': isChild || outlined,
         }}
         style={{
-          fontVariationSettings: outlined
+          fontVariationSettings: (isChild || outlined)
             ? '"FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24'
             : '"FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24',
         }}
@@ -350,7 +350,7 @@ export class SpectrumCollapsibleList {
             onClick={() => isParent ? this.handleParentClick(item, key, parentKey) : this.handleChildClick(item)}
             ref={this.setTriggerRef(key)}
           >
-            {this.renderIcon(item.icon)}
+            {this.renderIcon(item.icon, !isParent)}
             <span class="spectrum-collapsible-list__label">{item.label}</span>
             {isParent && (
               <>
@@ -373,7 +373,10 @@ export class SpectrumCollapsibleList {
           </div>
           {isParent && isExpanded && item.children && (
             <div class="spectrum-collapsible-list__children">
-              {this.renderItems(item.children, key)}
+              {this.renderItems(item.children.map(child => ({
+                ...child,
+                icon: child.icon || item.icon // Inherit parent's icon if child doesn't have one
+              })), key)}
             </div>
           )}
         </li>
