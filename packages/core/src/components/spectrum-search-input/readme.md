@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property           | Attribute            | Description                                                     | Type      | Default             |
-| ------------------ | -------------------- | --------------------------------------------------------------- | --------- | ------------------- |
-| `enableVoiceInput` | `enable-voice-input` | Whether to enable voice input capabilities (speech recognition) | `boolean` | `true`              |
-| `maxLines`         | `max-lines`          |                                                                 | `number`  | `4`                 |
-| `placeholder`      | `placeholder`        | Placeholder text for the search input                           | `string`  | `'Ask anything...'` |
+| Property            | Attribute             | Description                                                     | Type      | Default             |
+| ------------------- | --------------------- | --------------------------------------------------------------- | --------- | ------------------- |
+| `enableEnterSubmit` | `enable-enter-submit` | Whether to enable submitting search on Enter key press          | `boolean` | `true`              |
+| `enableVoiceInput`  | `enable-voice-input`  | Whether to enable voice input capabilities (speech recognition) | `boolean` | `true`              |
+| `maxLines`          | `max-lines`           |                                                                 | `number`  | `4`                 |
+| `placeholder`       | `placeholder`         | Placeholder text for the search input                           | `string`  | `'Ask anything...'` |
 
 
 ## Events

@@ -1,4 +1,4 @@
-import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment, Element } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment, Element, Listen } from '@stencil/core';
 import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
 
 /**
@@ -279,6 +279,17 @@ export class SpectrumCollapsibleList {
         </li>
       );
     });
+  }
+
+  /**
+   * Listen for context menu action clicks
+   */
+  @Listen('action-click', { target: 'document' })
+  handleContextAction(event: CustomEvent<{ value: string; targetKey: string }>) {
+    // Extract the label from the targetKey (which is in the format "parent > child")
+    const label = event.detail.targetKey.split(' > ').pop() || '';
+    // Emit our own event with the action value and label
+    this.contextAction.emit({ value: event.detail.value, label });
   }
 
   render() {

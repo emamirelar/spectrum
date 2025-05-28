@@ -20,6 +20,11 @@ export class SpectrumSearchInput {
    */
   @Prop() enableVoiceInput: boolean = true;
   
+  /**
+   * Whether to enable submitting search on Enter key press
+   */
+  @Prop() enableEnterSubmit: boolean = true;
+  
   @State() searchText: string = '';
   @State() isListening: boolean = false;
   @State() isSpeechAvailable: boolean = false;
@@ -96,6 +101,13 @@ export class SpectrumSearchInput {
     this.searchInput.emit(this.searchText);
   };
   
+  private handleKeyDown = (event: KeyboardEvent) => {
+    if (this.enableEnterSubmit && event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.handleSearch();
+    }
+  };
+  
   private adjustTextareaHeight = () => {
     if (this.inputRef) {
       // Reset height to measure actual content height
@@ -148,6 +160,7 @@ export class SpectrumSearchInput {
               class="spectrum-search-input__field"
               value={this.searchText}
               onInput={this.handleInput}
+              onKeyDown={this.handleKeyDown}
               placeholder={this.placeholder}
               rows={1}
               aria-label="Search input"

@@ -92,9 +92,7 @@ export class SpectrumContextMenu {
   }
 
   private handleActionClick(action: any) {
-    this.el.dispatchEvent(new CustomEvent('action-click', { 
-      detail: { value: action.value, targetKey: this.targetKey }
-    }));
+    this.actionClick.emit({ value: action.value, targetKey: this.targetKey });
     this.hide();
   }
 

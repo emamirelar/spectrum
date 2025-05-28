@@ -157,6 +157,7 @@ const renderList = (args: SpectrumCollapsibleListArgs) => html`
       }}
       @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
       @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
+      @context-action=${(e: CustomEvent) => action('context-action')(e.detail)}
     ></spectrum-collapsible-list>
   </div>
 `;
@@ -187,15 +188,29 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
           }
         ]
       }
+    ],
+    contextActions: [
+      {
+        label: 'Edit',
+        icon: 'edit',
+        value: 'edit'
+      },
+      {
+        label: 'Delete',
+        icon: 'delete',
+        value: 'delete'
+      }
     ]
   },
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
       <spectrum-collapsible-list
         .items=${args.items}
+        .contextActions=${args.contextActions}
         @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
         @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
         @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+        @context-action=${(e: CustomEvent) => action('Context Action')(e.detail)}
       ></spectrum-collapsible-list>
     </div>
   `

@@ -120,6 +120,10 @@ export namespace Components {
          */
         "conversationtitle": string;
         /**
+          * Whether to show the loading indicator Default: false
+         */
+        "loading": boolean;
+        /**
           * The messsages to display in the conversation panel Default: null
          */
         "messages": string;
@@ -220,6 +224,10 @@ export namespace Components {
         "onRailExpandedChange": (expanded: boolean) => Promise<boolean>;
     }
     interface SpectrumSearchInput {
+        /**
+          * Whether to enable submitting search on Enter key press
+         */
+        "enableEnterSubmit": boolean;
         /**
           * Whether to enable voice input capabilities (speech recognition)
          */
@@ -626,6 +634,10 @@ declare namespace LocalJSX {
          */
         "conversationtitle"?: string;
         /**
+          * Whether to show the loading indicator Default: false
+         */
+        "loading"?: boolean;
+        /**
           * The messsages to display in the conversation panel Default: null
          */
         "messages"?: string;
@@ -730,6 +742,10 @@ declare namespace LocalJSX {
         "label": string;
     }
     interface SpectrumSearchInput {
+        /**
+          * Whether to enable submitting search on Enter key press
+         */
+        "enableEnterSubmit"?: boolean;
         /**
           * Whether to enable voice input capabilities (speech recognition)
          */
