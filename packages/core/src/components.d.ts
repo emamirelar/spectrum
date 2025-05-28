@@ -120,6 +120,10 @@ export namespace Components {
          */
         "conversationtitle": string;
         /**
+          * Whether to show the loading indicator Default: false
+         */
+        "loading": boolean;
+        /**
           * The messsages to display in the conversation panel Default: null
          */
         "messages": string;
@@ -629,6 +633,10 @@ declare namespace LocalJSX {
           * The title to display in the conversation panel Default: null
          */
         "conversationtitle"?: string;
+        /**
+          * Whether to show the loading indicator Default: false
+         */
+        "loading"?: boolean;
         /**
           * The messsages to display in the conversation panel Default: null
          */

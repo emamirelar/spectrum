@@ -155,7 +155,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
 
 
 @ProxyCmp({
-  inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
+  inputs: ['actions', 'conversationtitle', 'loading', 'messages', 'sources'],
   methods: ['scrollToLatest']
 })
 @Component({
@@ -163,7 +163,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['actions', 'conversationtitle', 'messages', 'sources'],
+  inputs: ['actions', 'conversationtitle', 'loading', 'messages', 'sources'],
 })
 export class SpectrumConversationPanel {
   protected el: HTMLElement;

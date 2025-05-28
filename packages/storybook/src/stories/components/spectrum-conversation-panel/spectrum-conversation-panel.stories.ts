@@ -10,6 +10,7 @@ interface SpectrumConversationPanelArgs {
   conversationtitle: string;
   actions: string;
   sources: string;
+  loading: boolean;
 }
 
 const meta = {
@@ -73,7 +74,8 @@ const meta = {
         "value": "https://www.nasa.gov/mission/apollo-11/",
         "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth."
       }
-    ]`
+    ]`,
+    loading: false
   },
   argTypes: {
     messages: {
@@ -111,6 +113,13 @@ const meta = {
           summary: 'string',
           detail: 'JSON string containing an array of source objects with title, value, and snippet'
         }
+      }
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Whether to show the loading indicator',
+      table: {
+        type: { summary: 'boolean' }
       }
     }
   },
@@ -158,6 +167,7 @@ export const Default: StoryObj<SpectrumConversationPanelArgs> = {
         .conversationtitle=${args.conversationtitle}
         .actions=${args.actions}
         .sources=${args.sources}
+        .loading=${args.loading}
         @action=${(e: CustomEvent) => action('Action')(e.detail)}
         @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
         @explore=${(e: CustomEvent) => action('Explore')(e.detail)}

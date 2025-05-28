@@ -82,7 +82,12 @@ To publish a new version of the core package to the GCP Artifact Registry:
    ```bash
    cd packages/core
    ```
-3. **Publish the package:**
+3. **Authenticate with GCP Artifact Registry:**
+   ```bash
+   gcloud auth login
+   export NPM_TOKEN=$(gcloud auth print-access-token)  
+   ```
+4. **Publish the package:**
    ```bash
    npm publish
    ```

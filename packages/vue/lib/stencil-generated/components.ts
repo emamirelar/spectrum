@@ -78,6 +78,7 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'conversationtitle',
   'actions',
   'sources',
+  'loading',
   'explorationSelected',
   'action',
   'explore',

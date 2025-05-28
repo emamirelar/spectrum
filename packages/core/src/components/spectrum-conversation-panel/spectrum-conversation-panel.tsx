@@ -37,6 +37,12 @@ export class SpectrumConversationPanel {
   **/
   @Prop() sources: string = '';
 
+  /**
+   * Whether to show the loading indicator
+   * Default: false
+  **/
+  @Prop() loading: boolean = false;
+
   @State() sourcesExpanded: boolean = false;
   @State() explorationsExpanded: boolean = false;
   @State() expandedMessageId: string | null = null;
@@ -57,6 +63,13 @@ export class SpectrumConversationPanel {
   @Watch('messages')
   messagesChanged(newValue: string) {
     this.updateMessages(newValue);
+  }
+
+  @Watch('loading')
+  loadingChanged(newValue: boolean) {
+    if (newValue) {
+      this.scrollToLatest();
+    }
   }
 
   private updateMessages(messages: string) {
@@ -101,6 +114,18 @@ export class SpectrumConversationPanel {
         {this.messageArray.map((message, index) => {
           return this.renderMessage(message, message.sender, index);
         })}
+        {this.loading && (
+          <div class="message-wrapper response">
+            <div class="agentIcon"></div>
+            <div class="message">
+              <div class="loader">
+                <span class="dot">.</span>
+                <span class="dot">.</span>
+                <span class="dot">.</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
