@@ -6,6 +6,7 @@ interface SpectrumSearchInputArgs {
   maxLines: number;
   placeholder: string;
   enableVoiceInput: boolean;
+  enableEnterSubmit: boolean;
 }
 
 const meta = {
@@ -14,7 +15,8 @@ const meta = {
   args: {
     maxLines: 4,
     placeholder: 'Ask anything...',
-    enableVoiceInput: true
+    enableVoiceInput: true,
+    enableEnterSubmit: true
   },
   argTypes: {
     maxLines: {
@@ -40,6 +42,14 @@ const meta = {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' }
       }
+    },
+    enableEnterSubmit: {
+      control: 'boolean',
+      description: 'Whether to enable submitting search on Enter key press',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
     }
   },
   parameters: {
@@ -47,13 +57,14 @@ const meta = {
       description: {
         component: `
           A search input component that supports both text and voice input.
-          Emits a searchSubmit event when the search button is clicked.
+          Emits a searchSubmit event when the search button is clicked or when Enter is pressed.
           
           Example:
           \`\`\`html
           <spectrum-search-input
             placeholder="Search for documents..."
             enableVoiceInput={false}
+            enableEnterSubmit={true}
             @searchSubmit={(e) => {
               console.log('Search query:', e.detail);
             }}
@@ -75,6 +86,7 @@ export const Default: Story = {
       <spectrum-search-input
         placeholder="${args.placeholder}"
         ?enableVoiceInput="${args.enableVoiceInput}"
+        ?enableEnterSubmit="${args.enableEnterSubmit}"
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
@@ -93,6 +105,7 @@ export const CustomPlaceholder: Story = {
         .maxLines=${args.maxLines}
         placeholder=${args.placeholder}
         .enableVoiceInput=${args.enableVoiceInput}
+        .enableEnterSubmit=${args.enableEnterSubmit}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
@@ -100,21 +113,27 @@ export const CustomPlaceholder: Story = {
   `
 };
 
-// Without Voice Input Example
-export const WithoutVoiceInput: Story = {
+// Enter Key Submission Example
+export const EnterKeySubmission: Story = {
   args: {
-    enableVoiceInput: false
+    enableVoiceInput: false,
+    enableEnterSubmit: true,
+    placeholder: 'Type and press Enter to search...'
   },
   render: (args) => html`
     <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
-      <h3>Microphone button should not appear:</h3>
       <spectrum-search-input
         .maxLines=${args.maxLines}
         placeholder=${args.placeholder}
         .enableVoiceInput=${args.enableVoiceInput}
+        .enableEnterSubmit=${args.enableEnterSubmit}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
+      <div style="margin-top: 1rem; font-size: 0.875rem; color: #666;">
+        <p>Try typing something and pressing Enter to submit the search.</p>
+        <p>Note: Shift+Enter will still create a new line when maxLines > 1.</p>
+      </div>
     </div>
   `
 }; 

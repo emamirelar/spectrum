@@ -120,6 +120,7 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
   'maxLines',
   'placeholder',
   'enableVoiceInput',
+  'enableEnterSubmit',
   'searchSubmit',
   'searchInput'
 ]);

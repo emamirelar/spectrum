@@ -221,6 +221,10 @@ export namespace Components {
     }
     interface SpectrumSearchInput {
         /**
+          * Whether to enable submitting search on Enter key press
+         */
+        "enableEnterSubmit": boolean;
+        /**
           * Whether to enable voice input capabilities (speech recognition)
          */
         "enableVoiceInput": boolean;
@@ -730,6 +734,10 @@ declare namespace LocalJSX {
         "label": string;
     }
     interface SpectrumSearchInput {
+        /**
+          * Whether to enable submitting search on Enter key press
+         */
+        "enableEnterSubmit"?: boolean;
         /**
           * Whether to enable voice input capabilities (speech recognition)
          */
