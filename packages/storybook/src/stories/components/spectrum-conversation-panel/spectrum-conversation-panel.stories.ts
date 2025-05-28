@@ -19,19 +19,37 @@ const meta = {
   args: {
     messages: `[
       {
-        "role": "user",
-        "content": "Tell me about the Apollo 11 moon landing",
+        "message": "Tell me about the Apollo 11 moon landing",
+        "sender": "request",
         "timestamp": "2024-03-20T10:00:00Z"
       },
       {
-        "role": "assistant",
-        "content": "The Apollo 11 mission was the first manned mission to land on the Moon. Launched on July 16, 1969, it carried astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins. Armstrong and Aldrin became the first humans to walk on the lunar surface on July 20, 1969, while Collins remained in lunar orbit.",
+        "message": "The Apollo 11 mission was the first manned mission to land on the Moon. Launched on July 16, 1969, it carried astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins. Armstrong and Aldrin became the first humans to walk on the lunar surface on July 20, 1969, while Collins remained in lunar orbit.",
+        "sender": "response",
         "timestamp": "2024-03-20T10:00:05Z",
         "sources": [
           {
             "title": "NASA Apollo 11 Mission Overview",
-            "url": "https://www.nasa.gov/mission/apollo-11/",
+            "value": "https://www.nasa.gov/mission/apollo-11/",
             "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth."
+          }
+        ],
+        "explorations": [
+          {
+            "label": "What was the famous quote Neil Armstrong said when he first stepped on the moon?",
+            "value": "What was the famous quote Neil Armstrong said when he first stepped on the moon?"
+          },
+          {
+            "label": "How long did the astronauts stay on the lunar surface?",
+            "value": "How long did the astronauts stay on the lunar surface?"
+          },
+          {
+            "label": "What scientific experiments did they conduct on the moon?",
+            "value": "What scientific experiments did they conduct on the moon?"
+          },
+          {
+            "label": "What was the role of Michael Collins during the mission?",
+            "value": "What was the role of Michael Collins during the mission?"
           }
         ]
       }
@@ -52,7 +70,7 @@ const meta = {
     sources: `[
       {
         "title": "NASA Apollo 11 Mission Overview",
-        "url": "https://www.nasa.gov/mission/apollo-11/",
+        "value": "https://www.nasa.gov/mission/apollo-11/",
         "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth."
       }
     ]`
@@ -64,7 +82,7 @@ const meta = {
       table: {
         type: { 
           summary: 'string',
-          detail: 'JSON string containing an array of message objects with role, content, timestamp, and optional sources'
+          detail: 'JSON string containing an array of message objects with message, sender, timestamp, and optional sources'
         }
       }
     },
@@ -91,7 +109,7 @@ const meta = {
       table: {
         type: { 
           summary: 'string',
-          detail: 'JSON string containing an array of source objects with title, url, and snippet'
+          detail: 'JSON string containing an array of source objects with title, value, and snippet'
         }
       }
     }
@@ -143,7 +161,7 @@ export const Default: StoryObj<SpectrumConversationPanelArgs> = {
         @action=${(e: CustomEvent) => action('Action')(e.detail)}
         @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
         @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
-        @sourceClicked=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
       ></spectrum-conversation-panel>
     </div>
   `,
