@@ -264,10 +264,10 @@ export const Default: Story = {
     return html`
       <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
         <spectrum-rail
-          appName="${args.appName}"
-          expandedWidth="${args.expandedWidth}"
-          moreLabel="${args.moreLabel}"
-          initialExpanded="${args.initialExpanded}"
+          .appName=${args.appName}
+          .expandedWidth=${args.expandedWidth}
+          .moreLabel=${args.moreLabel}
+          .initialExpanded=${args.initialExpanded}
           @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
           @searchChange=${(e: CustomEvent) => {
             action('Search Changed')({ value: e.detail.value });
@@ -320,10 +320,10 @@ export const PinnedItems: Story = {
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
       <spectrum-rail
-        appName="${args.appName}"
-        expandedWidth="${args.expandedWidth}"
-        moreLabel="${args.moreLabel}"
-        initialExpanded="${args.initialExpanded}"
+        .appName=${args.appName}
+        .expandedWidth=${args.expandedWidth}
+        .moreLabel=${args.moreLabel}
+        .initialExpanded=${args.initialExpanded}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -368,10 +368,10 @@ export const RecentItems: Story = {
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
       <spectrum-rail
-        appName="${args.appName}"
-        expandedWidth="${args.expandedWidth}"
-        moreLabel="${args.moreLabel}"
-        initialExpanded="${args.initialExpanded}"
+        .appName=${args.appName}
+        .expandedWidth=${args.expandedWidth}
+        .moreLabel=${args.moreLabel}
+        .initialExpanded=${args.initialExpanded}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -432,11 +432,11 @@ export const WithoutAddButton: Story = {
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
       <spectrum-rail
-        appName="${args.appName}"
-        expandedWidth="${args.expandedWidth}"
-        moreLabel="${args.moreLabel}"
-        initialExpanded="${args.initialExpanded}"
-        showAddButton="false"
+        .appName=${args.appName}
+        .expandedWidth=${args.expandedWidth}
+        .moreLabel=${args.moreLabel}
+        .initialExpanded=${args.initialExpanded}
+        .showAddButton=${args.showAddButton}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -474,11 +474,11 @@ export const ProgrammaticControl: Story = {
       
       <spectrum-rail
         id="controlled-rail"
-        .appName="${args.appName}"
-        .expandedWidth="${args.expandedWidth}"
-        .moreLabel="${args.moreLabel}"
-        .initialExpanded="${args.initialExpanded}"
-        .showAddButton="${args.showAddButton}"
+        .appName=${args.appName}
+        .expandedWidth=${args.expandedWidth}
+        .moreLabel=${args.moreLabel}
+        .initialExpanded=${args.initialExpanded}
+        .showAddButton=${args.showAddButton}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => action('Search Changed')({ value: e.detail.value })}
         @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}

@@ -22,6 +22,36 @@ To start working with this designsystem, clone this repo to a new directory:
 git clone
 ```
 
+## 📥 Installation
+
+To install the package in your project:
+
+1. **Configure npm to use the GCP Artifact Registry** by creating or updating your `.npmrc` file:
+   ```bash
+   # Create or update .npmrc file
+   echo "@unops-itg-npm:registry=https://europe-west1-npm.pkg.dev/unops-itg-artifacts-prod/unops-itg-npm/" > .npmrc
+   ```
+
+2. **Authenticate with GCP Artifact Registry:**
+   ```bash
+   # Install Google Cloud CLI if you haven't already
+   # https://cloud.google.com/sdk/docs/install
+
+   # Login to GCP
+   gcloud auth login
+
+   # This command will:
+   # 1. Get a fresh GCP access token
+   # 2. Use it to authenticate with npm
+   # 3. Store the token in your .npmrc file
+   gcloud auth print-access-token | npm login --registry=https://europe-west1-npm.pkg.dev/unops-itg-artifacts-prod/unops-itg-npm/ --always-auth
+   ```
+
+3. **Install the package:**
+   ```bash
+   npm install @unops-itg-npm/cpit-spectrum
+   ```
+
 ## 👩‍💻 Usage
 
 1. Install dependencies: `npm install`
@@ -42,3 +72,22 @@ npm run generate <sub-folder>
 
 ## License
 MIT &copy; [UNOPS](https://www.unops.org)
+
+## 📦 Publishing the Core Package
+
+To publish a new version of the core package to the GCP Artifact Registry:
+
+1. **Increment the version** in `packages/core/package.json` (e.g., bump the alpha version).
+2. **Navigate to the core package directory:**
+   ```bash
+   cd packages/core
+   ```
+3. **Publish the package:**
+   ```bash
+   npm publish
+   ```
+
+> **Note:**
+> - The `publish` script has been removed from `package.json` to prevent double publishing.
+> - The registry is configured via the root `.npmrc` file.
+> - If you see a version error, increment the version again and retry.
