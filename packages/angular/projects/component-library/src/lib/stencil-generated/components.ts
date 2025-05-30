@@ -105,19 +105,19 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
   /**
    * Event emitted when a child node is clicked
    */
-  'child-action': EventEmitter<CustomEvent<{ action: string; label: string; }>>;
+  'child-action': EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
   /**
    * Event emitted when a parent node is expanded
    */
-  'expand-action': EventEmitter<CustomEvent<{ label: string; }>>;
+  'expand-action': EventEmitter<CustomEvent<{ label: string; id: string }>>;
   /**
    * Event emitted when a parent node is contracted
    */
-  'contract-action': EventEmitter<CustomEvent<{ label: string; }>>;
+  'contract-action': EventEmitter<CustomEvent<{ label: string; id: string }>>;
   /**
    * Event emitted when a context action is clicked
    */
-  'context-action': EventEmitter<CustomEvent<{ value: string; label: string }>>;
+  'context-action': EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
 }
 
 
@@ -146,7 +146,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   /**
    * Event emitted when an action is clicked
    */
-  'action-click': EventEmitter<CustomEvent<{ value: string; targetKey: string }>>;
+  'action-click': EventEmitter<CustomEvent<{ action: string; targetKey: string }>>;
   /**
    * Event emitted when the menu is closed
    */
@@ -242,7 +242,7 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
   /**
    * Emits when a rail action is triggered
    */
-  railAction: EventEmitter<CustomEvent<{ action: string, label: string }>>;
+  railAction: EventEmitter<CustomEvent<{ action: string; id: string }>>;
   /**
    * Emits when the add button is clicked
    */

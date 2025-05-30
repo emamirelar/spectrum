@@ -19,10 +19,10 @@ A popup menu for contextual actions that can be attached to any element.
 
 ## Events
 
-| Event          | Description                             | Type                                                 |
-| -------------- | --------------------------------------- | ---------------------------------------------------- |
-| `action-click` | Event emitted when an action is clicked | `CustomEvent<{ value: string; targetKey: string; }>` |
-| `menu-close`   | Event emitted when the menu is closed   | `CustomEvent<void>`                                  |
+| Event          | Description                             | Type                                                  |
+| -------------- | --------------------------------------- | ----------------------------------------------------- |
+| `action-click` | Event emitted when an action is clicked | `CustomEvent<{ action: string; targetKey: string; }>` |
+| `menu-close`   | Event emitted when the menu is closed   | `CustomEvent<void>`                                   |
 
 
 ## Methods
@@ -54,18 +54,18 @@ Type: `Promise<boolean>`
 
 
 
-### `show(actions: any[], x: number, y: number, targetKey: string) => Promise<void>`
+### `show(actions: ContextMenuAction[], x: number, y: number, targetKey: string) => Promise<void>`
 
 
 
 #### Parameters
 
-| Name        | Type     | Description |
-| ----------- | -------- | ----------- |
-| `actions`   | `any[]`  |             |
-| `x`         | `number` |             |
-| `y`         | `number` |             |
-| `targetKey` | `string` |             |
+| Name        | Type                  | Description |
+| ----------- | --------------------- | ----------- |
+| `actions`   | `ContextMenuAction[]` |             |
+| `x`         | `number`              |             |
+| `y`         | `number`              |             |
+| `targetKey` | `string`              |             |
 
 #### Returns
 

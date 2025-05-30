@@ -7,52 +7,51 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 interface ContextMenuAction {
   label: string;
   icon: string;
-  value: string;
+  action: string;
+  id: string;
   ripple?: boolean;
 }
 
 // Define the type for our component meta
 interface SpectrumContextMenuArgs {
-  actions: any[];
+  actions: ContextMenuAction[];
   targetKey: string;
   isOpen: boolean;
-  position?: string;
+  position: 'left' | 'right' | 'top' | 'bottom';
+  showTrigger: boolean;
 }
 
 // Define story meta
-const meta = {
+const meta: Meta<SpectrumContextMenuArgs> = {
   title: 'Components/SpectrumContextMenu',
-  tags: ['autodocs'],
+  argTypes: {
+    actions: { control: 'object' },
+    targetKey: { control: 'text' },
+    isOpen: { control: 'boolean' },
+    position: {
+      control: { type: 'select' },
+      options: ['left', 'right', 'top', 'bottom'],
+    },
+    showTrigger: { control: 'boolean' },
+  },
   args: {
     actions: [
-      { label: 'Edit', icon: 'edit', value: 'edit' },
-      { label: 'Delete', icon: 'delete', value: 'delete' },
-      { label: 'Share', icon: 'share', value: 'share' }
+      { label: 'Edit', icon: 'edit', action: 'edit', id: 'edit-action', ripple: true },
+      { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action' },
+      { label: 'Duplicate', icon: 'content_copy', action: 'duplicate', id: 'duplicate-action' },
+      { label: 'Share', icon: 'share', action: 'share', id: 'share-action' },
     ],
-    targetKey: 'item-1',
-    isOpen: true,
-    position: 'right'
+    targetKey: 'demo-item',
+    isOpen: false,
+    position: 'right',
+    showTrigger: true,
   },
-  argTypes: {
+  parameters: {
     actions: {
-      control: 'object',
-      description: 'Array of action items to display in the menu'
+      handles: ['action-click', 'menu-close', 'context-action'],
     },
-    targetKey: {
-      control: 'text',
-      description: 'Key of the item that triggered the menu'
-    },
-    isOpen: {
-      control: 'boolean',
-      description: 'Whether the menu is currently open'
-    },
-    position: {
-      control: 'select',
-      options: ['left', 'right'],
-      description: 'Position of the menu relative to the trigger'
-    }
   }
-} satisfies Meta;
+};
 
 export default meta;
 type Story = StoryObj<SpectrumContextMenuArgs>;
@@ -189,10 +188,10 @@ export const WithCollapsibleList: Story = {
 export const CustomActions: Story = {
   args: {
     actions: [
-      { label: 'View Details', icon: 'visibility', value: 'view' },
-      { label: 'Download', icon: 'download', value: 'download' },
-      { label: 'Mark as Important', icon: 'star', value: 'mark-important' },
-      { label: 'Report Issue', icon: 'flag', value: 'report' },
+      { label: 'View Details', icon: 'visibility', action: 'view', id: 'view-action' },
+      { label: 'Download', icon: 'download', action: 'download', id: 'download-action' },
+      { label: 'Mark as Important', icon: 'star', action: 'mark-important', id: 'mark-important-action' },
+      { label: 'Report Issue', icon: 'flag', action: 'report', id: 'report-action' },
     ],
     isOpen: true,
   },

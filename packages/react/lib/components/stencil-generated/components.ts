@@ -57,10 +57,10 @@ export const SpectrumChip: StencilReactComponent<SpectrumChipElement, SpectrumCh
 });
 
 type SpectrumCollapsibleListEvents = {
-    onChildAction: EventName<CustomEvent<{ action: string; label: string; }>>,
-    onExpandAction: EventName<CustomEvent<{ label: string; }>>,
-    onContractAction: EventName<CustomEvent<{ label: string; }>>,
-    onContextAction: EventName<CustomEvent<{ value: string; label: string }>>
+    onChildAction: EventName<CustomEvent<{ action: string; label: string; id: string }>>,
+    onExpandAction: EventName<CustomEvent<{ label: string; id: string }>>,
+    onContractAction: EventName<CustomEvent<{ label: string; id: string }>>,
+    onContextAction: EventName<CustomEvent<{ action: string; label: string; id: string }>>
 };
 
 export const SpectrumCollapsibleList: StencilReactComponent<SpectrumCollapsibleListElement, SpectrumCollapsibleListEvents> = /*@__PURE__*/ createComponent<SpectrumCollapsibleListElement, SpectrumCollapsibleListEvents>({
@@ -78,7 +78,7 @@ export const SpectrumCollapsibleList: StencilReactComponent<SpectrumCollapsibleL
 });
 
 type SpectrumContextMenuEvents = {
-    onActionClick: EventName<CustomEvent<{ value: string; targetKey: string }>>,
+    onActionClick: EventName<CustomEvent<{ action: string; targetKey: string }>>,
     onMenuClose: EventName<CustomEvent<void>>
 };
 
@@ -129,7 +129,7 @@ export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, Sp
 type SpectrumRailEvents = {
     onExpandedChange: EventName<CustomEvent<boolean>>,
     onSearchChange: EventName<CustomEvent<{ value: string }>>,
-    onRailAction: EventName<CustomEvent<{ action: string, label: string }>>,
+    onRailAction: EventName<CustomEvent<{ action: string; id: string }>>,
     onAddAction: EventName<CustomEvent<void>>
 };
 

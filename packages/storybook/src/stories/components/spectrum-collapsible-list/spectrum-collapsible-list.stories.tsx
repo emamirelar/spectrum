@@ -10,6 +10,7 @@ interface CollapsibleListItem {
   icon: string;
   expanded?: boolean;
   action?: string;
+  id: string;
   ripple?: boolean;
   children?: CollapsibleListItem[];
 }
@@ -17,7 +18,8 @@ interface CollapsibleListItem {
 interface ContextAction {
   label: string;
   icon: string;
-  value: string;
+  action: string;
+  id: string;
   ripple?: boolean;
 }
 
@@ -37,27 +39,32 @@ const meta = {
         label: 'Parent Item 1',
         icon: 'folder',
         expanded: true,
+        id: 'parent-1',
         children: [
           {
             label: 'Child Item 1.1',
             icon: 'description',
-            action: 'child-1-1'
+            action: 'child-1-1',
+            id: 'child-1-1'
           },
           {
             label: 'Child Item 1.2',
             icon: 'description',
-            action: 'child-1-2'
+            action: 'child-1-2',
+            id: 'child-1-2'
           }
         ]
       },
       {
         label: 'Parent Item 2',
         icon: 'folder',
+        id: 'parent-2',
         children: [
           {
             label: 'Child Item 2.1',
             icon: 'description',
-            action: 'child-2-1'
+            action: 'child-2-1',
+            id: 'child-2-1'
           }
         ]
       }
@@ -77,6 +84,7 @@ const meta = {
               icon: string;
               expanded?: boolean;
               action?: string;
+              id: string;
               ripple?: boolean;
               children?: CollapsibleListItem[];
             }
@@ -86,15 +94,16 @@ const meta = {
     },
     contextActions: {
       control: 'object',
-      description: 'Context actions for all leaf nodes. Each action should have a label, icon, and value.',
+      description: 'Context actions for all leaf nodes. Each action should have a label, icon, and action.',
       table: {
         type: { 
-          summary: '{ label: string; icon: string; value: string }[]',
+          summary: '{ label: string; icon: string; action: string; id: string }[]',
           detail: `
             interface ContextAction {
               label: string;
               icon: string;
-              value: string;
+              action: string;
+              id: string;
               ripple?: boolean;
             }
           `
@@ -169,22 +178,26 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Parent Item 1',
         icon: 'folder',
         expanded: true,
+        id: 'parent-1',
         children: [
           ...Array.from({ length: 20 }, (_, i) => ({
             label: `Child Item 1.${i + 1}`,
             icon: 'description',
-            action: `child-1-${i + 1}`
+            action: `child-1-${i + 1}`,
+            id: `child-1-${i + 1}`
           }))
         ]
       },
       {
         label: 'Parent Item 2',
         icon: 'folder',
+        id: 'parent-2',
         children: [
           {
             label: 'Child Item 2.1',
             icon: 'description',
-            action: 'child-2-1'
+            action: 'child-2-1',
+            id: 'child-2-1'
           }
         ]
       }
@@ -193,12 +206,14 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
       {
         label: 'Edit',
         icon: 'edit',
-        value: 'edit'
+        action: 'edit',
+        id: 'edit-action'
       },
       {
         label: 'Delete',
         icon: 'delete',
-        value: 'delete'
+        action: 'delete',
+        id: 'delete-action'
       }
     ]
   },
@@ -222,17 +237,20 @@ export const SingleLevel: StoryObj<SpectrumCollapsibleListArgs> = {
       {
         label: 'Item 1',
         icon: 'description',
-        action: 'action-1'
+        action: 'action-1',
+        id: 'item-1'
       },
       {
         label: 'Item 2',
         icon: 'description',
-        action: 'action-2'
+        action: 'action-2',
+        id: 'item-2'
       },
       {
         label: 'Item 3',
         icon: 'description',
-        action: 'action-3'
+        action: 'action-3',
+        id: 'item-3'
       }
     ]
   },
@@ -246,22 +264,26 @@ export const DeepNested: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Level 1',
         icon: 'folder',
         expanded: true,
+        id: 'level-1',
         children: [
           {
             label: 'Level 2.1',
             icon: 'folder',
+            id: 'level-2-1',
             children: [
               {
                 label: 'Level 3.1',
                 icon: 'description',
-                action: 'level-3-1'
+                action: 'level-3-1',
+                id: 'level-3-1'
               }
             ]
           },
           {
             label: 'Level 2.2',
             icon: 'description',
-            action: 'level-2-2'
+            action: 'level-2-2',
+            id: 'level-2-2'
           }
         ]
       }
@@ -276,32 +298,38 @@ export const CustomIcons: StoryObj<SpectrumCollapsibleListArgs> = {
       {
         label: 'Documents',
         icon: 'folder',
+        id: 'documents',
         children: [
           {
             label: 'Reports',
             icon: 'description',
-            action: 'reports'
+            action: 'reports',
+            id: 'reports'
           },
           {
             label: 'Presentations',
             icon: 'slideshow',
-            action: 'presentations'
+            action: 'presentations',
+            id: 'presentations'
           }
         ]
       },
       {
         label: 'Settings',
         icon: 'settings',
+        id: 'settings',
         children: [
           {
             label: 'Account',
             icon: 'person',
-            action: 'account'
+            action: 'account',
+            id: 'account'
           },
           {
             label: 'Preferences',
             icon: 'tune',
-            action: 'preferences'
+            action: 'preferences',
+            id: 'preferences'
           }
         ]
       }
@@ -310,7 +338,6 @@ export const CustomIcons: StoryObj<SpectrumCollapsibleListArgs> = {
   render: renderList
 };
 
-// Pre-expanded items
 export const PreExpanded: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
@@ -318,16 +345,19 @@ export const PreExpanded: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Parent Item 1',
         icon: 'folder',
         expanded: true,
+        id: 'parent-1',
         children: [
           {
             label: 'Child Item 1.1',
             icon: 'description',
-            action: 'child-1-1'
+            action: 'child-1-1',
+            id: 'child-1-1'
           },
           {
             label: 'Child Item 1.2',
             icon: 'description',
-            action: 'child-1-2'
+            action: 'child-1-2',
+            id: 'child-1-2'
           }
         ]
       },
@@ -335,11 +365,13 @@ export const PreExpanded: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Parent Item 2',
         icon: 'folder',
         expanded: true,
+        id: 'parent-2',
         children: [
           {
             label: 'Child Item 2.1',
             icon: 'description',
-            action: 'child-2-1'
+            action: 'child-2-1',
+            id: 'child-2-1'
           }
         ]
       }
@@ -348,7 +380,6 @@ export const PreExpanded: StoryObj<SpectrumCollapsibleListArgs> = {
   render: renderList
 };
 
-// Example: Child node inherits parent icon
 export const InheritParentIcon: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
@@ -356,16 +387,19 @@ export const InheritParentIcon: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Parent Folder',
         icon: 'folder',
         expanded: true,
+        id: 'parent-folder',
         children: [
           {
             label: 'Child Inherits Icon',
             icon: 'folder',
-            action: 'child-inherit'
+            action: 'child-inherit',
+            id: 'child-inherit'
           },
           {
             label: 'Child With Own Icon',
             icon: 'description',
-            action: 'child-own-icon'
+            action: 'child-own-icon',
+            id: 'child-own-icon'
           }
         ]
       }
@@ -374,7 +408,6 @@ export const InheritParentIcon: StoryObj<SpectrumCollapsibleListArgs> = {
   render: renderList
 };
 
-// Context actions on leaf nodes with popover menu
 export const ContextActions: StoryObj<SpectrumCollapsibleListArgs> = {
   args: {
     items: [
@@ -382,23 +415,27 @@ export const ContextActions: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Project',
         icon: 'folder',
         expanded: true,
+        id: 'project',
         children: [
           {
             label: 'Report.pdf',
             icon: 'picture_as_pdf',
             action: 'open-pdf',
+            id: 'report-pdf',
             ripple: true
           },
           {
             label: 'Notes.txt',
             icon: 'description',
             action: 'open-txt',
+            id: 'notes-txt',
             ripple: true
           },
           {
             label: 'Presentation.pptx',
             icon: 'slideshow',
             action: 'open-pptx',
+            id: 'presentation-pptx',
             ripple: true
           }
         ]
@@ -406,32 +443,25 @@ export const ContextActions: StoryObj<SpectrumCollapsibleListArgs> = {
       {
         label: 'Archive',
         icon: 'folder',
+        id: 'archive',
         children: [
           {
             label: 'Old Data.csv',
             icon: 'table_chart',
             action: 'open-csv',
+            id: 'old-data-csv',
             ripple: true
           }
         ]
       }
     ],
     contextActions: [
-      { label: 'Download', icon: 'download', value: 'download', ripple: true },
-      { label: 'Share', icon: 'share', value: 'share', ripple: true },
-      { label: 'Delete', icon: 'delete', value: 'delete', ripple: true }
+      { label: 'Download', icon: 'download', action: 'download', id: 'download-action', ripple: true },
+      { label: 'Share', icon: 'share', action: 'share', id: 'share-action', ripple: true },
+      { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action', ripple: true }
     ]
   },
-  render: renderList,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-This story demonstrates context actions on leaf nodes with ripple effects. Only leaf nodes with actions show the three-dot icon. Clicking the icon opens a native popover menu. Selecting an action emits the **context-action** event with the action value and the node label. All actions have ripple effects enabled for better visual feedback. The context menu has a 500ms delay before closing to make the ripple effect visible.
-        `
-      }
-    }
-  }
+  render: renderList
 };
 
 export const WithFiltering: StoryObj<SpectrumCollapsibleListArgs> = {
@@ -441,21 +471,25 @@ export const WithFiltering: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Documents',
         icon: 'folder',
         expanded: true,
+        id: 'documents',
         children: [
           {
             label: 'Reports',
             icon: 'description',
-            action: 'reports'
+            action: 'reports',
+            id: 'reports'
           },
           {
             label: 'Presentations',
             icon: 'slideshow',
-            action: 'presentations'
+            action: 'presentations',
+            id: 'presentations'
           },
           {
             label: 'Meeting Notes',
             icon: 'description',
-            action: 'meeting-notes'
+            action: 'meeting-notes',
+            id: 'meeting-notes'
           }
         ]
       },
@@ -463,56 +497,48 @@ export const WithFiltering: StoryObj<SpectrumCollapsibleListArgs> = {
         label: 'Settings',
         icon: 'settings',
         expanded: true,
+        id: 'settings',
         children: [
           {
             label: 'Account',
             icon: 'person',
-            action: 'account'
+            action: 'account',
+            id: 'account'
           },
           {
             label: 'Preferences',
             icon: 'tune',
-            action: 'preferences'
+            action: 'preferences',
+            id: 'preferences'
           }
         ]
       },
       {
-        label: 'Reports',  // This parent matches the filter
+        label: 'Reports',
         icon: 'assessment',
         expanded: true,
+        id: 'reports-section',
         children: [
           {
             label: 'Financial Reports',
             icon: 'attach_money',
-            action: 'financial-reports'
+            action: 'financial-reports',
+            id: 'financial-reports'
           },
           {
             label: 'Analytics',
             icon: 'insights',
-            action: 'analytics'
+            action: 'analytics',
+            id: 'analytics'
           }
         ]
       }
     ],
     filter: 'reports'
   },
-  render: renderList,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-This story demonstrates filtering functionality. When a filter value is provided:
-- Items (parent or child) with labels containing the filter text are shown
-- Parent items with matching children are shown with only their matching children
-- Parent items without matching children and that don't match themselves are hidden
-- The filter is case-insensitive for better user experience
-        `
-      }
-    }
-  }
+  render: renderList
 };
 
-// Example showing both mutually exclusive and non-exclusive behavior
 export const ExpansionBehavior: StoryObj<SpectrumCollapsibleListArgs> = {
   render: (args) => html`
     <div style="display: flex; gap: 40px; justify-content: center;">
@@ -545,25 +571,28 @@ export const ExpansionBehavior: StoryObj<SpectrumCollapsibleListArgs> = {
       {
         label: 'Section 1',
         icon: 'folder',
+        id: 'section-1',
         children: [
-          { label: 'Item 1.1', icon: 'description', action: 'item-1-1' },
-          { label: 'Item 1.2', icon: 'description', action: 'item-1-2' }
+          { label: 'Item 1.1', icon: 'description', action: 'item-1-1', id: 'item-1-1' },
+          { label: 'Item 1.2', icon: 'description', action: 'item-1-2', id: 'item-1-2' }
         ]
       },
       {
         label: 'Section 2',
         icon: 'folder',
+        id: 'section-2',
         children: [
-          { label: 'Item 2.1', icon: 'description', action: 'item-2-1' },
-          { label: 'Item 2.2', icon: 'description', action: 'item-2-2' }
+          { label: 'Item 2.1', icon: 'description', action: 'item-2-1', id: 'item-2-1' },
+          { label: 'Item 2.2', icon: 'description', action: 'item-2-2', id: 'item-2-2' }
         ]
       },
       {
         label: 'Section 3',
         icon: 'folder',
+        id: 'section-3',
         children: [
-          { label: 'Item 3.1', icon: 'description', action: 'item-3-1' },
-          { label: 'Item 3.2', icon: 'description', action: 'item-3-2' }
+          { label: 'Item 3.1', icon: 'description', action: 'item-3-1', id: 'item-3-1' },
+          { label: 'Item 3.2', icon: 'description', action: 'item-3-2', id: 'item-3-2' }
         ]
       }
     ]
