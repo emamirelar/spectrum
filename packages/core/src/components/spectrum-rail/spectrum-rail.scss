@@ -18,6 +18,7 @@
   --rail-font-size: var(--spectrum-sys-font-size);
   --rail-spacing: var(--spectrum-sys-spacing, 8px);
   --rail-spacing-lg: var(--spectrum-sys-spacing-large, 16px);
+  --rail-collapsed-offset: 0px;
 
   display: flex;
   align-items: center;
@@ -42,10 +43,12 @@
   transition: 
     width var(--rail-transition-duration) var(--rail-transition-timing),
     height var(--rail-transition-duration) var(--rail-transition-timing),
-    border-radius var(--rail-transition-duration) var(--rail-transition-timing);
+    border-radius var(--rail-transition-duration) var(--rail-transition-timing),
+    margin-left var(--rail-transition-duration) var(--rail-transition-timing);
   
   /* Centering for the fixed-width rail */
   margin: 0 auto;
+  margin-left: var(--rail-collapsed-offset);
   
   /* Add standard Spectrum padding to top and bottom */
   padding-top: var(--spectrum-sys-spacing-large, 16px);
@@ -66,6 +69,7 @@
     border-radius: 0;
     padding-top: 0;
     padding-bottom: 0;
+    margin-left: 0;
     
     .rail-expanded-content {
       opacity: 1;
@@ -133,7 +137,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  // width: 100%;
   justify-content: center;
   transition: all var(--rail-transition-duration) var(--rail-transition-timing);
   padding: var(--rail-spacing) var(--spectrum-sys-spacing-medium, 12px);
@@ -320,20 +323,16 @@
 .more-expanded {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  padding: var(--rail-spacing);
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   box-shadow: 0px -2px 37px 0px rgba(0, 0, 0, 0.29);
 }
 
-/* More button text specific styling to ensure visibility */
-.more-button .spectrum-button__text,
-.more-button span {
-  display: inline-flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  color: var(--spectrum-color-text, #000) !important;
-}
+
+
 
 /* Force all children spans to be visible */
 spectrum-button:not([icon-only]) span {

@@ -166,6 +166,10 @@ export namespace Components {
      */
     interface SpectrumRail {
         /**
+          * Add button icon (displayed in both states)
+         */
+        "addIcon": string;
+        /**
           * Add button label (displayed in expanded state)
          */
         "addLabel": string;
@@ -173,6 +177,10 @@ export namespace Components {
           * Application name to display in expanded menu
          */
         "appName": string;
+        /**
+          * Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.)
+         */
+        "collapsedOffset": string;
         /**
           * Expanded width for the rail (with units like px, rem, etc.)
          */
@@ -680,6 +688,10 @@ declare namespace LocalJSX {
      */
     interface SpectrumRail {
         /**
+          * Add button icon (displayed in both states)
+         */
+        "addIcon"?: string;
+        /**
           * Add button label (displayed in expanded state)
          */
         "addLabel"?: string;
@@ -687,6 +699,10 @@ declare namespace LocalJSX {
           * Application name to display in expanded menu
          */
         "appName"?: string;
+        /**
+          * Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.)
+         */
+        "collapsedOffset"?: string;
         /**
           * Expanded width for the rail (with units like px, rem, etc.)
          */

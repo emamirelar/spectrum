@@ -8,6 +8,9 @@ interface SpectrumRailArgs {
   moreLabel: string;
   initialExpanded?: boolean;
   showAddButton?: boolean;
+  collapsedOffset?: string;
+  addLabel?: string;
+  addIcon?: string;
 }
 
 // Define interface for the rail element to help TypeScript understand the setExpanded method
@@ -23,7 +26,10 @@ const meta = {
     expandedWidth: '340px',
     moreLabel: 'Explore more',
     initialExpanded: false,
-    showAddButton: true
+    showAddButton: true,
+    collapsedOffset: '0px',
+    addLabel: 'Add new',
+    addIcon: 'add'
   },
   argTypes: {
     appName: { 
@@ -64,6 +70,30 @@ const meta = {
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' }
+      }
+    },
+    collapsedOffset: {
+      control: 'text',
+      description: 'Offset from the left when rail is collapsed (e.g. "20px", "1rem")',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '0px' }
+      }
+    },
+    addLabel: {
+      control: 'text',
+      description: 'Label for the add button (displayed in expanded state)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Add new' }
+      }
+    },
+    addIcon: {
+      control: 'text',
+      description: 'Icon for the add button (displayed in both states)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'add' }
       }
     }
   },
@@ -254,6 +284,9 @@ export const Default: Story = {
           .expandedWidth=${args.expandedWidth}
           .moreLabel=${args.moreLabel}
           .initialExpanded=${args.initialExpanded}
+          .collapsedOffset=${args.collapsedOffset}
+          .addLabel=${args.addLabel}
+          .addIcon=${args.addIcon}
           @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
           @searchChange=${(e: CustomEvent) => {
             action('Search Changed')({ value: e.detail.value });
@@ -280,10 +313,43 @@ export const Default: Story = {
   }
 };
 
+// Add a new story to demonstrate custom add label
+export const CustomAddLabel: Story = {
+  args: {
+    addLabel: 'Create New Item',
+    initialExpanded: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail with a custom label for the add button.'
+      }
+    }
+  },
+  render: Default.render
+};
+
+// Add a new story to demonstrate the collapsedOffset
+export const WithOffset: Story = {
+  args: {
+    collapsedOffset: '20px',
+    initialExpanded: false
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail with a 20px offset from the left when collapsed. The offset will be removed when expanded.'
+      }
+    }
+  },
+  render: Default.render
+};
+
 // Pinned items with their specific context actions 
 export const PinnedItems: Story = {
   args: {
     initialExpanded: true,
+    collapsedOffset: '0px'
   },
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
@@ -292,6 +358,8 @@ export const PinnedItems: Story = {
         .expandedWidth=${args.expandedWidth}
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
+        .collapsedOffset=${args.collapsedOffset}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -339,6 +407,7 @@ export const RecentItems: Story = {
         .expandedWidth=${args.expandedWidth}
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -403,6 +472,7 @@ export const WithoutAddButton: Story = {
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
         .showAddButton=${args.showAddButton}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -445,6 +515,7 @@ export const ProgrammaticControl: Story = {
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
         .showAddButton=${args.showAddButton}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => action('Search Changed')({ value: e.detail.value })}
         @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
@@ -551,4 +622,21 @@ export const WithCollapsibleListActions = {
       }
     }
   }
+};
+
+// Add a new story to demonstrate custom add icon
+export const CustomAddIcon: Story = {
+  args: {
+    addIcon: 'create_new_folder',
+    addLabel: 'New Folder',
+    initialExpanded: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail with a custom icon for the add button.'
+      }
+    }
+  },
+  render: Default.render
 }; 

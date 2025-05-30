@@ -30,6 +30,12 @@ export class SpectrumRail {
   /** Add button label (displayed in expanded state) */
   @Prop() addLabel: string = 'Add new';
   
+  /** Add button icon (displayed in both states) */
+  @Prop() addIcon: string = 'add';
+  
+  /** Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.) */
+  @Prop() collapsedOffset: string = '0px';
+  
   /** Current expanded state of the rail */
   @State() expanded: boolean = false;
 
@@ -203,6 +209,9 @@ export class SpectrumRail {
       this.el.style.setProperty('--rail-expanded-width', this.expandedWidth.toString());
     }
 
+    // Set collapsed offset
+    this.el.style.setProperty('--rail-collapsed-offset', this.collapsedOffset);
+
     // Set initial expanded state if specified
     if (this.initialExpanded) {
       this.expanded = true;
@@ -313,18 +322,17 @@ export class SpectrumRail {
                   size="sm"
                   iconOnly={true}
                   showLeftIcon={true}
-                  leftIcon="add"
+                  leftIcon={this.addIcon}
                   onClick={() => this.handleAddClick()}
                   title={this.addLabel}
                   aria-label={this.addLabel}
                 />
               ) : (
                 <spectrum-button
-                  class="add-button"
-                  variant="fab"
-                  size="sm"
+                  variant="secondary"
+                  outline={true}
                   showLeftIcon={true}
-                  leftIcon="add"
+                  leftIcon={this.addIcon}
                   buttonText={this.addLabel}
                   showButtonText={true}
                   onClick={() => this.handleAddClick()}
@@ -372,16 +380,17 @@ export class SpectrumRail {
             ) : (
               <div class="more-expanded">
                 <spectrum-button
-                  class="more-button"
-                  variant="ghost"
+                  variant="secondary"
+                  outline={true}
                   size="base"
                   showLeftIcon={true}
-                  leftIcon="settings"
+                  leftIcon="instant_mix"
                   buttonText={this.moreLabel || 'Explore more'}
                   showButtonText={true}
                   showRightIcon={true}
                   rightIcon="chevron_right"
                   onClick={() => this.handleMoreClick()}
+                  class="more-button"
                 >
                   {moreText}
                 </spectrum-button>

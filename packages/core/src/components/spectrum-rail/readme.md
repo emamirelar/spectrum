@@ -12,14 +12,16 @@ A vertical navigation rail with two states: expanded and contracted
 
 ## Properties
 
-| Property          | Attribute          | Description                                                 | Type      | Default     |
-| ----------------- | ------------------ | ----------------------------------------------------------- | --------- | ----------- |
-| `addLabel`        | `add-label`        | Add button label (displayed in expanded state)              | `string`  | `'Add new'` |
-| `appName`         | `app-name`         | Application name to display in expanded menu                | `string`  | `''`        |
-| `expandedWidth`   | `expanded-width`   | Expanded width for the rail (with units like px, rem, etc.) | `number`  | `280`       |
-| `initialExpanded` | `initial-expanded` | Whether the rail should be initially expanded               | `boolean` | `false`     |
-| `moreLabel`       | `more-label`       | More section label (displayed in expanded state)            | `string`  | `'More'`    |
-| `showAddButton`   | `show-add-button`  | Whether to show the add button in the rail                  | `boolean` | `true`      |
+| Property          | Attribute          | Description                                                             | Type      | Default     |
+| ----------------- | ------------------ | ----------------------------------------------------------------------- | --------- | ----------- |
+| `addIcon`         | `add-icon`         | Add button icon (displayed in both states)                              | `string`  | `'add'`     |
+| `addLabel`        | `add-label`        | Add button label (displayed in expanded state)                          | `string`  | `'Add new'` |
+| `appName`         | `app-name`         | Application name to display in expanded menu                            | `string`  | `''`        |
+| `collapsedOffset` | `collapsed-offset` | Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.) | `string`  | `'0px'`     |
+| `expandedWidth`   | `expanded-width`   | Expanded width for the rail (with units like px, rem, etc.)             | `number`  | `280`       |
+| `initialExpanded` | `initial-expanded` | Whether the rail should be initially expanded                           | `boolean` | `false`     |
+| `moreLabel`       | `more-label`       | More section label (displayed in expanded state)                        | `string`  | `'More'`    |
+| `showAddButton`   | `show-add-button`  | Whether to show the add button in the rail                              | `boolean` | `true`      |
 
 
 ## Events

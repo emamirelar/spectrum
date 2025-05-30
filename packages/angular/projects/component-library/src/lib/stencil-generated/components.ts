@@ -210,7 +210,7 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
-  inputs: ['addLabel', 'appName', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
   methods: ['setExpanded', 'setShowAddButton']
 })
 @Component({
@@ -218,7 +218,7 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['addLabel', 'appName', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
 })
 export class SpectrumRail {
   protected el: HTMLElement;

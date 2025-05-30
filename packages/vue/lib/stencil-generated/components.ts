@@ -102,6 +102,8 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'initialExpanded',
   'showAddButton',
   'addLabel',
+  'addIcon',
+  'collapsedOffset',
   'expandedChange',
   'searchChange',
   'railAction',
