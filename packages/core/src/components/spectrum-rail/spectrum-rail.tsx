@@ -284,7 +284,6 @@ export class SpectrumRail {
           <div class="rail-section menu">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}
@@ -319,7 +318,6 @@ export class SpectrumRail {
           <div class="rail-section search">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}
@@ -350,7 +348,6 @@ export class SpectrumRail {
             <div class="rail-section add">
               {!this.expanded ? (
                 <spectrum-button
-                  class="rail-icon-only"
                   variant="fab"
                   size="sm"
                   iconOnly={true}
@@ -380,7 +377,6 @@ export class SpectrumRail {
           <div class="rail-section items">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}
@@ -402,7 +398,6 @@ export class SpectrumRail {
           <div class="rail-section more">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}

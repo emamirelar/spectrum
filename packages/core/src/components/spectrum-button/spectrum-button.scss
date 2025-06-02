@@ -143,7 +143,7 @@
   &--base {
     font-size: var(--button-font-size-base);
     min-height: var(--button-size-base);
-    padding: 0 var(--button-padding-base);
+    padding: var(--button-padding-base);
     
     .spectrum-button__icon {
       font-size: var(--button-icon-size-base);
@@ -279,8 +279,8 @@
 
     &:not(.spectrum-button--icon-only) {
       border-radius: 100vw;
-      padding: 0 calc(var(--button-padding) * 1.5);
-      height: var(--button-min-height);
+      // padding: calc(var(--button-padding));
+      // height: var(--button-min-height);
       width: auto;
       aspect-ratio: auto;
       
@@ -334,7 +334,7 @@
     line-height: 1;
     position: relative;
     z-index: 1;
-    padding: var(--button-padding) 0;
+    // padding: var(--button-padding) 0;
   }
 
   // Icon-only variant

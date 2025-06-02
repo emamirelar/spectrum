@@ -221,7 +221,7 @@ const favoritesItems = [
   {
     label: 'Favorites',
     icon: 'star',
-    expanded: true,
+    expanded: false,
     id: 'favorites',
     children: [
       { label: 'Project Dashboard', action: 'open-dashboard', id: 'project-dashboard' },
@@ -461,7 +461,128 @@ export const InitiallyExpanded: Story = {
   args: {
     initialExpanded: true,
   },
-  render: Default.render,
+  render: (args) => {
+    // Create a custom dataset where only the first parent is expanded
+    const customItems = [
+      {
+        label: 'Pinned',
+        icon: 'push_pin',
+        expanded: true, // Only this one is expanded
+        id: 'pinned',
+        children: [
+          { label: 'UX Design Framework', action: 'open-ux-framework', id: 'ux-framework' },
+          { label: 'Project Roadmap', action: 'open-roadmap', id: 'project-roadmap' },
+          { label: 'Team Calendar', action: 'open-calendar', id: 'team-calendar' }
+        ]
+      },
+      {
+        label: 'Favorites',
+        icon: 'star',
+        expanded: false, // Collapsed
+        id: 'favorites',
+        children: [
+          { label: 'Project Dashboard', action: 'open-dashboard', id: 'project-dashboard' },
+          { label: 'Team Chat', action: 'open-chat', id: 'team-chat' },
+          { label: 'Document Library', action: 'open-library', id: 'document-library' }
+        ]
+      },
+      {
+        label: 'Recent',
+        icon: 'schedule',
+        expanded: false, // Collapsed
+        id: 'recent',
+        children: [
+          { label: 'Q4 Financial Report', action: 'open-q4-financial', id: 'q4-financial' },
+          { label: 'Product Launch Plan', action: 'open-product-launch', id: 'product-launch' },
+          { label: 'Team Onboarding', action: 'open-team-onboarding', id: 'team-onboarding' },
+          { label: 'Vendor Contracts', action: 'open-vendor-contracts', id: 'vendor-contracts' },
+          { label: 'Client Presentation', action: 'open-client-presentation', id: 'client-presentation' },
+          { label: 'Project Timeline', action: 'open-project-timeline', id: 'project-timeline' },
+          { label: 'User Testing Results', action: 'open-user-testing', id: 'user-testing' },
+          { label: 'System Requirements', action: 'open-system-requirements', id: 'system-requirements' },
+          { label: 'Weekly Status Update', action: 'open-weekly-status', id: 'weekly-status' },
+          { label: 'Mobile App Wireframes', action: 'open-mobile-wireframes', id: 'mobile-wireframes' },
+          { label: 'Social Media Strategy', action: 'open-social-media-strategy', id: 'social-media-strategy' },
+          { label: 'Technical Documentation', action: 'open-technical-documentation', id: 'technical-documentation' },
+          { label: 'Support Ticket Analysis', action: 'open-support-ticket-analysis', id: 'support-ticket-analysis' },
+          { label: 'Resource Allocation', action: 'open-resource-allocation', id: 'resource-allocation' },
+          { label: 'Feature Prioritization', action: 'open-feature-prioritization', id: 'feature-prioritization' },
+          { label: 'Usability Test Plan', action: 'open-usability-test', id: 'usability-test' },
+          { label: 'Infrastructure Migration', action: 'open-infrastructure-migration', id: 'infrastructure-migration' },
+          { label: 'Stakeholder Feedback', action: 'open-stakeholder-feedback', id: 'stakeholder-feedback' },
+          { label: 'Customer Journey Map', action: 'open-customer-journey', id: 'customer-journey' },
+          { label: 'OKR Review Document', action: 'open-okr-review', id: 'okr-review' }
+        ]
+      },
+      {
+        label: 'Settings',
+        icon: 'settings',
+        expanded: false, // Collapsed
+        id: 'settings',
+        children: [
+          { label: 'Account', action: 'open-account', id: 'account' },
+          { label: 'Preferences', action: 'open-preferences', id: 'preferences' },
+          { label: 'Help & Support', action: 'open-help', id: 'help' }
+        ]
+      }
+    ];
+
+    setTimeout(() => {
+      // Listen for context menu open
+      const list = document.querySelector('spectrum-collapsible-list');
+      if (list) {
+        list.addEventListener('context-menu-open', (e) => {
+          action('Context Menu Open')((e as CustomEvent).detail);
+        });
+      }
+      // Listen for context menu action globally
+      window.addEventListener('actionClick', (e) => {
+        action('Context Menu Action')((e as CustomEvent).detail);
+      });
+    }, 500);
+
+    return html`
+      <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
+        <spectrum-rail
+          .appName=${args.appName}
+          .expandedWidth=${args.expandedWidth}
+          .moreLabel=${args.moreLabel}
+          .initialExpanded=${args.initialExpanded}
+          .collapsedOffset=${args.collapsedOffset}
+          .addLabel=${args.addLabel}
+          .addIcon=${args.addIcon}
+          @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
+          @searchChange=${(e: CustomEvent) => {
+            const detail = e.detail;
+            action('Search Changed')({ action: detail.action, value: detail.value });
+            // Update the list component's filter
+            const list = document.querySelector('spectrum-collapsible-list');
+            if (list) {
+              list.setAttribute('filter', detail.value);
+            }
+          }}
+          @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+          @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
+        >
+          <spectrum-collapsible-list 
+            slot="items"
+            .items=${customItems}
+            @childAction=${handleChildAction}
+            @expandAction=${handleExpandAction}
+            @contractAction=${handleContractAction}
+            @contextAction=${handleContextAction}
+          ></spectrum-collapsible-list>
+        </spectrum-rail>
+      </div>
+    `;
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail in expanded state with only the first parent item (Pinned) expanded on load. Other sections remain collapsed.'
+      }
+    }
+  }
 };
 
 // Story with no add button
