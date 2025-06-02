@@ -8,6 +8,7 @@ export interface CollapsibleListItem {
   label: string;
   icon?: string;
   action?: string;
+  id: string;
   expanded?: boolean;
   children?: CollapsibleListItem[];
   contextActions?: ContextMenuAction[]; // Optional per-parent context actions
@@ -51,6 +52,16 @@ export class SpectrumCollapsibleList {
   @State() originalItems: CollapsibleListItem[] = [];
 
   /**
+   * State to track which item is being edited (by item id)
+   */
+  @State() editingItemId: string | null = null;
+
+  /**
+   * State to store the original name when editing starts
+   */
+  @State() originalEditingName: string = '';
+
+  /**
    * Host element reference
    */
   @Element() hostElement!: HTMLElement;
@@ -58,22 +69,52 @@ export class SpectrumCollapsibleList {
   /**
    * Event emitted when a child node is clicked
    */
-  @Event({ eventName: 'child-action' }) childAction: EventEmitter<{ action: string; label: string; }>; // eslint-disable-line
+  @Event({
+    eventName: 'child-action',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) childAction: EventEmitter<{ action: string; label: string; id: string }>;
 
   /**
    * Event emitted when a parent node is expanded
    */
-  @Event({ eventName: 'expand-action' }) expandAction: EventEmitter<{ label: string; }>; // eslint-disable-line
+  @Event({
+    eventName: 'expand-action',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) expandAction: EventEmitter<{ label: string; id: string }>;
 
   /**
    * Event emitted when a parent node is contracted
    */
-  @Event({ eventName: 'contract-action' }) contractAction: EventEmitter<{ label: string; }>; // eslint-disable-line
+  @Event({
+    eventName: 'contract-action',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) contractAction: EventEmitter<{ label: string; id: string }>;
 
   /**
    * Event emitted when a context action is clicked
    */
-  @Event({ eventName: 'context-action' }) contextAction: EventEmitter<{ value: string; label: string }>; // eslint-disable-line
+  @Event({
+    eventName: 'context-action',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) contextAction: EventEmitter<{ action: string; label: string; id: string }>;
+
+  /**
+   * Event emitted when an item is renamed
+   */
+  @Event({
+    eventName: 'item-renamed',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) itemRenamed: EventEmitter<{ id: string; oldName: string; newName: string }>;
 
   componentDidLoad() {
     // No need to store the host element anymore
@@ -122,11 +163,11 @@ export class SpectrumCollapsibleList {
       // Expand the clicked item
       newMap[key] = true;
       this.expandedMap = newMap;
-      this.expandAction.emit({ label: item.label });
+      this.expandAction.emit({ label: item.label, id: item.id });
     } else {
       // Just collapse this item
       this.expandedMap = { ...this.expandedMap, [key]: false };
-      this.contractAction.emit({ label: item.label });
+      this.contractAction.emit({ label: item.label, id: item.id });
     }
   }
 
@@ -135,19 +176,19 @@ export class SpectrumCollapsibleList {
    */
   private handleChildClick(item: CollapsibleListItem) {
     if (item.action) {
-      this.childAction.emit({ action: item.action, label: item.label });
+      this.childAction.emit({ action: item.action, label: item.label, id: item.id });
     }
   }
 
   /**
    * Handle click on the context menu icon
    */
-  private handleActionsIconClick(e: MouseEvent, key: string, actions?: ContextMenuAction[]) {
+  private handleActionsIconClick(e: MouseEvent, item: CollapsibleListItem, actions?: ContextMenuAction[]) {
     e.stopPropagation();
     e.preventDefault();
     const iconElement = e.currentTarget as HTMLElement;
     if (!iconElement) {
-      console.warn('Missing icon element for key:', key);
+      console.warn('Missing icon element for item:', item);
       return;
     }
 
@@ -162,10 +203,78 @@ export class SpectrumCollapsibleList {
     }
 
     if (typeof menu['show'] === 'function') {
-      menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, key);
+      menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, item.id);
     } else {
       console.warn('Global context menu exists but show method is not available');
     }
+  }
+
+  /**
+   * Start editing an item
+   */
+  private startEditing(item: CollapsibleListItem) {
+    this.editingItemId = item.id;
+    this.originalEditingName = item.label;
+    
+    // Focus the input on next tick
+    setTimeout(() => {
+      const input = this.hostElement.shadowRoot?.querySelector(`#edit-input-${item.id}`) as HTMLInputElement;
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }, 0);
+  }
+
+  /**
+   * Complete the rename operation
+   */
+  private completeRename(newName: string) {
+    if (this.editingItemId && newName.trim() !== '') {
+      const trimmedName = newName.trim();
+      
+      // Only emit if the name actually changed
+      if (trimmedName !== this.originalEditingName) {
+        this.itemRenamed.emit({
+          id: this.editingItemId,
+          oldName: this.originalEditingName,
+          newName: trimmedName
+        });
+      }
+    }
+    
+    // Reset editing state
+    this.editingItemId = null;
+    this.originalEditingName = '';
+  }
+
+  /**
+   * Cancel the rename operation
+   */
+  private cancelRename() {
+    this.editingItemId = null;
+    this.originalEditingName = '';
+  }
+
+  /**
+   * Handle key events during editing
+   */
+  private handleEditKeyDown(e: KeyboardEvent, currentValue: string) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.completeRename(currentValue);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      this.cancelRename();
+    }
+  }
+
+  /**
+   * Handle blur event during editing
+   */
+  private handleEditBlur(e: FocusEvent) {
+    const input = e.target as HTMLInputElement;
+    this.completeRename(input.value);
   }
 
   /**
@@ -249,7 +358,19 @@ export class SpectrumCollapsibleList {
             onClick={() => isParent ? this.handleParentClick(item, key, parentKey) : this.handleChildClick(item)}
           >
             {this.renderIcon(item.icon, !isParent)}
-            <span class="spectrum-collapsible-list__label">{item.label}</span>
+            {this.editingItemId === item.id ? (
+              <input
+                id={`edit-input-${item.id}`}
+                class="spectrum-collapsible-list__edit-input"
+                type="text"
+                value={item.label}
+                onKeyDown={(e) => this.handleEditKeyDown(e, (e.target as HTMLInputElement).value)}
+                onBlur={(e) => this.handleEditBlur(e)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <span class="spectrum-collapsible-list__label">{item.label}</span>
+            )}
             {isParent && (
               <>
                 <span class="spectrum-collapsible-list__child-count">{item.children?.length}</span>
@@ -261,7 +382,7 @@ export class SpectrumCollapsibleList {
             {!isParent && currentContextActions?.length > 0 && (
               <span 
                 class="spectrum-collapsible-list__icon spectrum-collapsible-list__icon--outlined spectrum-collapsible-list__context-icon"
-                onClick={(e) => this.handleActionsIconClick(e, key, currentContextActions)}
+                onClick={(e) => this.handleActionsIconClick(e, item, currentContextActions)}
                 id={contextIconId}
               >
                 more_vert
@@ -285,11 +406,42 @@ export class SpectrumCollapsibleList {
    * Listen for context menu action clicks
    */
   @Listen('action-click', { target: 'document' })
-  handleContextAction(event: CustomEvent<{ value: string; targetKey: string }>) {
-    // Extract the label from the targetKey (which is in the format "parent > child")
-    const label = event.detail.targetKey.split(' > ').pop() || '';
-    // Emit our own event with the action value and label
-    this.contextAction.emit({ value: event.detail.value, label });
+  handleContextAction(event: CustomEvent<{ action: string; targetKey: string }>) {
+    // Find the leaf node in our items array
+    const findNode = (items: CollapsibleListItem[], key: string): CollapsibleListItem | undefined => {
+      for (const item of items) {
+        if (item.children) {
+          for (const child of item.children) {
+            if (child.id === key) {
+              return child;
+            }
+          }
+          const result = findNode(item.children, key);
+          if (result) return result;
+        }
+      }
+      return undefined;
+    };
+
+    // Find the node
+    const node = findNode(this.originalItems, event.detail.targetKey);
+    if (!node) {
+      console.warn('Could not find node for target key:', event.detail.targetKey);
+      return;
+    }
+
+    // Check if this is a rename action
+    if (event.detail.action === 'rename') {
+      this.startEditing(node);
+      return;
+    }
+
+    // Emit our own event with the action and the node's properties
+    this.contextAction.emit({ 
+      action: event.detail.action, 
+      label: node.label, 
+      id: node.id 
+    });
   }
 
   render() {

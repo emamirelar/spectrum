@@ -8,6 +8,9 @@ interface SpectrumRailArgs {
   moreLabel: string;
   initialExpanded?: boolean;
   showAddButton?: boolean;
+  collapsedOffset?: string;
+  addLabel?: string;
+  addIcon?: string;
 }
 
 // Define interface for the rail element to help TypeScript understand the setExpanded method
@@ -23,7 +26,10 @@ const meta = {
     expandedWidth: '340px',
     moreLabel: 'Explore more',
     initialExpanded: false,
-    showAddButton: true
+    showAddButton: true,
+    collapsedOffset: '0px',
+    addLabel: 'Add new',
+    addIcon: 'add'
   },
   argTypes: {
     appName: { 
@@ -64,6 +70,30 @@ const meta = {
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' }
+      }
+    },
+    collapsedOffset: {
+      control: 'text',
+      description: 'Offset from the left when rail is collapsed (e.g. "20px", "1rem")',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '0px' }
+      }
+    },
+    addLabel: {
+      control: 'text',
+      description: 'Label for the add button (displayed in expanded state)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Add new' }
+      }
+    },
+    addIcon: {
+      control: 'text',
+      description: 'Icon for the add button (displayed in both states)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'add' }
       }
     }
   },
@@ -122,127 +152,113 @@ const meta = {
 export default meta;
 type Story = StoryObj<SpectrumRailArgs>;
 
-// Sample data for the collapsible list with Pinned items
-const pinnedItems = [
-  {
-    label: 'Pinned',
-    icon: 'push_pin',
-    expanded: false,
-    children: [
-      { label: 'UX Design Framework', action: 'open-ux-framework' },
-      { label: 'Budget Planning', action: 'open-budget-planning' },
-      { label: 'Product Roadmap', action: 'open-product-roadmap' },
-      { label: 'User Research', action: 'open-user-research' },
-      { label: 'Marketing Campaign', action: 'open-marketing-campaign' },
-      { label: 'Development Sprint', action: 'open-development-sprint' },
-      { label: 'Competitive Analysis', action: 'open-competitive-analysis' },
-      { label: 'Design System', action: 'open-design-system' },
-      { label: 'Content Strategy', action: 'open-content-strategy' },
-      { label: 'Customer Feedback', action: 'open-customer-feedback' },
-      { label: 'Team Resources', action: 'open-team-resources' },
-      { label: 'Brand Guidelines', action: 'open-brand-guidelines' },
-      { label: 'Platform Architecture', action: 'open-platform-architecture' },
-      { label: 'Security Protocols', action: 'open-security-protocols' },
-      { label: 'API Documentation', action: 'open-api-documentation' },
-      { label: 'Data Analytics', action: 'open-data-analytics' },
-      { label: 'Performance Metrics', action: 'open-performance-metrics' },
-      { label: 'User Journey Maps', action: 'open-user-journey-maps' },
-      { label: 'Accessibility Guidelines', action: 'open-accessibility-guidelines' },
-      { label: 'Strategic Initiatives', action: 'open-strategic-initiatives' }
-    ]
-  }
-];
-
 // Sample data for the collapsible list with Recent items
 const recentItems = [
   {
     label: 'Recent',
     icon: 'schedule',
     expanded: false,
+    id: 'recent',
     children: [
-      { label: 'Q4 Financial Report', action: 'open-q4-financial' },
-      { label: 'Product Launch Plan', action: 'open-product-launch' },
-      { label: 'Team Onboarding', action: 'open-team-onboarding' },
-      { label: 'Vendor Contracts', action: 'open-vendor-contracts' },
-      { label: 'Client Presentation', action: 'open-client-presentation' },
-      { label: 'Project Timeline', action: 'open-project-timeline' },
-      { label: 'User Testing Results', action: 'open-user-testing' },
-      { label: 'System Requirements', action: 'open-system-requirements' },
-      { label: 'Weekly Status Update', action: 'open-weekly-status' },
-      { label: 'Mobile App Wireframes', action: 'open-mobile-wireframes' },
-      { label: 'Social Media Strategy', action: 'open-social-media-strategy' },
-      { label: 'Technical Documentation', action: 'open-technical-documentation' },
-      { label: 'Support Ticket Analysis', action: 'open-support-ticket-analysis' },
-      { label: 'Resource Allocation', action: 'open-resource-allocation' },
-      { label: 'Feature Prioritization', action: 'open-feature-prioritization' },
-      { label: 'Usability Test Plan', action: 'open-usability-test' },
-      { label: 'Infrastructure Migration', action: 'open-infrastructure-migration' },
-      { label: 'Stakeholder Feedback', action: 'open-stakeholder-feedback' },
-      { label: 'Customer Journey Map', action: 'open-customer-journey' },
-      { label: 'OKR Review Document', action: 'open-okr-review' }
+      { label: 'Q4 Financial Report', action: 'open-q4-financial', id: 'q4-financial' },
+      { label: 'Product Launch Plan', action: 'open-product-launch', id: 'product-launch' },
+      { label: 'Team Onboarding', action: 'open-team-onboarding', id: 'team-onboarding' },
+      { label: 'Vendor Contracts', action: 'open-vendor-contracts', id: 'vendor-contracts' },
+      { label: 'Client Presentation', action: 'open-client-presentation', id: 'client-presentation' },
+      { label: 'Project Timeline', action: 'open-project-timeline', id: 'project-timeline' },
+      { label: 'User Testing Results', action: 'open-user-testing', id: 'user-testing' },
+      { label: 'System Requirements', action: 'open-system-requirements', id: 'system-requirements' },
+      { label: 'Weekly Status Update', action: 'open-weekly-status', id: 'weekly-status' },
+      { label: 'Mobile App Wireframes', action: 'open-mobile-wireframes', id: 'mobile-wireframes' },
+      { label: 'Social Media Strategy', action: 'open-social-media-strategy', id: 'social-media-strategy' },
+      { label: 'Technical Documentation', action: 'open-technical-documentation', id: 'technical-documentation' },
+      { label: 'Support Ticket Analysis', action: 'open-support-ticket-analysis', id: 'support-ticket-analysis' },
+      { label: 'Resource Allocation', action: 'open-resource-allocation', id: 'resource-allocation' },
+      { label: 'Feature Prioritization', action: 'open-feature-prioritization', id: 'feature-prioritization' },
+      { label: 'Usability Test Plan', action: 'open-usability-test', id: 'usability-test' },
+      { label: 'Infrastructure Migration', action: 'open-infrastructure-migration', id: 'infrastructure-migration' },
+      { label: 'Stakeholder Feedback', action: 'open-stakeholder-feedback', id: 'stakeholder-feedback' },
+      { label: 'Customer Journey Map', action: 'open-customer-journey', id: 'customer-journey' },
+      { label: 'OKR Review Document', action: 'open-okr-review', id: 'okr-review' }
     ]
   }
 ];
 
 // Context actions for Pinned items
 const pinnedContextActions = [
-  { label: 'Unpin', icon: 'push_pin', value: 'unpin' },
-  { label: 'Rename', icon: 'edit', value: 'rename' },
-  { label: 'Delete', icon: 'delete', value: 'delete' }
+  { label: 'Unpin', icon: 'push_pin', action: 'unpin', id: 'unpin-action' },
+  { label: 'Rename', icon: 'edit', action: 'rename', id: 'rename-action' },
+  { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action' }
 ];
 
-// Context actions for Recent items
-const recentContextActions = [
-  { label: 'Pin', icon: 'push_pin', value: 'pin' },
-  { label: 'Rename', icon: 'edit', value: 'rename' },
-  { label: 'Delete', icon: 'delete', value: 'delete' }
-];
-
-// Sample data combining both types for the default view, now with per-parent contextActions
-const sampleItems = [
+// Sample data for the collapsible list with Pinned items
+const pinnedItems = [
   {
-    ...pinnedItems[0],
-    contextActions: pinnedContextActions
-  },
-  {
-    ...recentItems[0],
-    contextActions: recentContextActions
+    label: 'Pinned',
+    icon: 'push_pin',
+    expanded: true,
+    id: 'pinned',
+    children: [
+      { label: 'UX Design Framework', action: 'open-ux-framework', id: 'ux-framework' },
+      { label: 'Project Roadmap', action: 'open-roadmap', id: 'project-roadmap' },
+      { label: 'Team Calendar', action: 'open-calendar', id: 'team-calendar' }
+    ]
   }
 ];
 
-// Function to handle child action events
+// Sample data for the collapsible list with Favorites items
+const favoritesItems = [
+  {
+    label: 'Favorites',
+    icon: 'star',
+    expanded: true,
+    id: 'favorites',
+    children: [
+      { label: 'Project Dashboard', action: 'open-dashboard', id: 'project-dashboard' },
+      { label: 'Team Chat', action: 'open-chat', id: 'team-chat' },
+      { label: 'Document Library', action: 'open-library', id: 'document-library' }
+    ]
+  }
+];
+
+// Sample data for the collapsible list with Settings items
+const settingsItems = [
+  {
+    label: 'Settings',
+    icon: 'settings',
+    expanded: false,
+    id: 'settings',
+    children: [
+      { label: 'Account', action: 'open-account', id: 'account' },
+      { label: 'Preferences', action: 'open-preferences', id: 'preferences' },
+      { label: 'Help & Support', action: 'open-help', id: 'help' }
+    ]
+  }
+];
+
+// Combine all items
+const sampleItems = [
+  ...pinnedItems,
+  ...favoritesItems,
+  ...recentItems,
+  ...settingsItems
+];
+
+// Event handlers
 const handleChildAction = (e: CustomEvent) => {
-  const { action, label } = e.detail;
-  action('Item Clicked')({ 
-    action, 
-    label, 
-    timestamp: new Date().toISOString() 
-  });
+  action('Child Action')(e.detail);
 };
 
-// Function to handle expand/contract events
 const handleExpandAction = (e: CustomEvent) => {
-  action('Folder Expanded')({ 
-    label: e.detail.label,
-    timestamp: new Date().toISOString()
-  });
+  action('Expand Action')(e.detail);
 };
 
 const handleContractAction = (e: CustomEvent) => {
-  action('Folder Collapsed')({ 
-    label: e.detail.label,
-    timestamp: new Date().toISOString()
-  });
+  action('Contract Action')(e.detail);
 };
 
-// Function to handle context menu actions
 const handleContextAction = (e: CustomEvent) => {
-  const { value, label } = e.detail;
-  action('Context Action')({ 
-    action: value, 
-    item: label,
-    timestamp: new Date().toISOString()
-  });
+  action('Context Action')(e.detail);
 };
 
 // Demo Rail showing all features in collapsed state (default)
@@ -268,6 +284,9 @@ export const Default: Story = {
           .expandedWidth=${args.expandedWidth}
           .moreLabel=${args.moreLabel}
           .initialExpanded=${args.initialExpanded}
+          .collapsedOffset=${args.collapsedOffset}
+          .addLabel=${args.addLabel}
+          .addIcon=${args.addIcon}
           @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
           @searchChange=${(e: CustomEvent) => {
             action('Search Changed')({ value: e.detail.value });
@@ -287,35 +306,50 @@ export const Default: Story = {
             @expand-action=${handleExpandAction}
             @contract-action=${handleContractAction}
             @context-action=${handleContextAction}
-          ></spectrum-collapsible-list>
+          />
         </spectrum-rail>
       </div>
-      <div style="margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 4px;">
-        <p><strong>Instructions:</strong></p>
-        <ul style="margin: 0; padding-left: 1.5rem;">
-          <li>Click on the rail items to expand/collapse the rail</li>
-          <li>Click on the Pinned or Recent folders to expand/collapse them</li>
-          <li>Click on any of the 20 items in each category to trigger their actions (visible in Actions panel)</li>
-          <li>Right-click on items to see context menu actions:
-            <ul>
-              <li><strong>Pinned items</strong>: Unpin, Rename, Delete</li>
-              <li><strong>Recent items</strong>: Pin, Rename, Delete</li>
-            </ul>
-          </li>
-          <li>Use search to filter through the 40 total items across both categories</li>
-          <li>Try searching for terms like "design", "report", or "documentation" to see how filtering works</li>
-          <li>Scroll through the expanded list to see all items in each category</li>
-          <li>Click the add button to trigger the add action</li>
-        </ul>
-      </div>
     `;
+  }
+};
+
+// Add a new story to demonstrate custom add label
+export const CustomAddLabel: Story = {
+  args: {
+    addLabel: 'Create New Item',
+    initialExpanded: true
   },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail with a custom label for the add button.'
+      }
+    }
+  },
+  render: Default.render
+};
+
+// Add a new story to demonstrate the collapsedOffset
+export const WithOffset: Story = {
+  args: {
+    collapsedOffset: '20px',
+    initialExpanded: false
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail with a 20px offset from the left when collapsed. The offset will be removed when expanded.'
+      }
+    }
+  },
+  render: Default.render
 };
 
 // Pinned items with their specific context actions 
 export const PinnedItems: Story = {
   args: {
     initialExpanded: true,
+    collapsedOffset: '0px'
   },
   render: (args) => html`
     <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
@@ -324,6 +358,8 @@ export const PinnedItems: Story = {
         .expandedWidth=${args.expandedWidth}
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
+        .collapsedOffset=${args.collapsedOffset}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -338,7 +374,6 @@ export const PinnedItems: Story = {
         <spectrum-collapsible-list 
           slot="items"
           .items=${pinnedItems}
-          .contextActions=${pinnedContextActions}
           @child-action=${handleChildAction}
           @expand-action=${handleExpandAction}
           @contract-action=${handleContractAction}
@@ -372,6 +407,7 @@ export const RecentItems: Story = {
         .expandedWidth=${args.expandedWidth}
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -386,7 +422,6 @@ export const RecentItems: Story = {
         <spectrum-collapsible-list 
           slot="items"
           .items=${recentItems}
-          .contextActions=${recentContextActions}
           @child-action=${handleChildAction}
           @expand-action=${handleExpandAction}
           @contract-action=${handleContractAction}
@@ -437,6 +472,7 @@ export const WithoutAddButton: Story = {
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
         .showAddButton=${args.showAddButton}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
           action('Search Changed')({ value: e.detail.value });
@@ -479,6 +515,7 @@ export const ProgrammaticControl: Story = {
         .moreLabel=${args.moreLabel}
         .initialExpanded=${args.initialExpanded}
         .showAddButton=${args.showAddButton}
+        .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => action('Search Changed')({ value: e.detail.value })}
         @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
@@ -511,4 +548,95 @@ export const ProgrammaticControl: Story = {
       }, 100);
     </script>
   `,
+};
+
+export const WithCollapsibleListActions = {
+  args: {},
+  render: () => html`
+    <div style="height: 600px; padding: 2rem; background: #f0f0f0;">
+      <spectrum-rail appName="Demo App" expandedWidth="320" initialExpanded="true" moreLabel="More">
+        <spectrum-collapsible-list
+          slot="items"
+          .items=${[
+            {
+              label: 'Project',
+              icon: 'folder',
+              expanded: true,
+              id: 'project',
+              children: [
+                {
+                  label: 'Report.pdf',
+                  icon: 'picture_as_pdf',
+                  action: 'open-pdf',
+                  id: 'report-pdf',
+                  ripple: true
+                },
+                {
+                  label: 'Notes.txt',
+                  icon: 'description',
+                  action: 'open-txt',
+                  id: 'notes-txt',
+                  ripple: true
+                },
+                {
+                  label: 'Presentation.pptx',
+                  icon: 'slideshow',
+                  action: 'open-pptx',
+                  id: 'presentation-pptx',
+                  ripple: true
+                }
+              ]
+            },
+            {
+              label: 'Archive',
+              icon: 'folder',
+              id: 'archive',
+              children: [
+                {
+                  label: 'Old Data.csv',
+                  icon: 'table_chart',
+                  action: 'open-csv',
+                  id: 'old-data-csv',
+                  ripple: true
+                }
+              ]
+            }
+          ]}
+          .contextActions=${[
+            { label: 'Download', icon: 'download', action: 'download', id: 'download-action', ripple: true },
+            { label: 'Share', icon: 'share', action: 'share', id: 'share-action', ripple: true },
+            { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action', ripple: true }
+          ]}
+          @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
+          @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
+          @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+          @context-action=${(e: CustomEvent) => action('Context Action')(e.detail)}
+        ></spectrum-collapsible-list>
+      </spectrum-rail>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `This story demonstrates a rail with a collapsible list containing context actions for its items. Right-click or use the context menu on a leaf item to trigger actions like Download, Share, or Delete.`
+      }
+    }
+  }
+};
+
+// Add a new story to demonstrate custom add icon
+export const CustomAddIcon: Story = {
+  args: {
+    addIcon: 'create_new_folder',
+    addLabel: 'New Folder',
+    initialExpanded: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail with a custom icon for the add button.'
+      }
+    }
+  },
+  render: Default.render
 }; 

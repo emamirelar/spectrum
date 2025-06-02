@@ -133,6 +133,7 @@ const meta = {
           - explorationSelected: When an exploration is selected
           - explore: When exploring content
           - sourceClick: When a source link is clicked
+          - titleChanged: When the conversation title is edited
           
           Example:
           \`\`\`html
@@ -148,6 +149,9 @@ const meta = {
             }}
             @sourceClick={(e) => {
               console.log('Source clicked:', e.detail);
+            }}
+            @titleChanged={(e) => {
+              console.log('Title changed:', e.detail);
             }}
           />
           \`\`\`
@@ -172,6 +176,7 @@ export const Default: StoryObj<SpectrumConversationPanelArgs> = {
         @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
         @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
         @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
       ></spectrum-conversation-panel>
     </div>
   `,

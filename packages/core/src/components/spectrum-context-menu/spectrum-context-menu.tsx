@@ -14,7 +14,12 @@ export interface ContextMenuAction {
   /**
    * Action identifier
    */
-  value: string;
+  action: string;
+  
+  /**
+   * Unique identifier for the action
+   */
+  id: string;
   
   /**
    * Whether to show ripple effect (optional)
@@ -35,7 +40,7 @@ export class SpectrumContextMenu {
   @Element() el: HTMLElement;
 
   @State() isOpen: boolean = false;
-  @State() actions: any[] = [];
+  @State() actions: ContextMenuAction[] = [];
   @State() x: number = 0;
   @State() y: number = 0;
   @State() targetKey: string = '';
@@ -58,7 +63,7 @@ export class SpectrumContextMenu {
     composed: true,
     cancelable: true,
     bubbles: true
-  }) actionClick: EventEmitter<{ value: string; targetKey: string }>;
+  }) actionClick: EventEmitter<{ action: string; targetKey: string }>;
 
   /**
    * Event emitted when the menu is closed
@@ -77,7 +82,7 @@ export class SpectrumContextMenu {
   }
 
   @Method()
-  async show(actions: any[], x: number, y: number, targetKey: string) {
+  async show(actions: ContextMenuAction[], x: number, y: number, targetKey: string) {
     this.actions = actions;
     this.targetKey = targetKey;
     this.x = x;
@@ -91,8 +96,8 @@ export class SpectrumContextMenu {
     this.isOpen = false;
   }
 
-  private handleActionClick(action: any) {
-    this.actionClick.emit({ value: action.value, targetKey: this.targetKey });
+  private handleActionClick(action: ContextMenuAction) {
+    this.actionClick.emit({ action: action.action, targetKey: this.targetKey });
     this.hide();
   }
 
@@ -199,8 +204,8 @@ export class SpectrumContextMenu {
                   onClick={() => this.handleActionClick(action)}
                   role="menuitem"
                   tabindex="0"
-                  key={`action-${action.value}`}
-                  data-value={action.value}
+                  key={`action-${action.id}`}
+                  data-action={action.action}
                 >
                   <span class="spectrum-context-menu__icon material-symbols-outlined">
                     {action.icon}

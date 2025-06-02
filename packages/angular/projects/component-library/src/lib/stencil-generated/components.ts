@@ -8,14 +8,14 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLElement;
@@ -96,7 +96,7 @@ export class SpectrumCollapsibleList {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['child-action', 'expand-action', 'contract-action', 'context-action']);
+    proxyOutputs(this, this.el, ['child-action', 'expand-action', 'contract-action', 'context-action', 'item-renamed']);
   }
 }
 
@@ -105,19 +105,23 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
   /**
    * Event emitted when a child node is clicked
    */
-  'child-action': EventEmitter<CustomEvent<{ action: string; label: string; }>>;
+  'child-action': EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
   /**
    * Event emitted when a parent node is expanded
    */
-  'expand-action': EventEmitter<CustomEvent<{ label: string; }>>;
+  'expand-action': EventEmitter<CustomEvent<{ label: string; id: string }>>;
   /**
    * Event emitted when a parent node is contracted
    */
-  'contract-action': EventEmitter<CustomEvent<{ label: string; }>>;
+  'contract-action': EventEmitter<CustomEvent<{ label: string; id: string }>>;
   /**
    * Event emitted when a context action is clicked
    */
-  'context-action': EventEmitter<CustomEvent<{ value: string; label: string }>>;
+  'context-action': EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
+  /**
+   * Event emitted when an item is renamed
+   */
+  'item-renamed': EventEmitter<CustomEvent<{ id: string; oldName: string; newName: string }>>;
 }
 
 
@@ -146,7 +150,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   /**
    * Event emitted when an action is clicked
    */
-  'action-click': EventEmitter<CustomEvent<{ value: string; targetKey: string }>>;
+  'action-click': EventEmitter<CustomEvent<{ action: string; targetKey: string }>>;
   /**
    * Event emitted when the menu is closed
    */
@@ -170,7 +174,7 @@ export class SpectrumConversationPanel {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore', 'sourceClick']);
+    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore', 'sourceClick', 'titleChanged']);
   }
 }
 
@@ -184,6 +188,8 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
   explore: EventEmitter<CustomEvent<string>>;
 
   sourceClick: EventEmitter<CustomEvent<{label: string, value: string}>>;
+
+  titleChanged: EventEmitter<CustomEvent<{action: string, value: string}>>;
 }
 
 
@@ -210,7 +216,7 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
-  inputs: ['addLabel', 'appName', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
   methods: ['setExpanded', 'setShowAddButton']
 })
 @Component({
@@ -218,7 +224,7 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['addLabel', 'appName', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
 })
 export class SpectrumRail {
   protected el: HTMLElement;
@@ -242,7 +248,7 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
   /**
    * Emits when a rail action is triggered
    */
-  railAction: EventEmitter<CustomEvent<{ action: string, label: string }>>;
+  railAction: EventEmitter<CustomEvent<{ action: string; id: string }>>;
   /**
    * Emits when the add button is clicked
    */
@@ -274,7 +280,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
 
 
 @ProxyCmp({
-  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder'],
+  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
   methods: ['setFocus']
 })
 @Component({
@@ -282,7 +288,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder'],
+  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
 })
 export class SpectrumSearchInput {
   protected el: HTMLElement;

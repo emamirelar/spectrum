@@ -16,10 +16,10 @@ export class SpectrumRail {
   @Prop() appName: string = '';
   
   /** Expanded width for the rail (with units like px, rem, etc.) */
-  @Prop() expandedWidth: string = '340px';
+  @Prop() expandedWidth: number = 280;
   
   /** More section label (displayed in expanded state) */
-  @Prop() moreLabel: string = 'Explore more';
+  @Prop() moreLabel: string = 'More';
 
   /** Whether the rail should be initially expanded */
   @Prop() initialExpanded: boolean = false;
@@ -30,23 +30,49 @@ export class SpectrumRail {
   /** Add button label (displayed in expanded state) */
   @Prop() addLabel: string = 'Add new';
   
+  /** Add button icon (displayed in both states) */
+  @Prop() addIcon: string = 'add';
+  
+  /** Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.) */
+  @Prop() collapsedOffset: string = '0px';
+  
   /** Current expanded state of the rail */
   @State() expanded: boolean = false;
 
   /** Current filter value from search input */
-  @State() filter: string = '';
+  @State() searchValue: string = '';
 
   /** Emits when the rail changes expanded state */
-  @Event() expandedChange: EventEmitter<boolean>;
+  @Event({
+    eventName: 'expandedChange',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) expandedChange: EventEmitter<boolean>;
 
   /** Emits when the search value changes */
-  @Event() searchChange: EventEmitter<{ value: string }>;
+  @Event({
+    eventName: 'searchChange',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) searchChange: EventEmitter<{ value: string }>;
 
   /** Emits when a rail action is triggered */
-  @Event() railAction: EventEmitter<{ action: string, label: string }>;
+  @Event({
+    eventName: 'railAction',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) railAction: EventEmitter<{ action: string; id: string }>;
 
   /** Emits when the add button is clicked */
-  @Event() addAction: EventEmitter<void>;
+  @Event({
+    eventName: 'addAction',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) addAction: EventEmitter<void>;
 
   private searchInputRef?: HTMLElement;
 
@@ -55,7 +81,7 @@ export class SpectrumRail {
     this.toggleExpanded();
     this.railAction.emit({
       action: 'menu',
-      label: 'Menu'
+      id: ''
     });
   }
 
@@ -87,32 +113,29 @@ export class SpectrumRail {
     this.addAction.emit();
     this.railAction.emit({
       action: 'add',
-      label: this.addLabel
+      id: ''
     });
   }
 
   /** Handle search input value change */
-  private handleSearchChange(value: string) {
-    this.filter = value;
-    this.searchChange.emit({ value: this.filter });
+  private handleSearchChange = (e: Event | CustomEvent) => {
+    let value = '';
     
-    const slotElement = this.el.shadowRoot?.querySelector('slot[name="items"]') as HTMLSlotElement;
-    if (slotElement) {
-      const elements = slotElement.assignedElements();
-      if (elements.length > 0) {
-        const collapsibleList = elements[0] as HTMLElement;
-        if (collapsibleList && collapsibleList.tagName.toLowerCase() === 'spectrum-collapsible-list') {
-          collapsibleList.setAttribute('filter', value);
-          try {
-            (collapsibleList as any).filter = value;
-          } catch (error) {
-            console.error('Failed to set filter property:', error);
-          }
-        } else {
-          console.warn('First slotted element is not a spectrum-collapsible-list');
-        }
-      }
+    // Handle CustomEvent from spectrum-search-input
+    if ('detail' in e && typeof e.detail === 'string') {
+      // spectrum-search-input emits CustomEvent<string>
+      value = e.detail;
+    } else if ('detail' in e && e.detail && typeof e.detail === 'object') {
+      // Other custom event types
+      value = e.detail.value || '';
+    } else if (e.target) {
+      // Standard input event
+      const input = e.target as HTMLInputElement;
+      value = input.value;
     }
+    
+    this.searchValue = value;
+    this.searchChange.emit({ value: this.searchValue });
   }
 
   /** Handle more button click */
@@ -125,12 +148,12 @@ export class SpectrumRail {
     
     this.railAction.emit({
       action: 'more',
-      label: this.moreLabel
+      id: ''
     });
   }
 
   /** Update the filter prop of the collapsible list when the filter state changes */
-  @Watch('filter')
+  @Watch('searchValue')
   filterChanged(newValue: string) {
     // Get the collapsible list from the slot
     const slotElement = this.el.shadowRoot?.querySelector('slot[name="items"]') as HTMLSlotElement;
@@ -197,8 +220,11 @@ export class SpectrumRail {
   componentDidLoad() {
     // Set custom properties from props
     if (this.expandedWidth) {
-      this.el.style.setProperty('--rail-expanded-width', this.expandedWidth);
+      this.el.style.setProperty('--rail-expanded-width', this.expandedWidth.toString());
     }
+
+    // Set collapsed offset
+    this.el.style.setProperty('--rail-collapsed-offset', this.collapsedOffset);
 
     // Set initial expanded state if specified
     if (this.initialExpanded) {
@@ -233,7 +259,7 @@ export class SpectrumRail {
             'rail--expanded': this.expanded
           }}
           style={{
-            '--rail-expanded-width': this.expandedWidth
+            '--rail-expanded-width': this.expandedWidth.toString()
           }}
         >
           {/* Menu Section */}
@@ -287,14 +313,15 @@ export class SpectrumRail {
               />
             ) : (
               <div class="search-expanded">
-                <spectrum-search-input 
-                  ref={(el) => this.searchInputRef = el as HTMLElement}
-                  maxLines={1}
+                <spectrum-search-input
+                  ref={(el) => this.searchInputRef = el}
+                  placeholder="Search..."
                   enableVoiceInput={false}
-                  placeholder="Search conversations"
-                  onSearchSubmit={(e: CustomEvent) => this.handleSearchChange(e.detail)}
-                  onSearchInput={(e: CustomEvent) => this.handleSearchChange(e.detail)}
-                  class="search-input-expanded"
+                  enableEnterSubmit={true}
+                  searchIconPosition="left"
+                  searchButtonVariant="ghost"
+                  onSearchInput={(e) => this.handleSearchChange(e)}
+                  onSearchSubmit={(e) => this.handleSearchChange(e)}
                 />
               </div>
             )}
@@ -310,18 +337,17 @@ export class SpectrumRail {
                   size="sm"
                   iconOnly={true}
                   showLeftIcon={true}
-                  leftIcon="add"
+                  leftIcon={this.addIcon}
                   onClick={() => this.handleAddClick()}
                   title={this.addLabel}
                   aria-label={this.addLabel}
                 />
               ) : (
                 <spectrum-button
-                  class="add-button"
                   variant="fab"
-                  size="sm"
+                  size="base"
                   showLeftIcon={true}
-                  leftIcon="add"
+                  leftIcon={this.addIcon}
                   buttonText={this.addLabel}
                   showButtonText={true}
                   onClick={() => this.handleAddClick()}
@@ -348,7 +374,9 @@ export class SpectrumRail {
                 state="active"
               />
             ) : (
-              <slot name="items"></slot>
+              <div class="rail-items-container">
+                <slot name="items"></slot>
+              </div>
             )}
           </div>
 
@@ -369,16 +397,18 @@ export class SpectrumRail {
             ) : (
               <div class="more-expanded">
                 <spectrum-button
-                  class="more-button"
-                  variant="ghost"
+                  variant="secondary"
+                  outline={true}
                   size="base"
                   showLeftIcon={true}
-                  leftIcon="settings"
+                  leftIcon="instant_mix"
                   buttonText={this.moreLabel || 'Explore more'}
                   showButtonText={true}
                   showRightIcon={true}
                   rightIcon="chevron_right"
                   onClick={() => this.handleMoreClick()}
+                  class="more-button"
+                  customStyle={{ width: '100%', justifyContent: 'space-between' }}
                 >
                   {moreText}
                 </spectrum-button>

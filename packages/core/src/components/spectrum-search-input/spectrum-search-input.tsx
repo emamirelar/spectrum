@@ -24,6 +24,16 @@ export class SpectrumSearchInput {
    * Whether to enable submitting search on Enter key press
    */
   @Prop() enableEnterSubmit: boolean = true;
+
+  /**
+   * Position of the search icon - 'left' or 'right'
+   */
+  @Prop() searchIconPosition: 'left' | 'right' = 'right';
+
+  /**
+   * Variant of the search button - 'primary' or 'ghost'
+   */
+  @Prop() searchButtonVariant: 'primary' | 'ghost' = 'primary';
   
   @State() searchText: string = '';
   @State() isListening: boolean = false;
@@ -148,6 +158,31 @@ export class SpectrumSearchInput {
   };
   
   render() {
+    const searchButton = (
+      <spectrum-button
+        variant={this.searchButtonVariant}
+        iconOnly={true}
+        size="base"
+        leftIcon="search"
+        showLeftIcon={true}
+        onClick={this.handleSearch}
+        aria-label="Search"
+      />
+    );
+
+    const voiceButton = this.enableVoiceInput && this.isSpeechAvailable && (
+      <spectrum-button
+        variant="ghost"
+        iconOnly={true}
+        size="base"
+        leftIcon="mic"
+        showLeftIcon={true}
+        onClick={this.handleVoiceInput}
+        state={this.isListening ? 'active' : 'default'}
+        aria-label="Voice search"
+      />
+    );
+
     return (
       <Host>
         <div class="spectrum-search-input">
@@ -155,9 +190,17 @@ export class SpectrumSearchInput {
             'spectrum-search-input__container': true,
             'spectrum-search-input__container--multiline': this.isMultiline
           }}>
+            {this.searchIconPosition === 'left' && (
+              <div class="spectrum-search-input__buttons--left">
+                {searchButton}
+              </div>
+            )}
             <textarea
               ref={(el) => this.inputRef = el}
-              class="spectrum-search-input__field"
+              class={{
+                'spectrum-search-input__field': true,
+                'spectrum-search-input__field--icon-left': this.searchIconPosition === 'left',
+              }}
               value={this.searchText}
               onInput={this.handleInput}
               onKeyDown={this.handleKeyDown}
@@ -166,27 +209,8 @@ export class SpectrumSearchInput {
               aria-label="Search input"
             />
             <div class="spectrum-search-input__buttons">
-              {this.enableVoiceInput && this.isSpeechAvailable && (
-                <spectrum-button
-                  variant="ghost"
-                  iconOnly={true}
-                  size="base"
-                  leftIcon="mic"
-                  showLeftIcon={true}
-                  onClick={this.handleVoiceInput}
-                  state={this.isListening ? 'active' : 'default'}
-                  aria-label="Voice search"
-                />
-              )}
-              <spectrum-button
-                variant="primary"
-                iconOnly={true}
-                size="base"
-                leftIcon="search"
-                showLeftIcon={true}
-                onClick={this.handleSearch}
-                aria-label="Search"
-              />
+              {this.searchIconPosition === 'right' && searchButton}
+              {voiceButton}
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'disabled',
   'ripple',
   'action',
+  'customStyle',
   'showButtonText',
   'buttonText',
   'showLeftIcon',
@@ -62,7 +63,8 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'child-action',
   'expand-action',
   'contract-action',
-  'context-action'
+  'context-action',
+  'item-renamed'
 ]);
 
 
@@ -82,7 +84,8 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'explorationSelected',
   'action',
   'explore',
-  'sourceClick'
+  'sourceClick',
+  'titleChanged'
 ]);
 
 
@@ -102,6 +105,8 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'initialExpanded',
   'showAddButton',
   'addLabel',
+  'addIcon',
+  'collapsedOffset',
   'expandedChange',
   'searchChange',
   'railAction',
@@ -122,6 +127,8 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
   'placeholder',
   'enableVoiceInput',
   'enableEnterSubmit',
+  'searchIconPosition',
+  'searchButtonVariant',
   'searchSubmit',
   'searchInput'
 ]);
