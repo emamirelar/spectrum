@@ -610,4 +610,126 @@ The \`mutuallyExclusive\` property controls this behavior, defaulting to \`true\
       }
     }
   }
+};
+
+export const RenameFunctionality: StoryObj<SpectrumCollapsibleListArgs> = {
+  args: {
+    items: [
+      {
+        label: 'Projects',
+        icon: 'folder',
+        expanded: true,
+        id: 'projects',
+        children: [
+          {
+            label: 'Project Alpha.docx',
+            icon: 'description',
+            action: 'open-alpha',
+            id: 'project-alpha'
+          },
+          {
+            label: 'Project Beta.pdf',
+            icon: 'picture_as_pdf',
+            action: 'open-beta',
+            id: 'project-beta'
+          },
+          {
+            label: 'Project Gamma.xlsx',
+            icon: 'table_chart',
+            action: 'open-gamma',
+            id: 'project-gamma'
+          }
+        ]
+      },
+      {
+        label: 'Documents',
+        icon: 'folder',
+        id: 'documents',
+        children: [
+          {
+            label: 'Meeting Notes.txt',
+            icon: 'description',
+            action: 'open-notes',
+            id: 'meeting-notes'
+          },
+          {
+            label: 'Presentation.pptx',
+            icon: 'slideshow',
+            action: 'open-presentation',
+            id: 'presentation'
+          }
+        ]
+      }
+    ],
+    contextActions: [
+      { label: 'Rename', icon: 'edit', action: 'rename', id: 'rename-action' },
+      { label: 'Download', icon: 'download', action: 'download', id: 'download-action' },
+      { label: 'Share', icon: 'share', action: 'share', id: 'share-action' },
+      { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action' }
+    ]
+  },
+  render: (args) => html`
+    <div style="width: 340px; height: 420px; margin: 2rem auto; background: none; overflow: auto; scrollbar-gutter: stable;">
+      <h3 style="text-align: center; margin-bottom: 16px; color: #333;">Rename Functionality Demo</h3>
+      <p style="text-align: center; margin-bottom: 20px; color: #666; font-size: 14px;">
+        Click the context menu (⋮) on any file and select "Rename" to edit the filename.
+        <br>Press Enter or click outside to save, Escape to cancel.
+      </p>
+      <spectrum-collapsible-list
+        .items=${args.items}
+        .contextActions=${args.contextActions}
+        .mutuallyExclusive=${args.mutuallyExclusive}
+        @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
+        @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
+        @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+        @context-action=${(e: CustomEvent) => action('Context Action')(e.detail)}
+        @item-renamed=${(e: CustomEvent) => {
+          action('Item Renamed')(e.detail);
+          // Show a toast-like notification in the story
+          const notification = document.createElement('div');
+          notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-family: system-ui, sans-serif;
+            font-size: 14px;
+          `;
+          notification.textContent = `Renamed "${e.detail.oldName}" to "${e.detail.newName}"`;
+          document.body.appendChild(notification);
+          setTimeout(() => {
+            notification.remove();
+          }, 3000);
+        }}
+      ></spectrum-collapsible-list>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates the rename functionality of the collapsible list:
+
+1. **Context Menu**: Right-click or click the context menu icon (⋮) on any file
+2. **Select Rename**: Click on the "Rename" action in the context menu
+3. **Edit Mode**: The filename becomes editable with focus automatically set
+4. **Save Changes**: 
+   - Press **Enter** to save
+   - **Click outside** (blur) to save
+   - Press **Escape** to cancel
+5. **Event Emission**: When renamed, an \`item-renamed\` event is fired with:
+   - \`id\`: The item's unique identifier
+   - \`oldName\`: The original filename
+   - \`newName\`: The new filename
+
+The rename functionality only works on leaf nodes (files), not on parent folders.
+        `
+      }
+    }
+  }
 }; 

@@ -101,6 +101,26 @@
   white-space: nowrap;
 }
 
+.spectrum-collapsible-list__edit-input {
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--spectrum-color-primary, #0066cc);
+  border-radius: var(--collapsible-list-border-radius);
+  padding: 0.25em 0.5em;
+  font-family: var(--collapsible-list-label-font);
+  font-size: var(--collapsible-list-label-size);
+  background: var(--spectrum-color-surface, #ffffff);
+  color: var(--spectrum-color-on-surface, #333);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--spectrum-color-primary-container, rgba(0, 102, 204, 0.2));
+  transition: border-color var(--collapsible-list-transition), box-shadow var(--collapsible-list-transition);
+}
+
+.spectrum-collapsible-list__edit-input:focus {
+  border-color: var(--spectrum-color-primary, #0066cc);
+  box-shadow: 0 0 0 3px var(--spectrum-color-primary-container, rgba(0, 102, 204, 0.3));
+}
+
 .spectrum-collapsible-list__child-count {
   margin-left: 0.75em;
   color: #6c7a89;

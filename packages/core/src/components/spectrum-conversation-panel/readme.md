@@ -18,12 +18,13 @@
 
 ## Events
 
-| Event                 | Description | Type                                             |
-| --------------------- | ----------- | ------------------------------------------------ |
-| `action`              |             | `CustomEvent<{ type: string; value: string; }>`  |
-| `explorationSelected` |             | `CustomEvent<string>`                            |
-| `explore`             |             | `CustomEvent<string>`                            |
-| `sourceClick`         |             | `CustomEvent<{ label: string; value: string; }>` |
+| Event                 | Description | Type                                              |
+| --------------------- | ----------- | ------------------------------------------------- |
+| `action`              |             | `CustomEvent<{ type: string; value: string; }>`   |
+| `explorationSelected` |             | `CustomEvent<string>`                             |
+| `explore`             |             | `CustomEvent<string>`                             |
+| `sourceClick`         |             | `CustomEvent<{ label: string; value: string; }>`  |
+| `titleChanged`        |             | `CustomEvent<{ action: string; value: string; }>` |
 
 
 ## Methods

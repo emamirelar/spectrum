@@ -59,6 +59,12 @@ export class SpectrumConversationPanel {
   }) action: EventEmitter<{type: string, value: string}>;
   @Event() explore: EventEmitter<string>;
   @Event() sourceClick: EventEmitter<{label: string, value: string}>;
+  @Event({
+    eventName: 'titleChanged',
+    bubbles: true,
+    composed: true,
+    cancelable: true
+  }) titleChanged: EventEmitter<{action: string, value: string}>;
 
   @Watch('messages')
   messagesChanged(newValue: string) {
@@ -335,11 +341,48 @@ export class SpectrumConversationPanel {
     }
   }
 
+  /**
+   * Handle title edit events (Enter key press or blur)
+   * @param event - The keyboard or focus event
+   * @param newTitle - The new title value
+   */
+  private handleTitleEdit = (event: KeyboardEvent | FocusEvent, newTitle: string) => {
+    const eventType = event.type;
+    
+    if (eventType === 'keydown') {
+      const keyEvent = event as KeyboardEvent;
+      if (keyEvent.key === 'Enter') {
+        keyEvent.preventDefault();
+        (event.target as HTMLElement).blur(); // Remove focus to trigger blur event
+        this.titleChanged.emit({
+          action: 'titleChanged',
+          value: newTitle.trim()
+        });
+      }
+    } else if (eventType === 'blur') {
+      this.titleChanged.emit({
+        action: 'titleChanged',
+        value: newTitle.trim()
+      });
+    }
+  }
+
   render() {
     return (
       <Host class="conversation-panel-host">
           <div class="panel frost">
-              <h2 class="conversation-title">
+              <h2 
+                class="conversation-title"
+                contentEditable={true}
+                onKeyDown={(event) => {
+                  const target = event.target as HTMLElement;
+                  this.handleTitleEdit(event, target.textContent || '');
+                }}
+                onBlur={(event) => {
+                  const target = event.target as HTMLElement;
+                  this.handleTitleEdit(event, target.textContent || '');
+                }}
+              >
                 {this.conversationtitle}
               </h2>
               {this.renderMessages()}

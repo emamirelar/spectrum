@@ -52,6 +52,16 @@ export class SpectrumCollapsibleList {
   @State() originalItems: CollapsibleListItem[] = [];
 
   /**
+   * State to track which item is being edited (by item id)
+   */
+  @State() editingItemId: string | null = null;
+
+  /**
+   * State to store the original name when editing starts
+   */
+  @State() originalEditingName: string = '';
+
+  /**
    * Host element reference
    */
   @Element() hostElement!: HTMLElement;
@@ -95,6 +105,16 @@ export class SpectrumCollapsibleList {
     cancelable: true,
     bubbles: true
   }) contextAction: EventEmitter<{ action: string; label: string; id: string }>;
+
+  /**
+   * Event emitted when an item is renamed
+   */
+  @Event({
+    eventName: 'item-renamed',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) itemRenamed: EventEmitter<{ id: string; oldName: string; newName: string }>;
 
   componentDidLoad() {
     // No need to store the host element anymore
@@ -190,6 +210,74 @@ export class SpectrumCollapsibleList {
   }
 
   /**
+   * Start editing an item
+   */
+  private startEditing(item: CollapsibleListItem) {
+    this.editingItemId = item.id;
+    this.originalEditingName = item.label;
+    
+    // Focus the input on next tick
+    setTimeout(() => {
+      const input = this.hostElement.shadowRoot?.querySelector(`#edit-input-${item.id}`) as HTMLInputElement;
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }, 0);
+  }
+
+  /**
+   * Complete the rename operation
+   */
+  private completeRename(newName: string) {
+    if (this.editingItemId && newName.trim() !== '') {
+      const trimmedName = newName.trim();
+      
+      // Only emit if the name actually changed
+      if (trimmedName !== this.originalEditingName) {
+        this.itemRenamed.emit({
+          id: this.editingItemId,
+          oldName: this.originalEditingName,
+          newName: trimmedName
+        });
+      }
+    }
+    
+    // Reset editing state
+    this.editingItemId = null;
+    this.originalEditingName = '';
+  }
+
+  /**
+   * Cancel the rename operation
+   */
+  private cancelRename() {
+    this.editingItemId = null;
+    this.originalEditingName = '';
+  }
+
+  /**
+   * Handle key events during editing
+   */
+  private handleEditKeyDown(e: KeyboardEvent, currentValue: string) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.completeRename(currentValue);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      this.cancelRename();
+    }
+  }
+
+  /**
+   * Handle blur event during editing
+   */
+  private handleEditBlur(e: FocusEvent) {
+    const input = e.target as HTMLInputElement;
+    this.completeRename(input.value);
+  }
+
+  /**
    * Render an icon with Material Symbols
    */
   private renderIcon(icon: string, isChild = false, outlined = false) {
@@ -270,7 +358,19 @@ export class SpectrumCollapsibleList {
             onClick={() => isParent ? this.handleParentClick(item, key, parentKey) : this.handleChildClick(item)}
           >
             {this.renderIcon(item.icon, !isParent)}
-            <span class="spectrum-collapsible-list__label">{item.label}</span>
+            {this.editingItemId === item.id ? (
+              <input
+                id={`edit-input-${item.id}`}
+                class="spectrum-collapsible-list__edit-input"
+                type="text"
+                value={item.label}
+                onKeyDown={(e) => this.handleEditKeyDown(e, (e.target as HTMLInputElement).value)}
+                onBlur={(e) => this.handleEditBlur(e)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <span class="spectrum-collapsible-list__label">{item.label}</span>
+            )}
             {isParent && (
               <>
                 <span class="spectrum-collapsible-list__child-count">{item.children?.length}</span>
@@ -327,6 +427,12 @@ export class SpectrumCollapsibleList {
     const node = findNode(this.originalItems, event.detail.targetKey);
     if (!node) {
       console.warn('Could not find node for target key:', event.detail.targetKey);
+      return;
+    }
+
+    // Check if this is a rename action
+    if (event.detail.action === 'rename') {
+      this.startEditing(node);
       return;
     }
 

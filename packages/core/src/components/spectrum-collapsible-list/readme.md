@@ -1,5 +1,7 @@
 # spectrum-collapsible-list
 
+
+
 <!-- Auto Generated Below -->
 
 
@@ -15,12 +17,13 @@
 
 ## Events
 
-| Event             | Description                                    | Type                                                          |
-| ----------------- | ---------------------------------------------- | ------------------------------------------------------------- |
-| `child-action`    | Event emitted when a child node is clicked     | `CustomEvent<{ action: string; label: string; id: string; }>` |
-| `context-action`  | Event emitted when a context action is clicked | `CustomEvent<{ action: string; label: string; id: string; }>` |
-| `contract-action` | Event emitted when a parent node is contracted | `CustomEvent<{ label: string; id: string; }>`                 |
-| `expand-action`   | Event emitted when a parent node is expanded   | `CustomEvent<{ label: string; id: string; }>`                 |
+| Event             | Description                                    | Type                                                             |
+| ----------------- | ---------------------------------------------- | ---------------------------------------------------------------- |
+| `child-action`    | Event emitted when a child node is clicked     | `CustomEvent<{ action: string; label: string; id: string; }>`    |
+| `context-action`  | Event emitted when a context action is clicked | `CustomEvent<{ action: string; label: string; id: string; }>`    |
+| `contract-action` | Event emitted when a parent node is contracted | `CustomEvent<{ label: string; id: string; }>`                    |
+| `expand-action`   | Event emitted when a parent node is expanded   | `CustomEvent<{ label: string; id: string; }>`                    |
+| `item-renamed`    | Event emitted when an item is renamed          | `CustomEvent<{ id: string; oldName: string; newName: string; }>` |
 
 
 ## Dependencies

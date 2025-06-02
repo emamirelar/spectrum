@@ -379,6 +379,7 @@ declare global {
         "expand-action": { label: string; id: string };
         "contract-action": { label: string; id: string };
         "context-action": { action: string; label: string; id: string };
+        "item-renamed": { id: string; oldName: string; newName: string };
     }
     interface HTMLSpectrumCollapsibleListElement extends Components.SpectrumCollapsibleList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumCollapsibleListElementEventMap>(type: K, listener: (this: HTMLSpectrumCollapsibleListElement, ev: SpectrumCollapsibleListCustomEvent<HTMLSpectrumCollapsibleListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -421,6 +422,7 @@ declare global {
         "action": {type: string, value: string};
         "explore": string;
         "sourceClick": {label: string, value: string};
+        "titleChanged": {action: string, value: string};
     }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumConversationPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumConversationPanelElement, ev: SpectrumConversationPanelCustomEvent<HTMLSpectrumConversationPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -625,6 +627,10 @@ declare namespace LocalJSX {
           * Event emitted when a parent node is expanded
          */
         "onExpand-action"?: (event: SpectrumCollapsibleListCustomEvent<{ label: string; id: string }>) => void;
+        /**
+          * Event emitted when an item is renamed
+         */
+        "onItem-renamed"?: (event: SpectrumCollapsibleListCustomEvent<{ id: string; oldName: string; newName: string }>) => void;
     }
     /**
      * Spectrum Context Menu Component
@@ -665,6 +671,7 @@ declare namespace LocalJSX {
         "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         "onExplore"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
         "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{label: string, value: string}>) => void;
+        "onTitleChanged"?: (event: SpectrumConversationPanelCustomEvent<{action: string, value: string}>) => void;
         /**
           * The sources to display in the messages Default: null
          */

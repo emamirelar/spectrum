@@ -63,7 +63,8 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'child-action',
   'expand-action',
   'contract-action',
-  'context-action'
+  'context-action',
+  'item-renamed'
 ]);
 
 
@@ -83,7 +84,8 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'explorationSelected',
   'action',
   'explore',
-  'sourceClick'
+  'sourceClick',
+  'titleChanged'
 ]);
 
 

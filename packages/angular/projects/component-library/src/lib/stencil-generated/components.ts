@@ -96,7 +96,7 @@ export class SpectrumCollapsibleList {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['child-action', 'expand-action', 'contract-action', 'context-action']);
+    proxyOutputs(this, this.el, ['child-action', 'expand-action', 'contract-action', 'context-action', 'item-renamed']);
   }
 }
 
@@ -118,6 +118,10 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
    * Event emitted when a context action is clicked
    */
   'context-action': EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
+  /**
+   * Event emitted when an item is renamed
+   */
+  'item-renamed': EventEmitter<CustomEvent<{ id: string; oldName: string; newName: string }>>;
 }
 
 
@@ -170,7 +174,7 @@ export class SpectrumConversationPanel {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore', 'sourceClick']);
+    proxyOutputs(this, this.el, ['explorationSelected', 'action', 'explore', 'sourceClick', 'titleChanged']);
   }
 }
 
@@ -184,6 +188,8 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
   explore: EventEmitter<CustomEvent<string>>;
 
   sourceClick: EventEmitter<CustomEvent<{label: string, value: string}>>;
+
+  titleChanged: EventEmitter<CustomEvent<{action: string, value: string}>>;
 }
 
 
