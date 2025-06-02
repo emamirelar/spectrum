@@ -103,6 +103,7 @@ export namespace Components {
      */
     interface SpectrumContextMenu {
         "hide": () => Promise<void>;
+        "isMenuOpen": () => Promise<boolean>;
         /**
           * The key identifying the target component that triggered this menu
          */

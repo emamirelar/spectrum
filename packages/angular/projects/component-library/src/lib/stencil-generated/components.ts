@@ -127,7 +127,7 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
 
 @ProxyCmp({
   inputs: ['position'],
-  methods: ['show', 'hide', 'positionAtCoordinates']
+  methods: ['show', 'hide', 'isMenuOpen', 'positionAtCoordinates']
 })
 @Component({
   selector: 'spectrum-context-menu',

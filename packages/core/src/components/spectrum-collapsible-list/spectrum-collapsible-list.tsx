@@ -183,7 +183,7 @@ export class SpectrumCollapsibleList {
   /**
    * Handle click on the context menu icon
    */
-  private handleActionsIconClick(e: MouseEvent, item: CollapsibleListItem, actions?: ContextMenuAction[]) {
+  private async handleActionsIconClick(e: MouseEvent, item: CollapsibleListItem, actions?: ContextMenuAction[]) {
     e.stopPropagation();
     e.preventDefault();
     const iconElement = e.currentTarget as HTMLElement;
@@ -192,9 +192,6 @@ export class SpectrumCollapsibleList {
       return;
     }
 
-    // Get the icon position
-    const iconRect = iconElement.getBoundingClientRect();
-
     // Create or get the global context menu
     let menu = document.querySelector('spectrum-context-menu') as any;
     if (!menu) {
@@ -202,10 +199,27 @@ export class SpectrumCollapsibleList {
       document.body.appendChild(menu);
     }
 
-    if (typeof menu['show'] === 'function') {
-      menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, item.id);
+    // Check if the menu is already open
+    let isOpen = false;
+    if (typeof menu['isMenuOpen'] === 'function') {
+      isOpen = await menu['isMenuOpen']();
+    }
+
+    if (isOpen) {
+      // If menu is open, hide it
+      if (typeof menu['hide'] === 'function') {
+        menu['hide']();
+      } else {
+        console.warn('Global context menu exists but hide method is not available');
+      }
     } else {
-      console.warn('Global context menu exists but show method is not available');
+      // If menu is closed, show it
+      const iconRect = iconElement.getBoundingClientRect();
+      if (typeof menu['show'] === 'function') {
+        menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, item.id);
+      } else {
+        console.warn('Global context menu exists but show method is not available');
+      }
     }
   }
 

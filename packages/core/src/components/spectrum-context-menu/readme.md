@@ -37,6 +37,16 @@ Type: `Promise<void>`
 
 
 
+### `isMenuOpen() => Promise<boolean>`
+
+
+
+#### Returns
+
+Type: `Promise<boolean>`
+
+
+
 ### `positionAtCoordinates(x: number, y: number) => Promise<boolean>`
 
 Position the menu at specific coordinates

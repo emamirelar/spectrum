@@ -97,6 +97,11 @@ export class SpectrumContextMenu {
     this.menuClose.emit({ action: 'close' });
   }
 
+  @Method()
+  async isMenuOpen(): Promise<boolean> {
+    return this.isOpen;
+  }
+
   private handleActionClick(action: ContextMenuAction) {
     this.actionClick.emit({ action: action.action, targetKey: this.targetKey });
     this.hide();
