@@ -605,12 +605,20 @@ export const WithCollapsibleListActions = {
           .contextActions=${[
             { label: 'Download', icon: 'download', action: 'download', id: 'download-action', ripple: true },
             { label: 'Share', icon: 'share', action: 'share', id: 'share-action', ripple: true },
+            { label: 'Rename', icon: 'edit', action: 'rename', id: 'rename-action', ripple: true },
             { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action', ripple: true }
           ]}
           @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
           @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
           @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
-          @context-action=${(e: CustomEvent) => action('Context Action')(e.detail)}
+          @context-action=${(e: CustomEvent) => {
+            action('Context Action')(e.detail);
+            console.log('Context action event received:', e.detail);
+          }}
+          @item-renamed=${(e: CustomEvent) => {
+            action('Item Renamed')(e.detail);
+            console.log('Item renamed event received:', e.detail);
+          }}
         ></spectrum-collapsible-list>
       </spectrum-rail>
     </div>
@@ -618,7 +626,7 @@ export const WithCollapsibleListActions = {
   parameters: {
     docs: {
       description: {
-        story: `This story demonstrates a rail with a collapsible list containing context actions for its items. Right-click or use the context menu on a leaf item to trigger actions like Download, Share, or Delete.`
+        story: `This story demonstrates a rail with a collapsible list containing context actions for its items. Right-click or use the context menu on a leaf item to trigger actions like Download, Share, Rename, or Delete.`
       }
     }
   }
