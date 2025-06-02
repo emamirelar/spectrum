@@ -30,7 +30,7 @@ const meta = {
         "timestamp": "2024-03-20T10:00:05Z",
         "sources": [
           {
-            "title": "NASA Apollo 11 Mission Overview",
+            "label": "NASA Apollo 11 Mission Overview",
             "value": "https://www.nasa.gov/mission/apollo-11/",
             "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth."
           }
@@ -70,7 +70,7 @@ const meta = {
     ]`,
     sources: `[
       {
-        "title": "NASA Apollo 11 Mission Overview",
+        "label": "NASA Apollo 11 Mission Overview",
         "value": "https://www.nasa.gov/mission/apollo-11/",
         "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth."
       }
@@ -111,7 +111,7 @@ const meta = {
       table: {
         type: { 
           summary: 'string',
-          detail: 'JSON string containing an array of source objects with title, value, and snippet'
+          detail: 'JSON string containing an array of source objects with label, value, and snippet'
         }
       }
     },

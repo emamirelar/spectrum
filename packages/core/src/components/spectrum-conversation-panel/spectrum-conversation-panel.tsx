@@ -292,6 +292,7 @@ export class SpectrumConversationPanel {
           <div class="card-content">
             <div class="title">{source.label}</div>
             <div class="subtitle">{displayUrl}</div>
+            <div class="snippet">{source.snippet}</div>
           </div>
         </a>
       );

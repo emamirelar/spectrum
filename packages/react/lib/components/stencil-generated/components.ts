@@ -9,18 +9,18 @@
 
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
-import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops/cpit-spectrum/dist/components/spectrum-button.js";
-import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops/cpit-spectrum/dist/components/spectrum-carousel.js";
-import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops/cpit-spectrum/dist/components/spectrum-chip.js";
-import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustomElement as defineSpectrumCollapsibleList } from "@unops/cpit-spectrum/dist/components/spectrum-collapsible-list.js";
-import { SpectrumContextMenu as SpectrumContextMenuElement, defineCustomElement as defineSpectrumContextMenu } from "@unops/cpit-spectrum/dist/components/spectrum-context-menu.js";
-import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@unops/cpit-spectrum/dist/components/spectrum-conversation-panel.js";
-import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@unops/cpit-spectrum/dist/components/spectrum-megamenu.js";
-import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops/cpit-spectrum/dist/components/spectrum-rail-item.js";
-import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops/cpit-spectrum/dist/components/spectrum-rail.js";
-import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@unops/cpit-spectrum/dist/components/spectrum-search-input.js";
-import { SpectrumTheme as SpectrumThemeElement, defineCustomElement as defineSpectrumTheme } from "@unops/cpit-spectrum/dist/components/spectrum-theme.js";
-import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@unops/cpit-spectrum/dist/components/spectrum-wallpaper.js";
+import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
+import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-carousel.js";
+import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
+import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustomElement as defineSpectrumCollapsibleList } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-collapsible-list.js";
+import { SpectrumContextMenu as SpectrumContextMenuElement, defineCustomElement as defineSpectrumContextMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-context-menu.js";
+import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-conversation-panel.js";
+import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-megamenu.js";
+import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-item.js";
+import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail.js";
+import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-search-input.js";
+import { SpectrumTheme as SpectrumThemeElement, defineCustomElement as defineSpectrumTheme } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-theme.js";
+import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-wallpaper.js";
 import React from 'react';
 
 type SpectrumButtonEvents = { onButtonAction: EventName<CustomEvent<{ action?: string; label: string }>> };
