@@ -26,12 +26,12 @@ A vertical navigation rail with two states: expanded and contracted
 
 ## Events
 
-| Event            | Description                                | Type                                           |
-| ---------------- | ------------------------------------------ | ---------------------------------------------- |
-| `addAction`      | Emits when the add button is clicked       | `CustomEvent<void>`                            |
-| `expandedChange` | Emits when the rail changes expanded state | `CustomEvent<boolean>`                         |
-| `railAction`     | Emits when a rail action is triggered      | `CustomEvent<{ action: string; id: string; }>` |
-| `searchChange`   | Emits when the search value changes        | `CustomEvent<{ value: string; }>`              |
+| Event            | Description                                | Type                                                  |
+| ---------------- | ------------------------------------------ | ----------------------------------------------------- |
+| `addAction`      | Emits when the add button is clicked       | `CustomEvent<{ action: string; }>`                    |
+| `expandedChange` | Emits when the rail changes expanded state | `CustomEvent<{ action: string; expanded: boolean; }>` |
+| `railAction`     | Emits when a rail action is triggered      | `CustomEvent<{ action: string; id: string; }>`        |
+| `searchChange`   | Emits when the search value changes        | `CustomEvent<{ action: string; value: string; }>`     |
 
 
 ## Methods

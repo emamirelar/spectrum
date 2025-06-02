@@ -60,18 +60,18 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'filter',
   'contextActions',
   'mutuallyExclusive',
-  'child-action',
-  'expand-action',
-  'contract-action',
-  'context-action',
-  'item-renamed'
+  'childAction',
+  'expandAction',
+  'contractAction',
+  'contextAction',
+  'itemRenamed'
 ]);
 
 
 export const SpectrumContextMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumContextMenu>('spectrum-context-menu', undefined, [
   'position',
-  'action-click',
-  'menu-close'
+  'actionClick',
+  'menuClose'
 ]);
 
 

@@ -132,10 +132,20 @@ const meta = {
           - \`items\`: For the main navigation items (typically a collapsible list)
           
           ## Events
-          - \`railAction\`: Emitted when rail actions are triggered
-          - \`searchChange\`: Emitted when the search text changes
-          - \`expandedChange\`: Emitted when the rail changes expanded state
-          - \`addAction\`: Emitted when the add button is clicked
+          All events now include an action attribute to identify the type of action performed:
+          
+          - **railAction**: Emitted when rail actions are triggered
+            - Payload: \`{ action: string, id: string }\`
+            - Action values: \`'menu', 'add', 'more'\`
+          - **searchChange**: Emitted when the search text changes
+            - Payload: \`{ action: string, value: string }\`
+            - Action values: \`'search'\`
+          - **expandedChange**: Emitted when the rail changes expanded state
+            - Payload: \`{ action: string, expanded: boolean }\`
+            - Action values: \`'menu', 'search', 'more'\`
+          - **addAction**: Emitted when the add button is clicked
+            - Payload: \`{ action: string }\`
+            - Action values: \`'add'\`
           
           ## Collapsible List Actions
           The rail works seamlessly with the spectrum-collapsible-list component to provide navigation:
@@ -273,7 +283,7 @@ export const Default: Story = {
         });
       }
       // Listen for context menu action globally
-      window.addEventListener('action-click', (e) => {
+      window.addEventListener('actionClick', (e) => {
         action('Context Menu Action')((e as CustomEvent).detail);
       });
     }, 500);
@@ -289,24 +299,25 @@ export const Default: Story = {
           .addIcon=${args.addIcon}
           @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
           @searchChange=${(e: CustomEvent) => {
-            action('Search Changed')({ value: e.detail.value });
-            // Update filter on the collapsible list
+            const detail = e.detail;
+            action('Search Changed')({ action: detail.action, value: detail.value });
+            // Update the list component's filter
             const list = document.querySelector('spectrum-collapsible-list');
             if (list) {
-              list.setAttribute('filter', e.detail.value);
+              list.setAttribute('filter', detail.value);
             }
           }}
-          @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
-          @addAction=${() => action('Add Button Clicked')()}
+          @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+          @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
         >
           <spectrum-collapsible-list 
             slot="items"
             .items=${sampleItems}
-            @child-action=${handleChildAction}
-            @expand-action=${handleExpandAction}
-            @contract-action=${handleContractAction}
-            @context-action=${handleContextAction}
-          />
+            @childAction=${handleChildAction}
+            @expandAction=${handleExpandAction}
+            @contractAction=${handleContractAction}
+            @contextAction=${handleContextAction}
+          ></spectrum-collapsible-list>
         </spectrum-rail>
       </div>
     `;
@@ -362,22 +373,23 @@ export const PinnedItems: Story = {
         .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
-          action('Search Changed')({ value: e.detail.value });
+          const detail = e.detail;
+          action('Search Changed')({ action: detail.action, value: detail.value });
           const list = document.querySelector('spectrum-collapsible-list');
           if (list) {
-            list.setAttribute('filter', e.detail.value);
+            list.setAttribute('filter', detail.value);
           }
         }}
-        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
-        @addAction=${() => action('Add Button Clicked')()}
+        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+        @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
       >
         <spectrum-collapsible-list 
           slot="items"
           .items=${pinnedItems}
-          @child-action=${handleChildAction}
-          @expand-action=${handleExpandAction}
-          @contract-action=${handleContractAction}
-          @context-action=${handleContextAction}
+          @childAction=${handleChildAction}
+          @expandAction=${handleExpandAction}
+          @contractAction=${handleContractAction}
+          @contextAction=${handleContextAction}
         ></spectrum-collapsible-list>
       </spectrum-rail>
     </div>
@@ -410,22 +422,23 @@ export const RecentItems: Story = {
         .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
-          action('Search Changed')({ value: e.detail.value });
+          const detail = e.detail;
+          action('Search Changed')({ action: detail.action, value: detail.value });
           const list = document.querySelector('spectrum-collapsible-list');
           if (list) {
-            list.setAttribute('filter', e.detail.value);
+            list.setAttribute('filter', detail.value);
           }
         }}
-        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
-        @addAction=${() => action('Add Button Clicked')()}
+        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+        @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
       >
         <spectrum-collapsible-list 
           slot="items"
           .items=${recentItems}
-          @child-action=${handleChildAction}
-          @expand-action=${handleExpandAction}
-          @contract-action=${handleContractAction}
-          @context-action=${handleContextAction}
+          @childAction=${handleChildAction}
+          @expandAction=${handleExpandAction}
+          @contractAction=${handleContractAction}
+          @contextAction=${handleContextAction}
         ></spectrum-collapsible-list>
       </spectrum-rail>
     </div>
@@ -475,23 +488,23 @@ export const WithoutAddButton: Story = {
         .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
         @searchChange=${(e: CustomEvent) => {
-          action('Search Changed')({ value: e.detail.value });
-          // Update filter on collapsible list
+          const detail = e.detail;
+          action('Search Changed')({ action: detail.action, value: detail.value });
           const list = document.querySelector('spectrum-collapsible-list');
           if (list) {
-            list.setAttribute('filter', e.detail.value);
+            list.setAttribute('filter', detail.value);
           }
         }}
-        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
-        @addAction=${() => action('Add Button Clicked')()}
+        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+        @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
       >
         <spectrum-collapsible-list 
           slot="items"
           .items=${sampleItems}
-          @child-action=${handleChildAction}
-          @expand-action=${handleExpandAction}
-          @contract-action=${handleContractAction}
-          @context-action=${handleContextAction}
+          @childAction=${handleChildAction}
+          @expandAction=${handleExpandAction}
+          @contractAction=${handleContractAction}
+          @contextAction=${handleContextAction}
         ></spectrum-collapsible-list>
       </spectrum-rail>
     </div>
@@ -517,17 +530,24 @@ export const ProgrammaticControl: Story = {
         .showAddButton=${args.showAddButton}
         .addIcon=${args.addIcon}
         @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
-        @searchChange=${(e: CustomEvent) => action('Search Changed')({ value: e.detail.value })}
-        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ expanded: e.detail })}
-        @addAction=${() => action('Add Button Clicked')()}
+        @searchChange=${(e: CustomEvent) => {
+          const detail = e.detail;
+          action('Search Changed')({ action: detail.action, value: detail.value });
+          const list = document.querySelector('spectrum-collapsible-list');
+          if (list) {
+            list.setAttribute('filter', detail.value);
+          }
+        }}
+        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+        @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
       >
         <spectrum-collapsible-list 
           slot="items"
           .items=${sampleItems}
-          @child-action=${handleChildAction}
-          @expand-action=${handleExpandAction}
-          @contract-action=${handleContractAction}
-          @context-action=${handleContextAction}
+          @childAction=${handleChildAction}
+          @expandAction=${handleExpandAction}
+          @contractAction=${handleContractAction}
+          @contextAction=${handleContextAction}
         ></spectrum-collapsible-list>
       </spectrum-rail>
     </div>
@@ -608,14 +628,14 @@ export const WithCollapsibleListActions = {
             { label: 'Rename', icon: 'edit', action: 'rename', id: 'rename-action', ripple: true },
             { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action', ripple: true }
           ]}
-          @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
-          @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
-          @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
-          @context-action=${(e: CustomEvent) => {
+          @childAction=${(e: CustomEvent) => action('Child Action')(e.detail)}
+          @expandAction=${(e: CustomEvent) => action('Expand Action')(e.detail)}
+          @contractAction=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+          @contextAction=${(e: CustomEvent) => {
             action('Context Action')(e.detail);
             console.log('Context action event received:', e.detail);
           }}
-          @item-renamed=${(e: CustomEvent) => {
+          @itemRenamed=${(e: CustomEvent) => {
             action('Item Renamed')(e.detail);
             console.log('Item renamed event received:', e.detail);
           }}

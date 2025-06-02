@@ -19,10 +19,10 @@ A popup menu for contextual actions that can be attached to any element.
 
 ## Events
 
-| Event          | Description                             | Type                                                  |
-| -------------- | --------------------------------------- | ----------------------------------------------------- |
-| `action-click` | Event emitted when an action is clicked | `CustomEvent<{ action: string; targetKey: string; }>` |
-| `menu-close`   | Event emitted when the menu is closed   | `CustomEvent<void>`                                   |
+| Event         | Description                             | Type                                                  |
+| ------------- | --------------------------------------- | ----------------------------------------------------- |
+| `actionClick` | Event emitted when an action is clicked | `CustomEvent<{ action: string; targetKey: string; }>` |
+| `menuClose`   | Event emitted when the menu is closed   | `CustomEvent<{ action: string; }>`                    |
 
 
 ## Methods

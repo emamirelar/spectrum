@@ -1,6 +1,230 @@
 ---
 description: 
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
-Components should emit events. Event names should be camel-case. Events should contain - an action attribute, and potentially other attributes as needed by the component.
+# Component Events Rule
+
+## Overview
+Components should emit well-structured, consistent events that enable loose coupling and maintainable integrations across the component system.
+
+## Event Naming Conventions
+
+### 1. Property Names
+- Component event properties should use **camelCase** naming
+- Example: `@Event() childAction: EventEmitter<...>`
+
+### 2. Event Names (eventName)
+- **Default**: Use camelCase matching the property name
+- **Legacy/Integration**: Use kebab-case only when required for backward compatibility with existing integrations
+- **Decision Factors**:
+  - New components: Use camelCase
+  - Components with existing dependents: Check dependency map before changing
+  - Integration components: Maintain compatibility with dependent components
+
+```typescript
+// ✅ Preferred (New Components)
+@Event({
+  eventName: 'childAction',
+  composed: true,
+  cancelable: true,
+  bubbles: true
+}) childAction: EventEmitter<{...}>;
+
+// ✅ Acceptable (Legacy Integration)
+@Event({
+  eventName: 'action-click', // kebab-case for backward compatibility
+  composed: true,
+  cancelable: true,
+  bubbles: true
+}) actionClick: EventEmitter<{...}>;
+```
+
+## Event Payload Structure
+
+### 1. Action Attribute (Required)
+All events MUST include an `action` attribute to identify the type of action performed:
+
+```typescript
+// ✅ Correct
+{ action: "expand", label: "Folder Name", id: "folder-1" }
+{ action: "delete", targetKey: "item-123" }
+{ action: "search", value: "search term" }
+
+// ❌ Incorrect
+{ label: "Folder Name", id: "folder-1" } // Missing action
+```
+
+### 2. Contextual Attributes
+Include additional attributes relevant to the specific action:
+- `id`: Unique identifier of the target element
+- `label`: Human-readable label
+- `value`: Action-specific data
+- `targetKey`: Reference to external elements
+
+### 3. Type Safety
+Always use TypeScript interfaces for event payloads:
+
+```typescript
+interface ChildActionPayload {
+  action: string;
+  label: string;
+  id: string;
+}
+
+@Event() childAction: EventEmitter<ChildActionPayload>;
+```
+
+## Event Configuration
+
+### 1. Standard Configuration
+Use this configuration for most events:
+
+```typescript
+@Event({
+  eventName: 'eventName',
+  composed: true,    // Event can cross shadow DOM boundaries
+  cancelable: true,  // Event can be prevented
+  bubbles: true     // Event bubbles up the DOM tree
+}) eventName: EventEmitter<PayloadType>;
+```
+
+### 2. Special Cases
+- **Simple notifications**: `cancelable: false` for informational events
+- **Internal events**: `composed: false` for component-internal events
+
+## Integration Patterns
+
+### 1. Component Dependencies
+Before changing event names, check the dependency map:
+- **Emitting Component**: Can have dependents listening to its events
+- **Listening Component**: May break if emitting component changes event names
+- **Integration Chain**: Changes can cascade through multiple components
+
+### 2. Event Listening Patterns
+
+#### Direct Event Binding (Preferred)
+```typescript
+<spectrum-component 
+  @childAction=${(e: CustomEvent) => this.handleAction(e.detail)}
+/>
+```
+
+#### Document-Level Listening (Integration)
+```typescript
+@Listen('action-click', { target: 'document' })
+handleGlobalAction(event: CustomEvent<{action: string; targetKey: string}>) {
+  // Handle cross-component communication
+}
+```
+
+### 3. Event Forwarding
+When components forward events from child components:
+
+```typescript
+// ✅ Forward with context
+this.contextAction.emit({
+  action: event.detail.action,
+  label: node.label,
+  id: node.id
+});
+
+// ❌ Direct forwarding without context
+this.contextAction.emit(event.detail);
+```
+
+## Documentation Requirements
+
+### 1. Component Documentation
+Document all events with:
+- Event name and payload structure
+- When the event is triggered
+- Example usage
+
+```typescript
+/**
+ * Event emitted when a child item is clicked
+ * @event childAction
+ * @payload {action: string, label: string, id: string}
+ * @example
+ * component.addEventListener('childAction', (e) => {
+ *   console.log('Child clicked:', e.detail.label);
+ * });
+ */
+@Event() childAction: EventEmitter<{action: string; label: string; id: string}>;
+```
+
+### 2. Storybook Documentation
+Update Storybook stories to:
+- Show event payloads with action attributes
+- Include example event handlers
+- Document integration patterns
+
+## Backward Compatibility
+
+### 1. Dependency Analysis
+Before changing events:
+1. Check the dependency map for dependent components
+2. Search codebase for event listeners
+3. Verify Storybook integration
+4. Test component interactions
+
+### 2. Migration Strategy
+When updating events:
+1. **Safe Changes**: Adding new attributes to payload
+2. **Breaking Changes**: Changing event names or removing attributes
+3. **Coordination Required**: Update all dependent components simultaneously
+
+### 3. Integration Testing
+Always test event integrations:
+- Component → Component communication
+- Context menu → Collapsible list integration
+- Rail → Search input → Collapsible list chain
+
+## Examples
+
+### ✅ Well-Structured Events
+```typescript
+// Simple action with context
+@Event() buttonAction: EventEmitter<{ 
+  action?: string; 
+  label: string 
+}>;
+
+// State change with action context  
+@Event() expandedChange: EventEmitter<{ 
+  action: string; 
+  expanded: boolean 
+}>;
+
+// Complex interaction with full context
+@Event() itemRenamed: EventEmitter<{ 
+  action: "rename"; 
+  id: string; 
+  oldName: string; 
+  newName: string 
+}>;
+```
+
+### ❌ Problematic Events
+```typescript
+// Missing action attribute
+@Event() change: EventEmitter<boolean>;
+
+// Inconsistent naming
+@Event({
+  eventName: 'my-custom-event'
+}) myEvent: EventEmitter<string>;
+
+// No type safety
+@Event() genericAction: EventEmitter<any>;
+```
+
+## Maintenance
+
+When adding or modifying components:
+1. ✅ Follow this event structure
+2. ✅ Update dependency map
+3. ✅ Update Storybook documentation
+4. ✅ Test integration chains
+5. ✅ Document payload structures

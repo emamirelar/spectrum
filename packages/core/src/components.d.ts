@@ -375,11 +375,11 @@ declare global {
         new (): HTMLSpectrumChipElement;
     };
     interface HTMLSpectrumCollapsibleListElementEventMap {
-        "child-action": { action: string; label: string; id: string };
-        "expand-action": { label: string; id: string };
-        "contract-action": { label: string; id: string };
-        "context-action": { action: string; label: string; id: string };
-        "item-renamed": { id: string; oldName: string; newName: string };
+        "childAction": { action: string; label: string; id: string };
+        "expandAction": { action: string; label: string; id: string };
+        "contractAction": { action: string; label: string; id: string };
+        "contextAction": { action: string; label: string; id: string };
+        "itemRenamed": { action: string; id: string; oldName: string; newName: string };
     }
     interface HTMLSpectrumCollapsibleListElement extends Components.SpectrumCollapsibleList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumCollapsibleListElementEventMap>(type: K, listener: (this: HTMLSpectrumCollapsibleListElement, ev: SpectrumCollapsibleListCustomEvent<HTMLSpectrumCollapsibleListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -396,8 +396,8 @@ declare global {
         new (): HTMLSpectrumCollapsibleListElement;
     };
     interface HTMLSpectrumContextMenuElementEventMap {
-        "action-click": { action: string; targetKey: string };
-        "menu-close": void;
+        "actionClick": { action: string; targetKey: string };
+        "menuClose": { action: string };
     }
     /**
      * Spectrum Context Menu Component
@@ -418,10 +418,10 @@ declare global {
         new (): HTMLSpectrumContextMenuElement;
     };
     interface HTMLSpectrumConversationPanelElementEventMap {
-        "explorationSelected": string;
-        "action": {type: string, value: string};
-        "explore": string;
-        "sourceClick": {label: string, value: string};
+        "explorationSelected": { action: string; exploration: string };
+        "action": {action: string, type: string, value: string};
+        "explore": { action: string; value: string };
+        "sourceClick": { action: string; label: string; value: string };
         "titleChanged": {action: string, value: string};
     }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
@@ -445,10 +445,10 @@ declare global {
         new (): HTMLSpectrumMegamenuElement;
     };
     interface HTMLSpectrumRailElementEventMap {
-        "expandedChange": boolean;
-        "searchChange": { value: string };
+        "expandedChange": { action: string; expanded: boolean };
+        "searchChange": { action: string; value: string };
         "railAction": { action: string; id: string };
-        "addAction": void;
+        "addAction": { action: string };
     }
     /**
      * Spectrum Rail Component
@@ -480,8 +480,8 @@ declare global {
         new (): HTMLSpectrumRailItemElement;
     };
     interface HTMLSpectrumSearchInputElementEventMap {
-        "searchSubmit": string;
-        "searchInput": string;
+        "searchSubmit": { action: string; value: string };
+        "searchInput": { action: string; value: string };
     }
     interface HTMLSpectrumSearchInputElement extends Components.SpectrumSearchInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumSearchInputElementEventMap>(type: K, listener: (this: HTMLSpectrumSearchInputElement, ev: SpectrumSearchInputCustomEvent<HTMLSpectrumSearchInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -614,23 +614,23 @@ declare namespace LocalJSX {
         /**
           * Event emitted when a child node is clicked
          */
-        "onChild-action"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; id: string }>) => void;
+        "onChildAction"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; id: string }>) => void;
         /**
           * Event emitted when a context action is clicked
          */
-        "onContext-action"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; id: string }>) => void;
+        "onContextAction"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; id: string }>) => void;
         /**
           * Event emitted when a parent node is contracted
          */
-        "onContract-action"?: (event: SpectrumCollapsibleListCustomEvent<{ label: string; id: string }>) => void;
+        "onContractAction"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; id: string }>) => void;
         /**
           * Event emitted when a parent node is expanded
          */
-        "onExpand-action"?: (event: SpectrumCollapsibleListCustomEvent<{ label: string; id: string }>) => void;
+        "onExpandAction"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; label: string; id: string }>) => void;
         /**
           * Event emitted when an item is renamed
          */
-        "onItem-renamed"?: (event: SpectrumCollapsibleListCustomEvent<{ id: string; oldName: string; newName: string }>) => void;
+        "onItemRenamed"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; id: string; oldName: string; newName: string }>) => void;
     }
     /**
      * Spectrum Context Menu Component
@@ -640,11 +640,11 @@ declare namespace LocalJSX {
         /**
           * Event emitted when an action is clicked
          */
-        "onAction-click"?: (event: SpectrumContextMenuCustomEvent<{ action: string; targetKey: string }>) => void;
+        "onActionClick"?: (event: SpectrumContextMenuCustomEvent<{ action: string; targetKey: string }>) => void;
         /**
           * Event emitted when the menu is closed
          */
-        "onMenu-close"?: (event: SpectrumContextMenuCustomEvent<void>) => void;
+        "onMenuClose"?: (event: SpectrumContextMenuCustomEvent<{ action: string }>) => void;
         /**
           * The key identifying the target component that triggered this menu
          */
@@ -667,10 +667,10 @@ declare namespace LocalJSX {
           * The messsages to display in the conversation panel Default: null
          */
         "messages"?: string;
-        "onAction"?: (event: SpectrumConversationPanelCustomEvent<{type: string, value: string}>) => void;
-        "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
-        "onExplore"?: (event: SpectrumConversationPanelCustomEvent<string>) => void;
-        "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{label: string, value: string}>) => void;
+        "onAction"?: (event: SpectrumConversationPanelCustomEvent<{action: string, type: string, value: string}>) => void;
+        "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; exploration: string }>) => void;
+        "onExplore"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; value: string }>) => void;
+        "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; label: string; value: string }>) => void;
         "onTitleChanged"?: (event: SpectrumConversationPanelCustomEvent<{action: string, value: string}>) => void;
         /**
           * The sources to display in the messages Default: null
@@ -735,11 +735,11 @@ declare namespace LocalJSX {
         /**
           * Emits when the add button is clicked
          */
-        "onAddAction"?: (event: SpectrumRailCustomEvent<void>) => void;
+        "onAddAction"?: (event: SpectrumRailCustomEvent<{ action: string }>) => void;
         /**
           * Emits when the rail changes expanded state
          */
-        "onExpandedChange"?: (event: SpectrumRailCustomEvent<boolean>) => void;
+        "onExpandedChange"?: (event: SpectrumRailCustomEvent<{ action: string; expanded: boolean }>) => void;
         /**
           * Emits when a rail action is triggered
          */
@@ -747,7 +747,7 @@ declare namespace LocalJSX {
         /**
           * Emits when the search value changes
          */
-        "onSearchChange"?: (event: SpectrumRailCustomEvent<{ value: string }>) => void;
+        "onSearchChange"?: (event: SpectrumRailCustomEvent<{ action: string; value: string }>) => void;
         /**
           * Whether to show the add button in the rail
          */
@@ -789,8 +789,8 @@ declare namespace LocalJSX {
         /**
           * Emits when input value changes, for real-time filtering
          */
-        "onSearchInput"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
-        "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<string>) => void;
+        "onSearchInput"?: (event: SpectrumSearchInputCustomEvent<{ action: string; value: string }>) => void;
+        "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<{ action: string; value: string }>) => void;
         /**
           * Placeholder text for the search input
          */

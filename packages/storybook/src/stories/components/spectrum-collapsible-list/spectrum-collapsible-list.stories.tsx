@@ -131,18 +131,43 @@ const meta = {
           automatically collapses other parents at the same level. This can be disabled by setting
           the \`mutuallyExclusive\` property to \`false\`.
           
-          Example:
+          ## Events
+          All events now include an action attribute to identify the type of action performed:
+          
+          - **childAction**: When a child item is clicked
+            - Payload: \`{ action: string, label: string, id: string }\`
+          - **expandAction**: When a parent item is expanded
+            - Payload: \`{ action: "expand", label: string, id: string }\`
+          - **contractAction**: When a parent item is collapsed
+            - Payload: \`{ action: "contract", label: string, id: string }\`
+          - **contextAction**: When a context menu action is selected
+            - Payload: \`{ action: string, label: string, id: string }\`
+          - **itemRenamed**: When an item is renamed
+            - Payload: \`{ action: "rename", id: string, oldName: string, newName: string }\`
+          
+          ## Example Usage
           \`\`\`html
           <spectrum-collapsible-list
             .mutuallyExclusive=${true}
-            @child-action={(e) => {
+            @childAction={(e) => {
+              // e.detail = { action: "open-file", label: "Document.pdf", id: "doc-1" }
               console.log('Child action:', e.detail);
             }}
-            @expand-action={(e) => {
+            @expandAction={(e) => {
+              // e.detail = { action: "expand", label: "Folder Name", id: "folder-1" }
               console.log('Expand action:', e.detail);
             }}
-            @contract-action={(e) => {
+            @contractAction={(e) => {
+              // e.detail = { action: "contract", label: "Folder Name", id: "folder-1" }
               console.log('Contract action:', e.detail);
+            }}
+            @contextAction={(e) => {
+              // e.detail = { action: "delete", label: "Item Name", id: "item-1" }
+              console.log('Context action:', e.detail);
+            }}
+            @itemRenamed={(e) => {
+              // e.detail = { action: "rename", id: "item-1", oldName: "Old Name", newName: "New Name" }
+              console.log('Item renamed:', e.detail);
             }}
           />
           \`\`\`
@@ -161,12 +186,13 @@ const renderList = (args: SpectrumCollapsibleListArgs) => html`
       .contextActions=${args.contextActions}
       .filter=${args.filter}
       .mutuallyExclusive=${args.mutuallyExclusive}
-      @child-action=${(e: CustomEvent) => {
-        setTimeout(() => action('child-action')(e.detail), 500);
+      @childAction=${(e: CustomEvent) => {
+        setTimeout(() => action('childAction')(e.detail), 500);
       }}
-      @expand-action=${(e: CustomEvent) => action('expand-action')(e.detail)}
-      @contract-action=${(e: CustomEvent) => action('contract-action')(e.detail)}
-      @context-action=${(e: CustomEvent) => action('context-action')(e.detail)}
+      @expandAction=${(e: CustomEvent) => action('expandAction')(e.detail)}
+      @contractAction=${(e: CustomEvent) => action('contractAction')(e.detail)}
+      @contextAction=${(e: CustomEvent) => action('contextAction')(e.detail)}
+      @itemRenamed=${(e: CustomEvent) => action('itemRenamed')(e.detail)}
     ></spectrum-collapsible-list>
   </div>
 `;
@@ -222,10 +248,10 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
       <spectrum-collapsible-list
         .items=${args.items}
         .contextActions=${args.contextActions}
-        @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
-        @context-action=${(e: CustomEvent) => action('Context Action')(e.detail)}
+        @childAction=${(e: CustomEvent) => action('Child Action')(e.detail)}
+        @expandAction=${(e: CustomEvent) => action('Expand Action')(e.detail)}
+        @contractAction=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+        @contextAction=${(e: CustomEvent) => action('Context Action')(e.detail)}
       ></spectrum-collapsible-list>
     </div>
   `
@@ -548,8 +574,8 @@ export const ExpansionBehavior: StoryObj<SpectrumCollapsibleListArgs> = {
           <spectrum-collapsible-list
             .items=${args.items}
             .mutuallyExclusive=${true}
-            @expand-action=${(e: CustomEvent) => action('expand-action (exclusive)')(e.detail)}
-            @contract-action=${(e: CustomEvent) => action('contract-action (exclusive)')(e.detail)}
+            @expandAction=${(e: CustomEvent) => action('expandAction (exclusive)')(e.detail)}
+            @contractAction=${(e: CustomEvent) => action('contractAction (exclusive)')(e.detail)}
           ></spectrum-collapsible-list>
         </div>
       </div>
@@ -559,8 +585,8 @@ export const ExpansionBehavior: StoryObj<SpectrumCollapsibleListArgs> = {
           <spectrum-collapsible-list
             .items=${args.items}
             .mutuallyExclusive=${false}
-            @expand-action=${(e: CustomEvent) => action('expand-action (non-exclusive)')(e.detail)}
-            @contract-action=${(e: CustomEvent) => action('contract-action (non-exclusive)')(e.detail)}
+            @expandAction=${(e: CustomEvent) => action('expandAction (non-exclusive)')(e.detail)}
+            @contractAction=${(e: CustomEvent) => action('contractAction (non-exclusive)')(e.detail)}
           ></spectrum-collapsible-list>
         </div>
       </div>
@@ -679,11 +705,11 @@ export const RenameFunctionality: StoryObj<SpectrumCollapsibleListArgs> = {
         .items=${args.items}
         .contextActions=${args.contextActions}
         .mutuallyExclusive=${args.mutuallyExclusive}
-        @child-action=${(e: CustomEvent) => action('Child Action')(e.detail)}
-        @expand-action=${(e: CustomEvent) => action('Expand Action')(e.detail)}
-        @contract-action=${(e: CustomEvent) => action('Contract Action')(e.detail)}
-        @context-action=${(e: CustomEvent) => action('Context Action')(e.detail)}
-        @item-renamed=${(e: CustomEvent) => {
+        @childAction=${(e: CustomEvent) => action('Child Action')(e.detail)}
+        @expandAction=${(e: CustomEvent) => action('Expand Action')(e.detail)}
+        @contractAction=${(e: CustomEvent) => action('Contract Action')(e.detail)}
+        @contextAction=${(e: CustomEvent) => action('Context Action')(e.detail)}
+        @itemRenamed=${(e: CustomEvent) => {
           action('Item Renamed')(e.detail);
           // Show a toast-like notification in the story
           const notification = document.createElement('div');

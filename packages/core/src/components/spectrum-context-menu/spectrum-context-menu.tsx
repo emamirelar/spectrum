@@ -59,7 +59,7 @@ export class SpectrumContextMenu {
    * Event emitted when an action is clicked
    */
   @Event({
-    eventName: 'action-click',
+    eventName: 'actionClick',
     composed: true,
     cancelable: true,
     bubbles: true
@@ -69,11 +69,11 @@ export class SpectrumContextMenu {
    * Event emitted when the menu is closed
    */
   @Event({
-    eventName: 'menu-close',
+    eventName: 'menuClose',
     composed: true,
     cancelable: true,
     bubbles: true
-  }) menuClose: EventEmitter<void>;
+  }) menuClose: EventEmitter<{ action: string }>;
 
   private log(_message: string, _data?: any) {
     if (this.debug) {
@@ -94,6 +94,7 @@ export class SpectrumContextMenu {
   @Method()
   async hide() {
     this.isOpen = false;
+    this.menuClose.emit({ action: 'close' });
   }
 
   private handleActionClick(action: ContextMenuAction) {

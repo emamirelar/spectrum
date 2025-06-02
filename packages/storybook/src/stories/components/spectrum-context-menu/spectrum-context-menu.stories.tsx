@@ -48,7 +48,41 @@ const meta: Meta<SpectrumContextMenuArgs> = {
   },
   parameters: {
     actions: {
-      handles: ['action-click', 'menu-close', 'context-action'],
+      handles: ['actionClick', 'menuClose', 'contextAction'],
+    },
+    description: {
+      component: `
+        A context menu component that provides a floating menu with actions when triggered.
+        The menu automatically positions itself to stay within the viewport boundaries.
+        
+        ## Events
+        Events now use camelCase names following the component events rule:
+        
+        - **actionClick**: Emitted when a menu action is clicked
+          - Payload: \`{ action: string, targetKey: string }\`
+          - \`action\`: The action identifier from the clicked menu item
+          - \`targetKey\`: The key of the component that triggered the menu
+        - **menuClose**: Emitted when the menu is closed
+          - Payload: \`{ action: string }\`
+          - Action values: \`'close'\`
+
+        ## Usage
+        The context menu is typically used by other components like spectrum-collapsible-list.
+        It can be programmatically controlled via the show() and hide() methods.
+
+        \`\`\`tsx
+        // Get menu instance
+        const menu = document.querySelector('spectrum-context-menu');
+        
+        // Show menu with actions
+        await menu.show(actions, x, y, targetKey);
+        
+        // Listen for events
+        menu.addEventListener('actionClick', (e) => {
+          console.log('Action clicked:', e.detail);
+        });
+        \`\`\`
+      `,
     },
   }
 };
@@ -66,16 +100,16 @@ const setupEventListeners = (menuId: string) => {
     console.log('Setting up event listeners for menu:', menuId);
     
     // Action click event
-    menu.addEventListener('action-click', (e: Event) => {
+    menu.addEventListener('actionClick', (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      action('action-click')(detail);
-      console.log('action-click event captured:', detail);
+      action('actionClick')(detail);
+      console.log('actionClick event captured:', detail);
     });
     
     // Menu close event
-    menu.addEventListener('menu-close', () => {
-      action('menu-close')();
-      console.log('menu-close event captured');
+    menu.addEventListener('menuClose', () => {
+      action('menuClose')();
+      console.log('menuClose event captured');
     });
   }, 100);
 };
@@ -86,10 +120,10 @@ export const Default: Story = {
     setTimeout(() => {
       const menu = document.querySelector('spectrum-context-menu');
       if (menu) {
-        menu.addEventListener('action-click', ((e: Event) => {
+        menu.addEventListener('actionClick', ((e: Event) => {
           action('Action Clicked')((e as CustomEvent).detail);
         }) as EventListener);
-        menu.addEventListener('menu-close', (() => {
+        menu.addEventListener('menuClose', (() => {
           action('Menu Closed')();
         }) as EventListener);
       }
@@ -102,8 +136,8 @@ export const Default: Story = {
           .targetKey=${args.targetKey}
           ?isOpen=${args.isOpen}
           position=${ifDefined(args.position)}
-          @action-click=${(e: CustomEvent) => action('Action Clicked')(e.detail)}
-          @menu-close=${() => action('Menu Closed')()}
+          @actionClick=${(e: CustomEvent) => action('Action Clicked')(e.detail)}
+          @menuClose=${() => action('Menu Closed')()}
         ></spectrum-context-menu>
       </div>
     `;
@@ -177,7 +211,7 @@ export const WithCollapsibleList: Story = {
         <spectrum-collapsible-list
           .items=${listItems}
           .contextActions=${args.actions}
-          @context-action=${handleContextAction}
+          @contextAction=${handleContextAction}
         ></spectrum-collapsible-list>
       </div>
     `;
