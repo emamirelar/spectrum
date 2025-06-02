@@ -107,6 +107,46 @@ export class SpectrumContextMenu {
     this.hide();
   }
 
+  private createRipple(event: MouseEvent, element: HTMLElement) {
+    // Remove any existing ripples
+    const existingRipples = element.querySelectorAll('.spectrum-context-menu__ripple');
+    existingRipples.forEach(ripple => ripple.remove());
+
+    // Create new ripple element
+    const ripple = document.createElement('span');
+    ripple.classList.add('spectrum-context-menu__ripple');
+
+    // Get the element dimensions and position
+    const rect = element.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
+
+    // Set ripple size and position
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+
+    // Add ripple to element and trigger animation
+    element.appendChild(ripple);
+
+    // Remove ripple after animation completes
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
+  }
+
+  private handleItemClick = (event: MouseEvent, action: ContextMenuAction) => {
+    // Create ripple effect on the clicked item
+    const target = event.currentTarget as HTMLElement;
+    this.createRipple(event, target);
+
+    // Slight delay to show ripple before closing menu
+    setTimeout(() => {
+      this.handleActionClick(action);
+    }, 100);
+  };
+
   private handleWindowClick = (event: MouseEvent) => {
     if (!this.isOpen) return;
     if (!this.el.shadowRoot.contains(event.target as Node)) {
@@ -207,7 +247,7 @@ export class SpectrumContextMenu {
               {this.actions.map((action) => (
                 <li
                   class="spectrum-context-menu__item"
-                  onClick={() => this.handleActionClick(action)}
+                  onClick={(event) => this.handleItemClick(event, action)}
                   role="menuitem"
                   tabindex="0"
                   key={`action-${action.id}`}
@@ -219,7 +259,6 @@ export class SpectrumContextMenu {
                   <span class="spectrum-context-menu__label">
                     {action.label}
                   </span>
-                  {action.ripple && <span class="spectrum-context-menu__ripple" />}
                 </li>
               ))}
             </ul>

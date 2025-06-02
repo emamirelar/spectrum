@@ -2,29 +2,24 @@
   display: block;
   position: relative;
   
-  // Core menu properties
-  --context-menu-background: var(--spectrum-color-background, #ffffff);
-  --context-menu-color: var(--spectrum-color-text, #333333);
-  --context-menu-border-radius: var(--spectrum-sys-border-radius, 4px);
-  --context-menu-padding: var(--spectrum-sys-spacing-small, 4px);
-  --context-menu-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
-  --context-menu-font-size: var(--spectrum-sys-font-size, 16px);
-  --context-menu-border: var(--spectrum-sys-border, 1px solid rgba(0, 0, 0, 0.1));
-  --context-menu-spacing: var(--spectrum-sys-spacing, 8px);
-  --context-menu-shadow: var(--spectrum-sys-shadow, 0 2px 8px rgba(0, 0, 0, 0.15));
-  --context-menu-icon-size: var(--spectrum-sys-icon-font-size, 20px);
-  --context-menu-z-index: 1000;
-  
-  // Item interaction properties
-  --context-menu-item-height: var(--spectrum-sys-listitem-height, 36px);
-  --context-menu-item-hover-background: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.03));
-  --context-menu-item-active-background: var(--spectrum-color-surface-active, rgba(0, 0, 0, 0.1));
-  --context-menu-item-gap: var(--spectrum-sys-spacing, 8px);
-  
-  // Animation properties
-  --context-menu-animation-duration: var(--spectrum-sys-animation-duration, 200ms);
-  --context-menu-animation-timing: var(--spectrum-sys-animation-timing-function, ease-out);
-  --context-menu-transition: all var(--context-menu-animation-duration) var(--context-menu-animation-timing);
+  // Local variables set from spectrum theme variables
+  --menu-background: var(--spectrum-color-background, #ffffff);
+  --menu-color: var(--spectrum-color-text, #333333);
+  --menu-border-radius: var(--spectrum-sys-border-radius, 4px);
+  --menu-padding: var(--spectrum-sys-spacing-small, 4px);
+  --menu-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --menu-font-size: var(--spectrum-sys-font-size, 16px);
+  --menu-border: var(--spectrum-sys-border, 1px solid rgba(0, 0, 0, 0.1));
+  --menu-spacing: var(--spectrum-sys-spacing, 8px);
+  --menu-shadow: var(--spectrum-sys-shadow, 0 2px 8px rgba(0, 0, 0, 0.15));
+  --menu-icon-size: var(--spectrum-sys-icon-font-size, 20px);
+  --menu-z-index: 1000;
+  --menu-item-height: var(--spectrum-sys-listitem-height, 36px);
+  --menu-item-hover-bg: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.03));
+  --menu-item-active-bg: var(--spectrum-color-surface-active, rgba(0, 0, 0, 0.1));
+  --menu-animation-duration: var(--spectrum-sys-animation-duration, 200ms);
+  --menu-animation-timing: var(--spectrum-sys-animation-timing-function, ease-out);
+  --menu-transition: all var(--menu-animation-duration) var(--menu-animation-timing);
 }
 
 // Main context menu container
@@ -32,20 +27,20 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: var(--context-menu-background);
-  color: var(--context-menu-color);
-  border-radius: var(--context-menu-border-radius);
-  border: var(--context-menu-border);
-  box-shadow: var(--context-menu-shadow);
-  padding: var(--context-menu-padding);
-  z-index: var(--context-menu-z-index);
+  background-color: var(--menu-background);
+  color: var(--menu-color);
+  border-radius: var(--menu-border-radius);
+  border: var(--menu-border);
+  box-shadow: var(--menu-shadow);
+  padding: var(--menu-padding);
+  z-index: var(--menu-z-index);
   min-width: 160px;
   max-width: 280px;
-  animation: menu-appear var(--context-menu-animation-duration) var(--context-menu-animation-timing);
+  animation: menu-appear var(--menu-animation-duration) var(--menu-animation-timing);
   transform-origin: top left;
   overflow: hidden;
-  font-family: var(--context-menu-font-family);
-  font-size: var(--context-menu-font-size);
+  font-family: var(--menu-font-family);
+  font-size: var(--menu-font-size);
   
   // Menu list
   &__list {
@@ -61,24 +56,24 @@
   &__item {
     display: flex;
     align-items: center;
-    gap: var(--context-menu-item-gap);
-    padding: var(--context-menu-padding) var(--context-menu-spacing);
-    min-height: var(--context-menu-item-height);
+    gap: var(--menu-spacing);
+    padding: var(--menu-padding) var(--menu-spacing);
+    min-height: var(--menu-item-height);
     cursor: pointer;
     position: relative;
     user-select: none;
-    border-radius: calc(var(--context-menu-border-radius) - 2px);
-    transition: var(--context-menu-transition);
+    border-radius: calc(var(--menu-border-radius) - 2px);
+    transition: var(--menu-transition);
     
     // Hover and focus styles
     &:hover, &:focus-visible {
-      background-color: var(--context-menu-item-hover-background);
+      background-color: var(--menu-item-hover-bg);
       outline: none;
     }
     
     // Active (pressed) styles
     &:active {
-      background-color: var(--context-menu-item-active-background);
+      background-color: var(--menu-item-active-bg);
     }
   }
   
@@ -87,8 +82,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--context-menu-icon-size);
-    min-width: var(--context-menu-icon-size);
+    font-size: var(--menu-icon-size);
+    min-width: var(--menu-icon-size);
     color: inherit;
     
     &.material-symbols-outlined {
@@ -157,7 +152,7 @@
     min-width: 140px;
     
     &__item {
-      min-height: calc(var(--context-menu-item-height) * 1.2);
+      min-height: calc(var(--menu-item-height) * 1.2);
     }
   }
 }
