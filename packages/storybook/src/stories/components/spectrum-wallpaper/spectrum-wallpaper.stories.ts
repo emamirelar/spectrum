@@ -13,7 +13,7 @@ const meta = {
   render: (args) => html`
     <spectrum-wallpaper
       background=${args.background}
-      show-swatches=${args['show-swatches']}
+      show-swatches=${args.showSwatches}
       backgroundposition=${args.backgroundposition}
       backgroundsize=${args.backgroundsize}
     >
@@ -32,7 +32,7 @@ const meta = {
   },
   args: {
     background: 'url(https://images.unsplash.com/photo-1682687220063-4742bd7fd538)',
-    'show-swatches': true,
+    showSwatches: true,
     backgroundposition: 'center',
     backgroundsize: 'cover',
   },
@@ -45,7 +45,7 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       }
     },
-    'show-swatches': {
+    showSwatches: {
       description: 'Whether to show the theme color swatches',
       control: 'boolean',
       table: {
@@ -96,6 +96,34 @@ export const Gradient: StoryObj<SpectrumWallpaper> = {
     docs: {
       description: {
         story: 'Example using a gradient background. The component will extract the first color from the gradient to generate the theme.'
+      }
+    }
+  }
+};
+
+export const Ocean: StoryObj<SpectrumWallpaper> = {
+  name: 'Ocean Scene',
+  args: {
+    background: 'url(https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1920&q=80)',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Ocean landscape image that demonstrates how the component generates a blue-toned theme from natural water scenes.'
+      }
+    }
+  }
+};
+
+export const Forest: StoryObj<SpectrumWallpaper> = {
+  name: 'Forest Scene',
+  args: {
+    background: 'url(https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80)',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Forest landscape image that demonstrates how the component generates a green-toned theme from natural vegetation scenes.'
       }
     }
   }
