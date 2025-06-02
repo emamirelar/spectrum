@@ -26,6 +26,7 @@ export class SpectrumButton {
   @Prop() disabled: boolean = false;
   @Prop() ripple: boolean = false;
   @Prop() action: string = '';
+  @Prop() customStyle: { [key: string]: string } = {};
 
   // Button Content
   @Prop() showButtonText: boolean = true;
@@ -136,8 +137,8 @@ export class SpectrumButton {
       styles.cursor = 'not-allowed';
     }
 
-    this.log('Generated styles', { styles });
-    return styles;
+    // Merge custom styles with default styles
+    return { ...styles, ...this.customStyle };
   }
 
   // ============== Lifecycle Methods ==============

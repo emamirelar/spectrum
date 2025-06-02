@@ -8,14 +8,14 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'buttonText', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLElement;
@@ -274,7 +274,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
 
 
 @ProxyCmp({
-  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder'],
+  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
   methods: ['setFocus']
 })
 @Component({
@@ -282,7 +282,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder'],
+  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
 })
 export class SpectrumSearchInput {
   protected el: HTMLElement;

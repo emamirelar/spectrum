@@ -17,6 +17,7 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'disabled',
   'ripple',
   'action',
+  'customStyle',
   'showButtonText',
   'buttonText',
   'showLeftIcon',
@@ -124,6 +125,8 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
   'placeholder',
   'enableVoiceInput',
   'enableEnterSubmit',
+  'searchIconPosition',
+  'searchButtonVariant',
   'searchSubmit',
   'searchInput'
 ]);

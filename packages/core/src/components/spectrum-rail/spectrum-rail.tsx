@@ -118,9 +118,23 @@ export class SpectrumRail {
   }
 
   /** Handle search input value change */
-  private handleSearchChange(e: Event) {
-    const input = e.target as HTMLInputElement;
-    this.searchValue = input.value;
+  private handleSearchChange = (e: Event | CustomEvent) => {
+    let value = '';
+    
+    // Handle CustomEvent from spectrum-search-input
+    if ('detail' in e && typeof e.detail === 'string') {
+      // spectrum-search-input emits CustomEvent<string>
+      value = e.detail;
+    } else if ('detail' in e && e.detail && typeof e.detail === 'object') {
+      // Other custom event types
+      value = e.detail.value || '';
+    } else if (e.target) {
+      // Standard input event
+      const input = e.target as HTMLInputElement;
+      value = input.value;
+    }
+    
+    this.searchValue = value;
     this.searchChange.emit({ value: this.searchValue });
   }
 
@@ -299,14 +313,15 @@ export class SpectrumRail {
               />
             ) : (
               <div class="search-expanded">
-                <spectrum-search-input 
-                  ref={(el) => this.searchInputRef = el as HTMLElement}
-                  maxLines={1}
+                <spectrum-search-input
+                  ref={(el) => this.searchInputRef = el}
+                  placeholder="Search..."
                   enableVoiceInput={false}
-                  placeholder="Search conversations"
-                  onSearchSubmit={(e: CustomEvent) => this.handleSearchChange(e)}
-                  onSearchInput={(e: CustomEvent) => this.handleSearchChange(e)}
-                  class="search-input-expanded"
+                  enableEnterSubmit={true}
+                  searchIconPosition="left"
+                  searchButtonVariant="ghost"
+                  onSearchInput={(e) => this.handleSearchChange(e)}
+                  onSearchSubmit={(e) => this.handleSearchChange(e)}
                 />
               </div>
             )}
@@ -329,8 +344,8 @@ export class SpectrumRail {
                 />
               ) : (
                 <spectrum-button
-                  variant="secondary"
-                  outline={true}
+                  variant="fab"
+                  size="base"
                   showLeftIcon={true}
                   leftIcon={this.addIcon}
                   buttonText={this.addLabel}
@@ -359,7 +374,9 @@ export class SpectrumRail {
                 state="active"
               />
             ) : (
-              <slot name="items"></slot>
+              <div class="rail-items-container">
+                <slot name="items"></slot>
+              </div>
             )}
           </div>
 
@@ -391,6 +408,7 @@ export class SpectrumRail {
                   rightIcon="chevron_right"
                   onClick={() => this.handleMoreClick()}
                   class="more-button"
+                  customStyle={{ width: '100%', justifyContent: 'space-between' }}
                 >
                   {moreText}
                 </spectrum-button>

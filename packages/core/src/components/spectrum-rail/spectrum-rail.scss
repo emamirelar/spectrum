@@ -129,8 +129,16 @@
 
     .items {
       padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
+}
+
+.rail-items-container {
+  padding-left: var(--spectrum-sys-spacing, 8px);
+  padding-right: var(--spectrum-sys-spacing, 8px);
 }
 
 .rail-section {

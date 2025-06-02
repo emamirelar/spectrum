@@ -7,6 +7,8 @@ interface SpectrumSearchInputArgs {
   placeholder: string;
   enableVoiceInput: boolean;
   enableEnterSubmit: boolean;
+  searchIconPosition: 'left' | 'right';
+  searchButtonVariant: 'primary' | 'ghost';
 }
 
 const meta = {
@@ -16,7 +18,9 @@ const meta = {
     maxLines: 4,
     placeholder: 'Ask anything...',
     enableVoiceInput: true,
-    enableEnterSubmit: true
+    enableEnterSubmit: true,
+    searchIconPosition: 'right',
+    searchButtonVariant: 'primary'
   },
   argTypes: {
     maxLines: {
@@ -50,6 +54,24 @@ const meta = {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' }
       }
+    },
+    searchIconPosition: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the search icon',
+      table: {
+        type: { summary: "'left' | 'right'" },
+        defaultValue: { summary: "'right'" }
+      }
+    },
+    searchButtonVariant: {
+      control: 'select',
+      options: ['primary', 'ghost'],
+      description: 'Variant of the search button',
+      table: {
+        type: { summary: "'primary' | 'ghost'" },
+        defaultValue: { summary: "'primary'" }
+      }
     }
   },
   parameters: {
@@ -65,6 +87,7 @@ const meta = {
             placeholder="Search for documents..."
             enableVoiceInput={false}
             enableEnterSubmit={true}
+            searchIconPosition="left"
             @searchSubmit={(e) => {
               console.log('Search query:', e.detail);
             }}
@@ -87,6 +110,8 @@ export const Default: Story = {
         placeholder="${args.placeholder}"
         ?enableVoiceInput="${args.enableVoiceInput}"
         ?enableEnterSubmit="${args.enableEnterSubmit}"
+        .searchIconPosition=${args.searchIconPosition}
+        .searchButtonVariant=${args.searchButtonVariant}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
@@ -106,6 +131,8 @@ export const CustomPlaceholder: Story = {
         placeholder=${args.placeholder}
         .enableVoiceInput=${args.enableVoiceInput}
         .enableEnterSubmit=${args.enableEnterSubmit}
+        .searchIconPosition=${args.searchIconPosition}
+        .searchButtonVariant=${args.searchButtonVariant}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
@@ -127,12 +154,80 @@ export const EnterKeySubmission: Story = {
         placeholder=${args.placeholder}
         .enableVoiceInput=${args.enableVoiceInput}
         .enableEnterSubmit=${args.enableEnterSubmit}
+        .searchIconPosition=${args.searchIconPosition}
+        .searchButtonVariant=${args.searchButtonVariant}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
       ></spectrum-search-input>
       <div style="margin-top: 1rem; font-size: 0.875rem; color: #666;">
         <p>Try typing something and pressing Enter to submit the search.</p>
         <p>Note: Shift+Enter will still create a new line when maxLines > 1.</p>
+      </div>
+    </div>
+  `
+};
+
+// Search Icon Position Examples
+export const SearchIconPositions: Story = {
+  render: () => html`
+    <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
+      <h3 style="margin-bottom: 1rem;">Search Icon on Left</h3>
+      <spectrum-search-input
+        placeholder="Search with icon on left..."
+        .searchIconPosition=${'left'}
+        .searchButtonVariant=${'primary'}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+      ></spectrum-search-input>
+
+      <h3 style="margin: 2rem 0 1rem;">Search Icon on Right (Default)</h3>
+      <spectrum-search-input
+        placeholder="Search with icon on right..."
+        .searchIconPosition=${'right'}
+        .searchButtonVariant=${'primary'}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+      ></spectrum-search-input>
+    </div>
+  `
+};
+
+// Search Button Variants Example
+export const SearchButtonVariants: Story = {
+  render: () => html`
+    <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
+      <h3 style="margin-bottom: 1rem;">Primary Button (Default)</h3>
+      <spectrum-search-input
+        placeholder="Search with primary button..."
+        .searchButtonVariant=${'primary'}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+      ></spectrum-search-input>
+
+      <h3 style="margin: 2rem 0 1rem;">Ghost Button (Simple Icon)</h3>
+      <spectrum-search-input
+        placeholder="Search with ghost button..."
+        .searchButtonVariant=${'ghost'}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+      ></spectrum-search-input>
+
+      <h3 style="margin: 2rem 0 1rem;">Comparison with Different Positions</h3>
+      <div style="display: flex; gap: 1rem; flex-direction: column;">
+        <spectrum-search-input
+          placeholder="Primary button, left icon"
+          .searchIconPosition=${'left'}
+          .searchButtonVariant=${'primary'}
+          @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+          @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+        ></spectrum-search-input>
+        <spectrum-search-input
+          placeholder="Ghost button, left icon"
+          .searchIconPosition=${'left'}
+          .searchButtonVariant=${'ghost'}
+          @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
+          @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
+        ></spectrum-search-input>
       </div>
     </div>
   `

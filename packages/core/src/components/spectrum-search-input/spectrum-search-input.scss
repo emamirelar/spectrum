@@ -85,6 +85,10 @@
       background: rgba(0, 0, 0, 0.2);
       border-radius: 4px;
     }
+
+    &--icon-left {
+      padding-left: 64px;
+    }
   }
   
   &__buttons {
@@ -124,6 +128,27 @@
       &:hover {
         background-color: var(--spectrum-sys-color-primary-hover);
       }
+    }
+  }
+
+  &__buttons--left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: auto;
+    background: linear-gradient(to right, var(--spectrum-sys-color-surface) 70%, transparent);
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+    z-index: 1;
+
+    spectrum-button {
+      --button-size: 40px;
+      flex-shrink: 0;
     }
   }
 }

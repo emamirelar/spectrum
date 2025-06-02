@@ -20,6 +20,7 @@ export namespace Components {
     interface SpectrumButton {
         "action": string;
         "buttonText": string;
+        "customStyle": { [key: string]: string };
         "debug": boolean;
         "disabled": boolean;
         "iconOnly": boolean;
@@ -247,6 +248,14 @@ export namespace Components {
           * Placeholder text for the search input
          */
         "placeholder": string;
+        /**
+          * Variant of the search button - 'primary' or 'ghost'
+         */
+        "searchButtonVariant": 'primary' | 'ghost';
+        /**
+          * Position of the search icon - 'left' or 'right'
+         */
+        "searchIconPosition": 'left' | 'right';
         "setFocus": () => Promise<void>;
     }
     interface SpectrumTheme {
@@ -522,6 +531,7 @@ declare namespace LocalJSX {
     interface SpectrumButton {
         "action"?: string;
         "buttonText"?: string;
+        "customStyle"?: { [key: string]: string };
         "debug"?: boolean;
         "disabled"?: boolean;
         "iconOnly"?: boolean;
@@ -778,6 +788,14 @@ declare namespace LocalJSX {
           * Placeholder text for the search input
          */
         "placeholder"?: string;
+        /**
+          * Variant of the search button - 'primary' or 'ghost'
+         */
+        "searchButtonVariant"?: 'primary' | 'ghost';
+        /**
+          * Position of the search icon - 'left' or 'right'
+         */
+        "searchIconPosition"?: 'left' | 'right';
     }
     interface SpectrumTheme {
         /**
