@@ -96,7 +96,7 @@ export class SpectrumCollapsibleList {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['child-action', 'expand-action', 'contract-action', 'context-action', 'item-renamed']);
+    proxyOutputs(this, this.el, ['childAction', 'expandAction', 'contractAction', 'contextAction', 'itemRenamed']);
   }
 }
 
@@ -105,29 +105,29 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
   /**
    * Event emitted when a child node is clicked
    */
-  'child-action': EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
+  childAction: EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
   /**
    * Event emitted when a parent node is expanded
    */
-  'expand-action': EventEmitter<CustomEvent<{ label: string; id: string }>>;
+  expandAction: EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
   /**
    * Event emitted when a parent node is contracted
    */
-  'contract-action': EventEmitter<CustomEvent<{ label: string; id: string }>>;
+  contractAction: EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
   /**
    * Event emitted when a context action is clicked
    */
-  'context-action': EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
+  contextAction: EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
   /**
    * Event emitted when an item is renamed
    */
-  'item-renamed': EventEmitter<CustomEvent<{ id: string; oldName: string; newName: string }>>;
+  itemRenamed: EventEmitter<CustomEvent<{ action: string; id: string; oldName: string; newName: string }>>;
 }
 
 
 @ProxyCmp({
   inputs: ['position'],
-  methods: ['show', 'hide', 'positionAtCoordinates']
+  methods: ['show', 'hide', 'isMenuOpen', 'positionAtCoordinates']
 })
 @Component({
   selector: 'spectrum-context-menu',
@@ -141,7 +141,7 @@ export class SpectrumContextMenu {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['action-click', 'menu-close']);
+    proxyOutputs(this, this.el, ['actionClick', 'menuClose']);
   }
 }
 
@@ -150,11 +150,11 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   /**
    * Event emitted when an action is clicked
    */
-  'action-click': EventEmitter<CustomEvent<{ action: string; targetKey: string }>>;
+  actionClick: EventEmitter<CustomEvent<{ action: string; targetKey: string }>>;
   /**
    * Event emitted when the menu is closed
    */
-  'menu-close': EventEmitter<CustomEvent<void>>;
+  menuClose: EventEmitter<CustomEvent<{ action: string }>>;
 }
 
 
@@ -181,13 +181,13 @@ export class SpectrumConversationPanel {
 
 export declare interface SpectrumConversationPanel extends Components.SpectrumConversationPanel {
 
-  explorationSelected: EventEmitter<CustomEvent<string>>;
+  explorationSelected: EventEmitter<CustomEvent<{ action: string; exploration: string }>>;
 
-  action: EventEmitter<CustomEvent<{type: string, value: string}>>;
+  action: EventEmitter<CustomEvent<{action: string, type: string, value: string}>>;
 
-  explore: EventEmitter<CustomEvent<string>>;
+  explore: EventEmitter<CustomEvent<{ action: string; value: string }>>;
 
-  sourceClick: EventEmitter<CustomEvent<{label: string, value: string}>>;
+  sourceClick: EventEmitter<CustomEvent<{ action: string; label: string; value: string }>>;
 
   titleChanged: EventEmitter<CustomEvent<{action: string, value: string}>>;
 }
@@ -240,11 +240,11 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
   /**
    * Emits when the rail changes expanded state
    */
-  expandedChange: EventEmitter<CustomEvent<boolean>>;
+  expandedChange: EventEmitter<CustomEvent<{ action: string; expanded: boolean }>>;
   /**
    * Emits when the search value changes
    */
-  searchChange: EventEmitter<CustomEvent<{ value: string }>>;
+  searchChange: EventEmitter<CustomEvent<{ action: string; value: string }>>;
   /**
    * Emits when a rail action is triggered
    */
@@ -252,7 +252,7 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
   /**
    * Emits when the add button is clicked
    */
-  addAction: EventEmitter<CustomEvent<void>>;
+  addAction: EventEmitter<CustomEvent<{ action: string }>>;
 }
 
 
@@ -302,11 +302,11 @@ export class SpectrumSearchInput {
 
 export declare interface SpectrumSearchInput extends Components.SpectrumSearchInput {
 
-  searchSubmit: EventEmitter<CustomEvent<string>>;
+  searchSubmit: EventEmitter<CustomEvent<{ action: string; value: string }>>;
   /**
    * Emits when input value changes, for real-time filtering
    */
-  searchInput: EventEmitter<CustomEvent<string>>;
+  searchInput: EventEmitter<CustomEvent<{ action: string; value: string }>>;
 }
 
 

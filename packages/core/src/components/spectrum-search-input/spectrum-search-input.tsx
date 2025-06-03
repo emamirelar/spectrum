@@ -40,10 +40,10 @@ export class SpectrumSearchInput {
   @State() isSpeechAvailable: boolean = false;
   @State() isMultiline: boolean = false;
   
-  @Event() searchSubmit: EventEmitter<string>;
+  @Event() searchSubmit: EventEmitter<{ action: string; value: string }>;
   
   /** Emits when input value changes, for real-time filtering */
-  @Event() searchInput: EventEmitter<string>;
+  @Event() searchInput: EventEmitter<{ action: string; value: string }>;
   
   private inputRef?: HTMLTextAreaElement;
   private recognition: any;
@@ -108,7 +108,7 @@ export class SpectrumSearchInput {
     this.adjustTextareaHeight();
     
     // Emit the input event for real-time filtering
-    this.searchInput.emit(this.searchText);
+    this.searchInput.emit({ action: 'input', value: this.searchText });
   };
   
   private handleKeyDown = (event: KeyboardEvent) => {
@@ -147,7 +147,7 @@ export class SpectrumSearchInput {
   };
   
   private handleSearch = () => {
-    this.searchSubmit.emit(this.searchText);
+    this.searchSubmit.emit({ action: 'submit', value: this.searchText });
   };
   
   private handleVoiceInput = () => {

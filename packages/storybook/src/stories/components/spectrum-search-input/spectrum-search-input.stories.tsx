@@ -78,19 +78,35 @@ const meta = {
     docs: {
       description: {
         component: `
-          A search input component that supports both text and voice input.
-          Emits a searchSubmit event when the search button is clicked or when Enter is pressed.
+          A search input component with voice input capabilities and flexible layout options.
+          Supports real-time filtering and submit actions with modern speech recognition.
+
+          ## Events
+          All events now include an action attribute to identify the type of action performed:
           
-          Example:
-          \`\`\`html
+          - **searchInput**: Emitted when input value changes, for real-time filtering
+            - Payload: \`{ action: string, value: string }\`
+            - Action values: \`'input'\`
+          - **searchSubmit**: Emitted when search is submitted (Enter key or search button)
+            - Payload: \`{ action: string, value: string }\`
+            - Action values: \`'submit'\`
+
+          ## Features
+          - Voice input with speech recognition (when supported)
+          - Responsive textarea that adapts to content length
+          - Configurable search button position (left/right)
+          - Enter key submission (can be disabled)
+          - Configurable maximum lines before scrolling
+
+          ## Usage
+          \`\`\`tsx
           <spectrum-search-input
-            placeholder="Search for documents..."
-            enableVoiceInput={false}
+            placeholder="Search anything..."
+            enableVoiceInput={true}
             enableEnterSubmit={true}
-            searchIconPosition="left"
-            @searchSubmit={(e) => {
-              console.log('Search query:', e.detail);
-            }}
+            searchIconPosition="right"
+            onSearchInput={(e) => console.log('Search input:', e.detail)}
+            onSearchSubmit={(e) => console.log('Search submitted:', e.detail)}
           />
           \`\`\`
         `

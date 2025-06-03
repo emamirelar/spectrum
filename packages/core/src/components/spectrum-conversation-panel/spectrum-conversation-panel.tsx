@@ -50,15 +50,15 @@ export class SpectrumConversationPanel {
   @State() messageArray: any[] = [];
   private messageIdMap: Map<number, string> = new Map();
 
-  @Event() explorationSelected: EventEmitter<string>;
+  @Event() explorationSelected: EventEmitter<{ action: string; exploration: string }>;
   @Event({
     eventName: 'action',
     bubbles: true,
     composed: true,
     cancelable: true
-  }) action: EventEmitter<{type: string, value: string}>;
-  @Event() explore: EventEmitter<string>;
-  @Event() sourceClick: EventEmitter<{label: string, value: string}>;
+  }) action: EventEmitter<{action: string, type: string, value: string}>;
+  @Event() explore: EventEmitter<{ action: string; value: string }>;
+  @Event() sourceClick: EventEmitter<{ action: string; label: string; value: string }>;
   @Event({
     eventName: 'titleChanged',
     bubbles: true,
@@ -243,9 +243,9 @@ export class SpectrumConversationPanel {
               iconOnly={true}
               showLeftIcon={true}
               leftIcon={action.icon}
-              action={action.value}
               onClick={() => this.action.emit({
-                type: 'action',
+                action: action.action,
+                type: action.type,
                 value: action.value
               })}
             />
@@ -282,6 +282,7 @@ export class SpectrumConversationPanel {
           onClick={(e: MouseEvent) => {
             e.preventDefault();
             this.sourceClick.emit({
+              action: 'sourceClick',
               label: source.label,
               value: source.value
             });
@@ -310,8 +311,9 @@ export class SpectrumConversationPanel {
           <button 
             class="exploration-chip"
             onClick={() => this.action.emit({
-              type: 'exploration-action',
-              value: exploration.label
+              action: exploration.action,
+              type: exploration.type,
+              value: exploration.value
             })}
           >
             <span class="material-symbols-outlined">prompt_suggestion</span>

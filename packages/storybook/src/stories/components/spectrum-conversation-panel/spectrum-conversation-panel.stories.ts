@@ -128,29 +128,42 @@ const meta = {
       description: {
         component: `
           A conversation panel component that displays messages, actions, sources, and explorations.
-          Emits various events for user interactions:
-          - action: When action buttons are clicked
-          - explorationSelected: When an exploration is selected
-          - explore: When exploring content
-          - sourceClick: When a source link is clicked
-          - titleChanged: When the conversation title is edited
           
-          Example:
+          ## Events
+          All events now include an action attribute to identify the type of action performed:
+          
+          - **action**: When action buttons are clicked
+            - Payload: \`{ action: string, type: string, value: string }\`
+          - **explorationSelected**: When an exploration is selected  
+            - Payload: \`{ action: string, exploration: string }\`
+          - **explore**: When exploring content
+            - Payload: \`{ action: string, value: string }\`
+          - **sourceClick**: When a source link is clicked
+            - Payload: \`{ action: string, label: string, value: string }\`
+          - **titleChanged**: When the conversation title is edited
+            - Payload: \`{ action: string, value: string }\`
+          
+          ## Example Usage
           \`\`\`html
           <spectrum-conversation-panel
             @action={(e) => {
+              // e.detail = { action: "share", type: "action", value: "share" }
               console.log('Action:', e.detail);
             }}
             @explorationSelected={(e) => {
+              // e.detail = { action: "explorationSelected", exploration: "exploration text" }
               console.log('Exploration selected:', e.detail);
             }}
             @explore={(e) => {
+              // e.detail = { action: "explore", value: "exploration content" }
               console.log('Explore:', e.detail);
             }}
             @sourceClick={(e) => {
+              // e.detail = { action: "sourceClick", label: "NASA", value: "https://nasa.gov" }
               console.log('Source clicked:', e.detail);
             }}
             @titleChanged={(e) => {
+              // e.detail = { action: "titleChanged", value: "New Title" }
               console.log('Title changed:', e.detail);
             }}
           />

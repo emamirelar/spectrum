@@ -1,0 +1,148 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Spectrum Components Dependency Map and Rules
+
+## Component Dependency Map
+
+This map shows the relationships between Spectrum components. Keep this updated when implementing or modifying components.
+
+### Core Infrastructure Components (Foundation Layer)
+- **spectrum-theme**: Foundation theming component
+  - Dependencies: @material/material-color-utilities
+  - Used by: All components (through CSS custom properties)
+  - Purpose: Provides Material Design 3 color system and theming
+
+### Atomic Components (No Internal Dependencies)
+- **spectrum-button**: Interactive button component
+  - Dependencies: None (pure component)
+  - Used by: spectrum-rail, spectrum-search-input, spectrum-rail-item, spectrum-context-menu
+  - Purpose: Primary interactive element
+
+- **spectrum-chip**: Small interactive element for tags/selections
+  - Dependencies: None (pure component)  
+  - Used by: spectrum-conversation-panel
+  - Purpose: Display tags, selections, or actionable items
+
+### Utility Components
+- **spectrum-context-menu**: Contextual menu overlay
+  - Dependencies: None (pure component)
+  - Used by: spectrum-collapsible-list
+  - Purpose: Provides contextual actions menu
+  - Exports: ContextMenuAction interface
+
+- **spectrum-wallpaper**: Background theming component
+  - Dependencies: None (pure component)
+  - Used by: Standalone background theming
+  - Purpose: Dynamic background with color extraction
+
+### Composed Components (With Internal Dependencies)
+- **spectrum-search-input**: Enhanced search input with voice
+  - Dependencies: spectrum-button
+  - Used by: spectrum-rail
+  - Purpose: Advanced search functionality
+
+- **spectrum-rail-item**: Individual rail navigation item
+  - Dependencies: spectrum-button
+  - Used by: spectrum-rail (via slots)
+  - Purpose: Rail navigation items with expand/collapse states
+
+- **spectrum-collapsible-list**: Hierarchical list with context menus
+  - Dependencies: spectrum-context-menu (imports ContextMenuAction interface)
+  - Used by: spectrum-rail (via slots)
+  - Purpose: Expandable/collapsible navigation lists
+
+- **spectrum-rail**: Main navigation rail
+  - Dependencies: spectrum-search-input, spectrum-collapsible-list (via slots), spectrum-rail-item (via slots)
+  - Used by: Main navigation component
+  - Purpose: Primary navigation with expand/collapse functionality
+
+- **spectrum-conversation-panel**: Chat/conversation interface
+  - Dependencies: spectrum-chip
+  - Used by: AI/chat applications
+  - Purpose: Message display and interaction
+
+### Standalone Components (No Internal Dependencies)
+- **spectrum-carousel**: Image/content carousel
+  - Dependencies: @glidejs/glide (external)
+  - Used by: Content display
+  - Purpose: Interactive content carousel
+
+- **spectrum-megamenu**: Full-screen navigation menu
+  - Dependencies: None (uses native popover API)
+  - Used by: Complex navigation scenarios
+  - Purpose: Large navigation overlay
+
+## Dependency Flow Hierarchy
+
+```
+Level 0 (Foundation):
+└── spectrum-theme
+
+Level 1 (Atomic):
+├── spectrum-button
+├── spectrum-chip
+├── spectrum-context-menu
+├── spectrum-wallpaper
+├── spectrum-carousel
+└── spectrum-megamenu
+
+Level 2 (Composed):
+├── spectrum-search-input (depends on: spectrum-button)
+├── spectrum-rail-item (depends on: spectrum-button)
+└── spectrum-collapsible-list (depends on: spectrum-context-menu)
+
+Level 3 (Complex):
+├── spectrum-rail (depends on: spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item)
+└── spectrum-conversation-panel (depends on: spectrum-chip)
+```
+
+## Key Integration Patterns
+
+### Event Communication
+- Components communicate via CustomEvents, not direct imports
+- Events bubble up the DOM tree for loose coupling
+- Standard event naming: camelCase with descriptive names
+
+### Slot-based Composition
+- spectrum-rail uses slots for spectrum-collapsible-list and spectrum-rail-item
+- Allows flexible composition without tight coupling
+- Components can detect parent state through method calls
+
+### Interface Sharing
+- spectrum-context-menu exports ContextMenuAction interface
+- spectrum-collapsible-list imports and uses this interface
+- Shared interfaces maintain type safety across components
+
+## Rules for Maintaining This Map
+
+When implementing or modifying components, you MUST:
+
+1. **Update this dependency map** immediately after any changes
+2. **Add new components** to the appropriate hierarchy level
+3. **Document new dependencies** when components use other spectrum components
+4. **Update the dependency flow** when relationships change
+5. **Maintain the integration patterns** described above
+
+### Adding New Components
+- Place in appropriate hierarchy level based on dependencies
+- Document what it depends on and what depends on it
+- Follow established patterns for event communication and composition
+- Update the dependency flow diagram
+
+### Modifying Existing Components
+- Check if dependency changes affect the hierarchy
+- Update documentation for components that use the modified component
+- Ensure event contracts remain stable
+- Update integration patterns if new patterns emerge
+
+### Component Creation Guidelines
+- Use `npm run generate <component-name>` in packages/core
+- Follow BEM CSS naming conventions
+- Emit events with camelCase names and action attributes
+- Use slots for composition when appropriate
+- Maintain loose coupling through events, not direct imports
+
+This dependency map ensures proper component architecture and helps maintain the modular, composable nature of the Spectrum component system.

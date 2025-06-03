@@ -5,25 +5,32 @@
 :host {
   display: block;
   height: 100%;
-  // Set background to transparent by default for clean embedding in any context
+  
+  // Core variables
   --collapsible-list-bg: transparent;
   --collapsible-list-text: var(--spectrum-color-on-surface, #333);
   --collapsible-list-hover-bg: var(--spectrum-color-primary-container, #d0e4ff);
   --collapsible-list-hover-text: var(--spectrum-color-on-primary-container, #001c3a);
   --collapsible-list-border-radius: var(--spectrum-sys-border-radius, 4px);
   --collapsible-list-spacing: var(--spectrum-sys-spacing-small, 0.5em);
-  --collapsible-list-icon-size: var(--spectrum-sys-icon-font-size, 20px);
-  --collapsible-list-label-font: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
-  --collapsible-list-label-size: var(--spectrum-sys-font-size, 16px);
+  --collapsible-list-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --collapsible-list-font-size: var(--spectrum-sys-font-size, 16px);
   --collapsible-list-transition: var(--spectrum-sys-animation-duration, 200ms) var(--spectrum-sys-animation-timing-function, ease-out);
-  // Ensure the context menu is above all other content
-  --context-menu-z-index: 9999;
+  
+  // Icon and interactive elements
+  --collapsible-list-icon-size: var(--spectrum-sys-icon-font-size, 20px);
+  --collapsible-list-icon-font: var(--spectrum-sys-icon-font-family, 'Material Symbols Outlined');
+  --collapsible-list-border-color: var(--spectrum-color-primary, #0066cc);
+  --collapsible-list-surface: var(--spectrum-color-surface, #ffffff);
+  
+  // Secondary colors
+  --collapsible-list-muted-text: var(--spectrum-color-on-surface-variant, #6c7a89);
+  --collapsible-list-focus-ring: var(--spectrum-color-primary-container, rgba(0, 102, 204, 0.2));
 }
 
 .spectrum-collapsible-list {
-  // width: 100%;
   height: 100%;
-  background: transparent !important;
+  background: var(--collapsible-list-bg);
   color: var(--collapsible-list-text);
   border-radius: var(--collapsible-list-border-radius);
   padding: 0;
@@ -33,8 +40,7 @@
   min-width: 0;
 }
 
-.spectrum-collapsible-list__list,
-.spectrum-collapsible-list__children ul {
+.spectrum-collapsible-list__list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -42,9 +48,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-}
-
-.spectrum-collapsible-list__list {
+  gap: var(--collapsible-list-spacing);
   flex: 1;
   overflow-y: auto;
 }
@@ -54,16 +58,12 @@
   flex-direction: column;
   align-items: stretch;
   gap: 0;
-  // padding: var(--collapsible-list-spacing) calc(var(--collapsible-list-spacing) * 1.5);
-  border-radius: var(--collapsible-list-border-radius);
-  font-family: var(--collapsible-list-label-font);
-  font-size: var(--collapsible-list-label-size);
+  font-family: var(--collapsible-list-font-family);
+  font-size: var(--collapsible-list-font-size);
   cursor: pointer;
   user-select: none;
-  transition: background var(--collapsible-list-transition), color var(--collapsible-list-transition);
   position: relative;
   outline: none;
-  background: transparent !important;
   min-width: 0;
 }
 
@@ -71,13 +71,24 @@
   font-weight: 600;
 }
 
-.spectrum-collapsible-list__item--expanded {
-  background: transparent !important;
+.spectrum-collapsible-list__row {
+  display: flex;
+  align-items: center;
+  gap: var(--collapsible-list-spacing);
+  padding: var(--collapsible-list-spacing);
+  transition: background var(--collapsible-list-transition), color var(--collapsible-list-transition), border-radius var(--collapsible-list-transition);
+  min-width: 0;
+}
+
+.spectrum-collapsible-list__row:hover,
+.spectrum-collapsible-list__row:focus-visible {
+  background: var(--collapsible-list-hover-bg);
   color: var(--collapsible-list-hover-text);
+  border-radius: 999px;
 }
 
 .spectrum-collapsible-list__icon {
-  font-family: var(--spectrum-sys-icon-font-family, 'Material Symbols Outlined');
+  font-family: var(--collapsible-list-icon-font);
   font-size: var(--collapsible-list-icon-size);
   line-height: 1;
   display: flex;
@@ -90,11 +101,11 @@
 }
 
 .spectrum-collapsible-list__icon--outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 .spectrum-collapsible-list__label {
-  flex: 1 1 0;
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -102,44 +113,43 @@
 }
 
 .spectrum-collapsible-list__edit-input {
-  flex: 1 1 0;
+  flex: 1;
   min-width: 0;
-  border: 1px solid var(--spectrum-color-primary, #0066cc);
+  border: 1px solid var(--collapsible-list-border-color);
   border-radius: var(--collapsible-list-border-radius);
   padding: 0.25em 0.5em;
-  font-family: var(--collapsible-list-label-font);
-  font-size: var(--collapsible-list-label-size);
-  background: var(--spectrum-color-surface, #ffffff);
-  color: var(--spectrum-color-on-surface, #333);
+  font-family: var(--collapsible-list-font-family);
+  font-size: var(--collapsible-list-font-size);
+  background: var(--collapsible-list-surface);
+  color: var(--collapsible-list-text);
   outline: none;
-  box-shadow: 0 0 0 2px var(--spectrum-color-primary-container, rgba(0, 102, 204, 0.2));
+  box-shadow: 0 0 0 2px var(--collapsible-list-focus-ring);
   transition: border-color var(--collapsible-list-transition), box-shadow var(--collapsible-list-transition);
 }
 
 .spectrum-collapsible-list__edit-input:focus {
-  border-color: var(--spectrum-color-primary, #0066cc);
-  box-shadow: 0 0 0 3px var(--spectrum-color-primary-container, rgba(0, 102, 204, 0.3));
+  border-color: var(--collapsible-list-border-color);
+  box-shadow: 0 0 0 3px var(--collapsible-list-focus-ring);
 }
 
 .spectrum-collapsible-list__child-count {
   margin-left: 0.75em;
-  color: #6c7a89;
+  color: var(--collapsible-list-muted-text);
   font-size: 0.95em;
   font-weight: 500;
   min-width: 1.5em;
   text-align: right;
-  display: inline-block;
 }
 
 .spectrum-collapsible-list__context-icon {
   margin-left: 0.75em;
   cursor: pointer;
   opacity: 0.7;
+  padding: 0.25em;
+  border-radius: 50%;
   transition: opacity var(--collapsible-list-transition), 
               background-color var(--collapsible-list-transition),
               color var(--collapsible-list-transition);
-  padding: 0.25em;
-  border-radius: 50%;
 }
 
 .spectrum-collapsible-list__context-icon:hover {
@@ -149,38 +159,12 @@
 }
 
 .spectrum-collapsible-list__children {
-  margin-left: 0;
-  border-left: none;
-  padding-left: 0;
-  // max-height: 200px;
-  overflow-y: auto;
-  width: 100%;
-  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
   font-weight: 400;
-}
-
-.spectrum-collapsible-list__children .spectrum-collapsible-list__item {
-  padding: 0;
-}
-
-.spectrum-collapsible-list__row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--collapsible-list-spacing);
-  transition: background var(--collapsible-list-transition), color var(--collapsible-list-transition), border-radius var(--collapsible-list-transition);
-  min-width: 0;
-  padding: var(--collapsible-list-spacing);
-}
-
-.spectrum-collapsible-list__row:hover,
-.spectrum-collapsible-list__row:focus-visible {
-  background: var(--collapsible-list-hover-bg, #e3f2fd) !important;
-  color: var(--collapsible-list-hover-text);
-  border-radius: 999px;
 }
 
 // Debug mode styles

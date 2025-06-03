@@ -70,7 +70,7 @@ export class SpectrumCollapsibleList {
    * Event emitted when a child node is clicked
    */
   @Event({
-    eventName: 'child-action',
+    eventName: 'childAction',
     composed: true,
     cancelable: true,
     bubbles: true
@@ -80,27 +80,27 @@ export class SpectrumCollapsibleList {
    * Event emitted when a parent node is expanded
    */
   @Event({
-    eventName: 'expand-action',
+    eventName: 'expandAction',
     composed: true,
     cancelable: true,
     bubbles: true
-  }) expandAction: EventEmitter<{ label: string; id: string }>;
+  }) expandAction: EventEmitter<{ action: string; label: string; id: string }>;
 
   /**
    * Event emitted when a parent node is contracted
    */
   @Event({
-    eventName: 'contract-action',
+    eventName: 'contractAction',
     composed: true,
     cancelable: true,
     bubbles: true
-  }) contractAction: EventEmitter<{ label: string; id: string }>;
+  }) contractAction: EventEmitter<{ action: string; label: string; id: string }>;
 
   /**
    * Event emitted when a context action is clicked
    */
   @Event({
-    eventName: 'context-action',
+    eventName: 'contextAction',
     composed: true,
     cancelable: true,
     bubbles: true
@@ -110,11 +110,11 @@ export class SpectrumCollapsibleList {
    * Event emitted when an item is renamed
    */
   @Event({
-    eventName: 'item-renamed',
+    eventName: 'itemRenamed',
     composed: true,
     cancelable: true,
     bubbles: true
-  }) itemRenamed: EventEmitter<{ id: string; oldName: string; newName: string }>;
+  }) itemRenamed: EventEmitter<{ action: string; id: string; oldName: string; newName: string }>;
 
   componentDidLoad() {
     // No need to store the host element anymore
@@ -163,11 +163,11 @@ export class SpectrumCollapsibleList {
       // Expand the clicked item
       newMap[key] = true;
       this.expandedMap = newMap;
-      this.expandAction.emit({ label: item.label, id: item.id });
+      this.expandAction.emit({ action: 'expand', label: item.label, id: item.id });
     } else {
       // Just collapse this item
       this.expandedMap = { ...this.expandedMap, [key]: false };
-      this.contractAction.emit({ label: item.label, id: item.id });
+      this.contractAction.emit({ action: 'contract', label: item.label, id: item.id });
     }
   }
 
@@ -183,7 +183,7 @@ export class SpectrumCollapsibleList {
   /**
    * Handle click on the context menu icon
    */
-  private handleActionsIconClick(e: MouseEvent, item: CollapsibleListItem, actions?: ContextMenuAction[]) {
+  private async handleActionsIconClick(e: MouseEvent, item: CollapsibleListItem, actions?: ContextMenuAction[]) {
     e.stopPropagation();
     e.preventDefault();
     const iconElement = e.currentTarget as HTMLElement;
@@ -192,9 +192,6 @@ export class SpectrumCollapsibleList {
       return;
     }
 
-    // Get the icon position
-    const iconRect = iconElement.getBoundingClientRect();
-
     // Create or get the global context menu
     let menu = document.querySelector('spectrum-context-menu') as any;
     if (!menu) {
@@ -202,10 +199,27 @@ export class SpectrumCollapsibleList {
       document.body.appendChild(menu);
     }
 
-    if (typeof menu['show'] === 'function') {
-      menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, item.id);
+    // Check if the menu is already open
+    let isOpen = false;
+    if (typeof menu['isMenuOpen'] === 'function') {
+      isOpen = await menu['isMenuOpen']();
+    }
+
+    if (isOpen) {
+      // If menu is open, hide it
+      if (typeof menu['hide'] === 'function') {
+        menu['hide']();
+      } else {
+        console.warn('Global context menu exists but hide method is not available');
+      }
     } else {
-      console.warn('Global context menu exists but show method is not available');
+      // If menu is closed, show it
+      const iconRect = iconElement.getBoundingClientRect();
+      if (typeof menu['show'] === 'function') {
+        menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, item.id);
+      } else {
+        console.warn('Global context menu exists but show method is not available');
+      }
     }
   }
 
@@ -236,6 +250,7 @@ export class SpectrumCollapsibleList {
       // Only emit if the name actually changed
       if (trimmedName !== this.originalEditingName) {
         this.itemRenamed.emit({
+          action: 'rename',
           id: this.editingItemId,
           oldName: this.originalEditingName,
           newName: trimmedName
@@ -403,9 +418,9 @@ export class SpectrumCollapsibleList {
   }
 
   /**
-   * Listen for context menu action clicks
+   * Handle context menu action clicks
    */
-  @Listen('action-click', { target: 'document' })
+  @Listen('actionClick', { target: 'document' })
   handleContextAction(event: CustomEvent<{ action: string; targetKey: string }>) {
     // Find the leaf node in our items array
     const findNode = (items: CollapsibleListItem[], key: string): CollapsibleListItem | undefined => {

@@ -48,7 +48,7 @@ export class SpectrumRail {
     composed: true,
     cancelable: true,
     bubbles: true
-  }) expandedChange: EventEmitter<boolean>;
+  }) expandedChange: EventEmitter<{ action: string; expanded: boolean }>;
 
   /** Emits when the search value changes */
   @Event({
@@ -56,7 +56,7 @@ export class SpectrumRail {
     composed: true,
     cancelable: true,
     bubbles: true
-  }) searchChange: EventEmitter<{ value: string }>;
+  }) searchChange: EventEmitter<{ action: string; value: string }>;
 
   /** Emits when a rail action is triggered */
   @Event({
@@ -72,7 +72,7 @@ export class SpectrumRail {
     composed: true,
     cancelable: true,
     bubbles: true
-  }) addAction: EventEmitter<void>;
+  }) addAction: EventEmitter<{ action: string }>;
 
   private searchInputRef?: HTMLElement;
 
@@ -88,7 +88,10 @@ export class SpectrumRail {
   /** Toggle the expanded state */
   private toggleExpanded() {
     this.expanded = !this.expanded;
-    this.expandedChange.emit(this.expanded);
+    this.expandedChange.emit({
+      action: 'menu',
+      expanded: this.expanded
+    });
     this.notifySlottedComponents(this.expanded);
   }
 
@@ -96,7 +99,10 @@ export class SpectrumRail {
   private handleSearchClick() {
     if (!this.expanded) {
       this.expanded = true;
-      this.expandedChange.emit(true);
+      this.expandedChange.emit({
+        action: 'search',
+        expanded: true
+      });
       this.notifySlottedComponents(true);
       
       // Focus the search input after a small delay to ensure it's rendered
@@ -110,7 +116,7 @@ export class SpectrumRail {
 
   /** Handle add button click */
   private handleAddClick() {
-    this.addAction.emit();
+    this.addAction.emit({ action: 'add' });
     this.railAction.emit({
       action: 'add',
       id: ''
@@ -135,14 +141,20 @@ export class SpectrumRail {
     }
     
     this.searchValue = value;
-    this.searchChange.emit({ value: this.searchValue });
+    this.searchChange.emit({
+      action: 'search',
+      value: this.searchValue
+    });
   }
 
   /** Handle more button click */
   private handleMoreClick() {
     if (!this.expanded) {
       this.expanded = true;
-      this.expandedChange.emit(true);
+      this.expandedChange.emit({
+        action: 'more',
+        expanded: true
+      });
       this.notifySlottedComponents(true);
     }
     
@@ -196,7 +208,10 @@ export class SpectrumRail {
   @Method()
   async setExpanded(expanded: boolean) {
     this.expanded = expanded;
-    this.expandedChange.emit(expanded);
+    this.expandedChange.emit({
+      action: 'menu',
+      expanded: expanded
+    });
     this.notifySlottedComponents(expanded);
     return expanded;
   }
@@ -229,7 +244,10 @@ export class SpectrumRail {
     // Set initial expanded state if specified
     if (this.initialExpanded) {
       this.expanded = true;
-      this.expandedChange.emit(true);
+      this.expandedChange.emit({
+        action: 'menu',
+        expanded: true
+      });
       this.notifySlottedComponents(true);
     }
   }
@@ -266,7 +284,6 @@ export class SpectrumRail {
           <div class="rail-section menu">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}
@@ -301,7 +318,6 @@ export class SpectrumRail {
           <div class="rail-section search">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}
@@ -332,7 +348,6 @@ export class SpectrumRail {
             <div class="rail-section add">
               {!this.expanded ? (
                 <spectrum-button
-                  class="rail-icon-only"
                   variant="fab"
                   size="sm"
                   iconOnly={true}
@@ -362,7 +377,6 @@ export class SpectrumRail {
           <div class="rail-section items">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}
@@ -384,7 +398,6 @@ export class SpectrumRail {
           <div class="rail-section more">
             {!this.expanded ? (
               <spectrum-button
-                class="rail-icon-only"
                 variant="ghost"
                 size="base"
                 iconOnly={true}

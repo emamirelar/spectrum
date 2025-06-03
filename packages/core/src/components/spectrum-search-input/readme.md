@@ -19,10 +19,10 @@
 
 ## Events
 
-| Event          | Description                                             | Type                  |
-| -------------- | ------------------------------------------------------- | --------------------- |
-| `searchInput`  | Emits when input value changes, for real-time filtering | `CustomEvent<string>` |
-| `searchSubmit` |                                                         | `CustomEvent<string>` |
+| Event          | Description                                             | Type                                              |
+| -------------- | ------------------------------------------------------- | ------------------------------------------------- |
+| `searchInput`  | Emits when input value changes, for real-time filtering | `CustomEvent<{ action: string; value: string; }>` |
+| `searchSubmit` |                                                         | `CustomEvent<{ action: string; value: string; }>` |
 
 
 ## Methods
