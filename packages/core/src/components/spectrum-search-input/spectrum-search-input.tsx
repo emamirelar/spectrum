@@ -35,6 +35,11 @@ export class SpectrumSearchInput {
    */
   @Prop() searchButtonVariant: 'primary' | 'ghost' = 'primary';
   
+  /**
+   * Whether to clear the input value after submitting a search
+   */
+  @Prop() clearOnSubmit: boolean = false;
+  
   @State() searchText: string = '';
   @State() isListening: boolean = false;
   @State() isSpeechAvailable: boolean = false;
@@ -148,6 +153,12 @@ export class SpectrumSearchInput {
   
   private handleSearch = () => {
     this.searchSubmit.emit({ action: 'submit', value: this.searchText });
+    
+    // Clear the input if clearOnSubmit is enabled
+    if (this.clearOnSubmit) {
+      this.searchText = '';
+      this.adjustTextareaHeight();
+    }
   };
   
   private handleVoiceInput = () => {

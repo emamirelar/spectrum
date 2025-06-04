@@ -30,17 +30,31 @@ export class SpectrumTheme {
   @Prop() showSwatches: boolean = false;
 
   /**
+   * Whether to enable debug logging
+   */
+  @Prop() debug: boolean = false;
+
+  /**
    * Theme configuration object for custom overrides
    */
   @Prop() config: string = '{}';
 
   private themeConfig: any = {};
 
+  /**
+   * Debug warning utility
+   */
+  private debugWarn(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.warn(`[spectrum-theme] ${message}`, ...args);
+    }
+  }
+
   componentWillLoad() {
     try {
       this.themeConfig = JSON.parse(this.config);
     } catch (e) {
-      console.warn('Invalid theme configuration:', e);
+      this.debugWarn('Invalid theme configuration:', e);
     }
     this.generateTheme();
   }

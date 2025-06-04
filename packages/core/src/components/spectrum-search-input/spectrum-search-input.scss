@@ -1,6 +1,8 @@
 :host {
   display: block;
   width: 100%;
+  // Colors from spectrum
+  --input-bg-color: var(--spectrum-sys-color-surface-subtle, #f1f5f9);
 }
 
 .spectrum-search-input {
@@ -10,7 +12,7 @@
     display: flex;
     align-items: center;
     gap: var(--spectrum-sys-spacing-small);
-    background-color: var(--spectrum-sys-color-surface);
+    background-color: var(--input-bg-color);
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 9999px;
     padding: 0;

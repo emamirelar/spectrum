@@ -22,6 +22,88 @@ To start working with this designsystem, clone this repo to a new directory:
 git clone
 ```
 
+## 📋 Changelog & Documentation
+
+The Spectrum Design System maintains a comprehensive changelog integrated with Storybook to track all changes, updates, and releases. This system is powered by Cursor AI rules that help maintain consistency and completeness.
+
+### 📍 Changelog Location
+
+- **Primary Changelog**: [`packages/storybook/src/stories/changelog.mdx`](packages/storybook/src/stories/changelog.mdx)
+- **Storybook View**: Documentation → Changelog (when running Storybook)
+- **Template Reference**: [`packages/storybook/src/stories/changelog-template.md`](packages/storybook/src/stories/changelog-template.md)
+- **Cursor Rules**: [`.cursor/rules/changelog.mdc`](.cursor/rules/changelog.mdc)
+
+### 🔄 Changelog Workflow
+
+#### When Generating New Components
+
+1. **Generate the component** using Stencil:
+   ```bash
+   cd packages/core
+   npm run generate spectrum-new-component
+   ```
+
+2. **Request changelog update** from Cursor AI:
+   ```
+   "Update the changelog for the new spectrum-new-component"
+   ```
+
+3. **AI will automatically**:
+   - Add entry to the "Unreleased" section
+   - Follow the established format and conventions
+   - Update component dependency map if needed
+   - Ensure proper semantic versioning alignment
+
+#### Manual Changelog Updates
+
+For bug fixes, changes, or other updates:
+
+1. **Use the template** in `packages/storybook/src/stories/changelog-template.md`
+2. **Follow the format**:
+   ```markdown
+   ### Category
+   - **spectrum-component-name**: Description of change
+   ```
+3. **Add to appropriate section** in `changelog.mdx`
+
+### 📝 Changelog Format
+
+The changelog follows [Keep a Changelog](https://keepachangelog.com/) standards with these categories:
+
+- **🆕 Added**: New features, components, or functionality
+- **🔄 Changed**: Changes to existing functionality  
+- **🐛 Fixed**: Bug fixes and patches
+- **📝 Deprecated**: Features marked for removal
+- **🗑️ Removed**: Removed features or components
+- **🔒 Security**: Security-related changes
+
+### 🎯 Version Management
+
+- **Semantic Versioning**: Follows SemVer (`MAJOR.MINOR.PATCH`)
+- **Pre-releases**: Format `MAJOR.MINOR.PATCH-alpha.N`
+- **Version Source**: `packages/core/package.json`
+- **Release Process**: Update changelog → Update package.json → Commit together
+
+### 🤖 AI-Assisted Maintenance
+
+The changelog system includes Cursor AI rules that:
+- Maintain consistent formatting across all entries
+- Ensure breaking changes are properly marked with `⚠️ BREAKING CHANGE:`
+- Validate version alignment with package.json
+- Provide migration instructions for breaking changes
+- Cross-reference with component dependency maps
+
+### ✅ Pre-Release Checklist
+
+Before publishing any release:
+- [ ] All changes since last release documented
+- [ ] Version number matches `packages/core/package.json`
+- [ ] Breaking changes clearly marked with migration paths
+- [ ] Component dependency map updated
+- [ ] Date format is YYYY-MM-DD
+- [ ] Grammar and spelling checked
+- [ ] Storybook renders changelog correctly
+
 ## 📥 Installation
 
 To install the package in your project:
@@ -62,6 +144,83 @@ npm run generate <sub-folder>
 4. Go to the Storybook package: `cd /packages/storybook`
     - Use `npm run storybook.run` to monitor only the stories for changes in Storybook.
     - Use `npm run storybook` to also watch for changes in the web component itself.
+
+## 🐛 Debug Logging
+
+Several Spectrum components support debug logging to help with development and troubleshooting. You can enable debug logging by adding the `debug` attribute to components that support it.
+
+### Components with Debug Support
+
+The following components support debug logging:
+
+- **spectrum-wallpaper**: Logs color extraction, theme generation, and image loading processes
+- **spectrum-theme**: Logs theme configuration parsing and validation issues
+- **spectrum-collapsible-list**: Logs context menu interactions and item lookup operations
+- **spectrum-conversation-panel**: Logs message parsing, action parsing, and URL validation
+
+### How to Enable Debug Logging
+
+Add the `debug` attribute to any supported component:
+
+```html
+<!-- Enable debug logging for wallpaper component -->
+<spectrum-wallpaper debug background="url('image.jpg')">
+</spectrum-wallpaper>
+
+<!-- Enable debug logging for theme component -->
+<spectrum-theme debug color="#0070d2">
+</spectrum-theme>
+
+<!-- Enable debug logging for collapsible list -->
+<spectrum-collapsible-list debug items='[{"label": "Item 1", "id": "1"}]'>
+</spectrum-collapsible-list>
+
+<!-- Enable debug logging for conversation panel -->
+<spectrum-conversation-panel debug messages='[{"sender": "request", "message": "Hello"}]'>
+</spectrum-conversation-panel>
+```
+
+### What Gets Logged
+
+When debug mode is enabled, components will log:
+
+- **spectrum-wallpaper**: 
+  - Image loading success/failure
+  - Color extraction from images and backgrounds
+  - Theme generation and application processes
+  - CSS custom property applications
+
+- **spectrum-theme**: 
+  - Theme configuration parsing errors
+  - Invalid configuration warnings
+
+- **spectrum-collapsible-list**: 
+  - Context menu interaction issues
+  - Item lookup failures
+  - Missing DOM element warnings
+
+- **spectrum-conversation-panel**: 
+  - Message parsing errors
+  - Action configuration parsing errors
+  - Invalid URL warnings
+
+### Debug Log Format
+
+All debug logs are prefixed with the component name for easy identification:
+
+```
+[spectrum-wallpaper] Image loaded successfully: https://example.com/image.jpg
+[spectrum-theme] Invalid theme configuration: SyntaxError: Unexpected token
+[spectrum-collapsible-list] Missing icon element for item: {id: "item1", label: "Item 1"}
+[spectrum-conversation-panel] Failed to parse messages: SyntaxError: Unexpected end of JSON input
+```
+
+### Best Practices
+
+- Only enable debug logging during development
+- Remove debug attributes from production code
+- Use debug logging to troubleshoot component configuration issues
+- Debug logs use appropriate console levels (log, warn, error) based on severity
   
 ## 👏 Contributing
 - Please open an [issue](https://github.com/.../issues) first to discuss what you would like to change.

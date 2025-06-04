@@ -9,6 +9,7 @@
 
 | Property              | Attribute               | Description                                                     | Type                   | Default             |
 | --------------------- | ----------------------- | --------------------------------------------------------------- | ---------------------- | ------------------- |
+| `clearOnSubmit`       | `clear-on-submit`       | Whether to clear the input value after submitting a search      | `boolean`              | `false`             |
 | `enableEnterSubmit`   | `enable-enter-submit`   | Whether to enable submitting search on Enter key press          | `boolean`              | `true`              |
 | `enableVoiceInput`    | `enable-voice-input`    | Whether to enable voice input capabilities (speech recognition) | `boolean`              | `true`              |
 | `maxLines`            | `max-lines`             |                                                                 | `number`               | `4`                 |

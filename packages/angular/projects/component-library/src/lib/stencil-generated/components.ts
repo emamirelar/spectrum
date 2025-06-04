@@ -82,14 +82,14 @@ export declare interface SpectrumChip extends Components.SpectrumChip {
 
 
 @ProxyCmp({
-  inputs: ['contextActions', 'filter', 'items', 'mutuallyExclusive']
+  inputs: ['contextActions', 'debug', 'filter', 'items', 'mutuallyExclusive']
 })
 @Component({
   selector: 'spectrum-collapsible-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['contextActions', 'filter', 'items', 'mutuallyExclusive'],
+  inputs: ['contextActions', 'debug', 'filter', 'items', 'mutuallyExclusive'],
 })
 export class SpectrumCollapsibleList {
   protected el: HTMLElement;
@@ -159,7 +159,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
 
 
 @ProxyCmp({
-  inputs: ['actions', 'conversationtitle', 'loading', 'messages', 'sources'],
+  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sources'],
   methods: ['scrollToLatest']
 })
 @Component({
@@ -167,7 +167,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['actions', 'conversationtitle', 'loading', 'messages', 'sources'],
+  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sources'],
 })
 export class SpectrumConversationPanel {
   protected el: HTMLElement;
@@ -280,7 +280,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
 
 
 @ProxyCmp({
-  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
+  inputs: ['clearOnSubmit', 'enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
   methods: ['setFocus']
 })
 @Component({
@@ -288,7 +288,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
+  inputs: ['clearOnSubmit', 'enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
 })
 export class SpectrumSearchInput {
   protected el: HTMLElement;
@@ -311,14 +311,14 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
 
 
 @ProxyCmp({
-  inputs: ['color', 'config', 'dark', 'showSwatches']
+  inputs: ['color', 'config', 'dark', 'debug', 'showSwatches']
 })
 @Component({
   selector: 'spectrum-theme',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['color', 'config', 'dark', 'showSwatches'],
+  inputs: ['color', 'config', 'dark', 'debug', 'showSwatches'],
 })
 export class SpectrumTheme {
   protected el: HTMLElement;
@@ -333,14 +333,14 @@ export declare interface SpectrumTheme extends Components.SpectrumTheme {}
 
 
 @ProxyCmp({
-  inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches']
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'showSwatches']
 })
 @Component({
   selector: 'spectrum-wallpaper',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['background', 'backgroundposition', 'backgroundsize', 'showSwatches'],
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'showSwatches'],
 })
 export class SpectrumWallpaper {
   protected el: HTMLElement;

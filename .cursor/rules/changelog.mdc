@@ -1,0 +1,151 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Spectrum Component Library Changelog Maintenance Rule
+
+## Overview
+The UNOPS Spectrum Design System maintains a comprehensive changelog to track all changes, updates, and releases. This changelog is integrated into the Storybook documentation for easy access by developers and designers.
+
+## Changelog Location and Structure
+
+### File Location
+- **Primary Changelog**: `packages/storybook/src/stories/changelog.mdx`
+- **Format**: Markdown (MDX) for Storybook integration
+- **Storybook Title**: "Documentation/Changelog"
+
+### Version Format
+- Follow Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+- Pre-release versions: `MAJOR.MINOR.PATCH-alpha.N` or `MAJOR.MINOR.PATCH-beta.N`
+- Current version tracked in: `packages/core/package.json`
+
+## Changelog Structure and Content
+
+### Required Sections for Each Release
+Each release entry must include:
+
+1. **Version Header**: `## [Version] - YYYY-MM-DD`
+2. **Release Type**: `### 🚀 Major Release` | `### ✨ Minor Release` | `### 🔧 Patch Release` | `### 🧪 Pre-release`
+3. **Change Categories** (when applicable):
+   - `### 🆕 Added` - New features, components, or functionality
+   - `### 🔄 Changed` - Changes to existing functionality
+   - `### 🐛 Fixed` - Bug fixes and patches
+   - `### 📝 Deprecated` - Features marked for removal
+   - `### 🗑️ Removed` - Removed features or components
+   - `### 🔒 Security` - Security-related changes
+
+### Entry Format Guidelines
+- **Component Changes**: Use format `**spectrum-{component-name}**: Description of change`
+- **Breaking Changes**: Mark with `⚠️ BREAKING CHANGE:` prefix
+- **Dependencies**: Note dependency updates in format `**Dependencies**: Updated package@version`
+- **Documentation**: Include significant documentation updates
+- **Cross-references**: Link to relevant issues, PRs, or discussions when applicable
+
+### Example Entry Format
+```markdown
+## [0.0.1-alpha.17] - 2024-01-15
+
+### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-modal**: New modal component with backdrop and keyboard navigation
+- **spectrum-theme**: Added dark mode color tokens and CSS custom properties
+- **Storybook**: Added interactive controls for all button variants
+
+### 🔄 Changed
+- **spectrum-button**: Updated hover states to match Material Design 3 specifications
+- **spectrum-rail**: Improved accessibility with ARIA labels and keyboard navigation
+- ⚠️ BREAKING CHANGE: **spectrum-chip**: Renamed `variant` prop to `appearance` for consistency
+
+### 🐛 Fixed
+- **spectrum-search-input**: Fixed voice recognition not working in Safari
+- **spectrum-carousel**: Resolved pagination dots not updating on swipe
+- **Global**: Fixed CSS custom properties not inheriting correctly in nested components
+
+### 📝 Documentation
+- Updated component dependency map with new spectrum-modal relationships
+- Added accessibility guidelines for interactive components
+- Enhanced storybook stories with better examples and documentation
+
+### 🔒 Dependencies
+- Updated @stencil/core to v4.22.2
+- Updated @material/material-color-utilities to v0.3.0
+```
+
+## Maintenance Rules and Responsibilities
+
+### When to Update the Changelog
+1. **Before each release**: Update changelog with all changes since last release
+2. **After component modifications**: Document significant component changes immediately
+3. **Breaking changes**: Document immediately with clear migration paths
+4. **New component creation**: Add to changelog under "Added" section
+5. **Dependency updates**: Document major dependency changes
+
+### Required Information for Each Entry
+- **What changed**: Clear description of the change
+- **Why it changed**: Brief context when not obvious
+- **Impact**: Who is affected and how
+- **Migration**: For breaking changes, provide upgrade instructions
+- **Version**: Accurate version number from package.json
+
+### Changelog Validation Checklist
+Before publishing a release, verify:
+- [ ] All changes since last release are documented
+- [ ] Version number matches package.json
+- [ ] Breaking changes are clearly marked and explained
+- [ ] Component dependency map is updated if needed
+- [ ] Date format is consistent (YYYY-MM-DD)
+- [ ] Links to issues/PRs are working
+- [ ] Grammar and spelling are correct
+- [ ] Storybook renders the changelog correctly
+
+## Integration with Development Workflow
+
+### Component Development
+When creating or modifying components:
+1. Update the changelog entry for the current unreleased version
+2. Use component generator: `npm run generate <component-name>` (in packages/core)
+3. Create corresponding storybook story
+4. Update component dependency map if needed
+5. Document the change in changelog before committing
+
+### Release Process
+1. Finalize changelog for the release version
+2. Update version in packages/core/package.json
+3. Ensure changelog version matches package.json version
+4. Commit changelog and version updates together
+5. Create release tag matching the version
+6. Update storybook deployment with new changelog
+
+### Storybook Integration
+- Changelog appears in Storybook navigation under "Documentation/Changelog"
+- Use MDX format for rich formatting and component integration
+- Include interactive examples when documenting component changes
+- Cross-reference with component stories when applicable
+
+## Best Practices
+
+### Writing Style
+- Use present tense for headings ("Added", not "Added")
+- Use past tense for descriptions ("Fixed button hover state")
+- Be concise but descriptive
+- Include technical details when relevant for developers
+- Use consistent terminology across entries
+
+### Categorization
+- **Added**: New features, components, props, or functionality
+- **Changed**: Modifications to existing behavior (non-breaking)
+- **Fixed**: Bug fixes and corrections
+- **Deprecated**: Features scheduled for removal (include timeline)
+- **Removed**: Deleted features (include migration instructions)
+- **Security**: Security improvements or fixes
+
+### Version Management
+- Keep unreleased changes at the top under "## [Unreleased]"
+- Move unreleased changes to versioned section on release
+- Maintain chronological order (newest first)
+- Include pre-release versions in the changelog
+- Reference semantic versioning guidelines for version increments
+
+This changelog serves as the single source of truth for all changes in the Spectrum Design System and provides essential information for developers integrating and maintaining applications using the component library.

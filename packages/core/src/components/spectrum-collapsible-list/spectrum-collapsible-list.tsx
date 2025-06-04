@@ -42,6 +42,11 @@ export class SpectrumCollapsibleList {
   @Prop() mutuallyExclusive: boolean = true;
 
   /**
+   * Whether to enable debug logging
+   */
+  @Prop() debug: boolean = false;
+
+  /**
    * Internal state for expanded nodes (by label path)
    */
   @State() expandedMap: { [key: string]: boolean } = {};
@@ -181,6 +186,15 @@ export class SpectrumCollapsibleList {
   }
 
   /**
+   * Debug warning utility
+   */
+  private debugWarn(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.warn(`[spectrum-collapsible-list] ${message}`, ...args);
+    }
+  }
+
+  /**
    * Handle click on the context menu icon
    */
   private async handleActionsIconClick(e: MouseEvent, item: CollapsibleListItem, actions?: ContextMenuAction[]) {
@@ -188,7 +202,7 @@ export class SpectrumCollapsibleList {
     e.preventDefault();
     const iconElement = e.currentTarget as HTMLElement;
     if (!iconElement) {
-      console.warn('Missing icon element for item:', item);
+      this.debugWarn('Missing icon element for item:', item);
       return;
     }
 
@@ -210,7 +224,7 @@ export class SpectrumCollapsibleList {
       if (typeof menu['hide'] === 'function') {
         menu['hide']();
       } else {
-        console.warn('Global context menu exists but hide method is not available');
+        this.debugWarn('Global context menu exists but hide method is not available');
       }
     } else {
       // If menu is closed, show it
@@ -218,7 +232,7 @@ export class SpectrumCollapsibleList {
       if (typeof menu['show'] === 'function') {
         menu['show'](actions, iconRect.right, iconRect.top + iconRect.height / 2, item.id);
       } else {
-        console.warn('Global context menu exists but show method is not available');
+        this.debugWarn('Global context menu exists but show method is not available');
       }
     }
   }
@@ -441,7 +455,7 @@ export class SpectrumCollapsibleList {
     // Find the node
     const node = findNode(this.originalItems, event.detail.targetKey);
     if (!node) {
-      console.warn('Could not find node for target key:', event.detail.targetKey);
+      this.debugWarn('Could not find node for target key:', event.detail.targetKey);
       return;
     }
 

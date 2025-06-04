@@ -85,6 +85,10 @@ export namespace Components {
          */
         "contextActions": ContextMenuAction[];
         /**
+          * Whether to enable debug logging
+         */
+        "debug": boolean;
+        /**
           * Filter value to filter list items
          */
         "filter": string;
@@ -123,6 +127,10 @@ export namespace Components {
           * The title to display in the conversation panel Default: null
          */
         "conversationtitle": string;
+        /**
+          * Whether to enable debug logging
+         */
+        "debug": boolean;
         /**
           * Whether to show the loading indicator Default: false
          */
@@ -237,6 +245,10 @@ export namespace Components {
     }
     interface SpectrumSearchInput {
         /**
+          * Whether to clear the input value after submitting a search
+         */
+        "clearOnSubmit": boolean;
+        /**
           * Whether to enable submitting search on Enter key press
          */
         "enableEnterSubmit": boolean;
@@ -273,6 +285,10 @@ export namespace Components {
          */
         "dark": boolean;
         /**
+          * Whether to enable debug logging
+         */
+        "debug": boolean;
+        /**
           * Whether to show theme color swatches (useful for development)
          */
         "showSwatches": boolean;
@@ -290,6 +306,10 @@ export namespace Components {
           * The background image size
          */
         "backgroundsize": string;
+        /**
+          * Whether to enable debug logging
+         */
+        "debug": boolean;
         /**
           * Whether to show the theme color swatches
          */
@@ -601,6 +621,10 @@ declare namespace LocalJSX {
          */
         "contextActions"?: ContextMenuAction[];
         /**
+          * Whether to enable debug logging
+         */
+        "debug"?: boolean;
+        /**
           * Filter value to filter list items
          */
         "filter"?: string;
@@ -660,6 +684,10 @@ declare namespace LocalJSX {
           * The title to display in the conversation panel Default: null
          */
         "conversationtitle"?: string;
+        /**
+          * Whether to enable debug logging
+         */
+        "debug"?: boolean;
         /**
           * Whether to show the loading indicator Default: false
          */
@@ -779,6 +807,10 @@ declare namespace LocalJSX {
     }
     interface SpectrumSearchInput {
         /**
+          * Whether to clear the input value after submitting a search
+         */
+        "clearOnSubmit"?: boolean;
+        /**
           * Whether to enable submitting search on Enter key press
          */
         "enableEnterSubmit"?: boolean;
@@ -819,6 +851,10 @@ declare namespace LocalJSX {
          */
         "dark"?: boolean;
         /**
+          * Whether to enable debug logging
+         */
+        "debug"?: boolean;
+        /**
           * Whether to show theme color swatches (useful for development)
          */
         "showSwatches"?: boolean;
@@ -836,6 +872,10 @@ declare namespace LocalJSX {
           * The background image size
          */
         "backgroundsize"?: string;
+        /**
+          * Whether to enable debug logging
+         */
+        "debug"?: boolean;
         /**
           * Whether to show the theme color swatches
          */

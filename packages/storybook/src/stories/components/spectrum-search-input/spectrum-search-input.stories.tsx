@@ -9,6 +9,7 @@ interface SpectrumSearchInputArgs {
   enableEnterSubmit: boolean;
   searchIconPosition: 'left' | 'right';
   searchButtonVariant: 'primary' | 'ghost';
+  clearOnSubmit: boolean;
 }
 
 const meta = {
@@ -20,7 +21,8 @@ const meta = {
     enableVoiceInput: true,
     enableEnterSubmit: true,
     searchIconPosition: 'right',
-    searchButtonVariant: 'primary'
+    searchButtonVariant: 'primary',
+    clearOnSubmit: false
   },
   argTypes: {
     maxLines: {
@@ -71,6 +73,14 @@ const meta = {
       table: {
         type: { summary: "'primary' | 'ghost'" },
         defaultValue: { summary: "'primary'" }
+      }
+    },
+    clearOnSubmit: {
+      control: 'boolean',
+      description: 'Whether to clear the input value after submitting a search',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
       }
     }
   },
@@ -126,6 +136,7 @@ export const Default: Story = {
         placeholder="${args.placeholder}"
         ?enableVoiceInput="${args.enableVoiceInput}"
         ?enableEnterSubmit="${args.enableEnterSubmit}"
+        ?clearOnSubmit="${args.clearOnSubmit}"
         .searchIconPosition=${args.searchIconPosition}
         .searchButtonVariant=${args.searchButtonVariant}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
@@ -147,6 +158,7 @@ export const CustomPlaceholder: Story = {
         placeholder=${args.placeholder}
         .enableVoiceInput=${args.enableVoiceInput}
         .enableEnterSubmit=${args.enableEnterSubmit}
+        .clearOnSubmit=${args.clearOnSubmit}
         .searchIconPosition=${args.searchIconPosition}
         .searchButtonVariant=${args.searchButtonVariant}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
@@ -170,6 +182,7 @@ export const EnterKeySubmission: Story = {
         placeholder=${args.placeholder}
         .enableVoiceInput=${args.enableVoiceInput}
         .enableEnterSubmit=${args.enableEnterSubmit}
+        .clearOnSubmit=${args.clearOnSubmit}
         .searchIconPosition=${args.searchIconPosition}
         .searchButtonVariant=${args.searchButtonVariant}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
@@ -244,6 +257,42 @@ export const SearchButtonVariants: Story = {
           @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
           @searchInput=${(e: CustomEvent) => action('searchInput')(e.detail)}
         ></spectrum-search-input>
+      </div>
+    </div>
+  `
+};
+
+// Clear On Submit Example
+export const ClearOnSubmit: Story = {
+  render: () => html`
+    <div style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
+      <h3 style="margin-bottom: 1rem;">Clear Input After Submit (clearOnSubmit=true)</h3>
+      <spectrum-search-input
+        placeholder="Type something and submit - input will clear..."
+        .clearOnSubmit=${true}
+        .enableEnterSubmit=${true}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit - clearOnSubmit=true')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput - clearOnSubmit=true')(e.detail)}
+      ></spectrum-search-input>
+      
+      <h3 style="margin: 2rem 0 1rem;">Keep Input After Submit (clearOnSubmit=false - Default)</h3>
+      <spectrum-search-input
+        placeholder="Type something and submit - input will remain..."
+        .clearOnSubmit=${false}
+        .enableEnterSubmit=${true}
+        @searchSubmit=${(e: CustomEvent) => action('searchSubmit - clearOnSubmit=false')(e.detail)}
+        @searchInput=${(e: CustomEvent) => action('searchInput - clearOnSubmit=false')(e.detail)}
+      ></spectrum-search-input>
+
+      <div style="margin-top: 1.5rem; font-size: 0.875rem; color: #666; background: #f5f5f5; padding: 1rem; border-radius: 8px;">
+        <p><strong>Usage Instructions:</strong></p>
+        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+          <li>Type some text in either input field</li>
+          <li>Submit using the search button or press Enter</li>
+          <li>Watch the Actions tab to see the submitted values</li>
+          <li>Notice how the first input clears after submission, while the second retains the text</li>
+        </ul>
+        <p style="margin-top: 1rem;"><em>This feature is useful for chat interfaces or when you want a fresh input after each search.</em></p>
       </div>
     </div>
   `

@@ -256,8 +256,12 @@ export class SpectrumRail {
   @Watch('moreLabel')
   @Watch('addLabel')
   @Watch('showAddButton')
+  @Watch('collapsedOffset')
   propChanged() {
     // Property changed handler
+    if (this.collapsedOffset !== undefined) {
+      this.el.style.setProperty('--rail-collapsed-offset', this.collapsedOffset);
+    }
   }
 
   render() {
@@ -277,7 +281,8 @@ export class SpectrumRail {
             'rail--expanded': this.expanded
           }}
           style={{
-            '--rail-expanded-width': this.expandedWidth.toString()
+            '--rail-expanded-width': this.expandedWidth.toString(),
+            '--rail-collapsed-offset': this.collapsedOffset
           }}
         >
           {/* Menu Section */}

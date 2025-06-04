@@ -43,6 +43,11 @@ export class SpectrumConversationPanel {
   **/
   @Prop() loading: boolean = false;
 
+  /**
+   * Whether to enable debug logging
+   */
+  @Prop() debug: boolean = false;
+
   @State() sourcesExpanded: boolean = false;
   @State() explorationsExpanded: boolean = false;
   @State() expandedMessageId: string | null = null;
@@ -69,12 +74,43 @@ export class SpectrumConversationPanel {
   @Watch('messages')
   messagesChanged(newValue: string) {
     this.updateMessages(newValue);
+    // Scroll to latest message after updating messages
+    setTimeout(() => {
+      this.scrollToLatest();
+    }, 50); // Small delay to ensure DOM has updated
   }
 
   @Watch('loading')
   loadingChanged(newValue: boolean) {
     if (newValue) {
       this.scrollToLatest();
+    }
+  }
+
+  /**
+   * Debug logging utility
+   */
+  private debugLog(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.log(`[spectrum-conversation-panel] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Debug error utility
+   */
+  private debugError(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.error(`[spectrum-conversation-panel] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Debug warning utility
+   */
+  private debugWarn(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.warn(`[spectrum-conversation-panel] ${message}`, ...args);
     }
   }
 
@@ -87,7 +123,7 @@ export class SpectrumConversationPanel {
         this.messageIdMap.set(index, `msg-${index}`);
       });
     } catch (error) {
-      console.error('Failed to parse messages:', error);
+      this.debugError('Failed to parse messages:', error);
       this.messageArray = [];
       this.messageIdMap.clear();
     }
@@ -99,39 +135,58 @@ export class SpectrumConversationPanel {
   @Method()
   async scrollToLatest() {
     if (this.conversationPanelRef) {
-      this.conversationPanelRef.scrollTo({
-        top: this.conversationPanelRef.scrollHeight,
-        behavior: 'smooth'
+      // Use requestAnimationFrame to ensure DOM is fully rendered
+      requestAnimationFrame(() => {
+        if (this.conversationPanelRef) {
+          this.conversationPanelRef.scrollTo({
+            top: this.conversationPanelRef.scrollHeight,
+            behavior: 'smooth'
+          });
+        }
       });
     }
   }
 
   componentDidLoad() {
+    this.debugLog('Component loaded, updating messages and scrolling to latest');
     this.updateMessages(this.messages);
-    this.scrollToLatest();
+    // Use a longer delay to ensure all DOM elements are rendered
+    setTimeout(() => {
+      this.scrollToLatest();
+    }, 100);
+  }
+
+  componentDidUpdate() {
+    // Also scroll to latest when component updates (after re-renders)
+    setTimeout(() => {
+      this.scrollToLatest();
+    }, 50);
   }
 
   /** 
    * RenderMessages - render messages in the conversation panel
   **/
   renderMessages() {
+    this.debugLog('Rendering messages', { messageCount: this.messageArray.length, loading: this.loading });
     return (
-      <div class="conversation-panel" ref={(el) => this.conversationPanelRef = el}>
-        {this.messageArray.map((message, index) => {
-          return this.renderMessage(message, message.sender, index);
-        })}
-        {this.loading && (
-          <div class="message-wrapper response">
-            <div class="agentIcon"></div>
-            <div class="message">
-              <div class="loader">
-                <span class="dot">.</span>
-                <span class="dot">.</span>
-                <span class="dot">.</span>
+      <div class="conversation-panel-host">
+        <div class="conversation-panel" ref={(el) => this.conversationPanelRef = el}>
+          {this.messageArray.map((message, index) => {
+            return this.renderMessage(message, message.sender, index);
+          })}
+          {this.loading && (
+            <div class="message-wrapper response">
+              <div class="agentIcon"></div>
+              <div class="message">
+                <div class="loader">
+                  <span class="dot">.</span>
+                  <span class="dot">.</span>
+                  <span class="dot">.</span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   }
@@ -178,6 +233,10 @@ export class SpectrumConversationPanel {
     const isExpanded = this.expandedMessageId === messageId;
     const activeAccordion = isExpanded ? this.expandedAccordionType : null;
 
+    // Check if data exists for conditional rendering
+    const hasExplorations = response.explorations && Array.isArray(response.explorations) && response.explorations.length > 0;
+    const hasSources = response.sources && Array.isArray(response.sources) && response.sources.length > 0;
+
     return [
       <div class="message-wrapper response" id={`message-${messageId}`}>
         <div class="agentIcon"></div>
@@ -186,37 +245,43 @@ export class SpectrumConversationPanel {
           <div class="actions">
             {this.renderActions()}
           </div>
-          <div class="accordion-row">
-            <spectrum-chip 
-              variant="secondary"
-              outline={true}
-              label="Dive Deeper"
-              leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
-              onClick={() => this.handleExplorationsClick(messageId)}
-              selected={activeAccordion === 'explorations'}
-            />
-            <spectrum-chip 
-              variant="secondary"
-              outline={true}
-              label="Sources and related content"
-              leadingIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
-              onClick={() => this.handleSourcesClick(messageId)}
-              selected={activeAccordion === 'sources'}
-            />
-          </div>
+          {(hasExplorations || hasSources) && (
+            <div class="accordion-row">
+              {hasExplorations && (
+                <spectrum-chip 
+                  variant="secondary"
+                  outline={true}
+                  label="Dive Deeper"
+                  leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
+                  onClick={() => this.handleExplorationsClick(messageId)}
+                  selected={activeAccordion === 'explorations'}
+                />
+              )}
+              {hasSources && (
+                <spectrum-chip 
+                  variant="secondary"
+                  outline={true}
+                  label="Sources and related content"
+                  leadingIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
+                  onClick={() => this.handleSourcesClick(messageId)}
+                  selected={activeAccordion === 'sources'}
+                />
+              )}
+            </div>
+          )}
         </div>
       </div>,
-      activeAccordion === 'explorations' && (
+      activeAccordion === 'explorations' && hasExplorations && (
         <div class="accordion-content expanded" id={`explorations-content-${messageId}`}>
           <div class="scroll-container">
-            {response.explorations ? this.renderExplorations(response.explorations) : null}
+            {this.renderExplorations(response.explorations)}
           </div>
         </div>
       ),
-      activeAccordion === 'sources' && (
+      activeAccordion === 'sources' && hasSources && (
         <div class="accordion-content expanded" id={`sources-content-${messageId}`}>
           <div class="scroll-container">
-            {response.sources ? this.renderSources(response.sources) : null}
+            {this.renderSources(response.sources)}
           </div>
         </div>
       )
@@ -253,7 +318,7 @@ export class SpectrumConversationPanel {
         </div>
       );
     } catch (error) {
-      console.error('Error parsing actions:', error);
+      this.debugError('Error parsing actions:', error);
       return null;
     }
   }
@@ -270,31 +335,24 @@ export class SpectrumConversationPanel {
         displayUrl = url.hostname;
       } catch (error) {
         // If URL parsing fails, just use the original URL string
-        console.warn(`Invalid URL: ${source.value}`);
+        this.debugWarn(`Invalid URL: ${source.value}`);
       }
       
       return (
         <a 
           href={source.value} 
           target="_blank" 
-          rel="noopener noreferrer" 
-          class="content-card"
-          onClick={(e: MouseEvent) => {
-            e.preventDefault();
-            this.sourceClick.emit({
-              action: 'sourceClick',
-              label: source.label,
-              value: source.value
-            });
-            window.open(source.value, '_blank');
-          }}
+          rel="noopener noreferrer"
+          key={index}
+          class="spectrum-conversation-panel__source"
+          onClick={() => this.sourceClick.emit({
+            action: 'sourceClick', 
+            label: source.label,
+            value: source.value
+          })}
         >
-          <div class="number">{index + 1}</div>
-          <div class="card-content">
-            <div class="title">{source.label}</div>
-            <div class="subtitle">{displayUrl}</div>
-            <div class="snippet">{source.snippet}</div>
-          </div>
+          <div class="spectrum-conversation-panel__source-title">{source.label}</div>
+          <div class="spectrum-conversation-panel__source-url">{displayUrl}</div>
         </a>
       );
     });
@@ -333,6 +391,7 @@ export class SpectrumConversationPanel {
   }
 
   toggleAccordion(messageId: string, accordion: 'sources' | 'explorations') {
+    this.debugLog('Toggling accordion', { messageId, accordion, currentExpanded: this.expandedMessageId });
     if (this.expandedMessageId === messageId && this.expandedAccordionType === accordion) {
       // Clicking the same accordion - collapse it
       this.expandedMessageId = null;

@@ -12,6 +12,7 @@
 | `background`         | `background`         | The background value (color, gradient, or image URL) | `string`  | `undefined` |
 | `backgroundposition` | `backgroundposition` | The background image position                        | `string`  | `'center'`  |
 | `backgroundsize`     | `backgroundsize`     | The background image size                            | `string`  | `'cover'`   |
+| `debug`              | `debug`              | Whether to enable debug logging                      | `boolean` | `false`     |
 | `showSwatches`       | `show-swatches`      | Whether to show the theme color swatches             | `boolean` | `false`     |
 
 
