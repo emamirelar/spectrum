@@ -30,6 +30,16 @@ To install this package in your project:
    npm install @unops-itg-npm/cpit-spectrum
    ```
 
+## 🐛 Debug Logging
+
+Many Spectrum components support debug logging for development and troubleshooting. For detailed information about debug features, see [DEBUG.md](./DEBUG.md).
+
+Quick example:
+```html
+<spectrum-wallpaper debug background="url('image.jpg')">
+</spectrum-wallpaper>
+```
+
 # Stencil Component Starter
 
 This is a starter project for building a standalone Web Component using Stencil.

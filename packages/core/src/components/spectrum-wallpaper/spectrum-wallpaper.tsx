@@ -27,6 +27,11 @@ export class SpectrumWallpaper {
   @Prop({ attribute: 'show-swatches' }) showSwatches: boolean = false;
 
   /**
+   * Whether to enable debug logging
+   */
+  @Prop() debug: boolean = false;
+
+  /**
    * The background image position
    */
   @Prop({ attribute: 'backgroundposition' }) backgroundposition: string = 'center';
@@ -36,9 +41,43 @@ export class SpectrumWallpaper {
    */
   @Prop({ attribute: 'backgroundsize' }) backgroundsize: string = 'cover';
 
+  /**
+   * Debug logging utility
+   */
+  private debugLog(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.log(`[spectrum-wallpaper] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Debug warning utility
+   */
+  private debugWarn(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.warn(`[spectrum-wallpaper] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Debug error utility
+   */
+  private debugError(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.error(`[spectrum-wallpaper] ${message}`, ...args);
+    }
+  }
+
   componentWillLoad() {
+    // Debug verification - this should always log if debug is enabled
+    this.debugLog('Debug mode enabled - component initializing');
+    
     if (this.background) {
       this.extractDominantColor();
+    } else {
+      // Apply default theme when no background is provided
+      this.debugLog('No background provided, applying default theme');
+      this.updateTheme('#0070d2'); // Default blue theme
     }
   }
 
@@ -61,19 +100,26 @@ export class SpectrumWallpaper {
       }
 
       // Only try image extraction for actual URLs
-      if (imageUrl.startsWith('http') || imageUrl.startsWith('//')) {
+      if (imageUrl.startsWith('http') || imageUrl.startsWith('//') || imageUrl.startsWith('blob:')) {
         const img = new Image();
         img.crossOrigin = 'anonymous';
         
         img.onload = () => {
-          console.log('Image loaded successfully:', imageUrl);
-          const color = this.extractColorFromImage(img);
-          this.updateTheme(color);
+          this.debugLog('Image loaded successfully:', imageUrl);
+          try {
+            const color = this.extractColorFromImage(img);
+            this.updateTheme(color);
+            this.debugLog('Theme updated with extracted color:', color);
+          } catch (error) {
+            this.debugWarn('Color extraction failed, using fallback color:', error);
+            const fallbackColor = this.extractColorFromBackground(this.background);
+            this.updateTheme(fallbackColor);
+          }
           resolve();
         };
 
-        img.onerror = () => {
-          console.warn('Image failed to load:', imageUrl);
+        img.onerror = (error) => {
+          this.debugWarn('Image failed to load:', imageUrl, error);
           // If image fails to load, extract color from background string
           const color = this.extractColorFromBackground(this.background);
           this.updateTheme(color);
@@ -107,17 +153,17 @@ export class SpectrumWallpaper {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const color = this.getAverageColor(imageData);
-      console.log('Extracted color from image:', color);
+      this.debugLog('Extracted color from image:', color);
       return color;
     } catch (error) {
-      console.warn('Failed to extract color from image (likely CORS issue):', error);
+      this.debugWarn('Failed to extract color from image (likely CORS issue):', error);
       // If CORS prevents canvas extraction, fall back to default blue for ocean
       return '#0070d2';
     }
   }
 
   private extractColorFromBackground(background: string): string {
-    console.log('Extracting color from background string:', background);
+    this.debugLog('Extracting color from background string:', background);
     
     // Try to extract color from gradient
     const gradientMatch = background.match(/linear-gradient\([^)]+\)/);
@@ -129,12 +175,12 @@ export class SpectrumWallpaper {
     if (background.includes('url(')) {
       // For ocean images, default to blue
       if (background.includes('1439066615861')) { // Ocean image ID
-        console.log('Ocean image detected, using blue fallback');
+        this.debugLog('Ocean image detected, using blue fallback');
         return '#1976d2';
       }
       // For forest images, default to green  
       if (background.includes('1441974231531')) { // Forest image ID
-        console.log('Forest image detected, using green fallback');
+        this.debugLog('Forest image detected, using green fallback');
         return '#388e3c';
       }
       // Generic image fallback
@@ -174,8 +220,32 @@ export class SpectrumWallpaper {
   }
 
   private updateTheme(color: string) {
-    const scheme = this.generateThemeFromColor(color);
-    this.applyTheme(scheme);
+    this.debugLog('Updating theme with color:', color);
+    try {
+      const scheme = this.generateThemeFromColor(color);
+      this.applyTheme(scheme);
+      this.debugLog('Theme successfully applied with scheme:', scheme);
+    } catch (error) {
+      this.debugError('Failed to generate or apply theme:', error);
+      // Apply a basic fallback theme
+      this.applyFallbackTheme(color);
+    }
+  }
+
+  private applyFallbackTheme(color: string) {
+    this.debugLog('Applying fallback theme with color:', color);
+    const fallbackProperties = {
+      '--spectrum-color-primary': color,
+      '--spectrum-color-on-primary': '#ffffff',
+      '--spectrum-color-background': '#ffffff',
+      '--spectrum-color-on-background': '#000000',
+      '--spectrum-color-surface': '#f5f5f5',
+      '--spectrum-color-on-surface': '#000000',
+    };
+    
+    Object.entries(fallbackProperties).forEach(([property, value]) => {
+      this.hostElement.style.setProperty(property, value);
+    });
   }
 
   private generateThemeFromColor(color: string): any {
@@ -196,8 +266,10 @@ export class SpectrumWallpaper {
 
   private applyTheme(scheme: any) {
     const customProperties = this.generateCustomProperties(scheme);
+    this.debugLog('Applying theme with custom properties:', Object.keys(customProperties).length, 'properties');
     Object.entries(customProperties).forEach(([property, value]) => {
       this.hostElement.style.setProperty(property, value);
+      this.debugLog(`Set ${property}: ${value}`);
     });
   }
 
@@ -292,7 +364,8 @@ export class SpectrumWallpaper {
     const style = {
       background: this.background,
       backgroundPosition: this.backgroundposition,
-      backgroundSize: this.backgroundsize
+      backgroundSize: this.backgroundsize,
+      backgroundRepeat: 'no-repeat'
     };
 
     return (

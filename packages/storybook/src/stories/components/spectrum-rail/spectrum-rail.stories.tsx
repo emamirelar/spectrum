@@ -788,4 +788,68 @@ export const CustomAddIcon: Story = {
     }
   },
   render: Default.render
+};
+
+// New story to demonstrate collapsed offset functionality
+export const CollapsedOffset: Story = {
+  args: {
+    appName: 'Offset Demo',
+    collapsedOffset: '50px',
+    initialExpanded: false,
+    expandedWidth: '300px',
+    moreLabel: 'More Options'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates the collapsed offset functionality. The rail is offset 50px from the left when collapsed. Click the menu button to expand and see the rail return to normal position. Use the Storybook controls to test different offset values.'
+      }
+    }
+  },
+  render: (args) => html`
+    <div style="height: 600px; padding: 0; position: relative; background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px;">
+      <!-- Visual reference lines to show the offset -->
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background-color: red; z-index: 1;"></div>
+      <div style="position: absolute; left: 50px; top: 0; bottom: 0; width: 2px; background-color: blue; z-index: 1;"></div>
+      <div style="position: absolute; left: 100px; top: 0; bottom: 0; width: 2px; background-color: green; z-index: 1;"></div>
+      
+      <!-- Legend -->
+      <div style="position: absolute; top: 10px; right: 10px; background: white; padding: 10px; border-radius: 4px; font-size: 12px; z-index: 2;">
+        <div style="margin-bottom: 5px;"><span style="color: red;">■</span> 0px (left edge)</div>
+        <div style="margin-bottom: 5px;"><span style="color: blue;">■</span> 50px offset</div>
+        <div><span style="color: green;">■</span> 100px reference</div>
+      </div>
+      
+      <spectrum-rail
+        .appName=${args.appName}
+        .expandedWidth=${args.expandedWidth}
+        .moreLabel=${args.moreLabel}
+        .initialExpanded=${args.initialExpanded}
+        .showAddButton=${args.showAddButton}
+        .collapsedOffset=${args.collapsedOffset}
+        .addIcon=${args.addIcon}
+        .addLabel=${args.addLabel}
+        @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
+        @searchChange=${(e: CustomEvent) => {
+          const detail = e.detail;
+          action('Search Changed')({ action: detail.action, value: detail.value });
+          const list = document.querySelector('spectrum-collapsible-list');
+          if (list) {
+            list.setAttribute('filter', detail.value);
+          }
+        }}
+        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+        @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
+      >
+        <spectrum-collapsible-list 
+          slot="items"
+          .items=${sampleItems}
+          @childAction=${handleChildAction}
+          @expandAction=${handleExpandAction}
+          @contractAction=${handleContractAction}
+          @contextAction=${handleContextAction}
+        ></spectrum-collapsible-list>
+      </spectrum-rail>
+    </div>
+  `,
 }; 

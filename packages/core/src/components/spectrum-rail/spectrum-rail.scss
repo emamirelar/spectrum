@@ -9,6 +9,7 @@
   --rail-border-radius: 100vw;
   --rail-item-size: 48px;
   --rail-left-offset: 24px;
+  --rail-collapsed-offset: 0px; // Default collapsed offset
   
   // Colors from spectrum
   --rail-bg-color: var(--spectrum-sys-color-surface-subtle, #f1f5f9);
@@ -43,7 +44,8 @@
   overflow: hidden;
   transition: margin var(--rail-transition), width var(--rail-transition), height var(--rail-transition), border-radius var(--rail-transition);
   will-change: margin, width, height, border-radius;  
-  margin: 0 auto;
+  margin: 0;
+  margin-left: var(--rail-collapsed-offset);
   padding: var(--rail-spacing-lg) 0;
   
   // &.rail--absolute {
@@ -58,6 +60,7 @@
     height: 100%;
     border-radius: 0;
     gap: 0;
+    margin: 0; // Reset all margins when expanded
 
     padding-bottom: 0;
     

@@ -194,3 +194,250 @@ export const Default: StoryObj<SpectrumConversationPanelArgs> = {
     </div>
   `,
 };
+
+// Scrolling Behavior - Many Messages for Testing
+export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    messages: `[
+      {
+        "message": "Hello! Can you help me understand quantum computing?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:00:00Z"
+      },
+      {
+        "message": "I'd be happy to help you understand quantum computing! It's a fascinating field that leverages quantum mechanical phenomena to process information in ways classical computers cannot.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:00:05Z",
+        "sources": [
+          {
+            "label": "IBM Quantum Computing",
+            "value": "https://www.ibm.com/quantum",
+            "snippet": "Quantum computing uses quantum bits (qubits) instead of classical bits to perform calculations."
+          }
+        ],
+        "explorations": [
+          {
+            "label": "What are qubits?",
+            "value": "What are qubits and how do they differ from classical bits?"
+          }
+        ]
+      },
+      {
+        "message": "What makes quantum computers different from regular computers?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:01:00Z"
+      },
+      {
+        "message": "Great question! The key differences are: Classical computers use bits (0 or 1), while quantum computers use qubits that can be 0, 1, or both simultaneously through superposition. Qubits can also be entangled, creating connections that don't exist in classical systems.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:01:10Z"
+      },
+      {
+        "message": "How do qubits work exactly?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:02:00Z"
+      },
+      {
+        "message": "Qubits are the fundamental units of quantum information. Unlike classical bits, they can exist in a superposition of both 0 and 1 states simultaneously. This is represented mathematically as |ψ⟩ = α|0⟩ + β|1⟩, where α and β are probability amplitudes.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:02:15Z"
+      },
+      {
+        "message": "What are some practical applications of quantum computing?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:03:00Z"
+      },
+      {
+        "message": "Quantum computing has several promising applications: Cryptography for breaking current encryption and creating quantum-safe methods, Drug Discovery for simulating molecular interactions, Financial Modeling for portfolio optimization, Machine Learning with quantum algorithms, Weather Forecasting for complex atmospheric modeling, and Supply Chain optimization.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:03:20Z",
+        "explorations": [
+          {
+            "label": "How does quantum cryptography work?",
+            "value": "How does quantum cryptography provide better security?"
+          },
+          {
+            "label": "What is quantum machine learning?",
+            "value": "How do quantum computers enhance machine learning?"
+          }
+        ]
+      },
+      {
+        "message": "Are quantum computers available today?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:04:00Z"
+      },
+      {
+        "message": "Yes, but they're still in early stages! Current quantum computers include IBM Quantum with cloud-accessible processors, Google Sycamore that achieved quantum supremacy in 2019, Rigetti Computing with quantum cloud services, IonQ with trapped-ion systems, and D-Wave with quantum annealing systems. However, these are mostly for research and experimentation.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:04:25Z"
+      },
+      {
+        "message": "What are the main challenges with quantum computing?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:05:00Z"
+      },
+      {
+        "message": "Quantum computing faces several significant challenges: Decoherence where qubits lose their quantum properties quickly, high error rates in current systems, extreme temperature requirements near absolute zero, limited qubit connectivity, the need for quantum error correction requiring many physical qubits for one logical qubit, and programming complexity since quantum algorithms are fundamentally different from classical ones.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:05:30Z",
+        "sources": [
+          {
+            "label": "Quantum Error Correction Research",
+            "value": "https://quantum-error-correction.org",
+            "snippet": "Error correction is crucial for building large-scale quantum computers that can solve real-world problems."
+          }
+        ]
+      },
+      {
+        "message": "How long until quantum computers become mainstream?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:06:00Z"
+      },
+      {
+        "message": "The timeline is uncertain, but estimates suggest: Near-term (2-5 years) quantum advantage in specific applications like optimization, Medium-term (5-15 years) practical quantum computers for specialized industries, and Long-term (15+ years) fault-tolerant quantum computers that could impact broader computing. Quantum computers won't replace classical computers entirely.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:06:40Z"
+      },
+      {
+        "message": "Can I learn quantum computing without a physics background?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:07:00Z"
+      },
+      {
+        "message": "Absolutely! While physics helps, you can learn quantum computing from a computer science perspective. You'll need mathematics like linear algebra, complex numbers, and basic probability. For programming, learn Python with quantum libraries like Qiskit, Cirq, or PennyLane. Try online courses like IBM Qiskit Textbook and Microsoft Quantum Katas.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:07:35Z",
+        "explorations": [
+          {
+            "label": "What quantum programming languages exist?",
+            "value": "What programming languages are used for quantum computing?"
+          },
+          {
+            "label": "Best quantum computing courses for beginners?",
+            "value": "What are the best quantum computing courses for beginners?"
+          }
+        ]
+      },
+      {
+        "message": "What's the difference between quantum computing and quantum AI?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:08:00Z"
+      },
+      {
+        "message": "Great distinction! Quantum Computing is the broader field of using quantum mechanics for computation, while Quantum AI/ML specifically uses quantum computers for artificial intelligence and machine learning tasks. Quantum AI could offer advantages in pattern recognition, neural network optimization, complex probability distributions, and feature mapping.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:08:30Z"
+      },
+      {
+        "message": "Are there any quantum computing companies I should know about?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:09:00Z"
+      },
+      {
+        "message": "Yes! Key hardware companies include IBM with Quantum Network, Google's Quantum AI division, Rigetti for quantum cloud computing, IonQ with trapped-ion systems, Honeywell/Quantinuum, and D-Wave for quantum annealing. For software and cloud services: Microsoft Azure Quantum, Amazon Braket, Xanadu for photonic quantum computing, and PsiQuantum for large-scale systems.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:09:45Z",
+        "sources": [
+          {
+            "label": "Quantum Computing Market Report",
+            "value": "https://quantum-market-report.com",
+            "snippet": "The quantum computing market is expected to grow significantly in the coming decade with major investments from tech giants."
+          }
+        ]
+      },
+      {
+        "message": "What about quantum internet? Is that related?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:10:00Z"
+      },
+      {
+        "message": "Yes, quantum internet is closely related! It's a theoretical network using quantum entanglement to transmit information with perfect security. Key features include quantum key distribution for unbreakable encryption, quantum teleportation for information transfer, distributed quantum computing across networks, and ultra-secure communications. China, EU, and US are investing heavily in this research.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:10:40Z"
+      },
+      {
+        "message": "This has been incredibly informative! Any final thoughts?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:11:00Z"
+      },
+      {
+        "message": "I'm glad you found it helpful! Quantum computing represents one of the most exciting frontiers in technology. Key takeaways: Quantum computers won't replace classical computers but will solve specific problems much faster, the technology is advancing rapidly but faces significant challenges, there are already opportunities to experiment with quantum programming, and the intersection with AI is particularly promising. Stay curious and keep learning!",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:11:30Z",
+        "explorations": [
+          {
+            "label": "How to get started with quantum programming?",
+            "value": "What's the best way to start programming quantum computers?"
+          },
+          {
+            "label": "Future of quantum computing in 2030?",
+            "value": "What will quantum computing look like in 2030?"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'Quantum Computing Deep Dive - Scrolling Test',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      },
+      {
+        "label": "Export",
+        "icon": "download",
+        "value": "export"
+      },
+      {
+        "label": "Bookmark",
+        "icon": "bookmark",
+        "value": "bookmark"
+      }
+    ]`,
+    sources: `[
+      {
+        "label": "IBM Quantum Computing",
+        "value": "https://www.ibm.com/quantum",
+        "snippet": "IBM's comprehensive quantum computing platform and resources."
+      }
+    ]`,
+    loading: false
+  },
+  render: (args) => html`
+    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
+      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Internal Scrolling Behavior Test</h3>
+        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
+          This panel contains <strong>24 messages</strong> (12 requests + 12 responses) and is constrained to 350px height 
+          to force internal scrolling. Test the scrolling behavior within the conversation panel.
+        </p>
+      </div>
+      
+      <spectrum-conversation-panel
+        
+        .messages=${args.messages}
+        .conversationtitle=${args.conversationtitle}
+        .actions=${args.actions}
+        .sources=${args.sources}
+        .loading=${args.loading}
+        @action=${(e: CustomEvent) => action('Action')(e.detail)}
+        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+      ></spectrum-conversation-panel>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #e7f3ff; border-radius: 6px; border-left: 4px solid #007bff;">
+        <p style="margin: 0; color: #004085; font-size: 0.875rem;">
+          <strong>💡 Test Instructions:</strong><br>
+          • The conversation panel above is constrained to 350px height<br>
+          • Scroll within the panel to see all 24 messages<br>
+          • Test scrolling performance and smoothness<br>
+          • Try clicking sources and explorations while scrolled<br>
+          • Check if scroll position is maintained during interactions
+        </p>
+      </div>
+    </div>
+  `,
+};

@@ -60,6 +60,7 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'filter',
   'contextActions',
   'mutuallyExclusive',
+  'debug',
   'childAction',
   'expandAction',
   'contractAction',
@@ -81,6 +82,7 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'actions',
   'sources',
   'loading',
+  'debug',
   'explorationSelected',
   'action',
   'explore',
@@ -129,6 +131,7 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
   'enableEnterSubmit',
   'searchIconPosition',
   'searchButtonVariant',
+  'clearOnSubmit',
   'searchSubmit',
   'searchInput'
 ]);
@@ -138,6 +141,7 @@ export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('s
   'color',
   'dark',
   'showSwatches',
+  'debug',
   'config'
 ]);
 
@@ -145,6 +149,7 @@ export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('s
 export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallpaper>('spectrum-wallpaper', undefined, [
   'background',
   'showSwatches',
+  'debug',
   'backgroundposition',
   'backgroundsize'
 ]);
