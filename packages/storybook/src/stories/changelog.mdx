@@ -18,23 +18,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.0.1-alpha.17] - 2024-12-23
+## [0.0.1-alpha.18] - 2024-12-23
 
 ### 🧪 Pre-release
+
+### 🐛 Fixed
+- **spectrum-collapsible-list**: Fixed rename functionality focus issue - input now properly receives focus when entering edit mode
+- **spectrum-collapsible-list**: Fixed rename event emission - itemRenamed events now properly propagate to Storybook actions panel
+- **spectrum-collapsible-list**: Enhanced rename debugging with detailed console logging when debug mode is enabled
+
+### 🔄 Changed
+- **spectrum-collapsible-list**: Improved startEditing method with longer timeout and retry logic for better focus handling
+- **spectrum-collapsible-list**: Enhanced completeRename method with better debugging and event payload validation
+
+### 📝 Documentation
+- **Storybook**: Added missing @itemRenamed event listener to Default story for proper rename functionality testing
+- **Storybook**: Added "Rename" action to Default story context menu for easier testing
+- Created changelog template for consistent entry formatting
+- Established changelog workflow integration with component development
+- Added pre-release checklist for changelog validation
 
 ### 🆕 Added
 - **Documentation**: Added comprehensive changelog for tracking all component library changes
 - **Development**: Established changelog maintenance rules and workflow integration
 - **Cursor Rules**: Implemented automated changelog maintenance system with AI assistance
 
-### 📝 Documentation
-- Created changelog template for consistent entry formatting
-- Established changelog workflow integration with component development
-- Added pre-release checklist for changelog validation
+### 🔒 Dependencies
+- **@stencil/core**: v4.22.2
+- **@material/material-color-utilities**: v0.3.0
+- **@glidejs/glide**: v3.7.1
+- **tailwindcss**: v3.4.17
+- **typescript**: v5.7.3
 
 ---
 
-## [0.0.1-alpha.16] - 2024-12-20
+## [0.0.1-alpha.17] - 2024-12-23
 
 ### 🧪 Pre-release
 
