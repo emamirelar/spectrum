@@ -230,6 +230,12 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
     ],
     contextActions: [
       {
+        label: 'Rename',
+        icon: 'edit',
+        action: 'rename',
+        id: 'rename-action'
+      },
+      {
         label: 'Edit',
         icon: 'edit',
         action: 'edit',
@@ -252,6 +258,7 @@ export const Default: StoryObj<SpectrumCollapsibleListArgs> = {
         @expandAction=${(e: CustomEvent) => action('Expand Action')(e.detail)}
         @contractAction=${(e: CustomEvent) => action('Contract Action')(e.detail)}
         @contextAction=${(e: CustomEvent) => action('Context Action')(e.detail)}
+        @itemRenamed=${(e: CustomEvent) => action('Item Renamed')(e.detail)}
       ></spectrum-collapsible-list>
     </div>
   `

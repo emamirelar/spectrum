@@ -244,14 +244,30 @@ export class SpectrumCollapsibleList {
     this.editingItemId = item.id;
     this.originalEditingName = item.label;
     
-    // Focus the input on next tick
+    // Force a re-render and then focus the input
     setTimeout(() => {
       const input = this.hostElement.shadowRoot?.querySelector(`#edit-input-${item.id}`) as HTMLInputElement;
       if (input) {
         input.focus();
         input.select();
+        
+        if (this.debug) {
+          console.log(`[spectrum-collapsible-list] Started editing item: ${item.label} (id: ${item.id})`);
+        }
+      } else {
+        if (this.debug) {
+          console.warn(`[spectrum-collapsible-list] Could not find input element for item: ${item.id}`);
+        }
+        // Try again with a longer delay
+        setTimeout(() => {
+          const retryInput = this.hostElement.shadowRoot?.querySelector(`#edit-input-${item.id}`) as HTMLInputElement;
+          if (retryInput) {
+            retryInput.focus();
+            retryInput.select();
+          }
+        }, 100);
       }
-    }, 0);
+    }, 50); // Increased timeout to allow for proper rendering
   }
 
   /**
@@ -261,14 +277,32 @@ export class SpectrumCollapsibleList {
     if (this.editingItemId && newName.trim() !== '') {
       const trimmedName = newName.trim();
       
+      if (this.debug) {
+        console.log(`[spectrum-collapsible-list] Completing rename for ${this.editingItemId}: "${this.originalEditingName}" -> "${trimmedName}"`);
+      }
+      
       // Only emit if the name actually changed
       if (trimmedName !== this.originalEditingName) {
-        this.itemRenamed.emit({
+        const renameEvent = {
           action: 'rename',
           id: this.editingItemId,
           oldName: this.originalEditingName,
           newName: trimmedName
-        });
+        };
+        
+        if (this.debug) {
+          console.log(`[spectrum-collapsible-list] Emitting itemRenamed event:`, renameEvent);
+        }
+        
+        this.itemRenamed.emit(renameEvent);
+      } else {
+        if (this.debug) {
+          console.log(`[spectrum-collapsible-list] Name unchanged, not emitting event`);
+        }
+      }
+    } else {
+      if (this.debug) {
+        console.log(`[spectrum-collapsible-list] Rename cancelled - empty name or no editing item`);
       }
     }
     
