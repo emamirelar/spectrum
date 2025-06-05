@@ -14,7 +14,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### 🆕 Added
+- **spectrum-toast**: New notification component for user feedback and system messages
+  - **Screen Edge Positioning**: 8 position options (top, bottom, left, right, top-left, top-right, bottom-left, bottom-right) with default to top
+  - **Variant Support**: Full spectrum theme variant support (primary, secondary, success, warning, danger, ghost) matching button component
+  - **Auto-close Functionality**: Configurable duration with pause-on-hover and manual dismiss options
+  - **Action Buttons**: Optional action buttons centered at bottom with proper event emission
+  - **Custom Icons**: Variant-specific default icons with custom icon override support
+  - **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
+  - **Responsive Design**: Mobile-optimized with proper touch targets and responsive positioning
+  - **Spectrum Theming**: Complete integration with spectrum design tokens and standardized spacing/sizing
+  - **Animation System**: Smooth slide-in/out animations with reduced motion support
+  - **Event System**: Comprehensive events (`toastAction`, `toastDismiss`) with detailed payload data
+  - **TypeScript Support**: Full type definitions with proper prop interfaces
+  - **Storybook Integration**: Comprehensive stories demonstrating all features, variants, and use cases
+- **spectrum-image-gallery**: New comprehensive image gallery component with masonry and horizontal layouts
+  - **Multiple Layout Modes**: Pinterest-style vertical masonry using CSS columns and horizontal scrolling for carousels
+  - **File Upload System**: Modal-based drag & drop and file browser upload with automatic base64 conversion
+  - **URL Input**: Add external images with validation and error handling
+  - **Selection Modes**: Single select, multi-select, or no selection with visual feedback
+  - **Delete Functionality**: Remove selected images with confirmation UI
+  - **Rich Event System**: Comprehensive events (`imageAdded`, `imageSelected`, `imageDeselect`) with complete metadata
+  - **Responsive Design**: Adapts seamlessly to different screen sizes with mobile-optimized interactions
+  - **Accessibility**: Full keyboard navigation, ARIA labels, and screen reader support
+  - **Spectrum Theming**: Consistent with Spectrum design tokens and Material Design patterns
+  - **TypeScript Interfaces**: Complete `ImageConfig` and `ImageAddedEvent` type definitions
+  - **Comprehensive Testing**: Full test suite with modal interactions, selection modes, and responsive behavior
 - Ready for next release changes...
+
+### 🐛 Fixed
+- **spectrum-conversation-panel**: Fixed action button events emitting undefined values - action buttons now properly emit `{action: string, type: "action", value: string}` instead of `{action: undefined, type: undefined, value: string}`
+- **spectrum-conversation-panel**: Fixed exploration chip events emitting undefined values - exploration chips now properly emit `{action: "explore", type: "exploration", value: string}` instead of undefined action/type properties
+- **spectrum-conversation-panel**: Fixed missing source card styling and content - added CSS styles for `.spectrum-conversation-panel__source`, `.spectrum-conversation-panel__source-title`, `.spectrum-conversation-panel__source-snippet`, and `.spectrum-conversation-panel__source-url` classes to restore proper visual formatting of source links with title, snippet, and URL display
+
+### 🔄 Changed
+- **spectrum-conversation-panel**: Enhanced source card styling with improved focus states, hover effects, and consistent spacing following BEM naming conventions
+- **spectrum-conversation-panel**: Added snippet display to source cards with multi-line text truncation support
 
 ---
 

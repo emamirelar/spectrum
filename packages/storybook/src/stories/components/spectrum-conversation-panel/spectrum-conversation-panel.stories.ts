@@ -32,7 +32,8 @@ const meta = {
           {
             "label": "NASA Apollo 11 Mission Overview",
             "value": "https://www.nasa.gov/mission/apollo-11/",
-            "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth."
+            "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth.",
+            "number": 1
           }
         ],
         "explorations": [
@@ -72,7 +73,32 @@ const meta = {
       {
         "label": "NASA Apollo 11 Mission Overview",
         "value": "https://www.nasa.gov/mission/apollo-11/",
-        "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth."
+        "snippet": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961: perform a crewed lunar landing and return to Earth.",
+        "number": 1
+      },
+      {
+        "label": "Kennedy Space Center Apollo 11 Archive",
+        "value": "https://www.kennedyspacecenter.com/apollo-11",
+        "snippet": "Comprehensive archive of Apollo 11 mission documentation, including crew communications and flight plans.",
+        "number": 2
+      },
+      {
+        "label": "National Air and Space Museum Collection",
+        "value": "https://airandspace.si.edu/apollo-11",
+        "snippet": "Artifacts and detailed information about the spacecraft, spacesuits, and equipment used during the historic mission.",
+        "number": 3
+      },
+      {
+        "label": "Apollo 11 Flight Journal",
+        "value": "https://www.hq.nasa.gov/alsj/a11/a11.html",
+        "snippet": "Complete mission transcript and timeline from launch to splashdown, including all crew communications.",
+        "number": 4
+      },
+      {
+        "label": "Smithsonian Apollo 11 Documentation",
+        "value": "https://www.smithsonianmag.com/apollo-11",
+        "snippet": "Historical context and behind-the-scenes stories from the mission that changed human history.",
+        "number": 5
       }
     ]`,
     loading: false
@@ -212,7 +238,8 @@ export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
           {
             "label": "IBM Quantum Computing",
             "value": "https://www.ibm.com/quantum",
-            "snippet": "Quantum computing uses quantum bits (qubits) instead of classical bits to perform calculations."
+            "snippet": "Quantum computing uses quantum bits (qubits) instead of classical bits to perform calculations.",
+            "number": 1
           }
         ],
         "explorations": [
@@ -285,7 +312,26 @@ export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
           {
             "label": "Quantum Error Correction Research",
             "value": "https://quantum-error-correction.org",
-            "snippet": "Error correction is crucial for building large-scale quantum computers that can solve real-world problems."
+            "snippet": "Error correction is crucial for building large-scale quantum computers that can solve real-world problems.",
+            "number": 1
+          },
+          {
+            "label": "Nature Quantum Information Journal",
+            "value": "https://www.nature.com/npjqi/",
+            "snippet": "Latest research papers on quantum information science and technology.",
+            "number": 2
+          },
+          {
+            "label": "Quantum Computing Stack Exchange",
+            "value": "https://quantumcomputing.stackexchange.com/",
+            "snippet": "Community-driven Q&A platform for quantum computing questions and discussions.",
+            "number": 3
+          },
+          {
+            "label": "arXiv Quantum Physics",
+            "value": "https://arxiv.org/list/quant-ph/recent",
+            "snippet": "Preprint repository for the latest quantum physics and quantum computing research.",
+            "number": 4
           }
         ]
       },
@@ -342,7 +388,32 @@ export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
           {
             "label": "Quantum Computing Market Report",
             "value": "https://quantum-market-report.com",
-            "snippet": "The quantum computing market is expected to grow significantly in the coming decade with major investments from tech giants."
+            "snippet": "The quantum computing market is expected to grow significantly in the coming decade with major investments from tech giants.",
+            "number": 1
+          },
+          {
+            "label": "MIT Technology Review Quantum",
+            "value": "https://www.technologyreview.com/topic/quantum-computing/",
+            "snippet": "Analysis and insights on the latest developments in quantum computing technology.",
+            "number": 2
+          },
+          {
+            "label": "IEEE Spectrum Quantum Computing",
+            "value": "https://spectrum.ieee.org/topic/quantum-computing/",
+            "snippet": "Technical articles and industry news covering quantum computing advancements.",
+            "number": 3
+          },
+          {
+            "label": "Quantum Computing Companies Database",
+            "value": "https://quantumcomputingcompanies.com/",
+            "snippet": "Comprehensive directory of companies working in quantum computing hardware and software.",
+            "number": 4
+          },
+          {
+            "label": "CB Insights Quantum Computing Report",
+            "value": "https://www.cbinsights.com/research/quantum-computing-market-map/",
+            "snippet": "Market analysis and funding trends in the quantum computing industry.",
+            "number": 5
           }
         ]
       },
@@ -399,7 +470,38 @@ export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
       {
         "label": "IBM Quantum Computing",
         "value": "https://www.ibm.com/quantum",
-        "snippet": "IBM's comprehensive quantum computing platform and resources."
+        "snippet": "IBM's comprehensive quantum computing platform and resources.",
+        "number": 1
+      },
+      {
+        "label": "Google Quantum AI",
+        "value": "https://ai.google/discover/quantumai/",
+        "snippet": "Google's quantum computing research and Sycamore processor achievements.",
+        "number": 2
+      },
+      {
+        "label": "Microsoft Azure Quantum",
+        "value": "https://azure.microsoft.com/en-us/services/quantum/",
+        "snippet": "Cloud-based quantum computing services and development tools.",
+        "number": 3
+      },
+      {
+        "label": "Rigetti Computing",
+        "value": "https://www.rigetti.com/",
+        "snippet": "Quantum cloud services and quantum processor development.",
+        "number": 4
+      },
+      {
+        "label": "IonQ Quantum Systems",
+        "value": "https://ionq.com/",
+        "snippet": "Trapped-ion quantum computing technology and cloud access.",
+        "number": 5
+      },
+      {
+        "label": "D-Wave Quantum Annealing",
+        "value": "https://www.dwavesys.com/",
+        "snippet": "Quantum annealing systems for optimization problems.",
+        "number": 6
       }
     ]`,
     loading: false
@@ -436,6 +538,150 @@ export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
           • Test scrolling performance and smoothness<br>
           • Try clicking sources and explorations while scrolled<br>
           • Check if scroll position is maintained during interactions
+        </p>
+      </div>
+    </div>
+  `,
+};
+
+// Sources Horizontal Scrolling Demo
+export const SourcesScrollingDemo: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    messages: `[
+      {
+        "message": "I need comprehensive information about renewable energy technologies and their implementation.",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "message": "Here's a comprehensive overview of renewable energy technologies: Solar power harnesses sunlight through photovoltaic panels or concentrated solar power systems. Wind energy captures kinetic energy through turbines in onshore and offshore installations. Hydroelectric power uses flowing water to generate electricity. Geothermal energy taps into Earth's internal heat. Biomass converts organic materials into energy. Each technology has unique advantages, costs, and implementation considerations.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "International Energy Agency (IEA) Renewable Report",
+            "value": "https://www.iea.org/reports/renewables-2023",
+            "snippet": "Comprehensive analysis of renewable energy market trends, forecasts, and policy recommendations from the world's leading energy authority.",
+            "number": 1
+          },
+          {
+            "label": "IRENA Global Energy Transformation Report",
+            "value": "https://www.irena.org/publications/2023/Jun/Global-energy-transformation",
+            "snippet": "International Renewable Energy Agency's roadmap for achieving sustainable energy transformation by 2050.",
+            "number": 2
+          },
+          {
+            "label": "National Renewable Energy Laboratory (NREL)",
+            "value": "https://www.nrel.gov/analysis/tech-lcoe-re-cost-est.html",
+            "snippet": "Technical and economic analysis of renewable energy technologies, including cost estimates and performance data.",
+            "number": 3
+          },
+          {
+            "label": "BloombergNEF Energy Transition Report",
+            "value": "https://about.bnef.com/energy-transition-investment/",
+            "snippet": "Market intelligence and financial analysis of clean energy investments and technology deployment trends.",
+            "number": 4
+          },
+          {
+            "label": "MIT Energy Initiative Technology Review",
+            "value": "https://energy.mit.edu/research/renewables/",
+            "snippet": "Research insights on renewable energy technologies, grid integration, and energy storage solutions.",
+            "number": 5
+          },
+          {
+            "label": "World Bank Energy Sector Management",
+            "value": "https://www.worldbank.org/en/topic/energy/overview",
+            "snippet": "Global perspective on energy access, renewable energy financing, and sustainable development goals.",
+            "number": 6
+          },
+          {
+            "label": "European Environment Agency Report",
+            "value": "https://www.eea.europa.eu/themes/energy/renewable-energy",
+            "snippet": "Environmental impact assessment and policy analysis of renewable energy deployment in Europe.",
+            "number": 7
+          },
+          {
+            "label": "Solar Power World Industry Analysis",
+            "value": "https://www.solarpowerworldonline.com/solar-market-insight/",
+            "snippet": "Latest trends in solar photovoltaic technology, market growth, and installation statistics worldwide.",
+            "number": 8
+          },
+          {
+            "label": "Global Wind Energy Council Report",
+            "value": "https://gwec.net/global-wind-report-2023/",
+            "snippet": "Comprehensive statistics and analysis of global wind energy capacity, technology developments, and future outlook.",
+            "number": 9
+          },
+          {
+            "label": "International Hydropower Association Database",
+            "value": "https://www.hydropower.org/status-report",
+            "snippet": "Global hydropower statistics, technological innovations, and sustainability guidelines for water-based energy generation.",
+            "number": 10
+          }
+        ],
+        "explorations": [
+          {
+            "label": "What are the latest solar panel efficiency improvements?",
+            "value": "What are the latest solar panel efficiency improvements?"
+          },
+          {
+            "label": "How do offshore wind farms compare to onshore installations?",
+            "value": "How do offshore wind farms compare to onshore installations?"
+          },
+          {
+            "label": "What role does energy storage play in renewable integration?",
+            "value": "What role does energy storage play in renewable integration?"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'Renewable Energy Sources - Horizontal Scrolling Demo',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      },
+      {
+        "label": "Export",
+        "icon": "download",
+        "value": "export"
+      }
+    ]`,
+    sources: `[]`,
+    loading: false
+  },
+  render: (args) => html`
+    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
+      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Sources Horizontal Scrolling Demo</h3>
+        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
+          This demo showcases <strong>10 numbered sources</strong> that scroll horizontally. Each source has an identifying number
+          for easy reference. Test the horizontal scrolling behavior in the sources section.
+        </p>
+      </div>
+      
+      <spectrum-conversation-panel
+        .messages=${args.messages}
+        .conversationtitle=${args.conversationtitle}
+        .actions=${args.actions}
+        .sources=${args.sources}
+        .loading=${args.loading}
+        @action=${(e: CustomEvent) => action('Action')(e.detail)}
+        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+      ></spectrum-conversation-panel>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #e7f3ff; border-radius: 6px; border-left: 4px solid #007bff;">
+        <p style="margin: 0; color: #004085; font-size: 0.875rem;">
+          <strong>💡 Demo Features:</strong><br>
+          • Each source has a numbered identifier (1-10)<br>
+          • Sources scroll horizontally when expanded<br>
+          • Click on "Sources and related content" to expand<br>
+          • Scroll through sources using mouse or touch<br>
+          • Click any source to test the sourceClick event
         </p>
       </div>
     </div>

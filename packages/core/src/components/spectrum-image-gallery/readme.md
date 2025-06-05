@@ -1,0 +1,234 @@
+# spectrum-image-gallery
+
+A beautiful, responsive image gallery component with masonry and horizontal layouts. Features modal-based image upload, URL input, selection capabilities, and delete functionality.
+
+## Features
+
+- **Masonry Layout**: Pinterest-style vertical masonry using CSS columns
+- **Horizontal Scrolling**: Linear horizontal layout for carousels and strips  
+- **File Upload**: Modal-based drag & drop and file browser upload
+- **URL Input**: Add images from external URLs with validation
+- **Selection Modes**: Single select, multi-select, or no selection
+- **Delete Functionality**: Remove selected images
+- **Event System**: Rich events with complete image data
+- **Responsive Design**: Adapts seamlessly to different screen sizes
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Spectrum Theming**: Consistent with Spectrum design patterns
+
+## Upload Functionality
+
+When users upload files:
+1. **File Processing**: Files are converted to base64 data URLs using `FileReader`
+2. **Immediate Display**: Images appear instantly in the gallery (no server required)
+3. **Rich Metadata**: Preserves filename, size, type, and upload timestamp
+4. **Event Emission**: Complete image data is emitted via `imageAdded` event
+5. **Temporary Storage**: Images exist only in component state (lost on page refresh)
+
+## Event System
+
+### imageAdded Event
+Emitted when images are uploaded or added via URL:
+```typescript
+{
+  image: {
+    id: string;           // Unique generated ID
+    url: string;          // Base64 data URL or external URL
+    alt: string;          // Filename or description
+    title: string;        // Display title
+    metadata: {
+      fileName?: string;  // Original filename (uploads only)
+      fileSize?: number;  // File size in bytes (uploads only)
+      fileType?: string;  // MIME type (uploads only)
+      uploadDate?: string; // ISO timestamp (uploads only)
+      source: 'upload' | 'url';
+    }
+  },
+  source: 'upload' | 'url'
+}
+```
+
+### imageSelected / imageDeselected Events
+Emitted when images are selected/deselected (returns `ImageConfig` object directly).
+
+## Properties
+
+| Property | Attribute | Description | Type | Default |
+| -------- | --------- | ----------- | ---- | ------- |
+| `allowDelete` | `allow-delete` | Allow users to delete selected images | `boolean` | `true` |
+| `allowUpload` | `allow-upload` | Allow users to upload new images | `boolean` | `true` |
+| `allowUrlInput` | `allow-url-input` | Allow users to add images from URLs | `boolean` | `true` |
+| `images` | -- | Array of images to display | `ImageConfig[]` | `[]` |
+| `scrollDirection` | `scroll-direction` | Gallery layout direction | `"horizontal" \| "vertical"` | `"vertical"` |
+| `selectionMode` | `selection-mode` | Image selection behavior | `"multi" \| "none" \| "single"` | `"single"` |
+
+## Events
+
+| Event | Description | Type |
+| ----- | ----------- | ---- |
+| `imageAdded` | Emitted when an image is uploaded or added via URL | `CustomEvent<{image: ImageConfig, source: 'upload' \| 'url'}>` |
+| `imageDeselected` | Emitted when an image is deselected | `CustomEvent<ImageConfig>` |
+| `imageSelected` | Emitted when an image is selected | `CustomEvent<ImageConfig>` |
+
+## ImageConfig Interface
+
+```typescript
+interface ImageConfig {
+  id: string;
+  url: string;
+  alt: string;
+  title: string;
+  metadata?: {
+    fileName?: string;
+    fileSize?: number;
+    fileType?: string;
+    uploadDate?: string;
+    source: 'upload' | 'url';
+  };
+}
+```
+
+## Usage Examples
+
+### Basic Gallery (Masonry Layout)
+```html
+<spectrum-image-gallery></spectrum-image-gallery>
+```
+
+### Horizontal Scrolling Gallery
+```html
+<spectrum-image-gallery scroll-direction="horizontal"></spectrum-image-gallery>
+```
+
+### Gallery with Pre-loaded Images
+```html
+<spectrum-image-gallery id="gallery"></spectrum-image-gallery>
+
+<script>
+  const gallery = document.getElementById('gallery');
+  gallery.images = [
+    {
+      id: '1',
+      url: 'https://example.com/image1.jpg',
+      alt: 'Example image 1',
+      title: 'Beautiful landscape'
+    },
+    {
+      id: '2', 
+      url: 'https://example.com/image2.jpg',
+      alt: 'Example image 2',
+      title: 'City skyline'
+    }
+  ];
+</script>
+```
+
+### Multi-Select Gallery with Event Handling
+```html
+<spectrum-image-gallery 
+  selection-mode="multi"
+  id="gallery">
+</spectrum-image-gallery>
+
+<script>
+  const gallery = document.getElementById('gallery');
+  
+  gallery.addEventListener('imageAdded', (event) => {
+    const { image, source } = event.detail;
+    console.log('Image added:', image);
+    console.log('Source:', source); // 'upload' or 'url'
+    
+    // Handle persistence (save to server, localStorage, etc.)
+    saveImageToServer(image);
+  });
+  
+  gallery.addEventListener('imageSelected', (event) => {
+    console.log('Image selected:', event.detail);
+  });
+  
+  gallery.addEventListener('imageDeselected', (event) => {
+    console.log('Image deselected:', event.detail);
+  });
+</script>
+```
+
+### Read-Only Gallery
+```html
+<spectrum-image-gallery 
+  selection-mode="none"
+  allow-upload="false" 
+  allow-url-input="false"
+  allow-delete="false">
+</spectrum-image-gallery>
+```
+
+## Important Notes
+
+- **No Persistence**: Images are stored temporarily in component state only
+- **Client-Side Only**: No server communication - parent must handle persistence  
+- **Base64 Storage**: Uploaded images are converted to data URLs for immediate use
+- **Event-Driven**: Use events to sync with external state management or APIs
+- **File Size Limits**: Large uploaded images are stored as base64, consider size implications
+- **Page Refresh**: Uploaded images are lost on page refresh unless saved externally
+
+## Styling
+
+The component uses CSS custom properties for theming and follows Spectrum design patterns. It adapts to the current theme automatically.
+
+### CSS Custom Properties
+The component inherits theming from the Spectrum theme system. Key variables include:
+- Border radius, spacing, and color tokens
+- Focus states and interaction feedback
+- Modal and overlay styling
+
+### Responsive Behavior
+- **Vertical (Masonry)**: Adjusts column count based on available width
+- **Horizontal**: Maintains aspect ratios while allowing horizontal scrolling
+- **Mobile**: Optimized touch interactions and layouts
+
+------
+
+*Built with Stencil*
+
+
+
+<!-- Auto Generated Below -->
+
+
+## Properties
+
+| Property          | Attribute          | Description | Type                            | Default      |
+| ----------------- | ------------------ | ----------- | ------------------------------- | ------------ |
+| `allowDelete`     | `allow-delete`     |             | `boolean`                       | `true`       |
+| `allowUpload`     | `allow-upload`     |             | `boolean`                       | `true`       |
+| `allowUrlInput`   | `allow-url-input`  |             | `boolean`                       | `true`       |
+| `images`          | --                 |             | `ImageConfig[]`                 | `[]`         |
+| `scrollDirection` | `scroll-direction` |             | `"horizontal" \| "vertical"`    | `'vertical'` |
+| `selectedImages`  | --                 |             | `string[]`                      | `[]`         |
+| `selectionMode`   | `selection-mode`   |             | `"multi" \| "none" \| "single"` | `'single'`   |
+
+
+## Events
+
+| Event           | Description | Type                           |
+| --------------- | ----------- | ------------------------------ |
+| `imageAdded`    |             | `CustomEvent<ImageAddedEvent>` |
+| `imageDeselect` |             | `CustomEvent<ImageConfig>`     |
+| `imageSelected` |             | `CustomEvent<ImageConfig>`     |
+
+
+## Dependencies
+
+### Depends on
+
+- [spectrum-button](../spectrum-button)
+
+### Graph
+```mermaid
+graph TD;
+  spectrum-image-gallery --> spectrum-button
+  style spectrum-image-gallery fill:#f9f,stroke:#333,stroke-width:4px
+```
+
+----------------------------------------------
+
+

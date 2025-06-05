@@ -309,8 +309,8 @@ export class SpectrumConversationPanel {
               showLeftIcon={true}
               leftIcon={action.icon}
               onClick={() => this.action.emit({
-                action: action.action,
-                type: action.type,
+                action: action.value || action.label || 'action',
+                type: 'action',
                 value: action.value
               })}
             />
@@ -344,15 +344,23 @@ export class SpectrumConversationPanel {
           target="_blank" 
           rel="noopener noreferrer"
           key={index}
-          class="spectrum-conversation-panel__source"
+          class="content-card"
           onClick={() => this.sourceClick.emit({
             action: 'sourceClick', 
             label: source.label,
             value: source.value
           })}
         >
-          <div class="spectrum-conversation-panel__source-title">{source.label}</div>
-          <div class="spectrum-conversation-panel__source-url">{displayUrl}</div>
+          {source.number && (
+            <div class="number">{source.number}</div>
+          )}
+          <div class="card-content">
+            <div class="subtitle">{displayUrl}</div>
+            <div class="title">{source.label}</div>
+            {source.snippet && (
+              <div class="snippet">{source.snippet}</div>
+            )}
+          </div>
         </a>
       );
     });
@@ -369,8 +377,8 @@ export class SpectrumConversationPanel {
           <button 
             class="exploration-chip"
             onClick={() => this.action.emit({
-              action: exploration.action,
-              type: exploration.type,
+              action: 'explore',
+              type: 'exploration',
               value: exploration.value
             })}
           >

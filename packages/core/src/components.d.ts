@@ -8,9 +8,11 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
+import { ImageAddedEvent, ImageConfig, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
+export { ImageAddedEvent, ImageConfig, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export namespace Components {
     /**
      * Spectrum Button Component
@@ -147,6 +149,15 @@ export namespace Components {
           * The sources to display in the messages Default: null
          */
         "sources": string;
+    }
+    interface SpectrumImageGallery {
+        "allowDelete": boolean;
+        "allowUpload": boolean;
+        "allowUrlInput": boolean;
+        "images": ImageConfig[];
+        "scrollDirection": ScrollDirection;
+        "selectedImages": string[];
+        "selectionMode": SelectionMode;
     }
     interface SpectrumMegamenu {
         /**
@@ -293,6 +304,31 @@ export namespace Components {
          */
         "showSwatches": boolean;
     }
+    /**
+     * Spectrum Toast Component
+     * A notification component that displays messages at screen edges.
+     * Supports various variants, positioning, and auto-dismiss functionality.
+     */
+    interface SpectrumToast {
+        "actionLabel": string;
+        "actionValue": string;
+        "autoClose": boolean;
+        "debug": boolean;
+        "dismiss": () => Promise<void>;
+        "dismissible": boolean;
+        "duration": number;
+        "hide": () => Promise<void>;
+        "icon": string;
+        "message": string;
+        "persistent": boolean;
+        "position": 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        "show": () => Promise<void>;
+        "showCloseButton": boolean;
+        "showIcon": boolean;
+        "toastTitle": string;
+        "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';
+        "visible": boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -336,6 +372,10 @@ export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> 
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
 }
+export interface SpectrumImageGalleryCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumImageGalleryElement;
+}
 export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumRailElement;
@@ -343,6 +383,10 @@ export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSearchInputElement;
+}
+export interface SpectrumToastCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumToastElement;
 }
 declare global {
     interface HTMLSpectrumButtonElementEventMap {
@@ -459,6 +503,25 @@ declare global {
         prototype: HTMLSpectrumConversationPanelElement;
         new (): HTMLSpectrumConversationPanelElement;
     };
+    interface HTMLSpectrumImageGalleryElementEventMap {
+        "imageSelected": ImageConfig;
+        "imageDeselect": ImageConfig;
+        "imageAdded": ImageAddedEvent;
+    }
+    interface HTMLSpectrumImageGalleryElement extends Components.SpectrumImageGallery, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumImageGalleryElementEventMap>(type: K, listener: (this: HTMLSpectrumImageGalleryElement, ev: SpectrumImageGalleryCustomEvent<HTMLSpectrumImageGalleryElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumImageGalleryElementEventMap>(type: K, listener: (this: HTMLSpectrumImageGalleryElement, ev: SpectrumImageGalleryCustomEvent<HTMLSpectrumImageGalleryElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumImageGalleryElement: {
+        prototype: HTMLSpectrumImageGalleryElement;
+        new (): HTMLSpectrumImageGalleryElement;
+    };
     interface HTMLSpectrumMegamenuElement extends Components.SpectrumMegamenu, HTMLStencilElement {
     }
     var HTMLSpectrumMegamenuElement: {
@@ -524,6 +587,29 @@ declare global {
         prototype: HTMLSpectrumThemeElement;
         new (): HTMLSpectrumThemeElement;
     };
+    interface HTMLSpectrumToastElementEventMap {
+        "toastAction": { action: string; toast: any };
+        "toastDismiss": { action: string; toast: any };
+    }
+    /**
+     * Spectrum Toast Component
+     * A notification component that displays messages at screen edges.
+     * Supports various variants, positioning, and auto-dismiss functionality.
+     */
+    interface HTMLSpectrumToastElement extends Components.SpectrumToast, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumToastElementEventMap>(type: K, listener: (this: HTMLSpectrumToastElement, ev: SpectrumToastCustomEvent<HTMLSpectrumToastElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumToastElementEventMap>(type: K, listener: (this: HTMLSpectrumToastElement, ev: SpectrumToastCustomEvent<HTMLSpectrumToastElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumToastElement: {
+        prototype: HTMLSpectrumToastElement;
+        new (): HTMLSpectrumToastElement;
+    };
     interface HTMLSpectrumWallpaperElement extends Components.SpectrumWallpaper, HTMLStencilElement {
     }
     var HTMLSpectrumWallpaperElement: {
@@ -537,11 +623,13 @@ declare global {
         "spectrum-collapsible-list": HTMLSpectrumCollapsibleListElement;
         "spectrum-context-menu": HTMLSpectrumContextMenuElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
+        "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-theme": HTMLSpectrumThemeElement;
+        "spectrum-toast": HTMLSpectrumToastElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
     }
 }
@@ -706,6 +794,18 @@ declare namespace LocalJSX {
          */
         "sources"?: string;
     }
+    interface SpectrumImageGallery {
+        "allowDelete"?: boolean;
+        "allowUpload"?: boolean;
+        "allowUrlInput"?: boolean;
+        "images"?: ImageConfig[];
+        "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
+        "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        "onImageSelected"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        "scrollDirection"?: ScrollDirection;
+        "selectedImages"?: string[];
+        "selectionMode"?: SelectionMode;
+    }
     interface SpectrumMegamenu {
         /**
           * The megamenu close button icon Default: close
@@ -859,6 +959,30 @@ declare namespace LocalJSX {
          */
         "showSwatches"?: boolean;
     }
+    /**
+     * Spectrum Toast Component
+     * A notification component that displays messages at screen edges.
+     * Supports various variants, positioning, and auto-dismiss functionality.
+     */
+    interface SpectrumToast {
+        "actionLabel"?: string;
+        "actionValue"?: string;
+        "autoClose"?: boolean;
+        "debug"?: boolean;
+        "dismissible"?: boolean;
+        "duration"?: number;
+        "icon"?: string;
+        "message"?: string;
+        "onToastAction"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
+        "onToastDismiss"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
+        "persistent"?: boolean;
+        "position"?: 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        "showCloseButton"?: boolean;
+        "showIcon"?: boolean;
+        "toastTitle"?: string;
+        "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';
+        "visible"?: boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * The background value (color, gradient, or image URL)
@@ -888,11 +1012,13 @@ declare namespace LocalJSX {
         "spectrum-collapsible-list": SpectrumCollapsibleList;
         "spectrum-context-menu": SpectrumContextMenu;
         "spectrum-conversation-panel": SpectrumConversationPanel;
+        "spectrum-image-gallery": SpectrumImageGallery;
         "spectrum-megamenu": SpectrumMegamenu;
         "spectrum-rail": SpectrumRail;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
         "spectrum-theme": SpectrumTheme;
+        "spectrum-toast": SpectrumToast;
         "spectrum-wallpaper": SpectrumWallpaper;
     }
 }
@@ -920,6 +1046,7 @@ declare module "@stencil/core" {
              */
             "spectrum-context-menu": LocalJSX.SpectrumContextMenu & JSXBase.HTMLAttributes<HTMLSpectrumContextMenuElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
+            "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
             /**
              * Spectrum Rail Component
@@ -934,6 +1061,12 @@ declare module "@stencil/core" {
             "spectrum-rail-item": LocalJSX.SpectrumRailItem & JSXBase.HTMLAttributes<HTMLSpectrumRailItemElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
             "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
+            /**
+             * Spectrum Toast Component
+             * A notification component that displays messages at screen edges.
+             * Supports various variants, positioning, and auto-dismiss functionality.
+             */
+            "spectrum-toast": LocalJSX.SpectrumToast & JSXBase.HTMLAttributes<HTMLSpectrumToastElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
         }
     }

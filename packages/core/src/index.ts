@@ -16,6 +16,8 @@ export { SpectrumWallpaper } from './components/spectrum-wallpaper/spectrum-wall
 export { SpectrumButton } from './components/spectrum-button/spectrum-button';
 export { SpectrumSearchInput } from './components/spectrum-search-input/spectrum-search-input';
 export { SpectrumTheme } from './components/spectrum-theme/spectrum-theme';
+export { SpectrumImageGallery } from './components/spectrum-image-gallery/spectrum-image-gallery';
+export { SpectrumToast } from './components/spectrum-toast/spectrum-toast';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';
