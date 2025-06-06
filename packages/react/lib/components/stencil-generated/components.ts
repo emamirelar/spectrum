@@ -9,7 +9,7 @@
 
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
-import { type ImageAddedEvent, type ImageConfig, type SpectrumImageGalleryCustomEvent } from "@unops-itg-npm/cpit-spectrum";
+import { type ImageAddedEvent, type ImageConfig, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-carousel.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
@@ -21,6 +21,7 @@ import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as def
 import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-item.js";
 import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail.js";
 import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-search-input.js";
+import { SpectrumSelect as SpectrumSelectElement, defineCustomElement as defineSpectrumSelect } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-select.js";
 import { SpectrumTheme as SpectrumThemeElement, defineCustomElement as defineSpectrumTheme } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-theme.js";
 import { SpectrumToast as SpectrumToastElement, defineCustomElement as defineSpectrumToast } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-toast.js";
 import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-wallpaper.js";
@@ -101,9 +102,9 @@ export const SpectrumContextMenu: StencilReactComponent<SpectrumContextMenuEleme
 
 type SpectrumConversationPanelEvents = {
     onExplorationSelected: EventName<CustomEvent<{ action: string; exploration: string }>>,
-    onAction: EventName<CustomEvent<{ action: string, type: string, value: string }>>,
+    onAction: EventName<CustomEvent<{ action: string, type: string, value: string, messageId?: string }>>,
     onExplore: EventName<CustomEvent<{ action: string; value: string }>>,
-    onSourceClick: EventName<CustomEvent<{ action: string; label: string; value: string }>>,
+    onSourceClick: EventName<CustomEvent<{ action: string; label: string; value: string; messageId?: string }>>,
     onTitleChanged: EventName<CustomEvent<{ action: string, value: string }>>
 };
 
@@ -199,6 +200,25 @@ export const SpectrumSearchInput: StencilReactComponent<SpectrumSearchInputEleme
         onSearchInput: 'searchInput'
     } as SpectrumSearchInputEvents,
     defineCustomElement: defineSpectrumSearchInput
+});
+
+type SpectrumSelectEvents = {
+    onSelectChange: EventName<SpectrumSelectCustomEvent<{
+        value: string;
+        label: string;
+        option: SpectrumSelectOption | null;
+        selectedValues?: string[];
+        selectedOptions?: SpectrumSelectOption[];
+    }>>
+};
+
+export const SpectrumSelect: StencilReactComponent<SpectrumSelectElement, SpectrumSelectEvents> = /*@__PURE__*/ createComponent<SpectrumSelectElement, SpectrumSelectEvents>({
+    tagName: 'spectrum-select',
+    elementClass: SpectrumSelectElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onSelectChange: 'selectChange' } as SpectrumSelectEvents,
+    defineCustomElement: defineSpectrumSelect
 });
 
 type SpectrumThemeEvents = NonNullable<unknown>;

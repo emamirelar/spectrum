@@ -20,11 +20,13 @@ const meta = {
   args: {
     messages: `[
       {
+        "id": "msg-001",
         "message": "Tell me about the Apollo 11 moon landing",
         "sender": "request",
         "timestamp": "2024-03-20T10:00:00Z"
       },
       {
+        "id": "msg-002",
         "message": "The Apollo 11 mission was the first manned mission to land on the Moon. Launched on July 16, 1969, it carried astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins. Armstrong and Aldrin became the first humans to walk on the lunar surface on July 20, 1969, while Collins remained in lunar orbit.",
         "sender": "response",
         "timestamp": "2024-03-20T10:00:05Z",
@@ -155,17 +157,20 @@ const meta = {
         component: `
           A conversation panel component that displays messages, actions, sources, and explorations.
           
+          ## Message IDs
+          Messages can now include an optional \`id\` field. If provided, this ID will be used internally and emitted with actions. If not provided, a fallback ID will be generated (e.g., "msg-0", "msg-1").
+          
           ## Events
-          All events now include an action attribute to identify the type of action performed:
+          All events now include an action attribute to identify the type of action performed. Actions related to specific messages also include a \`messageId\` field:
           
           - **action**: When action buttons are clicked
-            - Payload: \`{ action: string, type: string, value: string }\`
+            - Payload: \`{ action: string, type: string, value: string, messageId?: string }\`
           - **explorationSelected**: When an exploration is selected  
             - Payload: \`{ action: string, exploration: string }\`
           - **explore**: When exploring content
-            - Payload: \`{ action: string, value: string }\`
+            - Payload: \`{ action: string, value: string, messageId?: string }\`
           - **sourceClick**: When a source link is clicked
-            - Payload: \`{ action: string, label: string, value: string }\`
+            - Payload: \`{ action: string, label: string, value: string, messageId?: string }\`
           - **titleChanged**: When the conversation title is edited
             - Payload: \`{ action: string, value: string }\`
           
@@ -173,7 +178,7 @@ const meta = {
           \`\`\`html
           <spectrum-conversation-panel
             @action={(e) => {
-              // e.detail = { action: "share", type: "action", value: "share" }
+              // e.detail = { action: "share", type: "action", value: "share", messageId: "msg-002" }
               console.log('Action:', e.detail);
             }}
             @explorationSelected={(e) => {
@@ -181,11 +186,11 @@ const meta = {
               console.log('Exploration selected:', e.detail);
             }}
             @explore={(e) => {
-              // e.detail = { action: "explore", value: "exploration content" }
+              // e.detail = { action: "explore", value: "exploration content", messageId: "msg-002" }
               console.log('Explore:', e.detail);
             }}
             @sourceClick={(e) => {
-              // e.detail = { action: "sourceClick", label: "NASA", value: "https://nasa.gov" }
+              // e.detail = { action: "sourceClick", label: "NASA", value: "https://nasa.gov", messageId: "msg-002" }
               console.log('Source clicked:', e.detail);
             }}
             @titleChanged={(e) => {

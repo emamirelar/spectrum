@@ -2,8 +2,23 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 
-// @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumButton } from "@stencil-storybook-boilerplate/core/src/components/spectrum-button/spectrum-button";
+// Local interface definition since components are loaded globally
+interface SpectrumButton extends HTMLElement {
+  buttonText: string;
+  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
+  size: 'sm' | 'base' | 'lg';
+  outline: boolean;
+  iconOnly: boolean;
+  disabled: boolean;
+  ripple: boolean;
+  showButtonText: boolean;
+  showLeftIcon: boolean;
+  leftIcon: string;
+  showRightIcon: boolean;
+  rightIcon: string;
+  debug: boolean;
+  action: string;
+}
 
 interface SpectrumButtonArgs {
   variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';

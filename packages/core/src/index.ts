@@ -18,6 +18,10 @@ export { SpectrumSearchInput } from './components/spectrum-search-input/spectrum
 export { SpectrumTheme } from './components/spectrum-theme/spectrum-theme';
 export { SpectrumImageGallery } from './components/spectrum-image-gallery/spectrum-image-gallery';
 export { SpectrumToast } from './components/spectrum-toast/spectrum-toast';
+export { SpectrumSelect } from './components/spectrum-select/spectrum-select';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';
+
+// Export component types and interfaces
+export type { SpectrumSelectOption } from './components/spectrum-select/spectrum-select';

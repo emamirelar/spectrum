@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### 🆕 Added
-- Ready for next release changes...
+- Ready for next release features...
 
 ### 🐛 Fixed
 - Ready for next release fixes...
@@ -24,28 +24,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.0.1-alpha.19] - 2024-12-27
+## [0.0.1-alpha.20] - 2024-12-30
 
 ### 🧪 Pre-release
 
 ### 🆕 Added
-- **spectrum-toast**: New notification component for user feedback and system messages
-  - **Screen Edge Positioning**: 8 position options (top, bottom, left, right, top-left, top-right, bottom-left, bottom-right) with default to top
-  - **Variant Support**: Full spectrum theme variant support (primary, secondary, success, warning, danger, ghost) matching button component
-  - **Auto-close Functionality**: Configurable duration with pause-on-hover and manual dismiss options
-  - **Action Buttons**: Optional action buttons centered at bottom with proper event emission
-  - **Custom Icons**: Variant-specific default icons with custom icon override support
-  - **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
-  - **Responsive Design**: Mobile-optimized with proper touch targets and responsive positioning
-  - **Spectrum Theming**: Complete integration with spectrum design tokens and standardized spacing/sizing
-  - **Animation System**: Smooth slide-in/out animations with reduced motion support
-  - **Event System**: Comprehensive events (`toastAction`, `toastDismiss`) with detailed payload data
-  - **TypeScript Support**: Full type definitions with proper prop interfaces
-  - **Storybook Integration**: Comprehensive stories demonstrating all features, variants, and use cases
+- **spectrum-conversation-panel**: Enhanced message handling with ID support and improved action events
+  - **Message ID Support**: Messages can now include optional `id` field (e.g., `{"id": "msg-001", "message": "..."}`)
+  - **Fallback ID Generation**: Auto-generates IDs when not provided (e.g., "msg-0", "msg-1") for backward compatibility
+  - **Action Event Enhancement**: All message-related actions now emit `messageId` field in event payload
+  - **Enhanced Event Payloads**: 
+    - Action buttons: `{ action: string, type: string, value: string, messageId?: string }`
+    - Source clicks: `{ action: string, label: string, value: string, messageId?: string }`
+    - Explorations: `{ action: string, type: string, value: string, messageId?: string }`
+  - **Event Traceability**: Easy tracking of which specific message triggered each action for better user interaction analytics
+  - **TypeScript Support**: Updated event type definitions to include optional messageId field
+  - **Backward Compatibility**: Existing message structures without IDs continue to work seamlessly
+  - **Storybook Examples**: Updated with message ID demonstrations and comprehensive event examples
+- **spectrum-select**: New comprehensive select/dropdown component with single and multiple selection support
+  - **Single Selection Mode**: Traditional dropdown with option selection and form integration
+  - **Multiple Selection Mode**: Multi-select with checkboxes, count badges, and custom selection labels
+  - **Intelligent Display**: Single selections show item name + icon, multiple selections show count badge + label
+  - **Variant Support**: Full spectrum theme variant support (primary, secondary, outline, ghost) matching button styling
+  - **Size Variations**: Three sizes (sm, base, lg) with responsive scaling and consistent proportions
+  - **Icon Support**: Material Design icons in both trigger and dropdown options with proper fallback handling
+  - **Custom Dropdown**: Fully styled dropdown with surface theming, proper colors, and smooth animations
+  - **Checkbox UI**: Visual checkboxes for multiple selection mode with proper selected/unselected states
+  - **Count Badge**: Circular count indicator replacing leading icon in multiple mode (2+ selections)
+  - **Form Integration**: Hidden native select for accessibility, validation, and form submission support
+  - **Keyboard Navigation**: Full keyboard support (Arrow keys, Enter, Space, Escape, Home, End)
+  - **Accessibility**: ARIA labels, roles, screen reader support, and focus management
+  - **State Management**: Hover, focus, active, disabled, and invalid states with proper visual feedback
+  - **Animation Effects**: Button-like hover movement (translateY), dropdown slide-in, and smooth transitions
+  - **Event System**: Comprehensive `selectChange` events with both single and multiple selection data
+  - **Custom Styling**: Support for custom styles, placeholders, and dropdown icons
+  - **Responsive Design**: Mobile-optimized with proper touch targets and responsive behavior
+  - **TypeScript Support**: Full type definitions with `SpectrumSelectOption` interface and proper prop types
+  - **Storybook Integration**: 19 comprehensive stories covering all modes, variants, sizes, and use cases
+
+### 🔄 Changed
+- **Architecture**: Updated component dependency map to include spectrum-select in Level 1 (Atomic) components
+- **Development**: Enhanced spectrum-select with multiselect functionality and intelligent display modes
+
+### 🐛 Fixed
+- Ready for next release fixes...
 
 ### 🔄 Changed
 - **Architecture**: Updated component dependency map to include spectrum-toast in Level 1 (Atomic) components
 - **Development**: Enhanced Storybook stories with comprehensive toast examples and use cases
+
+### 📝 Documentation
+- **Storybook**: Added missing @itemRenamed event listener to Default story for proper rename functionality testing
+- **Storybook**: Added "Rename" action to Default story context menu for easier testing
+- Created changelog template for consistent entry formatting
+- Established changelog workflow integration with component development
+- Added pre-release checklist for changelog validation
+- **Documentation**: Added comprehensive changelog for tracking all component library changes
+- **Development**: Established changelog maintenance rules and workflow integration
+- **Cursor Rules**: Implemented automated changelog maintenance system with AI assistance
+
+### 🔒 Dependencies
+- **@stencil/core**: v4.22.2
+- **@material/material-color-utilities**: v0.3.0
+- **@glidejs/glide**: v3.7.1
+- **tailwindcss**: v3.4.17
+- **typescript**: v5.7.3
 
 ---
 

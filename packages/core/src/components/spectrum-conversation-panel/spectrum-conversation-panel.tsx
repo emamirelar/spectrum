@@ -61,9 +61,9 @@ export class SpectrumConversationPanel {
     bubbles: true,
     composed: true,
     cancelable: true
-  }) action: EventEmitter<{action: string, type: string, value: string}>;
+  }) action: EventEmitter<{action: string, type: string, value: string, messageId?: string}>;
   @Event() explore: EventEmitter<{ action: string; value: string }>;
-  @Event() sourceClick: EventEmitter<{ action: string; label: string; value: string }>;
+  @Event() sourceClick: EventEmitter<{ action: string; label: string; value: string; messageId?: string }>;
   @Event({
     eventName: 'titleChanged',
     bubbles: true,
@@ -119,8 +119,10 @@ export class SpectrumConversationPanel {
       const parsedMessages = JSON.parse(messages);
       this.messageArray = parsedMessages;
       this.messageIdMap.clear();
-      parsedMessages.forEach((_, index) => {
-        this.messageIdMap.set(index, `msg-${index}`);
+      parsedMessages.forEach((message, index) => {
+        // Use message.id if available, otherwise fallback to generated ID
+        const messageId = message.id || `msg-${index}`;
+        this.messageIdMap.set(index, messageId);
       });
     } catch (error) {
       this.debugError('Failed to parse messages:', error);
@@ -243,7 +245,7 @@ export class SpectrumConversationPanel {
         <div class="message">
           <div innerHTML={response.message}></div>
           <div class="actions">
-            {this.renderActions()}
+            {this.renderActions(messageId)}
           </div>
           {(hasExplorations || hasSources) && (
             <div class="accordion-row">
@@ -274,14 +276,14 @@ export class SpectrumConversationPanel {
       activeAccordion === 'explorations' && hasExplorations && (
         <div class="accordion-content expanded" id={`explorations-content-${messageId}`}>
           <div class="scroll-container">
-            {this.renderExplorations(response.explorations)}
+            {this.renderExplorations(response.explorations, messageId)}
           </div>
         </div>
       ),
       activeAccordion === 'sources' && hasSources && (
         <div class="accordion-content expanded" id={`sources-content-${messageId}`}>
           <div class="scroll-container">
-            {this.renderSources(response.sources)}
+            {this.renderSources(response.sources, messageId)}
           </div>
         </div>
       )
@@ -293,9 +295,9 @@ export class SpectrumConversationPanel {
    * actions are an array of objects and are passed in as a string from Storybook
    * the objects have a label and an icon and an action event to emit
    * to the component as a prop
-   * @param actions 
+   * @param messageId - the ID of the message these actions belong to
    */
-  private renderActions() {
+  private renderActions(messageId?: string) {
     if (!this.actions) return null;
 
     try {
@@ -311,7 +313,8 @@ export class SpectrumConversationPanel {
               onClick={() => this.action.emit({
                 action: action.value || action.label || 'action',
                 type: 'action',
-                value: action.value
+                value: action.value,
+                messageId: messageId
               })}
             />
           ))}
@@ -326,8 +329,9 @@ export class SpectrumConversationPanel {
   /**
    * RenderSources - render sources in the conversation panel 
    * @param sources 
+   * @param messageId - the ID of the message these sources belong to
    */
-  renderSources(sources: any) {
+  renderSources(sources: any, messageId?: string) {
     return sources.map((source, index) => {
       let displayUrl = source.value;
       try {
@@ -348,7 +352,8 @@ export class SpectrumConversationPanel {
           onClick={() => this.sourceClick.emit({
             action: 'sourceClick', 
             label: source.label,
-            value: source.value
+            value: source.value,
+            messageId: messageId
           })}
         >
           {source.number && (
@@ -369,8 +374,9 @@ export class SpectrumConversationPanel {
   /**
    * RenderExplorations - render explorations in the conversation panel
    * @param explorations 
+   * @param messageId - the ID of the message these explorations belong to
    */
-  renderExplorations(explorations: any) {
+  renderExplorations(explorations: any, messageId?: string) {
     return (
       <div class="explorations-container">
         {explorations.map((exploration) => (
@@ -379,7 +385,8 @@ export class SpectrumConversationPanel {
             onClick={() => this.action.emit({
               action: 'explore',
               type: 'exploration',
-              value: exploration.value
+              value: exploration.value,
+              messageId: messageId
             })}
           >
             <span class="material-symbols-outlined">prompt_suggestion</span>

@@ -183,11 +183,11 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
   explorationSelected: EventEmitter<CustomEvent<{ action: string; exploration: string }>>;
 
-  action: EventEmitter<CustomEvent<{action: string, type: string, value: string}>>;
+  action: EventEmitter<CustomEvent<{action: string, type: string, value: string, messageId?: string}>>;
 
   explore: EventEmitter<CustomEvent<{ action: string; value: string }>>;
 
-  sourceClick: EventEmitter<CustomEvent<{ action: string; label: string; value: string }>>;
+  sourceClick: EventEmitter<CustomEvent<{ action: string; label: string; value: string; messageId?: string }>>;
 
   titleChanged: EventEmitter<CustomEvent<{action: string, value: string}>>;
 }
@@ -340,6 +340,34 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
    * Emits when input value changes, for real-time filtering
    */
   searchInput: EventEmitter<CustomEvent<{ action: string; value: string }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'invalid', 'multiple', 'options', 'placeholder', 'required', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'size', 'state', 'variant']
+})
+@Component({
+  selector: 'spectrum-select',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'invalid', 'multiple', 'options', 'placeholder', 'required', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'size', 'state', 'variant'],
+})
+export class SpectrumSelect {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['selectChange']);
+  }
+}
+
+
+import type { SpectrumSelectOption as ISpectrumSelectSpectrumSelectOption } from '@stencil-storybook-boilerplate/core';
+
+export declare interface SpectrumSelect extends Components.SpectrumSelect {
+
+  selectChange: EventEmitter<CustomEvent<{ value: string; label: string; option: [object Object] | null; selectedValues?: string[]; selectedOptions?: [object Object][]; }>>;
 }
 
 

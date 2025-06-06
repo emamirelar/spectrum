@@ -9,10 +9,12 @@ import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spec
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ImageAddedEvent, ImageConfig, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ImageAddedEvent, ImageConfig, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export namespace Components {
     /**
      * Spectrum Button Component
@@ -282,6 +284,31 @@ export namespace Components {
         "searchIconPosition": 'left' | 'right';
         "setFocus": () => Promise<void>;
     }
+    /**
+     * Spectrum Select Component
+     * A styled wrapper around HTML select element with support for icons, text, and custom options.
+     * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+     */
+    interface SpectrumSelect {
+        "action": string;
+        "customStyle": { [key: string]: string };
+        "debug": boolean;
+        "disabled": boolean;
+        "dropdownIcon": string;
+        "invalid": boolean;
+        "multiple": boolean;
+        "options": SpectrumSelectOption[];
+        "placeholder": string;
+        "required": boolean;
+        "selectedValue": string;
+        "selectedValues": string[];
+        "selectionsLabel": string;
+        "showDropdownIcon": boolean;
+        "showIcon": boolean;
+        "size": 'sm' | 'base' | 'lg';
+        "state": 'default' | 'hover' | 'focus' | 'disabled';
+        "variant": 'primary' | 'secondary' | 'outline' | 'ghost';
+    }
     interface SpectrumTheme {
         /**
           * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
@@ -384,6 +411,10 @@ export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSearchInputElement;
 }
+export interface SpectrumSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumSelectElement;
+}
 export interface SpectrumToastCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumToastElement;
@@ -484,9 +515,9 @@ declare global {
     };
     interface HTMLSpectrumConversationPanelElementEventMap {
         "explorationSelected": { action: string; exploration: string };
-        "action": {action: string, type: string, value: string};
+        "action": {action: string, type: string, value: string, messageId?: string};
         "explore": { action: string; value: string };
-        "sourceClick": { action: string; label: string; value: string };
+        "sourceClick": { action: string; label: string; value: string; messageId?: string };
         "titleChanged": {action: string, value: string};
     }
     interface HTMLSpectrumConversationPanelElement extends Components.SpectrumConversationPanel, HTMLStencilElement {
@@ -581,6 +612,34 @@ declare global {
         prototype: HTMLSpectrumSearchInputElement;
         new (): HTMLSpectrumSearchInputElement;
     };
+    interface HTMLSpectrumSelectElementEventMap {
+        "selectChange": { 
+    value: string; 
+    label: string; 
+    option: SpectrumSelectOption | null;
+    selectedValues?: string[];
+    selectedOptions?: SpectrumSelectOption[];
+  };
+    }
+    /**
+     * Spectrum Select Component
+     * A styled wrapper around HTML select element with support for icons, text, and custom options.
+     * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+     */
+    interface HTMLSpectrumSelectElement extends Components.SpectrumSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumSelectElementEventMap>(type: K, listener: (this: HTMLSpectrumSelectElement, ev: SpectrumSelectCustomEvent<HTMLSpectrumSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumSelectElementEventMap>(type: K, listener: (this: HTMLSpectrumSelectElement, ev: SpectrumSelectCustomEvent<HTMLSpectrumSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumSelectElement: {
+        prototype: HTMLSpectrumSelectElement;
+        new (): HTMLSpectrumSelectElement;
+    };
     interface HTMLSpectrumThemeElement extends Components.SpectrumTheme, HTMLStencilElement {
     }
     var HTMLSpectrumThemeElement: {
@@ -628,6 +687,7 @@ declare global {
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
+        "spectrum-select": HTMLSpectrumSelectElement;
         "spectrum-theme": HTMLSpectrumThemeElement;
         "spectrum-toast": HTMLSpectrumToastElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
@@ -784,10 +844,10 @@ declare namespace LocalJSX {
           * The messsages to display in the conversation panel Default: null
          */
         "messages"?: string;
-        "onAction"?: (event: SpectrumConversationPanelCustomEvent<{action: string, type: string, value: string}>) => void;
+        "onAction"?: (event: SpectrumConversationPanelCustomEvent<{action: string, type: string, value: string, messageId?: string}>) => void;
         "onExplorationSelected"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; exploration: string }>) => void;
         "onExplore"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; value: string }>) => void;
-        "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; label: string; value: string }>) => void;
+        "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; label: string; value: string; messageId?: string }>) => void;
         "onTitleChanged"?: (event: SpectrumConversationPanelCustomEvent<{action: string, value: string}>) => void;
         /**
           * The sources to display in the messages Default: null
@@ -937,6 +997,38 @@ declare namespace LocalJSX {
          */
         "searchIconPosition"?: 'left' | 'right';
     }
+    /**
+     * Spectrum Select Component
+     * A styled wrapper around HTML select element with support for icons, text, and custom options.
+     * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+     */
+    interface SpectrumSelect {
+        "action"?: string;
+        "customStyle"?: { [key: string]: string };
+        "debug"?: boolean;
+        "disabled"?: boolean;
+        "dropdownIcon"?: string;
+        "invalid"?: boolean;
+        "multiple"?: boolean;
+        "onSelectChange"?: (event: SpectrumSelectCustomEvent<{ 
+    value: string; 
+    label: string; 
+    option: SpectrumSelectOption | null;
+    selectedValues?: string[];
+    selectedOptions?: SpectrumSelectOption[];
+  }>) => void;
+        "options"?: SpectrumSelectOption[];
+        "placeholder"?: string;
+        "required"?: boolean;
+        "selectedValue"?: string;
+        "selectedValues"?: string[];
+        "selectionsLabel"?: string;
+        "showDropdownIcon"?: boolean;
+        "showIcon"?: boolean;
+        "size"?: 'sm' | 'base' | 'lg';
+        "state"?: 'default' | 'hover' | 'focus' | 'disabled';
+        "variant"?: 'primary' | 'secondary' | 'outline' | 'ghost';
+    }
     interface SpectrumTheme {
         /**
           * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
@@ -1017,6 +1109,7 @@ declare namespace LocalJSX {
         "spectrum-rail": SpectrumRail;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
+        "spectrum-select": SpectrumSelect;
         "spectrum-theme": SpectrumTheme;
         "spectrum-toast": SpectrumToast;
         "spectrum-wallpaper": SpectrumWallpaper;
@@ -1060,6 +1153,12 @@ declare module "@stencil/core" {
              */
             "spectrum-rail-item": LocalJSX.SpectrumRailItem & JSXBase.HTMLAttributes<HTMLSpectrumRailItemElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
+            /**
+             * Spectrum Select Component
+             * A styled wrapper around HTML select element with support for icons, text, and custom options.
+             * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+             */
+            "spectrum-select": LocalJSX.SpectrumSelect & JSXBase.HTMLAttributes<HTMLSpectrumSelectElement>;
             "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
             /**
              * Spectrum Toast Component

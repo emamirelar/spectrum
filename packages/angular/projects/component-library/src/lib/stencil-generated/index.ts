@@ -13,6 +13,7 @@ export const DIRECTIVES = [
   d.SpectrumRail,
   d.SpectrumRailItem,
   d.SpectrumSearchInput,
+  d.SpectrumSelect,
   d.SpectrumTheme,
   d.SpectrumToast,
   d.SpectrumWallpaper

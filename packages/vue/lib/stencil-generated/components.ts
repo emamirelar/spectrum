@@ -151,6 +151,29 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
 ]);
 
 
+export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>('spectrum-select', undefined, [
+  'debug',
+  'variant',
+  'size',
+  'disabled',
+  'required',
+  'invalid',
+  'action',
+  'customStyle',
+  'placeholder',
+  'selectedValue',
+  'selectedValues',
+  'multiple',
+  'selectionsLabel',
+  'options',
+  'showIcon',
+  'showDropdownIcon',
+  'dropdownIcon',
+  'state',
+  'selectChange'
+]);
+
+
 export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('spectrum-theme', undefined, [
   'color',
   'dark',
