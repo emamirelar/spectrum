@@ -75,6 +75,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: Complex navigation scenarios
   - Purpose: Large navigation overlay
 
+- **spectrum-image-gallery**: Flexible image gallery with upload capabilities
+  - Dependencies: None (pure component, uses native APIs)
+  - Used by: Image management and display applications
+  - Purpose: Responsive image gallery with thumbnail navigation, upload, and selection
+
 ## Dependency Flow Hierarchy
 
 ```
@@ -87,7 +92,8 @@ Level 1 (Atomic):
 ├── spectrum-context-menu
 ├── spectrum-wallpaper
 ├── spectrum-carousel
-└── spectrum-megamenu
+├── spectrum-megamenu
+└── spectrum-image-gallery
 
 Level 2 (Composed):
 ├── spectrum-search-input (depends on: spectrum-button)

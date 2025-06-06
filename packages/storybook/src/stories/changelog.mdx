@@ -14,7 +14,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### 🆕 Added
+- Ready for next release features...
+
+### 🐛 Fixed
+- Ready for next release fixes...
+
+### 🔄 Changed
 - Ready for next release changes...
+
+---
+
+## [0.0.1-alpha.20] - 2024-12-30
+
+### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-conversation-panel**: Enhanced message handling with ID support and improved action events
+  - **Message ID Support**: Messages can now include optional `id` field (e.g., `{"id": "msg-001", "message": "..."}`)
+  - **Fallback ID Generation**: Auto-generates IDs when not provided (e.g., "msg-0", "msg-1") for backward compatibility
+  - **Action Event Enhancement**: All message-related actions now emit `messageId` field in event payload
+  - **Enhanced Event Payloads**: 
+    - Action buttons: `{ action: string, type: string, value: string, messageId?: string }`
+    - Source clicks: `{ action: string, label: string, value: string, messageId?: string }`
+    - Explorations: `{ action: string, type: string, value: string, messageId?: string }`
+  - **Event Traceability**: Easy tracking of which specific message triggered each action for better user interaction analytics
+  - **TypeScript Support**: Updated event type definitions to include optional messageId field
+  - **Backward Compatibility**: Existing message structures without IDs continue to work seamlessly
+  - **Storybook Examples**: Updated with message ID demonstrations and comprehensive event examples
+- **spectrum-select**: New comprehensive select/dropdown component with single and multiple selection support
+  - **Single Selection Mode**: Traditional dropdown with option selection and form integration
+  - **Multiple Selection Mode**: Multi-select with checkboxes, count badges, and custom selection labels
+  - **Intelligent Display**: Single selections show item name + icon, multiple selections show count badge + label
+  - **Variant Support**: Full spectrum theme variant support (primary, secondary, outline, ghost) matching button styling
+  - **Size Variations**: Three sizes (sm, base, lg) with responsive scaling and consistent proportions
+  - **Icon Support**: Material Design icons in both trigger and dropdown options with proper fallback handling
+  - **Custom Dropdown**: Fully styled dropdown with surface theming, proper colors, and smooth animations
+  - **Checkbox UI**: Visual checkboxes for multiple selection mode with proper selected/unselected states
+  - **Count Badge**: Circular count indicator replacing leading icon in multiple mode (2+ selections)
+  - **Form Integration**: Hidden native select for accessibility, validation, and form submission support
+  - **Keyboard Navigation**: Full keyboard support (Arrow keys, Enter, Space, Escape, Home, End)
+  - **Accessibility**: ARIA labels, roles, screen reader support, and focus management
+  - **State Management**: Hover, focus, active, disabled, and invalid states with proper visual feedback
+  - **Animation Effects**: Button-like hover movement (translateY), dropdown slide-in, and smooth transitions
+  - **Event System**: Comprehensive `selectChange` events with both single and multiple selection data
+  - **Custom Styling**: Support for custom styles, placeholders, and dropdown icons
+  - **Responsive Design**: Mobile-optimized with proper touch targets and responsive behavior
+  - **TypeScript Support**: Full type definitions with `SpectrumSelectOption` interface and proper prop types
+  - **Storybook Integration**: 19 comprehensive stories covering all modes, variants, sizes, and use cases
+
+### 🔄 Changed
+- **Architecture**: Updated component dependency map to include spectrum-select in Level 1 (Atomic) components
+- **Development**: Enhanced spectrum-select with multiselect functionality and intelligent display modes
+
+### 🐛 Fixed
+- Ready for next release fixes...
+
+### 🔄 Changed
+- **Architecture**: Updated component dependency map to include spectrum-toast in Level 1 (Atomic) components
+- **Development**: Enhanced Storybook stories with comprehensive toast examples and use cases
+
+### 📝 Documentation
+- **Storybook**: Added missing @itemRenamed event listener to Default story for proper rename functionality testing
+- **Storybook**: Added "Rename" action to Default story context menu for easier testing
+- Created changelog template for consistent entry formatting
+- Established changelog workflow integration with component development
+- Added pre-release checklist for changelog validation
+- **Documentation**: Added comprehensive changelog for tracking all component library changes
+- **Development**: Established changelog maintenance rules and workflow integration
+- **Cursor Rules**: Implemented automated changelog maintenance system with AI assistance
+
+### 🔒 Dependencies
+- **@stencil/core**: v4.22.2
+- **@material/material-color-utilities**: v0.3.0
+- **@glidejs/glide**: v3.7.1
+- **tailwindcss**: v3.4.17
+- **typescript**: v5.7.3
 
 ---
 
@@ -22,12 +96,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🧪 Pre-release
 
+### 🆕 Added
+- **spectrum-image-gallery**: New comprehensive image gallery component with masonry and horizontal layouts
+  - **Multiple Layout Modes**: Pinterest-style vertical masonry using CSS columns and horizontal scrolling for carousels
+  - **File Upload System**: Modal-based drag & drop and file browser upload with automatic base64 conversion
+  - **URL Input**: Add external images with validation and error handling
+  - **Selection Modes**: Single select, multi-select, or no selection with visual feedback
+  - **Delete Functionality**: Remove selected images with confirmation UI
+  - **Rich Event System**: Comprehensive events (`imageAdded`, `imageSelected`, `imageDeselect`) with complete metadata
+  - **Responsive Design**: Adapts seamlessly to different screen sizes with mobile-optimized interactions
+  - **Accessibility**: Full keyboard navigation, ARIA labels, and screen reader support
+  - **Spectrum Theming**: Consistent with Spectrum design tokens and Material Design patterns
+  - **TypeScript Interfaces**: Complete `ImageConfig` and `ImageAddedEvent` type definitions
+  - **Comprehensive Testing**: Full test suite with modal interactions, selection modes, and responsive behavior
+
 ### 🐛 Fixed
+- **spectrum-conversation-panel**: Fixed action button events emitting undefined values - action buttons now properly emit `{action: string, type: "action", value: string}` instead of `{action: undefined, type: undefined, value: string}`
+- **spectrum-conversation-panel**: Fixed exploration chip events emitting undefined values - exploration chips now properly emit `{action: "explore", type: "exploration", value: string}` instead of undefined action/type properties
+- **spectrum-conversation-panel**: Fixed missing source card styling and content - added CSS styles for `.spectrum-conversation-panel__source`, `.spectrum-conversation-panel__source-title`, `.spectrum-conversation-panel__source-snippet`, and `.spectrum-conversation-panel__source-url` classes to restore proper visual formatting of source links with title, snippet, and URL display
 - **spectrum-collapsible-list**: Fixed rename functionality focus issue - input now properly receives focus when entering edit mode
 - **spectrum-collapsible-list**: Fixed rename event emission - itemRenamed events now properly propagate to Storybook actions panel
 - **spectrum-collapsible-list**: Enhanced rename debugging with detailed console logging when debug mode is enabled
 
 ### 🔄 Changed
+- **spectrum-conversation-panel**: Enhanced source card styling with improved focus states, hover effects, and consistent spacing following BEM naming conventions
+- **spectrum-conversation-panel**: Added snippet display to source cards with multi-line text truncation support
 - **spectrum-collapsible-list**: Improved startEditing method with longer timeout and retry logic for better focus handling
 - **spectrum-collapsible-list**: Enhanced completeRename method with better debugging and event payload validation
 
@@ -37,8 +130,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Created changelog template for consistent entry formatting
 - Established changelog workflow integration with component development
 - Added pre-release checklist for changelog validation
-
-### 🆕 Added
 - **Documentation**: Added comprehensive changelog for tracking all component library changes
 - **Development**: Established changelog maintenance rules and workflow integration
 - **Cursor Rules**: Implemented automated changelog maintenance system with AI assistance

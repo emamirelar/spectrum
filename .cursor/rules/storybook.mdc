@@ -18,6 +18,7 @@ Components need storybook stories that demonstrate their functionality and varia
 
 ## Story Requirements
 - Each component should have a comprehensive story file
+- There should be full documentation for each story
 - Stories should demonstrate all variants, states, and use cases
 - Keep stories up to date with component changes
 - Use proper TypeScript types and Storybook controls

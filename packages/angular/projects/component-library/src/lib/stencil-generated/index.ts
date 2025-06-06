@@ -8,10 +8,13 @@ export const DIRECTIVES = [
   d.SpectrumCollapsibleList,
   d.SpectrumContextMenu,
   d.SpectrumConversationPanel,
+  d.SpectrumImageGallery,
   d.SpectrumMegamenu,
   d.SpectrumRail,
   d.SpectrumRailItem,
   d.SpectrumSearchInput,
+  d.SpectrumSelect,
   d.SpectrumTheme,
+  d.SpectrumToast,
   d.SpectrumWallpaper
 ];

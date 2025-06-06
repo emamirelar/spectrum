@@ -91,6 +91,20 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumImageGallery>('spectrum-image-gallery', undefined, [
+  'images',
+  'allowUpload',
+  'allowUrlInput',
+  'allowDelete',
+  'selectionMode',
+  'selectedImages',
+  'scrollDirection',
+  'imageSelected',
+  'imageDeselect',
+  'imageAdded'
+]);
+
+
 export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegamenu>('spectrum-megamenu', undefined, [
   'megamenutitle',
   'openicon',
@@ -137,12 +151,56 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
 ]);
 
 
+export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>('spectrum-select', undefined, [
+  'debug',
+  'variant',
+  'size',
+  'disabled',
+  'required',
+  'invalid',
+  'action',
+  'customStyle',
+  'placeholder',
+  'selectedValue',
+  'selectedValues',
+  'multiple',
+  'selectionsLabel',
+  'options',
+  'showIcon',
+  'showDropdownIcon',
+  'dropdownIcon',
+  'state',
+  'selectChange'
+]);
+
+
 export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('spectrum-theme', undefined, [
   'color',
   'dark',
   'showSwatches',
   'debug',
   'config'
+]);
+
+
+export const SpectrumToast = /*@__PURE__*/ defineContainer<JSX.SpectrumToast>('spectrum-toast', undefined, [
+  'debug',
+  'variant',
+  'position',
+  'visible',
+  'autoClose',
+  'duration',
+  'dismissible',
+  'persistent',
+  'toastTitle',
+  'message',
+  'showIcon',
+  'icon',
+  'showCloseButton',
+  'actionLabel',
+  'actionValue',
+  'toastAction',
+  'toastDismiss'
 ]);
 
 
