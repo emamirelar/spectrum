@@ -1,0 +1,227 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Documentation/Dependency Map" />
+
+# 🧩 Component Dependency Map
+
+This document shows the relationships between Spectrum components and helps maintain proper component architecture. The dependency map ensures the modular, composable nature of the Spectrum component system.
+
+---
+
+## 📋 Component Dependency Map
+
+This map shows the relationships between Spectrum components. Keep this updated when implementing or modifying components.
+
+### Core Infrastructure Components (Foundation Layer)
+- **spectrum-theme**: Foundation theming component
+  - **Dependencies**: @material/material-color-utilities
+  - **Used by**: All components (through CSS custom properties)
+  - **Purpose**: Provides Material Design 3 color system and theming
+
+### Atomic Components (No Internal Dependencies)
+- **spectrum-button**: Interactive button component
+  - **Dependencies**: None (pure component)
+  - **Used by**: spectrum-rail, spectrum-search-input, spectrum-rail-item, spectrum-context-menu, **spectrum-select**
+  - **Purpose**: Primary interactive element
+
+- **spectrum-chip**: Small interactive element for tags/selections
+  - **Dependencies**: None (pure component)  
+  - **Used by**: spectrum-conversation-panel
+  - **Purpose**: Display tags, selections, or actionable items
+
+### Utility Components
+- **spectrum-context-menu**: Contextual menu overlay
+  - **Dependencies**: None (pure component)
+  - **Used by**: spectrum-collapsible-list
+  - **Purpose**: Provides contextual actions menu
+  - **Exports**: ContextMenuAction interface
+
+- **spectrum-wallpaper**: Background theming component
+  - **Dependencies**: None (pure component)
+  - **Used by**: Standalone background theming
+  - **Purpose**: Dynamic background with color extraction
+
+### Composed Components (With Internal Dependencies)
+- **spectrum-search-input**: Enhanced search input with voice
+  - **Dependencies**: spectrum-button
+  - **Used by**: spectrum-rail
+  - **Purpose**: Advanced search functionality
+
+- **spectrum-rail-item**: Individual rail navigation item
+  - **Dependencies**: spectrum-button
+  - **Used by**: spectrum-rail (via slots)
+  - **Purpose**: Rail navigation items with expand/collapse states
+
+- **spectrum-collapsible-list**: Hierarchical list with context menus
+  - **Dependencies**: spectrum-context-menu (imports ContextMenuAction interface)
+  - **Used by**: spectrum-rail (via slots)
+  - **Purpose**: Expandable/collapsible navigation lists
+
+- **spectrum-select**: 🆕 Comprehensive select/dropdown component
+  - **Dependencies**: spectrum-button
+  - **Used by**: Form components and data input applications
+  - **Purpose**: Single and multiple selection dropdown with search capabilities
+  - **Integration**: Replaces custom trigger with spectrum-button for consistency
+
+- **spectrum-rail**: Main navigation rail
+  - **Dependencies**: spectrum-search-input, spectrum-collapsible-list (via slots), spectrum-rail-item (via slots)
+  - **Used by**: Main navigation component
+  - **Purpose**: Primary navigation with expand/collapse functionality
+
+- **spectrum-conversation-panel**: Chat/conversation interface
+  - **Dependencies**: spectrum-chip
+  - **Used by**: AI/chat applications
+  - **Purpose**: Message display and interaction
+
+### Standalone Components (No Internal Dependencies)
+- **spectrum-carousel**: Image/content carousel
+  - **Dependencies**: @glidejs/glide (external)
+  - **Used by**: Content display
+  - **Purpose**: Interactive content carousel
+
+- **spectrum-megamenu**: Full-screen navigation menu
+  - **Dependencies**: None (uses native popover API)
+  - **Used by**: Complex navigation scenarios
+  - **Purpose**: Large navigation overlay
+
+- **spectrum-image-gallery**: Flexible image gallery with upload capabilities
+  - **Dependencies**: None (pure component, uses native APIs)  
+  - **Used by**: Image management and display applications
+  - **Purpose**: Responsive image gallery with thumbnail navigation, upload, and selection
+
+---
+
+## 🏗️ Dependency Flow Hierarchy
+
+```
+Level 0 (Foundation):
+└── spectrum-theme
+
+Level 1 (Atomic):
+├── spectrum-button
+├── spectrum-chip
+├── spectrum-context-menu
+├── spectrum-wallpaper
+├── spectrum-carousel
+├── spectrum-megamenu
+└── spectrum-image-gallery
+
+Level 2 (Composed):
+├── spectrum-search-input (depends on: spectrum-button)
+├── spectrum-rail-item (depends on: spectrum-button)
+├── spectrum-select (depends on: spectrum-button) ✨ NEW
+└── spectrum-collapsible-list (depends on: spectrum-context-menu)
+
+Level 3 (Complex):
+├── spectrum-rail (depends on: spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item)
+└── spectrum-conversation-panel (depends on: spectrum-chip)
+```
+
+---
+
+## 🔗 Key Integration Patterns
+
+### Event Communication
+- Components communicate via CustomEvents, not direct imports
+- Events bubble up the DOM tree for loose coupling
+- Standard event naming: camelCase with descriptive names
+
+### Slot-based Composition
+- spectrum-rail uses slots for spectrum-collapsible-list and spectrum-rail-item
+- Allows flexible composition without tight coupling
+- Components can detect parent state through method calls
+
+### Interface Sharing
+- spectrum-context-menu exports ContextMenuAction interface
+- spectrum-collapsible-list imports and uses this interface
+- Shared interfaces maintain type safety across components
+
+### Button Integration Pattern
+- **spectrum-select** demonstrates the new pattern of using spectrum-button as internal trigger
+- Properties pass through directly: variant, size, disabled
+- Button handles all visual states (hover, focus, active) and animations
+- Parent wrapper becomes transparent container
+- **Minimal Animation**: Select uses `minimalAnimation={true}` for better accessibility
+
+---
+
+## 📈 Recent Updates
+
+### ✨ spectrum-select Integration (Latest)
+- **New Component**: Added to Level 2 (Composed) with spectrum-button dependency
+- **Button Integration**: Uses spectrum-button as trigger instead of custom div
+- **Transparent Wrapper**: Parent containers are completely invisible - no background, border, or padding
+- **Variant Pass-through**: All variants (primary, secondary, outline, ghost) pass directly to spectrum-button
+- **Multi-select Display**: Shows count badge in left slot, single selections show option icon
+- **Minimal Animation**: Enabled for reduced motion and better accessibility
+- **Fixed Dropdown Sizing**: 40ch width, shows exactly 4 options (320px height)
+
+---
+
+## ⚠️ Rules for Maintaining This Map
+
+When implementing or modifying components, you **MUST**:
+
+1. **Update this dependency map** immediately after any changes
+2. **Add new components** to the appropriate hierarchy level  
+3. **Document new dependencies** when components use other spectrum components
+4. **Update the dependency flow** when relationships change
+5. **Maintain the integration patterns** described above
+
+### Adding New Components
+- Place in appropriate hierarchy level based on dependencies
+- Document what it depends on and what depends on it
+- Follow established patterns for event communication and composition
+- Update the dependency flow diagram
+
+### Modifying Existing Components  
+- Check if dependency changes affect the hierarchy
+- Update documentation for components that use the modified component
+- Ensure event contracts remain stable
+- Update integration patterns if new patterns emerge
+
+### Component Creation Guidelines
+- Use `npm run generate <component-name>` in packages/core
+- Follow BEM CSS naming conventions
+- Emit events with camelCase names and action attributes
+- Use slots for composition when appropriate
+- Maintain loose coupling through events, not direct imports
+
+---
+
+## 🔍 Visual Dependencies
+
+```mermaid
+graph TD
+    ST[spectrum-theme] --> |CSS Variables| ALL[All Components]
+    
+    SB[spectrum-button] --> |Direct Use| SR[spectrum-rail]
+    SB --> |Direct Use| SSI[spectrum-search-input] 
+    SB --> |Direct Use| SRI[spectrum-rail-item]
+    SB --> |Direct Use| SCM[spectrum-context-menu]
+    SB --> |Direct Use| SS[spectrum-select]
+    
+    SC[spectrum-chip] --> |Direct Use| SCP[spectrum-conversation-panel]
+    
+    SCTX[spectrum-context-menu] --> |Interface Export| SCL[spectrum-collapsible-list]
+    
+    SSI --> |Slot Composition| SR
+    SRI --> |Slot Composition| SR  
+    SCL --> |Slot Composition| SR
+    
+    classDef foundation fill:#e1f5fe
+    classDef atomic fill:#f3e5f5
+    classDef composed fill:#fff3e0
+    classDef complex fill:#e8f5e8
+    classDef new fill:#ffebee,stroke:#f44336,stroke-width:2px
+    
+    class ST foundation
+    class SB,SC,SCTX,SW,SCAR,SM,SIG atomic
+    class SSI,SRI,SCL,SS composed
+    class SR,SCP complex
+    class SS new
+```
+
+---
+
+This dependency map ensures proper component architecture and helps maintain the modular, composable nature of the Spectrum component system. 

@@ -1,5 +1,8 @@
 import { Component, Host, h, Prop, State, Watch, Element, Event, EventEmitter, Listen } from '@stencil/core';
 
+// Import spectrum-button to ensure it's available
+import '../spectrum-button/spectrum-button';
+
 export interface SpectrumSelectOption {
   value: string;
   label: string;
@@ -537,6 +540,10 @@ export class SpectrumSelect {
     this.focusedOptionIndex = -1;
   };
 
+  private handleButtonClick = () => {
+    this.toggleDropdown();
+  };
+
   // ============== Style Helpers ==============
   private getSelectStyles(): { [key: string]: string } {
     const styles: { [key: string]: string } = {};
@@ -562,7 +569,7 @@ export class SpectrumSelect {
       if (this.selectedOptions.length === 1) {
         return this.selectedOptions[0].label;
       } else if (this.selectedOptions.length > 1) {
-        return `${this.selectionsLabel}`;
+        return `${this.selectedOptions.length} ${this.selectionsLabel}`;
       }
       return this.placeholder;
     } else {
@@ -710,55 +717,33 @@ export class SpectrumSelect {
             ))}
           </select>
 
-          <div 
+          <spectrum-button
+            variant={this.variant}
+            size={this.size}
+            disabled={this.disabled}
+            outline={this.variant === 'outline'}
+            button-text={this.loading ? this.loadingText : displayText}
+            show-button-text={true}
+            show-left-icon={displayCount ? false : (this.showIcon && !!displayIcon)}
+            left-icon={displayCount ? '' : (displayIcon || '')}
+            show-right-icon={this.showDropdownIcon && !this.loading}
+            right-icon={this.loading ? '' : this.dropdownIcon}
+            ripple={this.touchOptimized}
+            minimalAnimation={true}
+            onButtonAction={this.handleButtonClick}
             class="spectrum-select__trigger"
-            tabindex={this.disabled ? -1 : 0}
-            role="combobox"
-            aria-expanded={this.isOpen.toString()}
-            aria-haspopup="listbox"
-            aria-label={this.placeholder}
-            aria-invalid={this.invalid.toString()}
-            aria-required={this.required.toString()}
-            onClick={this.toggleDropdown}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
           >
-            {this.rippleActive && (
-              <div class="spectrum-select__ripple"></div>
-            )}
-
-            <div class="spectrum-select__content">
-              {displayCount ? (
-                <span class="spectrum-select__count">
-                  {displayCount}
-                </span>
-              ) : (
-                this.showIcon && displayIcon && (
-                  <span class="spectrum-select__icon spectrum-select__icon--leading">
-                    <span class="material-symbols-outlined">{displayIcon}</span>
-                  </span>
-                )
-              )}
-              <span class={`spectrum-select__text ${
-                (this.multiple ? this.selectedOptions.length === 0 : !this.selectedOption) ? 
-                'spectrum-select__text--placeholder' : ''
-              }`}>
-                {this.loading ? this.loadingText : displayText}
+            {displayCount && (
+              <span slot="left-icon" class="spectrum-select__count">
+                {displayCount}
               </span>
-            </div>
-
-            {this.loading ? (
-              <span class="spectrum-select__icon spectrum-select__icon--loading">
+            )}
+            {this.loading && (
+              <span slot="right-icon" class="spectrum-select__icon spectrum-select__icon--loading">
                 <span class="spectrum-select__spinner"></span>
               </span>
-            ) : (
-              this.showDropdownIcon && (
-                <span class="spectrum-select__icon spectrum-select__icon--dropdown">
-                  <span class="material-symbols-outlined">{this.dropdownIcon}</span>
-                </span>
-              )
             )}
-          </div>
+          </spectrum-button>
 
           {this.errorText && (
             <div class="spectrum-select__error" role="alert">

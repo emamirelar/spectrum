@@ -50,6 +50,7 @@ Supports icons, text, and various interactive states.
  - [spectrum-rail](../spectrum-rail)
  - [spectrum-rail-item](../spectrum-rail-item)
  - [spectrum-search-input](../spectrum-search-input)
+ - [spectrum-select](../spectrum-select)
 
 ### Graph
 ```mermaid
@@ -59,6 +60,7 @@ graph TD;
   spectrum-rail --> spectrum-button
   spectrum-rail-item --> spectrum-button
   spectrum-search-input --> spectrum-button
+  spectrum-select --> spectrum-button
   style spectrum-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

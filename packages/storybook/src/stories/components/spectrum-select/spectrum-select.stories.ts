@@ -68,10 +68,10 @@ const countryOptions: SpectrumSelectOption[] = [
 ];
 
 const statusOptions: SpectrumSelectOption[] = [
-  { value: 'active', label: 'Active', icon: 'check_circle', description: 'Currently operational and available' },
-  { value: 'pending', label: 'Pending', icon: 'schedule', description: 'Awaiting approval or processing' },
-  { value: 'inactive', label: 'Inactive', icon: 'cancel', description: 'Temporarily disabled or unavailable' },
-  { value: 'draft', label: 'Draft', icon: 'edit', description: 'Work in progress, not yet published' },
+  { value: 'active', label: 'Active', icon: 'check_circle', description: 'Currently operational and available, everything is working as expected' },
+  { value: 'pending', label: 'Pending', icon: 'schedule', description: 'Awaiting approval or processing, waiting for a decision' },
+  { value: 'inactive', label: 'Inactive', icon: 'cancel', description: 'Temporarily disabled or unavailable, not working as expected' },
+  { value: 'draft', label: 'Draft', icon: 'edit', description: 'Work in progress, not yet published, not ready for production' },
   { value: 'archived', label: 'Archived', icon: 'archive', description: 'Stored for reference, not active' },
 ];
 
@@ -96,6 +96,111 @@ const largeCityOptions: SpectrumSelectOption[] = [
 const meta = {
   title: 'Components/SpectrumSelect',
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+          # Spectrum Select Component
+          
+          A comprehensive select component with advanced features including search, loading states,
+          enhanced animations, mobile optimization, and accessibility improvements.
+          Based on the Spectrum design system and Material Design 3 patterns.
+
+          ## Features
+          
+          - **Single & Multiple Selection**: Choose one or multiple options with visual feedback
+          - **Search & Filter**: Built-in search functionality with debounced input
+          - **Loading States**: Loading spinner and configurable loading text
+          - **Button Integration**: Uses spectrum-button as trigger for consistent styling and behavior
+          - **Accessibility**: Full keyboard navigation and screen reader support
+          - **Mobile Optimization**: Touch-optimized interactions and mobile fullscreen mode
+          - **Error Handling**: Error message display with styled error states
+
+          ## Keyboard Navigation
+
+          The spectrum-select component provides comprehensive keyboard navigation support for accessibility and power user workflows.
+
+          ### Opening the Dropdown
+
+          | Key | Action |
+          | --- | ------ |
+          | \`Enter\` | Opens the dropdown when focused on the select trigger |
+          | \`Space\` | Opens the dropdown when focused on the select trigger |
+          | \`Arrow Down\` | Opens the dropdown and focuses the first option |
+          | \`Arrow Up\` | Opens the dropdown and focuses the first option |
+
+          ### Navigating Options
+
+          | Key | Action |
+          | --- | ------ |
+          | \`Arrow Down\` | Move focus to the next option in the list |
+          | \`Arrow Up\` | Move focus to the previous option in the list |
+          | \`Home\` | Move focus to the first option in the list |
+          | \`End\` | Move focus to the last option in the list |
+
+          ### Selecting Options
+
+          | Key | Action |
+          | --- | ------ |
+          | \`Enter\` | Select the currently focused option (closes dropdown in single-select mode) |
+          | \`Space\` | Select the currently focused option (closes dropdown in single-select mode) |
+
+          ### Closing the Dropdown
+
+          | Key | Action |
+          | --- | ------ |
+          | \`Escape\` | Close the dropdown and return focus to the select trigger |
+          | \`Tab\` | Close the dropdown and move focus to the next focusable element |
+          | \`Shift + Tab\` | Close the dropdown and move focus to the previous focusable element |
+
+          ### Search Mode Navigation
+
+          When the dropdown is searchable (\`searchable={true}\`), additional keyboard behavior is available:
+
+          | Key | Action |
+          | --- | ------ |
+          | \`Arrow Down\` | Switch focus from search input to first option (if available) |
+          | \`Arrow Up\` | Switch focus from search input to last option (if available) |
+          | \`Escape\` | Clear search and close dropdown |
+          | \`Enter\` | Select first option if only one result matches the search |
+
+          ### Multi-Select Keyboard Behavior
+
+          In multi-select mode (\`multiple={true}\`), the following additional behaviors apply:
+
+          - \`Enter\` or \`Space\` toggles selection without closing the dropdown
+          - Selected options remain visually indicated with checkboxes
+          - The dropdown stays open to allow multiple selections
+          - Use \`Escape\` to close and complete the multi-selection
+
+          ## Accessibility Features
+
+          - **Screen Reader Support**: All options are properly labeled with ARIA attributes
+          - **Focus Management**: Visual focus indicators clearly show the current selection
+          - **Keyboard Trapping**: Focus remains within the dropdown when open
+          - **Live Regions**: Search results are announced to screen readers
+          - **Role Declarations**: Proper ARIA roles for listbox and option elements
+          - **Minimal Animation**: Reduced motion support for users with vestibular sensitivities
+
+          ## Integration with spectrum-button
+
+          The select component demonstrates the new pattern of using spectrum-button as an internal trigger:
+          - Properties pass through directly: variant, size, disabled
+          - Button handles all visual states (hover, focus, active) and animations
+          - Parent wrapper becomes transparent container
+          - Minimal animation enabled for better accessibility
+
+          ## Best Practices
+
+          1. **Focus Management**: Always ensure the select trigger can receive keyboard focus
+          2. **Clear Labeling**: Use descriptive option labels for screen reader users
+          3. **Logical Order**: Arrange options in a logical sequence for keyboard navigation
+          4. **Search Integration**: Enable search for long option lists to improve keyboard usability
+          5. **Error Handling**: Provide clear error messages when validation fails
+        `
+      }
+    }
+  },
   args: {
     variant: 'primary',
     size: 'base',

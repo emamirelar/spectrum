@@ -2,6 +2,12 @@
   display: inline-block;
   position: relative;
   
+  // Ensure the host is completely transparent
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  
   // Core select properties using spectrum system variables
   --select-background: var(--spectrum-color-surface);
   --select-color: var(--spectrum-color-on-surface);
@@ -50,22 +56,7 @@
   --select-icon-size-lg: 1.375em;
   --select-dropdown-icon-size: 1.5em;
 
-  // Select variants using spectrum color system
-  --select-primary-background: var(--spectrum-color-primary);
-  --select-primary-color: var(--spectrum-color-on-primary);
-  --select-primary-border: var(--spectrum-color-primary);
-  
-  --select-secondary-background: var(--spectrum-color-secondary);
-  --select-secondary-color: var(--spectrum-color-on-secondary);
-  --select-secondary-border: var(--spectrum-color-secondary);
-  
-  --select-outline-background: var(--spectrum-color-surface);
-  --select-outline-color: var(--spectrum-color-on-surface);
-  --select-outline-border: var(--spectrum-color-primary);
-  
-  --select-ghost-background: transparent;
-  --select-ghost-color: var(--spectrum-color-on-surface);
-  --select-ghost-border: transparent;
+  // Variant styles removed - spectrum-button handles all variants internally
 
   // Placeholder styles using spectrum text colors
   --select-placeholder-color: var(--spectrum-color-on-surface-variant);
@@ -77,7 +68,7 @@
   --select-dropdown-border: var(--spectrum-color-outline);
   --select-dropdown-border-radius: var(--spectrum-sys-border-radius);
   --select-dropdown-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
-  --select-dropdown-max-height: 200px;
+  --select-dropdown-max-height: 320px; // Show 4 options with descriptions (4 × ~80px)
   --select-dropdown-z-index: 1000;
 
   // Option styles using spectrum system
@@ -122,6 +113,14 @@
   position: relative;
   width: 100%;
   min-width: var(--select-min-width);
+  
+  // Ensure the wrapper is completely transparent and invisible
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
 
   // Hidden native select for accessibility and form integration
   &__native {
@@ -139,95 +138,20 @@
     }
   }
 
-  // Custom styled trigger
+  // Custom styled trigger using spectrum-button
   &__trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--select-gap);
     width: 100%;
-    min-height: var(--select-min-height);
-    padding: 0 var(--select-padding);
-    font-family: var(--select-font-family);
-    font-size: var(--select-font-size);
-    font-weight: var(--select-font-weight);
-    background-color: var(--select-background);
-    border: var(--select-border) solid var(--select-border-color);
-    border-radius: var(--select-border-radius);
-    transition: var(--select-transition);
-    cursor: pointer;
+    
+    // Ensure trigger wrapper is completely transparent
+    background: transparent;
+    border: none;
     outline: none;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-
-    // Hover and active overlay
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: transparent;
-      transition: background-color var(--spectrum-sys-animation-duration-fast) var(--spectrum-sys-animation-timing-function);
-      z-index: 0;
-      border-radius: var(--select-border-radius);
-    }
-
-    &:hover::before {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-
-    &:active::before {
-      background-color: rgba(0, 0, 0, 0.08);
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  // Ripple effect
-  &__ripple {
-    position: absolute;
-    top: var(--ripple-y, 50%);
-    left: var(--ripple-x, 50%);
-    width: 0;
-    height: 0;
-    background-color: var(--select-ripple-color);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: ripple var(--select-ripple-duration) ease-out;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  &__content {
-    display: flex;
-    align-items: center;
-    gap: var(--select-gap);
-    flex: 1;
-    min-width: 0;
-    position: relative;
-    z-index: 2;
-  }
-
-  &__text {
-    font-family: var(--select-font-family);
-    font-size: inherit;
-    line-height: 1.2;
-    color: var(--select-color);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    position: relative;
-    z-index: 2;
-
-    &--placeholder {
-      color: var(--select-placeholder-color);
-      opacity: var(--select-placeholder-opacity);
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    
+    spectrum-button {
+      width: 100%;
     }
   }
 
@@ -338,9 +262,7 @@
     left: 0;
     right: 0;
     margin-top: var(--select-spacing-small);
-    min-width: 200px;
-    max-width: none;
-    width: max-content;
+    width: 40ch; // Fixed width of 40 characters
     min-width: 100%;
     background-color: var(--select-dropdown-background);
     color: var(--select-dropdown-color);
@@ -377,7 +299,7 @@
 
   // Scrollable options container
   &__options-container {
-    max-height: calc(var(--select-dropdown-max-height) - 60px); // Account for search section
+    max-height: 320px; // Show 4 options with descriptions (4 × ~80px)
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -603,8 +525,7 @@
     text-overflow: ellipsis;
     flex: 1;
     font-weight: inherit;
-    min-width: 200px;
-    max-width: 500px;
+    max-width: 35ch; // Allow most of the 40ch width for text
   }
 
   // Option description
@@ -617,8 +538,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     opacity: 0.8;
-    min-width: 200px;
-    max-width: 500px;
+    max-width: 35ch; // Allow most of the 40ch width for description
   }
 
   &__option-checkbox {
@@ -654,30 +574,9 @@
     }
   }
 
-  // Size variations
-  &--base {
-    .spectrum-select__trigger {
-      font-size: var(--select-font-size);
-      min-height: var(--select-size-base);
-      padding: 0 var(--select-padding);
-    }
-    
-    .spectrum-select__icon--leading {
-      font-size: var(--select-icon-size);
-    }
-  }
-
+  // Size variations - spectrum-button handles trigger sizing internally
+  // Only keep option-specific sizing adjustments
   &--sm {
-    .spectrum-select__trigger {
-      font-size: var(--select-font-size-sm);
-      min-height: var(--select-size-sm);
-      padding: 0 var(--select-padding-sm);
-    }
-    
-    .spectrum-select__icon--leading {
-      font-size: var(--select-icon-size-sm);
-    }
-
     .spectrum-select__option {
       padding: var(--select-padding-sm) var(--spectrum-sys-spacing);
       min-height: calc(var(--select-option-min-height) * 0.8);
@@ -685,174 +584,23 @@
   }
 
   &--lg {
-    .spectrum-select__trigger {
-      font-size: var(--select-font-size-lg);
-      min-height: var(--select-size-lg);
-      padding: 0 var(--select-padding-lg);
-    }
-    
-    .spectrum-select__icon--leading {
-      font-size: var(--select-icon-size-lg);
-    }
-
     .spectrum-select__option {
       padding: var(--select-padding-lg) var(--spectrum-sys-spacing-large);
       min-height: calc(var(--select-option-min-height) * 1.2);
     }
   }
 
-  // Variant styles
-  &--primary {
-    .spectrum-select__trigger {
-      background-color: var(--select-primary-background);
-      color: var(--select-primary-color);
-      border-color: var(--select-primary-border);
-      border-radius: var(--select-border-radius);
-    }
-    
-    .spectrum-select__text {
-      color: inherit !important;
-      opacity: 1 !important;
-    }
-    
-    .spectrum-select__icon--dropdown {
-      color: inherit !important;
-      opacity: 1 !important;
-    }
-
-    .spectrum-select__ripple {
-      --select-ripple-color: rgba(255, 255, 255, 0.3);
-    }
-  }
-
-  &--secondary {
-    .spectrum-select__trigger {
-      background-color: var(--select-secondary-background);
-      color: var(--select-secondary-color);
-      border-color: var(--select-secondary-border);
-      border-radius: var(--select-border-radius);
-    }
-    
-    .spectrum-select__text {
-      color: inherit !important;
-      opacity: 1 !important;
-    }
-    
-    .spectrum-select__icon--dropdown {
-      color: inherit !important;
-      opacity: 1 !important;
-    }
-
-    .spectrum-select__ripple {
-      --select-ripple-color: rgba(255, 255, 255, 0.3);
-    }
-  }
-
-  &--outline {
-    .spectrum-select__trigger {
-      background-color: var(--select-outline-background);
-      color: var(--select-outline-color);
-      border-color: var(--select-outline-border);
-      border-width: 1px;
-      border-radius: var(--select-border-radius);
-    }
-
-    .spectrum-select__ripple {
-      --select-ripple-color: rgba(0, 112, 210, 0.15);
-    }
-  }
-
-  &--ghost {
-    .spectrum-select__trigger {
-      background-color: var(--select-ghost-background);
-      color: var(--select-ghost-color);
-      border: none;
-      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-      border-radius: var(--select-border-radius);
-    }
-
-    .spectrum-select__ripple {
-      --select-ripple-color: rgba(0, 0, 0, 0.08);
-    }
-  }
-
-  // State styles
-  &--hover:not(&--primary):not(&--secondary) {
-    .spectrum-select__trigger {
-      border-color: var(--select-border-hover);
-      background-color: var(--select-surface-hover);
-      box-shadow: var(--select-hover-shadow);
-    }
-  }
-
-  &--hover {
-    .spectrum-select__trigger {
-      box-shadow: var(--select-hover-shadow);
-    }
-  }
-
-  &--active {
-    .spectrum-select__trigger {
-      box-shadow: var(--select-active-shadow);
-    }
-  }
-
-  &--focus {
-    .spectrum-select__trigger {
-      border-color: var(--select-border-focus);
-      background-color: var(--select-surface-focus);
-      box-shadow: var(--select-focus-shadow);
-    }
-  }
-
+  // State styles - spectrum-button handles its own states now
+  // Remove legacy state styling since spectrum-button manages this internally
+  
   &--open {
-    .spectrum-select__trigger {
-      border-color: var(--select-border-focus);
-      background-color: var(--select-surface-focus);
-      box-shadow: var(--select-focus-shadow);
-    }
-
+    // Only keep the dropdown icon rotation for open state
     .spectrum-select__icon--dropdown {
       transform: rotate(180deg);
     }
   }
 
-  &--disabled {
-    .spectrum-select__trigger {
-      opacity: var(--select-disabled-opacity);
-      background-color: var(--spectrum-color-surface);
-      border-color: var(--spectrum-color-outline-variant);
-      cursor: not-allowed;
-    }
-
-    .spectrum-select__text {
-      color: var(--spectrum-color-on-surface-variant);
-    }
-  }
-
-  &--invalid {
-    .spectrum-select__trigger {
-      border-color: var(--select-invalid-border);
-    }
-
-    &.spectrum-select--focus .spectrum-select__trigger,
-    &.spectrum-select--open .spectrum-select__trigger {
-      border-color: var(--select-invalid-border);
-      box-shadow: 0 0 0 1px rgba(211, 47, 47, 0.3);
-    }
-  }
-
-  &--loading {
-    .spectrum-select__trigger {
-      cursor: wait;
-    }
-  }
-
-  &--has-value {
-    .spectrum-select__text {
-      color: var(--select-color);
-    }
-  }
+  // Remove all other legacy state styles - spectrum-button handles them
 
   // Mobile optimization
   &--mobile {
@@ -880,19 +628,7 @@
     }
   }
 
-  // Ripple effect active state
-  &--ripple-active {
-    .spectrum-select__trigger {
-      overflow: hidden;
-    }
-  }
-
-  // Focus styles for accessibility
-  &__trigger:focus-visible {
-    outline: none;
-    border-color: var(--select-border-focus);
-    box-shadow: var(--select-focus-shadow);
-  }
+  // Remove ripple and focus styles - spectrum-button handles these internally
 }
 
 // Animations using spectrum timing
