@@ -363,6 +363,27 @@
     box-shadow: var(--button-active-shadow);
   }
 
+  // Minimal animation variant - disables transform animations
+  &--minimal-animation {
+    &.spectrum-button--hover {
+      transform: none;
+    }
+
+    &.spectrum-button--active {
+      transform: none;
+    }
+
+    &.spectrum-button--fab {
+      &:hover {
+        transform: none;
+      }
+
+      &:active {
+        transform: none;
+      }
+    }
+  }
+
   &--disabled {
     opacity: var(--button-disabled-opacity);
     pointer-events: none;

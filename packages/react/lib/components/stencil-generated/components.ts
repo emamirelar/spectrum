@@ -209,7 +209,10 @@ type SpectrumSelectEvents = {
         option: SpectrumSelectOption | null;
         selectedValues?: string[];
         selectedOptions?: SpectrumSelectOption[];
-    }>>
+    }>>,
+    onSearchChange: EventName<CustomEvent<string>>,
+    onDropdownOpen: EventName<CustomEvent<void>>,
+    onDropdownClose: EventName<CustomEvent<void>>
 };
 
 export const SpectrumSelect: StencilReactComponent<SpectrumSelectElement, SpectrumSelectEvents> = /*@__PURE__*/ createComponent<SpectrumSelectElement, SpectrumSelectEvents>({
@@ -217,7 +220,12 @@ export const SpectrumSelect: StencilReactComponent<SpectrumSelectElement, Spectr
     elementClass: SpectrumSelectElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: { onSelectChange: 'selectChange' } as SpectrumSelectEvents,
+    events: {
+        onSelectChange: 'selectChange',
+        onSearchChange: 'searchChange',
+        onDropdownOpen: 'dropdownOpen',
+        onDropdownClose: 'dropdownClose'
+    } as SpectrumSelectEvents,
     defineCustomElement: defineSpectrumSelect
 });
 

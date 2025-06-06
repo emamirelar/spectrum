@@ -6,38 +6,56 @@
 ## Overview
 
 Spectrum Select Component
-A styled wrapper around HTML select element with support for icons, text, and custom options.
-Based on the Spectrum design system and inspired by spectrum-button component patterns.
+A comprehensive select component with advanced features including search, loading states,
+enhanced animations, mobile optimization, and accessibility improvements.
+Based on the Spectrum design system and Material Design 3 patterns.
 
 ## Properties
 
-| Property           | Attribute            | Description | Type                                               | Default              |
-| ------------------ | -------------------- | ----------- | -------------------------------------------------- | -------------------- |
-| `action`           | `action`             |             | `string`                                           | `''`                 |
-| `customStyle`      | --                   |             | `{ [key: string]: string; }`                       | `{}`                 |
-| `debug`            | `debug`              |             | `boolean`                                          | `false`              |
-| `disabled`         | `disabled`           |             | `boolean`                                          | `false`              |
-| `dropdownIcon`     | `dropdown-icon`      |             | `string`                                           | `'expand_more'`      |
-| `invalid`          | `invalid`            |             | `boolean`                                          | `false`              |
-| `multiple`         | `multiple`           |             | `boolean`                                          | `false`              |
-| `options`          | --                   |             | `SpectrumSelectOption[]`                           | `[]`                 |
-| `placeholder`      | `placeholder`        |             | `string`                                           | `'Select an option'` |
-| `required`         | `required`           |             | `boolean`                                          | `false`              |
-| `selectedValue`    | `selected-value`     |             | `string`                                           | `''`                 |
-| `selectedValues`   | --                   |             | `string[]`                                         | `[]`                 |
-| `selectionsLabel`  | `selections-label`   |             | `string`                                           | `'selections'`       |
-| `showDropdownIcon` | `show-dropdown-icon` |             | `boolean`                                          | `true`               |
-| `showIcon`         | `show-icon`          |             | `boolean`                                          | `true`               |
-| `size`             | `size`               |             | `"base" \| "lg" \| "sm"`                           | `'base'`             |
-| `state`            | `state`              |             | `"default" \| "disabled" \| "focus" \| "hover"`    | `'default'`          |
-| `variant`          | `variant`            |             | `"ghost" \| "outline" \| "primary" \| "secondary"` | `'primary'`          |
+| Property            | Attribute            | Description | Type                                               | Default               |
+| ------------------- | -------------------- | ----------- | -------------------------------------------------- | --------------------- |
+| `action`            | `action`             |             | `string`                                           | `''`                  |
+| `customStyle`       | --                   |             | `{ [key: string]: string; }`                       | `{}`                  |
+| `debug`             | `debug`              |             | `boolean`                                          | `false`               |
+| `disabled`          | `disabled`           |             | `boolean`                                          | `false`               |
+| `dropdownIcon`      | `dropdown-icon`      |             | `string`                                           | `'expand_more'`       |
+| `errorText`         | `error-text`         |             | `string`                                           | `''`                  |
+| `invalid`           | `invalid`            |             | `boolean`                                          | `false`               |
+| `itemHeight`        | `item-height`        |             | `number`                                           | `40`                  |
+| `loading`           | `loading`            |             | `boolean`                                          | `false`               |
+| `loadingText`       | `loading-text`       |             | `string`                                           | `'Loading...'`        |
+| `maxHeight`         | `max-height`         |             | `string`                                           | `'200px'`             |
+| `mobileFullscreen`  | `mobile-fullscreen`  |             | `boolean`                                          | `false`               |
+| `multiple`          | `multiple`           |             | `boolean`                                          | `false`               |
+| `noResultsText`     | `no-results-text`    |             | `string`                                           | `'No results found'`  |
+| `options`           | --                   |             | `SpectrumSelectOption[]`                           | `[]`                  |
+| `placeholder`       | `placeholder`        |             | `string`                                           | `'Select an option'`  |
+| `required`          | `required`           |             | `boolean`                                          | `false`               |
+| `searchPlaceholder` | `search-placeholder` |             | `string`                                           | `'Search options...'` |
+| `searchTitle`       | `search-title`       |             | `string`                                           | `''`                  |
+| `searchable`        | `searchable`         |             | `boolean`                                          | `false`               |
+| `selectAllText`     | `select-all-text`    |             | `string`                                           | `'Select All'`        |
+| `selectedValue`     | `selected-value`     |             | `string`                                           | `''`                  |
+| `selectedValues`    | --                   |             | `string[]`                                         | `[]`                  |
+| `selectionsLabel`   | `selections-label`   |             | `string`                                           | `'selections'`        |
+| `showDropdownIcon`  | `show-dropdown-icon` |             | `boolean`                                          | `true`                |
+| `showIcon`          | `show-icon`          |             | `boolean`                                          | `true`                |
+| `showSelectAll`     | `show-select-all`    |             | `boolean`                                          | `false`               |
+| `size`              | `size`               |             | `"base" \| "lg" \| "sm"`                           | `'base'`              |
+| `state`             | `state`              |             | `"default" \| "disabled" \| "focus" \| "hover"`    | `'default'`           |
+| `touchOptimized`    | `touch-optimized`    |             | `boolean`                                          | `true`                |
+| `variant`           | `variant`            |             | `"ghost" \| "outline" \| "primary" \| "secondary"` | `'primary'`           |
+| `virtualScrolling`  | `virtual-scrolling`  |             | `boolean`                                          | `false`               |
 
 
 ## Events
 
-| Event          | Description | Type                                                                                                                                                |
-| -------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `selectChange` |             | `CustomEvent<{ value: string; label: string; option: SpectrumSelectOption; selectedValues?: string[]; selectedOptions?: SpectrumSelectOption[]; }>` |
+| Event           | Description | Type                                                                                                                                                |
+| --------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dropdownClose` |             | `CustomEvent<void>`                                                                                                                                 |
+| `dropdownOpen`  |             | `CustomEvent<void>`                                                                                                                                 |
+| `searchChange`  |             | `CustomEvent<string>`                                                                                                                               |
+| `selectChange`  |             | `CustomEvent<{ value: string; label: string; option: SpectrumSelectOption; selectedValues?: string[]; selectedOptions?: SpectrumSelectOption[]; }>` |
 
 
 ----------------------------------------------

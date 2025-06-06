@@ -29,6 +29,7 @@ export namespace Components {
         "disabled": boolean;
         "iconOnly": boolean;
         "leftIcon": string;
+        "minimalAnimation": boolean;
         "outline": boolean;
         "rightIcon": string;
         "ripple": boolean;
@@ -286,8 +287,9 @@ export namespace Components {
     }
     /**
      * Spectrum Select Component
-     * A styled wrapper around HTML select element with support for icons, text, and custom options.
-     * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+     * A comprehensive select component with advanced features including search, loading states,
+     * enhanced animations, mobile optimization, and accessibility improvements.
+     * Based on the Spectrum design system and Material Design 3 patterns.
      */
     interface SpectrumSelect {
         "action": string;
@@ -295,19 +297,33 @@ export namespace Components {
         "debug": boolean;
         "disabled": boolean;
         "dropdownIcon": string;
+        "errorText": string;
         "invalid": boolean;
+        "itemHeight": number;
+        "loading": boolean;
+        "loadingText": string;
+        "maxHeight": string;
+        "mobileFullscreen": boolean;
         "multiple": boolean;
+        "noResultsText": string;
         "options": SpectrumSelectOption[];
         "placeholder": string;
         "required": boolean;
+        "searchPlaceholder": string;
+        "searchTitle": string;
+        "searchable": boolean;
+        "selectAllText": string;
         "selectedValue": string;
         "selectedValues": string[];
         "selectionsLabel": string;
         "showDropdownIcon": boolean;
         "showIcon": boolean;
+        "showSelectAll": boolean;
         "size": 'sm' | 'base' | 'lg';
         "state": 'default' | 'hover' | 'focus' | 'disabled';
+        "touchOptimized": boolean;
         "variant": 'primary' | 'secondary' | 'outline' | 'ghost';
+        "virtualScrolling": boolean;
     }
     interface SpectrumTheme {
         /**
@@ -620,11 +636,15 @@ declare global {
     selectedValues?: string[];
     selectedOptions?: SpectrumSelectOption[];
   };
+        "searchChange": string;
+        "dropdownOpen": void;
+        "dropdownClose": void;
     }
     /**
      * Spectrum Select Component
-     * A styled wrapper around HTML select element with support for icons, text, and custom options.
-     * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+     * A comprehensive select component with advanced features including search, loading states,
+     * enhanced animations, mobile optimization, and accessibility improvements.
+     * Based on the Spectrum design system and Material Design 3 patterns.
      */
     interface HTMLSpectrumSelectElement extends Components.SpectrumSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumSelectElementEventMap>(type: K, listener: (this: HTMLSpectrumSelectElement, ev: SpectrumSelectCustomEvent<HTMLSpectrumSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -707,6 +727,7 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "iconOnly"?: boolean;
         "leftIcon"?: string;
+        "minimalAnimation"?: boolean;
         "onButtonAction"?: (event: SpectrumButtonCustomEvent<{ action?: string; label: string }>) => void;
         "outline"?: boolean;
         "rightIcon"?: string;
@@ -999,8 +1020,9 @@ declare namespace LocalJSX {
     }
     /**
      * Spectrum Select Component
-     * A styled wrapper around HTML select element with support for icons, text, and custom options.
-     * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+     * A comprehensive select component with advanced features including search, loading states,
+     * enhanced animations, mobile optimization, and accessibility improvements.
+     * Based on the Spectrum design system and Material Design 3 patterns.
      */
     interface SpectrumSelect {
         "action"?: string;
@@ -1008,8 +1030,18 @@ declare namespace LocalJSX {
         "debug"?: boolean;
         "disabled"?: boolean;
         "dropdownIcon"?: string;
+        "errorText"?: string;
         "invalid"?: boolean;
+        "itemHeight"?: number;
+        "loading"?: boolean;
+        "loadingText"?: string;
+        "maxHeight"?: string;
+        "mobileFullscreen"?: boolean;
         "multiple"?: boolean;
+        "noResultsText"?: string;
+        "onDropdownClose"?: (event: SpectrumSelectCustomEvent<void>) => void;
+        "onDropdownOpen"?: (event: SpectrumSelectCustomEvent<void>) => void;
+        "onSearchChange"?: (event: SpectrumSelectCustomEvent<string>) => void;
         "onSelectChange"?: (event: SpectrumSelectCustomEvent<{ 
     value: string; 
     label: string; 
@@ -1020,14 +1052,21 @@ declare namespace LocalJSX {
         "options"?: SpectrumSelectOption[];
         "placeholder"?: string;
         "required"?: boolean;
+        "searchPlaceholder"?: string;
+        "searchTitle"?: string;
+        "searchable"?: boolean;
+        "selectAllText"?: string;
         "selectedValue"?: string;
         "selectedValues"?: string[];
         "selectionsLabel"?: string;
         "showDropdownIcon"?: boolean;
         "showIcon"?: boolean;
+        "showSelectAll"?: boolean;
         "size"?: 'sm' | 'base' | 'lg';
         "state"?: 'default' | 'hover' | 'focus' | 'disabled';
+        "touchOptimized"?: boolean;
         "variant"?: 'primary' | 'secondary' | 'outline' | 'ghost';
+        "virtualScrolling"?: boolean;
     }
     interface SpectrumTheme {
         /**
@@ -1155,8 +1194,9 @@ declare module "@stencil/core" {
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
             /**
              * Spectrum Select Component
-             * A styled wrapper around HTML select element with support for icons, text, and custom options.
-             * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+             * A comprehensive select component with advanced features including search, loading states,
+             * enhanced animations, mobile optimization, and accessibility improvements.
+             * Based on the Spectrum design system and Material Design 3 patterns.
              */
             "spectrum-select": LocalJSX.SpectrumSelect & JSXBase.HTMLAttributes<HTMLSpectrumSelectElement>;
             "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
