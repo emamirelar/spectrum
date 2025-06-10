@@ -145,6 +145,275 @@ npm run generate <sub-folder>
     - Use `npm run storybook.run` to monitor only the stories for changes in Storybook.
     - Use `npm run storybook` to also watch for changes in the web component itself.
 
+## 📚 Storybook Development & Deployment
+
+Storybook serves as our component documentation and development environment. This section covers running, building, and deploying Storybook.
+
+### 🚀 Running Storybook Locally
+
+#### Quick Start
+Navigate to the Storybook package directory:
+```bash
+cd packages/storybook
+```
+
+#### Development Modes
+
+**1. Stories Only Mode** (Faster startup)
+```bash
+npm run storybook.run
+```
+- Monitors only story files for changes
+- Best for writing/editing stories
+- Faster hot reload
+- Port: `http://localhost:6006`
+
+**2. Full Development Mode** (Complete hot reload)
+```bash
+npm run storybook
+```
+- Watches both stories AND core component changes
+- Automatically rebuilds components when modified
+- Best for component development
+- Runs concurrently with core package watch mode
+- Port: `http://localhost:6006`
+
+#### Prerequisites
+Ensure core components are built before running Storybook:
+```bash
+cd packages/core
+npm run build
+cd ../storybook
+npm run storybook
+```
+
+### 🏗️ Building Storybook for Production
+
+#### Standard Build
+```bash
+cd packages/storybook
+npm run build-storybook
+```
+- Creates optimized static files in `storybook-static/`
+- Ready for deployment to any static hosting service
+
+#### CI/CD Build (with base path)
+```bash
+cd packages/storybook
+npm run build-storybook-ci
+```
+- Builds with custom base path for GitHub Pages deployment
+- Sets `BASE_PATH=/stencil-storybook-boilerplate/`
+- Configured for automated deployments
+
+#### Preview Built Storybook
+```bash
+cd packages/storybook
+npm run preview-storybook
+```
+- Serves the built `storybook-static/` folder locally
+- Test production build before deployment
+- Uses `http-server` on a local port
+
+### 🚀 Deploying Storybook
+
+#### GitHub Pages Deployment
+Automated deployment to GitHub Pages:
+
+**Prerequisites:**
+1. **GitHub Repository**: Ensure your repository is hosted on GitHub
+2. **GitHub Pages Enabled**: Enable GitHub Pages in repository settings
+3. **Branch Permissions**: Ensure you have push access to create/update the `gh-pages` branch
+4. **Git Configuration**: Verify git is configured with your GitHub credentials
+
+**Setup GitHub Pages (First Time):**
+1. Go to your repository's **Settings** → **Pages**
+2. Under **Source**, select **Deploy from a branch**
+3. Select **gh-pages** branch (will be created automatically on first deploy)
+4. Choose **/ (root)** folder
+5. Click **Save**
+
+**Deploy Command:**
+```bash
+cd packages/storybook
+npm run deploy-storybook
+```
+
+**What this script does:**
+- Uses `@storybook/storybook-deployer` package (`storybook-to-ghpages`)
+- Builds Storybook for production automatically
+- Creates or updates the `gh-pages` branch in your repository
+- Pushes the built static files to the `gh-pages` branch
+- GitHub Pages automatically serves the content from this branch
+
+**Deployment Process:**
+1. **Build**: Automatically runs `storybook build` 
+2. **Commit**: Creates a commit with built files on `gh-pages` branch
+3. **Push**: Pushes the `gh-pages` branch to GitHub
+4. **Deploy**: GitHub Pages automatically deploys the new content (may take 1-10 minutes)
+
+**Expected Output:**
+```bash
+> storybook-to-ghpages
+
+Building storybook
+Built storybook files to storybook-static/
+Deploying to gh-pages branch
+Published to https://yourusername.github.io/your-repo-name/
+```
+
+**Access Your Deployed Storybook:**
+- URL format: `https://[username].github.io/[repository-name]/`
+- Example: `https://unops.github.io/cpit-spectrum/`
+
+**Troubleshooting GitHub Pages:**
+- **Permission denied**: Ensure you have push access to the repository
+- **gh-pages branch not found**: Will be created automatically on first deploy
+- **Build fails**: Run `npm run build-storybook` locally first to check for errors
+- **Deploy but not updating**: GitHub Pages can take up to 10 minutes to reflect changes
+- **404 errors**: Check that GitHub Pages is enabled and pointing to gh-pages branch
+
+#### Manual Static Hosting
+For other hosting services (Netlify, Vercel, AWS S3, etc.):
+```bash
+# 1. Build for production
+npm run build-storybook
+
+# 2. Upload the storybook-static/ folder to your hosting service
+# The contents of storybook-static/ are your deployable files
+```
+
+#### Deployment Checklist
+Before deploying:
+- [ ] All core components built (`cd packages/core && npm run build`)
+- [ ] Stories updated and tested locally
+- [ ] Build successful (`npm run build-storybook`)
+- [ ] No broken links or missing assets
+- [ ] Components render correctly in production build
+
+### 🔧 Storybook Configuration
+
+#### Key Configuration Files
+```
+packages/storybook/
+├── .storybook/
+│   ├── main.ts          # Storybook configuration
+│   └── preview.ts       # Global decorators and parameters
+├── src/stories/         # Story files (.stories.ts)
+├── package.json         # Storybook dependencies and scripts
+└── vite.config.ts       # Vite configuration for Storybook
+```
+
+#### Adding New Stories
+Create story files in `packages/storybook/src/stories/components/`:
+```typescript
+// spectrum-new-component.stories.ts
+import type { Meta, StoryObj } from '@storybook/web-components';
+import { html } from 'lit';
+
+const meta: Meta = {
+  title: 'Components/spectrum-new-component',
+  component: 'spectrum-new-component',
+  parameters: {
+    docs: {
+      description: {
+        component: 'Description of your component...'
+      }
+    }
+  }
+};
+
+export default meta;
+type Story = StoryObj;
+
+export const Default: Story = {
+  render: () => html`
+    <spectrum-new-component>
+      Content here
+    </spectrum-new-component>
+  `
+};
+```
+
+### 🎯 Storybook Best Practices
+
+#### Story Organization
+- Group stories by component type: `Components/spectrum-*`
+- Use descriptive story names: `Default`, `WithIcon`, `Loading`, etc.
+- Include comprehensive examples and edge cases
+
+#### Documentation
+- Add component descriptions in story metadata
+- Document all props and their types
+- Include usage examples and code snippets
+- Link to relevant design system documentation
+
+#### Testing
+```bash
+# Run Storybook tests
+npm run test-storybook
+```
+- Visual regression testing with Storybook
+- Accessibility testing with a11y addon
+- Interaction testing with @storybook/test
+
+### 📦 Storybook Dependencies
+
+#### Core Dependencies
+- **@storybook/web-components**: Web components support
+- **@storybook/web-components-vite**: Vite integration
+- **lit**: Template rendering for stories
+- **vite**: Build tool and dev server
+
+#### Essential Addons
+- **@storybook/addon-essentials**: Controls, docs, actions, etc.
+- **@storybook/addon-a11y**: Accessibility testing
+- **@storybook/addon-links**: Story navigation
+- **@storybook/blocks**: Documentation blocks
+
+#### Development Tools
+- **concurrently**: Run multiple commands simultaneously
+- **http-server**: Preview built Storybook locally
+- **storybook-deployer**: Deploy to GitHub Pages
+
+### 🚨 Troubleshooting
+
+#### Common Issues
+
+**Storybook won't start:**
+```bash
+# Clear cache and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**Components not updating:**
+```bash
+# Rebuild core components
+cd packages/core
+npm run build
+cd ../storybook
+npm run storybook
+```
+
+**Build failures:**
+```bash
+# Check for TypeScript errors
+npm run build-storybook 2>&1 | grep -i error
+```
+
+**Port conflicts:**
+```bash
+# Change default port (6006)
+npx storybook dev -p 6007
+```
+
+### 🔗 Related Resources
+- [Storybook Documentation](https://storybook.js.org/docs)
+- [Web Components in Storybook](https://storybook.js.org/docs/web-components/get-started)
+- [Stencil Component Integration](https://stenciljs.com/docs/storybook)
+- [Spectrum Component Documentation](?path=/docs/documentation-dependency-map--docs)
+
 ## 🐛 Debug Logging
 
 Several Spectrum components support debug logging to help with development and troubleshooting. You can enable debug logging by adding the `debug` attribute to components that support it.
