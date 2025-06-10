@@ -456,3 +456,167 @@ spectrum-conversation-panel .loader {
     opacity: 0;
   }
 }
+
+/* Source Chip Overlay Styles */
+spectrum-conversation-panel .source-hover-overlay {
+  pointer-events: auto;
+  z-index: 1000;
+  
+  .content-card.hover-card {
+    max-width: var(--conversation-panel-card-width);
+    animation: fadeInUp 0.2s ease-out;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--conversation-panel-outline-variant);
+    text-decoration: none;
+    
+    /* Ensure hover effects work */
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Source Card Styles */
+spectrum-conversation-panel .mobile-source-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+spectrum-conversation-panel .mobile-source-card {
+  background: var(--conversation-panel-surface);
+  border-radius: var(--conversation-panel-border-radius-large) var(--conversation-panel-border-radius-large) 0 0;
+  max-width: 100%;
+  width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
+}
+
+spectrum-conversation-panel .mobile-card-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--conversation-panel-spacing);
+  border-bottom: 1px solid var(--conversation-panel-outline-variant);
+  
+  .close-button {
+    background: none;
+    border: none;
+    padding: var(--conversation-panel-spacing-small);
+    cursor: pointer;
+    border-radius: 50%;
+    color: var(--conversation-panel-on-surface-variant);
+    transition: var(--conversation-panel-transition);
+    
+    &:hover {
+      background: var(--conversation-panel-surface-hover);
+    }
+    
+    .material-symbols-outlined {
+      font-size: 24px;
+    }
+  }
+}
+
+spectrum-conversation-panel .view-source-button {
+  display: block;
+  width: 100%;
+  padding: var(--conversation-panel-spacing);
+  background: var(--conversation-panel-primary);
+  color: var(--conversation-panel-on-primary);
+  text-decoration: none;
+  border-radius: var(--conversation-panel-border-radius);
+  text-align: center;
+  font-weight: var(--conversation-panel-font-weight-medium);
+  margin-top: var(--conversation-panel-spacing);
+  transition: var(--conversation-panel-transition);
+  
+  &:hover {
+    background: var(--conversation-panel-primary-container);
+    color: var(--conversation-panel-on-primary-container);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Message content styles for inline source chips */
+spectrum-conversation-panel .message-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--conversation-panel-spacing-small);
+  text-wrap: balance;
+  
+  /* Style for content with inline source chips */
+  spectrum-chip[size="extra-small"] {
+    margin: 0 2px;
+    vertical-align: baseline;
+    display: inline-flex;
+    cursor: pointer;
+  }
+}
+
+/* Message content with inline chips */
+spectrum-conversation-panel .message-content-with-chips {
+  display: inline;
+  
+  /* Ensure chips display inline with text */
+  spectrum-chip[size="extra-small"] {
+    margin: 0 2px;
+    vertical-align: baseline;
+    display: inline-flex;
+    cursor: pointer;
+  }
+  
+  /* Ensure text spans display inline */
+  span {
+    display: inline;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  spectrum-conversation-panel .source-hover-overlay {
+    display: none; /* Hide hover overlay on mobile */
+  }
+  
+  spectrum-conversation-panel .mobile-source-card {
+    max-height: 80vh;
+  }
+}

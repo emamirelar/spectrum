@@ -18,6 +18,7 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'ripple',
   'action',
   'customStyle',
+  'minimalAnimation',
   'showButtonText',
   'buttonText',
   'showLeftIcon',
@@ -42,6 +43,7 @@ export const SpectrumCarousel = /*@__PURE__*/ defineContainer<JSX.SpectrumCarous
 export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spectrum-chip', undefined, [
   'debug',
   'variant',
+  'size',
   'selected',
   'disabled',
   'outline',
@@ -158,6 +160,7 @@ export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>(
   'disabled',
   'required',
   'invalid',
+  'loading',
   'action',
   'customStyle',
   'placeholder',
@@ -169,8 +172,24 @@ export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>(
   'showIcon',
   'showDropdownIcon',
   'dropdownIcon',
+  'searchable',
+  'searchTitle',
+  'searchPlaceholder',
+  'maxHeight',
+  'showSelectAll',
+  'selectAllText',
+  'noResultsText',
+  'loadingText',
+  'errorText',
+  'virtualScrolling',
+  'itemHeight',
+  'touchOptimized',
+  'mobileFullscreen',
   'state',
-  'selectChange'
+  'selectChange',
+  'searchChange',
+  'dropdownOpen',
+  'dropdownClose'
 ]);
 
 

@@ -14,13 +14,172 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### 🆕 Added
-- Ready for next release features...
-
-### 🐛 Fixed
-- Ready for next release fixes...
+- **Documentation**: Enhanced dependency map with interactive mermaid diagrams for visual component relationships
+  - **Visual Dependency Flow**: Added interactive mermaid diagram showing component hierarchy and dependencies
+  - **Component Categorization**: Visual representation of Foundation, Atomic, Composed, and Complex component layers
+  - **Relationship Mapping**: Clear visual lines showing how components depend on and use each other
+  - **Color-coded Hierarchy**: Different colors for each component level (foundation, atomic, composed, complex)
+  - **New Component Highlighting**: Special styling for newly added components with red borders
+  - **Interactive Documentation**: Hover and click interactions for better exploration of component relationships
+  - **Storybook Integration**: Custom `mermaid-diagram` web component for seamless rendering in documentation
+  - **Auto-updating**: Diagrams automatically reflect changes as components are added or relationships change
+- **spectrum-button**: New `minimalAnimation` configuration option for accessibility and performance optimization
+  - **Minimal Animation Mode**: New boolean prop `minimalAnimation` (default: false) to disable transform animations while preserving other effects
+  - **Transform Disable**: When enabled, removes `translateY` animations on hover/active states and FAB button movements 
+  - **Preserved Animations**: Keeps background color transitions, box shadow changes, ripple effects, and opacity animations intact
+  - **Accessibility Enhancement**: Improves experience for users who prefer reduced motion or have vestibular sensitivities
+  - **Performance Optimization**: Reduces GPU load in animation-heavy interfaces while maintaining visual feedback
+  - **CSS Implementation**: Uses `.spectrum-button--minimal-animation` class to conditionally disable transforms
+  - **Storybook Story**: New dedicated story demonstrates the minimal animation feature with comparison examples
+- **spectrum-select**: 🚀 **Major Enhancement** - Comprehensive upgrade with advanced features and improved UX
+  - **Search & Filter**: Built-in search functionality with debounced input, placeholder text, and clear button
+  - **Loading States**: Loading spinner, configurable loading text, and disabled interactions during async operations
+  - **Clear Selection**: Optional clear button with single/multiple mode support and keyboard shortcuts (Backspace/Delete)
+  - **Select All**: Bulk selection option for multiple mode with filtered results support
+  - **Enhanced Animations**: Ripple effects, improved dropdown animations, and smooth state transitions
+  - **Mobile Optimization**: Touch-optimized interactions, mobile fullscreen mode, and iOS zoom prevention
+  - **Advanced Accessibility**: Enhanced ARIA labels, focus management, screen reader support, and keyboard navigation
+  - **Error Handling**: Error message display with icon and styled error states
+  - **Option Descriptions**: Support for secondary text in dropdown options with proper truncation
+  - **Auto-scrolling**: Smooth scrolling to focused options with keyboard navigation
+  - **Custom Scrollbar**: Styled scrollbars for dropdown with hover effects
+  - **Responsive Design**: Mobile-first approach with touch targets and breakpoint optimizations
+  - **Performance**: Debounced search, reduced motion support, and optimized animations
+  - **New Props**: `searchable`, `clearable`, `loading`, `errorText`, `searchPlaceholder`, `showSelectAll`, `noResultsText`, `loadingText`, `touchOptimized`, `mobileFullscreen`, `maxHeight`
+  - **New Events**: `searchChange`, `dropdownOpen`, `dropdownClose` for better event handling
+  - **Enhanced Styling**: Improved shadows, focus indicators, hover effects, and variant-specific ripple colors
+  - **Material Design 3 Colors**: Updated to use proper surface tokens - surface/on-surface for default and selected, surface-variant/on-surface-variant for hover states
+  - **Improved Selection Indicators**: All options now use consistent Material Design checkbox icons - empty box for unselected (`check_box_outline_blank`) and checked box for selected (`check_box`) options
+  - **Fully Rounded Trigger**: Select trigger now uses fully rounded caps (`border-radius: 100vw !important`) like button component for consistent design language across all variants
+- **spectrum-chip**: Added extra-small size variant for inline content citations
+  - **New Size Variant**: Added `size="extra-small"` prop option with compact styling (10px font, 1rem height, 4px padding)
+  - **Inline Integration**: Optimized for inline text usage with proper baseline alignment and minimal visual disruption
+  - **CSS Size Classes**: Added `.spectrum-chip--size-extra-small` class with responsive typography scaling
+  - **Typography Consistency**: Extra-small chips use `font-size: 10px` and reduced padding for seamless text integration
+  - **Storybook Support**: Enhanced chip stories to demonstrate all size variants including extra-small
+- **spectrum-conversation-panel**: 🚀 **Major Enhancement** - Automatic source citation conversion with interactive chips
+  - **Automatic Sup Tag Conversion**: Automatically parses `<sup>1</sup>` tags in message content and converts them to interactive spectrum-chip components
+  - **Inline Source Citations**: Source numbers in text become clickable extra-small chips showing source titles (e.g., "NASA Climate Change and Global Warming")
+  - **Desktop Hover Cards**: Hover over source chips shows detailed source information with 300ms delay including domain, title, and snippet
+  - **Mobile Source Cards**: Tap source chips on mobile shows slide-up source card from bottom with close button and "View Source" link
+  - **Smart Source Matching**: Automatically matches chip numbers with corresponding sources in message `sources` array by number field
+  - **Enhanced User Experience**: Replaces traditional expandable "Sources and related content" section with elegant inline citations
+  - **Event Integration**: Source chip clicks emit `sourceClick` events with full source data and message context
+  - **Responsive Design**: Hover functionality disabled on mobile (≤768px) with tap-to-show alternative
+  - **Debug Mode**: Enhanced debug logging for source parsing, chip creation, and interaction tracking
+  - **CSS Animations**: Smooth fadeInUp animations for hover cards and slideUp animations for mobile cards
+  - **Source Data Structure**: Supports sources with `number`, `label`, `value`, and `snippet` fields for rich source information
 
 ### 🔄 Changed
-- Ready for next release changes...
+- **spectrum-conversation-panel**: Removed redundant "Sources and related content" expandable section in favor of inline source citations
+  - **Streamlined UX**: Eliminated duplicate source presentation by removing traditional expandable sources section
+  - **Cleaner Interface**: Only "Dive Deeper" explorations section remains when available, reducing UI clutter
+  - **Consistent Citations**: All source information now accessible through elegant inline chip interactions
+  - **Simplified State Management**: Removed `sourcesExpanded` state and sources-related accordion handling
+  - **Code Cleanup**: Removed unused `renderSources()` method and `handleSourcesClick()` handlers
+- **spectrum-select**: Enabled minimal animation mode for better accessibility and performance
+  - **Reduced Motion**: Select trigger buttons now use `minimalAnimation={true}` to disable transform animations
+  - **Stable UX**: Eliminates jarring hover movements (translateY) while preserving other visual feedback
+  - **Accessibility**: Better experience for users with vestibular sensitivities or motion preferences
+  - **Performance**: Reduced GPU load from transform animations while maintaining hover colors, shadows, and ripple effects
+  - **Consistent Behavior**: All select variants benefit from smoother, less distracting interactions
+- **spectrum-select**: Optimized dropdown height to show exactly 4 options without scrolling
+  - **Perfect Option Count**: Dropdown now shows exactly 4 options (192px height = 4 × 48px option height)
+  - **No Initial Scrolling**: Users can see all available options at first glance for small lists
+  - **Consistent UX**: Predictable dropdown size regardless of whether search functionality is enabled
+  - **Better Performance**: Fixed height reduces layout reflows and improves rendering performance
+  - **Accessibility**: Easier to navigate with keyboard as all visible options are immediately accessible
+- **spectrum-select**: Improved dropdown sizing with fixed character-based width
+  - **Fixed Width**: Dropdown now has a consistent width of 40 characters (`40ch`) regardless of content
+  - **Better UX**: Predictable dropdown size provides more stable user experience
+  - **Text Optimization**: Option text and descriptions now use 35ch max-width to fit within the 40ch dropdown
+  - **No More Dynamic Sizing**: Eliminates jarring width changes when switching between options with different text lengths
+  - **Typography Consistency**: Uses character-based units (`ch`) that scale with font size changes
+- **spectrum-select**: Complete wrapper transparency and styling cleanup for spectrum-button integration
+  - **Invisible Parent Wrapper**: Made all parent containers completely transparent (no background, border, box-shadow, margins, or padding)
+  - **State Management Transfer**: Removed legacy state styles (hover, focus, active) since spectrum-button handles these internally
+  - **Variant Management Transfer**: Removed legacy variant styles (primary, secondary, outline, ghost) since spectrum-button handles these internally
+  - **Size Management Transfer**: Removed legacy size styles (sm, base, lg) since spectrum-button handles these internally
+  - **Focus Management Transfer**: Removed legacy focus and ripple styles since spectrum-button handles these internally
+  - **Clean Integration**: Select component now acts as a pure transparent container around spectrum-button
+  - **Maintained Functionality**: Preserved dropdown-specific behaviors (icon rotation on open, option sizing, dropdown positioning)
+  - **Performance Improvement**: Reduced CSS overhead by eliminating duplicate styling that spectrum-button already provides
+- **spectrum-select**: Pure variant pass-through for spectrum-button integration
+  - **Direct Variant Mapping**: Select component variants now pass directly to spectrum-button without any additional styling interference
+  - **Removed Variant CSS Variables**: Eliminated all variant-specific CSS custom properties (--select-primary-*, --select-secondary-*, etc.)
+  - **Clean Architecture**: Select component no longer defines its own variant styling - relies entirely on spectrum-button's internal variant handling
+  - **Consistent Behavior**: All variants (primary, secondary, outline, ghost) now behave exactly like their spectrum-button counterparts
+  - **No Style Conflicts**: Eliminated potential styling conflicts between select wrapper and spectrum-button
+  - **Better Maintainability**: Single source of truth for variant styling reduces duplication and maintenance overhead
+
+### 🐛 Fixed
+- **spectrum-conversation-panel**: Fixed layout overflow and container structure issues
+  - **Root Cause**: Nested `conversation-panel-host` div wrappers were causing flexbox layout conflicts and container overflow
+  - **Solution**: Removed redundant wrapper div in `renderMessages()` method to maintain clean Host element structure
+  - **Behavior**: Conversation panel now properly fits within its parent container without overflowing
+  - **Layout Fix**: Restored proper scrolling behavior and eliminated layout confusion from duplicate CSS class structures
+  - **Components Restored**: Fixed missing source chips, action buttons, and "Dive Deeper" functionality
+- **spectrum-select**: Fixed multi-select mode incorrectly showing left icon
+  - **Issue**: When multiple items were selected, the button was showing both the count badge AND the regular left icon
+  - **Solution**: Updated `show-left-icon` logic to be `false` when displaying count badge for multiple selections
+  - **Behavior**: Multi-select now only shows the count badge (e.g., "2") without conflicting with regular option icons
+  - **Clean UI**: Single selections show the option icon, multiple selections show only the count badge
+- **spectrum-select**: Fixed multi-select mode not showing count in button text
+  - **Issue**: When multiple items were selected, button only showed "selections" without indicating how many items were selected
+  - **Solution**: Updated `getDisplayText()` method to prefix selections label with the actual count number
+  - **Behavior**: Multi-select now displays "2 selections", "3 countries selected", etc. instead of just "selections"
+  - **User Experience**: Users can now immediately see how many items they have selected without opening the dropdown
+- **spectrum-select**: Fixed outline variant not displaying as outline button
+  - **Root Cause**: Select component was only passing `variant="outline"` to spectrum-button but not the required `outline={true}` prop
+  - **Solution**: Added conditional `outline={this.variant === 'outline'}` prop to spectrum-button in select component
+  - **Behavior**: Outline variant now correctly displays as button with border outline instead of filled button
+  - **Consistency**: All variants now render with their expected spectrum-button appearance
+- **spectrum-select**: Fixed TypeScript error where `event` parameter was declared but never used in `triggerRipple` method
+  - **Enhanced Ripple Effect**: Now uses actual click/touch coordinates for realistic ripple positioning
+  - **Dynamic Positioning**: Ripple effect starts from where user actually interacts with the component
+  - **Improved Animation**: More sophisticated scaling and opacity transitions for better visual feedback
+  - **Touch Support**: Proper handling of both mouse and touch events for ripple positioning
+- **spectrum-select**: Fixed multiple UI shortcomings and interaction issues
+  - **Removed Problematic Animation**: Eliminated right-shift hover animation that was causing unwanted movement
+  - **Removed All Hover Transforms**: Completely eliminated hover transform effects for stable, movement-free interactions
+  - **Fixed Horizontal Scrollbar**: Dropdown now uses proper width management to prevent horizontal scrolling
+  - **Improved Dropdown Expansion**: Searchable dropdowns now expand to accommodate content rather than clipping, with generous text width allowances (200-500px)
+  - **Improved Hover Styling**: Enhanced hover states with better background colors and border radius
+  - **Enhanced Selected State**: Better visual styling for selected options with proper color contrast
+  - **Fixed Persistent Hover**: Added mouse leave handler to clear hover state when pointer exits dropdown
+  - **Better Text Truncation**: Options now properly truncate text within container bounds
+  - **Consistent Theme Usage**: All dimensions, colors, and spacing now use proper Spectrum theme variables
+  - **Material Design 3 Colors**: Updated to use proper surface tokens - surface/on-surface for default and selected, surface-variant/on-surface-variant for hover states
+  - **Improved Selection Indicators**: All options now use consistent Material Design checkbox icons - empty box for unselected (`check_box_outline_blank`) and checked box for selected (`check_box`) options
+  - **Fully Rounded Trigger**: Select trigger now uses fully rounded caps (`border-radius: 100vw !important`) like button component for consistent design language across all variants
+
+### 🔄 Changed
+- **Architecture**: Updated component dependency map to include spectrum-toast in Level 1 (Atomic) components
+- **Development**: Enhanced Storybook stories with comprehensive toast examples and use cases
+
+### �� Documentation
+- **spectrum-select**: Added comprehensive keyboard navigation documentation to README
+  - **Complete Keyboard Reference**: Detailed tables for all keyboard interactions (Enter, Space, Arrow keys, Home, End, Escape, Tab)
+  - **Mode-Specific Guidance**: Separate sections for single-select, multi-select, and searchable dropdown behaviors
+  - **Accessibility Focus**: Extensive coverage of screen reader support, ARIA attributes, and focus management
+  - **Developer Best Practices**: Guidelines for implementing accessible select components with proper labeling and error handling
+  - **Search Integration**: Specific keyboard navigation patterns for searchable dropdowns with filtering
+  - **Power User Support**: Advanced keyboard shortcuts for efficient navigation (Home/End for quick jumping)
+- **Storybook**: Added missing @itemRenamed event listener to Default story for proper rename functionality testing
+- **Storybook**: Added "Rename" action to Default story context menu for easier testing
+- Created changelog template for consistent entry formatting
+- Established changelog workflow integration with component development
+- Added pre-release checklist for changelog validation
+- **Documentation**: Added comprehensive changelog for tracking all component library changes
+- **Development**: Established changelog maintenance rules and workflow integration
+- **Cursor Rules**: Implemented automated changelog maintenance system with AI assistance
+
+### 🔒 Dependencies
+- **@stencil/core**: v4.22.2
+- **@material/material-color-utilities**: v0.3.0
+- **@glidejs/glide**: v3.7.1
+- **tailwindcss**: v3.4.17
+- **typescript**: v5.7.3
 
 ---
 

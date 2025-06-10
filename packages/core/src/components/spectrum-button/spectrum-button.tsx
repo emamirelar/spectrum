@@ -27,6 +27,7 @@ export class SpectrumButton {
   @Prop() ripple: boolean = false;
   @Prop() action: string = '';
   @Prop() customStyle: { [key: string]: string } = {};
+  @Prop() minimalAnimation: boolean = false;
 
   // Button Content
   @Prop() showButtonText: boolean = true;
@@ -172,6 +173,7 @@ export class SpectrumButton {
       'spectrum-button--icon-only': this.iconOnly,
       'spectrum-button--hover': this.isHovered,
       'spectrum-button--active': this.isActive,
+      'spectrum-button--minimal-animation': this.minimalAnimation,
     };
 
     return (

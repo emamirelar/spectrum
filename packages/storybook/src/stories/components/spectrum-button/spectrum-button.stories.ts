@@ -11,6 +11,7 @@ interface SpectrumButton extends HTMLElement {
   iconOnly: boolean;
   disabled: boolean;
   ripple: boolean;
+  minimalAnimation: boolean;
   showButtonText: boolean;
   showLeftIcon: boolean;
   leftIcon: string;
@@ -34,6 +35,7 @@ interface SpectrumButtonArgs {
   rightIcon: string;
   debug: boolean;
   ripple: boolean;
+  minimalAnimation: boolean;
   action: string;
   disabled: boolean;
 }
@@ -49,6 +51,7 @@ const meta = {
     iconOnly: false,
     disabled: false,
     ripple: true,
+    minimalAnimation: false,
     showButtonText: true,
     showLeftIcon: false,
     leftIcon: '',
@@ -87,6 +90,10 @@ const meta = {
     ripple: {
       control: 'boolean',
       description: 'Whether to show ripple effect on click',
+    },
+    minimalAnimation: {
+      control: 'boolean',
+      description: 'Disable transform animations while keeping other animations (hover effects, transitions, etc.)',
     },
     showButtonText: {
       control: 'boolean',
@@ -130,6 +137,7 @@ const renderButton = (args: SpectrumButtonArgs) => html`
     ?icon-only=${args.iconOnly}
     ?disabled=${args.disabled}
     ?ripple=${args.ripple}
+    ?minimal-animation=${args.minimalAnimation}
     ?show-button-text=${args.showButtonText}
     ?show-left-icon=${args.showLeftIcon}
     left-icon=${args.leftIcon}
@@ -347,6 +355,48 @@ export const WithAction: StoryObj<SpectrumButtonArgs> = {
     docs: {
       description: {
         story: 'A button that emits an action value when clicked.',
+      },
+    },
+  },
+};
+
+// Minimal Animation
+export const MinimalAnimation: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    buttonText: 'Minimal Animation',
+    showButtonText: true,
+    minimalAnimation: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with minimal animation enabled. Transform animations are disabled while other animations (color transitions, ripple effects, etc.) remain active.',
+      },
+    },
+  },
+};
+
+// Minimal Animation FAB
+export const MinimalAnimationFAB: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'fab',
+    size: 'lg',
+    iconOnly: true,
+    showLeftIcon: true,
+    leftIcon: 'add',
+    ripple: true,
+    minimalAnimation: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A FAB with minimal animation enabled. The button will not move on hover/press but retains ripple and color effects.',
       },
     },
   },

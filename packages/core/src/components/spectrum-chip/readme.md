@@ -24,6 +24,7 @@ Supports leading/trailing icons, selection states, and various interactive behav
 | `ripple`           | `ripple`             |             | `boolean`                                                                     | `false`     |
 | `selected`         | `selected`           |             | `boolean`                                                                     | `false`     |
 | `showTrailingIcon` | `show-trailing-icon` |             | `boolean`                                                                     | `false`     |
+| `size`             | `size`               |             | `"extra-small" \| "large" \| "medium" \| "small"`                             | `'medium'`  |
 | `trailingIcon`     | `trailing-icon`      |             | `string`                                                                      | `'close'`   |
 | `variant`          | `variant`            |             | `"assist" \| "filter" \| "input" \| "primary" \| "secondary" \| "suggestion"` | `'primary'` |
 

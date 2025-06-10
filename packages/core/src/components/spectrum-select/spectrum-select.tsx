@@ -1,17 +1,28 @@
 import { Component, Host, h, Prop, State, Watch, Element, Event, EventEmitter, Listen } from '@stencil/core';
 
+// Import spectrum-button to ensure it's available
+import '../spectrum-button/spectrum-button';
+
 export interface SpectrumSelectOption {
   value: string;
   label: string;
   icon?: string;
   disabled?: boolean;
   selected?: boolean;
+  group?: string;
+  description?: string;
+}
+
+export interface SpectrumSelectGroup {
+  label: string;
+  options: SpectrumSelectOption[];
 }
 
 /**
  * Spectrum Select Component
- * A styled wrapper around HTML select element with support for icons, text, and custom options.
- * Based on the Spectrum design system and inspired by spectrum-button component patterns.
+ * A comprehensive select component with advanced features including search, loading states,
+ * enhanced animations, mobile optimization, and accessibility improvements.
+ * Based on the Spectrum design system and Material Design 3 patterns.
  */
 @Component({
   tag: 'spectrum-select',
@@ -28,6 +39,9 @@ export class SpectrumSelect {
     selectedValues?: string[];
     selectedOptions?: SpectrumSelectOption[];
   }>;
+  @Event() searchChange: EventEmitter<string>;
+  @Event() dropdownOpen: EventEmitter<void>;
+  @Event() dropdownClose: EventEmitter<void>;
 
   // Debug Mode
   @Prop() debug: boolean = false;
@@ -38,6 +52,7 @@ export class SpectrumSelect {
   @Prop() disabled: boolean = false;
   @Prop() required: boolean = false;
   @Prop() invalid: boolean = false;
+  @Prop() loading: boolean = false;
   @Prop() action: string = '';
   @Prop() customStyle: { [key: string]: string } = {};
 
@@ -52,6 +67,23 @@ export class SpectrumSelect {
   @Prop() showDropdownIcon: boolean = true;
   @Prop() dropdownIcon: string = 'expand_more';
 
+  // Advanced Features
+  @Prop() searchable: boolean = false;
+  @Prop() searchTitle: string = '';
+  @Prop() searchPlaceholder: string = 'Search options...';
+  @Prop() maxHeight: string = '200px';
+  @Prop() showSelectAll: boolean = false;
+  @Prop() selectAllText: string = 'Select All';
+  @Prop() noResultsText: string = 'No results found';
+  @Prop() loadingText: string = 'Loading...';
+  @Prop() errorText: string = '';
+  @Prop() virtualScrolling: boolean = false;
+  @Prop() itemHeight: number = 40;
+
+  // Mobile Optimization
+  @Prop() touchOptimized: boolean = true;
+  @Prop() mobileFullscreen: boolean = false;
+
   // Select State
   @Prop() state: 'default' | 'hover' | 'focus' | 'disabled' = 'default';
   @State() currentState: string = 'default';
@@ -62,8 +94,17 @@ export class SpectrumSelect {
   @State() selectedOption: SpectrumSelectOption | null = null;
   @State() selectedOptions: SpectrumSelectOption[] = [];
   @State() focusedOptionIndex: number = -1;
+  @State() searchQuery: string = '';
+  @State() filteredOptions: SpectrumSelectOption[] = [];
+  @State() isSearching: boolean = false;
+  @State() rippleActive: boolean = false;
+  @State() isMobile: boolean = false;
 
   private selectRef!: HTMLSelectElement;
+  private searchInputRef!: HTMLInputElement;
+  private dropdownRef!: HTMLDivElement;
+  private rippleTimeout: number;
+  private searchTimeout: number;
 
   @Watch('selectedValue')
   handleSelectedValueChange(newValue: string) {
@@ -82,6 +123,7 @@ export class SpectrumSelect {
   @Watch('options')
   handleOptionsChange() {
     this.updateSelectedOption(this.selectedValue);
+    this.updateFilteredOptions();
   }
 
   @Watch('disabled')
@@ -97,13 +139,36 @@ export class SpectrumSelect {
   @Watch('isOpen')
   handleOpenChange(newValue: boolean) {
     if (newValue) {
-      this.focusedOptionIndex = this.options.findIndex(option => option.value === this.selectedValue);
+      this.focusedOptionIndex = this.filteredOptions.findIndex(option => option.value === this.selectedValue);
       if (this.focusedOptionIndex === -1) {
         this.focusedOptionIndex = 0;
       }
+      this.dropdownOpen.emit();
+      if (this.searchable) {
+        setTimeout(() => {
+          this.searchInputRef?.focus();
+        }, 100);
+      }
     } else {
       this.focusedOptionIndex = -1;
+      this.searchQuery = '';
+      this.isSearching = false;
+      this.updateFilteredOptions();
+      
+      // Ensure search input is cleared in DOM
+      if (this.searchInputRef) {
+        this.searchInputRef.value = '';
+      }
+      
+      this.dropdownClose.emit();
     }
+  }
+
+  @Watch('searchQuery')
+  handleSearchChange(newQuery: string) {
+    this.isSearching = newQuery.length > 0;
+    this.updateFilteredOptions();
+    this.searchChange.emit(newQuery);
   }
 
   // ============== Event Listeners ==============
@@ -124,9 +189,9 @@ export class SpectrumSelect {
         if (!this.isOpen) {
           event.preventDefault();
           this.toggleDropdown();
-        } else if (this.focusedOptionIndex >= 0) {
+        } else if (this.focusedOptionIndex >= 0 && !this.isSearching) {
           event.preventDefault();
-          this.selectOption(this.options[this.focusedOptionIndex]);
+          this.selectOption(this.filteredOptions[this.focusedOptionIndex]);
         }
         break;
       
@@ -141,11 +206,12 @@ export class SpectrumSelect {
         event.preventDefault();
         if (!this.isOpen) {
           this.isOpen = true;
-        } else {
+        } else if (!this.isSearching) {
           this.focusedOptionIndex = Math.min(
             this.focusedOptionIndex + 1,
-            this.options.length - 1
+            this.filteredOptions.length - 1
           );
+          this.scrollToFocusedOption();
         }
         break;
       
@@ -153,25 +219,33 @@ export class SpectrumSelect {
         event.preventDefault();
         if (!this.isOpen) {
           this.isOpen = true;
-        } else {
+        } else if (!this.isSearching) {
           this.focusedOptionIndex = Math.max(this.focusedOptionIndex - 1, 0);
+          this.scrollToFocusedOption();
         }
         break;
       
       case 'Home':
-        if (this.isOpen) {
+        if (this.isOpen && !this.isSearching) {
           event.preventDefault();
           this.focusedOptionIndex = 0;
+          this.scrollToFocusedOption();
         }
         break;
       
       case 'End':
-        if (this.isOpen) {
+        if (this.isOpen && !this.isSearching) {
           event.preventDefault();
-          this.focusedOptionIndex = this.options.length - 1;
+          this.focusedOptionIndex = this.filteredOptions.length - 1;
+          this.scrollToFocusedOption();
         }
         break;
     }
+  }
+
+  @Listen('resize', { target: 'window' })
+  handleResize() {
+    this.detectMobile();
   }
 
   // ============== Debug Helpers ==============
@@ -198,6 +272,103 @@ export class SpectrumSelect {
     this.log('Selected options updated', this.selectedOptions);
   }
 
+  private updateFilteredOptions() {
+    if (!this.searchQuery || this.searchQuery.trim() === '') {
+      this.filteredOptions = [...this.options];
+    } else {
+      const query = this.searchQuery.toLowerCase().trim();
+      this.filteredOptions = this.options.filter(option =>
+        option.label.toLowerCase().includes(query) ||
+        option.value.toLowerCase().includes(query) ||
+        (option.description && option.description.toLowerCase().includes(query))
+      );
+    }
+    this.log('Filtered options updated', { query: this.searchQuery, count: this.filteredOptions.length });
+  }
+
+  private detectMobile() {
+    this.isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+  }
+
+  private scrollToFocusedOption() {
+    if (this.dropdownRef && this.focusedOptionIndex >= 0) {
+      const focusedElement = this.dropdownRef.querySelector(
+        `.spectrum-select__option:nth-child(${this.focusedOptionIndex + 1})`
+      ) as HTMLElement;
+      if (focusedElement) {
+        focusedElement.scrollIntoView({ 
+          block: 'nearest', 
+          behavior: 'smooth' 
+        });
+      }
+    }
+  }
+
+  private selectAll() {
+    if (!this.multiple) return;
+    
+    const allValues = this.filteredOptions
+      .filter(option => !option.disabled)
+      .map(option => option.value);
+    
+    this.selectedValues = allValues;
+    this.updateSelectedOptions(allValues);
+    
+    if (this.selectRef) {
+      Array.from(this.selectRef.options).forEach(option => {
+        option.selected = allValues.includes(option.value);
+      });
+    }
+    
+    this.selectChange.emit({
+      value: allValues.join(','),
+      label: this.getMultipleDisplayText(),
+      option: null,
+      selectedValues: allValues,
+      selectedOptions: this.selectedOptions
+    });
+
+    this.log('All options selected', { count: allValues.length });
+  }
+
+  private triggerRipple(event: MouseEvent | TouchEvent) {
+    if (!this.touchOptimized) return;
+    
+    this.rippleActive = true;
+    
+    if (this.rippleTimeout) {
+      clearTimeout(this.rippleTimeout);
+    }
+    
+    const triggerElement = this.el.querySelector('.spectrum-select__trigger') as HTMLElement;
+    if (triggerElement && event) {
+      const rect = triggerElement.getBoundingClientRect();
+      let clientX: number, clientY: number;
+      
+      if (event.type === 'touchstart') {
+        const touchEvent = event as TouchEvent;
+        clientX = touchEvent.touches[0].clientX;
+        clientY = touchEvent.touches[0].clientY;
+      } else {
+        const mouseEvent = event as MouseEvent;
+        clientX = mouseEvent.clientX;
+        clientY = mouseEvent.clientY;
+      }
+      
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      
+      triggerElement.style.setProperty('--ripple-x', `${x}px`);
+      triggerElement.style.setProperty('--ripple-y', `${y}px`);
+      
+      this.log('Ripple triggered', { x, y, type: event.type });
+    }
+    
+    this.rippleTimeout = window.setTimeout(() => {
+      this.rippleActive = false;
+    }, 300);
+  }
+
   // ============== Event Handlers ==============
   private handleMouseEnter = () => {
     if (this.currentState !== 'disabled') {
@@ -211,16 +382,30 @@ export class SpectrumSelect {
     this.isHovered = false;
   };
 
-  private handleMouseDown = () => {
+  private handleMouseDown = (event: MouseEvent) => {
     if (this.currentState !== 'disabled') {
       this.log('Mouse down');
       this.isActive = true;
+      this.triggerRipple(event);
     }
   };
 
   private handleMouseUp = () => {
     this.log('Mouse up');
     this.isActive = false;
+  };
+
+  private handleTouchStart = (event: TouchEvent) => {
+    if (this.currentState !== 'disabled' && this.touchOptimized) {
+      this.isActive = true;
+      this.triggerRipple(event);
+    }
+  };
+
+  private handleTouchEnd = () => {
+    if (this.touchOptimized) {
+      this.isActive = false;
+    }
   };
 
   private handleFocus = () => {
@@ -239,6 +424,36 @@ export class SpectrumSelect {
     const select = event.target as HTMLSelectElement;
     const selectedValue = select.value;
     this.updateSelection(selectedValue);
+  };
+
+  private handleSearchInput = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    
+    this.searchTimeout = window.setTimeout(() => {
+      this.searchQuery = input.value;
+    }, 150);
+  };
+
+  private handleSearchKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowUp':
+        event.preventDefault();
+        this.isSearching = false;
+        if (this.filteredOptions.length > 0) {
+          this.focusedOptionIndex = event.key === 'ArrowDown' ? 0 : this.filteredOptions.length - 1;
+          this.scrollToFocusedOption();
+        }
+        break;
+      
+      case 'Escape':
+        this.isOpen = false;
+        break;
+    }
   };
 
   private toggleDropdown = () => {
@@ -263,17 +478,14 @@ export class SpectrumSelect {
     const valueIndex = currentValues.indexOf(value);
     
     if (valueIndex > -1) {
-      // Remove from selection
       currentValues.splice(valueIndex, 1);
     } else {
-      // Add to selection
       currentValues.push(value);
     }
     
     this.selectedValues = currentValues;
     this.updateSelectedOptions(currentValues);
     
-    // Update the native select values for form integration
     if (this.selectRef) {
       Array.from(this.selectRef.options).forEach(option => {
         option.selected = currentValues.includes(option.value);
@@ -301,7 +513,6 @@ export class SpectrumSelect {
       this.selectedValue = value;
       this.selectedOption = selectedOption;
       
-      // Update the native select value
       if (this.selectRef) {
         this.selectRef.value = value;
       }
@@ -325,27 +536,40 @@ export class SpectrumSelect {
     this.focusedOptionIndex = index;
   };
 
+  private handleDropdownMouseLeave = () => {
+    this.focusedOptionIndex = -1;
+  };
+
+  private handleButtonClick = () => {
+    this.toggleDropdown();
+  };
+
   // ============== Style Helpers ==============
   private getSelectStyles(): { [key: string]: string } {
     const styles: { [key: string]: string } = {};
 
-    // Apply cursor style for disabled state
     if (this.currentState === 'disabled') {
       styles.cursor = 'not-allowed';
     }
 
-    // Merge custom styles with default styles
+    if (this.isMobile && this.mobileFullscreen && this.isOpen) {
+      styles.position = 'fixed';
+      styles.top = '0';
+      styles.left = '0';
+      styles.right = '0';
+      styles.bottom = '0';
+      styles.zIndex = '9999';
+    }
+
     return { ...styles, ...this.customStyle };
   }
 
   private getDisplayText(): string {
     if (this.multiple) {
       if (this.selectedOptions.length === 1) {
-        // Show the actual item name when only one is selected, like single select
         return this.selectedOptions[0].label;
       } else if (this.selectedOptions.length > 1) {
-        // Show count + label when multiple items are selected
-        return `${this.selectionsLabel}`;
+        return `${this.selectedOptions.length} ${this.selectionsLabel}`;
       }
       return this.placeholder;
     } else {
@@ -359,10 +583,8 @@ export class SpectrumSelect {
   private getDisplayIcon(): string | null {
     if (this.multiple) {
       if (this.selectedOptions.length === 1) {
-        // Show the icon when only one is selected, like single select
         return this.selectedOptions[0].icon || null;
       }
-      // For multiple selections, don't show icon - count will replace it
       return null;
     } else {
       if (this.selectedOption && this.selectedOption.icon) {
@@ -396,16 +618,28 @@ export class SpectrumSelect {
       options: this.options
     });
     
-    // Initialize selected option(s)
     if (this.multiple) {
       this.updateSelectedOptions(this.selectedValues);
     } else {
       this.updateSelectedOption(this.selectedValue);
     }
+
+    this.updateFilteredOptions();
+    
+    this.detectMobile();
   }
 
   componentDidLoad() {
     this.log('Component did load');
+  }
+
+  disconnectedCallback() {
+    if (this.rippleTimeout) {
+      clearTimeout(this.rippleTimeout);
+    }
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
   }
 
   // ============== Render Methods ==============
@@ -415,7 +649,8 @@ export class SpectrumSelect {
       isHovered: this.isHovered,
       isFocused: this.isFocused,
       isOpen: this.isOpen,
-      selectedOption: this.selectedOption
+      selectedOption: this.selectedOption,
+      filteredOptionsCount: this.filteredOptions.length
     });
 
     const selectClasses: { [key: string]: boolean } = {
@@ -424,11 +659,16 @@ export class SpectrumSelect {
       [`spectrum-select--${this.size}`]: true,
       'spectrum-select--disabled': this.disabled,
       'spectrum-select--invalid': this.invalid,
+      'spectrum-select--loading': this.loading,
       'spectrum-select--hover': this.isHovered,
       'spectrum-select--active': this.isActive,
       'spectrum-select--focus': this.isFocused,
       'spectrum-select--open': this.isOpen,
       'spectrum-select--has-value': !!this.selectedOption,
+      'spectrum-select--searchable': this.searchable,
+      'spectrum-select--mobile': this.isMobile,
+      'spectrum-select--touch-optimized': this.touchOptimized,
+      'spectrum-select--ripple-active': this.rippleActive,
     };
 
     const displayIcon = this.getDisplayIcon();
@@ -444,8 +684,9 @@ export class SpectrumSelect {
           onMouseLeave={this.handleMouseLeave}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
+          onTouchStart={this.handleTouchStart}
+          onTouchEnd={this.handleTouchEnd}
         >
-          {/* Hidden native select for accessibility and form integration */}
           <select
             ref={el => this.selectRef = el as HTMLSelectElement}
             class="spectrum-select__native"
@@ -476,94 +717,152 @@ export class SpectrumSelect {
             ))}
           </select>
 
-          {/* Custom styled trigger */}
-          <div 
+          <spectrum-button
+            variant={this.variant}
+            size={this.size}
+            disabled={this.disabled}
+            outline={this.variant === 'outline'}
+            button-text={this.loading ? this.loadingText : displayText}
+            show-button-text={true}
+            show-left-icon={displayCount ? false : (this.showIcon && !!displayIcon)}
+            left-icon={displayCount ? '' : (displayIcon || '')}
+            show-right-icon={this.showDropdownIcon && !this.loading}
+            right-icon={this.loading ? '' : this.dropdownIcon}
+            ripple={this.touchOptimized}
+            minimalAnimation={true}
+            onButtonAction={this.handleButtonClick}
             class="spectrum-select__trigger"
-            tabindex={this.disabled ? -1 : 0}
-            role="combobox"
-            aria-expanded={this.isOpen.toString()}
-            aria-haspopup="listbox"
-            aria-label={this.placeholder}
-            onClick={this.toggleDropdown}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
           >
-            <div class="spectrum-select__content">
-              {/* Show count for multiple mode, icon for single mode */}
-              {displayCount ? (
-                <span class="spectrum-select__count">
-                  {displayCount}
-                </span>
-              ) : (
-                this.showIcon && displayIcon && (
-                  <span class="spectrum-select__icon spectrum-select__icon--leading">
-                    <span class="material-symbols-outlined">{displayIcon}</span>
-                  </span>
-                )
-              )}
-              <span class={`spectrum-select__text ${
-                (this.multiple ? this.selectedOptions.length === 0 : !this.selectedOption) ? 
-                'spectrum-select__text--placeholder' : ''
-              }`}>
-                {displayText}
-              </span>
-            </div>
-            {this.showDropdownIcon && (
-              <span class="spectrum-select__icon spectrum-select__icon--dropdown">
-                <span class="material-symbols-outlined">{this.dropdownIcon}</span>
+            {displayCount && (
+              <span slot="left-icon" class="spectrum-select__count">
+                {displayCount}
               </span>
             )}
-          </div>
+            {this.loading && (
+              <span slot="right-icon" class="spectrum-select__icon spectrum-select__icon--loading">
+                <span class="spectrum-select__spinner"></span>
+              </span>
+            )}
+          </spectrum-button>
 
-          {/* Custom dropdown with icons */}
+          {this.errorText && (
+            <div class="spectrum-select__error" role="alert">
+              <span class="material-symbols-outlined">error</span>
+              <span class="spectrum-select__error-text">{this.errorText}</span>
+            </div>
+          )}
+
           {this.isOpen && (
             <div 
+              ref={el => this.dropdownRef = el as HTMLDivElement}
               class="spectrum-select__dropdown"
               role="listbox"
               aria-label={this.placeholder}
               aria-multiselectable={this.multiple.toString()}
+              onMouseLeave={this.handleDropdownMouseLeave}
+              style={{ 
+                maxHeight: this.maxHeight,
+                ...(this.isMobile && this.mobileFullscreen ? {
+                  position: 'fixed',
+                  top: '0',
+                  left: '0',
+                  right: '0',
+                  bottom: '0',
+                  maxHeight: '100vh',
+                  borderRadius: '0',
+                } : {})
+              }}
             >
-              {this.options.map((option, index) => (
-                <div
-                  class={{
-                    'spectrum-select__option': true,
-                    'spectrum-select__option--disabled': option.disabled,
-                    'spectrum-select__option--selected': this.multiple ? 
-                      this.selectedValues.includes(option.value) : 
-                      option.value === this.selectedValue,
-                    'spectrum-select__option--focused': index === this.focusedOptionIndex,
-                  }}
-                  role="option"
-                  aria-selected={this.multiple ? 
-                    this.selectedValues.includes(option.value).toString() : 
-                    (option.value === this.selectedValue).toString()
-                  }
-                  aria-disabled={option.disabled ? 'true' : 'false'}
-                  onClick={() => this.selectOption(option)}
-                  onMouseEnter={() => this.handleOptionMouseEnter(index)}
-                >
-                  {option.icon && (
-                    <span class="spectrum-select__option-icon">
-                      <span class="material-symbols-outlined">{option.icon}</span>
-                    </span>
+              {this.searchable && (
+                <div class="spectrum-select__search">
+                  {this.searchTitle && (
+                    <div class="spectrum-select__search-title">
+                      {this.searchTitle}
+                    </div>
                   )}
-                  <span class="spectrum-select__option-text">{option.label}</span>
-                  {/* Show checkbox for multiple mode, checkmark for single mode */}
-                  {this.multiple ? (
-                    <span class="spectrum-select__option-checkbox">
-                      <span class="material-symbols-outlined">
-                        {this.selectedValues.includes(option.value) ? 'check_box' : 'check_box_outline_blank'}
-                      </span>
+                  <div class="spectrum-select__search-input-container">
+                    <span class="spectrum-select__search-icon">
+                      <span class="material-symbols-outlined">search</span>
                     </span>
-                  ) : (
-                    option.value === this.selectedValue && (
-                      <span class="spectrum-select__option-check">
-                        <span class="material-symbols-outlined">check</span>
-                      </span>
-                    )
-                  )}
+                    <input
+                      ref={el => this.searchInputRef = el as HTMLInputElement}
+                      type="text"
+                      class="spectrum-select__search-input"
+                      placeholder={this.searchPlaceholder}
+                      value={this.searchQuery}
+                      onInput={this.handleSearchInput}
+                      onKeyDown={this.handleSearchKeyDown}
+                    />
+                  </div>
                 </div>
-              ))}
+              )}
+
+              <div class="spectrum-select__options-container">
+                {this.multiple && this.showSelectAll && this.filteredOptions.length > 1 && (
+                  <div
+                    class="spectrum-select__option spectrum-select__option--select-all"
+                    onClick={() => this.selectAll()}
+                  >
+                    <span class="spectrum-select__option-icon">
+                      <span class="material-symbols-outlined">select_all</span>
+                    </span>
+                    <span class="spectrum-select__option-text">{this.selectAllText}</span>
+                  </div>
+                )}
+
+                {this.filteredOptions.length > 0 ? (
+                  this.filteredOptions.map((option, index) => (
+                    <div
+                      class={{
+                        'spectrum-select__option': true,
+                        'spectrum-select__option--disabled': option.disabled,
+                        'spectrum-select__option--selected': this.multiple ? 
+                          this.selectedValues.includes(option.value) : 
+                          option.value === this.selectedValue,
+                        'spectrum-select__option--focused': index === this.focusedOptionIndex,
+                      }}
+                      role="option"
+                      aria-selected={this.multiple ? 
+                        this.selectedValues.includes(option.value).toString() : 
+                        (option.value === this.selectedValue).toString()
+                      }
+                      aria-disabled={option.disabled ? 'true' : 'false'}
+                      onClick={() => this.selectOption(option)}
+                      onMouseEnter={() => this.handleOptionMouseEnter(index)}
+                    >
+                      {option.icon && (
+                        <span class="spectrum-select__option-icon">
+                          <span class="material-symbols-outlined">{option.icon}</span>
+                        </span>
+                      )}
+                      <div class="spectrum-select__option-content">
+                        <span class="spectrum-select__option-text">{option.label}</span>
+                        {option.description && (
+                          <span class="spectrum-select__option-description">{option.description}</span>
+                        )}
+                      </div>
+                      {this.multiple ? (
+                        <span class="spectrum-select__option-checkbox">
+                          <span class="material-symbols-outlined">
+                            {this.selectedValues.includes(option.value) ? 'check_box' : 'check_box_outline_blank'}
+                          </span>
+                        </span>
+                      ) : (
+                        <span class="spectrum-select__option-checkbox">
+                          <span class="material-symbols-outlined">
+                            {option.value === this.selectedValue ? 'check_box' : 'check_box_outline_blank'}
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div class="spectrum-select__no-results">
+                    <span class="material-symbols-outlined">search_off</span>
+                    <span class="spectrum-select__no-results-text">{this.noResultsText}</span>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

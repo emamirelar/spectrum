@@ -8,14 +8,14 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLElement;
@@ -56,14 +56,14 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
 
 
 @ProxyCmp({
-  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant']
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'trailingIcon', 'variant']
 })
 @Component({
   selector: 'spectrum-chip',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'trailingIcon', 'variant'],
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'trailingIcon', 'variant'],
 })
 export class SpectrumChip {
   protected el: HTMLElement;
@@ -344,21 +344,21 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
 
 
 @ProxyCmp({
-  inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'invalid', 'multiple', 'options', 'placeholder', 'required', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'size', 'state', 'variant']
+  inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'errorText', 'invalid', 'itemHeight', 'loading', 'loadingText', 'maxHeight', 'mobileFullscreen', 'multiple', 'noResultsText', 'options', 'placeholder', 'required', 'searchPlaceholder', 'searchTitle', 'searchable', 'selectAllText', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'showSelectAll', 'size', 'state', 'touchOptimized', 'variant', 'virtualScrolling']
 })
 @Component({
   selector: 'spectrum-select',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'invalid', 'multiple', 'options', 'placeholder', 'required', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'size', 'state', 'variant'],
+  inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'errorText', 'invalid', 'itemHeight', 'loading', 'loadingText', 'maxHeight', 'mobileFullscreen', 'multiple', 'noResultsText', 'options', 'placeholder', 'required', 'searchPlaceholder', 'searchTitle', 'searchable', 'selectAllText', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'showSelectAll', 'size', 'state', 'touchOptimized', 'variant', 'virtualScrolling'],
 })
 export class SpectrumSelect {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['selectChange']);
+    proxyOutputs(this, this.el, ['selectChange', 'searchChange', 'dropdownOpen', 'dropdownClose']);
   }
 }
 
@@ -368,6 +368,12 @@ import type { SpectrumSelectOption as ISpectrumSelectSpectrumSelectOption } from
 export declare interface SpectrumSelect extends Components.SpectrumSelect {
 
   selectChange: EventEmitter<CustomEvent<{ value: string; label: string; option: [object Object] | null; selectedValues?: string[]; selectedOptions?: [object Object][]; }>>;
+
+  searchChange: EventEmitter<CustomEvent<string>>;
+
+  dropdownOpen: EventEmitter<CustomEvent<void>>;
+
+  dropdownClose: EventEmitter<CustomEvent<void>>;
 }
 
 

@@ -221,4 +221,33 @@
       }
     }
   }
+
+  // Size variants
+  &--extra-small {
+    --chip-font-size: 10px;
+    --chip-min-height: 1rem;
+    --chip-padding: 4px;
+    --chip-gap: 2px;
+    --chip-icon-size: 0.75em;
+  }
+
+  &--small {
+    --chip-font-size: 12px;
+    --chip-min-height: 1.25rem;
+    --chip-padding: 6px;
+    --chip-gap: 3px;
+    --chip-icon-size: 1em;
+  }
+
+  &--medium {
+    // Default sizes (already defined in root)
+  }
+
+  &--large {
+    --chip-font-size: 18px;
+    --chip-min-height: 2.25rem;
+    --chip-padding: 12px;
+    --chip-gap: 6px;
+    --chip-icon-size: 1.5em;
+  }
 } 
