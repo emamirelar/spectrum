@@ -11,6 +11,7 @@ interface SpectrumConversationPanelArgs {
   actions: string;
   sources: string;
   loading: boolean;
+  debug?: boolean;
 }
 
 const meta = {
@@ -146,6 +147,13 @@ const meta = {
     loading: {
       control: 'boolean',
       description: 'Whether to show the loading indicator',
+      table: {
+        type: { summary: 'boolean' }
+      }
+    },
+    debug: {
+      control: 'boolean',
+      description: 'Whether to enable debug mode',
       table: {
         type: { summary: 'boolean' }
       }
@@ -692,3 +700,117 @@ export const SourcesScrollingDemo: StoryObj<SpectrumConversationPanelArgs> = {
     </div>
   `,
 };
+
+// Source Citations with Chips Demo
+export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    messages: `[
+      {
+        "message": "Tell me about the effects of climate change on polar ice caps",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "message": "Climate change is causing dramatic effects on polar ice caps. Arctic sea ice is declining at a rate of 13% per decade<sup>1</sup>, while Antarctic ice sheets are losing mass at an accelerating pace<sup>2</sup>. The Greenland ice sheet has lost approximately 280 billion tons of ice annually since 2002<sup>3</sup>, contributing to global sea level rise of about 1.5mm per year<sup>4</sup>. Polar bears and other Arctic wildlife are facing habitat loss as their ice platforms disappear<sup>5</sup>.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "NASA Climate Change and Global Warming",
+            "value": "https://climate.nasa.gov/effects/",
+            "snippet": "Official NASA data on Arctic sea ice decline rates and climate change impacts on polar regions.",
+            "number": "1"
+          },
+          {
+            "label": "IPCC Climate Change 2023 Report",
+            "value": "https://www.ipcc.ch/report/ar6/wg1/",
+            "snippet": "Comprehensive assessment of Antarctic ice sheet mass loss and contribution to sea level rise.",
+            "number": "2"
+          },
+          {
+            "label": "GRACE Satellite Data - Greenland Ice Loss",
+            "value": "https://grace.jpl.nasa.gov/resources/30/greenland-ice-loss/",
+            "snippet": "Satellite measurements showing Greenland ice sheet mass loss from 2002 to present.",
+            "number": "3"
+          },
+          {
+            "label": "NOAA Sea Level Trends",
+            "value": "https://tidesandcurrents.noaa.gov/sltrends/",
+            "snippet": "Historical and current sea level rise data from NOAA tide gauge stations worldwide.",
+            "number": "4"
+          },
+          {
+            "label": "WWF Arctic Wildlife Conservation",
+            "value": "https://www.worldwildlife.org/places/arctic",
+            "snippet": "Impact of sea ice loss on polar bear populations and Arctic ecosystem conservation efforts.",
+            "number": "5"
+          }
+        ],
+        "explorations": [
+          {
+            "label": "What are the tipping points for polar ice sheet collapse?",
+            "value": "What are the tipping points for polar ice sheet collapse?"
+          },
+          {
+            "label": "How do melting ice caps affect ocean currents?",
+            "value": "How do melting ice caps affect ocean currents?"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'Climate Change and Polar Ice - Source Citations Demo',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      },
+      {
+        "label": "Export",
+        "icon": "download",
+        "value": "export"
+      }
+    ]`,
+    sources: `[]`,
+    loading: false,
+    debug: true
+  },
+  render: (args) => html`
+    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
+      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Source Citations with Chips Demo</h3>
+        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
+          This demo shows <strong>inline source citations</strong> using <code>&lt;sup&gt;</code> tags that are automatically converted to 
+          <strong>extra-small spectrum-chip</strong> components. Hover over chips on desktop or tap on mobile to see source details.
+        </p>
+      </div>
+      
+      <spectrum-conversation-panel
+        .messages=${args.messages}
+        .conversationtitle=${args.conversationtitle}
+        .actions=${args.actions}
+        .sources=${args.sources}
+        .loading=${args.loading}
+        .debug=${args.debug}
+        @action=${(e: CustomEvent) => action('Action')(e.detail)}
+        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+      ></spectrum-conversation-panel>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #e7f3ff; border-radius: 6px; border-left: 4px solid #007bff;">
+        <p style="margin: 0; color: #004085; font-size: 0.875rem;">
+          <strong>💡 New Features:</strong><br>
+          • <code>&lt;sup&gt;1&lt;/sup&gt;</code> tags automatically become extra-small chips<br>
+          • <strong>Desktop:</strong> Hover over chips to see source details<br>
+          • <strong>Mobile:</strong> Tap chips to see source card slide up from bottom<br>
+          • Chips show corresponding source information from the sources array<br>
+          • Click chips to emit sourceClick events with message context
+        </p>
+      </div>
+    </div>
+  `,
+};
+
+export type Story = StoryObj<SpectrumConversationPanelArgs>;

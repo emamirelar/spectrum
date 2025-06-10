@@ -81,6 +81,7 @@ export namespace Components {
         "ripple": boolean;
         "selected": boolean;
         "showTrailingIcon": boolean;
+        "size": 'small' | 'medium' | 'large' | 'extra-small';
         "trailingIcon": string;
         "variant": 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
@@ -781,6 +782,7 @@ declare namespace LocalJSX {
         "ripple"?: boolean;
         "selected"?: boolean;
         "showTrailingIcon"?: boolean;
+        "size"?: 'small' | 'medium' | 'large' | 'extra-small';
         "trailingIcon"?: string;
         "variant"?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }

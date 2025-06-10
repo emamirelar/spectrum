@@ -51,8 +51,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Material Design 3 Colors**: Updated to use proper surface tokens - surface/on-surface for default and selected, surface-variant/on-surface-variant for hover states
   - **Improved Selection Indicators**: All options now use consistent Material Design checkbox icons - empty box for unselected (`check_box_outline_blank`) and checked box for selected (`check_box`) options
   - **Fully Rounded Trigger**: Select trigger now uses fully rounded caps (`border-radius: 100vw !important`) like button component for consistent design language across all variants
+- **spectrum-chip**: Added extra-small size variant for inline content citations
+  - **New Size Variant**: Added `size="extra-small"` prop option with compact styling (10px font, 1rem height, 4px padding)
+  - **Inline Integration**: Optimized for inline text usage with proper baseline alignment and minimal visual disruption
+  - **CSS Size Classes**: Added `.spectrum-chip--size-extra-small` class with responsive typography scaling
+  - **Typography Consistency**: Extra-small chips use `font-size: 10px` and reduced padding for seamless text integration
+  - **Storybook Support**: Enhanced chip stories to demonstrate all size variants including extra-small
+- **spectrum-conversation-panel**: 🚀 **Major Enhancement** - Automatic source citation conversion with interactive chips
+  - **Automatic Sup Tag Conversion**: Automatically parses `<sup>1</sup>` tags in message content and converts them to interactive spectrum-chip components
+  - **Inline Source Citations**: Source numbers in text become clickable extra-small chips showing source titles (e.g., "NASA Climate Change and Global Warming")
+  - **Desktop Hover Cards**: Hover over source chips shows detailed source information with 300ms delay including domain, title, and snippet
+  - **Mobile Source Cards**: Tap source chips on mobile shows slide-up source card from bottom with close button and "View Source" link
+  - **Smart Source Matching**: Automatically matches chip numbers with corresponding sources in message `sources` array by number field
+  - **Enhanced User Experience**: Replaces traditional expandable "Sources and related content" section with elegant inline citations
+  - **Event Integration**: Source chip clicks emit `sourceClick` events with full source data and message context
+  - **Responsive Design**: Hover functionality disabled on mobile (≤768px) with tap-to-show alternative
+  - **Debug Mode**: Enhanced debug logging for source parsing, chip creation, and interaction tracking
+  - **CSS Animations**: Smooth fadeInUp animations for hover cards and slideUp animations for mobile cards
+  - **Source Data Structure**: Supports sources with `number`, `label`, `value`, and `snippet` fields for rich source information
 
 ### 🔄 Changed
+- **spectrum-conversation-panel**: Removed redundant "Sources and related content" expandable section in favor of inline source citations
+  - **Streamlined UX**: Eliminated duplicate source presentation by removing traditional expandable sources section
+  - **Cleaner Interface**: Only "Dive Deeper" explorations section remains when available, reducing UI clutter
+  - **Consistent Citations**: All source information now accessible through elegant inline chip interactions
+  - **Simplified State Management**: Removed `sourcesExpanded` state and sources-related accordion handling
+  - **Code Cleanup**: Removed unused `renderSources()` method and `handleSourcesClick()` handlers
 - **spectrum-select**: Enabled minimal animation mode for better accessibility and performance
   - **Reduced Motion**: Select trigger buttons now use `minimalAnimation={true}` to disable transform animations
   - **Stable UX**: Eliminates jarring hover movements (translateY) while preserving other visual feedback
@@ -89,6 +113,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Better Maintainability**: Single source of truth for variant styling reduces duplication and maintenance overhead
 
 ### 🐛 Fixed
+- **spectrum-conversation-panel**: Fixed layout overflow and container structure issues
+  - **Root Cause**: Nested `conversation-panel-host` div wrappers were causing flexbox layout conflicts and container overflow
+  - **Solution**: Removed redundant wrapper div in `renderMessages()` method to maintain clean Host element structure
+  - **Behavior**: Conversation panel now properly fits within its parent container without overflowing
+  - **Layout Fix**: Restored proper scrolling behavior and eliminated layout confusion from duplicate CSS class structures
+  - **Components Restored**: Fixed missing source chips, action buttons, and "Dive Deeper" functionality
 - **spectrum-select**: Fixed multi-select mode incorrectly showing left icon
   - **Issue**: When multiple items were selected, the button was showing both the count badge AND the regular left icon
   - **Solution**: Updated `show-left-icon` logic to be `false` when displaying count badge for multiple selections

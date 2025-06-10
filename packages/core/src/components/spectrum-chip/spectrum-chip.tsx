@@ -19,6 +19,7 @@ export class SpectrumChip {
 
   // Chip Variants and Appearance
   @Prop() variant: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion' = 'primary';
+  @Prop() size: 'small' | 'medium' | 'large' | 'extra-small' = 'medium';
   @Prop() selected: boolean = false;
   @Prop() disabled: boolean = false;
   @Prop() outline: boolean = false;
@@ -122,6 +123,9 @@ export class SpectrumChip {
     
     // Add variant class
     classes.push(`spectrum-chip--${this.variant}`);
+    
+    // Add size class
+    classes.push(`spectrum-chip--${this.size}`);
     
     // Add outline class if needed
     if (this.outline) {

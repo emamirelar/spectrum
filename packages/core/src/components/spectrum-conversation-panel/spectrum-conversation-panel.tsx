@@ -48,12 +48,15 @@ export class SpectrumConversationPanel {
    */
   @Prop() debug: boolean = false;
 
-  @State() sourcesExpanded: boolean = false;
   @State() explorationsExpanded: boolean = false;
   @State() expandedMessageId: string | null = null;
-  @State() expandedAccordionType: 'sources' | 'explorations' | null = null;
+  @State() expandedAccordionType: 'explorations' | null = null;
   @State() messageArray: any[] = [];
+  @State() hoveredSourceChip: { messageId: string; sourceNumber: string; element: HTMLElement } | null = null;
+  @State() showMobileSourceCard: boolean = false;
+  @State() mobileSourceData: any = null;
   private messageIdMap: Map<number, string> = new Map();
+  private hoverTimeout: NodeJS.Timeout | null = null;
 
   @Event() explorationSelected: EventEmitter<{ action: string; exploration: string }>;
   @Event({
@@ -171,24 +174,22 @@ export class SpectrumConversationPanel {
   renderMessages() {
     this.debugLog('Rendering messages', { messageCount: this.messageArray.length, loading: this.loading });
     return (
-      <div class="conversation-panel-host">
-        <div class="conversation-panel" ref={(el) => this.conversationPanelRef = el}>
-          {this.messageArray.map((message, index) => {
-            return this.renderMessage(message, message.sender, index);
-          })}
-          {this.loading && (
-            <div class="message-wrapper response">
-              <div class="agentIcon"></div>
-              <div class="message">
-                <div class="loader">
-                  <span class="dot">.</span>
-                  <span class="dot">.</span>
-                  <span class="dot">.</span>
-                </div>
+      <div class="conversation-panel" ref={(el) => this.conversationPanelRef = el}>
+        {this.messageArray.map((message, index) => {
+          return this.renderMessage(message, message.sender, index);
+        })}
+        {this.loading && (
+          <div class="message-wrapper response">
+            <div class="agentIcon"></div>
+            <div class="message">
+              <div class="loader">
+                <span class="dot">.</span>
+                <span class="dot">.</span>
+                <span class="dot">.</span>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -237,38 +238,27 @@ export class SpectrumConversationPanel {
 
     // Check if data exists for conditional rendering
     const hasExplorations = response.explorations && Array.isArray(response.explorations) && response.explorations.length > 0;
-    const hasSources = response.sources && Array.isArray(response.sources) && response.sources.length > 0;
 
     return [
       <div class="message-wrapper response" id={`message-${messageId}`}>
         <div class="agentIcon"></div>
         <div class="message">
-          <div innerHTML={response.message}></div>
+          <div class="message-content">
+            {this.parseAndReplaceSupTags(response.message, response.sources || [], messageId)}
+          </div>
           <div class="actions">
             {this.renderActions(messageId)}
           </div>
-          {(hasExplorations || hasSources) && (
+          {hasExplorations && (
             <div class="accordion-row">
-              {hasExplorations && (
-                <spectrum-chip 
-                  variant="secondary"
-                  outline={true}
-                  label="Dive Deeper"
-                  leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
-                  onClick={() => this.handleExplorationsClick(messageId)}
-                  selected={activeAccordion === 'explorations'}
-                />
-              )}
-              {hasSources && (
-                <spectrum-chip 
-                  variant="secondary"
-                  outline={true}
-                  label="Sources and related content"
-                  leadingIcon={activeAccordion === 'sources' ? 'arrow_drop_up' : 'arrow_drop_down'}
-                  onClick={() => this.handleSourcesClick(messageId)}
-                  selected={activeAccordion === 'sources'}
-                />
-              )}
+              <spectrum-chip 
+                variant="secondary"
+                outline={true}
+                label="Dive Deeper"
+                leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
+                onClick={() => this.handleExplorationsClick(messageId)}
+                selected={activeAccordion === 'explorations'}
+              />
             </div>
           )}
         </div>
@@ -277,13 +267,6 @@ export class SpectrumConversationPanel {
         <div class="accordion-content expanded" id={`explorations-content-${messageId}`}>
           <div class="scroll-container">
             {this.renderExplorations(response.explorations, messageId)}
-          </div>
-        </div>
-      ),
-      activeAccordion === 'sources' && hasSources && (
-        <div class="accordion-content expanded" id={`sources-content-${messageId}`}>
-          <div class="scroll-container">
-            {this.renderSources(response.sources, messageId)}
           </div>
         </div>
       )
@@ -327,51 +310,6 @@ export class SpectrumConversationPanel {
   }
 
   /**
-   * RenderSources - render sources in the conversation panel 
-   * @param sources 
-   * @param messageId - the ID of the message these sources belong to
-   */
-  renderSources(sources: any, messageId?: string) {
-    return sources.map((source, index) => {
-      let displayUrl = source.value;
-      try {
-        const url = new URL(source.value);
-        displayUrl = url.hostname;
-      } catch (error) {
-        // If URL parsing fails, just use the original URL string
-        this.debugWarn(`Invalid URL: ${source.value}`);
-      }
-      
-      return (
-        <a 
-          href={source.value} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          key={index}
-          class="content-card"
-          onClick={() => this.sourceClick.emit({
-            action: 'sourceClick', 
-            label: source.label,
-            value: source.value,
-            messageId: messageId
-          })}
-        >
-          {source.number && (
-            <div class="number">{source.number}</div>
-          )}
-          <div class="card-content">
-            <div class="subtitle">{displayUrl}</div>
-            <div class="title">{source.label}</div>
-            {source.snippet && (
-              <div class="snippet">{source.snippet}</div>
-            )}
-          </div>
-        </a>
-      );
-    });
-  }
-
-  /**
    * RenderExplorations - render explorations in the conversation panel
    * @param explorations 
    * @param messageId - the ID of the message these explorations belong to
@@ -401,11 +339,7 @@ export class SpectrumConversationPanel {
     this.toggleAccordion(messageId, 'explorations');
   }
 
-  private handleSourcesClick = (messageId: string) => {
-    this.toggleAccordion(messageId, 'sources');
-  }
-
-  toggleAccordion(messageId: string, accordion: 'sources' | 'explorations') {
+  toggleAccordion(messageId: string, accordion: 'explorations') {
     this.debugLog('Toggling accordion', { messageId, accordion, currentExpanded: this.expandedMessageId });
     if (this.expandedMessageId === messageId && this.expandedAccordionType === accordion) {
       // Clicking the same accordion - collapse it
@@ -444,6 +378,288 @@ export class SpectrumConversationPanel {
     }
   }
 
+  /**
+   * Parse HTML content and replace <sup> tags with source chips
+   */
+  private parseAndReplaceSupTags(htmlContent: string, sources: any[], messageId: string): any {
+    this.debugLog('parseAndReplaceSupTags called', { htmlContent, sourcesLength: sources?.length, messageId });
+    
+    if (!sources || !Array.isArray(sources) || sources.length === 0) {
+      this.debugLog('No sources found, returning original content');
+      return <div innerHTML={htmlContent}></div>;
+    }
+
+    // Check if there are any sup tags
+    const supRegex = /<sup>(\d+)<\/sup>/g;
+    const matches = [...htmlContent.matchAll(supRegex)];
+    
+    if (matches.length === 0) {
+      this.debugLog('No sup tags found in content');
+      return <div innerHTML={htmlContent}></div>;
+    }
+
+    this.debugLog('Found sup tags, processing...', { matchCount: matches.length });
+    
+    // Build an array of elements
+    const elements: any[] = [];
+    let lastIndex = 0;
+    
+    matches.forEach((match) => {
+      const sourceNumber = match[1];
+      const matchStart = match.index!;
+      const matchEnd = matchStart + match[0].length;
+
+      this.debugLog('Processing sup tag', { sourceNumber, matchStart, matchEnd });
+
+      // Find the corresponding source
+      const source = sources.find(s => 
+        s.number === sourceNumber || 
+        s.number === parseInt(sourceNumber) || 
+        s.number?.toString() === sourceNumber
+      );
+
+      if (!source) {
+        this.debugWarn('No matching source found for number', sourceNumber);
+        return; // Skip if no matching source found
+      }
+
+      this.debugLog('Found matching source', source);
+
+      // Add text before the sup tag
+      if (matchStart > lastIndex) {
+        const beforeText = htmlContent.substring(lastIndex, matchStart);
+        if (beforeText.trim()) {
+          elements.push(<span innerHTML={beforeText} />);
+        }
+      }
+
+      // Add the source chip  
+      elements.push(
+        <spectrum-chip
+          size="extra-small"
+          variant="secondary"
+          outline={true}
+          label={source.label}
+          style={{ margin: '0 2px', verticalAlign: 'middle', display: 'inline-flex' }}
+          onMouseEnter={(e) => this.handleSourceChipHover(e, messageId, sourceNumber, source)}
+          onMouseLeave={() => this.handleSourceChipLeave()}
+          onClick={(e) => this.handleSourceChipClick(e, messageId, sourceNumber, source)}
+        />
+      );
+
+      lastIndex = matchEnd;
+    });
+
+    // Add remaining text after the last sup tag
+    if (lastIndex < htmlContent.length) {
+      const remainingText = htmlContent.substring(lastIndex);
+      if (remainingText.trim()) {
+        elements.push(<span innerHTML={remainingText} />);
+      }
+    }
+
+    this.debugLog('Created elements for rendering', { elementsLength: elements.length });
+    
+    // Return a div containing all elements
+    return <div style={{ display: 'inline' }}>{elements}</div>;
+  }
+
+  /**
+   * Handle source chip hover
+   */
+  private handleSourceChipHover = (event: MouseEvent, messageId: string, sourceNumber: string, _source: any) => {
+    const target = event.target as HTMLElement;
+    
+    // Check if we're on mobile
+    if (window.innerWidth <= 768) {
+      return; // Don't show hover on mobile
+    }
+    
+    // Clear any existing timeout
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+    
+    this.hoveredSourceChip = {
+      messageId,
+      sourceNumber,
+      element: target
+    };
+  }
+
+  /**
+   * Handle source chip leave
+   */
+  private handleSourceChipLeave = () => {
+    // Set a delay before hiding to allow user to hover over the card
+    this.hoverTimeout = setTimeout(() => {
+      this.hoveredSourceChip = null;
+    }, 300); // 300ms delay
+  }
+
+  /**
+   * Handle source overlay hover (keep it visible when hovering over the card)
+   */
+  private handleSourceOverlayEnter = () => {
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+  }
+
+  /**
+   * Handle source overlay leave
+   */
+  private handleSourceOverlayLeave = () => {
+    this.hoveredSourceChip = null;
+  }
+
+  /**
+   * Handle source chip click
+   */
+  private handleSourceChipClick = (event: MouseEvent, messageId: string, _sourceNumber: string, source: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    // Check if we're on mobile
+    if (window.innerWidth <= 768) {
+      this.mobileSourceData = source;
+      this.showMobileSourceCard = true;
+    } else {
+      // On desktop, emit the source click event
+      this.sourceClick.emit({
+        action: 'sourceClick',
+        label: source.label,
+        value: source.value,
+        messageId: messageId
+      });
+    }
+  }
+
+  /**
+   * Close mobile source card
+   */
+  private closeMobileSourceCard = () => {
+    this.showMobileSourceCard = false;
+    this.mobileSourceData = null;
+  }
+
+  /**
+   * Render desktop hover overlay for source chips
+   */
+  private renderSourceHoverOverlay() {
+    if (!this.hoveredSourceChip) return null;
+
+    const sourceNumber = this.hoveredSourceChip.sourceNumber;
+    const messageId = this.hoveredSourceChip.messageId;
+    
+    // Find the source data from the message
+    const message = this.messageArray.find((_msg, index) => this.messageIdMap.get(index) === messageId);
+    if (!message || !message.sources) return null;
+    
+    const source = message.sources.find(s => s.number === sourceNumber || s.number === parseInt(sourceNumber));
+    if (!source) return null;
+
+    // Calculate position based on the chip element
+    const chipElement = this.hoveredSourceChip.element;
+    const chipRect = chipElement.getBoundingClientRect();
+    
+    let displayUrl = source.value;
+    try {
+      const url = new URL(source.value);
+      displayUrl = url.hostname;
+    } catch (error) {
+      this.debugWarn(`Invalid URL: ${source.value}`);
+    }
+
+    return (
+      <div 
+        class="source-hover-overlay"
+        style={{
+          position: 'fixed',
+          top: `${chipRect.bottom + 8}px`,
+          left: `${chipRect.left}px`,
+          zIndex: '1000'
+        }}
+        onMouseEnter={this.handleSourceOverlayEnter}
+        onMouseLeave={this.handleSourceOverlayLeave}
+      >
+        <a 
+          href={source.value} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="content-card hover-card"
+          onClick={() => this.sourceClick.emit({
+            action: 'sourceClick',
+            label: source.label,
+            value: source.value,
+            messageId: messageId
+          })}
+        >
+          {source.number && (
+            <div class="number">{source.number}</div>
+          )}
+          <div class="card-content">
+            <div class="subtitle">{displayUrl}</div>
+            <div class="title">{source.label}</div>
+            {source.snippet && (
+              <div class="snippet">{source.snippet}</div>
+            )}
+          </div>
+        </a>
+      </div>
+    );
+  }
+
+  /**
+   * Render mobile source card that slides up from bottom
+   */
+  private renderMobileSourceCard() {
+    if (!this.mobileSourceData) return null;
+
+    const source = this.mobileSourceData;
+    let displayUrl = source.value;
+    try {
+      const url = new URL(source.value);
+      displayUrl = url.hostname;
+    } catch (error) {
+      this.debugWarn(`Invalid URL: ${source.value}`);
+    }
+
+    return (
+      <div class="mobile-source-overlay" onClick={this.closeMobileSourceCard}>
+        <div class="mobile-source-card" onClick={(e) => e.stopPropagation()}>
+          <div class="mobile-card-header">
+            <button class="close-button" onClick={this.closeMobileSourceCard}>
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div class="source-card">
+            {source.number && (
+              <div class="number">{source.number}</div>
+            )}
+            <div class="card-content">
+              <div class="subtitle">{displayUrl}</div>
+              <div class="title">{source.label}</div>
+              {source.snippet && (
+                <div class="snippet">{source.snippet}</div>
+              )}
+            </div>
+            <a 
+              href={source.value} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="view-source-button"
+            >
+              View Source
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <Host class="conversation-panel-host">
@@ -464,6 +680,12 @@ export class SpectrumConversationPanel {
               </h2>
               {this.renderMessages()}
           </div>
+          
+          {/* Desktop hover overlay for source chips */}
+          {this.hoveredSourceChip && this.renderSourceHoverOverlay()}
+          
+          {/* Mobile source card */}
+          {this.showMobileSourceCard && this.renderMobileSourceCard()}
       </Host>
     );
   }
