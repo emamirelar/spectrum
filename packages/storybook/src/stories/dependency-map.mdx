@@ -191,23 +191,22 @@ When implementing or modifying components, you **MUST**:
 
 ## 🔍 Visual Dependencies
 
-```mermaid
-graph TD
-    ST[spectrum-theme] --> |CSS Variables| ALL[All Components]
+<mermaid-diagram chart="graph TD
+    ST[spectrum-theme] --&gt; |CSS Variables| ALL[All Components]
     
-    SB[spectrum-button] --> |Direct Use| SR[spectrum-rail]
-    SB --> |Direct Use| SSI[spectrum-search-input] 
-    SB --> |Direct Use| SRI[spectrum-rail-item]
-    SB --> |Direct Use| SCM[spectrum-context-menu]
-    SB --> |Direct Use| SS[spectrum-select]
+    SB[spectrum-button] --&gt; |Direct Use| SR[spectrum-rail]
+    SB --&gt; |Direct Use| SSI[spectrum-search-input] 
+    SB --&gt; |Direct Use| SRI[spectrum-rail-item]
+    SB --&gt; |Direct Use| SCM[spectrum-context-menu]
+    SB --&gt; |Direct Use| SS[spectrum-select]
     
-    SC[spectrum-chip] --> |Direct Use| SCP[spectrum-conversation-panel]
+    SC[spectrum-chip] --&gt; |Direct Use| SCP[spectrum-conversation-panel]
     
-    SCTX[spectrum-context-menu] --> |Interface Export| SCL[spectrum-collapsible-list]
+    SCTX[spectrum-context-menu] --&gt; |Interface Export| SCL[spectrum-collapsible-list]
     
-    SSI --> |Slot Composition| SR
-    SRI --> |Slot Composition| SR  
-    SCL --> |Slot Composition| SR
+    SSI --&gt; |Slot Composition| SR
+    SRI --&gt; |Slot Composition| SR  
+    SCL --&gt; |Slot Composition| SR
     
     classDef foundation fill:#e1f5fe
     classDef atomic fill:#f3e5f5
@@ -219,8 +218,7 @@ graph TD
     class SB,SC,SCTX,SW,SCAR,SM,SIG atomic
     class SSI,SRI,SCL,SS composed
     class SR,SCP complex
-    class SS new
-```
+    class SS new"></mermaid-diagram>
 
 ---
 

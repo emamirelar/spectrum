@@ -1,4 +1,5 @@
 import './globals.css'
+import '../src/components/mermaid-diagram.ts'
 import type { Preview } from "@storybook/web-components";
 
 const preview: Preview = {

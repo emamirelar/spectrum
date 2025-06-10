@@ -37,6 +37,10 @@ const config: StorybookConfig = {
 
     const { mergeConfig } = await import('vite');
     return mergeConfig(config, {
+      // Enable React JSX support
+      esbuild: {
+        jsx: 'automatic',
+      },
       build: {
         chunkSizeWarningLimit: 1000,
         rollupOptions: {

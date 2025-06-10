@@ -14,6 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### 🆕 Added
+- **Documentation**: Enhanced dependency map with interactive mermaid diagrams for visual component relationships
+  - **Visual Dependency Flow**: Added interactive mermaid diagram showing component hierarchy and dependencies
+  - **Component Categorization**: Visual representation of Foundation, Atomic, Composed, and Complex component layers
+  - **Relationship Mapping**: Clear visual lines showing how components depend on and use each other
+  - **Color-coded Hierarchy**: Different colors for each component level (foundation, atomic, composed, complex)
+  - **New Component Highlighting**: Special styling for newly added components with red borders
+  - **Interactive Documentation**: Hover and click interactions for better exploration of component relationships
+  - **Storybook Integration**: Custom `mermaid-diagram` web component for seamless rendering in documentation
+  - **Auto-updating**: Diagrams automatically reflect changes as components are added or relationships change
 - **spectrum-button**: New `minimalAnimation` configuration option for accessibility and performance optimization
   - **Minimal Animation Mode**: New boolean prop `minimalAnimation` (default: false) to disable transform animations while preserving other effects
   - **Transform Disable**: When enabled, removes `translateY` animations on hover/active states and FAB button movements 
