@@ -14,6 +14,7 @@
 | `debug`             | `debug`             | Whether to enable debug logging                                  | `boolean` | `false`               |
 | `loading`           | `loading`           | Whether to show the loading indicator Default: false             | `boolean` | `false`               |
 | `messages`          | `messages`          | The messsages to display in the conversation panel Default: null | `string`  | `''`                  |
+| `sound`             | `sound`             | Whether to enable sound effects Default: false                   | `boolean` | `false`               |
 | `sources`           | `sources`           | The sources to display in the messages Default: null             | `string`  | `''`                  |
 
 
@@ -45,14 +46,17 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [spectrum-chip](../spectrum-chip)
+- [spectrum-accordion](../spectrum-accordion)
 - [spectrum-button](../spectrum-button)
+- [spectrum-chip](../spectrum-chip)
 
 ### Graph
 ```mermaid
 graph TD;
-  spectrum-conversation-panel --> spectrum-chip
+  spectrum-conversation-panel --> spectrum-accordion
   spectrum-conversation-panel --> spectrum-button
+  spectrum-conversation-panel --> spectrum-chip
+  spectrum-accordion --> spectrum-chip
   style spectrum-conversation-panel fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

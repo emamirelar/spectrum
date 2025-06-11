@@ -8,14 +8,42 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant']
+  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'horizontalScroll', 'label', 'outline', 'sound', 'variant']
+})
+@Component({
+  selector: 'spectrum-accordion',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'horizontalScroll', 'label', 'outline', 'sound', 'variant'],
+})
+export class SpectrumAccordion {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['accordionToggle']);
+  }
+}
+
+
+export declare interface SpectrumAccordion extends Components.SpectrumAccordion {
+  /**
+   * Event emitted when the accordion is toggled
+   */
+  accordionToggle: EventEmitter<CustomEvent<{ expanded: boolean; accordionId: string; }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLElement;
@@ -56,14 +84,14 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
 
 
 @ProxyCmp({
-  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'trailingIcon', 'variant']
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant']
 })
 @Component({
   selector: 'spectrum-chip',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'trailingIcon', 'variant'],
+  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant'],
 })
 export class SpectrumChip {
   protected el: HTMLElement;
@@ -159,7 +187,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
 
 
 @ProxyCmp({
-  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sources'],
+  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sound', 'sources'],
   methods: ['scrollToLatest']
 })
 @Component({
@@ -167,7 +195,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sources'],
+  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sound', 'sources'],
 })
 export class SpectrumConversationPanel {
   protected el: HTMLElement;
@@ -194,27 +222,28 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
 
 @ProxyCmp({
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'images', 'scrollDirection', 'selectedImages', 'selectionMode']
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'images', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({
   selector: 'spectrum-image-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'images', 'scrollDirection', 'selectedImages', 'selectionMode'],
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'images', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded']);
+    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted']);
   }
 }
 
 
 import type { ImageConfig as ISpectrumImageGalleryImageConfig } from '@stencil-storybook-boilerplate/core';
 import type { ImageAddedEvent as ISpectrumImageGalleryImageAddedEvent } from '@stencil-storybook-boilerplate/core';
+import type { ImageDeletedEvent as ISpectrumImageGalleryImageDeletedEvent } from '@stencil-storybook-boilerplate/core';
 
 export declare interface SpectrumImageGallery extends Components.SpectrumImageGallery {
 
@@ -223,6 +252,8 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   imageDeselect: EventEmitter<CustomEvent<ISpectrumImageGalleryImageConfig>>;
 
   imageAdded: EventEmitter<CustomEvent<ISpectrumImageGalleryImageAddedEvent>>;
+
+  imageDeleted: EventEmitter<CustomEvent<ISpectrumImageGalleryImageDeletedEvent>>;
 }
 
 

@@ -19,6 +19,7 @@ export { SpectrumTheme } from './components/spectrum-theme/spectrum-theme';
 export { SpectrumImageGallery } from './components/spectrum-image-gallery/spectrum-image-gallery';
 export { SpectrumToast } from './components/spectrum-toast/spectrum-toast';
 export { SpectrumSelect } from './components/spectrum-select/spectrum-select';
+export { SpectrumAccordion } from './components/spectrum-accordion/spectrum-accordion';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';

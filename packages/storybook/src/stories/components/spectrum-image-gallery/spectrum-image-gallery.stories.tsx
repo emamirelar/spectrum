@@ -14,6 +14,7 @@ interface SpectrumImageGalleryArgs {
   selectedImages: string[];
   scrollDirection: ScrollDirection;
   isLoading: boolean;
+  debug: boolean;
 }
 
 // Beautiful Unsplash images for demo
@@ -289,96 +290,31 @@ const meta = {
     docs: {
       description: {
         component: `
-# Spectrum Image Gallery
-
 A beautiful, responsive image gallery component with masonry and horizontal layouts. Features modal-based image upload, URL input, selection capabilities, and delete functionality.
 
-## Key Features
+**Key Features:**
+- Masonry Layout: Pinterest-style vertical masonry using CSS columns
+- Horizontal Scrolling: Linear horizontal layout for carousels and strips  
+- File Upload: Modal-based drag & drop and file browser upload
+- URL Input: Add images from external URLs with validation
+- Selection Modes: Single select, multi-select, or no selection
+- Delete Functionality: Remove selected images
+- Event System: Rich events with complete image data
+- Responsive Design: Adapts seamlessly to different screen sizes
+- Accessibility: Full keyboard navigation and screen reader support
+- Spectrum Theming: Consistent with Spectrum design patterns
 
-- **Masonry Layout**: Pinterest-style vertical masonry using CSS columns
-- **Horizontal Scrolling**: Linear horizontal layout for carousels and strips
-- **File Upload**: Modal-based drag & drop and file browser upload
-- **URL Input**: Add images from external URLs with validation
-- **Selection Modes**: Single select, multi-select, or no selection
-- **Delete Functionality**: Remove selected images
-- **Event System**: Rich events with complete image data
-- **Responsive Design**: Adapts seamlessly to different screen sizes
-- **Accessibility**: Full keyboard navigation and screen reader support
-- **Spectrum Theming**: Consistent with Spectrum design patterns
+**Upload Functionality:**
+When users upload files, they are converted to base64 data URLs using FileReader for immediate display. Images appear instantly in the gallery with rich metadata including filename, size, type, and upload timestamp. Complete image data is emitted via imageAdded event. Images exist only in component state and are lost on page refresh.
 
-## Upload Functionality
+**Event System:**
+The imageAdded event is emitted when images are uploaded or added via URL. The imageSelected and imageDeselect events are emitted when images are selected/deselected and return ImageConfig objects directly.
 
-When users upload files:
-1. **File Processing**: Files are converted to base64 data URLs using \`FileReader\`
-2. **Immediate Display**: Images appear instantly in the gallery (no server required)
-3. **Rich Metadata**: Preserves filename, size, type, and upload timestamp
-4. **Event Emission**: Complete image data is emitted via \`imageAdded\` event
-5. **Temporary Storage**: Images exist only in component state (lost on page refresh)
-
-## Event System
-
-### imageAdded Event
-Emitted when images are uploaded or added via URL:
-\`\`\`typescript
-{
-  image: {
-    id: string;           // Unique generated ID
-    url: string;          // Base64 data URL or external URL
-    alt: string;          // Filename or description
-    title: string;        // Display title
-    metadata: {
-      fileName?: string;  // Original filename (uploads only)
-      fileSize?: number;  // File size in bytes (uploads only)
-      fileType?: string;  // MIME type (uploads only)
-      uploadDate?: string; // ISO timestamp (uploads only)
-      source: 'upload' | 'url';
-    }
-  },
-  source: 'upload' | 'url'
-}
-\`\`\`
-
-### imageSelected / imageDeselect Events
-Emitted when images are selected/deselected (returns \`ImageConfig\` object directly).
-
-## Important Notes
-
-- **No Persistence**: Images are stored temporarily in component state only
-- **Client-Side Only**: No server communication - parent must handle persistence
-- **Base64 Storage**: Uploaded images are converted to data URLs for immediate use
-- **Event-Driven**: Use events to sync with external state management or APIs
-
-## Usage
-
-\`\`\`html
-<!-- Basic vertical gallery (masonry) -->
-<spectrum-image-gallery></spectrum-image-gallery>
-
-<!-- Horizontal scrolling gallery -->
-<spectrum-image-gallery scroll-direction="horizontal"></spectrum-image-gallery>
-
-<!-- Gallery with images and multi-select -->
-<spectrum-image-gallery 
-  .images="[{...}]" 
-  selection-mode="multi">
-</spectrum-image-gallery>
-
-<!-- Read-only gallery -->
-<spectrum-image-gallery 
-  .images="[{...}]" 
-  selection-mode="none"
-  allow-upload="false" 
-  allow-url-input="false"
-  allow-delete="false">
-</spectrum-image-gallery>
-
-<!-- Event handling -->
-<spectrum-image-gallery 
-  @imageAdded="\${(e) => handleImageAdded(e.detail)}"
-  @imageSelected="\${(e) => handleImageSelected(e.detail)}"
-  @imageDeselect="\${(e) => handleImageDeselect(e.detail)}">
-</spectrum-image-gallery>
-\`\`\`
+**Important Notes:**
+- No Persistence: Images are stored temporarily in component state only
+- Client-Side Only: No server communication - parent must handle persistence  
+- Base64 Storage: Uploaded images are converted to data URLs for immediate use
+- Event-Driven: Use events to sync with external state management or APIs
         `,
       },
     },
@@ -392,6 +328,7 @@ Emitted when images are selected/deselected (returns \`ImageConfig\` object dire
     selectedImages: [],
     scrollDirection: 'vertical',
     isLoading: false,
+    debug: false,
   },
   argTypes: {
     images: {
@@ -460,6 +397,14 @@ Emitted when images are selected/deselected (returns \`ImageConfig\` object dire
         defaultValue: { summary: 'false' },
       },
     },
+    debug: {
+      control: 'boolean',
+      description: 'Debug mode indicator',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
   },
 } satisfies Meta<SpectrumImageGallery>;
 
@@ -475,9 +420,11 @@ const renderGallery = (args: SpectrumImageGalleryArgs) => html`
       .selectionMode=${args.selectionMode}
       .selectedImages=${args.selectedImages}
       .scrollDirection=${args.scrollDirection}
+      .debug=${args.debug}
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+      @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
     ></spectrum-image-gallery>
   </div>
 `;
@@ -492,9 +439,11 @@ const renderScrollableGallery = (args: SpectrumImageGalleryArgs) => html`
       .selectionMode=${args.selectionMode}
       .selectedImages=${args.selectedImages}
       .scrollDirection=${args.scrollDirection}
+      .debug=${args.debug}
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+      @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
     ></spectrum-image-gallery>
   </div>
 `;
@@ -636,6 +585,7 @@ export const ResponsiveDemo: StoryObj<SpectrumImageGalleryArgs> = {
         @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
         @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
         @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+        @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
       ></spectrum-image-gallery>
     </div>
   `,
@@ -658,8 +608,8 @@ export const EventHandling: StoryObj<SpectrumImageGalleryArgs> = {
       <div style="margin-bottom: 16px; padding: 12px; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #0070d2;">
         <strong>Event Handling Demo:</strong> 
         Check the Actions panel below to see events fired when interacting with the gallery.
-        Try selecting images, uploading files, or adding URLs through the modals.
-        <br><strong>Events:</strong> imageSelected and imageDeselect emit ImageConfig objects directly.
+        Try selecting images, uploading files, adding URLs, or deleting selected images.
+        <br><strong>Events:</strong> imageSelected, imageDeselect, imageAdded, and imageDeleted events with complete data payloads.
       </div>
       <div style="height: 500px; width: 100%; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden;">
         <spectrum-image-gallery
@@ -671,6 +621,7 @@ export const EventHandling: StoryObj<SpectrumImageGalleryArgs> = {
           @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
           @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
           @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
         ></spectrum-image-gallery>
       </div>
     </div>
@@ -678,7 +629,7 @@ export const EventHandling: StoryObj<SpectrumImageGalleryArgs> = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstration of all events emitted by the gallery component. Check the Actions panel to see detailed event information. Events now emit ImageConfig objects directly.',
+        story: 'Demonstration of all events emitted by the gallery component. Check the Actions panel to see detailed event information including imageSelected, imageDeselect, imageAdded, and imageDeleted events with complete data payloads.',
       },
     },
   },
@@ -797,6 +748,7 @@ export const ScrollDirectionComparison: StoryObj<SpectrumImageGalleryArgs> = {
           @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
           @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
           @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
         ></spectrum-image-gallery>
       </div>
       <div style="border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden;">
@@ -810,6 +762,7 @@ export const ScrollDirectionComparison: StoryObj<SpectrumImageGalleryArgs> = {
           @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
           @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
           @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
         ></spectrum-image-gallery>
       </div>
     </div>

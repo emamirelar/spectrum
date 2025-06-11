@@ -13,6 +13,12 @@ export interface ImageAddedEvent {
   source: 'upload' | 'url';
 }
 
+export interface ImageDeletedEvent {
+  deletedImages: ImageConfig[];
+  deletedIds: string[];
+  remainingCount: number;
+}
+
 export type SelectionMode = 'single' | 'multi' | 'none';
 export type ScrollDirection = 'vertical' | 'horizontal';
 
@@ -32,6 +38,7 @@ export class SpectrumImageGallery {
   @Prop() selectionMode: SelectionMode = 'single';
   @Prop() selectedImages: string[] = [];
   @Prop() scrollDirection: ScrollDirection = 'vertical';
+  @Prop() debug: boolean = false;
 
   // Internal State
   @State() allImages: ImageConfig[] = [];
@@ -45,9 +52,37 @@ export class SpectrumImageGallery {
   @Event() imageSelected: EventEmitter<ImageConfig>;
   @Event() imageDeselect: EventEmitter<ImageConfig>;
   @Event() imageAdded: EventEmitter<ImageAddedEvent>;
+  @Event() imageDeleted: EventEmitter<ImageDeletedEvent>;
 
   // Element References
   private fileInputRef: HTMLInputElement;
+
+  /**
+   * Debug logging utility
+   */
+  private debugLog(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.log(`[spectrum-image-gallery] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Debug error utility
+   */
+  private debugError(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.error(`[spectrum-image-gallery] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Debug warning utility
+   */
+  private debugWarn(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.warn(`[spectrum-image-gallery] ${message}`, ...args);
+    }
+  }
 
   componentWillLoad() {
     this.allImages = [...this.images];
@@ -161,7 +196,7 @@ export class SpectrumImageGallery {
           source: 'upload'
         });
       } catch (error) {
-        console.error('Failed to process file:', error);
+        this.debugError('Failed to process file:', error);
       }
     }
 
@@ -202,7 +237,7 @@ export class SpectrumImageGallery {
       const isValid = await this.validateImageUrl(url.toString());
       
       if (!isValid) {
-        console.error('Image URL is not accessible or not a valid image:', url.toString());
+        this.debugError('Image URL is not accessible or not a valid image:', url.toString());
         alert('Unable to load image from this URL. Please check the URL and ensure the image is publicly accessible.');
         this.isLoading = false;
         return;
@@ -228,7 +263,7 @@ export class SpectrumImageGallery {
 
       this.closeUrlModal();
     } catch (error) {
-      console.error('Invalid URL:', error);
+      this.debugError('Invalid URL:', error);
       alert('Please enter a valid URL');
     }
 
@@ -274,7 +309,7 @@ export class SpectrumImageGallery {
               `;
               imgElement.parentElement.appendChild(errorDiv);
             }
-            console.warn(`Failed to load image: ${image.url}`);
+            this.debugWarn(`Failed to load image: ${image.url}`);
           }}
         />
         {isSelected && isSelectable && (
@@ -394,6 +429,11 @@ export class SpectrumImageGallery {
 
     const selectedIds = [...this.internalSelectedImages];
     
+    // Get the actual image objects that will be deleted
+    const imagesToDelete = this.allImages.filter(image => 
+      selectedIds.includes(image.id)
+    );
+    
     // Remove selected images from the gallery
     this.allImages = this.allImages.filter(image => 
       !selectedIds.includes(image.id)
@@ -402,13 +442,20 @@ export class SpectrumImageGallery {
     // Clear selection
     this.internalSelectedImages = [];
     
-    console.log(`Deleted ${selectedIds.length} images. Gallery now has ${this.allImages.length} images.`);
+    // Emit the delete event with deleted image data
+    this.imageDeleted.emit({
+      deletedImages: imagesToDelete,
+      deletedIds: selectedIds,
+      remainingCount: this.allImages.length
+    });
+    
+    this.debugLog(`Deleted ${selectedIds.length} images. Gallery now has ${this.allImages.length} images.`);
   }
 
   render() {
     const hasImages = this.allImages.length > 0;
     
-    console.log(`Rendering gallery: ${this.allImages.length} images, hasImages: ${hasImages}`);
+    this.debugLog(`Rendering gallery: ${this.allImages.length} images, hasImages: ${hasImages}`);
 
     return (
       <Host>
@@ -424,7 +471,7 @@ export class SpectrumImageGallery {
               'gallery__grid--horizontal': this.scrollDirection === 'horizontal'
             }}>
               {this.allImages.map((image, index) => {
-                console.log(`Rendering image ${index}:`, image);
+                this.debugLog(`Rendering image ${index}:`, image);
                 return this.renderThumbnail(image, index);
               })}
             </div>

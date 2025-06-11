@@ -44,6 +44,12 @@ export class SpectrumConversationPanel {
   @Prop() loading: boolean = false;
 
   /**
+   * Whether to enable sound effects
+   * Default: false
+  **/
+  @Prop() sound: boolean = false;
+
+  /**
    * Whether to enable debug logging
    */
   @Prop() debug: boolean = false;
@@ -57,6 +63,8 @@ export class SpectrumConversationPanel {
   @State() mobileSourceData: any = null;
   private messageIdMap: Map<number, string> = new Map();
   private hoverTimeout: NodeJS.Timeout | null = null;
+  private audioElement: HTMLAudioElement | null = null;
+  private isAudioLooping: boolean = false;
 
   @Event() explorationSelected: EventEmitter<{ action: string; exploration: string }>;
   @Event({
@@ -87,6 +95,23 @@ export class SpectrumConversationPanel {
   loadingChanged(newValue: boolean) {
     if (newValue) {
       this.scrollToLatest();
+      // Start playing waiting sound if sound is enabled
+      if (this.sound) {
+        this.playWaitingSound();
+      }
+    } else {
+      // Stop playing waiting sound
+      this.stopWaitingSound();
+    }
+  }
+
+  @Watch('sound')
+  handleSoundChange(newValue: boolean) {
+    if (newValue && !this.audioElement) {
+      this.initializeAudio();
+    } else if (!newValue) {
+      // If sound is disabled, stop any playing audio
+      this.stopWaitingSound();
     }
   }
 
@@ -161,11 +186,39 @@ export class SpectrumConversationPanel {
     }, 100);
   }
 
+  componentWillLoad() {
+    this.debugLog('Component will load', {
+      loading: this.loading,
+      sound: this.sound
+    });
+
+    // Initialize audio if sound is enabled
+    if (this.sound) {
+      this.initializeAudio();
+    }
+  }
+
   componentDidUpdate() {
     // Also scroll to latest when component updates (after re-renders)
     setTimeout(() => {
       this.scrollToLatest();
     }, 50);
+  }
+
+  disconnectedCallback() {
+    this.debugLog('Component disconnecting, cleaning up audio');
+    // Clean up audio element when component is destroyed
+    if (this.audioElement) {
+      this.audioElement.pause();
+      this.audioElement = null;
+    }
+    this.isAudioLooping = false;
+    
+    // Clear any hover timeouts
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
   }
 
   /** 
@@ -250,26 +303,19 @@ export class SpectrumConversationPanel {
             {this.renderActions(messageId)}
           </div>
           {hasExplorations && (
-            <div class="accordion-row">
-              <spectrum-chip 
-                variant="secondary"
-                outline={true}
-                label="Dive Deeper"
-                leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
-                onClick={() => this.handleExplorationsClick(messageId)}
-                selected={activeAccordion === 'explorations'}
-              />
-            </div>
+            <spectrum-accordion
+              expanded={activeAccordion === 'explorations'}
+              label="Dive Deeper"
+              sound={this.sound}
+              horizontalScroll={false}
+              accordionId={`explorations-${messageId}`}
+              onAccordionToggle={(event) => this.handleAccordionToggle(event, messageId, 'explorations')}
+            >
+              {this.renderExplorations(response.explorations, messageId)}
+            </spectrum-accordion>
           )}
         </div>
-      </div>,
-      activeAccordion === 'explorations' && hasExplorations && (
-        <div class="accordion-content expanded" id={`explorations-content-${messageId}`}>
-          <div class="scroll-container">
-            {this.renderExplorations(response.explorations, messageId)}
-          </div>
-        </div>
-      )
+      </div>
     ];
   }
 
@@ -281,10 +327,15 @@ export class SpectrumConversationPanel {
    * @param messageId - the ID of the message these actions belong to
    */
   private renderActions(messageId?: string) {
-    if (!this.actions) return null;
+    this.debugLog('renderActions called', { actions: this.actions, messageId });
+    if (!this.actions) {
+      this.debugLog('No actions provided, returning null');
+      return null;
+    }
 
     try {
       const actionsList = JSON.parse(this.actions);
+      this.debugLog('Parsed actions successfully', { actionsList, length: actionsList.length });
       return (
         <div class="spectrum-conversation-panel__actions">
           {actionsList.map((action: any) => (
@@ -293,6 +344,7 @@ export class SpectrumConversationPanel {
               iconOnly={true}
               showLeftIcon={true}
               leftIcon={action.icon}
+              sound={this.sound}
               onClick={() => this.action.emit({
                 action: action.value || action.label || 'action',
                 type: 'action',
@@ -315,28 +367,39 @@ export class SpectrumConversationPanel {
    * @param messageId - the ID of the message these explorations belong to
    */
   renderExplorations(explorations: any, messageId?: string) {
-    return (
-      <div class="explorations-container">
-        {explorations.map((exploration) => (
-          <button 
-            class="exploration-chip"
-            onClick={() => this.action.emit({
-              action: 'explore',
-              type: 'exploration',
-              value: exploration.value,
-              messageId: messageId
-            })}
-          >
-            <span class="material-symbols-outlined">prompt_suggestion</span>
-            <span class="chip-label">{exploration.label}</span>
-          </button>
-        ))}
-      </div>
-    );
+    this.debugLog('renderExplorations called', { explorations, messageId });
+    if (!explorations || !Array.isArray(explorations) || explorations.length === 0) {
+      this.debugLog('No valid explorations provided');
+      return null;
+    }
+    
+    // Return chips directly without container div for accordion usage
+    return explorations.map((exploration) => (
+      <spectrum-chip
+        variant="secondary"
+        label={exploration.label}
+        leadingIcon="prompt_suggestion"
+        sound={this.sound}
+        onClick={() => this.action.emit({
+          action: 'explore',
+          type: 'exploration',
+          value: exploration.value,
+          messageId: messageId
+        })}
+      />
+    ));
   }
 
-  private handleExplorationsClick = (messageId: string) => {
-    this.toggleAccordion(messageId, 'explorations');
+  private handleAccordionToggle = (event: CustomEvent, messageId: string, accordionType: 'explorations') => {
+    const { expanded } = event.detail;
+    
+    if (expanded) {
+      this.expandedMessageId = messageId;
+      this.expandedAccordionType = accordionType;
+    } else {
+      this.expandedMessageId = null;
+      this.expandedAccordionType = null;
+    }
   }
 
   toggleAccordion(messageId: string, accordion: 'explorations') {
@@ -440,6 +503,7 @@ export class SpectrumConversationPanel {
           variant="secondary"
           outline={true}
           label={source.label}
+          sound={this.sound}
           style={{ margin: '0 2px', verticalAlign: 'middle', display: 'inline-flex' }}
           onMouseEnter={(e) => this.handleSourceChipHover(e, messageId, sourceNumber, source)}
           onMouseLeave={() => this.handleSourceChipLeave()}
@@ -658,6 +722,109 @@ export class SpectrumConversationPanel {
         </div>
       </div>
     );
+  }
+
+  // ============== Audio Management ==============
+  private initializeAudio() {
+    try {
+      this.debugLog('Initializing audio for waiting sound');
+      this.loadWaitingSound();
+    } catch (error) {
+      this.debugError('Failed to initialize audio', error);
+    }
+  }
+
+  private loadWaitingSound() {
+    try {
+      // Try multiple possible paths for the waiting.mp3 file
+      const possiblePaths = [
+        './waiting.mp3',
+        '/waiting.mp3',
+        '../waiting.mp3',
+        'waiting.mp3',
+        '/assets/waiting.mp3',
+        './assets/waiting.mp3'
+      ];
+
+      // Try the first path
+      this.audioElement = new Audio(possiblePaths[0]);
+      this.audioElement.preload = 'auto';
+      this.audioElement.volume = 0.3;
+      this.audioElement.loop = true;
+      
+      // Test if the audio can be loaded
+      this.audioElement.addEventListener('canplaythrough', () => {
+        this.debugLog('Waiting sound loaded successfully');
+      });
+      
+      this.audioElement.addEventListener('error', (e) => {
+        this.debugWarn('Waiting sound failed to load from path, trying next path', e);
+        // Try other paths if the first one fails
+        this.tryAlternatePaths(possiblePaths.slice(1));
+      });
+      
+      this.audioElement.addEventListener('ended', () => {
+        // This shouldn't trigger since we're using loop=true, but just in case
+        if (this.isAudioLooping && this.loading) {
+          this.audioElement?.play();
+        }
+      });
+      
+    } catch (error) {
+      this.debugError('Failed to load waiting sound', error);
+    }
+  }
+
+  private tryAlternatePaths(paths: string[]) {
+    if (paths.length === 0) {
+      this.debugWarn('All audio paths failed, no waiting sound available');
+      return;
+    }
+
+    const nextPath = paths[0];
+    this.debugLog('Trying alternate audio path:', nextPath);
+    
+    if (this.audioElement) {
+      this.audioElement.src = nextPath;
+      this.audioElement.load();
+      
+      // Remove old error listener and add new one for remaining paths
+      this.audioElement.addEventListener('error', () => {
+        this.tryAlternatePaths(paths.slice(1));
+      }, { once: true });
+    }
+  }
+
+  private playWaitingSound() {
+    if (!this.sound || !this.audioElement) return;
+
+    try {
+      this.debugLog('Starting waiting sound');
+      this.isAudioLooping = true;
+      this.audioElement.currentTime = 0;
+      const playPromise = this.audioElement.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          this.debugError('Failed to play waiting sound', error);
+        });
+      }
+    } catch (error) {
+      this.debugError('Error playing waiting sound', error);
+    }
+  }
+
+  private stopWaitingSound() {
+    if (this.audioElement && this.isAudioLooping) {
+      try {
+        this.debugLog('Stopping waiting sound');
+        this.audioElement.pause();
+        this.audioElement.currentTime = 0;
+        this.isAudioLooping = false;
+      } catch (error) {
+        this.debugError('Error stopping waiting sound', error);
+      }
+    }
   }
 
   render() {

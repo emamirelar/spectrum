@@ -25,6 +25,7 @@ Supports leading/trailing icons, selection states, and various interactive behav
 | `selected`         | `selected`           |             | `boolean`                                                                     | `false`     |
 | `showTrailingIcon` | `show-trailing-icon` |             | `boolean`                                                                     | `false`     |
 | `size`             | `size`               |             | `"extra-small" \| "large" \| "medium" \| "small"`                             | `'medium'`  |
+| `sound`            | `sound`              |             | `boolean`                                                                     | `false`     |
 | `trailingIcon`     | `trailing-icon`      |             | `string`                                                                      | `'close'`   |
 | `variant`          | `variant`            |             | `"assist" \| "filter" \| "input" \| "primary" \| "secondary" \| "suggestion"` | `'primary'` |
 
@@ -40,11 +41,13 @@ Supports leading/trailing icons, selection states, and various interactive behav
 
 ### Used by
 
+ - [spectrum-accordion](../spectrum-accordion)
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
 
 ### Graph
 ```mermaid
 graph TD;
+  spectrum-accordion --> spectrum-chip
   spectrum-conversation-panel --> spectrum-chip
   style spectrum-chip fill:#f9f,stroke:#333,stroke-width:4px
 ```

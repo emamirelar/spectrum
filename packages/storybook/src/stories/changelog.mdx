@@ -27,6 +27,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.1-alpha.22] - 2025-01-02
+
+### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-accordion**: 🚀 **New Component** - Reusable collapsible content sections with configurable layouts
+  - **Flexible Layouts**: Horizontal scrolling (default) or vertical stacking layout options
+  - **Configurable Trigger**: Customizable label, icons, and chip variants (primary/secondary)
+  - **Sound Support**: Optional audio feedback integration with child components
+  - **State Management**: External state control with `expanded` prop and `accordionToggle` event emission
+  - **Accessibility**: ARIA compliant with keyboard navigation and screen reader support
+  - **Animation**: Smooth expand/collapse animations with fadeInDown effects and reduced motion support
+  - **Theming**: Full Spectrum design system integration with CSS custom properties
+  - **Debug Mode**: Optional debug logging for troubleshooting state changes and interactions
+  - **Props**: `expanded`, `label`, `collapsedIcon`, `expandedIcon`, `sound`, `horizontalScroll`, `disabled`, `variant`, `outline`, `accordionId`, `debug`
+  - **Events**: `accordionToggle` with payload `{ expanded: boolean, accordionId: string }`
+  - **Slot Support**: Clean slot-based content projection for flexible child component usage
+  - **CSS Architecture**: BEM methodology with modifier classes for expanded/collapsed states
+  - **Level 1 Component**: Atomic component with no internal dependencies on other Spectrum components
+- **spectrum-conversation-panel**: Enhanced sound support for accordion interactions
+  - **Sound Propagation**: Sound effects now properly pass through to accordion component
+  - **Consistent Audio**: Accordion and exploration chips respect the conversation panel's `sound` property
+  - **Audio Integration**: Seamless audio feedback across all interactive elements in the conversation
+- **spectrum-image-gallery**: New `imageDeleted` event for tracking image removal
+  - **Delete Event Emission**: Emits comprehensive event data when images are deleted via the delete button
+  - **Rich Event Payload**: Includes deleted image objects, IDs, and remaining image count for complete tracking
+  - **Event Structure**: `{ deletedImages: ImageConfig[], deletedIds: string[], remainingCount: number }`
+  - **Storybook Integration**: All gallery stories now include the `imageDeleted` event listener for testing
+  - **User Experience**: Provides visibility into which specific images were removed from the gallery
+  - **Developer API**: Enables external state management and analytics tracking for delete operations
+
+### 🔄 Changed
+- **spectrum-conversation-panel**: Refactored to use reusable spectrum-accordion component
+  - **Component Abstraction**: Replaced inline accordion implementation with dedicated spectrum-accordion component
+  - **Identical Behavior**: Maintained exact same API, events, and user experience as before
+  - **Code Reduction**: Removed inline accordion CSS and JavaScript in favor of reusable component
+  - **Vertical Layout**: Updated to use vertical accordion layout (`horizontalScroll={false}`) for better exploration readability
+  - **Cleaner Architecture**: Exploration rendering now uses accordion slots for better component composition
+  - **State Synchronization**: Enhanced state management with `handleAccordionToggle` method for proper expansion tracking
+  - **Dependency Update**: Now depends on spectrum-accordion component (Level 2 -> Level 3 in hierarchy)
+- **spectrum-accordion**: CSS layout optimizations for better alignment and spacing
+  - **Flush Left Alignment**: Both horizontal and vertical layouts now align flush left with trigger button
+  - **Improved Spacing**: Uses standard Spectrum spacing tokens between elements for consistency
+  - **Responsive Design**: Maintained spacing optimization on mobile devices
+  - **No Padding Interference**: Removed left/right padding to ensure clean alignment with parent elements
+
+### 🐛 Fixed
+- **spectrum-accordion**: Resolved slot content rendering issues with conditional visibility
+  - **Root Cause**: Stencil slot projection was showing content even when parent container was conditionally hidden
+  - **Solution**: Changed from conditional JSX rendering to CSS-based visibility control using display properties
+  - **Implementation**: Always render content container but control visibility with `--expanded` and `--collapsed` CSS classes
+  - **State Management**: Enhanced `@Watch` decorator and lifecycle methods for proper state synchronization
+  - **Debug Support**: Added comprehensive debugging to track state changes and rendering behavior
+
+### 📝 Documentation
+- **spectrum-accordion**: Complete documentation with markdown-based autodocs
+  - **Comprehensive Guide**: Full markdown documentation following established patterns
+  - **Usage Scenarios**: 6 different usage examples with code snippets
+  - **API Reference**: Complete properties and events tables with types and defaults  
+  - **Integration Examples**: Shows usage with spectrum-chip and spectrum-button components
+  - **Accessibility Features**: ARIA compliance, keyboard navigation, and reduced motion support
+  - **Best Practices**: Guidelines for content organization, visual hierarchy, and performance
+  - **Troubleshooting**: Common issues and solutions for developers
+  - **Storybook Stories**: 8 comprehensive stories showcasing all variants and features
+  - **Autodocs Integration**: Uses `tags: ['autodocs']` and external markdown file for documentation
+
+---
+
 ## [0.0.1-alpha.21] - 2024-12-31
 
 ### 🧪 Pre-release

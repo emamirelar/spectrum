@@ -724,7 +724,7 @@ export const KeyboardNavigation: StoryObj<SpectrumSelectArgs> = {
     placeholder: 'Try keyboard navigation',
     options: largeCityOptions,
     searchable: true,
-    debug: true
+    debug: false
   },
   render: renderSelect,
   parameters: {

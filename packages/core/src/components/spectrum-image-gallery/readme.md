@@ -47,6 +47,16 @@ Emitted when images are uploaded or added via URL:
 }
 ```
 
+### imageDeleted Event
+Emitted when selected images are deleted:
+```typescript
+{
+  deletedImages: ImageConfig[];  // Array of deleted image objects
+  deletedIds: string[];          // Array of deleted image IDs
+  remainingCount: number;        // Count of remaining images in gallery
+}
+```
+
 ### imageSelected / imageDeselected Events
 Emitted when images are selected/deselected (returns `ImageConfig` object directly).
 
@@ -66,6 +76,7 @@ Emitted when images are selected/deselected (returns `ImageConfig` object direct
 | Event | Description | Type |
 | ----- | ----------- | ---- |
 | `imageAdded` | Emitted when an image is uploaded or added via URL | `CustomEvent<{image: ImageConfig, source: 'upload' \| 'url'}>` |
+| `imageDeleted` | Emitted when selected images are deleted | `CustomEvent<{deletedImages: ImageConfig[], deletedIds: string[], remainingCount: number}>` |
 | `imageDeselected` | Emitted when an image is deselected | `CustomEvent<ImageConfig>` |
 | `imageSelected` | Emitted when an image is selected | `CustomEvent<ImageConfig>` |
 
@@ -201,6 +212,7 @@ The component inherits theming from the Spectrum theme system. Key variables inc
 | `allowDelete`     | `allow-delete`     |             | `boolean`                       | `true`       |
 | `allowUpload`     | `allow-upload`     |             | `boolean`                       | `true`       |
 | `allowUrlInput`   | `allow-url-input`  |             | `boolean`                       | `true`       |
+| `debug`           | `debug`            |             | `boolean`                       | `false`      |
 | `images`          | --                 |             | `ImageConfig[]`                 | `[]`         |
 | `scrollDirection` | `scroll-direction` |             | `"horizontal" \| "vertical"`    | `'vertical'` |
 | `selectedImages`  | --                 |             | `string[]`                      | `[]`         |
@@ -209,11 +221,12 @@ The component inherits theming from the Spectrum theme system. Key variables inc
 
 ## Events
 
-| Event           | Description | Type                           |
-| --------------- | ----------- | ------------------------------ |
-| `imageAdded`    |             | `CustomEvent<ImageAddedEvent>` |
-| `imageDeselect` |             | `CustomEvent<ImageConfig>`     |
-| `imageSelected` |             | `CustomEvent<ImageConfig>`     |
+| Event           | Description | Type                             |
+| --------------- | ----------- | -------------------------------- |
+| `imageAdded`    |             | `CustomEvent<ImageAddedEvent>`   |
+| `imageDeleted`  |             | `CustomEvent<ImageDeletedEvent>` |
+| `imageDeselect` |             | `CustomEvent<ImageConfig>`       |
+| `imageSelected` |             | `CustomEvent<ImageConfig>`       |
 
 
 ## Dependencies

@@ -113,9 +113,10 @@ spectrum-conversation-panel .panel {
 }
 
 spectrum-conversation-panel .conversation-title {
-  --adjusted-spacing: calc(var(--conversation-panel-spacing) / 2);
-  margin: var(--conversation-panel-spacing) var(--adjusted-spacing);
-  padding: var(--adjusted-spacing);
+  // --adjusted-spacing: calc(var(--conversation-panel-spacing) / 2);
+  // margin: var(--conversation-panel-spacing) var(--adjusted-spacing);
+  // padding: var(--adjusted-spacing);
+  padding: 0 var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large);
   font-size: var(--conversation-panel-font-size-x-large);
   color: var(--conversation-panel-on-surface);
   flex-shrink: 1;
@@ -182,47 +183,8 @@ spectrum-conversation-panel .response .message {
   }
 }
 
-/* Accordion Styles */
-spectrum-conversation-panel .accordion-row {
-  display: flex;
-  gap: calc(var(--conversation-panel-spacing-small) * 1.5);
-  justify-content: flex-start;
-  margin-top: var(--conversation-panel-spacing);
-
-  spectrum-chip {
-    cursor: pointer;
-    transition: var(--conversation-panel-transition);
-
-    &:hover {
-      transform: translateY(-1px);
-    }
-
-    &:active {
-      transform: translateY(1px);
-    }
-  }
-}
-
-spectrum-conversation-panel .accordion-content {
-  position: relative;
-  background: transparent;
-  width: 100%;
-
-  .scroll-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding: var(--conversation-panel-spacing-small);
-    padding: var(--conversation-panel-spacing-small);
-    gap: var(--conversation-panel-spacing);
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-}
+/* Accordion Styles - Now handled by spectrum-accordion component */
+/* These styles have been moved to spectrum-accordion component */
 
 /* Content Card Styles */
 spectrum-conversation-panel .content-card {

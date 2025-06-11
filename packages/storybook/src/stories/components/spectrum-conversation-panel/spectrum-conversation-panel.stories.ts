@@ -11,6 +11,7 @@ interface SpectrumConversationPanelArgs {
   actions: string;
   sources: string;
   loading: boolean;
+  sound: boolean;
   debug?: boolean;
 }
 
@@ -104,7 +105,8 @@ const meta = {
         "number": 5
       }
     ]`,
-    loading: false
+    loading: false,
+    sound: false
   },
   argTypes: {
     messages: {
@@ -147,6 +149,13 @@ const meta = {
     loading: {
       control: 'boolean',
       description: 'Whether to show the loading indicator',
+      table: {
+        type: { summary: 'boolean' }
+      }
+    },
+    sound: {
+      control: 'boolean',
+      description: 'Whether to enable sound',
       table: {
         type: { summary: 'boolean' }
       }
@@ -224,6 +233,8 @@ export const Default: StoryObj<SpectrumConversationPanelArgs> = {
         .actions=${args.actions}
         .sources=${args.sources}
         .loading=${args.loading}
+        .sound=${args.sound}
+        .debug=${args.debug}
         @action=${(e: CustomEvent) => action('Action')(e.detail)}
         @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
         @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
@@ -536,6 +547,7 @@ export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
         .actions=${args.actions}
         .sources=${args.sources}
         .loading=${args.loading}
+        .sound=${args.sound}
         @action=${(e: CustomEvent) => action('Action')(e.detail)}
         @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
         @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
@@ -680,6 +692,7 @@ export const SourcesScrollingDemo: StoryObj<SpectrumConversationPanelArgs> = {
         .actions=${args.actions}
         .sources=${args.sources}
         .loading=${args.loading}
+        .sound=${args.sound}
         @action=${(e: CustomEvent) => action('Action')(e.detail)}
         @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
         @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
@@ -773,7 +786,8 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
     ]`,
     sources: `[]`,
     loading: false,
-    debug: true
+    sound: false,
+    debug: false
   },
   render: (args) => html`
     <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
@@ -791,6 +805,7 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
         .actions=${args.actions}
         .sources=${args.sources}
         .loading=${args.loading}
+        .sound=${args.sound}
         .debug=${args.debug}
         @action=${(e: CustomEvent) => action('Action')(e.detail)}
         @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
@@ -811,6 +826,99 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
       </div>
     </div>
   `,
+};
+
+// Sound Support Demo
+export const SoundSupport: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    messages: `[
+      {
+        "message": "Tell me about artificial intelligence",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "message": "Artificial Intelligence (AI) is a branch of computer science that aims to create machines capable of intelligent behavior. AI systems can perform tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "explorations": [
+          {
+            "label": "What are the different types of AI?",
+            "value": "What are the different types of AI?"
+          },
+          {
+            "label": "How is machine learning related to AI?",
+            "value": "How is machine learning related to AI?"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'AI Sound Demo - Enable Loading',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      },
+      {
+        "label": "Export",
+        "icon": "download",
+        "value": "export"
+      }
+    ]`,
+    sources: `[]`,
+    loading: false,
+    sound: true,
+    debug: false
+  },
+  render: (args) => html`
+    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
+      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Sound Support Demo</h3>
+        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
+          This demo shows the <strong>sound support</strong> for the conversation panel. 
+          Enable the <strong>loading</strong> control to hear the waiting sound loop. 
+          When sound is enabled, <strong>all buttons and chips</strong> will also play sounds when clicked.
+          Make sure your volume is on and sound is enabled!
+        </p>
+      </div>
+      
+      <spectrum-conversation-panel
+        .messages=${args.messages}
+        .conversationtitle=${args.conversationtitle}
+        .actions=${args.actions}
+        .sources=${args.sources}
+        .loading=${args.loading}
+        .sound=${args.sound}
+        .debug=${args.debug}
+        @action=${(e: CustomEvent) => action('Action')(e.detail)}
+        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+      ></spectrum-conversation-panel>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #d4edda; border-radius: 6px; border-left: 4px solid #28a745;">
+        <p style="margin: 0; color: #155724; font-size: 0.875rem;">
+          <strong>🔊 Sound Features:</strong><br>
+          • <strong>Enable "sound" control:</strong> Turns on audio support<br>
+          • <strong>Enable "loading" control:</strong> Plays waiting.mp3 in a loop<br>
+          • <strong>Click action buttons:</strong> Play button.mp3 sounds<br>
+          • <strong>Click "Dive Deeper" chip:</strong> Plays chip.mp3 sound<br>
+          • <strong>Disable "loading":</strong> Stops the audio<br>
+          • All interactive elements inherit the panel's sound setting<br>
+          • Proper cleanup when component unmounts
+        </p>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates sound support with looping waiting.mp3 during loading state. Enable both sound and loading controls to test the audio functionality.',
+      },
+    },
+  },
 };
 
 export type Story = StoryObj<SpectrumConversationPanelArgs>;

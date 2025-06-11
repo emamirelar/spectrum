@@ -9,7 +9,8 @@
 
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
-import { type ImageAddedEvent, type ImageConfig, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
+import { type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
+import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-carousel.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
@@ -26,6 +27,22 @@ import { SpectrumTheme as SpectrumThemeElement, defineCustomElement as defineSpe
 import { SpectrumToast as SpectrumToastElement, defineCustomElement as defineSpectrumToast } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-toast.js";
 import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-wallpaper.js";
 import React from 'react';
+
+type SpectrumAccordionEvents = {
+    onAccordionToggle: EventName<CustomEvent<{
+        expanded: boolean;
+        accordionId: string;
+    }>>
+};
+
+export const SpectrumAccordion: StencilReactComponent<SpectrumAccordionElement, SpectrumAccordionEvents> = /*@__PURE__*/ createComponent<SpectrumAccordionElement, SpectrumAccordionEvents>({
+    tagName: 'spectrum-accordion',
+    elementClass: SpectrumAccordionElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onAccordionToggle: 'accordionToggle' } as SpectrumAccordionEvents,
+    defineCustomElement: defineSpectrumAccordion
+});
 
 type SpectrumButtonEvents = { onButtonAction: EventName<CustomEvent<{ action?: string; label: string }>> };
 
@@ -126,7 +143,8 @@ export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversati
 type SpectrumImageGalleryEvents = {
     onImageSelected: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
     onImageDeselect: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
-    onImageAdded: EventName<SpectrumImageGalleryCustomEvent<ImageAddedEvent>>
+    onImageAdded: EventName<SpectrumImageGalleryCustomEvent<ImageAddedEvent>>,
+    onImageDeleted: EventName<SpectrumImageGalleryCustomEvent<ImageDeletedEvent>>
 };
 
 export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents> = /*@__PURE__*/ createComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents>({
@@ -137,7 +155,8 @@ export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryEle
     events: {
         onImageSelected: 'imageSelected',
         onImageDeselect: 'imageDeselect',
-        onImageAdded: 'imageAdded'
+        onImageAdded: 'imageAdded',
+        onImageDeleted: 'imageDeleted'
     } as SpectrumImageGalleryEvents,
     defineCustomElement: defineSpectrumImageGallery
 });

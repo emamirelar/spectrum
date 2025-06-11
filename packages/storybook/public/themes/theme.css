@@ -142,11 +142,17 @@
     --spectrum-sys-icon-grade: 0;
     --spectrum-sys-icon-optical-size: 24;
   
-    --spectrum-sys-spacing: 1em;
+    --spectrum-sys-spacing: 1rem;
     --spectrum-sys-spacing-large: calc(var(--spectrum-sys-spacing) * 2);
     --spectrum-sys-spacing-x-large: calc(var(--spectrum-sys-spacing) * 3);
     --spectrum-sys-spacing-xx-large: calc(var(--spectrum-sys-spacing) * 4);
     --spectrum-sys-spacing-small: calc(var(--spectrum-sys-spacing) / 2);
+  
+    --spectrum-sys-padding: 1em;
+    --spectrum-sys-padding-large: calc(var(--spectrum-sys-padding) * 2);
+    --spectrum-sys-padding-x-large: calc(var(--spectrum-sys-padding) * 3);
+    --spectrum-sys-padding-xx-large: calc(var(--spectrum-sys-padding) * 4);
+    --spectrum-sys-padding-small: calc(var(--spectrum-sys-padding) / 2);
   
     --spectrum-sys-border: 1px;
     --spectrum-sys-border-radius: 4px;
