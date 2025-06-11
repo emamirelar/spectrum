@@ -303,27 +303,19 @@ export class SpectrumConversationPanel {
             {this.renderActions(messageId)}
           </div>
           {hasExplorations && (
-            <div class="accordion-row">
-              <spectrum-chip 
-                variant="secondary"
-                outline={true}
-                label="Dive Deeper"
-                sound={this.sound}
-                leadingIcon={activeAccordion === 'explorations' ? 'arrow_drop_up' : 'arrow_drop_down'}
-                onClick={() => this.handleExplorationsClick(messageId)}
-                selected={activeAccordion === 'explorations'}
-              />
-            </div>
+            <spectrum-accordion
+              expanded={activeAccordion === 'explorations'}
+              label="Dive Deeper"
+              sound={this.sound}
+              horizontalScroll={false}
+              accordionId={`explorations-${messageId}`}
+              onAccordionToggle={(event) => this.handleAccordionToggle(event, messageId, 'explorations')}
+            >
+              {this.renderExplorations(response.explorations, messageId)}
+            </spectrum-accordion>
           )}
         </div>
-      </div>,
-      activeAccordion === 'explorations' && hasExplorations && (
-        <div class="accordion-content expanded" id={`explorations-content-${messageId}`}>
-          <div class="scroll-container">
-            {this.renderExplorations(response.explorations, messageId)}
-          </div>
-        </div>
-      )
+      </div>
     ];
   }
 
@@ -381,28 +373,33 @@ export class SpectrumConversationPanel {
       return null;
     }
     
-    return (
-      <div class="explorations-container">
-        {explorations.map((exploration) => (
-          <spectrum-chip
-            variant="secondary"
-            label={exploration.label}
-            leadingIcon="prompt_suggestion"
-            sound={this.sound}
-            onClick={() => this.action.emit({
-              action: 'explore',
-              type: 'exploration',
-              value: exploration.value,
-              messageId: messageId
-            })}
-          />
-        ))}
-      </div>
-    );
+    // Return chips directly without container div for accordion usage
+    return explorations.map((exploration) => (
+      <spectrum-chip
+        variant="secondary"
+        label={exploration.label}
+        leadingIcon="prompt_suggestion"
+        sound={this.sound}
+        onClick={() => this.action.emit({
+          action: 'explore',
+          type: 'exploration',
+          value: exploration.value,
+          messageId: messageId
+        })}
+      />
+    ));
   }
 
-  private handleExplorationsClick = (messageId: string) => {
-    this.toggleAccordion(messageId, 'explorations');
+  private handleAccordionToggle = (event: CustomEvent, messageId: string, accordionType: 'explorations') => {
+    const { expanded } = event.detail;
+    
+    if (expanded) {
+      this.expandedMessageId = messageId;
+      this.expandedAccordionType = accordionType;
+    } else {
+      this.expandedMessageId = null;
+      this.expandedAccordionType = null;
+    }
   }
 
   toggleAccordion(messageId: string, accordion: 'explorations') {

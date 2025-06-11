@@ -8,6 +8,34 @@ import { Components } from '@stencil-storybook-boilerplate/core';
 
 
 @ProxyCmp({
+  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'horizontalScroll', 'label', 'outline', 'sound', 'variant']
+})
+@Component({
+  selector: 'spectrum-accordion',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'horizontalScroll', 'label', 'outline', 'sound', 'variant'],
+})
+export class SpectrumAccordion {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['accordionToggle']);
+  }
+}
+
+
+export declare interface SpectrumAccordion extends Components.SpectrumAccordion {
+  /**
+   * Event emitted when the accordion is toggled
+   */
+  accordionToggle: EventEmitter<CustomEvent<{ expanded: boolean; accordionId: string; }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant']
 })
 @Component({

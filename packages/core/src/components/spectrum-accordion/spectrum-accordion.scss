@@ -1,0 +1,192 @@
+/* Root variables and custom properties for spectrum-accordion */
+spectrum-accordion {
+  display: block;
+  width: 100%;
+  
+  /* Core accordion properties inherited from spectrum theme */
+  --accordion-background: var(--spectrum-color-background, #f6f6f6);
+  --accordion-surface: var(--spectrum-color-surface, #f6f6f6);
+  --accordion-on-surface: var(--spectrum-color-on-surface, #333333);
+  --accordion-on-surface-variant: var(--spectrum-color-on-surface-variant, #42474e);
+  --accordion-outline: var(--spectrum-color-outline, #72777f);
+  --accordion-outline-variant: var(--spectrum-color-outline-variant, #c2c7cf);
+  --accordion-shadow: var(--spectrum-color-shadow, #000000);
+  
+  /* Brand colors */
+  --accordion-primary: var(--spectrum-color-primary, #0070d2);
+  --accordion-on-primary: var(--spectrum-color-on-primary, #ffffff);
+  --accordion-primary-container: var(--spectrum-color-primary-container, #d0e4ff);
+  --accordion-on-primary-container: var(--spectrum-color-on-primary-container, #001c3a);
+  
+  /* Typography */
+  --accordion-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --accordion-font-size: var(--spectrum-sys-font-size, 16px);
+  --accordion-font-size-small: var(--spectrum-sys-font-size-small, 14px);
+  --accordion-font-weight-regular: var(--spectrum-sys-font-weight-regular, 400);
+  --accordion-font-weight-medium: var(--spectrum-sys-font-weight-medium, 500);
+  
+  /* Spacing */
+  --accordion-spacing: var(--spectrum-sys-spacing, 1em);
+  --accordion-spacing-small: var(--spectrum-sys-spacing-small, 0.5em);
+  --accordion-spacing-large: var(--spectrum-sys-spacing-large, 2em);
+  
+  /* Border radius */
+  --accordion-border-radius: var(--spectrum-sys-border-radius, 4px);
+  --accordion-border-radius-large: calc(var(--accordion-border-radius) * 4);
+  
+  /* Interactive states */
+  --accordion-surface-hover: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.03));
+  --accordion-surface-active: var(--spectrum-color-surface-active, rgba(0, 0, 0, 0.1));
+  
+  /* Animation */
+  --accordion-transition-duration: var(--spectrum-sys-animation-duration, 300ms);
+  --accordion-transition-timing: var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  --accordion-transition: all var(--accordion-transition-duration) var(--accordion-transition-timing);
+  
+  /* Component specific dimensions */
+  --accordion-card-width: 300px;
+}
+
+/* BEM Base Block */
+spectrum-accordion .spectrum-accordion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* BEM Element: Trigger */
+spectrum-accordion .spectrum-accordion__trigger {
+  display: flex;
+  gap: calc(var(--accordion-spacing-small) * 1.5);
+  justify-content: flex-start;
+  margin-top: var(--accordion-spacing);
+
+  spectrum-chip {
+    cursor: pointer;
+    transition: var(--accordion-transition);
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &[disabled] {
+      cursor: not-allowed;
+      opacity: 0.6;
+      
+      &:hover {
+        transform: none;
+      }
+      
+      &:active {
+        transform: none;
+      }
+    }
+  }
+}
+
+/* BEM Element: Content */
+spectrum-accordion .spectrum-accordion__content {
+  position: relative;
+  background: transparent;
+  width: 100%;
+  margin-top: var(--accordion-spacing-small);
+}
+
+/* BEM Modifier: Expanded Content */
+spectrum-accordion .spectrum-accordion__content--expanded {
+  display: block;
+  animation: fadeInDown var(--accordion-transition-duration) var(--accordion-transition-timing);
+}
+
+/* BEM Modifier: Collapsed Content */
+spectrum-accordion .spectrum-accordion__content--collapsed {
+  display: none;
+}
+
+/* BEM Element: Scroll Container */
+spectrum-accordion .spectrum-accordion__scroll-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: var(--accordion-spacing-small);
+  padding: var(--accordion-spacing-small) 0;
+  gap: var(--accordion-spacing);
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for Firefox */
+  scrollbar-width: none;
+}
+
+/* BEM Element: Content Container (for non-scrollable content) */
+spectrum-accordion .spectrum-accordion__content-container {
+  padding: var(--accordion-spacing-small) 0 var(--accordion-spacing) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--accordion-spacing-small);
+  align-items: flex-start;
+}
+
+/* Animation keyframes */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  spectrum-accordion {
+    --accordion-card-width: 280px;
+  }
+  
+  spectrum-accordion .spectrum-accordion__scroll-container {
+    padding: var(--accordion-spacing-small) 0;
+    gap: var(--accordion-spacing-small);
+  }
+  
+  spectrum-accordion .spectrum-accordion__trigger {
+    margin-top: var(--accordion-spacing-small);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  spectrum-accordion {
+    --accordion-outline: #000000;
+    --accordion-shadow: #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  spectrum-accordion {
+    --accordion-transition-duration: 0ms;
+  }
+  
+  spectrum-accordion .spectrum-accordion__content {
+    animation: none;
+  }
+  
+  spectrum-accordion .spectrum-accordion__trigger spectrum-chip {
+    transition: none;
+    
+    &:hover,
+    &:active {
+      transform: none;
+    }
+  }
+}

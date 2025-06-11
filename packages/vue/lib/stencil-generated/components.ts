@@ -8,6 +8,22 @@ import type { JSX } from '@stencil-storybook-boilerplate/core';
 
 
 
+export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccordion>('spectrum-accordion', undefined, [
+  'expanded',
+  'label',
+  'collapsedIcon',
+  'expandedIcon',
+  'sound',
+  'horizontalScroll',
+  'disabled',
+  'variant',
+  'outline',
+  'accordionId',
+  'debug',
+  'accordionToggle'
+]);
+
+
 export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>('spectrum-button', undefined, [
   'debug',
   'variant',

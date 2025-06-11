@@ -16,6 +16,52 @@ export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-c
 export { ImageAddedEvent, ImageConfig, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export namespace Components {
+    interface SpectrumAccordion {
+        /**
+          * Unique identifier for the accordion
+         */
+        "accordionId": string;
+        /**
+          * The icon to show when collapsed Default: 'arrow_drop_down'
+         */
+        "collapsedIcon": string;
+        /**
+          * Whether to enable debug logging
+         */
+        "debug": boolean;
+        /**
+          * Whether the accordion should be disabled Default: false
+         */
+        "disabled": boolean;
+        /**
+          * Whether the accordion is expanded Default: false
+         */
+        "expanded": boolean;
+        /**
+          * The icon to show when expanded Default: 'arrow_drop_up'
+         */
+        "expandedIcon": string;
+        /**
+          * Whether to show content in horizontal scroll container Default: true
+         */
+        "horizontalScroll": boolean;
+        /**
+          * The label for the accordion trigger Default: 'Dive Deeper'
+         */
+        "label": string;
+        /**
+          * Whether the trigger chip should be outlined Default: true
+         */
+        "outline": boolean;
+        /**
+          * Whether to enable sound effects Default: false
+         */
+        "sound": boolean;
+        /**
+          * The variant of the trigger chip Default: 'secondary'
+         */
+        "variant": 'primary' | 'secondary';
+    }
     /**
      * Spectrum Button Component
      * A versatile button component with multiple variants, sizes, and states.
@@ -403,6 +449,10 @@ export namespace Components {
         "showSwatches": boolean;
     }
 }
+export interface SpectrumAccordionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumAccordionElement;
+}
 export interface SpectrumButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumButtonElement;
@@ -444,6 +494,26 @@ export interface SpectrumToastCustomEvent<T> extends CustomEvent<T> {
     target: HTMLSpectrumToastElement;
 }
 declare global {
+    interface HTMLSpectrumAccordionElementEventMap {
+        "accordionToggle": {
+    expanded: boolean;
+    accordionId: string;
+  };
+    }
+    interface HTMLSpectrumAccordionElement extends Components.SpectrumAccordion, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumAccordionElementEventMap>(type: K, listener: (this: HTMLSpectrumAccordionElement, ev: SpectrumAccordionCustomEvent<HTMLSpectrumAccordionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumAccordionElementEventMap>(type: K, listener: (this: HTMLSpectrumAccordionElement, ev: SpectrumAccordionCustomEvent<HTMLSpectrumAccordionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumAccordionElement: {
+        prototype: HTMLSpectrumAccordionElement;
+        new (): HTMLSpectrumAccordionElement;
+    };
     interface HTMLSpectrumButtonElementEventMap {
         "buttonAction": { action?: string; label: string };
     }
@@ -704,6 +774,7 @@ declare global {
         new (): HTMLSpectrumWallpaperElement;
     };
     interface HTMLElementTagNameMap {
+        "spectrum-accordion": HTMLSpectrumAccordionElement;
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-carousel": HTMLSpectrumCarouselElement;
         "spectrum-chip": HTMLSpectrumChipElement;
@@ -722,6 +793,59 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface SpectrumAccordion {
+        /**
+          * Unique identifier for the accordion
+         */
+        "accordionId"?: string;
+        /**
+          * The icon to show when collapsed Default: 'arrow_drop_down'
+         */
+        "collapsedIcon"?: string;
+        /**
+          * Whether to enable debug logging
+         */
+        "debug"?: boolean;
+        /**
+          * Whether the accordion should be disabled Default: false
+         */
+        "disabled"?: boolean;
+        /**
+          * Whether the accordion is expanded Default: false
+         */
+        "expanded"?: boolean;
+        /**
+          * The icon to show when expanded Default: 'arrow_drop_up'
+         */
+        "expandedIcon"?: string;
+        /**
+          * Whether to show content in horizontal scroll container Default: true
+         */
+        "horizontalScroll"?: boolean;
+        /**
+          * The label for the accordion trigger Default: 'Dive Deeper'
+         */
+        "label"?: string;
+        /**
+          * Event emitted when the accordion is toggled
+         */
+        "onAccordionToggle"?: (event: SpectrumAccordionCustomEvent<{
+    expanded: boolean;
+    accordionId: string;
+  }>) => void;
+        /**
+          * Whether the trigger chip should be outlined Default: true
+         */
+        "outline"?: boolean;
+        /**
+          * Whether to enable sound effects Default: false
+         */
+        "sound"?: boolean;
+        /**
+          * The variant of the trigger chip Default: 'secondary'
+         */
+        "variant"?: 'primary' | 'secondary';
+    }
     /**
      * Spectrum Button Component
      * A versatile button component with multiple variants, sizes, and states.
@@ -1153,6 +1277,7 @@ declare namespace LocalJSX {
         "showSwatches"?: boolean;
     }
     interface IntrinsicElements {
+        "spectrum-accordion": SpectrumAccordion;
         "spectrum-button": SpectrumButton;
         "spectrum-carousel": SpectrumCarousel;
         "spectrum-chip": SpectrumChip;
@@ -1174,6 +1299,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "spectrum-accordion": LocalJSX.SpectrumAccordion & JSXBase.HTMLAttributes<HTMLSpectrumAccordionElement>;
             /**
              * Spectrum Button Component
              * A versatile button component with multiple variants, sizes, and states.

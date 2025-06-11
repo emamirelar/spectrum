@@ -46,14 +46,17 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [spectrum-chip](../spectrum-chip)
+- [spectrum-accordion](../spectrum-accordion)
 - [spectrum-button](../spectrum-button)
+- [spectrum-chip](../spectrum-chip)
 
 ### Graph
 ```mermaid
 graph TD;
-  spectrum-conversation-panel --> spectrum-chip
+  spectrum-conversation-panel --> spectrum-accordion
   spectrum-conversation-panel --> spectrum-button
+  spectrum-conversation-panel --> spectrum-chip
+  spectrum-accordion --> spectrum-chip
   style spectrum-conversation-panel fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
