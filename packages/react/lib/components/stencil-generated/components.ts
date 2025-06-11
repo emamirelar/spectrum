@@ -9,7 +9,7 @@
 
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
-import { type ImageAddedEvent, type ImageConfig, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
+import { type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-carousel.js";
@@ -143,7 +143,8 @@ export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversati
 type SpectrumImageGalleryEvents = {
     onImageSelected: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
     onImageDeselect: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
-    onImageAdded: EventName<SpectrumImageGalleryCustomEvent<ImageAddedEvent>>
+    onImageAdded: EventName<SpectrumImageGalleryCustomEvent<ImageAddedEvent>>,
+    onImageDeleted: EventName<SpectrumImageGalleryCustomEvent<ImageDeletedEvent>>
 };
 
 export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents> = /*@__PURE__*/ createComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents>({
@@ -154,7 +155,8 @@ export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryEle
     events: {
         onImageSelected: 'imageSelected',
         onImageDeselect: 'imageDeselect',
-        onImageAdded: 'imageAdded'
+        onImageAdded: 'imageAdded',
+        onImageDeleted: 'imageDeleted'
     } as SpectrumImageGalleryEvents,
     defineCustomElement: defineSpectrumImageGallery
 });

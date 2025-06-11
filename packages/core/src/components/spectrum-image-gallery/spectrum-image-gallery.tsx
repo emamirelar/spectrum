@@ -13,6 +13,12 @@ export interface ImageAddedEvent {
   source: 'upload' | 'url';
 }
 
+export interface ImageDeletedEvent {
+  deletedImages: ImageConfig[];
+  deletedIds: string[];
+  remainingCount: number;
+}
+
 export type SelectionMode = 'single' | 'multi' | 'none';
 export type ScrollDirection = 'vertical' | 'horizontal';
 
@@ -46,6 +52,7 @@ export class SpectrumImageGallery {
   @Event() imageSelected: EventEmitter<ImageConfig>;
   @Event() imageDeselect: EventEmitter<ImageConfig>;
   @Event() imageAdded: EventEmitter<ImageAddedEvent>;
+  @Event() imageDeleted: EventEmitter<ImageDeletedEvent>;
 
   // Element References
   private fileInputRef: HTMLInputElement;
@@ -422,6 +429,11 @@ export class SpectrumImageGallery {
 
     const selectedIds = [...this.internalSelectedImages];
     
+    // Get the actual image objects that will be deleted
+    const imagesToDelete = this.allImages.filter(image => 
+      selectedIds.includes(image.id)
+    );
+    
     // Remove selected images from the gallery
     this.allImages = this.allImages.filter(image => 
       !selectedIds.includes(image.id)
@@ -429,6 +441,13 @@ export class SpectrumImageGallery {
     
     // Clear selection
     this.internalSelectedImages = [];
+    
+    // Emit the delete event with deleted image data
+    this.imageDeleted.emit({
+      deletedImages: imagesToDelete,
+      deletedIds: selectedIds,
+      remainingCount: this.allImages.length
+    });
     
     this.debugLog(`Deleted ${selectedIds.length} images. Gallery now has ${this.allImages.length} images.`);
   }

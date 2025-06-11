@@ -123,7 +123,8 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'debug',
   'imageSelected',
   'imageDeselect',
-  'imageAdded'
+  'imageAdded',
+  'imageDeleted'
 ]);
 
 

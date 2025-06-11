@@ -8,12 +8,12 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
-import { ImageAddedEvent, ImageConfig, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+import { ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
-export { ImageAddedEvent, ImageConfig, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+export { ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export namespace Components {
     interface SpectrumAccordion {
@@ -632,6 +632,7 @@ declare global {
         "imageSelected": ImageConfig;
         "imageDeselect": ImageConfig;
         "imageAdded": ImageAddedEvent;
+        "imageDeleted": ImageDeletedEvent;
     }
     interface HTMLSpectrumImageGalleryElement extends Components.SpectrumImageGallery, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumImageGalleryElementEventMap>(type: K, listener: (this: HTMLSpectrumImageGalleryElement, ev: SpectrumImageGalleryCustomEvent<HTMLSpectrumImageGalleryElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1021,6 +1022,7 @@ declare namespace LocalJSX {
         "debug"?: boolean;
         "images"?: ImageConfig[];
         "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
+        "onImageDeleted"?: (event: SpectrumImageGalleryCustomEvent<ImageDeletedEvent>) => void;
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onImageSelected"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "scrollDirection"?: ScrollDirection;

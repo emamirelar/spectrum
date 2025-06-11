@@ -433,4 +433,54 @@ describe('spectrum-image-gallery', () => {
     expect(imageSelectedFired).toBe(false); // Should NOT fire when deselecting
     expect(deselectEventFired).toBe(true); // Should fire when deselecting
   });
+
+  it('emits imageDeleted event when images are deleted', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery selection-mode="multi"></spectrum-image-gallery>`,
+    });
+    
+    page.root.images = mockImages;
+    page.root.selectedImages = ['test-1', 'test-2'];
+    await page.waitForChanges();
+    
+    let deleteEventDetail: any;
+    page.root.addEventListener('imageDeleted', (e: any) => {
+      deleteEventDetail = e.detail;
+    });
+    
+    // Call handleDeleteSelected method directly
+    const instance = page.rootInstance;
+    instance.handleDeleteSelected();
+    await page.waitForChanges();
+    
+    expect(deleteEventDetail).toBeTruthy();
+    expect(deleteEventDetail.deletedImages).toHaveLength(2);
+    expect(deleteEventDetail.deletedIds).toEqual(['test-1', 'test-2']);
+    expect(deleteEventDetail.remainingCount).toBe(0);
+    expect(deleteEventDetail.deletedImages[0]).toEqual(mockImages[0]);
+    expect(deleteEventDetail.deletedImages[1]).toEqual(mockImages[1]);
+  });
+
+  it('does not emit imageDeleted event when no images are selected for deletion', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery></spectrum-image-gallery>`,
+    });
+    
+    page.root.images = mockImages;
+    await page.waitForChanges();
+    
+    let deleteEventFired = false;
+    page.root.addEventListener('imageDeleted', () => {
+      deleteEventFired = true;
+    });
+    
+    // Call handleDeleteSelected method directly with no selection
+    const instance = page.rootInstance;
+    instance.handleDeleteSelected();
+    await page.waitForChanges();
+    
+    expect(deleteEventFired).toBe(false);
+  });
 });

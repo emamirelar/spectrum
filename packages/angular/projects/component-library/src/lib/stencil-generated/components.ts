@@ -236,13 +236,14 @@ export class SpectrumImageGallery {
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded']);
+    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted']);
   }
 }
 
 
 import type { ImageConfig as ISpectrumImageGalleryImageConfig } from '@stencil-storybook-boilerplate/core';
 import type { ImageAddedEvent as ISpectrumImageGalleryImageAddedEvent } from '@stencil-storybook-boilerplate/core';
+import type { ImageDeletedEvent as ISpectrumImageGalleryImageDeletedEvent } from '@stencil-storybook-boilerplate/core';
 
 export declare interface SpectrumImageGallery extends Components.SpectrumImageGallery {
 
@@ -251,6 +252,8 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   imageDeselect: EventEmitter<CustomEvent<ISpectrumImageGalleryImageConfig>>;
 
   imageAdded: EventEmitter<CustomEvent<ISpectrumImageGalleryImageAddedEvent>>;
+
+  imageDeleted: EventEmitter<CustomEvent<ISpectrumImageGalleryImageDeletedEvent>>;
 }
 
 

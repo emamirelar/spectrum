@@ -424,6 +424,7 @@ const renderGallery = (args: SpectrumImageGalleryArgs) => html`
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+      @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
     ></spectrum-image-gallery>
   </div>
 `;
@@ -442,6 +443,7 @@ const renderScrollableGallery = (args: SpectrumImageGalleryArgs) => html`
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+      @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
     ></spectrum-image-gallery>
   </div>
 `;
@@ -583,6 +585,7 @@ export const ResponsiveDemo: StoryObj<SpectrumImageGalleryArgs> = {
         @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
         @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
         @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+        @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
       ></spectrum-image-gallery>
     </div>
   `,
@@ -605,8 +608,8 @@ export const EventHandling: StoryObj<SpectrumImageGalleryArgs> = {
       <div style="margin-bottom: 16px; padding: 12px; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #0070d2;">
         <strong>Event Handling Demo:</strong> 
         Check the Actions panel below to see events fired when interacting with the gallery.
-        Try selecting images, uploading files, or adding URLs through the modals.
-        <br><strong>Events:</strong> imageSelected and imageDeselect emit ImageConfig objects directly.
+        Try selecting images, uploading files, adding URLs, or deleting selected images.
+        <br><strong>Events:</strong> imageSelected, imageDeselect, imageAdded, and imageDeleted events with complete data payloads.
       </div>
       <div style="height: 500px; width: 100%; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden;">
         <spectrum-image-gallery
@@ -618,6 +621,7 @@ export const EventHandling: StoryObj<SpectrumImageGalleryArgs> = {
           @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
           @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
           @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
         ></spectrum-image-gallery>
       </div>
     </div>
@@ -625,7 +629,7 @@ export const EventHandling: StoryObj<SpectrumImageGalleryArgs> = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstration of all events emitted by the gallery component. Check the Actions panel to see detailed event information. Events now emit ImageConfig objects directly.',
+        story: 'Demonstration of all events emitted by the gallery component. Check the Actions panel to see detailed event information including imageSelected, imageDeselect, imageAdded, and imageDeleted events with complete data payloads.',
       },
     },
   },
@@ -744,6 +748,7 @@ export const ScrollDirectionComparison: StoryObj<SpectrumImageGalleryArgs> = {
           @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
           @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
           @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
         ></spectrum-image-gallery>
       </div>
       <div style="border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden;">
@@ -757,6 +762,7 @@ export const ScrollDirectionComparison: StoryObj<SpectrumImageGalleryArgs> = {
           @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
           @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
           @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
         ></spectrum-image-gallery>
       </div>
     </div>
