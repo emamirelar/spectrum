@@ -201,6 +201,7 @@ The component inherits theming from the Spectrum theme system. Key variables inc
 | `allowDelete`     | `allow-delete`     |             | `boolean`                       | `true`       |
 | `allowUpload`     | `allow-upload`     |             | `boolean`                       | `true`       |
 | `allowUrlInput`   | `allow-url-input`  |             | `boolean`                       | `true`       |
+| `debug`           | `debug`            |             | `boolean`                       | `false`      |
 | `images`          | --                 |             | `ImageConfig[]`                 | `[]`         |
 | `scrollDirection` | `scroll-direction` |             | `"horizontal" \| "vertical"`    | `'vertical'` |
 | `selectedImages`  | --                 |             | `string[]`                      | `[]`         |

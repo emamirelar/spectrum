@@ -113,9 +113,10 @@ spectrum-conversation-panel .panel {
 }
 
 spectrum-conversation-panel .conversation-title {
-  --adjusted-spacing: calc(var(--conversation-panel-spacing) / 2);
-  margin: var(--conversation-panel-spacing) var(--adjusted-spacing);
-  padding: var(--adjusted-spacing);
+  // --adjusted-spacing: calc(var(--conversation-panel-spacing) / 2);
+  // margin: var(--conversation-panel-spacing) var(--adjusted-spacing);
+  // padding: var(--adjusted-spacing);
+  padding: 0 var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large);
   font-size: var(--conversation-panel-font-size-x-large);
   color: var(--conversation-panel-on-surface);
   flex-shrink: 1;

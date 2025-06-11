@@ -30,6 +30,7 @@ Supports icons, text, and various interactive states.
 | `showLeftIcon`     | `show-left-icon`    |             | `boolean`                                                                                         | `false`     |
 | `showRightIcon`    | `show-right-icon`   |             | `boolean`                                                                                         | `false`     |
 | `size`             | `size`              |             | `"base" \| "lg" \| "sm"`                                                                          | `'base'`    |
+| `sound`            | `sound`             |             | `boolean`                                                                                         | `false`     |
 | `state`            | `state`             |             | `"active" \| "default" \| "disabled" \| "hover"`                                                  | `'default'` |
 | `variant`          | `variant`           |             | `"danger" \| "fab" \| "ghost" \| "outline" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
 

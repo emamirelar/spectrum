@@ -37,6 +37,7 @@ export namespace Components {
         "showLeftIcon": boolean;
         "showRightIcon": boolean;
         "size": 'sm' | 'base' | 'lg';
+        "sound": boolean;
         "state": 'default' | 'hover' | 'active' | 'disabled';
         "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
     }
@@ -82,6 +83,7 @@ export namespace Components {
         "selected": boolean;
         "showTrailingIcon": boolean;
         "size": 'small' | 'medium' | 'large' | 'extra-small';
+        "sound": boolean;
         "trailingIcon": string;
         "variant": 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
@@ -150,6 +152,10 @@ export namespace Components {
          */
         "scrollToLatest": () => Promise<void>;
         /**
+          * Whether to enable sound effects Default: false
+         */
+        "sound": boolean;
+        /**
           * The sources to display in the messages Default: null
          */
         "sources": string;
@@ -158,6 +164,7 @@ export namespace Components {
         "allowDelete": boolean;
         "allowUpload": boolean;
         "allowUrlInput": boolean;
+        "debug": boolean;
         "images": ImageConfig[];
         "scrollDirection": ScrollDirection;
         "selectedImages": string[];
@@ -737,6 +744,7 @@ declare namespace LocalJSX {
         "showLeftIcon"?: boolean;
         "showRightIcon"?: boolean;
         "size"?: 'sm' | 'base' | 'lg';
+        "sound"?: boolean;
         "state"?: 'default' | 'hover' | 'active' | 'disabled';
         "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
     }
@@ -783,6 +791,7 @@ declare namespace LocalJSX {
         "selected"?: boolean;
         "showTrailingIcon"?: boolean;
         "size"?: 'small' | 'medium' | 'large' | 'extra-small';
+        "sound"?: boolean;
         "trailingIcon"?: string;
         "variant"?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
@@ -873,6 +882,10 @@ declare namespace LocalJSX {
         "onSourceClick"?: (event: SpectrumConversationPanelCustomEvent<{ action: string; label: string; value: string; messageId?: string }>) => void;
         "onTitleChanged"?: (event: SpectrumConversationPanelCustomEvent<{action: string, value: string}>) => void;
         /**
+          * Whether to enable sound effects Default: false
+         */
+        "sound"?: boolean;
+        /**
           * The sources to display in the messages Default: null
          */
         "sources"?: string;
@@ -881,6 +894,7 @@ declare namespace LocalJSX {
         "allowDelete"?: boolean;
         "allowUpload"?: boolean;
         "allowUrlInput"?: boolean;
+        "debug"?: boolean;
         "images"?: ImageConfig[];
         "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;

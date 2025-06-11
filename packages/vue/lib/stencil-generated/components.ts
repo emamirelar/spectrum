@@ -25,6 +25,7 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'leftIcon',
   'showRightIcon',
   'rightIcon',
+  'sound',
   'state',
   'buttonAction'
 ]);
@@ -53,6 +54,7 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
   'leadingIcon',
   'trailingIcon',
   'showTrailingIcon',
+  'sound',
   'chipAction'
 ]);
 
@@ -84,6 +86,7 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'actions',
   'sources',
   'loading',
+  'sound',
   'debug',
   'explorationSelected',
   'action',
@@ -101,6 +104,7 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'selectionMode',
   'selectedImages',
   'scrollDirection',
+  'debug',
   'imageSelected',
   'imageDeselect',
   'imageAdded'

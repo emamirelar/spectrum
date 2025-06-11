@@ -19,6 +19,7 @@ interface SpectrumButton extends HTMLElement {
   rightIcon: string;
   debug: boolean;
   action: string;
+  sound: boolean;
 }
 
 interface SpectrumButtonArgs {
@@ -38,6 +39,7 @@ interface SpectrumButtonArgs {
   minimalAnimation: boolean;
   action: string;
   disabled: boolean;
+  sound: boolean;
 }
 
 const meta = {
@@ -58,7 +60,8 @@ const meta = {
     showRightIcon: false,
     rightIcon: '',
     debug: false,
-    action: 'custom'
+    action: 'custom',
+    sound: false
   },
   argTypes: {
     buttonText: {
@@ -122,6 +125,10 @@ const meta = {
     action: {
       control: 'text',
       description: 'Optional action to emit with the button click',
+    },
+    sound: {
+      control: 'boolean',
+      description: 'Enable sound effect when button is clicked',
     }
   }
 } satisfies Meta<SpectrumButton>;
@@ -145,12 +152,153 @@ const renderButton = (args: SpectrumButtonArgs) => html`
     right-icon=${args.rightIcon}
     ?debug=${args.debug}
     action=${args.action}
+    ?sound=${args.sound}
     @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
   ></spectrum-button>
 `;
 
 export const Default: StoryObj<SpectrumButtonArgs> = {
   render: renderButton
+};
+
+// Sound Enabled Button
+export const WithSound: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    buttonText: 'Click for Sound',
+    showButtonText: true,
+    sound: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with sound effects enabled. Click the button to hear an audio feedback sound. Make sure your volume is on!',
+      },
+    },
+  },
+};
+
+// Sound with Ripple Effect
+export const SoundWithRipple: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'success',
+    size: 'base',
+    buttonText: 'Sound + Ripple',
+    showButtonText: true,
+    sound: true,
+    ripple: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with both sound effects and ripple animation. This provides comprehensive audio-visual feedback.',
+      },
+    },
+  },
+};
+
+// Sound FAB
+export const SoundFAB: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'fab',
+    size: 'lg',
+    iconOnly: true,
+    showLeftIcon: true,
+    leftIcon: 'volume_up',
+    ripple: true,
+    sound: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A Floating Action Button with sound enabled. Perfect for audio-related actions or providing tactile feedback.',
+      },
+    },
+  },
+};
+
+// Sound with Icons
+export const SoundWithIcons: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    buttonText: 'Play Sound',
+    showButtonText: true,
+    showLeftIcon: true,
+    leftIcon: 'play_arrow',
+    showRightIcon: true,
+    rightIcon: 'volume_up',
+    sound: true,
+    ripple: true,
+    debug: false,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with icons and sound effects, perfect for media controls or audio-related actions.',
+      },
+    },
+  },
+};
+
+// Sound Comparison Demo
+export const SoundComparison: StoryObj<SpectrumButtonArgs> = {
+  render: () => html`
+    <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <spectrum-button
+          button-text="Silent Button"
+          variant="secondary"
+          sound=${false}
+        ></spectrum-button>
+        <small style="color: #666;">Sound: OFF</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <spectrum-button
+          button-text="Sound Button"
+          variant="primary"
+          sound=${true}
+        ></spectrum-button>
+        <small style="color: #666;">Sound: ON</small>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A side-by-side comparison of buttons with and without sound effects. Click both to experience the difference.',
+      },
+    },
+  },
+};
+
+// All Variants with Sound
+export const AllVariantsWithSound: StoryObj<SpectrumButtonArgs> = {
+  render: () => html`
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; align-items: start;">
+      <spectrum-button button-text="Primary" variant="primary" sound=${true}></spectrum-button>
+      <spectrum-button button-text="Secondary" variant="secondary" sound=${true}></spectrum-button>
+      <spectrum-button button-text="Success" variant="success" sound=${true}></spectrum-button>
+      <spectrum-button button-text="Warning" variant="warning" sound=${true}></spectrum-button>
+      <spectrum-button button-text="Danger" variant="danger" sound=${true}></spectrum-button>
+      <spectrum-button button-text="Ghost" variant="ghost" sound=${true}></spectrum-button>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'All button variants with sound effects enabled. Each button plays the same sound but represents different semantic meanings.',
+      },
+    },
+  },
 };
 
 // Outline Button
@@ -292,7 +440,7 @@ export const DebugMode: StoryObj<SpectrumButtonArgs> = {
     size: 'base',
     buttonText: 'Debug Button',
     showButtonText: true,
-    debug: true,
+    debug: false,
   },
   render: renderButton,
   parameters: {

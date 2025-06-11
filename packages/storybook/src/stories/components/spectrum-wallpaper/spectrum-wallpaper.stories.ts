@@ -147,7 +147,7 @@ export const Debug: StoryObj<SpectrumWallpaper> = {
   args: {
     background: 'url(https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=800&q=80)',
     showSwatches: true,
-    debug: true,
+    debug: false,
   },
   render: (args) => html`
     <div style="position: relative;">
