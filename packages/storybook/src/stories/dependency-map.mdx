@@ -78,6 +78,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - **Used by**: Image management and display applications
   - **Purpose**: Responsive image gallery with thumbnail navigation, upload, and selection
 
+- **spectrum-hero**: Hero section component with carousel functionality
+  - **Dependencies**: spectrum-button
+  - **Used by**: Landing pages, feature highlights, and content showcase applications
+  - **Purpose**: Hero sections with image/video backgrounds, text overlays, and call-to-action buttons
+
 ### Complex Components (Multiple Internal Dependencies)
 - **spectrum-rail**: Main navigation rail
   - **Dependencies**: spectrum-button, spectrum-search-input (via slots), spectrum-collapsible-list (via slots), spectrum-rail-item (via slots)
@@ -122,6 +127,7 @@ Level 2 (Composed):
 ├── spectrum-rail-item (depends on: spectrum-button)
 ├── spectrum-select (depends on: spectrum-button)
 ├── spectrum-image-gallery (depends on: spectrum-button)
+├── spectrum-hero (depends on: spectrum-button)
 └── spectrum-collapsible-list (depends on: spectrum-context-menu)
 
 Level 3 (Complex):
@@ -149,7 +155,7 @@ Level 3 (Complex):
 - Shared interfaces maintain type safety across components
 
 ### Button Integration Pattern
-- **Multiple components** use spectrum-button as internal trigger (spectrum-select, spectrum-search-input, spectrum-rail-item, spectrum-image-gallery)
+- **Multiple components** use spectrum-button as internal trigger (spectrum-select, spectrum-search-input, spectrum-rail-item, spectrum-image-gallery, spectrum-hero)
 - Properties pass through directly: variant, size, disabled
 - Button handles all visual states (hover, focus, active) and animations
 - Parent wrapper becomes transparent container
@@ -221,6 +227,7 @@ When implementing or modifying components, you **MUST**:
     SB --> |Direct Use| SRI[spectrum-rail-item]
     SB --> |Direct Use| SS[spectrum-select]
     SB --> |Direct Use| SIG[spectrum-image-gallery]
+    SB --> |Direct Use| SH[spectrum-hero]
     SB --> |Direct Use| SCP[spectrum-conversation-panel]
     
     SC[spectrum-chip] --> |Direct Use| SA[spectrum-accordion]
@@ -242,7 +249,7 @@ When implementing or modifying components, you **MUST**:
     
     class ST foundation
     class SB,SC,SCTX,SW,SCAR,SM,STT atomic
-    class SA,SSI,SRI,SCL,SS,SIG composed
+    class SA,SSI,SRI,SCL,SS,SIG,SH composed
     class SR,SCP complex
     class STT new"></mermaid-diagram>
 

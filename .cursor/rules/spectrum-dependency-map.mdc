@@ -74,6 +74,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: Image management and display applications
   - Purpose: Responsive image gallery with thumbnail navigation, upload, and selection
 
+- **spectrum-hero**: Hero section component with carousel functionality
+  - Dependencies: spectrum-button
+  - Used by: Landing pages, feature highlights, and content showcase applications
+  - Purpose: Hero sections with image/video backgrounds, text overlays, and call-to-action buttons
+
 ### Complex Components (Multiple Internal Dependencies)
 - **spectrum-rail**: Main navigation rail
   - Dependencies: spectrum-button, spectrum-search-input (via slots), spectrum-collapsible-list (via slots), spectrum-rail-item (via slots)
@@ -117,6 +122,7 @@ Level 2 (Composed):
 ├── spectrum-rail-item (depends on: spectrum-button)
 ├── spectrum-select (depends on: spectrum-button)
 ├── spectrum-image-gallery (depends on: spectrum-button)
+├── spectrum-hero (depends on: spectrum-button)
 └── spectrum-collapsible-list (depends on: spectrum-context-menu)
 
 Level 3 (Complex):

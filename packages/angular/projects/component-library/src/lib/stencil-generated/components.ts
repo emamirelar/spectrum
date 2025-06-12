@@ -222,6 +222,38 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
 
 @ProxyCmp({
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides']
+})
+@Component({
+  selector: 'spectrum-hero',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides'],
+})
+export class SpectrumHero {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['heroAction', 'slideChange']);
+  }
+}
+
+
+export declare interface SpectrumHero extends Components.SpectrumHero {
+  /**
+   * Event emitted when a hero action button is clicked
+   */
+  heroAction: EventEmitter<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string }>>;
+  /**
+   * Event emitted when slide changes
+   */
+  slideChange: EventEmitter<CustomEvent<{ action: string; slideIndex: number; totalSlides: number }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({

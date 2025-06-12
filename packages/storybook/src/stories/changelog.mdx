@@ -14,7 +14,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### 🆕 Added
-- Ready for next release features...
+- **spectrum-hero**: 🚀 **New Component** - Hero section component with carousel functionality and rich media support
+  - **Flexible Media Support**: Supports both image and video backgrounds with automatic type detection
+  - **Carousel Functionality**: Multi-slide carousel with smooth horizontal slide transitions and autoplay capabilities
+  - **Rich Content Overlays**: Configurable text overlays with title, subtitle, and call-to-action buttons
+  - **Responsive Design**: Mobile-first approach with breakpoint-specific styling and touch/swipe support
+  - **Navigation Controls**: Arrow navigation, dot indicators, and keyboard navigation (arrow keys, space, enter)
+  - **Autoplay Features**: Configurable autoplay with pause-on-hover, custom duration, and progress indicators
+  - **Accessibility**: Full ARIA compliance, keyboard navigation, screen reader support, and reduced motion preferences
+  - **Flexible Positioning**: Overlay content positioning (left/center/right horizontal, top/center/bottom vertical)
+  - **Event System**: `heroAction` and `slideChange` events with action attributes for external integration
+  - **Touch Interactions**: Swipe gestures for mobile navigation with proper touch event handling
+  - **Video Support**: HTML5 video backgrounds with poster images, autoplay, loop, and muted attributes
+  - **Debug Mode**: Optional debug logging for development and troubleshooting
+  - **Spectrum Integration**: Uses spectrum-button for call-to-action buttons and follows Spectrum design tokens
+  - **Props**: `slides` (JSON), `autoplay`, `animationDuration`, `pauseOnHover`, `showDots`, `showArrows`, `height`, `keyboardNavigation`, `debug`
+  - **Slide Configuration**: Each slide supports type, src, poster, alt, title, subtitle, buttonText, buttonAction, overlayPosition, overlayVertical
+  - **CSS Architecture**: BEM methodology with CSS Grid/Flexbox, proper z-index layering, and responsive breakpoints
+  - **Level 2 Component**: Composed component with dependency on spectrum-button for call-to-action functionality
+- **spectrum-image-gallery**: 🚀 **Major Enhancement** - Preview mode with modal image viewing and frost background effect
+  - **Preview Mode**: New `previewMode` prop enables click-to-preview functionality instead of image selection
+  - **Modal Image Viewer**: Full-screen modal overlay with dark background (rgba(0, 0, 0, 0.9)) and backdrop blur
+  - **Smooth Animations**: Preview modal features fade-in (0.3s) and zoom-in animations (scale 0.8 to 1.0) for polished UX
+  - **Close Functionality**: Multiple ways to close preview - close button (spectrum-button with close icon) and click-outside-to-close
+  - **Responsive Modal Design**: Modal adapts to screen sizes (90vw/90vh desktop, 95vw/95vh tablet, 100vw/100vh mobile)
+  - **Image Captions**: Optional caption display showing image title or alt text in preview modal
+  - **Event System**: New `imagePreview` event emitted when images are clicked in preview mode with full image data
+  - **Frost Background Effect**: New `frostBackground` prop applies beautiful frosted glass appearance to entire gallery
+  - **Frosted Glass Styling**: Semi-transparent white background (rgba(255, 255, 255, 0.8)) with 6px backdrop blur
+  - **Wallpaper Integration**: Perfect for overlaying galleries on background images while maintaining readability
+  - **Preview Mode Indicator**: Shows "Preview Mode - Click images to enlarge" message in controls when preview mode is active
+  - **Conditional Controls**: Upload/delete controls hidden in preview mode, replaced with helpful preview instructions
+  - **Enhanced Accessibility**: ARIA labels, keyboard navigation support, and proper focus management in modal
+  - **CSS Architecture**: Added `.gallery--frost` modifier class and `.preview-modal-overlay` with proper z-index layering
+  - **TypeScript Integration**: Full type safety with updated interfaces and proper event typing
 
 ### 🔄 Changed
 - Ready for next release changes...
@@ -23,7 +56,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ready for next release fixes...
 
 ### 📝 Documentation
-- Ready for next release documentation...
+- **spectrum-hero**: Comprehensive Storybook documentation with multiple demonstration stories
+  - **Hero Stories**: 8 comprehensive stories showcasing all variants and use cases
+  - **Single Hero**: Basic single-slide hero with image background and overlay content
+  - **Carousel Hero**: Multi-slide carousel with autoplay, navigation controls, and slide transitions
+  - **Video Hero**: Video background support with poster images and HTML5 video features
+  - **Custom Height**: Demonstrates flexible height configuration (50vh example)
+  - **No Navigation**: Clean hero without arrows or dots for minimal presentations
+  - **Manual Navigation**: User-controlled navigation with autoplay disabled
+  - **Positioning Variants**: Multiple overlay positioning examples (left, center, right, top, bottom)
+  - **Debug Mode**: Development story with debug logging enabled for troubleshooting
+  - **Comprehensive Documentation**: Detailed component documentation with props, events, and usage examples
+  - **Slide Configuration Guide**: Complete guide for configuring slides with all available options
+  - **Event Documentation**: Examples of heroAction and slideChange event handling
+  - **Best Practices**: Guidelines for image optimization, accessibility, and responsive design
+  - **Integration Examples**: Shows integration with spectrum-button and Spectrum design tokens
+- **spectrum-image-gallery**: Enhanced Storybook documentation with wallpaper demonstration stories
+  - **Wallpaper Stories**: Added "OnWallpaper" and "OnWallpaperPreviewMode" stories showcasing frost background effect
+  - **Full-Screen Demonstrations**: Stories use full viewport (100vh/100vw) with beautiful landscape backgrounds
+  - **Mountain & Forest Backgrounds**: High-resolution Unsplash images (1920x1080) for stunning visual demonstrations
+  - **Frost Effect Showcase**: Stories demonstrate how frost background makes galleries readable against any background
+  - **Preview Mode Examples**: Comprehensive examples showing both selection and preview modes side-by-side
+  - **Updated Documentation**: Enhanced README with preview mode usage examples and frost background configuration
+  - **Properties Table**: Added `previewMode` and `frostBackground` props with complete documentation
+  - **Events Table**: Added `imagePreview` event documentation with payload structure and usage examples
+  - **Usage Examples**: Code examples for both preview mode and frost background implementation
 
 ---
 

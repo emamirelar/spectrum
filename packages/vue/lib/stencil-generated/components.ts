@@ -112,6 +112,21 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spectrum-hero', undefined, [
+  'slides',
+  'autoplay',
+  'animationDuration',
+  'pauseOnHover',
+  'showDots',
+  'showArrows',
+  'height',
+  'keyboardNavigation',
+  'debug',
+  'heroAction',
+  'slideChange'
+]);
+
+
 export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumImageGallery>('spectrum-image-gallery', undefined, [
   'images',
   'allowUpload',
