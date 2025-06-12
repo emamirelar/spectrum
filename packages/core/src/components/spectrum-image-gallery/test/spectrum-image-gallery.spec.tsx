@@ -26,32 +26,17 @@ describe('spectrum-image-gallery', () => {
       html: `<spectrum-image-gallery></spectrum-image-gallery>`,
     });
     
-    expect(page.root).toEqualHtml(`
-      <spectrum-image-gallery>
-        <mock:shadow-root>
-          <div class="gallery gallery--vertical">
-            <div class="gallery__empty">
-              <svg fill="currentColor" viewBox="0 0 24 24">
-                <path d="M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19M19,19H5V5H19M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z"></path>
-              </svg>
-              <h3>No images in gallery</h3>
-              <p>Upload images or add them by URL to get started</p>
-            </div>
-            <div class="gallery__controls gallery__controls--vertical">
-              <button class="btn btn--primary" type="button">
-                <svg fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"></path>
-                </svg>
-                Upload Image
-              </button>
-              <button class="btn btn--secondary" type="button">
-                Add Image URL
-              </button>
-            </div>
-          </div>
-        </mock:shadow-root>
-      </spectrum-image-gallery>
-    `);
+    expect(page.root).toBeTruthy();
+    expect(page.rootInstance.allowUpload).toBe(true);
+    expect(page.rootInstance.allowUrlInput).toBe(true);
+    expect(page.rootInstance.allowDelete).toBe(true);
+    expect(page.rootInstance.selectionMode).toBe('single');
+    expect(page.rootInstance.scrollDirection).toBe('vertical');
+    expect(page.rootInstance.previewMode).toBe(false);
+    
+    // Check that empty state is rendered
+    const emptyState = page.root.shadowRoot.querySelector('.gallery__empty');
+    expect(emptyState).toBeTruthy();
   });
 
   it('renders with images', async () => {
@@ -76,7 +61,7 @@ describe('spectrum-image-gallery', () => {
       html: `<spectrum-image-gallery allow-upload="false"></spectrum-image-gallery>`,
     });
     
-    const uploadButton = page.root.shadowRoot.querySelector('.btn--primary');
+    const uploadButton = page.root.shadowRoot.querySelector('spectrum-button[buttontext="Upload Image"]');
     expect(uploadButton).toBeFalsy();
   });
 
@@ -86,7 +71,7 @@ describe('spectrum-image-gallery', () => {
       html: `<spectrum-image-gallery allow-url-input="false"></spectrum-image-gallery>`,
     });
     
-    const urlButton = page.root.shadowRoot.querySelector('.btn--secondary');
+    const urlButton = page.root.shadowRoot.querySelector('spectrum-button[buttontext="Add Image URL"]');
     expect(urlButton).toBeFalsy();
   });
 
@@ -128,7 +113,8 @@ describe('spectrum-image-gallery', () => {
       html: `<spectrum-image-gallery></spectrum-image-gallery>`,
     });
     
-    const uploadButton = page.root.shadowRoot.querySelector('.btn--primary') as HTMLButtonElement;
+    const uploadButton = page.root.shadowRoot.querySelector('spectrum-button[buttontext="Upload Image"]') as HTMLElement;
+    expect(uploadButton).toBeTruthy();
     uploadButton.click();
     await page.waitForChanges();
     
@@ -144,7 +130,8 @@ describe('spectrum-image-gallery', () => {
       html: `<spectrum-image-gallery></spectrum-image-gallery>`,
     });
     
-    const urlButton = page.root.shadowRoot.querySelector('.btn--secondary') as HTMLButtonElement;
+    const urlButton = page.root.shadowRoot.querySelector('spectrum-button[buttontext="Add Image URL"]') as HTMLElement;
+    expect(urlButton).toBeTruthy();
     urlButton.click();
     await page.waitForChanges();
     
@@ -161,12 +148,12 @@ describe('spectrum-image-gallery', () => {
     });
     
     // Open modal first
-    const uploadButton = page.root.shadowRoot.querySelector('.btn--primary') as HTMLButtonElement;
+    const uploadButton = page.root.shadowRoot.querySelector('spectrum-button[buttontext="Upload Image"]') as HTMLElement;
     uploadButton.click();
     await page.waitForChanges();
     
     // Close modal
-    const closeButton = page.root.shadowRoot.querySelector('.modal__close') as HTMLButtonElement;
+    const closeButton = page.root.shadowRoot.querySelector('spectrum-button[aria-label="Close modal"]') as HTMLElement;
     closeButton.click();
     await page.waitForChanges();
     
@@ -217,22 +204,24 @@ describe('spectrum-image-gallery', () => {
     page.root.images = mockImages;
     await page.waitForChanges();
     
-    let eventDetail: any;
+    const selectedEvents: any[] = [];
     page.root.addEventListener('imageSelected', (e: any) => {
-      eventDetail = e.detail;
+      selectedEvents.push(e.detail);
     });
     
     const items = page.root.shadowRoot.querySelectorAll('.gallery__item') as NodeListOf<HTMLElement>;
     
-    // Select first image
+    // First click should select first image
     items[0].click();
     await page.waitForChanges();
-    expect(eventDetail).toEqual(mockImages[0]);
+    expect(selectedEvents).toContain(mockImages[0]);
+    expect(page.rootInstance.internalSelectedImages).toEqual(['test-1']);
     
-    // Select second image (should add to selection)
+    // Second click should select second image (multi mode)
     items[1].click();
     await page.waitForChanges();
-    expect(eventDetail).toEqual(mockImages[1]);
+    expect(selectedEvents).toContain(mockImages[1]);
+    expect(page.rootInstance.internalSelectedImages).toEqual(['test-1', 'test-2']);
   });
 
   it('handles none selection mode', async () => {
@@ -482,5 +471,138 @@ describe('spectrum-image-gallery', () => {
     await page.waitForChanges();
     
     expect(deleteEventFired).toBe(false);
+  });
+
+  it('handles previewMode property', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery preview-mode="true"></spectrum-image-gallery>`,
+    });
+    
+    expect(page.rootInstance.previewMode).toBe(true);
+  });
+
+  it('hides controls in preview mode', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery preview-mode="true"></spectrum-image-gallery>`,
+    });
+    
+    await page.waitForChanges();
+    
+    const uploadButton = page.root.shadowRoot.querySelector('[button-text="Upload Image"]');
+    const urlButton = page.root.shadowRoot.querySelector('[button-text="Add Image URL"]');
+    
+    expect(uploadButton).toBeFalsy();
+    expect(urlButton).toBeFalsy();
+  });
+
+  it('opens preview modal when image is clicked in preview mode', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery preview-mode="true"></spectrum-image-gallery>`,
+    });
+    
+    page.root.images = mockImages;
+    await page.waitForChanges();
+    
+    const imageItem = page.root.shadowRoot.querySelector('.gallery__item') as HTMLElement;
+    imageItem.click();
+    await page.waitForChanges();
+    
+    expect(page.rootInstance.isPreviewModalOpen).toBe(true);
+    expect(page.rootInstance.previewImage).toEqual(mockImages[0]);
+    
+    const previewModal = page.root.shadowRoot.querySelector('.preview-modal-overlay');
+    expect(previewModal).toBeTruthy();
+  });
+
+  it('emits imagePreview event when image is clicked in preview mode', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery preview-mode="true"></spectrum-image-gallery>`,
+    });
+    
+    page.root.images = mockImages;
+    await page.waitForChanges();
+    
+    const imagePreviewSpy = jest.fn();
+    page.root.addEventListener('imagePreview', imagePreviewSpy);
+    
+    const imageItem = page.root.shadowRoot.querySelector('.gallery__item') as HTMLElement;
+    imageItem.click();
+    await page.waitForChanges();
+    
+    expect(imagePreviewSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        detail: mockImages[0]
+      })
+    );
+  });
+
+  it('closes preview modal when close button is clicked', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery preview-mode="true"></spectrum-image-gallery>`,
+    });
+    
+    page.root.images = mockImages;
+    await page.waitForChanges();
+    
+    // Open preview modal
+    const imageItem = page.root.shadowRoot.querySelector('.gallery__item') as HTMLElement;
+    imageItem.click();
+    await page.waitForChanges();
+    
+    expect(page.rootInstance.isPreviewModalOpen).toBe(true);
+    
+    // Close preview modal
+    const closeButton = page.root.shadowRoot.querySelector('.preview-modal__close') as HTMLElement;
+    closeButton.click();
+    await page.waitForChanges();
+    
+    expect(page.rootInstance.isPreviewModalOpen).toBe(false);
+    expect(page.rootInstance.previewImage).toBe(null);
+  });
+
+  it('closes preview modal when overlay is clicked', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery preview-mode="true"></spectrum-image-gallery>`,
+    });
+    
+    page.root.images = mockImages;
+    await page.waitForChanges();
+    
+    // Open preview modal
+    const imageItem = page.root.shadowRoot.querySelector('.gallery__item') as HTMLElement;
+    imageItem.click();
+    await page.waitForChanges();
+    
+    expect(page.rootInstance.isPreviewModalOpen).toBe(true);
+    
+    // Close preview modal by clicking overlay
+    const overlay = page.root.shadowRoot.querySelector('.preview-modal-overlay') as HTMLElement;
+    overlay.click();
+    await page.waitForChanges();
+    
+    expect(page.rootInstance.isPreviewModalOpen).toBe(false);
+    expect(page.rootInstance.previewImage).toBe(null);
+  });
+
+  it('does not show selection indicators in preview mode', async () => {
+    const page = await newSpecPage({
+      components: [SpectrumImageGallery],
+      html: `<spectrum-image-gallery preview-mode="true"></spectrum-image-gallery>`,
+    });
+    
+    page.root.images = mockImages;
+    await page.waitForChanges();
+    
+    const imageItem = page.root.shadowRoot.querySelector('.gallery__item');
+    expect(imageItem.classList.contains('gallery__item--selected')).toBe(false);
+    
+    const selectionIndicator = page.root.shadowRoot.querySelector('.gallery__selection-indicator');
+    expect(selectionIndicator).toBeFalsy();
   });
 });

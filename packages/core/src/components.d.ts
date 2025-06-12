@@ -211,7 +211,9 @@ export namespace Components {
         "allowUpload": boolean;
         "allowUrlInput": boolean;
         "debug": boolean;
+        "frostBackground": boolean;
         "images": ImageConfig[];
+        "previewMode": boolean;
         "scrollDirection": ScrollDirection;
         "selectedImages": string[];
         "selectionMode": SelectionMode;
@@ -633,6 +635,7 @@ declare global {
         "imageDeselect": ImageConfig;
         "imageAdded": ImageAddedEvent;
         "imageDeleted": ImageDeletedEvent;
+        "imagePreview": ImageConfig;
     }
     interface HTMLSpectrumImageGalleryElement extends Components.SpectrumImageGallery, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumImageGalleryElementEventMap>(type: K, listener: (this: HTMLSpectrumImageGalleryElement, ev: SpectrumImageGalleryCustomEvent<HTMLSpectrumImageGalleryElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1020,11 +1023,14 @@ declare namespace LocalJSX {
         "allowUpload"?: boolean;
         "allowUrlInput"?: boolean;
         "debug"?: boolean;
+        "frostBackground"?: boolean;
         "images"?: ImageConfig[];
         "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
         "onImageDeleted"?: (event: SpectrumImageGalleryCustomEvent<ImageDeletedEvent>) => void;
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        "onImagePreview"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onImageSelected"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        "previewMode"?: boolean;
         "scrollDirection"?: ScrollDirection;
         "selectedImages"?: string[];
         "selectionMode"?: SelectionMode;

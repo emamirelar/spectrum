@@ -144,7 +144,8 @@ type SpectrumImageGalleryEvents = {
     onImageSelected: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
     onImageDeselect: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
     onImageAdded: EventName<SpectrumImageGalleryCustomEvent<ImageAddedEvent>>,
-    onImageDeleted: EventName<SpectrumImageGalleryCustomEvent<ImageDeletedEvent>>
+    onImageDeleted: EventName<SpectrumImageGalleryCustomEvent<ImageDeletedEvent>>,
+    onImagePreview: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>
 };
 
 export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents> = /*@__PURE__*/ createComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents>({
@@ -156,7 +157,8 @@ export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryEle
         onImageSelected: 'imageSelected',
         onImageDeselect: 'imageDeselect',
         onImageAdded: 'imageAdded',
-        onImageDeleted: 'imageDeleted'
+        onImageDeleted: 'imageDeleted',
+        onImagePreview: 'imagePreview'
     } as SpectrumImageGalleryEvents,
     defineCustomElement: defineSpectrumImageGallery
 });

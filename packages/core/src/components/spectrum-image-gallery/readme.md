@@ -10,10 +10,21 @@ A beautiful, responsive image gallery component with masonry and horizontal layo
 - **URL Input**: Add images from external URLs with validation
 - **Selection Modes**: Single select, multi-select, or no selection
 - **Delete Functionality**: Remove selected images
+- **Preview Mode**: Enlarged image preview with modal overlay
 - **Event System**: Rich events with complete image data
 - **Responsive Design**: Adapts seamlessly to different screen sizes
 - **Accessibility**: Full keyboard navigation and screen reader support
 - **Spectrum Theming**: Consistent with Spectrum design patterns
+
+## Preview Mode
+
+When `previewMode` is enabled:
+- **No Upload/Delete**: Upload, URL input, and delete controls are hidden
+- **Preview on Click**: Clicking images opens an enlarged preview modal
+- **Animated Modal**: Smooth fade-in and zoom animations
+- **Overlay Close**: Click outside image or close button to dismiss
+- **Responsive**: Adapts to different screen sizes with proper scaling
+- **Accessibility**: Full keyboard navigation and proper ARIA labels
 
 ## Upload Functionality
 
@@ -25,6 +36,18 @@ When users upload files:
 5. **Temporary Storage**: Images exist only in component state (lost on page refresh)
 
 ## Event System
+
+### imagePreview Event
+Emitted when an image is clicked in preview mode:
+```typescript
+{
+  id: string;           // Unique image ID
+  url: string;          // Image URL
+  alt?: string;         // Alt text
+  title?: string;       // Display title
+  metadata?: Record<string, any>; // Additional metadata
+}
+```
 
 ### imageAdded Event
 Emitted when images are uploaded or added via URL:
@@ -68,6 +91,7 @@ Emitted when images are selected/deselected (returns `ImageConfig` object direct
 | `allowUpload` | `allow-upload` | Allow users to upload new images | `boolean` | `true` |
 | `allowUrlInput` | `allow-url-input` | Allow users to add images from URLs | `boolean` | `true` |
 | `images` | -- | Array of images to display | `ImageConfig[]` | `[]` |
+| `previewMode` | `preview-mode` | Enable preview mode (disables upload/delete, enables preview modal) | `boolean` | `false` |
 | `scrollDirection` | `scroll-direction` | Gallery layout direction | `"horizontal" \| "vertical"` | `"vertical"` |
 | `selectionMode` | `selection-mode` | Image selection behavior | `"multi" \| "none" \| "single"` | `"single"` |
 
@@ -78,6 +102,7 @@ Emitted when images are selected/deselected (returns `ImageConfig` object direct
 | `imageAdded` | Emitted when an image is uploaded or added via URL | `CustomEvent<{image: ImageConfig, source: 'upload' \| 'url'}>` |
 | `imageDeleted` | Emitted when selected images are deleted | `CustomEvent<{deletedImages: ImageConfig[], deletedIds: string[], remainingCount: number}>` |
 | `imageDeselected` | Emitted when an image is deselected | `CustomEvent<ImageConfig>` |
+| `imagePreview` | Emitted when an image is clicked in preview mode | `CustomEvent<ImageConfig>` |
 | `imageSelected` | Emitted when an image is selected | `CustomEvent<ImageConfig>` |
 
 ## ImageConfig Interface
@@ -172,6 +197,24 @@ interface ImageConfig {
 </spectrum-image-gallery>
 ```
 
+### Preview Mode Gallery
+```html
+<spectrum-image-gallery
+  preview-mode="true"
+  scroll-direction="vertical"
+  .images=${images}
+></spectrum-image-gallery>
+```
+
+### Image Gallery with Preview Events
+```html
+<spectrum-image-gallery
+  preview-mode="true"
+  .images=${images}
+  @imagePreview=${(e) => console.log('Preview image:', e.detail)}
+></spectrum-image-gallery>
+```
+
 ## Important Notes
 
 - **No Persistence**: Images are stored temporarily in component state only
@@ -213,7 +256,9 @@ The component inherits theming from the Spectrum theme system. Key variables inc
 | `allowUpload`     | `allow-upload`     |             | `boolean`                       | `true`       |
 | `allowUrlInput`   | `allow-url-input`  |             | `boolean`                       | `true`       |
 | `debug`           | `debug`            |             | `boolean`                       | `false`      |
+| `frostBackground` | `frost-background` |             | `boolean`                       | `false`      |
 | `images`          | --                 |             | `ImageConfig[]`                 | `[]`         |
+| `previewMode`     | `preview-mode`     |             | `boolean`                       | `false`      |
 | `scrollDirection` | `scroll-direction` |             | `"horizontal" \| "vertical"`    | `'vertical'` |
 | `selectedImages`  | --                 |             | `string[]`                      | `[]`         |
 | `selectionMode`   | `selection-mode`   |             | `"multi" \| "none" \| "single"` | `'single'`   |
@@ -226,6 +271,7 @@ The component inherits theming from the Spectrum theme system. Key variables inc
 | `imageAdded`    |             | `CustomEvent<ImageAddedEvent>`   |
 | `imageDeleted`  |             | `CustomEvent<ImageDeletedEvent>` |
 | `imageDeselect` |             | `CustomEvent<ImageConfig>`       |
+| `imagePreview`  |             | `CustomEvent<ImageConfig>`       |
 | `imageSelected` |             | `CustomEvent<ImageConfig>`       |
 
 

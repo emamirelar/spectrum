@@ -21,13 +21,18 @@ This map shows the relationships between Spectrum components. Keep this updated 
 ### Atomic Components (No Internal Dependencies)
 - **spectrum-button**: Interactive button component
   - **Dependencies**: None (pure component)
-  - **Used by**: spectrum-rail, spectrum-search-input, spectrum-rail-item, spectrum-context-menu, **spectrum-select**
+  - **Used by**: spectrum-conversation-panel, spectrum-image-gallery, spectrum-rail, spectrum-rail-item, spectrum-search-input, spectrum-select
   - **Purpose**: Primary interactive element
 
 - **spectrum-chip**: Small interactive element for tags/selections
   - **Dependencies**: None (pure component)  
-  - **Used by**: spectrum-conversation-panel
+  - **Used by**: spectrum-accordion, spectrum-conversation-panel
   - **Purpose**: Display tags, selections, or actionable items
+
+- **spectrum-toast**: ✨ **NEW** Notification component for user feedback
+  - **Dependencies**: None (pure component)
+  - **Used by**: Standalone notifications and user feedback systems
+  - **Purpose**: Display temporary notifications, alerts, and user feedback messages
 
 ### Utility Components
 - **spectrum-context-menu**: Contextual menu overlay
@@ -42,6 +47,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - **Purpose**: Dynamic background with color extraction
 
 ### Composed Components (With Internal Dependencies)
+- **spectrum-accordion**: Expandable content container
+  - **Dependencies**: spectrum-chip
+  - **Used by**: spectrum-conversation-panel
+  - **Purpose**: Collapsible content sections with chip-based triggers
+
 - **spectrum-search-input**: Enhanced search input with voice
   - **Dependencies**: spectrum-button
   - **Used by**: spectrum-rail
@@ -57,23 +67,29 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - **Used by**: spectrum-rail (via slots)
   - **Purpose**: Expandable/collapsible navigation lists
 
-- **spectrum-select**: 🆕 Comprehensive select/dropdown component
+- **spectrum-select**: Comprehensive select/dropdown component
   - **Dependencies**: spectrum-button
   - **Used by**: Form components and data input applications
   - **Purpose**: Single and multiple selection dropdown with search capabilities
-  - **Integration**: Replaces custom trigger with spectrum-button for consistency
+  - **Integration**: Uses spectrum-button as trigger for consistency
 
+- **spectrum-image-gallery**: Flexible image gallery with upload capabilities
+  - **Dependencies**: spectrum-button
+  - **Used by**: Image management and display applications
+  - **Purpose**: Responsive image gallery with thumbnail navigation, upload, and selection
+
+### Complex Components (Multiple Internal Dependencies)
 - **spectrum-rail**: Main navigation rail
-  - **Dependencies**: spectrum-search-input, spectrum-collapsible-list (via slots), spectrum-rail-item (via slots)
+  - **Dependencies**: spectrum-button, spectrum-search-input (via slots), spectrum-collapsible-list (via slots), spectrum-rail-item (via slots)
   - **Used by**: Main navigation component
   - **Purpose**: Primary navigation with expand/collapse functionality
 
 - **spectrum-conversation-panel**: Chat/conversation interface
-  - **Dependencies**: spectrum-chip
+  - **Dependencies**: spectrum-accordion, spectrum-button, spectrum-chip
   - **Used by**: AI/chat applications
-  - **Purpose**: Message display and interaction
+  - **Purpose**: Message display and interaction with expandable content
 
-### Standalone Components (No Internal Dependencies)
+### Standalone Components (External Dependencies Only)
 - **spectrum-carousel**: Image/content carousel
   - **Dependencies**: @glidejs/glide (external)
   - **Used by**: Content display
@@ -83,11 +99,6 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - **Dependencies**: None (uses native popover API)
   - **Used by**: Complex navigation scenarios
   - **Purpose**: Large navigation overlay
-
-- **spectrum-image-gallery**: Flexible image gallery with upload capabilities
-  - **Dependencies**: None (pure component, uses native APIs)  
-  - **Used by**: Image management and display applications
-  - **Purpose**: Responsive image gallery with thumbnail navigation, upload, and selection
 
 ---
 
@@ -100,21 +111,22 @@ Level 0 (Foundation):
 Level 1 (Atomic):
 ├── spectrum-button
 ├── spectrum-chip
+├── spectrum-toast ✨ NEW
 ├── spectrum-context-menu
 ├── spectrum-wallpaper
-├── spectrum-carousel
-├── spectrum-megamenu
-└── spectrum-image-gallery
+└── spectrum-megamenu
 
 Level 2 (Composed):
+├── spectrum-accordion (depends on: spectrum-chip)
 ├── spectrum-search-input (depends on: spectrum-button)
 ├── spectrum-rail-item (depends on: spectrum-button)
-├── spectrum-select (depends on: spectrum-button) ✨ NEW
+├── spectrum-select (depends on: spectrum-button)
+├── spectrum-image-gallery (depends on: spectrum-button)
 └── spectrum-collapsible-list (depends on: spectrum-context-menu)
 
 Level 3 (Complex):
-├── spectrum-rail (depends on: spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item)
-└── spectrum-conversation-panel (depends on: spectrum-chip)
+├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item)
+└── spectrum-conversation-panel (depends on: spectrum-accordion, spectrum-button, spectrum-chip)
 ```
 
 ---
@@ -137,24 +149,34 @@ Level 3 (Complex):
 - Shared interfaces maintain type safety across components
 
 ### Button Integration Pattern
-- **spectrum-select** demonstrates the new pattern of using spectrum-button as internal trigger
+- **Multiple components** use spectrum-button as internal trigger (spectrum-select, spectrum-search-input, spectrum-rail-item, spectrum-image-gallery)
 - Properties pass through directly: variant, size, disabled
 - Button handles all visual states (hover, focus, active) and animations
 - Parent wrapper becomes transparent container
-- **Minimal Animation**: Select uses `minimalAnimation={true}` for better accessibility
+- **Consistent UX**: All interactive elements share the same button behavior
+
+### Chip Integration Pattern
+- **spectrum-accordion** uses spectrum-chip as trigger element
+- **spectrum-conversation-panel** uses spectrum-chip for tags and interactive elements
+- Chips provide consistent micro-interactions across different contexts
 
 ---
 
 ## 📈 Recent Updates
 
-### ✨ spectrum-select Integration (Latest)
-- **New Component**: Added to Level 2 (Composed) with spectrum-button dependency
-- **Button Integration**: Uses spectrum-button as trigger instead of custom div
-- **Transparent Wrapper**: Parent containers are completely invisible - no background, border, or padding
-- **Variant Pass-through**: All variants (primary, secondary, outline, ghost) pass directly to spectrum-button
-- **Multi-select Display**: Shows count badge in left slot, single selections show option icon
-- **Minimal Animation**: Enabled for reduced motion and better accessibility
-- **Fixed Dropdown Sizing**: 40ch width, shows exactly 4 options (320px height)
+### ✨ spectrum-toast Component (Latest)
+- **New Component**: Added to Level 1 (Atomic) - no internal dependencies
+- **Notification System**: Comprehensive toast/notification component for user feedback
+- **Multiple Variants**: Support for success, warning, danger, primary, secondary, and ghost variants
+- **Flexible Positioning**: 8 different screen positions (top, bottom, corners, sides)
+- **Auto-dismiss**: Configurable duration with persistent option
+- **Interactive Elements**: Optional action buttons and dismiss functionality
+- **Accessibility**: Full keyboard navigation and screen reader support
+
+### 🔄 Updated Dependencies (Current State)
+- **spectrum-conversation-panel**: Now depends on spectrum-accordion, spectrum-button, and spectrum-chip
+- **spectrum-image-gallery**: Now depends on spectrum-button (updated from pure component)
+- **spectrum-accordion**: Confirmed dependency on spectrum-chip
 
 ---
 
@@ -192,21 +214,25 @@ When implementing or modifying components, you **MUST**:
 ## 🔍 Visual Dependencies
 
 <mermaid-diagram chart="graph TD
-    ST[spectrum-theme] --&gt; |CSS Variables| ALL[All Components]
+    ST[spectrum-theme] --> |CSS Variables| ALL[All Components]
     
-    SB[spectrum-button] --&gt; |Direct Use| SR[spectrum-rail]
-    SB --&gt; |Direct Use| SSI[spectrum-search-input] 
-    SB --&gt; |Direct Use| SRI[spectrum-rail-item]
-    SB --&gt; |Direct Use| SCM[spectrum-context-menu]
-    SB --&gt; |Direct Use| SS[spectrum-select]
+    SB[spectrum-button] --> |Direct Use| SR[spectrum-rail]
+    SB --> |Direct Use| SSI[spectrum-search-input] 
+    SB --> |Direct Use| SRI[spectrum-rail-item]
+    SB --> |Direct Use| SS[spectrum-select]
+    SB --> |Direct Use| SIG[spectrum-image-gallery]
+    SB --> |Direct Use| SCP[spectrum-conversation-panel]
     
-    SC[spectrum-chip] --&gt; |Direct Use| SCP[spectrum-conversation-panel]
+    SC[spectrum-chip] --> |Direct Use| SA[spectrum-accordion]
+    SC --> |Direct Use| SCP
     
-    SCTX[spectrum-context-menu] --&gt; |Interface Export| SCL[spectrum-collapsible-list]
+    SA --> |Direct Use| SCP
     
-    SSI --&gt; |Slot Composition| SR
-    SRI --&gt; |Slot Composition| SR  
-    SCL --&gt; |Slot Composition| SR
+    SCTX[spectrum-context-menu] --> |Interface Export| SCL[spectrum-collapsible-list]
+    
+    SSI --> |Slot Composition| SR
+    SRI --> |Slot Composition| SR  
+    SCL --> |Slot Composition| SR
     
     classDef foundation fill:#e1f5fe
     classDef atomic fill:#f3e5f5
@@ -215,10 +241,10 @@ When implementing or modifying components, you **MUST**:
     classDef new fill:#ffebee,stroke:#f44336,stroke-width:2px
     
     class ST foundation
-    class SB,SC,SCTX,SW,SCAR,SM,SIG atomic
-    class SSI,SRI,SCL,SS composed
+    class SB,SC,SCTX,SW,SCAR,SM,STT atomic
+    class SA,SSI,SRI,SCL,SS,SIG composed
     class SR,SCP complex
-    class SS new"></mermaid-diagram>
+    class STT new"></mermaid-diagram>
 
 ---
 

@@ -13,6 +13,8 @@ interface SpectrumImageGalleryArgs {
   selectionMode: SelectionMode;
   selectedImages: string[];
   scrollDirection: ScrollDirection;
+  previewMode: boolean;
+  frostBackground: boolean;
   isLoading: boolean;
   debug: boolean;
 }
@@ -327,6 +329,8 @@ The imageAdded event is emitted when images are uploaded or added via URL. The i
     selectionMode: 'single',
     selectedImages: [],
     scrollDirection: 'vertical',
+    previewMode: false,
+    frostBackground: false,
     isLoading: false,
     debug: false,
   },
@@ -389,6 +393,22 @@ The imageAdded event is emitted when images are uploaded or added via URL. The i
         defaultValue: { summary: "'vertical'" },
       },
     },
+    previewMode: {
+      control: 'boolean',
+      description: 'Enable preview mode',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    frostBackground: {
+      control: 'boolean',
+      description: 'Enable frost background effect for the entire gallery',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
     isLoading: {
       control: 'boolean',
       description: 'Loading state indicator',
@@ -420,11 +440,13 @@ const renderGallery = (args: SpectrumImageGalleryArgs) => html`
       .selectionMode=${args.selectionMode}
       .selectedImages=${args.selectedImages}
       .scrollDirection=${args.scrollDirection}
+      .previewMode=${args.previewMode}
       .debug=${args.debug}
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
       @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
+      @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
     ></spectrum-image-gallery>
   </div>
 `;
@@ -439,11 +461,13 @@ const renderScrollableGallery = (args: SpectrumImageGalleryArgs) => html`
       .selectionMode=${args.selectionMode}
       .selectedImages=${args.selectedImages}
       .scrollDirection=${args.scrollDirection}
+      .previewMode=${args.previewMode}
       .debug=${args.debug}
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
       @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
+      @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
     ></spectrum-image-gallery>
   </div>
 `;
@@ -771,6 +795,213 @@ export const ScrollDirectionComparison: StoryObj<SpectrumImageGalleryArgs> = {
     docs: {
       description: {
         story: 'Side-by-side comparison of vertical masonry layout versus horizontal scrolling layout with 15 images each. Try scrolling in both directions to see the different behaviors.',
+      },
+    },
+  },
+};
+
+export const PreviewMode: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.slice(0, 12),
+    previewMode: true,
+  },
+  render: renderGallery,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Gallery in preview mode where clicking images opens an enlarged modal view instead of selecting them. Upload and delete controls are hidden. Click any image to see the preview modal with smooth animations.',
+      },
+    },
+  },
+};
+
+export const PreviewModeHorizontal: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.slice(0, 15),
+    previewMode: true,
+    scrollDirection: 'horizontal',
+  },
+  render: renderScrollableGallery,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Horizontal gallery in preview mode. Perfect for image carousels where users can scroll through images and click to see detailed previews.',
+      },
+    },
+  },
+};
+
+export const PreviewModeNatureCollection: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.filter(img => img.metadata?.category === 'nature'),
+    previewMode: true,
+  },
+  render: renderGallery,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Nature photography collection in preview mode. Each image opens in an enlarged modal view with optional captions. Check the Actions panel to see imagePreview events.',
+      },
+    },
+  },
+};
+
+export const PreviewModeComparison: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.slice(0, 8),
+  },
+  render: (args: SpectrumImageGalleryArgs) => html`
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; height: 500px;">
+      <div style="border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden;">
+        <h4 style="margin: 0; padding: 12px; background: #f5f5f5; border-bottom: 1px solid #e0e0e0;">Selection Mode</h4>
+        <spectrum-image-gallery
+          .images=${args.images}
+          .allowUpload=${false}
+          .allowUrlInput=${false}
+          .selectionMode=${'single'}
+          .previewMode=${false}
+          @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+          @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+          @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
+        ></spectrum-image-gallery>
+      </div>
+      <div style="border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden;">
+        <h4 style="margin: 0; padding: 12px; background: #f5f5f5; border-bottom: 1px solid #e0e0e0;">Preview Mode</h4>
+        <spectrum-image-gallery
+          .images=${args.images}
+          .allowUpload=${false}
+          .allowUrlInput=${false}
+          .previewMode=${true}
+          @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+          @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+          @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
+        ></spectrum-image-gallery>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Side-by-side comparison of selection mode versus preview mode. Left side shows normal selection behavior, right side shows preview modal behavior when clicking images.',
+      },
+    },
+  },
+};
+
+export const OnWallpaper: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.slice(0, 12),
+    selectionMode: 'multi',
+    frostBackground: true,
+  },
+  render: (args: SpectrumImageGalleryArgs) => html`
+    <div style="
+      height: 100vh; 
+      width: 100vw; 
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      box-sizing: border-box;
+    ">
+      <div style="
+        width: 100%;
+        max-width: 1200px;
+        height: 80vh;
+        max-height: 800px;
+      ">
+        <spectrum-image-gallery
+          .images=${args.images}
+          .allowUpload=${args.allowUpload}
+          .allowUrlInput=${args.allowUrlInput}
+          .allowDelete=${args.allowDelete}
+          .selectionMode=${args.selectionMode}
+          .selectedImages=${args.selectedImages}
+          .scrollDirection=${args.scrollDirection}
+          .previewMode=${args.previewMode}
+          .frostBackground=${args.frostBackground}
+          .debug=${args.debug}
+          @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+          @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+          @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
+          @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
+        ></spectrum-image-gallery>
+      </div>
+    </div>
+  `,
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'Image gallery with frost background effect displayed on a full-screen mountain landscape. The entire gallery has a semi-transparent frosted glass appearance with backdrop blur, making it beautifully visible against the background while maintaining full functionality.',
+      },
+    },
+  },
+};
+
+export const OnWallpaperPreviewMode: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.slice(0, 15),
+    previewMode: true,
+    scrollDirection: 'horizontal',
+    frostBackground: true,
+  },
+  render: (args: SpectrumImageGalleryArgs) => html`
+    <div style="
+      height: 100vh; 
+      width: 100vw; 
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&h=1080&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      box-sizing: border-box;
+    ">
+      <div style="
+        width: 100%;
+        max-width: 1200px;
+        height: 80vh;
+        max-height: 600px;
+      ">
+        <spectrum-image-gallery
+          .images=${args.images}
+          .allowUpload=${args.allowUpload}
+          .allowUrlInput=${args.allowUrlInput}
+          .allowDelete=${args.allowDelete}
+          .selectionMode=${args.selectionMode}
+          .selectedImages=${args.selectedImages}
+          .scrollDirection=${args.scrollDirection}
+          .previewMode=${args.previewMode}
+          .frostBackground=${args.frostBackground}
+          .debug=${args.debug}
+          @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+          @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+          @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
+          @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
+        ></spectrum-image-gallery>
+      </div>
+    </div>
+  `,
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'Horizontal image gallery in preview mode with frost background effect on a full-screen forest landscape. The entire gallery has a beautiful frosted glass appearance. Click any image to see the preview modal with smooth animations.',
       },
     },
   },

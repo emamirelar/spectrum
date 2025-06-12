@@ -222,21 +222,21 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
 
 @ProxyCmp({
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'images', 'scrollDirection', 'selectedImages', 'selectionMode']
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({
   selector: 'spectrum-image-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'images', 'scrollDirection', 'selectedImages', 'selectionMode'],
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted']);
+    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted', 'imagePreview']);
   }
 }
 
@@ -254,6 +254,8 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   imageAdded: EventEmitter<CustomEvent<ISpectrumImageGalleryImageAddedEvent>>;
 
   imageDeleted: EventEmitter<CustomEvent<ISpectrumImageGalleryImageDeletedEvent>>;
+
+  imagePreview: EventEmitter<CustomEvent<ISpectrumImageGalleryImageConfig>>;
 }
 
 
