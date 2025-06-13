@@ -297,7 +297,7 @@ export class SpectrumConversationPanel {
         <div class="agentIcon"></div>
         <div class="message">
           <div class="message-content">
-            {this.parseAndReplaceSupTags(response.message, response.sources || [], messageId)}
+            {this.parseAndReplaceSourceTags(response.message, response.sources || [], messageId)}
           </div>
           <div class="actions">
             {this.renderActions(messageId)}
@@ -442,37 +442,50 @@ export class SpectrumConversationPanel {
   }
 
   /**
-   * Parse HTML content and replace <sup> tags with source chips
+   * Parse HTML content and replace <cite> and <sup> tags with source chips
    */
-  private parseAndReplaceSupTags(htmlContent: string, sources: any[], messageId: string): any {
-    this.debugLog('parseAndReplaceSupTags called', { htmlContent, sourcesLength: sources?.length, messageId });
+  private parseAndReplaceSourceTags(htmlContent: string, sources: any[], messageId: string): any {
+    this.debugLog('parseAndReplaceSourceTags called', { htmlContent, sourcesLength: sources?.length, messageId });
     
     if (!sources || !Array.isArray(sources) || sources.length === 0) {
       this.debugLog('No sources found, returning original content');
       return <div innerHTML={htmlContent}></div>;
     }
 
-    // Check if there are any sup tags
+    // Check for both cite and sup tags
+    const citeRegex = /<cite>(\d+)<\/cite>/g;
     const supRegex = /<sup>(\d+)<\/sup>/g;
-    const matches = [...htmlContent.matchAll(supRegex)];
     
-    if (matches.length === 0) {
-      this.debugLog('No sup tags found in content');
+    const citeMatches = [...htmlContent.matchAll(citeRegex)];
+    const supMatches = [...htmlContent.matchAll(supRegex)];
+    
+    // Combine all matches and sort by position
+    const allMatches = [
+      ...citeMatches.map(match => ({ ...match, tagType: 'cite' as const })),
+      ...supMatches.map(match => ({ ...match, tagType: 'sup' as const }))
+    ].sort((a, b) => a.index! - b.index!);
+    
+    if (allMatches.length === 0) {
+      this.debugLog('No cite or sup tags found in content');
       return <div innerHTML={htmlContent}></div>;
     }
 
-    this.debugLog('Found sup tags, processing...', { matchCount: matches.length });
+    this.debugLog('Found citation tags, processing...', { 
+      matchCount: allMatches.length, 
+      citeCount: citeMatches.length, 
+      supCount: supMatches.length 
+    });
     
     // Build an array of elements
     const elements: any[] = [];
     let lastIndex = 0;
     
-    matches.forEach((match) => {
+    allMatches.forEach((match) => {
       const sourceNumber = match[1];
       const matchStart = match.index!;
       const matchEnd = matchStart + match[0].length;
 
-      this.debugLog('Processing sup tag', { sourceNumber, matchStart, matchEnd });
+      this.debugLog('Processing citation tag', { tagType: match.tagType, sourceNumber, matchStart, matchEnd });
 
       // Find the corresponding source
       const source = sources.find(s => 

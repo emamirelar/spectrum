@@ -11,9 +11,10 @@ This map shows the relationships between Spectrum components. Keep this updated 
 
 ### Core Infrastructure Components (Foundation Layer)
 - **spectrum-theme**: Foundation theming component
-  - Dependencies: @material/material-color-utilities
+  - Dependencies: @material/material-color-utilities, FontLoader utility
   - Used by: All components (through CSS custom properties)
-  - Purpose: Provides Material Design 3 color system and theming
+  - Coordinates with: spectrum-wallpaper (via events for color extraction)
+  - Purpose: Provides Material Design 3 color system, theming, and FOUC prevention
 
 ### Atomic Components (No Internal Dependencies)
 - **spectrum-button**: Interactive button component
@@ -41,7 +42,8 @@ This map shows the relationships between Spectrum components. Keep this updated 
 - **spectrum-wallpaper**: Background theming component
   - Dependencies: None (pure component)
   - Used by: Standalone background theming
-  - Purpose: Dynamic background with color extraction
+  - Coordinates with: spectrum-theme (via events for color coordination)
+  - Purpose: Dynamic background with color extraction and theme coordination
 
 ### Composed Components (With Internal Dependencies)
 - **spectrum-accordion**: Expandable content container
@@ -164,6 +166,15 @@ Level 3 (Complex):
 - spectrum-accordion uses spectrum-chip as trigger element
 - spectrum-conversation-panel uses spectrum-chip for tags and interactive elements
 - Chips provide consistent micro-interactions across different contexts
+
+### Theme-Wallpaper Coordination Pattern
+- spectrum-theme and spectrum-wallpaper coordinate via document-level events
+- spectrum-wallpaper emits `wallpaper-colors-ready` and `wallpaper-colors-failed` events
+- spectrum-theme listens for wallpaper events when `waitForWallpaper` is enabled
+- Color coordination prevents FOUC by waiting for wallpaper color extraction
+- Both components manage document CSS classes for loading states
+- FontLoader utility provides singleton font loading to prevent duplicate operations
+- Event-based coordination maintains loose coupling between components
 
 ## Rules for Maintaining This Map
 

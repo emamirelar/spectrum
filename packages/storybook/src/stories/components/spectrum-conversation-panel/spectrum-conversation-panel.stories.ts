@@ -174,6 +174,28 @@ const meta = {
         component: `
           A conversation panel component that displays messages, actions, sources, and explorations.
           
+          ## Source Citations
+          The conversation panel automatically converts inline citation tags into interactive spectrum-chip components:
+          
+          - **Dual Tag Support**: Both \`<sup>1</sup>\` and \`<cite>2</cite>\` tags are supported
+          - **Identical Behavior**: Both tag types convert to the same extra-small spectrum-chip components
+          - **Mixed Usage**: You can use both tag types in the same message (e.g., \`<sup>1</sup>\` and \`<cite>2</cite>\`)
+          - **Interactive Chips**: Hover on desktop or tap on mobile to see source details
+          - **Source Matching**: Tags are matched to sources array by number (1, 2, 3, etc.)
+          - **Event Emission**: Clicking chips emits \`sourceClick\` events with full source data
+          
+          ### Citation Examples
+          \`\`\`html
+          <!-- Using sup tags (footnote style) -->
+          Climate change affects polar ice<sup>1</sup> and sea levels<sup>2</sup>.
+          
+          <!-- Using cite tags (academic style) -->
+          Research shows<cite>1</cite> that temperatures are rising<cite>2</cite>.
+          
+          <!-- Mixed usage -->
+          Studies indicate<sup>1</sup> while data confirms<cite>2</cite> the trend.
+          \`\`\`
+          
           ## Message IDs
           Messages can now include an optional \`id\` field. If provided, this ID will be used internally and emitted with actions. If not provided, a fallback ID will be generated (e.g., "msg-0", "msg-1").
           
@@ -724,7 +746,7 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
         "timestamp": "2024-03-20T10:00:00Z"
       },
       {
-        "message": "Climate change is causing dramatic effects on polar ice caps. Arctic sea ice is declining at a rate of 13% per decade<sup>1</sup>, while Antarctic ice sheets are losing mass at an accelerating pace<sup>2</sup>. The Greenland ice sheet has lost approximately 280 billion tons of ice annually since 2002<sup>3</sup>, contributing to global sea level rise of about 1.5mm per year<sup>4</sup>. Polar bears and other Arctic wildlife are facing habitat loss as their ice platforms disappear<sup>5</sup>.",
+        "message": "Climate change is causing dramatic effects on polar ice caps. Arctic sea ice is declining at a rate of 13% per decade<sup>1</sup>, while Antarctic ice sheets are losing mass at an accelerating pace<cite>2</cite>. The Greenland ice sheet has lost approximately 280 billion tons of ice annually since 2002<sup>3</sup>, contributing to global sea level rise of about 1.5mm per year<cite>4</cite>. Polar bears and other Arctic wildlife are facing habitat loss as their ice platforms disappear<sup>5</sup>.",
         "sender": "response",
         "timestamp": "2024-03-20T10:00:05Z",
         "sources": [
@@ -794,7 +816,7 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
       <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
         <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Source Citations with Chips Demo</h3>
         <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
-          This demo shows <strong>inline source citations</strong> using <code>&lt;sup&gt;</code> tags that are automatically converted to 
+          This demo shows <strong>inline source citations</strong> using both <code>&lt;sup&gt;</code> and <code>&lt;cite&gt;</code> tags that are automatically converted to 
           <strong>extra-small spectrum-chip</strong> components. Hover over chips on desktop or tap on mobile to see source details.
         </p>
       </div>
@@ -817,7 +839,7 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
       <div style="margin-top: 1rem; padding: 1rem; background: #e7f3ff; border-radius: 6px; border-left: 4px solid #007bff;">
         <p style="margin: 0; color: #004085; font-size: 0.875rem;">
           <strong>💡 New Features:</strong><br>
-          • <code>&lt;sup&gt;1&lt;/sup&gt;</code> tags automatically become extra-small chips<br>
+          • <code>&lt;sup&gt;1&lt;/sup&gt;</code> and <code>&lt;cite&gt;2&lt;/cite&gt;</code> tags automatically become extra-small chips<br>
           • <strong>Desktop:</strong> Hover over chips to see source details<br>
           • <strong>Mobile:</strong> Tap chips to see source card slide up from bottom<br>
           • Chips show corresponding source information from the sources array<br>
