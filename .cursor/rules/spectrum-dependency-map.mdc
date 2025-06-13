@@ -101,6 +101,12 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: Complex navigation scenarios
   - Purpose: Large navigation overlay
 
+- **spectrum-menu**: Responsive navigation menu with megamenu variant
+  - Dependencies: None (pure component)
+  - Used by: Navigation systems, header menus, sidebar navigation
+  - Purpose: Horizontal/vertical menus with regular submenus or full-width megamenu dropdowns
+  - Features: Mobile responsive, Material icons, accessibility support
+
 ## Dependency Flow Hierarchy
 
 ```
@@ -114,7 +120,8 @@ Level 1 (Atomic):
 ├── spectrum-context-menu
 ├── spectrum-wallpaper
 ├── spectrum-carousel
-└── spectrum-megamenu
+├── spectrum-megamenu
+└── spectrum-menu
 
 Level 2 (Composed):
 ├── spectrum-accordion (depends on: spectrum-chip)

@@ -1,14 +1,15 @@
 # Spectrum Menu
 
-A responsive and accessible menu component that can be displayed horizontally or vertically, with mobile support.
+A responsive and accessible menu component that can be displayed horizontally or vertically, with mobile support and megamenu variant.
 
 ## Features
 
 - Horizontal and vertical orientation
+- **Megamenu variant** with full-width dropdowns and rich content
 - Responsive design with mobile hamburger menu
 - Accessible keyboard navigation
 - Support for Material icons (see below)
-- Nested submenus
+- Nested submenus with descriptions (megamenu variant)
 - Disabled state support
 - Customizable styling through CSS variables
 
@@ -20,9 +21,11 @@ A responsive and accessible menu component that can be displayed horizontally or
 > <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 > ```
 
+### Default Menu
 ```html
 <spectrum-menu
   orientation="horizontal"
+  variant="default"
   mobile-breakpoint="768"
   items='[
     {
@@ -57,6 +60,44 @@ A responsive and accessible menu component that can be displayed horizontally or
       "href": "/disabled",
       "icon": "block",
       "disabled": true
+    }
+  ]'
+></spectrum-menu>
+```
+
+### Megamenu Variant
+```html
+<spectrum-menu
+  orientation="horizontal"
+  variant="megamenu"
+  mobile-breakpoint="768"
+  items='[
+    {
+      "label": "Products",
+      "href": "/products",
+      "icon": "inventory_2",
+      "children": [
+        {
+          "label": "Electronics",
+          "href": "/products/electronics",
+          "icon": "devices",
+          "description": "Latest gadgets and electronic devices",
+          "children": [
+            {
+              "label": "Smartphones",
+              "href": "/products/electronics/phones",
+              "icon": "smartphone",
+              "description": "Latest mobile phones and accessories"
+            },
+            {
+              "label": "Laptops",
+              "href": "/products/electronics/laptops",
+              "icon": "laptop",
+              "description": "High-performance laptops and notebooks"
+            }
+          ]
+        }
+      ]
     }
   ]'
 ></spectrum-menu>
