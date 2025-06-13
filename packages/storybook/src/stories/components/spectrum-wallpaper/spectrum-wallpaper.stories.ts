@@ -2,7 +2,7 @@ import { html } from 'lit';
 import type { Meta, StoryObj } from "@storybook/web-components";
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumWallpaper } from "@stencil-storybook-boilerplate/core/src/components/spectrum-wallpaper/spectrum-wallpaper";
+import type { SpectrumWallpaper } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-wallpaper/spectrum-wallpaper";
 
 // More on how to set up stories at: https://storybook.js.org/docs/web-components/writing-stories/introduction
 

@@ -24,7 +24,7 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@stencil-storybook-boilerplate/core": "*"
+    "@unops-itg-npm/cpit-spectrum": "*"
   },
   "devDependencies": {
     "vue": "^3.5.13"

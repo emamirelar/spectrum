@@ -12,14 +12,12 @@ import { createComponent } from '@stencil/react-output-target/runtime';
 import { type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
-import { SpectrumCarousel as SpectrumCarouselElement, defineCustomElement as defineSpectrumCarousel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-carousel.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
 import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustomElement as defineSpectrumCollapsibleList } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-collapsible-list.js";
 import { SpectrumContextMenu as SpectrumContextMenuElement, defineCustomElement as defineSpectrumContextMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-context-menu.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-conversation-panel.js";
 import { SpectrumHero as SpectrumHeroElement, defineCustomElement as defineSpectrumHero } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-hero.js";
 import { SpectrumImageGallery as SpectrumImageGalleryElement, defineCustomElement as defineSpectrumImageGallery } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-image-gallery.js";
-import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-megamenu.js";
 import { SpectrumMenu as SpectrumMenuElement, defineCustomElement as defineSpectrumMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-menu.js";
 import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-item.js";
 import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail.js";
@@ -55,17 +53,6 @@ export const SpectrumButton: StencilReactComponent<SpectrumButtonElement, Spectr
     react: React,
     events: { onButtonAction: 'buttonAction' } as SpectrumButtonEvents,
     defineCustomElement: defineSpectrumButton
-});
-
-type SpectrumCarouselEvents = NonNullable<unknown>;
-
-export const SpectrumCarousel: StencilReactComponent<SpectrumCarouselElement, SpectrumCarouselEvents> = /*@__PURE__*/ createComponent<SpectrumCarouselElement, SpectrumCarouselEvents>({
-    tagName: 'spectrum-carousel',
-    elementClass: SpectrumCarouselElement,
-    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
-    react: React,
-    events: {} as SpectrumCarouselEvents,
-    defineCustomElement: defineSpectrumCarousel
 });
 
 type SpectrumChipEvents = { onChipAction: EventName<CustomEvent<{ action?: string; label: string }>> };
@@ -180,17 +167,6 @@ export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryEle
         onImagePreview: 'imagePreview'
     } as SpectrumImageGalleryEvents,
     defineCustomElement: defineSpectrumImageGallery
-});
-
-type SpectrumMegamenuEvents = NonNullable<unknown>;
-
-export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, SpectrumMegamenuEvents> = /*@__PURE__*/ createComponent<SpectrumMegamenuElement, SpectrumMegamenuEvents>({
-    tagName: 'spectrum-megamenu',
-    elementClass: SpectrumMegamenuElement,
-    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
-    react: React,
-    events: {} as SpectrumMegamenuEvents,
-    defineCustomElement: defineSpectrumMegamenu
 });
 
 type SpectrumMenuEvents = {

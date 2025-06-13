@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 
 import { ProxyCmp, proxyOutputs } from './angular-component-lib/utils';
 
-import { Components } from '@stencil-storybook-boilerplate/core';
+import { Components } from '@unops-itg-npm/cpit-spectrum';
 
 
 @ProxyCmp({
@@ -18,7 +18,7 @@ import { Components } from '@stencil-storybook-boilerplate/core';
   inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'horizontalScroll', 'label', 'outline', 'sound', 'variant'],
 })
 export class SpectrumAccordion {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumAccordionElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -46,7 +46,7 @@ export declare interface SpectrumAccordion extends Components.SpectrumAccordion 
   inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant'],
 })
 export class SpectrumButton {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumButtonElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -62,28 +62,6 @@ export declare interface SpectrumButton extends Components.SpectrumButton {
 
 
 @ProxyCmp({
-  inputs: ['animationtime', 'autoplay', 'content', 'gap', 'hoverpause', 'show']
-})
-@Component({
-  selector: 'spectrum-carousel',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: '<ng-content></ng-content>',
-  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['animationtime', 'autoplay', 'content', 'gap', 'hoverpause', 'show'],
-})
-export class SpectrumCarousel {
-  protected el: HTMLElement;
-  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
-    c.detach();
-    this.el = r.nativeElement;
-  }
-}
-
-
-export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
-
-
-@ProxyCmp({
   inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant']
 })
 @Component({
@@ -94,7 +72,7 @@ export declare interface SpectrumCarousel extends Components.SpectrumCarousel {}
   inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant'],
 })
 export class SpectrumChip {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumChipElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -120,7 +98,7 @@ export declare interface SpectrumChip extends Components.SpectrumChip {
   inputs: ['contextActions', 'debug', 'filter', 'items', 'mutuallyExclusive'],
 })
 export class SpectrumCollapsibleList {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumCollapsibleListElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -165,7 +143,7 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
   inputs: ['position'],
 })
 export class SpectrumContextMenu {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumContextMenuElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -198,7 +176,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sound', 'sources'],
 })
 export class SpectrumConversationPanel {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumConversationPanelElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -232,7 +210,7 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
   inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides'],
 })
 export class SpectrumHero {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumHeroElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -264,7 +242,7 @@ export declare interface SpectrumHero extends Components.SpectrumHero {
   inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumImageGalleryElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -273,9 +251,9 @@ export class SpectrumImageGallery {
 }
 
 
-import type { ImageConfig as ISpectrumImageGalleryImageConfig } from '@stencil-storybook-boilerplate/core';
-import type { ImageAddedEvent as ISpectrumImageGalleryImageAddedEvent } from '@stencil-storybook-boilerplate/core';
-import type { ImageDeletedEvent as ISpectrumImageGalleryImageDeletedEvent } from '@stencil-storybook-boilerplate/core';
+import type { ImageConfig as ISpectrumImageGalleryImageConfig } from '@unops-itg-npm/cpit-spectrum';
+import type { ImageAddedEvent as ISpectrumImageGalleryImageAddedEvent } from '@unops-itg-npm/cpit-spectrum';
+import type { ImageDeletedEvent as ISpectrumImageGalleryImageDeletedEvent } from '@unops-itg-npm/cpit-spectrum';
 
 export declare interface SpectrumImageGallery extends Components.SpectrumImageGallery {
 
@@ -292,28 +270,6 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['closeicon', 'content', 'megamenutitle', 'openicon', 'width']
-})
-@Component({
-  selector: 'spectrum-megamenu',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: '<ng-content></ng-content>',
-  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['closeicon', 'content', 'megamenutitle', 'openicon', 'width'],
-})
-export class SpectrumMegamenu {
-  protected el: HTMLElement;
-  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
-    c.detach();
-    this.el = r.nativeElement;
-  }
-}
-
-
-export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
-
-
-@ProxyCmp({
   inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
   methods: ['close']
 })
@@ -325,7 +281,7 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
   inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
 })
 export class SpectrumMenu {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumMenuElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -354,7 +310,7 @@ export declare interface SpectrumMenu extends Components.SpectrumMenu {
   inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
 })
 export class SpectrumRail {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumRailElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -395,7 +351,7 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
   inputs: ['action', 'expanded', 'icon', 'label'],
 })
 export class SpectrumRailItem {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumRailItemElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -418,7 +374,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
   inputs: ['clearOnSubmit', 'enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
 })
 export class SpectrumSearchInput {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumSearchInputElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -448,7 +404,7 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
   inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'errorText', 'invalid', 'itemHeight', 'loading', 'loadingText', 'maxHeight', 'mobileFullscreen', 'multiple', 'noResultsText', 'options', 'placeholder', 'required', 'searchPlaceholder', 'searchTitle', 'searchable', 'selectAllText', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'showSelectAll', 'size', 'state', 'touchOptimized', 'variant', 'virtualScrolling'],
 })
 export class SpectrumSelect {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumSelectElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -457,7 +413,7 @@ export class SpectrumSelect {
 }
 
 
-import type { SpectrumSelectOption as ISpectrumSelectSpectrumSelectOption } from '@stencil-storybook-boilerplate/core';
+import type { SpectrumSelectOption as ISpectrumSelectSpectrumSelectOption } from '@unops-itg-npm/cpit-spectrum';
 
 export declare interface SpectrumSelect extends Components.SpectrumSelect {
 
@@ -482,7 +438,7 @@ export declare interface SpectrumSelect extends Components.SpectrumSelect {
   inputs: ['color', 'config', 'dark', 'debug', 'showSwatches'],
 })
 export class SpectrumTheme {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumThemeElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -505,7 +461,7 @@ export declare interface SpectrumTheme extends Components.SpectrumTheme {}
   inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'message', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
 })
 export class SpectrumToast {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumToastElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
@@ -533,7 +489,7 @@ export declare interface SpectrumToast extends Components.SpectrumToast {
   inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'showSwatches'],
 })
 export class SpectrumWallpaper {
-  protected el: HTMLElement;
+  protected el: HTMLSpectrumWallpaperElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;

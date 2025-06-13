@@ -3,7 +3,7 @@ import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumSelect, SpectrumSelectOption } from "@stencil-storybook-boilerplate/core/src/components/spectrum-select/spectrum-select";
+import type { SpectrumSelect, SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-select/spectrum-select";
 
 interface SpectrumSelectArgs {
   variant: 'primary' | 'secondary' | 'outline' | 'ghost';
