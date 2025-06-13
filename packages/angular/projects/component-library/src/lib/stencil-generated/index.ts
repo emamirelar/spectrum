@@ -12,6 +12,7 @@ export const DIRECTIVES = [
   d.SpectrumHero,
   d.SpectrumImageGallery,
   d.SpectrumMegamenu,
+  d.SpectrumMenu,
   d.SpectrumRail,
   d.SpectrumRailItem,
   d.SpectrumSearchInput,

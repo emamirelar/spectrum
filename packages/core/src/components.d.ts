@@ -283,6 +283,36 @@ export namespace Components {
          */
         "width": string;
     }
+    interface SpectrumMenu {
+        "close": () => Promise<void>;
+        /**
+          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart')
+         */
+        "items": Array<{
+    label: string;
+    href?: string;
+    icon?: string; // Material icon name
+    disabled?: boolean;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+    }>;
+  }>;
+        /**
+          * The breakpoint at which the menu switches to mobile view
+         */
+        "mobileBreakpoint": number;
+        /**
+          * The title displayed in the mobile menu header
+         */
+        "mobileMenuTitle": string;
+        /**
+          * The orientation of the menu
+         */
+        "orientation": 'horizontal' | 'vertical';
+    }
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
@@ -526,6 +556,10 @@ export interface SpectrumImageGalleryCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumImageGalleryElement;
 }
+export interface SpectrumMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumMenuElement;
+}
 export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumRailElement;
@@ -727,6 +761,26 @@ declare global {
         prototype: HTMLSpectrumMegamenuElement;
         new (): HTMLSpectrumMegamenuElement;
     };
+    interface HTMLSpectrumMenuElementEventMap {
+        "itemClick": {
+    label: string;
+    href?: string;
+  };
+    }
+    interface HTMLSpectrumMenuElement extends Components.SpectrumMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumMenuElementEventMap>(type: K, listener: (this: HTMLSpectrumMenuElement, ev: SpectrumMenuCustomEvent<HTMLSpectrumMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumMenuElementEventMap>(type: K, listener: (this: HTMLSpectrumMenuElement, ev: SpectrumMenuCustomEvent<HTMLSpectrumMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumMenuElement: {
+        prototype: HTMLSpectrumMenuElement;
+        new (): HTMLSpectrumMenuElement;
+    };
     interface HTMLSpectrumRailElementEventMap {
         "expandedChange": { action: string; expanded: boolean };
         "searchChange": { action: string; value: string };
@@ -858,6 +912,7 @@ declare global {
         "spectrum-hero": HTMLSpectrumHeroElement;
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
+        "spectrum-menu": HTMLSpectrumMenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
@@ -1179,6 +1234,42 @@ declare namespace LocalJSX {
          */
         "width"?: string;
     }
+    interface SpectrumMenu {
+        /**
+          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart')
+         */
+        "items"?: Array<{
+    label: string;
+    href?: string;
+    icon?: string; // Material icon name
+    disabled?: boolean;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+    }>;
+  }>;
+        /**
+          * The breakpoint at which the menu switches to mobile view
+         */
+        "mobileBreakpoint"?: number;
+        /**
+          * The title displayed in the mobile menu header
+         */
+        "mobileMenuTitle"?: string;
+        /**
+          * Event emitted when a menu item is clicked
+         */
+        "onItemClick"?: (event: SpectrumMenuCustomEvent<{
+    label: string;
+    href?: string;
+  }>) => void;
+        /**
+          * The orientation of the menu
+         */
+        "orientation"?: 'horizontal' | 'vertical';
+    }
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
@@ -1417,6 +1508,7 @@ declare namespace LocalJSX {
         "spectrum-hero": SpectrumHero;
         "spectrum-image-gallery": SpectrumImageGallery;
         "spectrum-megamenu": SpectrumMegamenu;
+        "spectrum-menu": SpectrumMenu;
         "spectrum-rail": SpectrumRail;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
@@ -1459,6 +1551,7 @@ declare module "@stencil/core" {
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
+            "spectrum-menu": LocalJSX.SpectrumMenu & JSXBase.HTMLAttributes<HTMLSpectrumMenuElement>;
             /**
              * Spectrum Rail Component
              * A vertical navigation rail with two states: expanded and contracted

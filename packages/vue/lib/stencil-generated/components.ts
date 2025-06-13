@@ -155,6 +155,15 @@ export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegame
 ]);
 
 
+export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spectrum-menu', undefined, [
+  'orientation',
+  'items',
+  'mobileBreakpoint',
+  'mobileMenuTitle',
+  'itemClick'
+]);
+
+
 export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spectrum-rail', undefined, [
   'appName',
   'expandedWidth',

@@ -314,6 +314,35 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
+  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation'],
+  methods: ['close']
+})
+@Component({
+  selector: 'spectrum-menu',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation'],
+})
+export class SpectrumMenu {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['itemClick']);
+  }
+}
+
+
+export declare interface SpectrumMenu extends Components.SpectrumMenu {
+  /**
+   * Event emitted when a menu item is clicked
+   */
+  itemClick: EventEmitter<CustomEvent<{ label: string; href?: string; }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
   methods: ['setExpanded', 'setShowAddButton']
 })

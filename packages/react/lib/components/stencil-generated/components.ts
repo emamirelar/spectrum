@@ -20,6 +20,7 @@ import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCu
 import { SpectrumHero as SpectrumHeroElement, defineCustomElement as defineSpectrumHero } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-hero.js";
 import { SpectrumImageGallery as SpectrumImageGalleryElement, defineCustomElement as defineSpectrumImageGallery } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-image-gallery.js";
 import { SpectrumMegamenu as SpectrumMegamenuElement, defineCustomElement as defineSpectrumMegamenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-megamenu.js";
+import { SpectrumMenu as SpectrumMenuElement, defineCustomElement as defineSpectrumMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-menu.js";
 import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-item.js";
 import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail.js";
 import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-search-input.js";
@@ -190,6 +191,22 @@ export const SpectrumMegamenu: StencilReactComponent<SpectrumMegamenuElement, Sp
     react: React,
     events: {} as SpectrumMegamenuEvents,
     defineCustomElement: defineSpectrumMegamenu
+});
+
+type SpectrumMenuEvents = {
+    onItemClick: EventName<CustomEvent<{
+        label: string;
+        href?: string;
+    }>>
+};
+
+export const SpectrumMenu: StencilReactComponent<SpectrumMenuElement, SpectrumMenuEvents> = /*@__PURE__*/ createComponent<SpectrumMenuElement, SpectrumMenuEvents>({
+    tagName: 'spectrum-menu',
+    elementClass: SpectrumMenuElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onItemClick: 'itemClick' } as SpectrumMenuEvents,
+    defineCustomElement: defineSpectrumMenu
 });
 
 type SpectrumRailEvents = {
