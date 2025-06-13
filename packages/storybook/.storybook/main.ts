@@ -45,14 +45,27 @@ const config: StorybookConfig = {
         chunkSizeWarningLimit: 1000,
         rollupOptions: {
           output: {
-            manualChunks: {
-              lit: ['lit'],
-              react: ['react'],
-              'react-dom': ['react-dom'],
-              'react/jsx-runtime': ['react/jsx-runtime']
+            manualChunks: (id) => {
+              // Bundle node_modules separately to avoid dynamic import issues
+              if (id.includes('node_modules')) {
+                if (id.includes('mermaid')) {
+                  return 'mermaid';
+                }
+                if (id.includes('lit')) {
+                  return 'lit';
+                }
+                if (id.includes('react')) {
+                  return 'react';
+                }
+                return 'vendor';
+              }
             },
           },
         },
+      },
+      // Define import.meta.url for proper asset resolution
+      define: {
+        'import.meta.url': JSON.stringify(config.base || '/')
       }
     });
   },

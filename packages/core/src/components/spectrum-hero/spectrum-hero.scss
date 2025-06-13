@@ -1,0 +1,534 @@
+// ==============================================
+// Spectrum Hero Component Styles
+// ==============================================
+// BEM naming convention: spectrum-hero (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+// Hero component uses simple text symbols for arrows
+
+:host {
+  display: block;
+  
+  // Component-level custom properties using theme tokens
+  --hero-height: 100vh;
+  --hero-overlay-bg: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%);
+  --hero-text-color: white;
+  --hero-title-size: var(--spectrum-sys-typescale-display-large-size, 3.5rem);
+  --hero-subtitle-size: var(--spectrum-sys-typescale-headline-medium-size, 1.25rem);
+  --hero-border-radius: var(--spectrum-sys-shape-corner-large, 1rem);
+  --hero-animation-duration: var(--spectrum-sys-animation-duration, 500ms);
+  --hero-animation-easing: var(--spectrum-sys-animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  
+  // Navigation elements
+  --hero-nav-bg: var(--spectrum-sys-color-surface-container);
+  --hero-nav-color: var(--spectrum-sys-color-on-surface);
+  --hero-nav-hover-bg: var(--spectrum-sys-color-primary);
+  --hero-nav-hover-color: var(--spectrum-sys-color-on-primary);
+  
+  // Progress bar
+  --hero-progress-bg: rgba(255, 255, 255, 0.3);
+  --hero-progress-fill: var(--spectrum-sys-color-primary);
+  
+  // Spacing using proper Spectrum tokens
+  --hero-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --hero-spacing: var(--spectrum-sys-spacing, 1rem);
+  --hero-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  --hero-spacing-x-large: var(--spectrum-sys-spacing-x-large, 3rem);
+  --hero-spacing-xx-large: var(--spectrum-sys-spacing-xx-large, 4rem);
+  
+  // Navigation dots
+  --hero-dot-size: var(--spectrum-sys-spacing-small, 0.5rem);
+}
+
+// ==============================================
+// Main Container - CLEAN VERSION
+// ==============================================
+.spectrum-hero {
+  position: relative !important;
+  width: 100% !important;
+  height: var(--hero-height) !important;
+  overflow: hidden !important;
+  border-radius: var(--spectrum-sys-shape-corner-large, 1rem) !important;
+  background-color: var(--spectrum-sys-color-surface) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  
+  // Focus management for accessibility
+  outline: none;
+  
+  &:focus-visible {
+    outline: 2px solid var(--spectrum-sys-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// ==============================================
+// Slides Container
+// ==============================================
+.spectrum-hero__slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+// ==============================================
+// Individual Slide - SLIDE TRANSITION
+// ==============================================
+.spectrum-hero__slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  
+  // Slide transition using transform
+  transform: translateX(100%);
+  transition: transform var(--hero-animation-duration) var(--hero-animation-easing);
+  
+  // Active slide state
+  &--active {
+    transform: translateX(0) !important;
+  }
+  
+  // Previous slide (slide out to left)
+  &--prev {
+    transform: translateX(-100%) !important;
+  }
+  
+  // Next slide (slide in from right)
+  &--next {
+    transform: translateX(100%) !important;
+  }
+}
+
+// ==============================================
+// Media Elements (Image/Video)
+// ==============================================
+.spectrum-hero__media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+  
+  // Smooth loading transition
+  transition: opacity var(--hero-animation-duration) var(--hero-animation-easing);
+  
+  // Video specific styles
+  &[src$=".mp4"],
+  &[src$=".webm"],
+  &[src$=".ogg"] {
+    // Ensure video plays smoothly
+    will-change: transform;
+  }
+}
+
+// ==============================================
+// Content Overlay - NO BACKGROUND
+// ==============================================
+.spectrum-hero__overlay {
+  position: relative !important;
+  z-index: 2 !important;
+  padding: var(--hero-spacing-x-large) !important;
+  margin: var(--hero-spacing-large) !important;
+  max-width: 600px !important;
+  
+  // NO background - just text with shadows
+  background: none !important;
+  backdrop-filter: none !important;
+  border-radius: 0 !important;
+  
+  // Horizontal positioning modifiers
+  &--left {
+    align-self: center;
+    justify-self: flex-start;
+    text-align: left;
+  }
+  
+  &--center {
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  &--right {
+    align-self: center;
+    justify-self: flex-end;
+    text-align: right;
+  }
+  
+  // Vertical positioning modifiers
+  &--top {
+    align-self: flex-start;
+  }
+  
+  &--center {
+    align-self: center;
+  }
+  
+  &--bottom {
+    align-self: flex-end;
+  }
+}
+
+// ==============================================
+// Content Elements - CLEAN TEXT
+// ==============================================
+.spectrum-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hero-spacing-large);
+  align-items: inherit;
+}
+
+.spectrum-hero__title {
+  margin: 0 !important;
+  font-size: var(--hero-title-size) !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em !important;
+  
+  // Pure white text with strong shadows for readability
+  color: white !important;
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.9),
+    0 4px 8px rgba(0, 0, 0, 0.7),
+    0 8px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+.spectrum-hero__subtitle {
+  margin: 0 !important;
+  font-size: var(--hero-subtitle-size) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  
+  // Pure white text with shadows
+  color: white !important;
+  text-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.6),
+    0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.spectrum-hero__button {
+  margin-top: var(--hero-spacing);
+  
+  // Left alignment (default)
+  .spectrum-hero__overlay--left & {
+    align-self: flex-start;
+  }
+  
+  // Center alignment
+  .spectrum-hero__overlay--center & {
+    align-self: center;
+  }
+  
+  // Right alignment
+  .spectrum-hero__overlay--right & {
+    align-self: flex-end;
+  }
+}
+
+// ==============================================
+// Navigation Arrows - CLEAN STYLING
+// ==============================================
+.spectrum-hero__arrows {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--hero-spacing);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.spectrum-hero__arrow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 48px !important;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 50% !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: rgba(0, 0, 0, 0.8) !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all var(--hero-animation-duration) var(--hero-animation-easing) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  line-height: 1 !important;
+  
+  // Hover and focus states
+  &:hover,
+  &:focus-visible {
+    background-color: white !important;
+    color: black !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--spectrum-sys-color-primary);
+    outline-offset: 2px;
+  }
+  
+  // Active state
+  &:active {
+    transform: scale(0.95) !important;
+  }
+}
+
+// ==============================================
+// Navigation Dots - LIFTED WITH SPECTRUM SPACING
+// ==============================================
+.spectrum-hero__dots {
+  position: absolute !important;
+  bottom: var(--hero-spacing-large) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 3 !important;
+  display: flex !important;
+  gap: var(--hero-spacing-small) !important;
+  padding: var(--hero-spacing-small) var(--hero-spacing) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: var(--spectrum-sys-shape-corner-full, 2rem) !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.spectrum-hero__dot {
+  width: var(--hero-dot-size);
+  aspect-ratio: 1/1;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all var(--hero-animation-duration) var(--hero-animation-easing);
+  flex-shrink: 0;
+  display: block;
+  
+  // Active state
+  &--active {
+    background-color: white !important;
+    transform: scale(1.2) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  // Hover and focus states
+  &:hover,
+  &:focus-visible {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--spectrum-sys-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// ==============================================
+// Progress Bar
+// ==============================================
+.spectrum-hero__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--hero-progress-bg);
+  z-index: 3;
+}
+
+.spectrum-hero__progress-bar {
+  height: 100%;
+  background-color: var(--hero-progress-fill);
+  transition: width var(--hero-animation-duration) var(--hero-animation-easing);
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
+// Tablet landscape and smaller
+@media (max-width: 1024px) {
+  :host {
+    --hero-title-size: var(--spectrum-sys-typescale-display-medium-size, 2.75rem);
+    --hero-subtitle-size: var(--spectrum-sys-typescale-headline-small-size, 1.5rem);
+  }
+  
+  .spectrum-hero__overlay {
+    max-width: 500px;
+    padding: var(--hero-spacing-large);
+    margin: var(--hero-spacing);
+  }
+  
+  .spectrum-hero__arrows {
+    padding: 0 var(--hero-spacing);
+  }
+  
+  .spectrum-hero__arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  
+  .spectrum-hero__dots {
+    bottom: var(--hero-spacing);
+  }
+}
+
+// Mobile landscape
+@media (max-width: 768px) {
+  :host {
+    --hero-title-size: var(--spectrum-sys-typescale-headline-large-size, 2rem);
+    --hero-subtitle-size: var(--spectrum-sys-typescale-headline-small-size, 1.25rem);
+  }
+  
+  .spectrum-hero__overlay {
+    max-width: 400px;
+    padding: var(--hero-spacing);
+    margin: var(--hero-spacing-small);
+  }
+  
+  .spectrum-hero__content {
+    gap: var(--hero-spacing);
+  }
+  
+  .spectrum-hero__dots {
+    bottom: var(--hero-spacing-small);
+    padding: var(--hero-spacing-small);
+  }
+}
+
+// Mobile portrait
+@media (max-width: 480px) {
+  :host {
+    --hero-title-size: var(--spectrum-sys-typescale-headline-medium-size, 1.75rem);
+    --hero-subtitle-size: var(--spectrum-sys-typescale-body-large-size, 1rem);
+  }
+  
+  .spectrum-hero {
+    border-radius: 0; // Remove border radius on very small screens
+  }
+  
+  .spectrum-hero__overlay {
+    max-width: calc(100% - var(--hero-spacing));
+    padding: var(--hero-spacing-small);
+    margin: var(--hero-spacing-small);
+    
+    // Stack content more tightly on mobile
+    &--left,
+    &--right {
+      text-align: center;
+      align-self: center;
+      justify-self: center;
+    }
+  }
+  
+  .spectrum-hero__content {
+    gap: var(--hero-spacing-small);
+  }
+  
+  .spectrum-hero__button {
+    align-self: stretch; // Full width button on mobile
+    width: 100%;
+    margin-top: var(--hero-spacing-small);
+  }
+  
+  .spectrum-hero__arrows {
+    padding: 0 var(--hero-spacing-small);
+  }
+  
+  .spectrum-hero__arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+  
+  .spectrum-hero__dots {
+    bottom: var(--hero-spacing-small);
+    padding: var(--hero-spacing-small);
+  }
+  
+  .spectrum-hero__dot {
+    --hero-dot-size: calc(var(--spectrum-sys-spacing-small, 0.5rem) * 0.75);
+  }
+}
+
+// ==============================================
+// High Contrast Mode Support
+// ==============================================
+@media (prefers-contrast: high) {
+  :host {
+    --hero-overlay-bg: rgba(0, 0, 0, 0.8);
+    --hero-nav-bg: var(--spectrum-sys-color-surface);
+    --hero-progress-bg: rgba(255, 255, 255, 0.8);
+  }
+  
+  .spectrum-hero__arrow {
+    border: 2px solid var(--spectrum-sys-color-outline);
+  }
+  
+  .spectrum-hero__dot {
+    border: 1px solid var(--spectrum-sys-color-outline);
+  }
+}
+
+// ==============================================
+// Reduced Motion Support
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --hero-animation-duration: 0ms;
+  }
+  
+  .spectrum-hero__slide,
+  .spectrum-hero__media,
+  .spectrum-hero__arrow,
+  .spectrum-hero__dot,
+  .spectrum-hero__progress-bar {
+    transition: none;
+  }
+}
+
+// ==============================================
+// Print Styles
+// ==============================================
+@media print {
+  .spectrum-hero {
+    height: auto;
+    min-height: 300px;
+    page-break-inside: avoid;
+  }
+  
+  .spectrum-hero__arrows,
+  .spectrum-hero__dots,
+  .spectrum-hero__progress {
+    display: none;
+  }
+  
+  .spectrum-hero__slide {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  .spectrum-hero__media {
+    position: relative;
+    height: 300px;
+  }
+}

@@ -112,6 +112,21 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spectrum-hero', undefined, [
+  'slides',
+  'autoplay',
+  'animationDuration',
+  'pauseOnHover',
+  'showDots',
+  'showArrows',
+  'height',
+  'keyboardNavigation',
+  'debug',
+  'heroAction',
+  'slideChange'
+]);
+
+
 export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumImageGallery>('spectrum-image-gallery', undefined, [
   'images',
   'allowUpload',
@@ -120,11 +135,14 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'selectionMode',
   'selectedImages',
   'scrollDirection',
+  'previewMode',
+  'frostBackground',
   'debug',
   'imageSelected',
   'imageDeselect',
   'imageAdded',
-  'imageDeleted'
+  'imageDeleted',
+  'imagePreview'
 ]);
 
 
@@ -134,6 +152,16 @@ export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegame
   'closeicon',
   'content',
   'width'
+]);
+
+
+export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spectrum-menu', undefined, [
+  'orientation',
+  'variant',
+  'items',
+  'mobileBreakpoint',
+  'mobileMenuTitle',
+  'itemClick'
 ]);
 
 

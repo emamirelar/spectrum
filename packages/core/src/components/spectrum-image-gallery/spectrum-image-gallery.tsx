@@ -38,6 +38,8 @@ export class SpectrumImageGallery {
   @Prop() selectionMode: SelectionMode = 'single';
   @Prop() selectedImages: string[] = [];
   @Prop() scrollDirection: ScrollDirection = 'vertical';
+  @Prop() previewMode: boolean = false;
+  @Prop() frostBackground: boolean = false;
   @Prop() debug: boolean = false;
 
   // Internal State
@@ -47,12 +49,15 @@ export class SpectrumImageGallery {
   @State() isUrlModalOpen: boolean = false;
   @State() urlInputValue: string = '';
   @State() isLoading: boolean = false;
+  @State() isPreviewModalOpen: boolean = false;
+  @State() previewImage: ImageConfig | null = null;
 
   // Events
   @Event() imageSelected: EventEmitter<ImageConfig>;
   @Event() imageDeselect: EventEmitter<ImageConfig>;
   @Event() imageAdded: EventEmitter<ImageAddedEvent>;
   @Event() imageDeleted: EventEmitter<ImageDeletedEvent>;
+  @Event() imagePreview: EventEmitter<ImageConfig>;
 
   // Element References
   private fileInputRef: HTMLInputElement;
@@ -104,6 +109,13 @@ export class SpectrumImageGallery {
   }
 
   private handleImageSelect(image: ImageConfig) {
+    // If in preview mode, show preview modal instead of selecting
+    if (this.previewMode) {
+      this.handlePreview(image);
+      this.imagePreview.emit(image);
+      return;
+    }
+
     // Don't allow selection if selection is disabled
     if (this.selectionMode === 'none') {
       return;
@@ -272,19 +284,20 @@ export class SpectrumImageGallery {
 
   private renderThumbnail(image: ImageConfig, index: number) {
     const isSelected = this.internalSelectedImages.includes(image.id);
-    const isSelectable = this.selectionMode !== 'none';
+    const isSelectable = this.selectionMode !== 'none' && !this.previewMode;
+    const isClickable = isSelectable || this.previewMode;
 
     return (
       <div
         class={{
           'gallery__item': true,
-          'gallery__item--selected': isSelected,
-          'gallery__item--selectable': isSelectable
+          'gallery__item--selected': isSelected && !this.previewMode,
+          'gallery__item--selectable': isClickable
         }}
-        onClick={isSelectable ? () => this.handleImageSelect(image) : undefined}
-        role={isSelectable ? "button" : undefined}
-        tabindex={isSelectable ? 0 : undefined}
-        aria-label={isSelectable ? (image.alt || image.title || `Image ${index + 1}`) : undefined}
+        onClick={isClickable ? () => this.handleImageSelect(image) : undefined}
+        role={isClickable ? "button" : undefined}
+        tabindex={isClickable ? 0 : undefined}
+        aria-label={isClickable ? (image.alt || image.title || `Image ${index + 1}`) : undefined}
         aria-selected={isSelectable ? isSelected.toString() : undefined}
       >
         <img
@@ -452,6 +465,51 @@ export class SpectrumImageGallery {
     this.debugLog(`Deleted ${selectedIds.length} images. Gallery now has ${this.allImages.length} images.`);
   }
 
+  private handlePreview(image: ImageConfig) {
+    this.previewImage = image;
+    this.isPreviewModalOpen = true;
+    this.debugLog('Opening preview for image:', image.id);
+  }
+
+  private closePreviewModal() {
+    this.isPreviewModalOpen = false;
+    this.previewImage = null;
+    this.debugLog('Closing preview modal');
+  }
+
+  private renderPreviewModal() {
+    if (!this.isPreviewModalOpen || !this.previewImage) return null;
+
+    return (
+      <div class="preview-modal-overlay" onClick={() => this.closePreviewModal()}>
+        <div class="preview-modal" onClick={(e) => e.stopPropagation()}>
+          <spectrum-button
+            variant="ghost"
+            iconOnly={true}
+            size="base"
+            leftIcon="close"
+            showLeftIcon={true}
+            onClick={() => this.closePreviewModal()}
+            aria-label="Close preview"
+            class="preview-modal__close"
+          />
+          <img
+            src={this.previewImage.url}
+            alt={this.previewImage.alt || this.previewImage.title || 'Preview image'}
+            loading="lazy"
+            crossorigin="anonymous"
+            class="preview-modal__image"
+          />
+          {(this.previewImage.title || this.previewImage.alt) && (
+            <div class="preview-modal__caption">
+              {this.previewImage.title || this.previewImage.alt}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const hasImages = this.allImages.length > 0;
     
@@ -462,7 +520,8 @@ export class SpectrumImageGallery {
         <div class={{
           'gallery': true,
           'gallery--vertical': this.scrollDirection === 'vertical',
-          'gallery--horizontal': this.scrollDirection === 'horizontal'
+          'gallery--horizontal': this.scrollDirection === 'horizontal',
+          'gallery--frost': this.frostBackground
         }}>
           {hasImages ? (
             <div class={{
@@ -485,54 +544,67 @@ export class SpectrumImageGallery {
             </div>
           )}
 
+          {/* Always show controls container for frost background, but conditionally show buttons */}
           <div class={{
             'gallery__controls': true,
             'gallery__controls--vertical': this.scrollDirection === 'vertical',
             'gallery__controls--horizontal': this.scrollDirection === 'horizontal'
           }}>
-            {this.allowDelete && this.internalSelectedImages.length > 0 && (
-              <spectrum-button
-                variant="danger"
-                size="base"
-                buttonText={`Delete (${this.internalSelectedImages.length})`}
-                showButtonText={true}
-                leftIcon="delete"
-                showLeftIcon={true}
-                disabled={this.isLoading}
-                onClick={() => this.handleDeleteSelected()}
-              />
-            )}
+            {this.previewMode ? (
+              // In preview mode, show a subtle indicator
+              <div class="gallery__preview-indicator">
+                <span>Preview Mode - Click images to enlarge</span>
+              </div>
+            ) : (
+              // Normal mode - show all control buttons
+              [
+                this.allowDelete && this.internalSelectedImages.length > 0 && (
+                  <spectrum-button
+                    variant="danger"
+                    size="base"
+                    buttonText={`Delete (${this.internalSelectedImages.length})`}
+                    showButtonText={true}
+                    leftIcon="delete"
+                    showLeftIcon={true}
+                    disabled={this.isLoading}
+                    onClick={() => this.handleDeleteSelected()}
+                  />
+                ),
 
-            {this.allowUrlInput && (
-              <spectrum-button
-                variant="secondary"
-                size="base"
-                buttonText="Add Image URL"
-                showButtonText={true}
-                leftIcon="add_link"
-                showLeftIcon={true}
-                disabled={this.isLoading}
-                onClick={() => this.openUrlModal()}
-              />
-            )}
+                this.allowUrlInput && (
+                  <spectrum-button
+                    variant="secondary"
+                    size="base"
+                    buttonText="Add Image URL"
+                    showButtonText={true}
+                    leftIcon="add_link"
+                    showLeftIcon={true}
+                    disabled={this.isLoading}
+                    onClick={() => this.openUrlModal()}
+                  />
+                ),
 
-            {this.allowUpload && (
-              <spectrum-button
-                variant="primary"
-                size="base"
-                buttonText="Upload Image"
-                showButtonText={true}
-                leftIcon="upload_file"
-                showLeftIcon={true}
-                disabled={this.isLoading}
-                onClick={() => this.openUploadModal()}
-              />
+                this.allowUpload && (
+                  <spectrum-button
+                    variant="primary"
+                    size="base"
+                    buttonText="Upload Image"
+                    showButtonText={true}
+                    leftIcon="upload_file"
+                    showLeftIcon={true}
+                    disabled={this.isLoading}
+                    onClick={() => this.openUploadModal()}
+                  />
+                )
+              ]
             )}
           </div>
 
           {this.renderUploadModal()}
           {this.renderUrlModal()}
         </div>
+
+        {this.renderPreviewModal()}
       </Host>
     );
   }

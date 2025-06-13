@@ -206,12 +206,57 @@ export namespace Components {
          */
         "sources": string;
     }
+    /**
+     * Spectrum Hero Component
+     * A hero section component that supports both images and video backgrounds,
+     * with carousel functionality, text overlays, and call-to-action buttons.
+     */
+    interface SpectrumHero {
+        /**
+          * Animation duration for slide transitions
+         */
+        "animationDuration": number;
+        /**
+          * Enable carousel autoplay Time in milliseconds between slides (0 to disable)
+         */
+        "autoplay": number;
+        /**
+          * Debug mode
+         */
+        "debug": boolean;
+        /**
+          * Hero height (CSS value)
+         */
+        "height": string;
+        /**
+          * Enable keyboard navigation
+         */
+        "keyboardNavigation": boolean;
+        /**
+          * Pause autoplay on hover
+         */
+        "pauseOnHover": boolean;
+        /**
+          * Show navigation arrows
+         */
+        "showArrows": boolean;
+        /**
+          * Show navigation dots
+         */
+        "showDots": boolean;
+        /**
+          * Hero slides as JSON string Array of HeroSlide objects containing content for each slide
+         */
+        "slides": string;
+    }
     interface SpectrumImageGallery {
         "allowDelete": boolean;
         "allowUpload": boolean;
         "allowUrlInput": boolean;
         "debug": boolean;
+        "frostBackground": boolean;
         "images": ImageConfig[];
+        "previewMode": boolean;
         "scrollDirection": ScrollDirection;
         "selectedImages": string[];
         "selectionMode": SelectionMode;
@@ -237,6 +282,49 @@ export namespace Components {
           * A custom width for the megamenu Default: null
          */
         "width": string;
+    }
+    interface SpectrumMenu {
+        "close": () => Promise<void>;
+        /**
+          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+         */
+        "items": Array<{
+    label: string;
+    href?: string;
+    icon?: string; // Material icon name
+    disabled?: boolean;
+    description?: string; // For megamenu descriptions
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }>;
+        /**
+          * The breakpoint at which the menu switches to mobile view
+         */
+        "mobileBreakpoint": number;
+        /**
+          * The title displayed in the mobile menu header
+         */
+        "mobileMenuTitle": string;
+        /**
+          * The orientation of the menu
+         */
+        "orientation": 'horizontal' | 'vertical';
+        /**
+          * The variant of the menu
+         */
+        "variant": 'default' | 'megamenu';
     }
     /**
      * Spectrum Rail Component
@@ -473,9 +561,17 @@ export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> 
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
 }
+export interface SpectrumHeroCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumHeroElement;
+}
 export interface SpectrumImageGalleryCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumImageGalleryElement;
+}
+export interface SpectrumMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumMenuElement;
 }
 export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -628,11 +724,35 @@ declare global {
         prototype: HTMLSpectrumConversationPanelElement;
         new (): HTMLSpectrumConversationPanelElement;
     };
+    interface HTMLSpectrumHeroElementEventMap {
+        "heroAction": { action: string; slideIndex: number; slideTitle?: string };
+        "slideChange": { action: string; slideIndex: number; totalSlides: number };
+    }
+    /**
+     * Spectrum Hero Component
+     * A hero section component that supports both images and video backgrounds,
+     * with carousel functionality, text overlays, and call-to-action buttons.
+     */
+    interface HTMLSpectrumHeroElement extends Components.SpectrumHero, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumHeroElementEventMap>(type: K, listener: (this: HTMLSpectrumHeroElement, ev: SpectrumHeroCustomEvent<HTMLSpectrumHeroElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumHeroElementEventMap>(type: K, listener: (this: HTMLSpectrumHeroElement, ev: SpectrumHeroCustomEvent<HTMLSpectrumHeroElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumHeroElement: {
+        prototype: HTMLSpectrumHeroElement;
+        new (): HTMLSpectrumHeroElement;
+    };
     interface HTMLSpectrumImageGalleryElementEventMap {
         "imageSelected": ImageConfig;
         "imageDeselect": ImageConfig;
         "imageAdded": ImageAddedEvent;
         "imageDeleted": ImageDeletedEvent;
+        "imagePreview": ImageConfig;
     }
     interface HTMLSpectrumImageGalleryElement extends Components.SpectrumImageGallery, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumImageGalleryElementEventMap>(type: K, listener: (this: HTMLSpectrumImageGalleryElement, ev: SpectrumImageGalleryCustomEvent<HTMLSpectrumImageGalleryElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -653,6 +773,26 @@ declare global {
     var HTMLSpectrumMegamenuElement: {
         prototype: HTMLSpectrumMegamenuElement;
         new (): HTMLSpectrumMegamenuElement;
+    };
+    interface HTMLSpectrumMenuElementEventMap {
+        "itemClick": {
+    label: string;
+    href?: string;
+  };
+    }
+    interface HTMLSpectrumMenuElement extends Components.SpectrumMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumMenuElementEventMap>(type: K, listener: (this: HTMLSpectrumMenuElement, ev: SpectrumMenuCustomEvent<HTMLSpectrumMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumMenuElementEventMap>(type: K, listener: (this: HTMLSpectrumMenuElement, ev: SpectrumMenuCustomEvent<HTMLSpectrumMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumMenuElement: {
+        prototype: HTMLSpectrumMenuElement;
+        new (): HTMLSpectrumMenuElement;
     };
     interface HTMLSpectrumRailElementEventMap {
         "expandedChange": { action: string; expanded: boolean };
@@ -782,8 +922,10 @@ declare global {
         "spectrum-collapsible-list": HTMLSpectrumCollapsibleListElement;
         "spectrum-context-menu": HTMLSpectrumContextMenuElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
+        "spectrum-hero": HTMLSpectrumHeroElement;
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
         "spectrum-megamenu": HTMLSpectrumMegamenuElement;
+        "spectrum-menu": HTMLSpectrumMenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
@@ -1015,16 +1157,70 @@ declare namespace LocalJSX {
          */
         "sources"?: string;
     }
+    /**
+     * Spectrum Hero Component
+     * A hero section component that supports both images and video backgrounds,
+     * with carousel functionality, text overlays, and call-to-action buttons.
+     */
+    interface SpectrumHero {
+        /**
+          * Animation duration for slide transitions
+         */
+        "animationDuration"?: number;
+        /**
+          * Enable carousel autoplay Time in milliseconds between slides (0 to disable)
+         */
+        "autoplay"?: number;
+        /**
+          * Debug mode
+         */
+        "debug"?: boolean;
+        /**
+          * Hero height (CSS value)
+         */
+        "height"?: string;
+        /**
+          * Enable keyboard navigation
+         */
+        "keyboardNavigation"?: boolean;
+        /**
+          * Event emitted when a hero action button is clicked
+         */
+        "onHeroAction"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; slideTitle?: string }>) => void;
+        /**
+          * Event emitted when slide changes
+         */
+        "onSlideChange"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; totalSlides: number }>) => void;
+        /**
+          * Pause autoplay on hover
+         */
+        "pauseOnHover"?: boolean;
+        /**
+          * Show navigation arrows
+         */
+        "showArrows"?: boolean;
+        /**
+          * Show navigation dots
+         */
+        "showDots"?: boolean;
+        /**
+          * Hero slides as JSON string Array of HeroSlide objects containing content for each slide
+         */
+        "slides"?: string;
+    }
     interface SpectrumImageGallery {
         "allowDelete"?: boolean;
         "allowUpload"?: boolean;
         "allowUrlInput"?: boolean;
         "debug"?: boolean;
+        "frostBackground"?: boolean;
         "images"?: ImageConfig[];
         "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
         "onImageDeleted"?: (event: SpectrumImageGalleryCustomEvent<ImageDeletedEvent>) => void;
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        "onImagePreview"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onImageSelected"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        "previewMode"?: boolean;
         "scrollDirection"?: ScrollDirection;
         "selectedImages"?: string[];
         "selectionMode"?: SelectionMode;
@@ -1050,6 +1246,55 @@ declare namespace LocalJSX {
           * A custom width for the megamenu Default: null
          */
         "width"?: string;
+    }
+    interface SpectrumMenu {
+        /**
+          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+         */
+        "items"?: Array<{
+    label: string;
+    href?: string;
+    icon?: string; // Material icon name
+    disabled?: boolean;
+    description?: string; // For megamenu descriptions
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }>;
+        /**
+          * The breakpoint at which the menu switches to mobile view
+         */
+        "mobileBreakpoint"?: number;
+        /**
+          * The title displayed in the mobile menu header
+         */
+        "mobileMenuTitle"?: string;
+        /**
+          * Event emitted when a menu item is clicked
+         */
+        "onItemClick"?: (event: SpectrumMenuCustomEvent<{
+    label: string;
+    href?: string;
+  }>) => void;
+        /**
+          * The orientation of the menu
+         */
+        "orientation"?: 'horizontal' | 'vertical';
+        /**
+          * The variant of the menu
+         */
+        "variant"?: 'default' | 'megamenu';
     }
     /**
      * Spectrum Rail Component
@@ -1286,8 +1531,10 @@ declare namespace LocalJSX {
         "spectrum-collapsible-list": SpectrumCollapsibleList;
         "spectrum-context-menu": SpectrumContextMenu;
         "spectrum-conversation-panel": SpectrumConversationPanel;
+        "spectrum-hero": SpectrumHero;
         "spectrum-image-gallery": SpectrumImageGallery;
         "spectrum-megamenu": SpectrumMegamenu;
+        "spectrum-menu": SpectrumMenu;
         "spectrum-rail": SpectrumRail;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
@@ -1322,8 +1569,15 @@ declare module "@stencil/core" {
              */
             "spectrum-context-menu": LocalJSX.SpectrumContextMenu & JSXBase.HTMLAttributes<HTMLSpectrumContextMenuElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
+            /**
+             * Spectrum Hero Component
+             * A hero section component that supports both images and video backgrounds,
+             * with carousel functionality, text overlays, and call-to-action buttons.
+             */
+            "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
             "spectrum-megamenu": LocalJSX.SpectrumMegamenu & JSXBase.HTMLAttributes<HTMLSpectrumMegamenuElement>;
+            "spectrum-menu": LocalJSX.SpectrumMenu & JSXBase.HTMLAttributes<HTMLSpectrumMenuElement>;
             /**
              * Spectrum Rail Component
              * A vertical navigation rail with two states: expanded and contracted

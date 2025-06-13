@@ -222,21 +222,53 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
 
 @ProxyCmp({
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'images', 'scrollDirection', 'selectedImages', 'selectionMode']
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides']
+})
+@Component({
+  selector: 'spectrum-hero',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides'],
+})
+export class SpectrumHero {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['heroAction', 'slideChange']);
+  }
+}
+
+
+export declare interface SpectrumHero extends Components.SpectrumHero {
+  /**
+   * Event emitted when a hero action button is clicked
+   */
+  heroAction: EventEmitter<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string }>>;
+  /**
+   * Event emitted when slide changes
+   */
+  slideChange: EventEmitter<CustomEvent<{ action: string; slideIndex: number; totalSlides: number }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({
   selector: 'spectrum-image-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'images', 'scrollDirection', 'selectedImages', 'selectionMode'],
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted']);
+    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted', 'imagePreview']);
   }
 }
 
@@ -254,6 +286,8 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   imageAdded: EventEmitter<CustomEvent<ISpectrumImageGalleryImageAddedEvent>>;
 
   imageDeleted: EventEmitter<CustomEvent<ISpectrumImageGalleryImageDeletedEvent>>;
+
+  imagePreview: EventEmitter<CustomEvent<ISpectrumImageGalleryImageConfig>>;
 }
 
 
@@ -277,6 +311,35 @@ export class SpectrumMegamenu {
 
 
 export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
+
+
+@ProxyCmp({
+  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
+  methods: ['close']
+})
+@Component({
+  selector: 'spectrum-menu',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
+})
+export class SpectrumMenu {
+  protected el: HTMLElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['itemClick']);
+  }
+}
+
+
+export declare interface SpectrumMenu extends Components.SpectrumMenu {
+  /**
+   * Event emitted when a menu item is clicked
+   */
+  itemClick: EventEmitter<CustomEvent<{ label: string; href?: string; }>>;
+}
 
 
 @ProxyCmp({

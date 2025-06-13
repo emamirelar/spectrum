@@ -3,7 +3,569 @@ description:
 globs: 
 alwaysApply: true
 ---
-Please use BEM @https://getbem.com/ for CSS naming conventions.
-Please use local variables for the component, assign values to them using the theme level variables.
-Please document the CSS.
-Favour responsive approaches that use flex and grid.
+# Spectrum CSS Architecture Guidelines
+
+## Overview
+Follow these CSS patterns and conventions for all Spectrum components. Use `spectrum-button` as the exemplar for proper CSS architecture.
+
+## 1. File Structure and Documentation
+
+### File Header Documentation
+```scss
+// ==============================================
+// Spectrum [Component] Component Styles
+// ==============================================
+// BEM naming convention: spectrum-[component] (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+```
+
+### Section Comments
+Use clear section dividers for different parts of your CSS:
+```scss
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+
+// ==============================================
+// Size Variations
+// ==============================================
+
+// ==============================================
+// Variant Styles
+// ==============================================
+
+// ==============================================
+// State Styles
+// ==============================================
+
+// ==============================================
+// Responsive Design
+// ==============================================
+```
+
+## 2. CSS Custom Properties Pattern
+
+### :host Variable Declaration
+Always declare component-level CSS custom properties in `:host` using Spectrum design tokens:
+
+```scss
+:host {
+  display: block; // or inline-block for inline components
+  
+  // Core component properties
+  --component-background: var(--spectrum-sys-color-surface, #ffffff);
+  --component-color: var(--spectrum-sys-color-on-surface, #000000);
+  --component-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --component-padding: var(--spectrum-sys-spacing, 1rem);
+  --component-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --component-font-size: var(--spectrum-sys-font-size, 1rem);
+  
+  // Interactive states
+  --component-hover-background: var(--spectrum-sys-color-surface-hover);
+  --component-active-background: var(--spectrum-sys-color-surface-active);
+  --component-focus-outline: var(--spectrum-sys-color-primary);
+  --component-disabled-opacity: 0.5;
+  
+  // Animation and transitions
+  --component-transition: all 0.2s ease-in-out;
+  --component-transition-duration: 0.2s;
+  --component-transition-timing: ease-in-out;
+  
+  // Size variations
+  --component-size-small: var(--spectrum-sys-spacing-large, 2rem);
+  --component-size-medium: var(--spectrum-sys-spacing-x-large, 3rem);
+  --component-size-large: var(--spectrum-sys-spacing-xx-large, 4rem);
+  
+  // Spacing variations
+  --component-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --component-spacing: var(--spectrum-sys-spacing, 1rem);
+  --component-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+}
+```
+
+### Variable Naming Convention
+- Use `--component-property` format
+- Group related properties together
+- Always provide fallback values
+- Reference Spectrum design tokens first
+
+## 3. BEM Naming Convention
+
+### Block-Element-Modifier Structure
+```scss
+// Block (component root)
+.spectrum-component {
+  // Base styles
+}
+
+// Elements (child components)
+.spectrum-component__header {
+  // Header styles
+}
+
+.spectrum-component__content {
+  // Content styles
+}
+
+.spectrum-component__footer {
+  // Footer styles
+}
+
+// Modifiers (variations)
+.spectrum-component--primary {
+  // Primary variant
+}
+
+.spectrum-component--large {
+  // Large size variant
+}
+
+.spectrum-component--disabled {
+  // Disabled state
+}
+```
+
+### Nested BEM Structure
+```scss
+.spectrum-component {
+  // Base component styles
+  
+  // Size modifiers
+  &--small {
+    --component-size: var(--component-size-small);
+  }
+  
+  &--medium {
+    --component-size: var(--component-size-medium);
+  }
+  
+  &--large {
+    --component-size: var(--component-size-large);
+  }
+  
+  // Variant modifiers
+  &--primary {
+    --component-background: var(--spectrum-sys-color-primary);
+    --component-color: var(--spectrum-sys-color-on-primary);
+  }
+  
+  &--secondary {
+    --component-background: var(--spectrum-sys-color-secondary);
+    --component-color: var(--spectrum-sys-color-on-secondary);
+  }
+  
+  // State modifiers
+  &--disabled {
+    opacity: var(--component-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+  
+  // Element styles
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--component-icon-size);
+  }
+  
+  &__text {
+    font-family: var(--component-font-family);
+    font-size: inherit;
+    line-height: 1;
+  }
+}
+```
+
+## 4. Responsive Design Patterns
+
+### Mobile-First Approach
+```scss
+// Base styles (mobile)
+.spectrum-component {
+  padding: var(--component-spacing-small);
+  font-size: var(--spectrum-sys-typescale-body-small-size);
+}
+
+// Tablet and up
+@media (min-width: 768px) {
+  .spectrum-component {
+    padding: var(--component-spacing);
+    font-size: var(--spectrum-sys-typescale-body-medium-size);
+  }
+}
+
+// Desktop and up
+@media (min-width: 1024px) {
+  .spectrum-component {
+    padding: var(--component-spacing-large);
+    font-size: var(--spectrum-sys-typescale-body-large-size);
+  }
+}
+```
+
+### Responsive Variables
+```scss
+:host {
+  // Responsive spacing
+  --component-spacing-responsive: var(--component-spacing-small);
+  
+  @media (min-width: 768px) {
+    --component-spacing-responsive: var(--component-spacing);
+  }
+  
+  @media (min-width: 1024px) {
+    --component-spacing-responsive: var(--component-spacing-large);
+  }
+}
+```
+
+## 5. Layout Patterns
+
+### Flexbox for Component Layout
+```scss
+.spectrum-component {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--component-spacing);
+  
+  // Responsive flex direction
+  flex-direction: column;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+```
+
+### CSS Grid for Complex Layouts
+```scss
+.spectrum-component {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+    "header"
+    "content"
+    "footer";
+  gap: var(--component-spacing);
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 200px 1fr;
+    grid-template-areas: 
+      "header header"
+      "sidebar content"
+      "footer footer";
+  }
+}
+
+.spectrum-component__header {
+  grid-area: header;
+}
+
+.spectrum-component__sidebar {
+  grid-area: sidebar;
+}
+
+.spectrum-component__content {
+  grid-area: content;
+}
+
+.spectrum-component__footer {
+  grid-area: footer;
+}
+```
+
+## 6. Animation and Transitions
+
+### Standard Transitions
+```scss
+.spectrum-component {
+  transition: var(--component-transition);
+  
+  // Hover states
+  &:hover {
+    background-color: var(--component-hover-background);
+    transform: var(--component-hover-transform, translateY(-1px));
+  }
+  
+  // Active states
+  &:active {
+    background-color: var(--component-active-background);
+    transform: var(--component-active-transform, translateY(1px));
+  }
+  
+  // Focus states
+  &:focus-visible {
+    outline: 2px solid var(--component-focus-outline);
+    outline-offset: 2px;
+  }
+}
+```
+
+### Reduced Motion Support
+```scss
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-component {
+    --component-transition-duration: 0.01ms;
+    --component-hover-transform: none;
+    --component-active-transform: none;
+  }
+}
+```
+
+## 7. Accessibility Patterns
+
+### Focus Management
+```scss
+.spectrum-component {
+  // Remove default outline
+  outline: none;
+  
+  // Custom focus styles
+  &:focus-visible {
+    outline: 2px solid var(--spectrum-sys-color-primary);
+    outline-offset: 2px;
+  }
+  
+  // High contrast mode support
+  @media (prefers-contrast: high) {
+    border: 1px solid;
+  }
+}
+```
+
+### Screen Reader Support
+```scss
+.spectrum-component {
+  // Ensure proper text contrast
+  color: var(--spectrum-sys-color-on-surface);
+  background-color: var(--spectrum-sys-color-surface);
+  
+  // Hidden content for screen readers
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+```
+
+## 8. Performance Optimization
+
+### Efficient Selectors
+```scss
+// ✅ Good - specific and efficient
+.spectrum-component__icon {
+  display: flex;
+}
+
+// ❌ Avoid - overly nested
+.spectrum-component .content .icon {
+  display: flex;
+}
+```
+
+### GPU Acceleration
+```scss
+.spectrum-component {
+  // Use transform and opacity for animations
+  transform: translateZ(0); // Force GPU layer
+  will-change: transform; // Hint to browser
+  
+  &:hover {
+    transform: translateY(-1px) translateZ(0);
+  }
+}
+```
+
+## 9. Common Patterns
+
+### Overlay Pattern
+```scss
+.spectrum-component {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    transition: background-color var(--component-transition-duration);
+  }
+  
+  &:hover::before {
+    background-color: var(--component-hover-overlay, rgba(0, 0, 0, 0.1));
+  }
+}
+```
+
+### Loading State Pattern
+```scss
+.spectrum-component {
+  &--loading {
+    position: relative;
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid var(--spectrum-sys-color-primary);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+```
+
+## 10. Best Practices
+
+### Do's ✅
+- Use Spectrum design tokens for all values
+- Follow BEM naming convention consistently
+- Document CSS sections with clear comments
+- Use CSS custom properties for theming
+- Implement responsive design mobile-first
+- Support accessibility features
+- Use efficient CSS selectors
+- Group related properties together
+- Provide fallback values for custom properties
+
+### Don'ts ❌
+- Don't use hardcoded values (use design tokens)
+- Don't use `!important` unless absolutely necessary
+- Don't nest selectors more than 3 levels deep
+- Don't use overly specific selectors
+- Don't forget responsive design
+- Don't ignore accessibility requirements
+- Don't use deprecated CSS properties
+- Don't mix different naming conventions
+
+## 11. Example: Complete Component CSS
+
+```scss
+// ==============================================
+// Spectrum Example Component Styles
+// ==============================================
+// BEM naming convention: spectrum-example (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: block;
+  
+  // Core component properties
+  --example-background: var(--spectrum-sys-color-surface, #ffffff);
+  --example-color: var(--spectrum-sys-color-on-surface, #000000);
+  --example-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --example-padding: var(--spectrum-sys-spacing, 1rem);
+  --example-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  
+  // Spacing using proper Spectrum tokens
+  --example-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --example-spacing: var(--spectrum-sys-spacing, 1rem);
+  --example-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+}
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-example {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--example-background);
+  color: var(--example-color);
+  border-radius: var(--example-border-radius);
+  padding: var(--example-padding);
+  font-family: var(--example-font-family);
+  gap: var(--example-spacing);
+  
+  // ==============================================
+  // Size Variations
+  // ==============================================
+  &--small {
+    padding: var(--example-spacing-small);
+    font-size: var(--spectrum-sys-typescale-body-small-size);
+  }
+  
+  &--large {
+    padding: var(--example-spacing-large);
+    font-size: var(--spectrum-sys-typescale-body-large-size);
+  }
+  
+  // ==============================================
+  // Variant Styles
+  // ==============================================
+  &--primary {
+    --example-background: var(--spectrum-sys-color-primary);
+    --example-color: var(--spectrum-sys-color-on-primary);
+  }
+  
+  // ==============================================
+  // Element Styles
+  // ==============================================
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--example-spacing-small);
+    border-bottom: 1px solid var(--spectrum-sys-color-outline);
+  }
+  
+  &__content {
+    flex: 1;
+    padding: var(--example-spacing-small) 0;
+  }
+  
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--example-spacing-small);
+    padding-top: var(--example-spacing-small);
+    border-top: 1px solid var(--spectrum-sys-color-outline);
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (min-width: 768px) {
+  .spectrum-example {
+    flex-direction: row;
+    
+    &__content {
+      padding: 0 var(--example-spacing);
+    }
+  }
+}
+```
+
+This comprehensive guide ensures consistent, maintainable, and accessible CSS across all Spectrum components.

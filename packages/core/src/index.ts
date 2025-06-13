@@ -20,9 +20,11 @@ export { SpectrumImageGallery } from './components/spectrum-image-gallery/spectr
 export { SpectrumToast } from './components/spectrum-toast/spectrum-toast';
 export { SpectrumSelect } from './components/spectrum-select/spectrum-select';
 export { SpectrumAccordion } from './components/spectrum-accordion/spectrum-accordion';
+export { SpectrumHero } from './components/spectrum-hero/spectrum-hero';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';
 
 // Export component types and interfaces
 export type { SpectrumSelectOption } from './components/spectrum-select/spectrum-select';
+export type { HeroSlide } from './components/spectrum-hero/spectrum-hero';
