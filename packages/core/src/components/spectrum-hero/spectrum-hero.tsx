@@ -1,8 +1,5 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Watch } from '@stencil/core';
 
-// Import spectrum-button to ensure it's available
-import '../spectrum-button/spectrum-button';
-
 export interface HeroSlide {
   type: 'image' | 'video';
   src: string;

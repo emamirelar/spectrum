@@ -1,8 +1,5 @@
 import { Component, Host, h, Prop, State, Watch, Element, Event, EventEmitter, Listen } from '@stencil/core';
 
-// Import spectrum-button to ensure it's available
-import '../spectrum-button/spectrum-button';
-
 export interface SpectrumSelectOption {
   value: string;
   label: string;
