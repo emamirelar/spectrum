@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coordinated Theme & Wallpaper Loading</title>
+  
+  <style>
+    /* Hide content until theme is ready */
+    html.theme-loading .app-content {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    
+    html.theme-ready .app-content {
+      opacity: 1;
+    }
+    
+    /* Loading screen */
+    .loading-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #0070d2, #1976d2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      color: white;
+      transition: opacity 0.5s ease;
+    }
+    
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-screen" class="loading-screen">
+    <div>Loading theme and wallpaper...</div>
+  </div>
+
+  <!-- Coordinated components -->
+  <spectrum-theme 
+    color="#0070d2"
+    wait-for-wallpaper="true"
+    coordination-timeout="3000"
+    hide-content-until-ready="true"
+    debug="true">
+    
+    <spectrum-wallpaper 
+      background="url(https://images.unsplash.com/photo-1682687220063-4742bd7fd538)"
+      preload-colors="true"
+      signal-ready="true"
+      debug="true">
+      
+      <main class="app-content">
+        <div style="padding: 2rem;">
+          <h1>🎨 Coordinated Loading Success!</h1>
+          <p>No FOUC - fonts and colors loaded together</p>
+        </div>
+      </main>
+    </spectrum-wallpaper>
+  </spectrum-theme>
+
+  <script>
+    document.addEventListener('themeready', () => {
+      setTimeout(() => {
+        document.getElementById('loading-screen').classList.add('hidden');
+      }, 500);
+    });
+  </script>
+</body>
+</html> 

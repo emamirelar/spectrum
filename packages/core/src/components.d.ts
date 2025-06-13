@@ -696,6 +696,11 @@ export namespace Components {
     }
     interface SpectrumTheme {
         /**
+          * Whether to automatically load fonts and prevent FOUC
+          * @default true
+         */
+        "autoLoadFonts": boolean;
+        /**
           * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
           * @default '#0070d2'
          */
@@ -705,6 +710,11 @@ export namespace Components {
           * @default '{}'
          */
         "config": string;
+        /**
+          * Timeout for wallpaper coordination in milliseconds
+          * @default 2000
+         */
+        "coordinationTimeout": number;
         /**
           * Whether to use dark mode
           * @default false
@@ -716,10 +726,30 @@ export namespace Components {
          */
         "debug": boolean;
         /**
+          * Font loading timeout in milliseconds
+          * @default 3000
+         */
+        "fontLoadTimeout": number;
+        /**
+          * Whether to hide content until theme is fully ready
+          * @default true
+         */
+        "hideContentUntilReady": boolean;
+        /**
+          * Whether to preload fonts via link elements
+          * @default true
+         */
+        "preloadFonts": boolean;
+        /**
           * Whether to show theme color swatches (useful for development)
           * @default false
          */
         "showSwatches": boolean;
+        /**
+          * Whether to wait for wallpaper colors before showing content
+          * @default false
+         */
+        "waitForWallpaper": boolean;
     }
     /**
      * Spectrum Toast Component
@@ -812,10 +842,20 @@ export namespace Components {
          */
         "debug": boolean;
         /**
+          * Whether to preload and extract colors before applying them
+          * @default false
+         */
+        "preloadColors": boolean;
+        /**
           * Whether to show the theme color swatches
           * @default false
          */
         "showSwatches": boolean;
+        /**
+          * Whether to signal when colors are ready for coordination
+          * @default false
+         */
+        "signalReady": boolean;
     }
 }
 export interface SpectrumAccordionCustomEvent<T> extends CustomEvent<T> {
@@ -1951,6 +1991,11 @@ declare namespace LocalJSX {
     }
     interface SpectrumTheme {
         /**
+          * Whether to automatically load fonts and prevent FOUC
+          * @default true
+         */
+        "autoLoadFonts"?: boolean;
+        /**
           * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
           * @default '#0070d2'
          */
@@ -1960,6 +2005,11 @@ declare namespace LocalJSX {
           * @default '{}'
          */
         "config"?: string;
+        /**
+          * Timeout for wallpaper coordination in milliseconds
+          * @default 2000
+         */
+        "coordinationTimeout"?: number;
         /**
           * Whether to use dark mode
           * @default false
@@ -1971,10 +2021,30 @@ declare namespace LocalJSX {
          */
         "debug"?: boolean;
         /**
+          * Font loading timeout in milliseconds
+          * @default 3000
+         */
+        "fontLoadTimeout"?: number;
+        /**
+          * Whether to hide content until theme is fully ready
+          * @default true
+         */
+        "hideContentUntilReady"?: boolean;
+        /**
+          * Whether to preload fonts via link elements
+          * @default true
+         */
+        "preloadFonts"?: boolean;
+        /**
           * Whether to show theme color swatches (useful for development)
           * @default false
          */
         "showSwatches"?: boolean;
+        /**
+          * Whether to wait for wallpaper colors before showing content
+          * @default false
+         */
+        "waitForWallpaper"?: boolean;
     }
     /**
      * Spectrum Toast Component
@@ -2066,10 +2136,20 @@ declare namespace LocalJSX {
          */
         "debug"?: boolean;
         /**
+          * Whether to preload and extract colors before applying them
+          * @default false
+         */
+        "preloadColors"?: boolean;
+        /**
           * Whether to show the theme color swatches
           * @default false
          */
         "showSwatches"?: boolean;
+        /**
+          * Whether to signal when colors are ready for coordination
+          * @default false
+         */
+        "signalReady"?: boolean;
     }
     interface IntrinsicElements {
         "spectrum-accordion": SpectrumAccordion;

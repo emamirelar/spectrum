@@ -10,42 +10,139 @@
   color: var(--spectrum-color-on-background);
 }
 
-/* Theme swatches display */
-.theme-swatches {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--spectrum-sys-spacing);
-  padding: var(--spectrum-sys-spacing);
+/* Font loading indicator */
+.font-loading-indicator {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.theme-swatch {
-  padding: var(--spectrum-sys-spacing);
-  border-radius: var(--spectrum-sys-border-radius, 4px);
-  cursor: pointer;
-  transition: transform var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function);
+/* Hide loading indicator when fonts are loaded */
+:host(.fonts-loaded) .font-loading-indicator {
+  opacity: 0;
+  pointer-events: none;
 }
 
-.theme-swatch:hover {
-  transform: translateY(-2px);
+/* Show error state when fonts fail */
+:host(.fonts-failed) .font-loading-indicator {
+  background-color: rgba(186, 26, 26, 0.9) !important;
 }
 
-/* Apply background and text colors based on data-variable attribute */
-.theme-swatch[data-variable*="primary"] {
-  background: var(--spectrum-color-primary);
-  color: var(--spectrum-color-on-primary);
+/* Hide content until theme is fully ready */
+html.theme-loading .app-content,
+html.theme-loading main,
+html.theme-loading [data-hide-until-ready] {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.theme-swatch[data-variable*="secondary"] {
-  background: var(--spectrum-color-secondary);
-  color: var(--spectrum-color-on-secondary);
+/* Show content when theme is ready */
+html.theme-ready .app-content,
+html.theme-ready main,
+html.theme-ready [data-hide-until-ready] {
+  opacity: 1;
 }
 
-.theme-swatch[data-variable*="surface"] {
-  background: var(--spectrum-color-surface);
-  color: var(--spectrum-color-on-surface);
+/* Override for elements that should always be visible */
+html.theme-loading .app-loading,
+html.theme-loading .theme-loading-indicator,
+html.theme-loading [data-always-visible] {
+  opacity: 1 !important;
 }
 
-.theme-swatch[data-variable*="background"] {
-  background: var(--spectrum-color-background);
-  color: var(--spectrum-color-on-background);
+/* Theme coordination states for wallpaper */
+html.theme-loading.wallpaper-loading {
+  /* Both theme and wallpaper are loading */
+}
+
+html.theme-ready:not(.wallpaper-ready) {
+  /* Theme ready but wallpaper still loading - can show content */
+}
+
+/* Loading overlay for smooth transitions - only when theme-loading class is present */
+html.theme-loading::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--spectrum-sys-color-surface, #f6f6f6);
+  z-index: 9998;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+html.theme-ready::before {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Ensure no overlay when theme-loading is not present */
+html:not(.theme-loading)::before {
+  display: none;
+}
+
+/* Theme swatches display - matching wallpaper component style */
+.swatches {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.swatches::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.swatches::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.swatches::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+  cursor: help;
+}
+
+.swatch-color {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.swatch-label {
+  color: #333;
+  font-size: 0.75rem;
+  text-align: center;
+  max-width: 100px;
+  word-break: break-word;
+}
+
+.variable-name {
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: #666;
+  opacity: 0.8;
 } 

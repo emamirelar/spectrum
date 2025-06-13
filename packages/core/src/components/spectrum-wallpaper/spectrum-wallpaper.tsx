@@ -15,6 +15,8 @@ export class SpectrumWallpaper {
 
   @State() dominantColor: string = '';
   private imageLoadPromise: Promise<void> | null = null;
+  private colorsReady: boolean = false;
+  private extractedColors: any = null;
 
   /**
    * The background value (color, gradient, or image URL)
@@ -30,6 +32,16 @@ export class SpectrumWallpaper {
    * Whether to enable debug logging
    */
   @Prop() debug: boolean = false;
+
+  /**
+   * Whether to preload and extract colors before applying them
+   */
+  @Prop() preloadColors: boolean = false;
+
+  /**
+   * Whether to signal when colors are ready for coordination
+   */
+  @Prop() signalReady: boolean = false;
 
   /**
    * The background image position
@@ -68,17 +80,138 @@ export class SpectrumWallpaper {
     }
   }
 
+  /**
+   * Signal that colors are ready for coordination
+   */
+  private signalColorsReady() {
+    if (this.signalReady) {
+      document.documentElement.classList.remove('wallpaper-loading');
+      document.documentElement.classList.add('wallpaper-ready');
+      
+      // Emit global event for theme coordination
+      document.dispatchEvent(new CustomEvent('wallpaper-colors-ready', {
+        detail: {
+          colors: this.extractedColors,
+          background: this.background,
+          component: 'spectrum-wallpaper'
+        }
+      }));
+
+      this.debugLog('Wallpaper colors ready event emitted');
+    }
+  }
+
+  /**
+   * Signal that color extraction failed
+   */
+  private signalColorsFailed() {
+    if (this.signalReady) {
+      document.documentElement.classList.remove('wallpaper-loading');
+      document.documentElement.classList.add('wallpaper-failed');
+      
+      // Emit global event for theme coordination
+      document.dispatchEvent(new CustomEvent('wallpaper-colors-failed', {
+        detail: {
+          error: 'Color extraction failed',
+          background: this.background,
+          component: 'spectrum-wallpaper'
+        }
+      }));
+
+      this.debugWarn('Wallpaper colors failed event emitted');
+    }
+  }
+
   componentWillLoad() {
     // Debug verification - this should always log if debug is enabled
     this.debugLog('Debug mode enabled - component initializing');
     
+    // Set wallpaper loading state if signaling is enabled
+    if (this.signalReady) {
+      document.documentElement.classList.add('wallpaper-loading');
+    }
+    
     if (this.background) {
-      this.extractDominantColor();
+      if (this.preloadColors) {
+        // Extract colors first, then apply them
+        this.preloadAndExtractColors();
+      } else {
+        // Apply colors immediately (existing behavior)
+        this.extractDominantColor();
+      }
     } else {
       // Apply default theme when no background is provided
       this.debugLog('No background provided, applying default theme');
       this.updateTheme('#0070d2'); // Default blue theme
     }
+  }
+
+  /**
+   * Preload and extract colors without applying them immediately
+   */
+  private async preloadAndExtractColors() {
+    this.debugLog('Preloading colors for coordination');
+    
+    try {
+      // Extract colors but don't apply theme yet
+      const color = await this.extractColorOnly();
+      this.extractedColors = this.generateThemeFromColor(color);
+      this.colorsReady = true;
+      this.signalColorsReady();
+      
+      this.debugLog('Colors preloaded successfully:', color);
+    } catch (error) {
+      this.debugWarn('Color preloading failed:', error);
+      this.signalColorsFailed();
+    }
+  }
+
+  /**
+   * Extract color without applying theme (for coordination)
+   */
+  private async extractColorOnly(): Promise<string> {
+    if (!this.background) return '#0070d2';
+
+    // If we already have a loading promise, wait for it to complete
+    if (this.imageLoadPromise) {
+      await this.imageLoadPromise;
+    }
+
+    return new Promise<string>((resolve) => {
+      // Extract URL from background string if it's in url() format
+      let imageUrl = this.background;
+      const urlMatch = this.background.match(/url\(['"]?([^'"]+)['"]?\)/);
+      if (urlMatch) {
+        imageUrl = urlMatch[1];
+      }
+
+      // Only try image extraction for actual URLs
+      if (imageUrl.startsWith('http') || imageUrl.startsWith('//') || imageUrl.startsWith('blob:')) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        
+        img.onload = () => {
+          try {
+            const color = this.extractColorFromImage(img);
+            resolve(color);
+          } catch (error) {
+            const fallbackColor = this.extractColorFromBackground(this.background);
+            resolve(fallbackColor);
+          }
+        };
+
+        img.onerror = () => {
+          const color = this.extractColorFromBackground(this.background);
+          resolve(color);
+        };
+
+        img.src = imageUrl;
+      } else {
+        // Not an image URL, extract color from background string directly
+        const color = this.extractColorFromBackground(this.background);
+        resolve(color);
+      }
+    });
   }
 
   @Watch('background')
@@ -223,12 +356,42 @@ export class SpectrumWallpaper {
     this.debugLog('Updating theme with color:', color);
     try {
       const scheme = this.generateThemeFromColor(color);
-      this.applyTheme(scheme);
-      this.debugLog('Theme successfully applied with scheme:', scheme);
+      
+      if (this.preloadColors && !this.colorsReady) {
+        // Store colors for later application
+        this.extractedColors = scheme;
+        this.colorsReady = true;
+        this.signalColorsReady();
+      } else {
+        // Apply theme immediately
+        this.applyTheme(scheme);
+        
+        // Signal ready if coordination is enabled
+        if (this.signalReady && !this.colorsReady) {
+          this.extractedColors = scheme;
+          this.colorsReady = true;
+          this.signalColorsReady();
+        }
+      }
+      
+      this.debugLog('Theme successfully processed with scheme:', scheme);
     } catch (error) {
       this.debugError('Failed to generate or apply theme:', error);
       // Apply a basic fallback theme
       this.applyFallbackTheme(color);
+      this.signalColorsFailed();
+    }
+  }
+
+  /**
+   * Apply preloaded colors (called by theme component coordination)
+   */
+  public applyPreloadedColors() {
+    if (this.extractedColors && this.colorsReady) {
+      this.debugLog('Applying preloaded colors');
+      this.applyTheme(this.extractedColors);
+    } else {
+      this.debugWarn('No preloaded colors available to apply');
     }
   }
 
@@ -249,19 +412,35 @@ export class SpectrumWallpaper {
   }
 
   private generateThemeFromColor(color: string): any {
+    this.debugLog('Generating theme from extracted color:', color);
+    
     // Convert hex to RGB
     const r = parseInt(color.slice(1, 3), 16);
     const g = parseInt(color.slice(3, 5), 16);
     const b = parseInt(color.slice(5, 7), 16);
+    
+    this.debugLog('RGB values:', { r, g, b });
 
     // Convert RGB to ARGB using Material utilities
     const argb = argbFromRgb(r, g, b);
+    this.debugLog('ARGB value:', argb);
     
     // Generate proper Material Design 3 theme from source color
     const theme = themeFromSourceColor(argb);
+    this.debugLog('Generated theme:', theme);
     
     // Use light scheme for now (could add dark mode support later)
-    return theme.schemes.light;
+    const scheme = theme.schemes.light;
+    this.debugLog('Light scheme:', scheme);
+    
+    // Log the key colors to verify they're different
+    this.debugLog('Key colors:', {
+      primary: hexFromArgb(scheme.primary),
+      secondary: hexFromArgb(scheme.secondary),
+      tertiary: hexFromArgb(scheme.tertiary)
+    });
+    
+    return scheme;
   }
 
   private applyTheme(scheme: any) {

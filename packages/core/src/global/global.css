@@ -5,3 +5,24 @@
   font-family: var(--spectrum-sys-font-family);
   font-size: var(--spectrum-sys-font-size, 16px);
 }
+
+/* Font loading states to prevent FOUC */
+html.fonts-loading .material-symbols-outlined {
+  /* Hide icons during font loading to prevent text flash */
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+html.fonts-loaded .material-symbols-outlined {
+  /* Show icons when font is loaded */
+  opacity: 1;
+}
+
+html.fonts-failed .material-symbols-outlined {
+  /* Fallback styling when font fails to load */
+  opacity: 1;
+  font-family: 'Segoe UI Symbol', 'Noto Color Emoji', Arial, sans-serif;
+  /* Provide visual feedback that icons might not render correctly */
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
