@@ -3,6 +3,7 @@ import { html } from 'lit';
 
 interface SpectrumMenu extends HTMLElement {
   orientation: 'horizontal' | 'vertical';
+  variant: 'default' | 'megamenu';
   mobileBreakpoint: number;
   mobileMenuTitle: string;
   items: Array<{
@@ -10,17 +11,27 @@ interface SpectrumMenu extends HTMLElement {
     href?: string;
     icon?: string;
     disabled?: boolean;
+    description?: string;
     children?: Array<{
       label: string;
       href?: string;
       icon?: string;
       disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
     }>;
   }>;
 }
 
 interface SpectrumMenuArgs {
   orientation: 'horizontal' | 'vertical';
+  variant: 'default' | 'megamenu';
   mobileBreakpoint: number;
   mobileMenuTitle: string;
   items: Array<{
@@ -28,11 +39,20 @@ interface SpectrumMenuArgs {
     href?: string;
     icon?: string;
     disabled?: boolean;
+    description?: string;
     children?: Array<{
       label: string;
       href?: string;
       icon?: string;
       disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
     }>;
   }>;
 }
@@ -78,6 +98,7 @@ const meta = {
   tags: ['autodocs'],
   args: {
     orientation: 'horizontal',
+    variant: 'default',
     mobileBreakpoint: 768,
     mobileMenuTitle: 'Menu',
     items: defaultItems,
@@ -87,6 +108,11 @@ const meta = {
       control: 'select',
       options: ['horizontal', 'vertical'],
       description: 'The orientation of the menu',
+    },
+    variant: {
+      control: 'select',
+      options: ['default', 'megamenu'],
+      description: 'The variant of the menu',
     },
     mobileBreakpoint: {
       control: 'number',
@@ -108,6 +134,7 @@ export default meta;
 const renderMenu = (args: SpectrumMenuArgs) => html`
   <spectrum-menu
     orientation=${args.orientation}
+    variant=${args.variant}
     mobile-breakpoint=${args.mobileBreakpoint}
     mobile-menu-title=${args.mobileMenuTitle}
     .items=${args.items}
@@ -128,6 +155,7 @@ export const Default: StoryObj<SpectrumMenuArgs> = {
 export const HorizontalWithSubmenus: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'horizontal',
+    variant: 'default',
     mobileBreakpoint: 768,
     items: defaultItems,
   },
@@ -151,6 +179,7 @@ export const HorizontalWithSubmenus: StoryObj<SpectrumMenuArgs> = {
       ">
         <spectrum-menu
           orientation=${args.orientation}
+          variant=${args.variant}
           mobile-breakpoint=${args.mobileBreakpoint}
           .items=${args.items}
         ></spectrum-menu>
@@ -181,6 +210,7 @@ export const HorizontalWithSubmenus: StoryObj<SpectrumMenuArgs> = {
 export const Vertical: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'vertical',
+    variant: 'default',
     mobileBreakpoint: 768,
     items: defaultItems,
   },
@@ -203,6 +233,7 @@ export const Vertical: StoryObj<SpectrumMenuArgs> = {
       ">
         <spectrum-menu
           orientation=${args.orientation}
+          variant=${args.variant}
           mobile-breakpoint=${args.mobileBreakpoint}
           .items=${args.items}
         ></spectrum-menu>
@@ -232,6 +263,7 @@ export const Vertical: StoryObj<SpectrumMenuArgs> = {
 export const VerticalContained: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'vertical',
+    variant: 'default',
     mobileBreakpoint: 768,
     items: [
       {
@@ -319,6 +351,7 @@ export const VerticalContained: StoryObj<SpectrumMenuArgs> = {
         </div>
         <spectrum-menu
           orientation=${args.orientation}
+          variant=${args.variant}
           mobile-breakpoint=${args.mobileBreakpoint}
           .items=${args.items}
         ></spectrum-menu>
@@ -357,6 +390,7 @@ export const VerticalContained: StoryObj<SpectrumMenuArgs> = {
 export const WithoutIcons: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'horizontal',
+    variant: 'default',
     mobileBreakpoint: 768,
     items: defaultItems.map(({ icon, ...item }) => item),
   },
@@ -373,6 +407,7 @@ export const WithoutIcons: StoryObj<SpectrumMenuArgs> = {
 export const WithoutSubmenus: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'horizontal',
+    variant: 'default',
     mobileBreakpoint: 768,
     items: defaultItems.map(({ children, ...item }) => item),
   },
@@ -389,6 +424,7 @@ export const WithoutSubmenus: StoryObj<SpectrumMenuArgs> = {
 export const CustomBreakpoint: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'horizontal',
+    variant: 'default',
     mobileBreakpoint: 1024,
     items: defaultItems,
   },
@@ -477,6 +513,7 @@ const complexItems = [
 export const ComplexNested: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'horizontal',
+    variant: 'default',
     mobileBreakpoint: 768,
     items: complexItems,
   },
@@ -493,6 +530,7 @@ export const ComplexNested: StoryObj<SpectrumMenuArgs> = {
 export const CustomMobileTitle: StoryObj<SpectrumMenuArgs> = {
   args: {
     orientation: 'horizontal',
+    variant: 'default',
     mobileBreakpoint: 768,
     mobileMenuTitle: 'Navigation',
     items: defaultItems,
@@ -502,6 +540,239 @@ export const CustomMobileTitle: StoryObj<SpectrumMenuArgs> = {
     docs: {
       description: {
         story: 'A menu with a custom mobile menu title. Resize to mobile view to see "Navigation" instead of "Menu".',
+      },
+    },
+  },
+};
+
+const megamenuItems = [
+  {
+    label: 'Products',
+    href: '/products',
+    icon: 'inventory_2',
+    children: [
+      {
+        label: 'Electronics',
+        href: '/products/electronics',
+        icon: 'devices',
+        description: 'Latest gadgets and electronic devices',
+        children: [
+          {
+            label: 'Smartphones',
+            href: '/products/electronics/phones',
+            icon: 'smartphone',
+            description: 'Latest mobile phones and accessories',
+          },
+          {
+            label: 'Laptops',
+            href: '/products/electronics/laptops',
+            icon: 'laptop',
+            description: 'High-performance laptops and notebooks',
+          },
+          {
+            label: 'Tablets',
+            href: '/products/electronics/tablets',
+            icon: 'tablet',
+            description: 'Portable tablets for work and entertainment',
+          },
+        ],
+      },
+      {
+        label: 'Fashion',
+        href: '/products/fashion',
+        icon: 'checkroom',
+        description: 'Trendy clothing and accessories',
+        children: [
+          {
+            label: 'Men\'s Clothing',
+            href: '/products/fashion/men',
+            icon: 'man',
+            description: 'Stylish apparel for men',
+          },
+          {
+            label: 'Women\'s Clothing',
+            href: '/products/fashion/women',
+            icon: 'woman',
+            description: 'Fashion-forward clothing for women',
+          },
+          {
+            label: 'Accessories',
+            href: '/products/fashion/accessories',
+            icon: 'watch',
+            description: 'Bags, watches, and jewelry',
+          },
+        ],
+      },
+      {
+        label: 'Home & Garden',
+        href: '/products/home',
+        icon: 'home',
+        description: 'Everything for your home and garden',
+        children: [
+          {
+            label: 'Furniture',
+            href: '/products/home/furniture',
+            icon: 'chair',
+            description: 'Quality furniture for every room',
+          },
+          {
+            label: 'Kitchen',
+            href: '/products/home/kitchen',
+            icon: 'kitchen',
+            description: 'Kitchen appliances and cookware',
+          },
+          {
+            label: 'Garden',
+            href: '/products/home/garden',
+            icon: 'yard',
+            description: 'Tools and supplies for gardening',
+          },
+        ],
+      },
+      {
+        label: 'Sports & Outdoors',
+        href: '/products/sports',
+        icon: 'sports',
+        description: 'Gear for active lifestyles',
+        children: [
+          {
+            label: 'Fitness Equipment',
+            href: '/products/sports/fitness',
+            icon: 'fitness_center',
+            description: 'Home gym and fitness gear',
+          },
+          {
+            label: 'Outdoor Gear',
+            href: '/products/sports/outdoor',
+            icon: 'hiking',
+            description: 'Camping and hiking equipment',
+          },
+          {
+            label: 'Team Sports',
+            href: '/products/sports/team',
+            icon: 'sports_soccer',
+            description: 'Equipment for team sports',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Services',
+    href: '/services',
+    icon: 'build',
+    children: [
+      {
+        label: 'Installation',
+        href: '/services/installation',
+        icon: 'construction',
+        description: 'Professional installation services',
+        children: [
+          {
+            label: 'Home Installation',
+            href: '/services/installation/home',
+            icon: 'home_repair_service',
+            description: 'In-home setup and installation',
+          },
+          {
+            label: 'Business Setup',
+            href: '/services/installation/business',
+            icon: 'business',
+            description: 'Commercial installation services',
+          },
+        ],
+      },
+      {
+        label: 'Support',
+        href: '/services/support',
+        icon: 'support',
+        description: '24/7 customer support',
+        children: [
+          {
+            label: 'Technical Support',
+            href: '/services/support/technical',
+            icon: 'engineering',
+            description: 'Expert technical assistance',
+          },
+          {
+            label: 'Live Chat',
+            href: '/services/support/chat',
+            icon: 'chat',
+            description: 'Instant chat support',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'About',
+    href: '/about',
+    icon: 'info',
+  },
+  {
+    label: 'Contact',
+    href: '/contact',
+    icon: 'contact_mail',
+  },
+];
+
+export const Megamenu: StoryObj<SpectrumMenuArgs> = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'megamenu',
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Menu',
+    items: megamenuItems,
+  },
+  render: (args: SpectrumMenuArgs) => html`
+    <div style="
+      min-height: 600px;
+      background: #f9f9f9;
+      padding: 2rem;
+    ">
+      <h3>Megamenu Variant</h3>
+      <p>Hover over 'Products' or 'Services' to see the full-width megamenu with rich content, descriptions, and organized columns.</p>
+      
+      <div style="
+        margin: 2rem 0;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        position: relative;
+        overflow: visible;
+      ">
+        <spectrum-menu
+          orientation=${args.orientation}
+          variant=${args.variant}
+          mobile-breakpoint=${args.mobileBreakpoint}
+          mobile-menu-title=${args.mobileMenuTitle}
+          .items=${args.items}
+        ></spectrum-menu>
+      </div>
+      
+      <div style="
+        padding: 2rem;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-top: 2rem;
+      ">
+        <h4>Content Below Megamenu</h4>
+        <p>This content demonstrates that the megamenu appears as a full-width overlay above the page content.</p>
+        <p>The megamenu organizes items into columns with descriptions for better navigation and discovery.</p>
+        <ul>
+          <li><strong>Full-width layout:</strong> Spans the entire viewport width</li>
+          <li><strong>Column organization:</strong> Items are automatically organized into columns</li>
+          <li><strong>Rich content:</strong> Supports descriptions and nested categories</li>
+          <li><strong>Responsive design:</strong> Adapts to different screen sizes</li>
+        </ul>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A megamenu variant that displays a full-width dropdown with organized columns, descriptions, and rich content for complex navigation structures.',
       },
     },
   },

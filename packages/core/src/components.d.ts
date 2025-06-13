@@ -286,18 +286,27 @@ export namespace Components {
     interface SpectrumMenu {
         "close": () => Promise<void>;
         /**
-          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart')
+          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
          */
         "items": Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
     disabled?: boolean;
+    description?: string; // For megamenu descriptions
     children?: Array<{
       label: string;
       href?: string;
       icon?: string;
       disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
     }>;
   }>;
         /**
@@ -312,6 +321,10 @@ export namespace Components {
           * The orientation of the menu
          */
         "orientation": 'horizontal' | 'vertical';
+        /**
+          * The variant of the menu
+         */
+        "variant": 'default' | 'megamenu';
     }
     /**
      * Spectrum Rail Component
@@ -1236,18 +1249,27 @@ declare namespace LocalJSX {
     }
     interface SpectrumMenu {
         /**
-          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart')
+          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
          */
         "items"?: Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
     disabled?: boolean;
+    description?: string; // For megamenu descriptions
     children?: Array<{
       label: string;
       href?: string;
       icon?: string;
       disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
     }>;
   }>;
         /**
@@ -1269,6 +1291,10 @@ declare namespace LocalJSX {
           * The orientation of the menu
          */
         "orientation"?: 'horizontal' | 'vertical';
+        /**
+          * The variant of the menu
+         */
+        "variant"?: 'default' | 'megamenu';
     }
     /**
      * Spectrum Rail Component

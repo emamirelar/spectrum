@@ -314,7 +314,7 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
 
 
 @ProxyCmp({
-  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation'],
+  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -322,7 +322,7 @@ export declare interface SpectrumMegamenu extends Components.SpectrumMegamenu {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation'],
+  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLElement;

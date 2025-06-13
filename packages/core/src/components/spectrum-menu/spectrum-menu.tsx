@@ -14,19 +14,34 @@ export class SpectrumMenu {
   @Prop() orientation: 'horizontal' | 'vertical' = 'horizontal';
 
   /**
+   * The variant of the menu
+   */
+  @Prop() variant: 'default' | 'megamenu' = 'default';
+
+  /**
    * The menu items configuration
    * icon: Material icon name (e.g. 'home', 'info', 'shopping_cart')
+   * For megamenu variant, children can have additional properties like description and columns
    */
   @Prop() items: Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
     disabled?: boolean;
+    description?: string; // For megamenu descriptions
     children?: Array<{
       label: string;
       href?: string;
       icon?: string;
       disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
     }>;
   }> = [];
 
@@ -111,6 +126,83 @@ export class SpectrumMenu {
     return <span class="material-symbols-outlined spectrum-menu__icon">{icon}</span>;
   }
 
+  renderMegamenuContent(children: any[]) {
+    // Group children into columns (max 4 columns)
+    const columns = [];
+    const itemsPerColumn = Math.ceil(children.length / 4);
+    
+    for (let i = 0; i < children.length; i += itemsPerColumn) {
+      columns.push(children.slice(i, i + itemsPerColumn));
+    }
+
+    return (
+      <div class="spectrum-menu__megamenu-columns">
+        {columns.map((column) => (
+          <div class="spectrum-menu__megamenu-column">
+            {column.map((item) => (
+              <div class="spectrum-menu__megamenu-section">
+                <a
+                  class={{
+                    'spectrum-menu__megamenu-item': true,
+                    'spectrum-menu__megamenu-item--disabled': item.disabled,
+                  }}
+                  href={item.href || '#'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (!item.disabled) {
+                      this.handleItemClick(item);
+                    }
+                  }}
+                  role="menuitem"
+                  tabindex={item.disabled ? -1 : 0}
+                  aria-disabled={item.disabled ? 'true' : 'false'}
+                >
+                  <div class="spectrum-menu__megamenu-item-header">
+                    {this.renderIcon(item.icon)}
+                    <span class="spectrum-menu__megamenu-item-label">{item.label}</span>
+                  </div>
+                  {item.description && (
+                    <p class="spectrum-menu__megamenu-item-description">{item.description}</p>
+                  )}
+                </a>
+                {item.children && item.children.length > 0 && (
+                  <div class="spectrum-menu__megamenu-subitems">
+                    {item.children.map((subitem) => (
+                      <a
+                        class={{
+                          'spectrum-menu__megamenu-subitem': true,
+                          'spectrum-menu__megamenu-subitem--disabled': subitem.disabled,
+                        }}
+                        href={subitem.href || '#'}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (!subitem.disabled) {
+                            this.handleItemClick(subitem);
+                          }
+                        }}
+                        role="menuitem"
+                        tabindex={subitem.disabled ? -1 : 0}
+                        aria-disabled={subitem.disabled ? 'true' : 'false'}
+                      >
+                        {this.renderIcon(subitem.icon)}
+                        <div class="spectrum-menu__megamenu-subitem-content">
+                          <span class="spectrum-menu__megamenu-subitem-label">{subitem.label}</span>
+                          {subitem.description && (
+                            <span class="spectrum-menu__megamenu-subitem-description">{subitem.description}</span>
+                          )}
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   renderMenuItem(item: any, isSubmenu = false) {
     const itemClass = isSubmenu ? 'spectrum-menu__submenu-item' : 'spectrum-menu__item';
     const linkClass = `${itemClass}-link`;
@@ -140,9 +232,17 @@ export class SpectrumMenu {
           <span class="spectrum-menu__label">{item.label}</span>
         </a>
         {!isSubmenu && item.children && item.children.length > 0 && (
-          <ul class="spectrum-menu__submenu" role="menu">
-            {item.children.map((child) => this.renderMenuItem(child, true))}
-          </ul>
+          this.variant === 'megamenu' ? (
+            <div class="spectrum-menu__megamenu" role="menu">
+              <div class="spectrum-menu__megamenu-content">
+                {this.renderMegamenuContent(item.children)}
+              </div>
+            </div>
+          ) : (
+            <ul class="spectrum-menu__submenu" role="menu">
+              {item.children.map((child) => this.renderMenuItem(child, true))}
+            </ul>
+          )
         )}
       </li>
     );
@@ -151,18 +251,18 @@ export class SpectrumMenu {
   private handleItemMouseEnter(event: MouseEvent, item: any) {
     if (item.children && item.children.length > 0) {
       const linkElement = event.target as HTMLElement;
-      const submenu = linkElement.parentElement?.querySelector('.spectrum-menu__submenu') as HTMLElement;
+      const submenu = linkElement.parentElement?.querySelector('.spectrum-menu__submenu, .spectrum-menu__megamenu') as HTMLElement;
       
       if (submenu) {
         const rect = linkElement.getBoundingClientRect();
         const spacing = 8; // 8px gap between menu item and submenu
         
-        // Debug logging
-        console.log('Menu orientation:', this.orientation);
-        console.log('Menu item rect:', rect);
-        console.log('Submenu element:', submenu);
-        
-        if (this.orientation === 'vertical') {
+        if (this.variant === 'megamenu') {
+          // Megamenu positioning - full width below the menu bar
+          submenu.style.top = `${rect.bottom + spacing}px`;
+          submenu.style.left = '0px';
+          submenu.style.width = '100vw';
+        } else if (this.orientation === 'vertical') {
           // Position submenu to the right of the menu item
           submenu.style.top = `${rect.top}px`;
           submenu.style.left = `${rect.right + spacing}px`;
@@ -212,6 +312,7 @@ export class SpectrumMenu {
           'spectrum-menu--mobile': this.isMobile,
           'spectrum-menu--horizontal': this.orientation === 'horizontal' && !this.isMobile,
           'spectrum-menu--vertical': this.orientation === 'vertical' && !this.isMobile,
+          'spectrum-menu--megamenu': this.variant === 'megamenu',
         }}
       >
         {this.isMobile ? (
