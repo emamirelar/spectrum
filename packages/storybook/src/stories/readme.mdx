@@ -2,47 +2,291 @@ import { Meta } from "@storybook/blocks";
 
 <Meta title="Readme" />
 
-# UNOPS 🌈 Spectrum Design System
+# 🌈 UNOPS Spectrum Design System
 
-Inspired by - [stencil-storybook-boilerplate](https://artursopelnik.github.io/stencil-storybook-boilerplate/)
+**Spectrum** is UNOPS's comprehensive design system that provides a unified set of reusable components, design tokens, and patterns to create consistent, accessible, and beautiful user interfaces across all UNOPS digital products.
 
-A robust design systems for React, Remix, Next.js, Vue, Angular or Vanilla JS Application ✨ with [Stencil](https://github.com/ionic-team/stencil), [Storybook](https://github.com/storybookjs/storybook), [Vite](https://github.com/vitejs/vite) and [TypeScript](https://github.com/microsoft/TypeScript). 
+Built with modern web technologies and Material Design 3 principles, Spectrum empowers teams to build high-quality user experiences while maintaining design consistency at scale.
 
-For Storybook, we use the most commonly used integration for web components with Lit, Vite and TypeScript, so you
-already have a basic implementation of buttons, headers etc. Lit is not required and therefore basically
-optional. When writing stories for web components built with Stencil, you don't have to use it, but you can, if you
-want, perform more advanced operations using the HTML tag for example.
+---
 
-## 💡 Requirements
+## ✨ What is Spectrum?
 
-- Node.js 20
-- Git
+Spectrum is more than just a component library—it's a complete design system that includes:
 
-## 🚀 Getting Started
+### 🎨 **Design Foundation**
+- **Material Design 3 Color System**: Dynamic theming with adaptive colors
+- **Typography Scale**: Harmonious text styles optimized for readability
+- **Spacing System**: Consistent spatial rhythm using design tokens
+- **Accessibility First**: WCAG 2.1 AA compliant components by default
 
-To start working with this designsystem, clone this repo to a new directory:
+### 🧩 **Component Library**
+- **15+ Production-Ready Components**: From simple buttons to complex data visualizations
+- **Framework Agnostic**: Use with React, Vue, Angular, or vanilla JavaScript
+- **TypeScript Support**: Full type safety and excellent developer experience
+- **Customizable**: Extensive theming and configuration options
 
+### 🏗️ **Architecture**
+- **Web Components (Stencil)**: Native browser support, framework independent
+- **Output Targets**: Automated React, Vue, and Angular bindings
+- **Tree Shakeable**: Import only what you need for optimal bundle sizes
+- **Modern Build Pipeline**: Vite, TypeScript, and advanced optimizations
+
+---
+
+## 🚀 Key Features
+
+### **🎯 Universal Compatibility**
+Works seamlessly across all major frameworks and vanilla JavaScript applications:
+- **React & Next.js**: Optimized React components with hooks support
+- **Vue & Nuxt**: Native Vue 3 composition API integration  
+- **Angular**: Full Angular service and dependency injection support
+- **Vanilla JS**: Direct HTML usage with minimal setup
+
+### **🌙 Advanced Theming**
+- **Dynamic Color Palettes**: Automatically generated from brand colors
+- **Dark Mode Support**: Intelligent theme switching
+- **CSS Custom Properties**: Runtime theme customization
+- **Responsive Design**: Mobile-first, adaptive layouts
+
+### **♿ Accessibility Excellence**
+- **Screen Reader Optimized**: Comprehensive ARIA implementations
+- **Keyboard Navigation**: Full keyboard accessibility for all interactive elements
+- **High Contrast Support**: Automatic adjustments for accessibility preferences
+- **Focus Management**: Intuitive focus flow and visual indicators
+
+### **🔧 Developer Experience**
+- **TypeScript First**: Complete type definitions and IntelliSense support
+- **Storybook Documentation**: Interactive component playground and documentation
+- **Live Examples**: Real-time code examples and usage patterns
+- **Design Tokens**: Programmatic access to design system values
+
+---
+
+## 📦 Component Ecosystem
+
+### **Foundation Components**
+- **🎨 spectrum-theme**: Global theming and color system
+- **🖼️ spectrum-wallpaper**: Dynamic backgrounds with color extraction
+
+### **Core Interactive Elements**
+- **🔘 spectrum-button**: Versatile buttons with multiple variants and states
+- **🏷️ spectrum-chip**: Tags, badges, and selectable items
+- **🍞 spectrum-toast**: Notification system with rich feedback options
+
+### **Form & Input Components**
+- **🔍 spectrum-search-input**: Advanced search with voice input support
+- **📋 spectrum-select**: Powerful dropdowns with search and multi-selection
+- **📝 spectrum-accordion**: Collapsible content sections
+
+### **Navigation & Layout**
+- **🚂 spectrum-rail**: Expandable sidebar navigation
+- **📱 spectrum-rail-item**: Individual navigation items
+- **🗂️ spectrum-collapsible-list**: Hierarchical navigation trees
+- **🍔 spectrum-menu**: Responsive menu systems
+- **📋 spectrum-context-menu**: Right-click contextual actions
+
+### **Content & Media**
+- **🖼️ spectrum-image-gallery**: Responsive image galleries with upload
+- **🎭 spectrum-hero**: Hero sections with carousel functionality
+- **💬 spectrum-conversation-panel**: Chat and messaging interfaces
+
+---
+
+## 🛠️ Technology Stack
+
+**Built with industry-leading tools for maximum performance and compatibility:**
+
+- **[Stencil](https://stenciljs.com/)**: Compile-time web component framework
+- **[TypeScript](https://www.typescriptlang.org/)**: Type-safe development experience
+- **[Material Design 3](https://m3.material.io/)**: Google's latest design language
+- **[Lit](https://lit.dev/)**: Lightweight web component utilities
+- **[Vite](https://vitejs.dev/)**: Ultra-fast build tooling and dev server
+- **[Storybook](https://storybook.js.org/)**: Component development and documentation
+- **[Tailwind CSS](https://tailwindcss.com/)**: Utility-first styling framework
+
+---
+
+## 🚀 Quick Start
+
+### **Installation**
+
+**For React/Next.js:**
 ```bash
-git clone
+npm install @unops-itg-npm/cpit-spectrum
 ```
 
-## 👩‍💻 Usage
-
-1. Install dependencies: `npm install`
-2. Navigate to the stencil core package: `cd /packages/core` and build it with: `npm run build`. To generate a new component, run: 
+**For Vue/Nuxt:**
 ```bash
-npm run generate <sub-folder>
+npm install @unops-itg-npm/cpit-spectrum
 ```
-4. Go to the Storybook package: `cd /packages/storybook`
-    - Use `npm run storybook.run` to monitor only the stories for changes in Storybook.
-    - Use `npm run storybook` to also watch for changes in the web component itself.
-  
-## 👏 Contributing
-- Please open an [issue](https://github.com/.../issues) first to discuss what you would like to change.
-- Please make sure to update tests as appropriate.
 
-## 📩 Contact
-📧 [Ema Rogobete](emamirelar@unops.org) or [Justin Waugh](justinwa@unops.org)
+**For Angular:**
+```bash
+npm install @unops-itg-npm/cpit-spectrum
+```
 
-## License
-MIT &copy; [UNOPS](https://www.unops.org)
+### **Basic Usage**
+
+**React Example:**
+```jsx
+import { SpectrumButton, SpectrumTheme } from '@unops-itg-npm/cpit-spectrum/react';
+
+function App() {
+  return (
+    <SpectrumTheme color="#1976d2">
+      <SpectrumButton 
+        variant="primary" 
+        onClick={() => console.log('Clicked!')}
+      >
+        Get Started
+      </SpectrumButton>
+    </SpectrumTheme>
+  );
+}
+```
+
+**Vue Example:**
+```vue
+<template>
+  <spectrum-theme color="#1976d2">
+    <spectrum-button 
+      variant="primary" 
+      @buttonAction="handleClick"
+    >
+      Get Started
+    </spectrum-button>
+  </spectrum-theme>
+</template>
+```
+
+**Vanilla HTML:**
+```html
+<spectrum-theme color="#1976d2">
+  <spectrum-button variant="primary">
+    Get Started
+  </spectrum-button>
+</spectrum-theme>
+```
+
+---
+
+## 💡 Development Requirements
+
+- **Node.js 20+**: Modern JavaScript runtime
+- **Git**: Version control
+- **Modern Browser**: Chrome 90+, Firefox 88+, Safari 14+
+
+## 🔧 Development Workflow
+
+### **1. Clone & Setup**
+```bash
+git clone [repository-url]
+cd cpit-spectrum
+npm install
+```
+
+### **2. Build Core Components**
+```bash
+cd packages/core
+npm run build
+```
+
+### **3. Start Development**
+```bash
+cd packages/storybook
+npm run storybook  # Full dev environment with hot reload
+# or
+npm run storybook.run  # Storybook only
+```
+
+### **4. Generate New Components**
+```bash
+cd packages/core
+npm run generate <component-name>
+```
+
+---
+
+## 🎯 Design Philosophy
+
+### **Consistency at Scale**
+Spectrum ensures visual and functional consistency across all UNOPS applications, reducing cognitive load for users and development overhead for teams.
+
+### **Accessibility by Default**
+Every component is built with accessibility as a core requirement, not an afterthought. We follow WCAG 2.1 AA guidelines and test with real assistive technologies.
+
+### **Performance First**
+Components are optimized for performance with:
+- Lazy loading and code splitting
+- Minimal runtime overhead
+- Tree-shakeable imports
+- Optimized bundle sizes
+
+### **Developer Ergonomics**
+We prioritize developer experience with:
+- Comprehensive TypeScript support
+- Clear documentation and examples
+- Intuitive APIs and naming conventions
+- Excellent tooling integration
+
+---
+
+## 🌍 Framework Integration
+
+Spectrum provides first-class support for all major frameworks through automated output targets:
+
+| Framework | Package | Status | Features |
+|-----------|---------|--------|----------|
+| **React** | `@spectrum/react` | ✅ Production | Hooks, TypeScript, JSX |
+| **Vue** | `@spectrum/vue` | ✅ Production | Composition API, TypeScript |
+| **Angular** | `@spectrum/angular` | ✅ Production | Services, DI, TypeScript |
+| **Vanilla** | `@unops-itg-npm/cpit-spectrum` | ✅ Production | Web Components |
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions from the UNOPS community! Here's how you can help:
+
+### **🐛 Bug Reports**
+- Use our [issue tracker](https://github.com/.../issues)
+- Provide detailed reproduction steps
+- Include browser and framework versions
+
+### **💡 Feature Requests**
+- Discuss new ideas in GitHub Discussions
+- Consider design system principles and consistency
+- Provide use cases and user stories
+
+### **🔧 Code Contributions**
+- Follow our coding standards and conventions
+- Include tests for new features
+- Update documentation and examples
+- Ensure accessibility compliance
+
+---
+
+## 📞 Support & Contact
+
+### **Design System Team**
+- **📧 Design Lead**: [Ema Rogobete](mailto:emamirelar@unops.org)
+- **📧 Tech Lead**: [Justin Waugh](mailto:justinwa@unops.org)
+
+### **Resources**
+- **📖 Documentation**: This Storybook instance
+- **🐛 Issues**: [GitHub Issues](https://github.com/.../issues)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/.../discussions)
+- **🎨 Design Files**: [Figma Library](https://figma.com/...)
+
+---
+
+## 📄 License
+
+**MIT License** &copy; [UNOPS](https://www.unops.org)
+
+*Building a better future through innovative design and technology.*
+
+---
+
+*Spectrum is continuously evolving. Check our [Changelog](/docs/changelog--docs) for the latest updates and improvements.*

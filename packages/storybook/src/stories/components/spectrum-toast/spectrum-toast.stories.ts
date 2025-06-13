@@ -3,7 +3,7 @@ import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumToast } from "@stencil-storybook-boilerplate/core/src/components/spectrum-toast/spectrum-toast";
+import type { SpectrumToast } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-toast/spectrum-toast";
 
 interface SpectrumToastArgs {
   variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';

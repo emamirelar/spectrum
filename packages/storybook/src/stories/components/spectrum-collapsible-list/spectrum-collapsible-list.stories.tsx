@@ -3,7 +3,7 @@ import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumCollapsibleList } from "@stencil-storybook-boilerplate/core/src/components/spectrum-collapsible-list/spectrum-collapsible-list";
+import type { SpectrumCollapsibleList } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-collapsible-list/spectrum-collapsible-list";
 
 interface CollapsibleListItem {
   label: string;

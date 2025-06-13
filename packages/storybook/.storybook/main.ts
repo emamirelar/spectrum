@@ -41,6 +41,13 @@ const config: StorybookConfig = {
       esbuild: {
         jsx: 'automatic',
       },
+      resolve: {
+        alias: {
+          // Ensure consistent React version resolution
+          'react': require.resolve('react'),
+          'react-dom': require.resolve('react-dom'),
+        },
+      },
       build: {
         chunkSizeWarningLimit: 1000,
         rollupOptions: {
@@ -54,7 +61,8 @@ const config: StorybookConfig = {
                 if (id.includes('lit')) {
                   return 'lit';
                 }
-                if (id.includes('react')) {
+                // Keep React and ReactDOM together to avoid scheduler issues
+                if (id.includes('react-dom') || id.includes('react/') || id.includes('scheduler')) {
                   return 'react';
                 }
                 return 'vendor';
@@ -65,8 +73,13 @@ const config: StorybookConfig = {
       },
       // Define import.meta.url for proper asset resolution
       define: {
-        'import.meta.url': JSON.stringify(config.base || '/')
-      }
+        'import.meta.url': JSON.stringify(config.base || '/'),
+        // Ensure global React is available
+        'global': 'globalThis',
+      },
+      optimizeDeps: {
+        include: ['react', 'react-dom', 'react/jsx-runtime'],
+      },
     });
   },
   // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration

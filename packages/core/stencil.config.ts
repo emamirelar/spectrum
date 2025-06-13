@@ -37,7 +37,7 @@ export const config: Config = {
       serviceWorker: null, // disable service workers
     },
     angularOutputTarget({
-      componentCorePackage: '@stencil-storybook-boilerplate/core',
+      componentCorePackage: '@unops-itg-npm/cpit-spectrum',
       outputType: 'component',
       directivesProxyFile: '../angular/projects/component-library/src/lib/stencil-generated/components.ts',
       directivesArrayFile: '../angular/projects/component-library/src/lib/stencil-generated/index.ts',
@@ -46,7 +46,7 @@ export const config: Config = {
       outDir: '../react/lib/components/stencil-generated/'
     }),
     vueOutputTarget({
-      componentCorePackage: '@stencil-storybook-boilerplate/core',
+      componentCorePackage: '@unops-itg-npm/cpit-spectrum',
       proxiesFile: '../vue/lib/stencil-generated/components.ts',
     }),
   ],

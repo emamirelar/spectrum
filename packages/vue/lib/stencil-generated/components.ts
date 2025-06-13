@@ -3,7 +3,7 @@
 /* auto-generated vue proxies */
 import { defineContainer } from '@stencil/vue-output-target/runtime';
 
-import type { JSX } from '@stencil-storybook-boilerplate/core';
+import type { JSX } from '@unops-itg-npm/cpit-spectrum';
 
 
 
@@ -20,6 +20,8 @@ export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccor
   'outline',
   'accordionId',
   'debug',
+  'accordionToggle'
+], [
   'accordionToggle'
 ]);
 
@@ -44,16 +46,8 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'sound',
   'state',
   'buttonAction'
-]);
-
-
-export const SpectrumCarousel = /*@__PURE__*/ defineContainer<JSX.SpectrumCarousel>('spectrum-carousel', undefined, [
-  'content',
-  'show',
-  'autoplay',
-  'animationtime',
-  'gap',
-  'hoverpause'
+], [
+  'buttonAction'
 ]);
 
 
@@ -72,6 +66,8 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
   'showTrailingIcon',
   'sound',
   'chipAction'
+], [
+  'chipAction'
 ]);
 
 
@@ -86,11 +82,20 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'contractAction',
   'contextAction',
   'itemRenamed'
+], [
+  'childAction',
+  'expandAction',
+  'contractAction',
+  'contextAction',
+  'itemRenamed'
 ]);
 
 
 export const SpectrumContextMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumContextMenu>('spectrum-context-menu', undefined, [
   'position',
+  'actionClick',
+  'menuClose'
+], [
   'actionClick',
   'menuClose'
 ]);
@@ -109,6 +114,12 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'explore',
   'sourceClick',
   'titleChanged'
+], [
+  'explorationSelected',
+  'action',
+  'explore',
+  'sourceClick',
+  'titleChanged'
 ]);
 
 
@@ -122,6 +133,9 @@ export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spe
   'height',
   'keyboardNavigation',
   'debug',
+  'heroAction',
+  'slideChange'
+], [
   'heroAction',
   'slideChange'
 ]);
@@ -143,15 +157,12 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'imageAdded',
   'imageDeleted',
   'imagePreview'
-]);
-
-
-export const SpectrumMegamenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMegamenu>('spectrum-megamenu', undefined, [
-  'megamenutitle',
-  'openicon',
-  'closeicon',
-  'content',
-  'width'
+], [
+  'imageSelected',
+  'imageDeselect',
+  'imageAdded',
+  'imageDeleted',
+  'imagePreview'
 ]);
 
 
@@ -161,6 +172,8 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'items',
   'mobileBreakpoint',
   'mobileMenuTitle',
+  'itemClick'
+], [
   'itemClick'
 ]);
 
@@ -174,6 +187,11 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'addLabel',
   'addIcon',
   'collapsedOffset',
+  'expandedChange',
+  'searchChange',
+  'railAction',
+  'addAction'
+], [
   'expandedChange',
   'searchChange',
   'railAction',
@@ -197,6 +215,9 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
   'searchIconPosition',
   'searchButtonVariant',
   'clearOnSubmit',
+  'searchSubmit',
+  'searchInput'
+], [
   'searchSubmit',
   'searchInput'
 ]);
@@ -239,6 +260,11 @@ export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>(
   'searchChange',
   'dropdownOpen',
   'dropdownClose'
+], [
+  'selectChange',
+  'searchChange',
+  'dropdownOpen',
+  'dropdownClose'
 ]);
 
 
@@ -267,6 +293,9 @@ export const SpectrumToast = /*@__PURE__*/ defineContainer<JSX.SpectrumToast>('s
   'showCloseButton',
   'actionLabel',
   'actionValue',
+  'toastAction',
+  'toastDismiss'
+], [
   'toastAction',
   'toastDismiss'
 ]);

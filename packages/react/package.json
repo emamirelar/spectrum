@@ -28,7 +28,7 @@
     "url": "https://github.com/artursopelnik/stencil-storybook-boilerplate/issues"
   },
   "dependencies": {
-    "@stencil-storybook-boilerplate/core": "*",
+    "@unops-itg-npm/cpit-spectrum": "*",
     "@stencil/react-output-target": "^0.7.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

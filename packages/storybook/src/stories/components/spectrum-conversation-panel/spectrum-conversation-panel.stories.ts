@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { action } from '@storybook/addon-actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumConversationPanel } from "@stencil-storybook-boilerplate/core/src/components/spectrum-conversation-panel/spectrum-conversation-panel";
+import type { SpectrumConversationPanel } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-conversation-panel/spectrum-conversation-panel";
 
 interface SpectrumConversationPanelArgs {
   messages: string;

@@ -3,7 +3,7 @@ import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumChip } from "@stencil-storybook-boilerplate/core/src/components/spectrum-chip/spectrum-chip";
+import type { SpectrumChip } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-chip/spectrum-chip";
 
 interface SpectrumChipArgs {
   variant: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
