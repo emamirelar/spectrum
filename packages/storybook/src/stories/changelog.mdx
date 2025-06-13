@@ -27,6 +27,106 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.1-alpha.24] - 2025-01-03
+
+### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-conversation-panel**: 🚀 **Enhancement** - Dual citation tag support for flexible source referencing
+  - **Cite Tag Support**: Added support for `<cite>` tags alongside existing `<sup>` tag functionality
+  - **Mixed Tag Usage**: Both `<cite>1</cite>` and `<sup>2</sup>` tags can be used interchangeably in the same message
+  - **Identical Behavior**: Both tag types convert to the same extra-small spectrum-chip components with identical styling and interactions
+  - **Automatic Detection**: Enhanced parsing logic automatically detects and processes both tag types in correct document order
+  - **Backward Compatibility**: Existing `<sup>` tag implementations continue to work without any changes
+  - **Enhanced Method**: Renamed `parseAndReplaceSupTags` to `parseAndReplaceSourceTags` for better semantic clarity
+  - **Improved Debugging**: Enhanced debug logging shows counts and types of citation tags found during processing
+  - **Flexible Citation Styles**: Supports academic citation preferences - use `<cite>` for formal citations or `<sup>` for footnote-style references
+- **spectrum-theme**: 🚀 **Major Enhancement** - Comprehensive FOUC prevention and coordinated loading system
+  - **Font Loading Coordination**: Automatic Material Symbols font loading with singleton pattern to prevent multiple instances
+  - **Wallpaper Color Coordination**: Event-based coordination with spectrum-wallpaper for seamless color extraction integration
+  - **Loading State Management**: Global CSS classes (`theme-loading`, `theme-ready`) for content visibility control during initialization
+  - **Coordinated Loading System**: `waitForWallpaper` prop enables coordination between theme and wallpaper components
+  - **Font Loading Utilities**: Integration with FontLoader utility class for robust font loading with timeout and error handling
+  - **Event Communication**: Rich event system (`themeready`, `themefontsloaded`, `themefontsfailed`, `themewallpaperready`, `themewallpaperfailed`)
+  - **Debug Indicators**: Visual font loading indicator with proper state management and automatic hiding
+  - **Timeout Protection**: Configurable timeouts for both font loading (`fontLoadTimeout`) and wallpaper coordination (`coordinationTimeout`)
+  - **Content Hiding**: `hideContentUntilReady` prop with CSS selectors to hide content during loading (`[data-hide-until-ready]`)
+  - **Override Classes**: `[data-always-visible]` attribute for elements that should remain visible during loading
+  - **Singleton Font Loading**: Static properties prevent duplicate font loading across multiple theme instances
+  - **New Props**: `autoLoadFonts`, `fontLoadTimeout`, `preloadFonts`, `waitForWallpaper`, `coordinationTimeout`, `hideContentUntilReady`
+  - **Enhanced Lifecycle**: Comprehensive component lifecycle management with proper cleanup and event handling
+- **spectrum-wallpaper**: 🚀 **Major Enhancement** - Color coordination and preloading system for FOUC prevention
+  - **Color Preloading**: `preloadColors` prop enables color extraction before component mounting
+  - **Theme Coordination**: `signalReady` prop enables automatic coordination with spectrum-theme component
+  - **Event Signaling**: Methods for signaling color readiness (`signalColorsReady()`, `signalColorsFailed()`)
+  - **Document State Classes**: CSS class management (`wallpaper-loading`, `wallpaper-ready`, `wallpaper-failed`)
+  - **Public API**: `applyPreloadedColors()` method for external coordination and color application
+  - **Enhanced Color Extraction**: `extractColorOnly()` method for color extraction without DOM manipulation
+  - **Preload and Extract**: `preloadAndExtractColors()` method combines image loading with color extraction
+  - **Error Handling**: Comprehensive error handling with fallback states and proper event emission
+  - **New Props**: `preloadColors`, `signalReady` for coordinated loading scenarios
+  - **Event System**: `wallpaper-colors-ready` and `wallpaper-colors-failed` events for theme coordination
+- **FontLoader Utility**: 🚀 **New Utility** - Comprehensive font loading system with FOUC prevention
+  - **CSS Font Loading API**: Modern font loading with proper timeout and error handling
+  - **Material Symbols Support**: Specialized loading for Material Symbols Outlined font
+  - **Preloading System**: Font preloading via `<link rel="preload">` elements for faster loading
+  - **Document State Management**: CSS class management (`fonts-loading`, `fonts-loaded`, `fonts-failed`)
+  - **Event Emission**: Global font loading events (`fontsloaded`, `fontsfailed`) for component coordination
+  - **Singleton Pattern**: Single instance prevents duplicate font loading operations
+  - **Timeout Handling**: Configurable timeout with automatic fallback to prevent indefinite loading
+  - **Debug Support**: Comprehensive logging for development and troubleshooting
+  - **Error Recovery**: Graceful fallback when font loading fails with proper state management
+
+### 🔄 Changed
+- **spectrum-theme**: Enhanced color application system for wallpaper coordination
+  - **Global Color Application**: Colors now applied to `document.documentElement` for global availability
+  - **Wallpaper Color Integration**: `applyWallpaperColors()` method applies extracted colors from wallpaper component
+  - **Color Override Prevention**: `wallpaperColorsApplied` flag prevents theme from overriding wallpaper colors
+  - **Enhanced State Tracking**: Improved state management for font loading and wallpaper coordination
+  - **Lifecycle Improvements**: Better component lifecycle with proper event listener cleanup
+- **Storybook Preview**: Enhanced font preloading and FOUC prevention
+  - **Font Preloading**: Added `<link rel="preload">` for Material Symbols CSS and WOFF2 files
+  - **Duplicate Removal**: Removed duplicate font loading from CSS imports to prevent conflicts
+  - **Loading Optimization**: Proper font loading sequence for faster initial page load
+
+### 🐛 Fixed
+- **spectrum-theme**: Font loading indicator persistence issue
+  - **State Management**: Added `@State()` decorator to `fontsReady` property for proper re-rendering
+  - **Visibility Logic**: Enhanced indicator visibility logic to check font loading state
+  - **Automatic Hiding**: Indicator now properly hides when fonts finish loading
+  - **Conditional Rendering**: Added checks for `fontsReady`, `autoLoadFonts`, and `debug` states
+  - **Re-render Triggers**: State changes now properly trigger component re-renders
+- **Material Icons FOUC**: Resolved flash of unstyled content for Material Symbols
+  - **Font Preloading**: Proper preloading of Material Symbols CSS and font files
+  - **Loading States**: CSS classes to hide icons during font loading
+  - **Duplicate Prevention**: Removed duplicate font imports causing loading conflicts
+  - **Coordination**: Proper coordination between font loading and component rendering
+
+### 📝 Documentation
+- **spectrum-conversation-panel**: Enhanced Storybook documentation with dual citation tag examples
+  - **Updated Stories**: Modified `SourceCitationsWithChips` story to demonstrate both `<cite>` and `<sup>` tag usage
+  - **Mixed Citation Demo**: Story now shows real-world usage with alternating citation styles in the same message
+  - **Enhanced Documentation**: Updated story descriptions to explain both tag types and their identical behavior
+  - **Usage Examples**: Clear examples showing `<sup>1</sup>`, `<cite>2</cite>`, and mixed usage patterns
+  - **Feature Highlights**: Updated info panels to showcase the flexibility of dual citation tag support
+- **FOUC Prevention Guide**: Comprehensive documentation for preventing flash of unstyled content
+  - **Font Loading Strategies**: Multiple approaches for font loading and FOUC prevention
+  - **Implementation Examples**: Code examples for theme and wallpaper coordination
+  - **Best Practices**: Guidelines for optimal loading performance and user experience
+  - **Troubleshooting**: Common issues and solutions for font loading problems
+- **Coordinated Loading Documentation**: Complete guide for theme and wallpaper coordination
+  - **Event System**: Documentation of all coordination events and their payloads
+  - **Configuration Options**: Detailed explanation of all coordination properties
+  - **Usage Patterns**: Examples of different coordination scenarios and implementations
+  - **Integration Guide**: Step-by-step guide for implementing coordinated loading
+- **Automatic Font Loading Documentation**: Technical documentation for font loading system
+  - **FontLoader API**: Complete API documentation for the FontLoader utility class
+  - **Integration Examples**: Code examples for manual and automatic font loading
+  - **Performance Considerations**: Guidelines for optimal font loading performance
+  - **Browser Compatibility**: Information about CSS Font Loading API support and fallbacks
+
+---
+
 ## [0.0.1-alpha.23] - 2025-01-03
 
 ### 🧪 Pre-release

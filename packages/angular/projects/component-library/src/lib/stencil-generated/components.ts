@@ -428,14 +428,14 @@ export declare interface SpectrumSelect extends Components.SpectrumSelect {
 
 
 @ProxyCmp({
-  inputs: ['color', 'config', 'dark', 'debug', 'showSwatches']
+  inputs: ['autoLoadFonts', 'color', 'config', 'coordinationTimeout', 'dark', 'debug', 'fontLoadTimeout', 'hideContentUntilReady', 'preloadFonts', 'showSwatches', 'waitForWallpaper']
 })
 @Component({
   selector: 'spectrum-theme',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['color', 'config', 'dark', 'debug', 'showSwatches'],
+  inputs: ['autoLoadFonts', 'color', 'config', 'coordinationTimeout', 'dark', 'debug', 'fontLoadTimeout', 'hideContentUntilReady', 'preloadFonts', 'showSwatches', 'waitForWallpaper'],
 })
 export class SpectrumTheme {
   protected el: HTMLSpectrumThemeElement;
@@ -479,14 +479,14 @@ export declare interface SpectrumToast extends Components.SpectrumToast {
 
 
 @ProxyCmp({
-  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'showSwatches']
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'preloadColors', 'showSwatches', 'signalReady']
 })
 @Component({
   selector: 'spectrum-wallpaper',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'showSwatches'],
+  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'preloadColors', 'showSwatches', 'signalReady'],
 })
 export class SpectrumWallpaper {
   protected el: HTMLSpectrumWallpaperElement;

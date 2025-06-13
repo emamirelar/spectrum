@@ -273,7 +273,13 @@ export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('s
   'dark',
   'showSwatches',
   'debug',
-  'config'
+  'config',
+  'autoLoadFonts',
+  'fontLoadTimeout',
+  'preloadFonts',
+  'waitForWallpaper',
+  'coordinationTimeout',
+  'hideContentUntilReady'
 ]);
 
 
@@ -305,6 +311,8 @@ export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallp
   'background',
   'showSwatches',
   'debug',
+  'preloadColors',
+  'signalReady',
   'backgroundposition',
   'backgroundsize'
 ]);

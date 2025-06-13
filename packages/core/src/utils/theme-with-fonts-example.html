@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spectrum Theme with Automatic Font Loading</title>
+  
+  <!-- Minimal critical CSS to prevent flash -->
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+    
+    /* Hide Material Icons until theme component loads fonts */
+    .material-symbols-outlined {
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+    
+    /* Show icons when fonts are loaded (set by theme component) */
+    html.fonts-loaded .material-symbols-outlined {
+      opacity: 1;
+    }
+    
+    /* Loading state for entire app */
+    .app-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-size: 1.2em;
+      color: #666;
+    }
+    
+    .app-loading.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading state while components initialize -->
+  <div id="app-loading" class="app-loading">
+    Loading Spectrum Components...
+  </div>
+
+  <!-- Main application wrapped in spectrum-theme -->
+  <!-- The theme component now automatically handles font loading! -->
+  <spectrum-theme 
+    color="#0070d2" 
+    auto-load-fonts="true"
+    preload-fonts="true"
+    font-load-timeout="3000"
+    debug="true">
+    
+    <div id="app" style="padding: 2rem;">
+      <h1>Spectrum Theme with Automatic Font Loading</h1>
+      
+      <p>
+        The <code>spectrum-theme</code> component now automatically:
+      </p>
+      <ul>
+        <li>✅ Preloads Material Symbols fonts</li>
+        <li>✅ Prevents FOUC with loading states</li>
+        <li>✅ Provides fallback fonts when loading fails</li>
+        <li>✅ Emits events for font loading status</li>
+        <li>✅ Requires zero configuration from the application</li>
+      </ul>
+      
+      <!-- These components will have icons that load smoothly -->
+      <div style="display: flex; gap: 1rem; margin: 2rem 0;">
+        <spectrum-button variant="primary">
+          <span class="material-symbols-outlined">home</span>
+          Home
+        </spectrum-button>
+        
+        <spectrum-button variant="secondary">
+          <span class="material-symbols-outlined">search</span>
+          Search
+        </spectrum-button>
+        
+        <spectrum-button variant="tertiary">
+          <span class="material-symbols-outlined">settings</span>
+          Settings
+        </spectrum-button>
+      </div>
+      
+      <spectrum-menu>
+        <spectrum-menu-item>
+          <span class="material-symbols-outlined">dashboard</span>
+          Dashboard
+        </spectrum-menu-item>
+        <spectrum-menu-item>
+          <span class="material-symbols-outlined">person</span>
+          Profile
+        </spectrum-menu-item>
+        <spectrum-menu-item>
+          <span class="material-symbols-outlined">notifications</span>
+          Notifications
+        </spectrum-menu-item>
+      </spectrum-menu>
+      
+      <h2>Configuration Options</h2>
+      <div style="background: var(--spectrum-color-surface-variant); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+        <h3>Theme Component Properties:</h3>
+        <ul>
+          <li><code>auto-load-fonts</code>: Enable/disable automatic font loading (default: true)</li>
+          <li><code>preload-fonts</code>: Preload fonts via link elements (default: true)</li>
+          <li><code>font-load-timeout</code>: Timeout in milliseconds (default: 3000)</li>
+          <li><code>debug</code>: Show font loading indicator and debug logs (default: false)</li>
+        </ul>
+      </div>
+      
+      <h2>Events</h2>
+      <div id="events-log" style="background: #f5f5f5; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.9em; max-height: 200px; overflow-y: auto;">
+        <div>Waiting for font loading events...</div>
+      </div>
+    </div>
+  </spectrum-theme>
+
+  <!-- Load Spectrum components -->
+  <script type="module">
+    // No font loading code needed! The theme component handles it automatically.
+    
+    // Hide loading screen once components are loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      const loading = document.getElementById('app-loading');
+      const app = document.getElementById('app');
+      
+      // Show app and hide loading
+      setTimeout(() => {
+        loading.classList.add('hidden');
+        app.style.opacity = '1';
+      }, 100);
+    });
+    
+    // Listen for theme font loading events
+    const eventsLog = document.getElementById('events-log');
+    
+    function logEvent(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const div = document.createElement('div');
+      div.style.color = type === 'error' ? '#d32f2f' : type === 'success' ? '#2e7d32' : '#666';
+      div.textContent = `[${timestamp}] ${message}`;
+      eventsLog.appendChild(div);
+      eventsLog.scrollTop = eventsLog.scrollHeight;
+    }
+    
+    // Theme-specific font events
+    document.addEventListener('themefontsloaded', (event) => {
+      logEvent('✅ Theme fonts loaded successfully', 'success');
+      console.log('Theme fonts loaded:', event.detail);
+    });
+    
+    document.addEventListener('themefontsfailed', (event) => {
+      logEvent('❌ Theme fonts failed to load', 'error');
+      console.log('Theme fonts failed:', event.detail);
+    });
+    
+    // Global font events (from FontLoader)
+    document.addEventListener('fontsloaded', () => {
+      logEvent('✅ Global font loading completed', 'success');
+    });
+    
+    document.addEventListener('fontsfailed', () => {
+      logEvent('⚠️ Font loading failed, using fallbacks', 'error');
+    });
+    
+    // Test theme color changes
+    let colorIndex = 0;
+    const colors = ['#0070d2', '#e91e63', '#4caf50', '#ff9800', '#9c27b0'];
+    
+    setInterval(() => {
+      const theme = document.querySelector('spectrum-theme');
+      if (theme) {
+        colorIndex = (colorIndex + 1) % colors.length;
+        theme.setAttribute('color', colors[colorIndex]);
+        logEvent(`🎨 Changed theme color to ${colors[colorIndex]}`, 'info');
+      }
+    }, 5000);
+    
+    logEvent('🚀 Application initialized', 'info');
+  </script>
+  
+  <!-- Fallback for browsers without module support -->
+  <script nomodule>
+    document.documentElement.classList.add('fonts-failed');
+    console.warn('Module scripts not supported, using fallback fonts');
+  </script>
+</body>
+</html> 
