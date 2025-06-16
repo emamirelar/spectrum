@@ -94,7 +94,7 @@ const defaultItems = [
 ];
 
 const meta = {
-  title: 'Components/SpectrumMenu',
+  title: 'Spectrum/Components/SpectrumMenu',
   tags: ['autodocs'],
   args: {
     orientation: 'horizontal',

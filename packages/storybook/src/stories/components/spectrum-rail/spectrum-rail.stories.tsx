@@ -19,7 +19,7 @@ interface SpectrumRailElement extends HTMLElement {
 }
 
 const meta = {
-  title: 'Components/SpectrumRail',
+  title: 'Spectrum/Components/SpectrumRail',
   tags: ['autodocs'],
   args: {
     appName: 'PleaseAI',

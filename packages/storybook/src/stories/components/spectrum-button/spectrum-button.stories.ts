@@ -43,7 +43,7 @@ interface SpectrumButtonArgs {
 }
 
 const meta = {
-  title: 'Components/SpectrumButton',
+  title: 'Spectrum/Components/SpectrumButton',
   tags: ['autodocs'],
   args: {
     buttonText: 'Click me',

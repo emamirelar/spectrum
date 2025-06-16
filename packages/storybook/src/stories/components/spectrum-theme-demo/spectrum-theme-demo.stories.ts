@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { action } from '@storybook/addon-actions';
 
 const meta = {
-  title: 'Components/SpectrumThemeDemo',
+  title: 'Spectrum/Components/SpectrumThemeDemo',
   component: 'spectrum-theme-demo',
   tags: ['autodocs'],
   render: (args) => html`

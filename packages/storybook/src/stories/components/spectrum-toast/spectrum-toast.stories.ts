@@ -24,7 +24,7 @@ interface SpectrumToastArgs {
 }
 
 const meta = {
-  title: 'Components/SpectrumToast',
+  title: 'Spectrum/Components/SpectrumToast',
   tags: ['autodocs'],
   args: {
     variant: 'primary',

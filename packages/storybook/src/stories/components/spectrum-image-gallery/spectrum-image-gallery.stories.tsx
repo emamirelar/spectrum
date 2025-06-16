@@ -284,7 +284,7 @@ const unsplashImages: ImageConfig[] = [
 ];
 
 const meta = {
-  title: 'Components/SpectrumImageGallery',
+  title: 'Spectrum/Components/SpectrumImageGallery',
   component: 'spectrum-image-gallery',
   tags: ['autodocs'],
   parameters: {
