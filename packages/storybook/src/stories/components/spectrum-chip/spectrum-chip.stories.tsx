@@ -19,6 +19,7 @@ interface SpectrumChipArgs {
   action: string;
   size: 'small' | 'medium' | 'large' | 'extra-small';
   sound: boolean;
+  haptic: boolean;
 }
 
 const meta = {
@@ -37,7 +38,8 @@ const meta = {
     debug: false,
     action: 'custom',
     size: 'medium',
-    sound: false
+    sound: false,
+    haptic: false
   },
   argTypes: {
     variant: {
@@ -93,6 +95,10 @@ const meta = {
     sound: {
       control: 'boolean',
       description: 'Whether the chip emits sound'
+    },
+    haptic: {
+      control: 'boolean',
+      description: 'Whether the chip provides haptic feedback'
     }
   }
 } satisfies Meta<SpectrumChip>;
@@ -108,6 +114,7 @@ const renderChip = (args: SpectrumChipArgs) => html`
     ?outline=${args.outline}
     ?ripple=${args.ripple}
     ?sound=${args.sound}
+    ?haptic=${args.haptic}
     label=${args.label}
     leading-icon=${args.leadingIcon}
     trailing-icon=${args.trailingIcon}
@@ -136,6 +143,7 @@ export const Primary: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: renderChip
 };
@@ -154,6 +162,7 @@ export const Secondary: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: renderChip
 };
@@ -172,6 +181,7 @@ export const WithIcons: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: renderChip
 };
@@ -190,6 +200,7 @@ export const Selected: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: renderChip
 };
@@ -208,6 +219,7 @@ export const Disabled: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: renderChip
 };
@@ -226,6 +238,7 @@ export const Outline: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: renderChip
 };
@@ -244,6 +257,7 @@ export const WithRipple: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: renderChip
 };
@@ -262,6 +276,7 @@ export const WithSound: StoryObj<SpectrumChipArgs> = {
     debug: true,
     size: 'medium',
     sound: true,
+    haptic: false,
   },
   render: (args) => html`
     <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
@@ -283,6 +298,79 @@ export const WithSound: StoryObj<SpectrumChipArgs> = {
   `
 };
 
+export const WithHapticFeedback: StoryObj<SpectrumChipArgs> = {
+  args: {
+    variant: 'primary',
+    selected: false,
+    disabled: false,
+    outline: false,
+    ripple: true,
+    label: 'Haptic Enabled',
+    leadingIcon: 'vibration',
+    trailingIcon: 'close',
+    showTrailingIcon: true,
+    debug: true,
+    size: 'medium',
+    sound: false,
+    haptic: true,
+  },
+  render: (args) => html`
+    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+      <h3 style="margin: 0 0 1rem 0; color: #495057;">Haptic Feedback Demo</h3>
+      <p style="margin: 0 0 1rem 0; color: #6c757d; font-size: 0.875rem;">
+        Click the chip below to feel the haptic feedback. This works on mobile devices that support the Vibration API.
+      </p>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        ${renderChip(args)}
+        <div style="font-size: 0.75rem; color: #6c757d;">
+          ${args.haptic ? '📳 Haptic ON' : '📳 Haptic OFF'}
+        </div>
+      </div>
+      <div style="margin-top: 1rem; padding: 0.75rem; background: #fff3cd; border-radius: 4px; font-size: 0.75rem; color: #856404;">
+        <strong>Note:</strong> Haptic feedback will trigger on click and remove actions. 
+        This feature works best on mobile devices and requires user interaction for security.
+        Debug mode is enabled to show haptic logs in the console.
+      </div>
+    </div>
+  `
+};
+
+export const SoundAndHaptic: StoryObj<SpectrumChipArgs> = {
+  args: {
+    variant: 'primary',
+    selected: false,
+    disabled: false,
+    outline: false,
+    ripple: true,
+    label: 'Full Feedback',
+    leadingIcon: 'notifications_active',
+    trailingIcon: 'close',
+    showTrailingIcon: true,
+    debug: true,
+    size: 'medium',
+    sound: true,
+    haptic: true,
+  },
+  render: (args) => html`
+    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+      <h3 style="margin: 0 0 1rem 0; color: #495057;">Complete Feedback Demo</h3>
+      <p style="margin: 0 0 1rem 0; color: #6c757d; font-size: 0.875rem;">
+        Click the chip below to experience both sound and haptic feedback together.
+      </p>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        ${renderChip(args)}
+        <div style="font-size: 0.75rem; color: #6c757d;">
+          ${args.sound ? '🔊 Sound ON' : '🔇 Sound OFF'} | ${args.haptic ? '📳 Haptic ON' : '📳 Haptic OFF'}
+        </div>
+      </div>
+      <div style="margin-top: 1rem; padding: 0.75rem; background: #d1ecf1; border-radius: 4px; font-size: 0.75rem; color: #0c5460;">
+        <strong>Complete Experience:</strong> This demo combines both audio and haptic feedback for rich user interaction. 
+        Sound works in most browsers, while haptic feedback requires mobile device support.
+      </div>
+    </div>
+  `
+};
+
 export const SizeVariants: StoryObj<SpectrumChipArgs> = {
   args: {
     variant: 'primary',
@@ -297,6 +385,7 @@ export const SizeVariants: StoryObj<SpectrumChipArgs> = {
     debug: false,
     size: 'medium',
     sound: false,
+    haptic: false,
   },
   render: (args) => html`
     <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
@@ -310,6 +399,7 @@ export const SizeVariants: StoryObj<SpectrumChipArgs> = {
           ?outline=${args.outline}
           ?ripple=${args.ripple}
           ?sound=${args.sound}
+          ?haptic=${args.haptic}
           label="Extra Small"
           leading-icon=${args.leadingIcon}
           trailing-icon=${args.trailingIcon}
@@ -326,6 +416,7 @@ export const SizeVariants: StoryObj<SpectrumChipArgs> = {
           ?outline=${args.outline}
           ?ripple=${args.ripple}
           ?sound=${args.sound}
+          ?haptic=${args.haptic}
           label="Small"
           leading-icon=${args.leadingIcon}
           trailing-icon=${args.trailingIcon}
@@ -342,6 +433,7 @@ export const SizeVariants: StoryObj<SpectrumChipArgs> = {
           ?outline=${args.outline}
           ?ripple=${args.ripple}
           ?sound=${args.sound}
+          ?haptic=${args.haptic}
           label="Medium"
           leading-icon=${args.leadingIcon}
           trailing-icon=${args.trailingIcon}
@@ -358,6 +450,7 @@ export const SizeVariants: StoryObj<SpectrumChipArgs> = {
           ?outline=${args.outline}
           ?ripple=${args.ripple}
           ?sound=${args.sound}
+          ?haptic=${args.haptic}
           label="Large"
           leading-icon=${args.leadingIcon}
           trailing-icon=${args.trailingIcon}

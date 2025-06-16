@@ -37,6 +37,12 @@ export class SpectrumAccordion {
   @Prop() sound: boolean = false;
 
   /**
+   * Whether to enable haptic feedback
+   * Default: false
+   */
+  @Prop() haptic: boolean = false;
+
+  /**
    * Whether to show content in horizontal scroll container
    * Default: true
    */
@@ -140,6 +146,7 @@ export class SpectrumAccordion {
             outline={this.outline}
             label={this.label}
             sound={this.sound}
+            haptic={this.haptic}
             leadingIcon={this.isExpanded ? this.expandedIcon : this.collapsedIcon}
             onClick={this.handleToggle}
             selected={this.isExpanded}
