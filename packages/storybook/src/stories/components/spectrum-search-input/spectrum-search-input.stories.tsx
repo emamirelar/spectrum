@@ -13,7 +13,7 @@ interface SpectrumSearchInputArgs {
 }
 
 const meta = {
-  title: 'Components/SpectrumSearchInput',
+  title: 'Spectrum/Components/SpectrumSearchInput',
   tags: ['autodocs'],
   args: {
     maxLines: 4,

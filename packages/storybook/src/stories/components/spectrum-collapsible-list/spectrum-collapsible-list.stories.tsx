@@ -31,7 +31,7 @@ interface SpectrumCollapsibleListArgs {
 }
 
 const meta = {
-  title: 'Components/SpectrumCollapsibleList',
+  title: 'Spectrum/Components/SpectrumCollapsibleList',
   tags: ['autodocs'],
   args: {
     items: [

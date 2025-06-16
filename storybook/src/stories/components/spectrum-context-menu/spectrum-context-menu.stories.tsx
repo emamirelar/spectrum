@@ -30,7 +30,7 @@ interface SpectrumContextMenuArgs {
 
 // Define story meta
 const meta: Meta<SpectrumContextMenuArgs> = {
-  title: 'Components/SpectrumContextMenu',
+  title: 'Spectrum/Components/SpectrumContextMenu',
   argTypes: {
     actions: { control: 'object' },
     targetKey: { control: 'text' },

@@ -7,7 +7,7 @@ import type { SpectrumWallpaper } from "@unops-itg-npm/cpit-spectrum/src/compone
 // More on how to set up stories at: https://storybook.js.org/docs/web-components/writing-stories/introduction
 
 const meta = {
-  title: 'Components/SpectrumWallpaper',
+  title: 'Spectrum/Components/SpectrumWallpaper',
   component: 'spectrum-wallpaper',
   tags: ['autodocs'],
   render: (args) => {

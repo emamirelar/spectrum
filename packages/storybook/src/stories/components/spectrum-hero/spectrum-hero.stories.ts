@@ -118,7 +118,7 @@ const videoHeroSlides: HeroSlide[] = [
 ];
 
 const meta = {
-  title: 'Components/SpectrumHero',
+  title: 'Spectrum/Components/SpectrumHero',
   component: 'spectrum-hero',
   tags: ['autodocs'],
   parameters: {

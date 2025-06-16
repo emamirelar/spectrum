@@ -94,7 +94,7 @@ const largeCityOptions: SpectrumSelectOption[] = [
 ];
 
 const meta = {
-  title: 'Components/SpectrumSelect',
+  title: 'Spectrum/Components/SpectrumSelect',
   tags: ['autodocs'],
   parameters: {
     docs: {

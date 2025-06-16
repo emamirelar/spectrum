@@ -22,7 +22,7 @@ interface SpectrumChipArgs {
 }
 
 const meta = {
-  title: 'Components/SpectrumChip',
+  title: 'Spectrum/Components/SpectrumChip',
   tags: ['autodocs'],
   args: {
     variant: 'primary',

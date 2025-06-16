@@ -18,7 +18,7 @@ interface SpectrumAccordionArgs {
 }
 
 const meta: Meta<SpectrumAccordionArgs> = {
-  title: 'Components/SpectrumAccordion',
+  title: 'Spectrum/Components/SpectrumAccordion',
   component: 'spectrum-accordion',
   tags: ['autodocs'],
   parameters: {

@@ -16,7 +16,7 @@ interface SpectrumConversationPanelArgs {
 }
 
 const meta = {
-  title: 'Components/SpectrumConversationPanel',
+  title: 'Spectrum/Components/SpectrumConversationPanel',
   // TODO: for now we won't use autodocs but will in the future when we right a template
   tags: ['autodocs'],
   args: {
