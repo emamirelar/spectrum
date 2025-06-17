@@ -65,6 +65,8 @@ export class SpectrumConversationPanel {
   private hoverTimeout: NodeJS.Timeout | null = null;
   private audioElement: HTMLAudioElement | null = null;
   private isAudioLooping: boolean = false;
+  private previousMessageCount: number = 0;
+  private previousLoadingState: boolean = false;
 
   @Event() explorationSelected: EventEmitter<{ action: string; exploration: string }>;
   @Event({
@@ -180,6 +182,11 @@ export class SpectrumConversationPanel {
   componentDidLoad() {
     this.debugLog('Component loaded, updating messages and scrolling to latest');
     this.updateMessages(this.messages);
+    
+    // Initialize tracking values
+    this.previousMessageCount = this.messageArray.length;
+    this.previousLoadingState = this.loading;
+    
     // Use a longer delay to ensure all DOM elements are rendered
     setTimeout(() => {
       this.scrollToLatest();
@@ -199,10 +206,21 @@ export class SpectrumConversationPanel {
   }
 
   componentDidUpdate() {
-    // Also scroll to latest when component updates (after re-renders)
-    setTimeout(() => {
-      this.scrollToLatest();
-    }, 50);
+    // Only scroll to latest when messages change or loading state changes
+    // Don't scroll on hover state changes or other UI state changes
+    const currentMessageCount = this.messageArray.length;
+    const currentLoadingState = this.loading;
+    
+    if (currentMessageCount !== this.previousMessageCount || 
+        currentLoadingState !== this.previousLoadingState) {
+      setTimeout(() => {
+        this.scrollToLatest();
+      }, 50);
+    }
+    
+    // Update tracked values
+    this.previousMessageCount = currentMessageCount;
+    this.previousLoadingState = currentLoadingState;
   }
 
   disconnectedCallback() {

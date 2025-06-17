@@ -850,6 +850,277 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
   `,
 };
 
+// Citation Hover Scroll Bug Test
+export const CitationHoverScrollTest: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    messages: `[
+      {
+        "message": "Can you explain quantum entanglement and its applications?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:00:00Z"
+      },
+      {
+        "message": "Quantum entanglement is a phenomenon where two particles become connected in such a way that measuring one instantly affects the other<sup>1</sup>. This occurs regardless of distance<cite>2</cite>. Applications include quantum computing<sup>3</sup>, quantum cryptography<cite>4</cite>, and quantum teleportation<sup>5</sup>.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:00:05Z",
+        "sources": [
+          {
+            "label": "Nature Physics - Quantum Entanglement Review",
+            "value": "https://www.nature.com/articles/nphys1338",
+            "snippet": "Comprehensive review of quantum entanglement phenomena and theoretical foundations.",
+            "number": "1"
+          },
+          {
+            "label": "Einstein-Podolsky-Rosen Paradox",
+            "value": "https://journals.aps.org/pr/abstract/10.1103/PhysRev.47.777",
+            "snippet": "Original paper describing the EPR paradox and quantum non-locality.",
+            "number": "2"
+          },
+          {
+            "label": "IBM Quantum Computing Research",
+            "value": "https://research.ibm.com/quantum-computing",
+            "snippet": "Latest developments in quantum computing using entangled qubits.",
+            "number": "3"
+          },
+          {
+            "label": "Quantum Cryptography Protocols",
+            "value": "https://arxiv.org/abs/quant-ph/0101098",
+            "snippet": "Secure communication protocols based on quantum key distribution.",
+            "number": "4"
+          },
+          {
+            "label": "Quantum Teleportation Experiments",
+            "value": "https://www.science.org/doi/10.1126/science.1253512",
+            "snippet": "Experimental demonstrations of quantum state teleportation.",
+            "number": "5"
+          }
+        ]
+      },
+      {
+        "message": "What are the practical challenges in quantum communication?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:01:00Z"
+      },
+      {
+        "message": "Quantum communication faces several challenges: decoherence limits transmission distance<sup>1</sup>, quantum states are fragile and easily disturbed<cite>2</cite>, current technology requires extremely low temperatures<sup>3</sup>, error rates increase with distance<cite>4</cite>, and scaling to large networks is complex<sup>5</sup>. Despite these challenges, progress is being made<cite>6</cite>.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:01:15Z",
+        "sources": [
+          {
+            "label": "Quantum Decoherence Studies",
+            "value": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.75.715",
+            "snippet": "Analysis of decoherence effects in quantum information systems.",
+            "number": "1"
+          },
+          {
+            "label": "Quantum State Fragility Research",
+            "value": "https://www.nature.com/articles/ncomms5732",
+            "snippet": "Environmental effects on quantum state preservation.",
+            "number": "2"
+          },
+          {
+            "label": "Cryogenic Quantum Systems",
+            "value": "https://aip.scitation.org/doi/10.1063/1.4905356",
+            "snippet": "Temperature requirements for quantum coherence maintenance.",
+            "number": "3"
+          },
+          {
+            "label": "Quantum Error Rate Analysis",
+            "value": "https://arxiv.org/abs/1809.10704",
+            "snippet": "Distance-dependent error rates in quantum communication channels.",
+            "number": "4"
+          },
+          {
+            "label": "Quantum Network Scaling",
+            "value": "https://www.nature.com/articles/s41566-018-0257-6",
+            "snippet": "Challenges in building large-scale quantum networks.",
+            "number": "5"
+          },
+          {
+            "label": "Recent Quantum Communication Advances",
+            "value": "https://science.sciencemag.org/content/372/6539/eabb2998",
+            "snippet": "Latest breakthroughs in quantum communication technology.",
+            "number": "6"
+          }
+        ],
+        "explorations": [
+          {
+            "label": "How do quantum repeaters work?",
+            "value": "How do quantum repeaters extend quantum communication range?"
+          }
+        ]
+      },
+      {
+        "message": "Tell me about quantum internet prospects",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:02:00Z"
+      },
+      {
+        "message": "The quantum internet represents the future of secure communication<sup>1</sup>. China has demonstrated quantum satellite communication<cite>2</cite>, Europe is building quantum infrastructure<sup>3</sup>, and the US is investing heavily in research<cite>4</cite>. Applications include unhackable communications<sup>5</sup>, distributed quantum computing<cite>6</cite>, and quantum sensor networks<sup>7</sup>.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:02:25Z",
+        "sources": [
+          {
+            "label": "Quantum Internet Vision Paper",
+            "value": "https://www.nature.com/articles/s41586-018-0200-5",
+            "snippet": "Roadmap for developing a global quantum internet.",
+            "number": "1"
+          },
+          {
+            "label": "China Quantum Satellite Program",
+            "value": "https://www.nature.com/articles/nature23675",
+            "snippet": "Micius quantum satellite achievements and capabilities.",
+            "number": "2"
+          },
+          {
+            "label": "European Quantum Flagship",
+            "value": "https://qt.eu/",
+            "snippet": "EU's billion-euro quantum technology initiative.",
+            "number": "3"
+          },
+          {
+            "label": "US National Quantum Initiative",
+            "value": "https://www.quantum.gov/",
+            "snippet": "American strategy for quantum information science leadership.",
+            "number": "4"
+          },
+          {
+            "label": "Quantum Cryptography Security",
+            "value": "https://arxiv.org/abs/1402.1385",
+            "snippet": "Information-theoretic security of quantum communication.",
+            "number": "5"
+          },
+          {
+            "label": "Distributed Quantum Computing",
+            "value": "https://www.nature.com/articles/s41534-019-0146-y",
+            "snippet": "Networked quantum processors for enhanced computation.",
+            "number": "6"
+          },
+          {
+            "label": "Quantum Sensor Networks",
+            "value": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.89.035002",
+            "snippet": "Quantum-enhanced sensing and metrology networks.",
+            "number": "7"
+          }
+        ]
+      },
+      {
+        "message": "What about quantum computing hardware requirements?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:03:00Z"
+      },
+      {
+        "message": "Quantum computers require extreme conditions: superconducting qubits need temperatures near absolute zero<sup>1</sup>, trapped ions require ultra-high vacuum<cite>2</cite>, photonic systems need precise lasers<sup>3</sup>, and all systems require extensive error correction<cite>4</cite>. The infrastructure is complex<sup>5</sup> but progress continues<cite>6</cite>.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:03:20Z",
+        "sources": [
+          {
+            "label": "Superconducting Qubit Physics",
+            "value": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.73.357",
+            "snippet": "Physics of superconducting circuits for quantum computing.",
+            "number": "1"
+          },
+          {
+            "label": "Trapped Ion Quantum Computing",
+            "value": "https://www.nature.com/articles/nphys1453",
+            "snippet": "Ion trap systems for quantum information processing.",
+            "number": "2"
+          },
+          {
+            "label": "Photonic Quantum Computing",
+            "value": "https://www.nature.com/articles/nphoton.2017.95",
+            "snippet": "Light-based quantum computing architectures.",
+            "number": "3"
+          },
+          {
+            "label": "Quantum Error Correction",
+            "value": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.87.307",
+            "snippet": "Methods for correcting quantum computation errors.",
+            "number": "4"
+          },
+          {
+            "label": "Quantum Computing Infrastructure",
+            "value": "https://ieeexplore.ieee.org/document/8586887",
+            "snippet": "Engineering challenges in quantum computer systems.",
+            "number": "5"
+          },
+          {
+            "label": "Quantum Hardware Progress",
+            "value": "https://www.nature.com/articles/s41586-019-1666-5",
+            "snippet": "Recent advances in quantum processor development.",
+            "number": "6"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'Quantum Technologies - Citation Hover Test',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      },
+      {
+        "label": "Export", 
+        "icon": "download",
+        "value": "export"
+      }
+    ]`,
+    sources: `[]`,
+    loading: false,
+    sound: false,
+    debug: true
+  },
+  render: (args) => html`
+    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
+      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff3cd; border-radius: 6px; border-left: 4px solid #ffc107;">
+        <h3 style="margin: 0 0 0.5rem 0; color: #856404;">🐛 Citation Hover Scroll Bug Test</h3>
+        <p style="margin: 0; color: #856404; font-size: 0.875rem;">
+          <strong>Test the scroll behavior fix:</strong><br>
+          • Scroll down in the conversation panel<br>
+          • <strong>Hover over citation chips</strong> (like <code>¹</code> and <code>²</code>) in the messages<br>
+          • <strong>Verify that hovering does NOT cause unwanted scrolling</strong><br>
+          • The panel should maintain its scroll position during hover events<br>
+          • Debug mode is enabled to show detailed logging in browser console
+        </p>
+      </div>
+      
+      <spectrum-conversation-panel
+        .messages=${args.messages}
+        .conversationtitle=${args.conversationtitle}
+        .actions=${args.actions}
+        .sources=${args.sources}
+        .loading=${args.loading}
+        .sound=${args.sound}
+        .debug=${args.debug}
+        @action=${(e: CustomEvent) => action('Action')(e.detail)}
+        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+      ></spectrum-conversation-panel>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #d1ecf1; border-radius: 6px; border-left: 4px solid #bee5eb;">
+        <p style="margin: 0; color: #0c5460; font-size: 0.875rem;">
+          <strong>🔧 Bug Fix Details:</strong><br>
+          • <strong>Before:</strong> Hovering citations triggered <code>componentDidUpdate()</code> → <code>scrollToLatest()</code><br>
+          • <strong>After:</strong> <code>componentDidUpdate()</code> only scrolls when messages change or loading state changes<br>
+          • <strong>Fix:</strong> Added tracking for <code>messageCount</code> and <code>loadingState</code> to prevent unnecessary scrolling<br>
+          • <strong>Expected:</strong> Citations hover smoothly without affecting scroll position<br>
+          • Both <code>&lt;sup&gt;</code> and <code>&lt;cite&gt;</code> tags are converted to chips
+        </p>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Test story for verifying the citation hover scroll bug fix. Hover over citation chips and verify the scroll position remains stable.',
+      },
+    },
+  },
+};
+
 // Sound Support Demo
 export const SoundSupport: StoryObj<SpectrumConversationPanelArgs> = {
   args: {

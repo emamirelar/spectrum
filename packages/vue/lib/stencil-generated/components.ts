@@ -14,6 +14,7 @@ export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccor
   'collapsedIcon',
   'expandedIcon',
   'sound',
+  'haptic',
   'horizontalScroll',
   'disabled',
   'variant',
@@ -23,6 +24,35 @@ export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccor
   'accordionToggle'
 ], [
   'accordionToggle'
+]);
+
+
+export const SpectrumAppLayout = /*@__PURE__*/ defineContainer<JSX.SpectrumAppLayout>('spectrum-app-layout', undefined, [
+  'headerHeight',
+  'footerHeight',
+  'sidebarExpandedWidth',
+  'sidebarCollapsedWidth',
+  'sidebarExpanded',
+  'sidebarCollapsible',
+  'sidebarPosition',
+  'showHeader',
+  'headerTitle',
+  'showLogo',
+  'logoSrc',
+  'logoAlt',
+  'showProfile',
+  'profileText',
+  'showFooter',
+  'responsive',
+  'breakpoint',
+  'collapseMobile',
+  'gap',
+  'debug',
+  'sidebarToggle',
+  'profileAction'
+], [
+  'sidebarToggle',
+  'profileAction'
 ]);
 
 
@@ -44,6 +74,7 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'showRightIcon',
   'rightIcon',
   'sound',
+  'haptic',
   'state',
   'buttonAction'
 ], [
@@ -65,9 +96,26 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
   'trailingIcon',
   'showTrailingIcon',
   'sound',
+  'haptic',
   'chipAction'
 ], [
   'chipAction'
+]);
+
+
+export const SpectrumCluster = /*@__PURE__*/ defineContainer<JSX.SpectrumCluster>('spectrum-cluster', undefined, [
+  'spacing',
+  'align',
+  'justify',
+  'wrap',
+  'noWrap',
+  'direction',
+  'responsive',
+  'breakpoint',
+  'stackBelow',
+  'fullWidth',
+  'centerContainer',
+  'debug'
 ]);
 
 
@@ -88,6 +136,20 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'contractAction',
   'contextAction',
   'itemRenamed'
+]);
+
+
+export const SpectrumContainer = /*@__PURE__*/ defineContainer<JSX.SpectrumContainer>('spectrum-container', undefined, [
+  'size',
+  'maxWidth',
+  'padding',
+  'paddingX',
+  'paddingY',
+  'centered',
+  'centerContent',
+  'responsive',
+  'fullWidthMobile',
+  'debug'
 ]);
 
 
@@ -120,6 +182,52 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'explore',
   'sourceClick',
   'titleChanged'
+]);
+
+
+export const SpectrumFlex = /*@__PURE__*/ defineContainer<JSX.SpectrumFlex>('spectrum-flex', undefined, [
+  'direction',
+  'wrap',
+  'justify',
+  'align',
+  'alignContent',
+  'gap',
+  'rowGap',
+  'columnGap',
+  'inline',
+  'fullHeight',
+  'fullWidth',
+  'responsive',
+  'breakpoint',
+  'mobileDirection',
+  'debug'
+]);
+
+
+export const SpectrumGrid = /*@__PURE__*/ defineContainer<JSX.SpectrumGrid>('spectrum-grid', undefined, [
+  'columns',
+  'minColumnWidth',
+  'autoColumns',
+  'rows',
+  'minRowHeight',
+  'autoRows',
+  'areas',
+  'gap',
+  'rowGap',
+  'columnGap',
+  'alignItems',
+  'justifyItems',
+  'alignContent',
+  'justifyContent',
+  'autoFit',
+  'autoFill',
+  'responsive',
+  'breakpoint',
+  'mobileColumns',
+  'fullHeight',
+  'fullWidth',
+  'inline',
+  'debug'
 ]);
 
 
@@ -265,6 +373,37 @@ export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>(
   'searchChange',
   'dropdownOpen',
   'dropdownClose'
+]);
+
+
+export const SpectrumSidebar = /*@__PURE__*/ defineContainer<JSX.SpectrumSidebar>('spectrum-sidebar', undefined, [
+  'position',
+  'sidebarWidth',
+  'minSidebarWidth',
+  'maxSidebarWidth',
+  'gap',
+  'responsive',
+  'breakpoint',
+  'collapseBelow',
+  'stackMobile',
+  'collapsible',
+  'collapsed',
+  'overlay',
+  'fullHeight',
+  'debug'
+]);
+
+
+export const SpectrumStack = /*@__PURE__*/ defineContainer<JSX.SpectrumStack>('spectrum-stack', undefined, [
+  'direction',
+  'spacing',
+  'align',
+  'justify',
+  'wrap',
+  'reverse',
+  'responsive',
+  'breakpoint',
+  'debug'
 ]);
 
 

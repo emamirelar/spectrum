@@ -18,6 +18,7 @@ Supports leading/trailing icons, selection states, and various interactive behav
 | `action`           | `action`             |             | `string`                                                                      | `''`        |
 | `debug`            | `debug`              |             | `boolean`                                                                     | `false`     |
 | `disabled`         | `disabled`           |             | `boolean`                                                                     | `false`     |
+| `haptic`           | `haptic`             |             | `boolean`                                                                     | `false`     |
 | `label`            | `label`              |             | `string`                                                                      | `''`        |
 | `leadingIcon`      | `leading-icon`       |             | `string`                                                                      | `''`        |
 | `outline`          | `outline`            |             | `boolean`                                                                     | `false`     |

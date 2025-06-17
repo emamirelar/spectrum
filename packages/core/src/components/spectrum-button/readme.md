@@ -20,6 +20,7 @@ Supports icons, text, and various interactive states.
 | `customStyle`      | `custom-style`      |             | `{ [key: string]: string; }`                                                                      | `{}`        |
 | `debug`            | `debug`             |             | `boolean`                                                                                         | `false`     |
 | `disabled`         | `disabled`          |             | `boolean`                                                                                         | `false`     |
+| `haptic`           | `haptic`            |             | `boolean`                                                                                         | `false`     |
 | `iconOnly`         | `icon-only`         |             | `boolean`                                                                                         | `false`     |
 | `leftIcon`         | `left-icon`         |             | `string`                                                                                          | `''`        |
 | `minimalAnimation` | `minimal-animation` |             | `boolean`                                                                                         | `false`     |

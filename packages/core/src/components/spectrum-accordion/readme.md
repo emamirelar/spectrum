@@ -15,6 +15,7 @@
 | `disabled`         | `disabled`          | Whether the accordion should be disabled Default: false              | `boolean`                  | `false`                                                      |
 | `expanded`         | `expanded`          | Whether the accordion is expanded Default: false                     | `boolean`                  | `false`                                                      |
 | `expandedIcon`     | `expanded-icon`     | The icon to show when expanded Default: 'arrow_drop_up'              | `string`                   | `'arrow_drop_up'`                                            |
+| `haptic`           | `haptic`            | Whether to enable haptic feedback Default: false                     | `boolean`                  | `false`                                                      |
 | `horizontalScroll` | `horizontal-scroll` | Whether to show content in horizontal scroll container Default: true | `boolean`                  | `true`                                                       |
 | `label`            | `label`             | The label for the accordion trigger Default: 'Dive Deeper'           | `string`                   | `'Dive Deeper'`                                              |
 | `outline`          | `outline`           | Whether the trigger chip should be outlined Default: true            | `boolean`                  | `true`                                                       |
