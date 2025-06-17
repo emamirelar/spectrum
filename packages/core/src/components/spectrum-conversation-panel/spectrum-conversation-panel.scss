@@ -437,6 +437,123 @@ spectrum-conversation-panel .source-hover-overlay {
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
     }
   }
+  
+  /* Grouped sources container */
+  .grouped-sources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--conversation-panel-spacing-small) var(--conversation-panel-spacing-small);
+    max-width: 520px; /* Slightly wider to accommodate regular grid */
+    padding: 0;
+    margin: 0;
+    
+    .content-card.hover-card.grouped-card {
+      /* Fixed dimensions for consistent layout */
+      width: 100% !important;
+      height: 120px !important; /* Fixed height for all cards */
+      margin: 0 !important; /* Force no margins */
+      padding: 12px !important;
+      animation: fadeInUp 0.2s ease-out;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--conversation-panel-outline-variant);
+      text-decoration: none;
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out !important; /* Include transform for hover animation */
+      box-sizing: border-box !important;
+      position: static !important; /* Use static positioning to avoid stacking context issues */
+      
+      /* Hover effects for individual grouped cards - match single card behavior */
+      &:hover {
+        transform: translateY(-2px) !important; /* Same as single cards */
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2) !important; /* Same as single cards */
+        /* No background change - same as single cards */
+        position: static !important; /* Keep static positioning */
+        margin: 0 !important; /* Force no margin changes */
+        width: 100% !important; /* Keep width */
+        height: 120px !important; /* Keep height */
+        /* Remove all z-index changes to prevent stacking context recalculation */
+      }
+      
+      /* Layout for card content */
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      
+      /* Smaller number badge for grouped cards - force perfect circle */
+      .number {
+        width: 20px !important;
+        height: 20px !important;
+        min-width: 20px !important;
+        min-height: 20px !important;
+        max-width: 20px !important;
+        max-height: 20px !important;
+        font-size: calc(var(--conversation-panel-font-size-small) * 0.9) !important;
+        line-height: 1 !important;
+        flex: 0 0 20px !important;
+        flex-shrink: 0 !important;
+        flex-grow: 0 !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        aspect-ratio: 1 / 1 !important;
+        box-sizing: border-box !important;
+        background: var(--conversation-panel-primary) !important;
+        color: var(--conversation-panel-on-primary) !important;
+        margin-top: 2px; /* Slight alignment adjustment */
+      }
+      
+      /* Compact content for grouped cards */
+      .card-content {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        overflow: hidden;
+        
+        .subtitle {
+          font-size: calc(var(--conversation-panel-font-size-small) * 0.85);
+          line-height: 1.2;
+          color: var(--conversation-panel-on-surface-variant);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin: 0;
+        }
+        
+        .title {
+          font-size: calc(var(--conversation-panel-font-size-small) * 0.95);
+          line-height: 1.3;
+          font-weight: var(--conversation-panel-font-weight-medium);
+          color: var(--conversation-panel-on-surface);
+          margin: 0;
+          
+          /* Limit title to 2 lines */
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          max-height: 2.6em; /* Approximately 2 lines */
+        }
+        
+        .snippet {
+          font-size: calc(var(--conversation-panel-font-size-small) * 0.8);
+          line-height: 1.25;
+          color: var(--conversation-panel-on-surface-variant);
+          margin: 0;
+          flex: 1; /* Take remaining space */
+          
+          /* Limit snippet to remaining space */
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+  }
 }
 
 @keyframes fadeInUp {
@@ -551,6 +668,7 @@ spectrum-conversation-panel .message-content {
     vertical-align: baseline;
     display: inline-flex;
     cursor: pointer;
+    --chip-padding: var(--spectrum-sys-spacing-xl, 3rem);
   }
 }
 
@@ -564,6 +682,7 @@ spectrum-conversation-panel .message-content-with-chips {
     vertical-align: baseline;
     display: inline-flex;
     cursor: pointer;
+    --chip-padding: var(--spectrum-sys-spacing-xl, 3rem);
   }
   
   /* Ensure text spans display inline */

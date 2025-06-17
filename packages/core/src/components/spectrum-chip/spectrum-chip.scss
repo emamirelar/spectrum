@@ -224,30 +224,30 @@
 
   // Size variants
   &--extra-small {
-    --chip-font-size: 10px;
+    --chip-font-size: var(--spectrum-sys-typescale-body-xs-size, 10px);
     --chip-min-height: 1rem;
-    --chip-padding: 4px;
-    --chip-gap: 2px;
+    --chip-padding: var(--spectrum-sys-spacing, 1rem);
+    --chip-gap: var(--spectrum-sys-spacing-xs, 0.25rem);
     --chip-icon-size: 0.75em;
   }
 
   &--small {
-    --chip-font-size: 12px;
+    --chip-font-size: var(--spectrum-sys-typescale-body-small-size, 12px);
     --chip-min-height: 1.25rem;
-    --chip-padding: 6px;
-    --chip-gap: 3px;
+    --chip-padding: var(--spectrum-sys-spacing-small, 0.5rem);
+    --chip-gap: var(--spectrum-sys-spacing-xs, 0.25rem);
     --chip-icon-size: 1em;
   }
 
   &--medium {
-    // Default sizes (already defined in root)
+    // Default sizes (already defined in root using Spectrum tokens)
   }
 
   &--large {
-    --chip-font-size: 18px;
+    --chip-font-size: var(--spectrum-sys-typescale-body-large-size, 18px);
     --chip-min-height: 2.25rem;
-    --chip-padding: 12px;
-    --chip-gap: 6px;
+    --chip-padding: var(--spectrum-sys-spacing, 1rem);
+    --chip-gap: var(--spectrum-sys-spacing-small, 0.5rem);
     --chip-icon-size: 1.5em;
   }
 } 

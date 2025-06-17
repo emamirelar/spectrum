@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { action } from '@storybook/addon-actions';
 
@@ -248,27 +249,49 @@ export default meta;
 
 export const Default: StoryObj<SpectrumConversationPanelArgs> = {
   render: (args) => html`
-    <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
-      <spectrum-conversation-panel
-        .messages=${args.messages}
-        .conversationtitle=${args.conversationtitle}
-        .actions=${args.actions}
-        .sources=${args.sources}
-        .loading=${args.loading}
-        .sound=${args.sound}
-        .debug=${args.debug}
-        @action=${(e: CustomEvent) => action('Action')(e.detail)}
-        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
-        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
-        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
-        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
-      ></spectrum-conversation-panel>
-    </div>
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 2rem; position: relative; background: var(--spectrum-sys-color-background, #f6f6f6);">
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          .debug=${args.debug}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+      </div>
+    </spectrum-theme>
   `,
 };
 
 // Scrolling Behavior - Many Messages for Testing
 export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
+  render: (args) => html`
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 2rem; position: relative; background: var(--spectrum-sys-color-background, #f6f6f6);">
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          .debug=${args.debug}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+      </div>
+    </spectrum-theme>
+  `,
   args: {
     messages: `[
       {
@@ -551,44 +574,7 @@ export const ScrollingBehavior: StoryObj<SpectrumConversationPanelArgs> = {
       }
     ]`,
     loading: false
-  },
-  render: (args) => html`
-    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
-      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Internal Scrolling Behavior Test</h3>
-        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
-          This panel contains <strong>24 messages</strong> (12 requests + 12 responses) and is constrained to 350px height 
-          to force internal scrolling. Test the scrolling behavior within the conversation panel.
-        </p>
-      </div>
-      
-      <spectrum-conversation-panel
-        
-        .messages=${args.messages}
-        .conversationtitle=${args.conversationtitle}
-        .actions=${args.actions}
-        .sources=${args.sources}
-        .loading=${args.loading}
-        .sound=${args.sound}
-        @action=${(e: CustomEvent) => action('Action')(e.detail)}
-        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
-        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
-        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
-        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
-      ></spectrum-conversation-panel>
-      
-      <div style="margin-top: 1rem; padding: 1rem; background: #e7f3ff; border-radius: 6px; border-left: 4px solid #007bff;">
-        <p style="margin: 0; color: #004085; font-size: 0.875rem;">
-          <strong>💡 Test Instructions:</strong><br>
-          • The conversation panel above is constrained to 350px height<br>
-          • Scroll within the panel to see all 24 messages<br>
-          • Test scrolling performance and smoothness<br>
-          • Try clicking sources and explorations while scrolled<br>
-          • Check if scroll position is maintained during interactions
-        </p>
-      </div>
-    </div>
-  `,
+  }
 };
 
 // Sources Horizontal Scrolling Demo
@@ -699,40 +685,42 @@ export const SourcesScrollingDemo: StoryObj<SpectrumConversationPanelArgs> = {
     loading: false
   },
   render: (args) => html`
-    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
-      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Sources Horizontal Scrolling Demo</h3>
-        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
-          This demo showcases <strong>10 numbered sources</strong> that scroll horizontally. Each source has an identifying number
-          for easy reference. Test the horizontal scrolling behavior in the sources section.
-        </p>
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 1rem; position: relative; background: var(--spectrum-sys-color-surface-variant, #f8f9fa); border: 1px solid var(--spectrum-sys-color-outline-variant, #e9ecef); border-radius: var(--spectrum-sys-shape-corner-large, 8px);">
+        <div style="margin-bottom: 1rem; padding: 1rem; background: var(--spectrum-sys-color-surface, #fff); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); box-shadow: var(--spectrum-sys-elevation-2, 0 2px 4px rgba(0,0,0,0.1));">
+          <h3 style="margin: 0 0 var(--spectrum-sys-spacing-small, 0.5rem) 0; color: var(--spectrum-sys-color-on-surface, #495057);">Sources Horizontal Scrolling Demo</h3>
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant, #6c757d); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            This demo showcases <strong>10 numbered sources</strong> that scroll horizontally. Each source has an identifying number
+            for easy reference. Test the horizontal scrolling behavior in the sources section.
+          </p>
+        </div>
+        
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing, 1rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-primary-container, #e7f3ff); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-primary, #007bff);">
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-primary-container, #004085); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            <strong>💡 Demo Features:</strong><br>
+            • Each source has a numbered identifier (1-10)<br>
+            • Sources scroll horizontally when expanded<br>
+            • Click on "Sources and related content" to expand<br>
+            • Scroll through sources using mouse or touch<br>
+            • Click any source to test the sourceClick event
+          </p>
+        </div>
       </div>
-      
-      <spectrum-conversation-panel
-        .messages=${args.messages}
-        .conversationtitle=${args.conversationtitle}
-        .actions=${args.actions}
-        .sources=${args.sources}
-        .loading=${args.loading}
-        .sound=${args.sound}
-        @action=${(e: CustomEvent) => action('Action')(e.detail)}
-        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
-        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
-        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
-        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
-      ></spectrum-conversation-panel>
-      
-      <div style="margin-top: 1rem; padding: 1rem; background: #e7f3ff; border-radius: 6px; border-left: 4px solid #007bff;">
-        <p style="margin: 0; color: #004085; font-size: 0.875rem;">
-          <strong>💡 Demo Features:</strong><br>
-          • Each source has a numbered identifier (1-10)<br>
-          • Sources scroll horizontally when expanded<br>
-          • Click on "Sources and related content" to expand<br>
-          • Scroll through sources using mouse or touch<br>
-          • Click any source to test the sourceClick event
-        </p>
-      </div>
-    </div>
+    </spectrum-theme>
   `,
 };
 
@@ -812,41 +800,43 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
     debug: false
   },
   render: (args) => html`
-    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
-      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Source Citations with Chips Demo</h3>
-        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
-          This demo shows <strong>inline source citations</strong> using both <code>&lt;sup&gt;</code> and <code>&lt;cite&gt;</code> tags that are automatically converted to 
-          <strong>extra-small spectrum-chip</strong> components. Hover over chips on desktop or tap on mobile to see source details.
-        </p>
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 1rem; position: relative; background: var(--spectrum-sys-color-surface-variant, #f8f9fa); border: 1px solid var(--spectrum-sys-color-outline-variant, #e9ecef); border-radius: var(--spectrum-sys-shape-corner-large, 8px);">
+        <div style="margin-bottom: 1rem; padding: 1rem; background: var(--spectrum-sys-color-surface, #fff); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); box-shadow: var(--spectrum-sys-elevation-2, 0 2px 4px rgba(0,0,0,0.1));">
+          <h3 style="margin: 0 0 var(--spectrum-sys-spacing-small, 0.5rem) 0; color: var(--spectrum-sys-color-on-surface, #495057);">Source Citations with Chips Demo</h3>
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant, #6c757d); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            This demo shows <strong>inline source citations</strong> using both <code>&lt;sup&gt;</code> and <code>&lt;cite&gt;</code> tags that are automatically converted to 
+            <strong>extra-small spectrum-chip</strong> components. Hover over chips on desktop or tap on mobile to see source details.
+          </p>
+        </div>
+        
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          .debug=${args.debug}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing, 1rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-primary-container, #e7f3ff); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-primary, #007bff);">
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-primary-container, #004085); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            <strong>💡 New Features:</strong><br>
+            • <code>&lt;sup&gt;1&lt;/sup&gt;</code> and <code>&lt;cite&gt;2&lt;/cite&gt;</code> tags automatically become extra-small chips<br>
+            • <strong>Desktop:</strong> Hover over chips to see source details<br>
+            • <strong>Mobile:</strong> Tap chips to see source card slide up from bottom<br>
+            • Chips show corresponding source information from the sources array<br>
+            • Click chips to emit sourceClick events with message context
+          </p>
+        </div>
       </div>
-      
-      <spectrum-conversation-panel
-        .messages=${args.messages}
-        .conversationtitle=${args.conversationtitle}
-        .actions=${args.actions}
-        .sources=${args.sources}
-        .loading=${args.loading}
-        .sound=${args.sound}
-        .debug=${args.debug}
-        @action=${(e: CustomEvent) => action('Action')(e.detail)}
-        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
-        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
-        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
-        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
-      ></spectrum-conversation-panel>
-      
-      <div style="margin-top: 1rem; padding: 1rem; background: #e7f3ff; border-radius: 6px; border-left: 4px solid #007bff;">
-        <p style="margin: 0; color: #004085; font-size: 0.875rem;">
-          <strong>💡 New Features:</strong><br>
-          • <code>&lt;sup&gt;1&lt;/sup&gt;</code> and <code>&lt;cite&gt;2&lt;/cite&gt;</code> tags automatically become extra-small chips<br>
-          • <strong>Desktop:</strong> Hover over chips to see source details<br>
-          • <strong>Mobile:</strong> Tap chips to see source card slide up from bottom<br>
-          • Chips show corresponding source information from the sources array<br>
-          • Click chips to emit sourceClick events with message context
-        </p>
-      </div>
-    </div>
+    </spectrum-theme>
   `,
 };
 
@@ -1072,45 +1062,47 @@ export const CitationHoverScrollTest: StoryObj<SpectrumConversationPanelArgs> = 
     debug: true
   },
   render: (args) => html`
-    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
-      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff3cd; border-radius: 6px; border-left: 4px solid #ffc107;">
-        <h3 style="margin: 0 0 0.5rem 0; color: #856404;">🐛 Citation Hover Scroll Bug Test</h3>
-        <p style="margin: 0; color: #856404; font-size: 0.875rem;">
-          <strong>Test the scroll behavior fix:</strong><br>
-          • Scroll down in the conversation panel<br>
-          • <strong>Hover over citation chips</strong> (like <code>¹</code> and <code>²</code>) in the messages<br>
-          • <strong>Verify that hovering does NOT cause unwanted scrolling</strong><br>
-          • The panel should maintain its scroll position during hover events<br>
-          • Debug mode is enabled to show detailed logging in browser console
-        </p>
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 1rem; position: relative; background: var(--spectrum-sys-color-surface-variant, #f8f9fa); border: 1px solid var(--spectrum-sys-color-outline-variant, #e9ecef); border-radius: var(--spectrum-sys-shape-corner-large, 8px);">
+        <div style="margin-bottom: 1rem; padding: 1rem; background: var(--spectrum-sys-color-warning-container, #fff3cd); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-warning, #ffc107);">
+          <h3 style="margin: 0 0 var(--spectrum-sys-spacing-small, 0.5rem) 0; color: var(--spectrum-sys-color-on-warning-container, #856404);">🐛 Citation Hover Scroll Bug Test</h3>
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-warning-container, #856404); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            <strong>Test the scroll behavior fix:</strong><br>
+            • Scroll down in the conversation panel<br>
+            • <strong>Hover over citation chips</strong> (like <code>¹</code> and <code>²</code>) in the messages<br>
+            • <strong>Verify that hovering does NOT cause unwanted scrolling</strong><br>
+            • The panel should maintain its scroll position during hover events<br>
+            • Debug mode is enabled to show detailed logging in browser console
+          </p>
+        </div>
+        
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          .debug=${args.debug}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing, 1rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-info-container, #d1ecf1); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-info, #bee5eb);">
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-info-container, #0c5460); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            <strong>🔧 Bug Fix Details:</strong><br>
+            • <strong>Before:</strong> Hovering citations triggered <code>componentDidUpdate()</code> → <code>scrollToLatest()</code><br>
+            • <strong>After:</strong> <code>componentDidUpdate()</code> only scrolls when messages change or loading state changes<br>
+            • <strong>Fix:</strong> Added tracking for <code>messageCount</code> and <code>loadingState</code> to prevent unnecessary scrolling<br>
+            • <strong>Expected:</strong> Citations hover smoothly without affecting scroll position<br>
+            • Both <code>&lt;sup&gt;</code> and <code>&lt;cite&gt;</code> tags are converted to chips
+          </p>
+        </div>
       </div>
-      
-      <spectrum-conversation-panel
-        .messages=${args.messages}
-        .conversationtitle=${args.conversationtitle}
-        .actions=${args.actions}
-        .sources=${args.sources}
-        .loading=${args.loading}
-        .sound=${args.sound}
-        .debug=${args.debug}
-        @action=${(e: CustomEvent) => action('Action')(e.detail)}
-        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
-        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
-        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
-        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
-      ></spectrum-conversation-panel>
-      
-      <div style="margin-top: 1rem; padding: 1rem; background: #d1ecf1; border-radius: 6px; border-left: 4px solid #bee5eb;">
-        <p style="margin: 0; color: #0c5460; font-size: 0.875rem;">
-          <strong>🔧 Bug Fix Details:</strong><br>
-          • <strong>Before:</strong> Hovering citations triggered <code>componentDidUpdate()</code> → <code>scrollToLatest()</code><br>
-          • <strong>After:</strong> <code>componentDidUpdate()</code> only scrolls when messages change or loading state changes<br>
-          • <strong>Fix:</strong> Added tracking for <code>messageCount</code> and <code>loadingState</code> to prevent unnecessary scrolling<br>
-          • <strong>Expected:</strong> Citations hover smoothly without affecting scroll position<br>
-          • Both <code>&lt;sup&gt;</code> and <code>&lt;cite&gt;</code> tags are converted to chips
-        </p>
-      </div>
-    </div>
+    </spectrum-theme>
   `,
   parameters: {
     docs: {
@@ -1165,50 +1157,336 @@ export const SoundSupport: StoryObj<SpectrumConversationPanelArgs> = {
     debug: false
   },
   render: (args) => html`
-    <div style="height: 600px; padding: 1rem; position: relative; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px;">
-      <div style="margin-bottom: 1rem; padding: 1rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h3 style="margin: 0 0 0.5rem 0; color: #495057;">Sound Support Demo</h3>
-        <p style="margin: 0; color: #6c757d; font-size: 0.875rem;">
-          This demo shows the <strong>sound support</strong> for the conversation panel. 
-          Enable the <strong>loading</strong> control to hear the waiting sound loop. 
-          When sound is enabled, <strong>all buttons and chips</strong> will also play sounds when clicked.
-          Make sure your volume is on and sound is enabled!
-        </p>
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 1rem; position: relative; background: var(--spectrum-sys-color-surface-variant, #f8f9fa); border: 1px solid var(--spectrum-sys-color-outline-variant, #e9ecef); border-radius: var(--spectrum-sys-shape-corner-large, 8px);">
+        <div style="margin-bottom: 1rem; padding: 1rem; background: var(--spectrum-sys-color-surface, #fff); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); box-shadow: var(--spectrum-sys-elevation-2, 0 2px 4px rgba(0,0,0,0.1));">
+          <h3 style="margin: 0 0 var(--spectrum-sys-spacing-small, 0.5rem) 0; color: var(--spectrum-sys-color-on-surface, #495057);">Sound Support Demo</h3>
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant, #6c757d); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            This demo shows the <strong>sound support</strong> for the conversation panel. 
+            Enable the <strong>loading</strong> control to hear the waiting sound loop. 
+            When sound is enabled, <strong>all buttons and chips</strong> will also play sounds when clicked.
+            Make sure your volume is on and sound is enabled!
+          </p>
+        </div>
+        
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          .debug=${args.debug}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing, 1rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-success-container, #d4edda); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-success, #28a745);">
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-success-container, #155724); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);">
+            <strong>🔊 Sound Features:</strong><br>
+            • <strong>Enable "sound" control:</strong> Turns on audio support<br>
+            • <strong>Enable "loading" control:</strong> Plays waiting.mp3 in a loop<br>
+            • <strong>Click action buttons:</strong> Play button.mp3 sounds<br>
+            • <strong>Click "Dive Deeper" chip:</strong> Plays chip.mp3 sound<br>
+            • <strong>Disable "loading":</strong> Stops the audio<br>
+            • All interactive elements inherit the panel's sound setting<br>
+            • Proper cleanup when component unmounts
+          </p>
+        </div>
       </div>
-      
-      <spectrum-conversation-panel
-        .messages=${args.messages}
-        .conversationtitle=${args.conversationtitle}
-        .actions=${args.actions}
-        .sources=${args.sources}
-        .loading=${args.loading}
-        .sound=${args.sound}
-        .debug=${args.debug}
-        @action=${(e: CustomEvent) => action('Action')(e.detail)}
-        @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
-        @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
-        @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
-        @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
-      ></spectrum-conversation-panel>
-      
-      <div style="margin-top: 1rem; padding: 1rem; background: #d4edda; border-radius: 6px; border-left: 4px solid #28a745;">
-        <p style="margin: 0; color: #155724; font-size: 0.875rem;">
-          <strong>🔊 Sound Features:</strong><br>
-          • <strong>Enable "sound" control:</strong> Turns on audio support<br>
-          • <strong>Enable "loading" control:</strong> Plays waiting.mp3 in a loop<br>
-          • <strong>Click action buttons:</strong> Play button.mp3 sounds<br>
-          • <strong>Click "Dive Deeper" chip:</strong> Plays chip.mp3 sound<br>
-          • <strong>Disable "loading":</strong> Stops the audio<br>
-          • All interactive elements inherit the panel's sound setting<br>
-          • Proper cleanup when component unmounts
-        </p>
-      </div>
-    </div>
+    </spectrum-theme>
   `,
   parameters: {
     docs: {
       description: {
         story: 'Demonstrates sound support with looping waiting.mp3 during loading state. Enable both sound and loading controls to test the audio functionality.',
+      },
+    },
+  },
+};
+
+// Grouped Citations Demo
+export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    messages: `[
+      {
+        "id": "msg-001",
+        "message": "What are the major benefits of renewable energy?",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "id": "msg-002",
+        "message": "Renewable energy offers numerous benefits including environmental protection<sup>1</sup><sup>2</sup><sup>3</sup>, economic advantages<cite>4</cite>, and energy security<sup>5</sup>. The technology has advanced rapidly<cite>6</cite><cite>7</cite><cite>8</cite> in recent years, making it increasingly cost-effective<sup>9</sup>. Studies show that wind and solar power<sup>10</sup><sup>11</sup> are now the cheapest sources of electricity in many regions.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "EPA Environmental Benefits of Renewable Energy",
+            "value": "https://www.epa.gov/renewable-energy-benefits",
+            "snippet": "Renewable energy reduces greenhouse gas emissions and air pollution, improving public health and environmental quality.",
+            "number": "1"
+          },
+          {
+            "label": "IPCC Climate Change and Renewable Energy Report",
+            "value": "https://www.ipcc.ch/report/renewable-energy-sources",
+            "snippet": "Comprehensive analysis of renewable energy's role in climate change mitigation and sustainable development.",
+            "number": "2"
+          },
+          {
+            "label": "Nature Climate Change: Renewable Energy Impact",
+            "value": "https://www.nature.com/articles/nclimate3463",
+            "snippet": "Peer-reviewed research on the environmental impacts and benefits of renewable energy technologies.",
+            "number": "3"
+          },
+          {
+            "label": "International Economic Benefits of Renewables",
+            "value": "https://www.irena.org/publications/2019/Jan/Global-energy-transformation",
+            "snippet": "Economic analysis showing job creation, GDP growth, and cost savings from renewable energy transition.",
+            "number": "4"
+          },
+          {
+            "label": "Energy Security and Independence Report",
+            "value": "https://www.iea.org/reports/energy-security",
+            "snippet": "How renewable energy enhances national energy security and reduces dependence on fossil fuel imports.",
+            "number": "5"
+          },
+          {
+            "label": "Renewable Energy Technology Roadmap 2023",
+            "value": "https://www.irena.org/publications/2023/technology-roadmap",
+            "snippet": "Latest technological advances in solar, wind, hydro, and other renewable energy systems.",
+            "number": "6"
+          },
+          {
+            "label": "Solar Energy Innovation Report",
+            "value": "https://www.nrel.gov/docs/solar-innovations",
+            "snippet": "National Renewable Energy Laboratory's comprehensive report on solar technology breakthroughs.",
+            "number": "7"
+          },
+          {
+            "label": "Wind Power Technological Progress",
+            "value": "https://www.windpower.org/tech-progress-2023",
+            "snippet": "Analysis of recent improvements in wind turbine efficiency and capacity factors.",
+            "number": "8"
+          },
+          {
+            "label": "LCOE Analysis: Renewable vs Fossil Fuels",
+            "value": "https://www.lazard.com/insights/levelized-cost-of-energy",
+            "snippet": "Comprehensive cost analysis showing renewable energy is now the lowest-cost option in most markets.",
+            "number": "9"
+          },
+          {
+            "label": "Global Wind Energy Council Report",
+            "value": "https://gwec.net/global-wind-report-2023",
+            "snippet": "Statistics and analysis of global wind energy capacity, growth, and market trends.",
+            "number": "10"
+          },
+          {
+            "label": "Solar Power Europe Market Report",
+            "value": "https://www.solarpowereurope.org/market-report-2023",
+            "snippet": "European solar market analysis including cost trends, capacity additions, and policy impacts.",
+            "number": "11"
+          }
+        ],
+        "explorations": [
+          {
+            "label": "What are the main challenges facing renewable energy adoption?",
+            "value": "What are the main challenges facing renewable energy adoption?"
+          },
+          {
+            "label": "How do storage technologies support renewable energy?",
+            "value": "How do storage technologies support renewable energy?"
+          },
+          {
+            "label": "What policies best support renewable energy development?",
+            "value": "What policies best support renewable energy development?"
+          }
+        ]
+      },
+      {
+        "id": "msg-003",
+        "message": "Can you explain the different types of renewable energy sources?",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:01:00Z"
+      },
+      {
+        "id": "msg-004",
+        "message": "There are several major types of renewable energy sources:\\n\\n**Solar Energy**: Photovoltaic panels<sup>1</sup> and thermal systems<sup>2</sup> harness sunlight. **Wind Energy**: Onshore<cite>3</cite> and offshore<cite>4</cite><cite>5</cite> wind turbines generate electricity. **Hydropower**: Traditional dams<sup>6</sup> and run-of-river systems<sup>7</sup><sup>8</sup> use flowing water. **Geothermal**: Underground heat<cite>9</cite> powers turbines. **Biomass**: Organic materials<sup>10</sup> provide fuel and energy.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:01:15Z",
+        "sources": [
+          {
+            "label": "Solar Photovoltaic Technology Guide",
+            "value": "https://www.nrel.gov/pv/",
+            "snippet": "Comprehensive guide to photovoltaic technology, efficiency improvements, and installation best practices.",
+            "number": "1"
+          },
+          {
+            "label": "Solar Thermal Energy Systems",
+            "value": "https://www.energy.gov/eere/solar/solar-thermal-energy",
+            "snippet": "Overview of concentrating solar power and solar heating technologies for residential and industrial use.",
+            "number": "2"
+          },
+          {
+            "label": "Onshore Wind Energy Development",
+            "value": "https://www.energy.gov/eere/wind/onshore-wind",
+            "snippet": "Land-based wind energy systems, from small residential turbines to large utility-scale wind farms.",
+            "number": "3"
+          },
+          {
+            "label": "Offshore Wind Technology",
+            "value": "https://www.offshore-energy.biz/wind",
+            "snippet": "Ocean-based wind energy systems with higher capacity factors and stronger, more consistent winds.",
+            "number": "4"
+          },
+          {
+            "label": "Floating Offshore Wind Platforms",
+            "value": "https://www.floating-offshore-wind.com/",
+            "snippet": "Advanced floating wind turbine platforms that enable wind energy in deeper waters.",
+            "number": "5"
+          },
+          {
+            "label": "Hydroelectric Power Systems",
+            "value": "https://www.energy.gov/eere/water/hydroelectric-power",
+            "snippet": "Traditional dam-based hydroelectric generation, including pumped storage and environmental considerations.",
+            "number": "6"
+          },
+          {
+            "label": "Run-of-River Hydropower",
+            "value": "https://www.hydroworld.com/run-of-river",
+            "snippet": "Small-scale hydropower systems that don't require large dams, minimizing environmental impact.",
+            "number": "7"
+          },
+          {
+            "label": "Micro-Hydro Energy Systems",
+            "value": "https://www.micro-hydro-power.com/",
+            "snippet": "Small-scale hydroelectric systems for rural communities and distributed energy generation.",
+            "number": "8"
+          },
+          {
+            "label": "Geothermal Energy Association",
+            "value": "https://www.geothermal.org/",
+            "snippet": "Geothermal power generation from underground heat sources, including enhanced geothermal systems.",
+            "number": "9"
+          },
+          {
+            "label": "Biomass Energy Production",
+            "value": "https://www.energy.gov/eere/bioenergy/biomass-basics",
+            "snippet": "Converting organic materials like wood, agricultural waste, and dedicated energy crops into electricity and fuel.",
+            "number": "10"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'Grouped Citations Demo',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      },
+      {
+        "label": "Copy",
+        "icon": "content_copy",
+        "value": "copy"
+      }
+    ]`,
+    sources: `[]`,
+    loading: false,
+    sound: false,
+    debug: true
+  },
+  render: (args) => html`
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 1rem; position: relative; background: var(--spectrum-sys-color-surface-variant, #f8f9fa); border: 1px solid var(--spectrum-sys-color-outline-variant, #e9ecef); border-radius: var(--spectrum-sys-shape-corner-large, 8px);">
+        <div style="margin-bottom: 1rem; padding: 1.5rem; background: linear-gradient(135deg, var(--spectrum-sys-color-primary, #667eea) 0%, var(--spectrum-sys-color-secondary, #764ba2) 100%); color: var(--spectrum-sys-color-on-primary, white); border-radius: var(--spectrum-sys-shape-corner-large, 8px); box-shadow: var(--spectrum-sys-elevation-2, 0 4px 6px rgba(0,0,0,0.1));">
+          <h3 style="margin: 0 0 var(--spectrum-sys-spacing-small, 0.75rem) 0; font-size: var(--spectrum-sys-typescale-headline-small-size, 1.25rem); font-weight: var(--spectrum-sys-typescale-headline-small-weight, 600);">🔗 Grouped Citations Demo</h3>
+          <p style="margin: 0; opacity: 0.95; font-size: var(--spectrum-sys-typescale-body-small-size, 0.9rem); line-height: 1.5;">
+            <strong>This demonstrates the new grouped citation functionality:</strong><br>
+            • <strong>Adjacent citations</strong> (like <sup>1</sup><sup>2</sup><sup>3</sup>) are automatically grouped into chips showing "3 citations"<br>
+            • <strong>Single citations</strong> continue to show the source title as before<br>
+            • <strong>Hover over grouped chips</strong> to see individual cards for each citation<br>
+            • <strong>Mixed citation styles</strong> are supported: &lt;sup&gt; and &lt;cite&gt; tags both work<br>
+            • Debug mode is enabled for detailed console logging
+          </p>
+        </div>
+        
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          .debug=${args.debug}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing, 1rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-success-container, #e8f5e8); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-success, #28a745);">
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-success-container, #0d5016); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem); line-height: 1.5;">
+            <strong>✅ Citation Grouping Rules:</strong><br>
+            • <strong>Adjacent Check:</strong> Citations are grouped if separated only by whitespace, punctuation, or ≤3 characters<br>
+            • <strong>Single Citations:</strong> Show the source title (e.g., "EPA Environmental Benefits")<br>
+            • <strong>Grouped Citations:</strong> Show count (e.g., "3 citations") with stacked hover cards<br>
+            • <strong>Both Tag Types:</strong> &lt;sup&gt;1&lt;/sup&gt; and &lt;cite&gt;4&lt;/cite&gt; are processed identically<br>
+            • <strong>Mobile Support:</strong> Grouped citations work with mobile source cards<br>
+            • <strong>Event Emission:</strong> All citations emit the same sourceClick events
+          </p>
+        </div>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing-small, 0.5rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-warning-container, #fff3cd); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-warning, #ffc107);">
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-warning-container, #856404); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem); line-height: 1.5;">
+            <strong>🧪 Test Cases in this Demo:</strong><br>
+            • <strong>Message 1:</strong> &lt;sup&gt;1&lt;/sup&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;sup&gt;3&lt;/sup&gt; → "3 citations" group<br>
+            • <strong>Message 1:</strong> &lt;cite&gt;4&lt;/cite&gt; → single citation showing source title<br>
+            • <strong>Message 1:</strong> &lt;cite&gt;6&lt;/cite&gt;&lt;cite&gt;7&lt;/cite&gt;&lt;cite&gt;8&lt;/cite&gt; → "3 citations" group<br>
+            • <strong>Message 1:</strong> &lt;sup&gt;10&lt;/sup&gt;&lt;sup&gt;11&lt;/sup&gt; → "2 citations" group<br>
+            • <strong>Message 2:</strong> Mixed single and grouped citations throughout the text
+          </p>
+        </div>
+      </div>
+    </spectrum-theme>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+          Demonstrates the new grouped citation functionality where adjacent citations are automatically grouped together.
+          
+          ## Key Features Demonstrated:
+          
+          ### Automatic Grouping
+          - Citations like \`<sup>1</sup><sup>2</sup><sup>3</sup>\` become a single chip showing "3 citations"
+          - Works with both \`<sup>\` and \`<cite>\` tags
+          - Groups citations separated by whitespace, punctuation, or ≤3 characters
+          
+          ### Hover Behavior
+          - **Single citations**: Show individual source card with title, URL, and snippet
+          - **Grouped citations**: Show stacked cards for each citation in the group
+          - Each card in a group can be clicked individually
+          
+          ### Responsive Design
+          - Desktop: Hover overlay with multiple cards for groups
+          - Mobile: Tap to open full-screen source card (shows first source in group)
+          
+          ### Event Handling
+          - All citations emit \`sourceClick\` events with full source data
+          - Events include \`messageId\` for tracking which message the citation came from
+          - Maintains backward compatibility with existing citation handling
+          
+          ## Test the Functionality:
+          1. **Hover over grouped citations** (showing "X citations") to see multiple cards
+          2. **Hover over single citations** to see individual source cards  
+          3. **Click any citation** to emit sourceClick events (check Actions panel)
+          4. **Test on mobile** by resizing browser window below 768px width
+        `,
       },
     },
   },

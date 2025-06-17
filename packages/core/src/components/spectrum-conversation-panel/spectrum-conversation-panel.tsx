@@ -58,7 +58,8 @@ export class SpectrumConversationPanel {
   @State() expandedMessageId: string | null = null;
   @State() expandedAccordionType: 'explorations' | null = null;
   @State() messageArray: any[] = [];
-  @State() hoveredSourceChip: { messageId: string; sourceNumber: string; element: HTMLElement } | null = null;
+  @State() hoveredSourceChip: { messageId: string; sourceNumber: string; element: HTMLElement; sourceNumbers?: string[] } | null = null;
+  @State() clickedSourceChip: { messageId: string; sourceNumber: string; element: HTMLElement; sourceNumbers?: string[] } | null = null;
   @State() showMobileSourceCard: boolean = false;
   @State() mobileSourceData: any = null;
   private messageIdMap: Map<number, string> = new Map();
@@ -187,6 +188,9 @@ export class SpectrumConversationPanel {
     this.previousMessageCount = this.messageArray.length;
     this.previousLoadingState = this.loading;
     
+    // Add click outside listener for closing clicked source chips
+    document.addEventListener('click', this.handleDocumentClick);
+    
     // Use a longer delay to ensure all DOM elements are rendered
     setTimeout(() => {
       this.scrollToLatest();
@@ -237,6 +241,9 @@ export class SpectrumConversationPanel {
       clearTimeout(this.hoverTimeout);
       this.hoverTimeout = null;
     }
+    
+    // Remove document click listener
+    document.removeEventListener('click', this.handleDocumentClick);
   }
 
   /** 
@@ -494,58 +501,82 @@ export class SpectrumConversationPanel {
       supCount: supMatches.length 
     });
     
+    // Group adjacent citations
+    const citationGroups = this.groupAdjacentCitations(allMatches, htmlContent);
+    
     // Build an array of elements
     const elements: any[] = [];
     let lastIndex = 0;
     
-    allMatches.forEach((match) => {
-      const sourceNumber = match[1];
-      const matchStart = match.index!;
-      const matchEnd = matchStart + match[0].length;
+    citationGroups.forEach((group) => {
+      const groupStart = group.matches[0].index!;
+      const groupEnd = group.matches[group.matches.length - 1].index! + group.matches[group.matches.length - 1][0].length;
 
-      this.debugLog('Processing citation tag', { tagType: match.tagType, sourceNumber, matchStart, matchEnd });
-
-      // Find the corresponding source
-      const source = sources.find(s => 
-        s.number === sourceNumber || 
-        s.number === parseInt(sourceNumber) || 
-        s.number?.toString() === sourceNumber
-      );
-
-      if (!source) {
-        this.debugWarn('No matching source found for number', sourceNumber);
-        return; // Skip if no matching source found
-      }
-
-      this.debugLog('Found matching source', source);
-
-      // Add text before the sup tag
-      if (matchStart > lastIndex) {
-        const beforeText = htmlContent.substring(lastIndex, matchStart);
+      // Add text before the citation group
+      if (groupStart > lastIndex) {
+        const beforeText = htmlContent.substring(lastIndex, groupStart);
         if (beforeText.trim()) {
           elements.push(<span innerHTML={beforeText} />);
         }
       }
 
-      // Add the source chip  
-      elements.push(
-        <spectrum-chip
-          size="extra-small"
-          variant="secondary"
-          outline={true}
-          label={source.label}
-          sound={this.sound}
-          style={{ margin: '0 2px', verticalAlign: 'middle', display: 'inline-flex' }}
-          onMouseEnter={(e) => this.handleSourceChipHover(e, messageId, sourceNumber, source)}
-          onMouseLeave={() => this.handleSourceChipLeave()}
-          onClick={(e) => this.handleSourceChipClick(e, messageId, sourceNumber, source)}
-        />
-      );
+      if (group.matches.length === 1) {
+        // Single citation - render as before
+        const match = group.matches[0];
+        const sourceNumber = match[1];
+        const source = sources.find(s => 
+          s.number === sourceNumber || 
+          s.number === parseInt(sourceNumber) || 
+          s.number?.toString() === sourceNumber
+        );
 
-      lastIndex = matchEnd;
+        if (source) {
+          elements.push(
+            <spectrum-chip
+              size="extra-small"
+              variant="secondary"
+              outline={true}
+              label={source.label}
+              sound={this.sound}
+              style={{ margin: '0 2px', verticalAlign: 'middle', display: 'inline-flex' }}
+              onMouseEnter={(e) => this.handleSourceChipHover(e, messageId, sourceNumber, source)}
+              onMouseLeave={() => this.handleSourceChipLeave()}
+              onClick={(e) => this.handleSourceChipClick(e, messageId, sourceNumber, source)}
+            />
+          );
+        }
+      } else {
+        // Multiple adjacent citations - render as grouped chip
+        const sourceNumbers = group.matches.map(m => m[1]);
+        const validSources = sourceNumbers
+          .map(num => sources.find(s => 
+            s.number === num || 
+            s.number === parseInt(num) || 
+            s.number?.toString() === num
+          ))
+          .filter(Boolean);
+
+        if (validSources.length > 0) {
+          elements.push(
+            <spectrum-chip
+              size="extra-small"
+              variant="secondary"
+              outline={true}
+              label={`${validSources.length} citations`}
+              sound={this.sound}
+              style={{ margin: '0 2px', verticalAlign: 'middle', display: 'inline-flex' }}
+              onMouseEnter={(e) => this.handleGroupedSourceChipHover(e, messageId, sourceNumbers)}
+              onMouseLeave={() => this.handleSourceChipLeave()}
+              onClick={(e) => this.handleGroupedSourceChipClick(e, messageId, sourceNumbers, validSources)}
+            />
+          );
+        }
+      }
+
+      lastIndex = groupEnd;
     });
 
-    // Add remaining text after the last sup tag
+    // Add remaining text after the last citation group
     if (lastIndex < htmlContent.length) {
       const remainingText = htmlContent.substring(lastIndex);
       if (remainingText.trim()) {
@@ -557,6 +588,41 @@ export class SpectrumConversationPanel {
     
     // Return a div containing all elements
     return <div style={{ display: 'inline' }}>{elements}</div>;
+  }
+
+  /**
+   * Group adjacent citations together
+   */
+  private groupAdjacentCitations(matches: any[], htmlContent: string): { matches: any[] }[] {
+    if (matches.length === 0) return [];
+    
+    const groups: { matches: any[] }[] = [];
+    let currentGroup: any[] = [matches[0]];
+    
+    for (let i = 1; i < matches.length; i++) {
+      const currentMatch = matches[i];
+      const previousMatch = matches[i - 1];
+      
+      // Calculate the text between this citation and the previous one
+      const previousEnd = previousMatch.index! + previousMatch[0].length;
+      const currentStart = currentMatch.index!;
+      const textBetween = htmlContent.substring(previousEnd, currentStart);
+      
+      // Consider citations adjacent if there's only whitespace, punctuation, or very short text between them
+      const isAdjacent = /^[\s,;.!?\-–—]*$/.test(textBetween) || textBetween.length <= 3;
+      
+      if (isAdjacent) {
+        currentGroup.push(currentMatch);
+      } else {
+        groups.push({ matches: currentGroup });
+        currentGroup = [currentMatch];
+      }
+    }
+    
+    // Don't forget the last group
+    groups.push({ matches: currentGroup });
+    
+    return groups;
   }
 
   /**
@@ -584,13 +650,44 @@ export class SpectrumConversationPanel {
   }
 
   /**
+   * Handle grouped source chip hover
+   */
+  private handleGroupedSourceChipHover = (event: MouseEvent, messageId: string, sourceNumbers: string[]) => {
+    const target = event.target as HTMLElement;
+    
+    // Check if we're on mobile
+    if (window.innerWidth <= 768) {
+      return; // Don't show hover on mobile
+    }
+    
+    // Clear any existing timeout
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+    
+    this.hoveredSourceChip = {
+      messageId,
+      sourceNumber: sourceNumbers[0], // Use first source number as primary
+      sourceNumbers: sourceNumbers,
+      element: target
+    };
+  }
+
+  /**
    * Handle source chip leave
    */
   private handleSourceChipLeave = () => {
-    // Set a delay before hiding to allow user to hover over the card
-    this.hoverTimeout = setTimeout(() => {
+    // Only hide on leave if not clicked (clicked state persists)
+    if (!this.clickedSourceChip) {
+      // Set a delay before hiding to allow user to hover over the card
+      this.hoverTimeout = setTimeout(() => {
+        this.hoveredSourceChip = null;
+      }, 300); // 300ms delay
+    } else {
+      // If clicked, just clear hover state but keep overlay visible
       this.hoveredSourceChip = null;
-    }, 300); // 300ms delay
+    }
   }
 
   /**
@@ -607,13 +704,19 @@ export class SpectrumConversationPanel {
    * Handle source overlay leave
    */
   private handleSourceOverlayLeave = () => {
-    this.hoveredSourceChip = null;
+    // Only hide overlay if not clicked (clicked state persists)
+    if (!this.clickedSourceChip) {
+      this.hoveredSourceChip = null;
+    } else {
+      // If clicked, just clear hover state but keep overlay visible
+      this.hoveredSourceChip = null;
+    }
   }
 
   /**
    * Handle source chip click
    */
-  private handleSourceChipClick = (event: MouseEvent, messageId: string, _sourceNumber: string, source: any) => {
+  private handleSourceChipClick = (event: MouseEvent, messageId: string, sourceNumber: string, source: any) => {
     event.preventDefault();
     event.stopPropagation();
     
@@ -622,13 +725,90 @@ export class SpectrumConversationPanel {
       this.mobileSourceData = source;
       this.showMobileSourceCard = true;
     } else {
-      // On desktop, emit the source click event
+      // On desktop, toggle clicked state or emit the source click event
+      if (this.clickedSourceChip && 
+          this.clickedSourceChip.messageId === messageId && 
+          this.clickedSourceChip.sourceNumber === sourceNumber) {
+        // Already clicked - close it
+        this.clickedSourceChip = null;
+      } else {
+        // Toggle to show this chip's cards
+        this.clickedSourceChip = {
+          messageId,
+          sourceNumber,
+          element: event.target as HTMLElement
+        };
+      }
+      
+      // Also emit the source click event
       this.sourceClick.emit({
         action: 'sourceClick',
         label: source.label,
         value: source.value,
         messageId: messageId
       });
+    }
+  }
+
+  /**
+   * Handle grouped source chip click
+   */
+  private handleGroupedSourceChipClick = (event: MouseEvent, messageId: string, sourceNumbers: string[], sources: any[]) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    // Check if we're on mobile
+    if (window.innerWidth <= 768) {
+      // For mobile, show the first source in the group
+      if (sources.length > 0) {
+        this.mobileSourceData = sources[0];
+        this.showMobileSourceCard = true;
+      }
+    } else {
+      // On desktop, toggle clicked state for grouped chips
+      const primarySourceNumber = sourceNumbers[0];
+      if (this.clickedSourceChip && 
+          this.clickedSourceChip.messageId === messageId && 
+          this.clickedSourceChip.sourceNumber === primarySourceNumber) {
+        // Already clicked - close it
+        this.clickedSourceChip = null;
+      } else {
+        // Toggle to show this group's cards
+        this.clickedSourceChip = {
+          messageId,
+          sourceNumber: primarySourceNumber,
+          sourceNumbers: sourceNumbers,
+          element: event.target as HTMLElement
+        };
+      }
+      
+      // Also emit the source click event for the first source in the group
+      if (sources.length > 0) {
+        this.sourceClick.emit({
+          action: 'sourceClick',
+          label: sources[0].label,
+          value: sources[0].value,
+          messageId: messageId
+        });
+      }
+    }
+  }
+
+  /**
+   * Handle clicks outside of source cards to close them
+   */
+  private handleDocumentClick = (event: MouseEvent) => {
+    if (!this.clickedSourceChip) return;
+    
+    const target = event.target as HTMLElement;
+    
+    // Check if click is inside a source hover overlay or on a source chip
+    const isInsideSourceOverlay = target.closest('.source-hover-overlay');
+    const isSourceChip = target.closest('spectrum-chip[size="extra-small"]');
+    
+    // Close if clicking outside both the overlay and chips
+    if (!isInsideSourceOverlay && !isSourceChip) {
+      this.clickedSourceChip = null;
     }
   }
 
@@ -644,29 +824,33 @@ export class SpectrumConversationPanel {
    * Render desktop hover overlay for source chips
    */
   private renderSourceHoverOverlay() {
-    if (!this.hoveredSourceChip) return null;
+    // Show overlay if either hovered or clicked
+    const activeChip = this.hoveredSourceChip || this.clickedSourceChip;
+    if (!activeChip) return null;
 
-    const sourceNumber = this.hoveredSourceChip.sourceNumber;
-    const messageId = this.hoveredSourceChip.messageId;
+    const messageId = activeChip.messageId;
+    const sourceNumbers = activeChip.sourceNumbers || [activeChip.sourceNumber];
     
     // Find the source data from the message
     const message = this.messageArray.find((_msg, index) => this.messageIdMap.get(index) === messageId);
     if (!message || !message.sources) return null;
-    
-    const source = message.sources.find(s => s.number === sourceNumber || s.number === parseInt(sourceNumber));
-    if (!source) return null;
+
+    // Get all sources for the hovered citation(s)
+    const sources = sourceNumbers
+      .map(num => message.sources.find(s => 
+        s.number === num || 
+        s.number === parseInt(num) || 
+        s.number?.toString() === num
+      ))
+      .filter(Boolean);
+
+    if (sources.length === 0) return null;
 
     // Calculate position based on the chip element
-    const chipElement = this.hoveredSourceChip.element;
+    const chipElement = activeChip.element;
     const chipRect = chipElement.getBoundingClientRect();
-    
-    let displayUrl = source.value;
-    try {
-      const url = new URL(source.value);
-      displayUrl = url.hostname;
-    } catch (error) {
-      this.debugWarn(`Invalid URL: ${source.value}`);
-    }
+
+    const isGrouped = sources.length > 1;
 
     return (
       <div 
@@ -680,29 +864,85 @@ export class SpectrumConversationPanel {
         onMouseEnter={this.handleSourceOverlayEnter}
         onMouseLeave={this.handleSourceOverlayLeave}
       >
-        <a 
-          href={source.value} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="content-card hover-card"
-          onClick={() => this.sourceClick.emit({
-            action: 'sourceClick',
-            label: source.label,
-            value: source.value,
-            messageId: messageId
-          })}
-        >
-          {source.number && (
-            <div class="number">{source.number}</div>
-          )}
-          <div class="card-content">
-            <div class="subtitle">{displayUrl}</div>
-            <div class="title">{source.label}</div>
-            {source.snippet && (
-              <div class="snippet">{source.snippet}</div>
-            )}
+        {isGrouped ? (
+          <div class="grouped-sources">
+            {sources.map((source, index) => {
+              let displayUrl = source.value;
+              try {
+                const url = new URL(source.value);
+                displayUrl = url.hostname;
+              } catch (error) {
+                this.debugWarn(`Invalid URL: ${source.value}`);
+              }
+
+              return (
+                <a 
+                  key={index}
+                  href={source.value} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="content-card hover-card grouped-card"
+                  onClick={() => this.sourceClick.emit({
+                    action: 'sourceClick',
+                    label: source.label,
+                    value: source.value,
+                    messageId: messageId
+                  })}
+                  style={{ marginBottom: index < sources.length - 1 ? '8px' : '0' }}
+                >
+                  {source.number && (
+                    <div class="number">{source.number}</div>
+                  )}
+                  <div class="card-content">
+                    <div class="subtitle">{displayUrl}</div>
+                    <div class="title">{source.label}</div>
+                    {source.snippet && (
+                      <div class="snippet">{source.snippet}</div>
+                    )}
+                  </div>
+                </a>
+              );
+            })}
           </div>
-        </a>
+        ) : (
+          // Single source - render as before
+          (() => {
+            const source = sources[0];
+            let displayUrl = source.value;
+            try {
+              const url = new URL(source.value);
+              displayUrl = url.hostname;
+            } catch (error) {
+              this.debugWarn(`Invalid URL: ${source.value}`);
+            }
+
+            return (
+              <a 
+                href={source.value} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="content-card hover-card"
+                onClick={() => this.sourceClick.emit({
+                  action: 'sourceClick',
+                  label: source.label,
+                  value: source.value,
+                  messageId: messageId
+                })}
+              >
+                {source.number && (
+                  <div class="number">{source.number}</div>
+                )}
+                <div class="card-content">
+                  <div class="subtitle">{displayUrl}</div>
+                  <div class="title">{source.label}</div>
+                  {source.snippet && (
+                    <div class="snippet">{source.snippet}</div>
+                  )}
+                </div>
+              </a>
+            );
+          })()
+        )}
       </div>
     );
   }
@@ -879,8 +1119,8 @@ export class SpectrumConversationPanel {
               {this.renderMessages()}
           </div>
           
-          {/* Desktop hover overlay for source chips */}
-          {this.hoveredSourceChip && this.renderSourceHoverOverlay()}
+          {/* Desktop hover/click overlay for source chips */}
+          {(this.hoveredSourceChip || this.clickedSourceChip) && this.renderSourceHoverOverlay()}
           
           {/* Mobile source card */}
           {this.showMobileSourceCard && this.renderMobileSourceCard()}
