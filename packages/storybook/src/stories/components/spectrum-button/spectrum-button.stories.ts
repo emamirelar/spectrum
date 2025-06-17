@@ -20,6 +20,7 @@ interface SpectrumButton extends HTMLElement {
   debug: boolean;
   action: string;
   sound: boolean;
+  haptic: boolean;
 }
 
 interface SpectrumButtonArgs {
@@ -40,6 +41,7 @@ interface SpectrumButtonArgs {
   action: string;
   disabled: boolean;
   sound: boolean;
+  haptic: boolean;
 }
 
 const meta = {
@@ -61,7 +63,8 @@ const meta = {
     rightIcon: '',
     debug: false,
     action: 'custom',
-    sound: false
+    sound: false,
+    haptic: false
   },
   argTypes: {
     buttonText: {
@@ -129,6 +132,10 @@ const meta = {
     sound: {
       control: 'boolean',
       description: 'Enable sound effect when button is clicked',
+    },
+    haptic: {
+      control: 'boolean',
+      description: 'Enable haptic feedback when button is clicked',
     }
   }
 } satisfies Meta<SpectrumButton>;
@@ -153,6 +160,7 @@ const renderButton = (args: SpectrumButtonArgs) => html`
     ?debug=${args.debug}
     action=${args.action}
     ?sound=${args.sound}
+    ?haptic=${args.haptic}
     @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
   ></spectrum-button>
 `;
@@ -169,6 +177,7 @@ export const WithSound: StoryObj<SpectrumButtonArgs> = {
     buttonText: 'Click for Sound',
     showButtonText: true,
     sound: true,
+    haptic: false,
     debug: false,
   },
   render: renderButton,
@@ -191,12 +200,57 @@ export const SoundWithRipple: StoryObj<SpectrumButtonArgs> = {
     sound: true,
     ripple: true,
     debug: false,
+    haptic: false,
   },
   render: renderButton,
   parameters: {
     docs: {
       description: {
         story: 'A button with both sound effects and ripple animation. This provides comprehensive audio-visual feedback.',
+      },
+    },
+  },
+};
+
+// Haptic Feedback Button
+export const WithHapticFeedback: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    buttonText: 'Haptic Button',
+    showButtonText: true,
+    sound: false,
+    haptic: true,
+    ripple: true,
+    debug: true,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with haptic feedback enabled. This provides physical feedback on mobile devices that support the Vibration API. Works best on mobile devices.',
+      },
+    },
+  },
+};
+
+// Complete Feedback Button
+export const CompleteFeeback: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'success',
+    size: 'lg',
+    buttonText: 'Full Feedback',
+    showButtonText: true,
+    sound: true,
+    haptic: true,
+    ripple: true,
+    debug: true,
+  },
+  render: renderButton,
+  parameters: {
+    docs: {
+      description: {
+        story: 'A button with complete feedback experience: sound, haptic, and visual ripple effects. This provides the richest user interaction experience.',
       },
     },
   },

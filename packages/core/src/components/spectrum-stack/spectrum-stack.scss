@@ -1,0 +1,221 @@
+// ==============================================
+// Spectrum Stack Component Styles
+// ==============================================
+// BEM naming convention: spectrum-stack (block), __element (element), --modifier (modifier)
+// Flexbox-based stacking layout with responsive design
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+:host {
+  display: block;
+  
+  // Core stack properties
+  --stack-gap: var(--spectrum-sys-spacing, 1rem);
+  --stack-gap-none: 0;
+  --stack-gap-xs: var(--spectrum-sys-spacing-xs, 0.25rem);
+  --stack-gap-sm: var(--spectrum-sys-spacing-small, 0.5rem);
+  --stack-gap-md: var(--spectrum-sys-spacing, 1rem);
+  --stack-gap-lg: var(--spectrum-sys-spacing-large, 2rem);
+  --stack-gap-xl: var(--spectrum-sys-spacing-xl, 3rem);
+  
+  // Debug styles
+  --stack-debug-border: 2px dashed var(--spectrum-sys-color-primary, #0070d2);
+  --stack-debug-background: rgba(0, 112, 210, 0.1);
+  
+  // Responsive breakpoints
+  --stack-breakpoint-sm: 576px;
+  --stack-breakpoint-md: 768px;
+  --stack-breakpoint-lg: 992px;
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-stack {
+  display: flex;
+  
+  // ==============================================
+  // Direction Variations
+  // ==============================================
+  &--vertical {
+    flex-direction: column;
+  }
+  
+  &--horizontal {
+    flex-direction: row;
+  }
+  
+  // CSS Grid-like aliases
+  &--column {
+    flex-direction: column;
+  }
+  
+  &--row {
+    flex-direction: row;
+  }
+  
+  // ==============================================
+  // Spacing Variations
+  // ==============================================
+  &--spacing-none {
+    gap: var(--stack-gap-none);
+  }
+  
+  &--spacing-xs {
+    gap: var(--stack-gap-xs);
+  }
+  
+  &--spacing-sm {
+    gap: var(--stack-gap-sm);
+  }
+  
+  &--spacing-md {
+    gap: var(--stack-gap-md);
+  }
+  
+  &--spacing-lg {
+    gap: var(--stack-gap-lg);
+  }
+  
+  &--spacing-xl {
+    gap: var(--stack-gap-xl);
+  }
+  
+  &--spacing-auto {
+    gap: var(--stack-gap);
+  }
+  
+  // ==============================================
+  // Alignment Variations
+  // ==============================================
+  &--align-start {
+    align-items: flex-start;
+  }
+  
+  &--align-center {
+    align-items: center;
+  }
+  
+  &--align-end {
+    align-items: flex-end;
+  }
+  
+  &--align-stretch {
+    align-items: stretch;
+  }
+  
+  // ==============================================
+  // Justify Content Variations
+  // ==============================================
+  &--justify-start {
+    justify-content: flex-start;
+  }
+  
+  &--justify-center {
+    justify-content: center;
+  }
+  
+  &--justify-end {
+    justify-content: flex-end;
+  }
+  
+  &--justify-space-between {
+    justify-content: space-between;
+  }
+  
+  &--justify-space-around {
+    justify-content: space-around;
+  }
+  
+  &--justify-space-evenly {
+    justify-content: space-evenly;
+  }
+  
+  // ==============================================
+  // Wrap and Reverse Modifiers
+  // ==============================================
+  &--wrap {
+    flex-wrap: wrap;
+  }
+  
+  &--reverse {
+    &.spectrum-stack--vertical {
+      flex-direction: column-reverse;
+    }
+    
+    &.spectrum-stack--horizontal {
+      flex-direction: row-reverse;
+    }
+  }
+  
+  // ==============================================
+  // Debug Mode
+  // ==============================================
+  &--debug {
+    border: var(--stack-debug-border);
+    background-color: var(--stack-debug-background);
+    position: relative;
+    
+    &::after {
+      content: 'STACK: ' attr(class);
+      position: absolute;
+      top: -1.5rem;
+      left: 0;
+      font-size: 0.75rem;
+      color: var(--spectrum-sys-color-primary);
+      background: var(--spectrum-sys-color-background, #ffffff);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      white-space: nowrap;
+      z-index: 10;
+    }
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+.spectrum-stack--responsive-sm {
+  @media (max-width: calc(var(--stack-breakpoint-sm) - 1px)) {
+    &.spectrum-stack--horizontal {
+      flex-direction: column;
+    }
+  }
+}
+
+.spectrum-stack--responsive-md {
+  @media (max-width: calc(var(--stack-breakpoint-md) - 1px)) {
+    &.spectrum-stack--horizontal {
+      flex-direction: column;
+    }
+  }
+}
+
+.spectrum-stack--responsive-lg {
+  @media (max-width: calc(var(--stack-breakpoint-lg) - 1px)) {
+    &.spectrum-stack--horizontal {
+      flex-direction: column;
+    }
+  }
+}
+
+// ==============================================
+// Accessibility Support
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-stack {
+    // No specific motion to reduce in stack layout
+  }
+}
+
+// ==============================================
+// High Contrast Mode Support
+// ==============================================
+@media (prefers-contrast: high) {
+  .spectrum-stack--debug {
+    border-color: currentColor;
+  }
+}

@@ -40,6 +40,9 @@ export class SpectrumButton {
   // Sound Support
   @Prop() sound: boolean = false;
 
+  // Haptic Feedback Support
+  @Prop() haptic: boolean = false;
+
   // Button State
   @Prop() state: 'default' | 'hover' | 'active' | 'disabled' = 'default';
   @State() currentState: string = 'default';
@@ -71,6 +74,13 @@ export class SpectrumButton {
   handleSoundChange(newValue: boolean) {
     if (newValue && !this.audioElement) {
       this.initializeAudio();
+    }
+  }
+
+  @Watch('haptic')
+  handleHapticChange(newValue: boolean) {
+    if (newValue) {
+      this.log('Haptic feedback enabled');
     }
   }
 
@@ -199,6 +209,30 @@ export class SpectrumButton {
     }
   }
 
+  // ============== Haptic Feedback Management ==============
+  private triggerHapticFeedback() {
+    if (!this.haptic || this.disabled) return;
+
+    try {
+      // Check if vibration API is supported
+      if ('vibrate' in navigator) {
+        // Standard haptic feedback for button interactions
+        // Pattern: [vibrate, pause, vibrate] in milliseconds
+        const success = navigator.vibrate([60]); // Single medium vibration for button
+        
+        if (success) {
+          this.log('Haptic feedback triggered');
+        } else {
+          this.log('Haptic feedback failed - invalid parameters or unsupported');
+        }
+      } else {
+        this.log('Vibration API not supported on this device');
+      }
+    } catch (error) {
+      this.log('Error triggering haptic feedback', error);
+    }
+  }
+
   // ============== State Management ==============
   @Watch('state')
   handleStateChange(newValue: string) {
@@ -250,9 +284,10 @@ export class SpectrumButton {
       }, 600);
     }
 
-    // Play sound if enabled and not disabled
+    // Play sound and trigger haptic feedback if enabled and not disabled
     if (!this.disabled) {
       this.playSound();
+      this.triggerHapticFeedback();
     }
 
     if (!this.disabled && this.buttonText) {
@@ -283,7 +318,8 @@ export class SpectrumButton {
       size: this.size,
       state: this.state,
       iconOnly: this.iconOnly,
-      sound: this.sound
+      sound: this.sound,
+      haptic: this.haptic
     });
 
     // Initialize audio if sound is enabled

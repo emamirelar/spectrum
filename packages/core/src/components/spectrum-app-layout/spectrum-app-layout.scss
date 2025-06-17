@@ -1,0 +1,474 @@
+// ==============================================
+// Spectrum App Layout Component Styles
+// ==============================================
+// BEM naming convention: spectrum-app-layout (block), __element (element), --modifier (modifier)
+// CSS Grid layout for app structure
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+
+:host {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  grid-template-columns: var(--app-layout-sidebar-current-width) 1fr;
+  grid-template-rows: var(--app-layout-header-height) 1fr var(--app-layout-footer-height);
+  grid-template-areas: 
+    "header header"
+    "sidebar main"
+    "footer footer";
+  background-color: var(--app-layout-background);
+  font-family: var(--app-layout-font-family);
+  font-size: var(--app-layout-font-size);
+  font-weight: var(--app-layout-font-weight);
+  color: var(--app-layout-text);
+  transition: var(--app-layout-transition);
+  
+  // Core layout properties
+  --app-layout-background: var(--spectrum-sys-color-surface, #ffffff);
+  --app-layout-text: var(--spectrum-sys-color-on-surface, #000000);
+  --app-layout-border: var(--spectrum-sys-color-outline-variant, #e5e5e5);
+  --app-layout-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --app-layout-font-size: var(--spectrum-sys-typescale-body-medium-size, 1rem);
+  --app-layout-font-weight: var(--spectrum-sys-typescale-body-medium-weight, 400);
+  
+  // Layout dimensions
+  --app-layout-header-height: 5rem;
+  --app-layout-footer-height: 5rem;
+  --app-layout-sidebar-expanded-width: 16rem;
+  --app-layout-sidebar-collapsed-width: 4rem;
+  --app-layout-sidebar-current-width: var(--app-layout-sidebar-expanded-width);
+  
+  // Component sizing
+  --app-layout-logo-size: 2.5rem;
+  --app-layout-toggle-size: 2.5rem;
+  
+  // Spacing using proper Spectrum tokens
+  --app-layout-spacing-xs: var(--spectrum-sys-spacing-xs, 0.25rem);
+  --app-layout-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --app-layout-spacing: var(--spectrum-sys-spacing, 1rem);
+  --app-layout-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  --app-layout-spacing-xl: var(--spectrum-sys-spacing-xl, 3rem);
+  
+  // Header colors
+  --app-layout-header-background: var(--spectrum-sys-color-surface, #ffffff);
+  
+  // Sidebar colors
+  --app-layout-sidebar-background: var(--spectrum-sys-color-surface-container, #f5f5f5);
+  
+  // Interactive states
+  --app-layout-hover-background: var(--spectrum-sys-color-surface-container-hover, rgba(0, 0, 0, 0.05));
+  --app-layout-active-background: var(--spectrum-sys-color-surface-container-active, rgba(0, 0, 0, 0.1));
+  --app-layout-focus-outline: var(--spectrum-sys-color-primary, #0066cc);
+  
+  // Transitions
+  --app-layout-transition: all 0.3s ease-in-out;
+  --app-layout-transition-fast: all 0.2s ease-in-out;
+  
+  // Z-index values
+  --app-layout-z-header: 10;
+  --app-layout-z-sidebar: 5;
+  --app-layout-z-main: 1;
+  --app-layout-z-footer: 10;
+}
+
+// ==============================================
+// Base Component Grid Layout Applied Above in :host
+// ==============================================
+
+// ==============================================
+// Header Styles
+// ==============================================
+
+.spectrum-app-layout__header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: var(--app-layout-spacing);
+  padding: 0 var(--app-layout-spacing);
+  background-color: var(--app-layout-header-background);
+  border-bottom: 1px solid var(--app-layout-border);
+  z-index: var(--app-layout-z-header);
+}
+
+.spectrum-app-layout__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--app-layout-logo-size);
+  width: var(--app-layout-logo-size);
+  flex-shrink: 0;
+}
+
+.spectrum-app-layout__logo img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  border-radius: var(--spectrum-sys-shape-corner-small, 4px);
+}
+
+.spectrum-app-layout__logo-placeholder {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--spectrum-sys-color-surface-container, #f0f0f0);
+  border-radius: var(--spectrum-sys-shape-corner-small, 4px);
+  color: var(--spectrum-sys-color-on-surface-variant, #666);
+}
+
+.spectrum-app-layout__title {
+  margin: 0;
+  font-size: var(--spectrum-sys-typescale-title-large-size, 1.5rem);
+  font-weight: var(--spectrum-sys-typescale-title-large-weight, 600);
+  color: var(--app-layout-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spectrum-app-layout__header-spacer {
+  flex: 1;
+}
+
+.spectrum-app-layout__profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--app-layout-spacing-small) var(--app-layout-spacing);
+  border-radius: var(--spectrum-sys-shape-corner-medium, 8px);
+  cursor: pointer;
+  transition: var(--app-layout-transition-fast);
+  white-space: nowrap;
+}
+
+.spectrum-app-layout__profile:hover {
+  background-color: var(--app-layout-hover-background);
+}
+
+.spectrum-app-layout__profile:active {
+  background-color: var(--app-layout-active-background);
+}
+
+.spectrum-app-layout__profile span {
+  font-weight: 500;
+}
+
+// ==============================================
+// Sidebar Styles
+// ==============================================
+
+.spectrum-app-layout__sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--app-layout-sidebar-background);
+  border-right: 1px solid var(--app-layout-border);
+  overflow: hidden;
+  transition: var(--app-layout-transition);
+  z-index: var(--app-layout-z-sidebar);
+}
+
+.spectrum-app-layout__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--app-layout-toggle-size);
+  width: var(--app-layout-toggle-size);
+  margin: var(--app-layout-spacing);
+  background-color: var(--spectrum-sys-color-surface-container, rgba(0, 0, 0, 0.04));
+  border: 1px solid var(--app-layout-border);
+  border-radius: var(--spectrum-sys-shape-corner-small, 4px);
+  cursor: pointer;
+  transition: var(--app-layout-transition-fast);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--app-layout-text);
+}
+
+.spectrum-app-layout__toggle:hover {
+  background-color: var(--app-layout-hover-background);
+}
+
+.spectrum-app-layout__toggle:active {
+  background-color: var(--app-layout-active-background);
+}
+
+.spectrum-app-layout__toggle span {
+  transition: var(--app-layout-transition);
+  transform: rotate(0deg);
+}
+
+.spectrum-app-layout__toggle--expanded span {
+  transform: rotate(90deg);
+}
+
+.spectrum-app-layout__sidebar-content {
+  flex: 1;
+  padding: var(--app-layout-spacing);
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: var(--app-layout-transition);
+}
+
+// When sidebar is collapsed, hide text content
+:host(.spectrum-app-layout--sidebar-collapsed) .spectrum-app-layout__sidebar-content {
+  padding: var(--app-layout-spacing-small);
+}
+
+.spectrum-app-layout__sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.spectrum-app-layout__sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.spectrum-app-layout__sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--spectrum-sys-color-outline-variant, #ccc);
+  border-radius: 3px;
+}
+
+.spectrum-app-layout__sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--spectrum-sys-color-outline, #999);
+}
+
+// ==============================================
+// Main Content Styles
+// ==============================================
+
+.spectrum-app-layout__main {
+  grid-area: main;
+  padding: var(--app-layout-spacing);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--app-layout-background);
+}
+
+.spectrum-app-layout__main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.spectrum-app-layout__main::-webkit-scrollbar-track {
+  background: var(--spectrum-sys-color-surface-variant, #f5f5f5);
+}
+
+.spectrum-app-layout__main::-webkit-scrollbar-thumb {
+  background: var(--spectrum-sys-color-outline-variant, #ccc);
+  border-radius: 4px;
+}
+
+.spectrum-app-layout__main::-webkit-scrollbar-thumb:hover {
+  background: var(--spectrum-sys-color-outline, #999);
+}
+
+// ==============================================
+// Footer Styles
+// ==============================================
+
+.spectrum-app-layout__footer {
+  grid-area: footer;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--app-layout-spacing);
+  background-color: var(--app-layout-header-background);
+  border-top: 1px solid var(--app-layout-border);
+  z-index: var(--app-layout-z-footer);
+}
+
+// ==============================================
+// Layout Modifiers
+// ==============================================
+
+:host(.spectrum-app-layout--no-header) {
+  grid-template-rows: 1fr var(--app-layout-footer-height);
+  grid-template-areas: 
+    "sidebar main"
+    "footer footer";
+}
+
+:host(.spectrum-app-layout--no-footer) {
+  grid-template-rows: var(--app-layout-header-height) 1fr;
+  grid-template-areas: 
+    "header header"
+    "sidebar main";
+}
+
+:host(.spectrum-app-layout--no-header):host(.spectrum-app-layout--no-footer) {
+  grid-template-rows: 1fr;
+  grid-template-areas: "sidebar main";
+}
+
+:host(.spectrum-app-layout--sidebar-right) {
+  grid-template-areas: 
+    "header header"
+    "main sidebar"
+    "footer footer";
+}
+
+:host(.spectrum-app-layout--sidebar-right):host(.spectrum-app-layout--no-header) {
+  grid-template-areas: 
+    "main sidebar"
+    "footer footer";
+}
+
+:host(.spectrum-app-layout--sidebar-right):host(.spectrum-app-layout--no-footer) {
+  grid-template-areas: 
+    "header header"
+    "main sidebar";
+}
+
+:host(.spectrum-app-layout--sidebar-right):host(.spectrum-app-layout--no-header):host(.spectrum-app-layout--no-footer) {
+  grid-template-areas: "main sidebar";
+}
+
+:host(.spectrum-app-layout--sidebar-right) .spectrum-app-layout__sidebar {
+  border-right: none;
+  border-left: 1px solid var(--app-layout-border);
+}
+
+// ==============================================
+// Sidebar State Modifiers
+// ==============================================
+
+:host(.spectrum-app-layout--sidebar-collapsed) {
+  --app-layout-sidebar-current-width: var(--app-layout-sidebar-collapsed-width);
+}
+
+:host(.spectrum-app-layout--sidebar-expanded) {
+  --app-layout-sidebar-current-width: var(--app-layout-sidebar-expanded-width);
+}
+
+// ==============================================
+// Gap Modifiers
+// ==============================================
+
+:host(.spectrum-app-layout--gap-none) {
+  gap: 0;
+}
+
+:host(.spectrum-app-layout--gap-xs) {
+  gap: var(--app-layout-spacing-xs);
+}
+
+:host(.spectrum-app-layout--gap-sm) {
+  gap: var(--app-layout-spacing-small);
+}
+
+:host(.spectrum-app-layout--gap-md) {
+  gap: var(--app-layout-spacing);
+}
+
+:host(.spectrum-app-layout--gap-lg) {
+  gap: var(--app-layout-spacing-large);
+}
+
+:host(.spectrum-app-layout--gap-xl) {
+  gap: var(--app-layout-spacing-xl);
+}
+
+// ==============================================
+// Debug Mode
+// ==============================================
+
+:host(.spectrum-app-layout--debug) .spectrum-app-layout__header {
+  border: 2px solid red !important;
+  background-color: rgba(255, 0, 0, 0.1) !important;
+}
+
+:host(.spectrum-app-layout--debug) .spectrum-app-layout__sidebar {
+  border: 2px solid blue !important;
+  background-color: rgba(0, 0, 255, 0.1) !important;
+}
+
+:host(.spectrum-app-layout--debug) .spectrum-app-layout__main {
+  border: 2px solid green !important;
+  background-color: rgba(0, 255, 0, 0.1) !important;
+}
+
+:host(.spectrum-app-layout--debug) .spectrum-app-layout__footer {
+  border: 2px solid orange !important;
+  background-color: rgba(255, 165, 0, 0.1) !important;
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
+@media (max-width: 640px) {
+  :host(.spectrum-app-layout--responsive-sm):host(.spectrum-app-layout--collapse-mobile) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "main"
+      "footer";
+  }
+  
+  :host(.spectrum-app-layout--responsive-sm):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "main"
+      "footer";
+  }
+  
+  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  :host(.spectrum-app-layout--responsive-lg):host(.spectrum-app-layout--collapse-mobile) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "main"
+      "footer";
+  }
+  
+  :host(.spectrum-app-layout--responsive-lg):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar {
+    display: none;
+  }
+}
+
+// ==============================================
+// Accessibility and Motion
+// ==============================================
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --app-layout-transition: none;
+    --app-layout-transition-fast: none;
+  }
+  
+  .spectrum-app-layout__toggle span {
+    transition: none;
+  }
+}
+
+// Focus states
+.spectrum-app-layout__toggle:focus-visible,
+.spectrum-app-layout__profile:focus-visible {
+  outline: 2px solid var(--app-layout-focus-outline);
+  outline-offset: 2px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .spectrum-app-layout__header,
+  .spectrum-app-layout__sidebar,
+  .spectrum-app-layout__footer {
+    border-width: 2px;
+  }
+}

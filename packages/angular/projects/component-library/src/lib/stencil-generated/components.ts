@@ -8,14 +8,14 @@ import { Components } from '@unops-itg-npm/cpit-spectrum';
 
 
 @ProxyCmp({
-  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'horizontalScroll', 'label', 'outline', 'sound', 'variant']
+  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sound', 'variant']
 })
 @Component({
   selector: 'spectrum-accordion',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'horizontalScroll', 'label', 'outline', 'sound', 'variant'],
+  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sound', 'variant'],
 })
 export class SpectrumAccordion {
   protected el: HTMLSpectrumAccordionElement;
@@ -36,14 +36,42 @@ export declare interface SpectrumAccordion extends Components.SpectrumAccordion 
 
 
 @ProxyCmp({
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant']
+  inputs: ['breakpoint', 'collapseMobile', 'debug', 'footerHeight', 'gap', 'headerHeight', 'headerTitle', 'logoAlt', 'logoSrc', 'profileText', 'responsive', 'showFooter', 'showHeader', 'showLogo', 'showProfile', 'sidebarCollapsedWidth', 'sidebarCollapsible', 'sidebarExpanded', 'sidebarExpandedWidth', 'sidebarPosition']
+})
+@Component({
+  selector: 'spectrum-app-layout',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['breakpoint', 'collapseMobile', 'debug', 'footerHeight', 'gap', 'headerHeight', 'headerTitle', 'logoAlt', 'logoSrc', 'profileText', 'responsive', 'showFooter', 'showHeader', 'showLogo', 'showProfile', 'sidebarCollapsedWidth', 'sidebarCollapsible', 'sidebarExpanded', 'sidebarExpandedWidth', 'sidebarPosition'],
+})
+export class SpectrumAppLayout {
+  protected el: HTMLSpectrumAppLayoutElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['sidebarToggle', 'profileAction']);
+  }
+}
+
+
+export declare interface SpectrumAppLayout extends Components.SpectrumAppLayout {
+
+  sidebarToggle: EventEmitter<CustomEvent<{ action: string; expanded: boolean }>>;
+
+  profileAction: EventEmitter<CustomEvent<{ action: string; type: 'profile' }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'haptic', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'haptic', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLSpectrumButtonElement;
@@ -62,14 +90,14 @@ export declare interface SpectrumButton extends Components.SpectrumButton {
 
 
 @ProxyCmp({
-  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant']
+  inputs: ['action', 'debug', 'disabled', 'haptic', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant']
 })
 @Component({
   selector: 'spectrum-chip',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'debug', 'disabled', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant'],
+  inputs: ['action', 'debug', 'disabled', 'haptic', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant'],
 })
 export class SpectrumChip {
   protected el: HTMLSpectrumChipElement;
@@ -85,6 +113,28 @@ export declare interface SpectrumChip extends Components.SpectrumChip {
 
   chipAction: EventEmitter<CustomEvent<{ action?: string; label: string }>>;
 }
+
+
+@ProxyCmp({
+  inputs: ['align', 'breakpoint', 'centerContainer', 'debug', 'direction', 'fullWidth', 'justify', 'noWrap', 'responsive', 'spacing', 'stackBelow', 'wrap']
+})
+@Component({
+  selector: 'spectrum-cluster',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['align', 'breakpoint', 'centerContainer', 'debug', 'direction', 'fullWidth', 'justify', 'noWrap', 'responsive', 'spacing', 'stackBelow', 'wrap'],
+})
+export class SpectrumCluster {
+  protected el: HTMLSpectrumClusterElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumCluster extends Components.SpectrumCluster {}
 
 
 @ProxyCmp({
@@ -129,6 +179,28 @@ export declare interface SpectrumCollapsibleList extends Components.SpectrumColl
    */
   itemRenamed: EventEmitter<CustomEvent<{ action: string; id: string; oldName: string; newName: string }>>;
 }
+
+
+@ProxyCmp({
+  inputs: ['centerContent', 'centered', 'debug', 'fullWidthMobile', 'maxWidth', 'padding', 'paddingX', 'paddingY', 'responsive', 'size']
+})
+@Component({
+  selector: 'spectrum-container',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['centerContent', 'centered', 'debug', 'fullWidthMobile', 'maxWidth', 'padding', 'paddingX', 'paddingY', 'responsive', 'size'],
+})
+export class SpectrumContainer {
+  protected el: HTMLSpectrumContainerElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumContainer extends Components.SpectrumContainer {}
 
 
 @ProxyCmp({
@@ -197,6 +269,50 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
   titleChanged: EventEmitter<CustomEvent<{action: string, value: string}>>;
 }
+
+
+@ProxyCmp({
+  inputs: ['align', 'alignContent', 'breakpoint', 'columnGap', 'debug', 'direction', 'fullHeight', 'fullWidth', 'gap', 'inline', 'justify', 'mobileDirection', 'responsive', 'rowGap', 'wrap']
+})
+@Component({
+  selector: 'spectrum-flex',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['align', 'alignContent', 'breakpoint', 'columnGap', 'debug', 'direction', 'fullHeight', 'fullWidth', 'gap', 'inline', 'justify', 'mobileDirection', 'responsive', 'rowGap', 'wrap'],
+})
+export class SpectrumFlex {
+  protected el: HTMLSpectrumFlexElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumFlex extends Components.SpectrumFlex {}
+
+
+@ProxyCmp({
+  inputs: ['alignContent', 'alignItems', 'areas', 'autoColumns', 'autoFill', 'autoFit', 'autoRows', 'breakpoint', 'columnGap', 'columns', 'debug', 'fullHeight', 'fullWidth', 'gap', 'inline', 'justifyContent', 'justifyItems', 'minColumnWidth', 'minRowHeight', 'mobileColumns', 'responsive', 'rowGap', 'rows']
+})
+@Component({
+  selector: 'spectrum-grid',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['alignContent', 'alignItems', 'areas', 'autoColumns', 'autoFill', 'autoFit', 'autoRows', 'breakpoint', 'columnGap', 'columns', 'debug', 'fullHeight', 'fullWidth', 'gap', 'inline', 'justifyContent', 'justifyItems', 'minColumnWidth', 'minRowHeight', 'mobileColumns', 'responsive', 'rowGap', 'rows'],
+})
+export class SpectrumGrid {
+  protected el: HTMLSpectrumGridElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumGrid extends Components.SpectrumGrid {}
 
 
 @ProxyCmp({
@@ -425,6 +541,50 @@ export declare interface SpectrumSelect extends Components.SpectrumSelect {
 
   dropdownClose: EventEmitter<CustomEvent<void>>;
 }
+
+
+@ProxyCmp({
+  inputs: ['breakpoint', 'collapseBelow', 'collapsed', 'collapsible', 'debug', 'fullHeight', 'gap', 'maxSidebarWidth', 'minSidebarWidth', 'overlay', 'position', 'responsive', 'sidebarWidth', 'stackMobile']
+})
+@Component({
+  selector: 'spectrum-sidebar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['breakpoint', 'collapseBelow', 'collapsed', 'collapsible', 'debug', 'fullHeight', 'gap', 'maxSidebarWidth', 'minSidebarWidth', 'overlay', 'position', 'responsive', 'sidebarWidth', 'stackMobile'],
+})
+export class SpectrumSidebar {
+  protected el: HTMLSpectrumSidebarElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumSidebar extends Components.SpectrumSidebar {}
+
+
+@ProxyCmp({
+  inputs: ['align', 'breakpoint', 'debug', 'direction', 'justify', 'responsive', 'reverse', 'spacing', 'wrap']
+})
+@Component({
+  selector: 'spectrum-stack',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['align', 'breakpoint', 'debug', 'direction', 'justify', 'responsive', 'reverse', 'spacing', 'wrap'],
+})
+export class SpectrumStack {
+  protected el: HTMLSpectrumStackElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumStack extends Components.SpectrumStack {}
 
 
 @ProxyCmp({

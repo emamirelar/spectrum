@@ -96,16 +96,60 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - **Used by**: AI/chat applications
   - **Purpose**: Message display and interaction with expandable content
 
-### Standalone Components (External Dependencies Only)
+### Layout Components (Work in Progress) ⚠️
+**WARNING: Layout components are currently work in progress and not ready for production use.**
 
+- **spectrum-app-layout**: 🚧 **WIP** Application layout container
+  - **Status**: Work in progress - not ready for use
+  - **Dependencies**: TBD
+  - **Purpose**: Main application layout structure
+
+- **spectrum-stack**: 🚧 **WIP** Vertical stacking layout
+  - **Status**: Work in progress - not ready for use
+  - **Dependencies**: TBD
+  - **Purpose**: Vertical content arrangement
+
+- **spectrum-cluster**: 🚧 **WIP** Flexible clustering layout
+  - **Status**: Work in progress - not ready for use
+  - **Dependencies**: TBD
+  - **Purpose**: Flexible content clustering
+
+- **spectrum-container**: 🚧 **WIP** Content container layout
+  - **Status**: Work in progress - not ready for use
+  - **Dependencies**: TBD
+  - **Purpose**: Content containerization
+
+- **spectrum-flex**: 🚧 **WIP** Flexbox layout utility
+  - **Status**: Work in progress - not ready for use
+  - **Dependencies**: TBD
+  - **Purpose**: Flexible box layout
+
+- **spectrum-grid**: 🚧 **WIP** CSS Grid layout utility
+  - **Status**: Work in progress - not ready for use
+  - **Dependencies**: TBD
+  - **Purpose**: Grid-based layout system
+
+- **spectrum-sidebar**: 🚧 **WIP** Sidebar layout component
+  - **Status**: Work in progress - not ready for use
+  - **Dependencies**: TBD
+  - **Purpose**: Sidebar navigation and content layout
+
+### Standalone Components (External Dependencies Only)
+- **spectrum-carousel**: Interactive image/content carousel
   - **Dependencies**: @glidejs/glide (external)
   - **Used by**: Content display
   - **Purpose**: Interactive content carousel
 
-
+- **spectrum-megamenu**: Full-screen navigation menu
   - **Dependencies**: None (uses native popover API)
   - **Used by**: Complex navigation scenarios
   - **Purpose**: Large navigation overlay
+
+- **spectrum-menu**: Responsive navigation menu with megamenu variant
+  - **Dependencies**: None (pure component)
+  - **Used by**: Navigation systems, header menus, sidebar navigation
+  - **Purpose**: Horizontal/vertical menus with regular submenus or full-width megamenu dropdowns
+  - **Features**: Mobile responsive, Material icons, accessibility support
 
 ---
 
@@ -121,7 +165,9 @@ Level 1 (Atomic):
 ├── spectrum-toast ✨ NEW
 ├── spectrum-context-menu
 ├── spectrum-wallpaper
-
+├── spectrum-carousel
+├── spectrum-megamenu
+└── spectrum-menu
 
 Level 2 (Composed):
 ├── spectrum-accordion (depends on: spectrum-chip)
@@ -135,6 +181,15 @@ Level 2 (Composed):
 Level 3 (Complex):
 ├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item)
 └── spectrum-conversation-panel (depends on: spectrum-accordion, spectrum-button, spectrum-chip)
+
+⚠️ Layout Components (WIP - DO NOT USE):
+├── spectrum-app-layout 🚧
+├── spectrum-stack 🚧
+├── spectrum-cluster 🚧
+├── spectrum-container 🚧
+├── spectrum-flex 🚧
+├── spectrum-grid 🚧
+└── spectrum-sidebar 🚧
 ```
 
 ---
@@ -181,7 +236,16 @@ Level 3 (Complex):
 
 ## 📈 Recent Updates
 
-### ✨ spectrum-toast Component (Latest)
+### 🚧 Layout Components (v0.0.1-alpha.25) - **WORK IN PROGRESS**
+**⚠️ WARNING: These components are NOT ready for production use.**
+- **Status**: All layout components are experimental and unstable
+- **Breaking Changes**: APIs subject to change without notice
+- **New Components**: spectrum-app-layout, spectrum-stack, spectrum-cluster, spectrum-container, spectrum-flex, spectrum-grid, spectrum-sidebar
+- **Dependencies**: TBD (to be determined as components mature)
+- **Documentation**: All components marked with 🚧 WIP status in dependency map
+- **Usage**: DO NOT USE in production applications
+
+### ✨ spectrum-toast Component (Previous)
 - **New Component**: Added to Level 1 (Atomic) - no internal dependencies
 - **Notification System**: Comprehensive toast/notification component for user feedback
 - **Multiple Variants**: Support for success, warning, danger, primary, secondary, and ghost variants
@@ -191,9 +255,10 @@ Level 3 (Complex):
 - **Accessibility**: Full keyboard navigation and screen reader support
 
 ### 🔄 Updated Dependencies (Current State)
-- **spectrum-conversation-panel**: Now depends on spectrum-accordion, spectrum-button, and spectrum-chip
+- **spectrum-conversation-panel**: Now depends on spectrum-accordion, spectrum-button, and spectrum-chip + enhanced scrolling behavior
 - **spectrum-image-gallery**: Now depends on spectrum-button (updated from pure component)
 - **spectrum-accordion**: Confirmed dependency on spectrum-chip
+- **Haptic Feedback**: Enhanced across button components and interactive elements
 
 ---
 

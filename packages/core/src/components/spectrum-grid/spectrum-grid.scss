@@ -1,0 +1,328 @@
+// ==============================================
+// Spectrum Grid Component Styles
+// ==============================================
+// BEM naming convention: spectrum-grid (block), __element (element), --modifier (modifier)
+// CSS Grid layout with comprehensive grid properties
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+:host {
+  display: block;
+  
+  // Core grid properties
+  --grid-gap: var(--spectrum-sys-spacing, 1rem);
+  --grid-gap-none: 0;
+  --grid-gap-xs: var(--spectrum-sys-spacing-xs, 0.25rem);
+  --grid-gap-sm: var(--spectrum-sys-spacing-small, 0.5rem);
+  --grid-gap-md: var(--spectrum-sys-spacing, 1rem);
+  --grid-gap-lg: var(--spectrum-sys-spacing-large, 2rem);
+  --grid-gap-xl: var(--spectrum-sys-spacing-xl, 3rem);
+  
+  // Grid template properties (set dynamically)
+  --grid-template-columns: 1fr;
+  --grid-template-rows: auto;
+  --grid-template-areas: none;
+  --grid-auto-columns: auto;
+  --grid-auto-rows: auto;
+  
+  // Custom gap values (set dynamically)
+  --grid-gap-custom: var(--grid-gap);
+  --grid-row-gap-custom: var(--grid-gap);
+  --grid-column-gap-custom: var(--grid-gap);
+  
+  // Mobile responsive columns
+  --grid-mobile-columns: 1fr;
+  
+  // Debug styles
+  --grid-debug-border: 2px dashed var(--spectrum-sys-color-success, #2e844a);
+  --grid-debug-background: rgba(46, 132, 74, 0.1);
+  
+  // Responsive breakpoints
+  --grid-breakpoint-sm: 576px;
+  --grid-breakpoint-md: 768px;
+  --grid-breakpoint-lg: 992px;
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-grid {
+  display: grid;
+  grid-template-columns: var(--grid-template-columns);
+  grid-template-rows: var(--grid-template-rows);
+  grid-template-areas: var(--grid-template-areas);
+  grid-auto-columns: var(--grid-auto-columns);
+  grid-auto-rows: var(--grid-auto-rows);
+  
+  // ==============================================
+  // Display Variations
+  // ==============================================
+  &--inline {
+    display: inline-grid;
+  }
+  
+  // ==============================================
+  // Auto-sizing Variations
+  // ==============================================
+  &--auto-fit,
+  &--auto-fill {
+    // Grid template columns are set dynamically via CSS custom properties
+  }
+  
+  // ==============================================
+  // Gap Variations
+  // ==============================================
+  &--gap-none {
+    gap: var(--grid-gap-none);
+  }
+  
+  &--gap-xs {
+    gap: var(--grid-gap-xs);
+  }
+  
+  &--gap-sm {
+    gap: var(--grid-gap-sm);
+  }
+  
+  &--gap-md {
+    gap: var(--grid-gap-md);
+  }
+  
+  &--gap-lg {
+    gap: var(--grid-gap-lg);
+  }
+  
+  &--gap-xl {
+    gap: var(--grid-gap-xl);
+  }
+  
+  &--gap-custom {
+    gap: var(--grid-gap-custom);
+  }
+  
+  // Row Gap Variations
+  &--row-gap-none {
+    row-gap: var(--grid-gap-none);
+  }
+  
+  &--row-gap-xs {
+    row-gap: var(--grid-gap-xs);
+  }
+  
+  &--row-gap-sm {
+    row-gap: var(--grid-gap-sm);
+  }
+  
+  &--row-gap-md {
+    row-gap: var(--grid-gap-md);
+  }
+  
+  &--row-gap-lg {
+    row-gap: var(--grid-gap-lg);
+  }
+  
+  &--row-gap-xl {
+    row-gap: var(--grid-gap-xl);
+  }
+  
+  &--row-gap-custom {
+    row-gap: var(--grid-row-gap-custom);
+  }
+  
+  // Column Gap Variations
+  &--column-gap-none {
+    column-gap: var(--grid-gap-none);
+  }
+  
+  &--column-gap-xs {
+    column-gap: var(--grid-gap-xs);
+  }
+  
+  &--column-gap-sm {
+    column-gap: var(--grid-gap-sm);
+  }
+  
+  &--column-gap-md {
+    column-gap: var(--grid-gap-md);
+  }
+  
+  &--column-gap-lg {
+    column-gap: var(--grid-gap-lg);
+  }
+  
+  &--column-gap-xl {
+    column-gap: var(--grid-gap-xl);
+  }
+  
+  &--column-gap-custom {
+    column-gap: var(--grid-column-gap-custom);
+  }
+  
+  // ==============================================
+  // Alignment Variations
+  // ==============================================
+  &--align-items-start {
+    align-items: start;
+  }
+  
+  &--align-items-end {
+    align-items: end;
+  }
+  
+  &--align-items-center {
+    align-items: center;
+  }
+  
+  &--align-items-stretch {
+    align-items: stretch;
+  }
+  
+  &--justify-items-start {
+    justify-items: start;
+  }
+  
+  &--justify-items-end {
+    justify-items: end;
+  }
+  
+  &--justify-items-center {
+    justify-items: center;
+  }
+  
+  &--justify-items-stretch {
+    justify-items: stretch;
+  }
+  
+  &--align-content-start {
+    align-content: start;
+  }
+  
+  &--align-content-end {
+    align-content: end;
+  }
+  
+  &--align-content-center {
+    align-content: center;
+  }
+  
+  &--align-content-stretch {
+    align-content: stretch;
+  }
+  
+  &--align-content-space-between {
+    align-content: space-between;
+  }
+  
+  &--align-content-space-around {
+    align-content: space-around;
+  }
+  
+  &--align-content-space-evenly {
+    align-content: space-evenly;
+  }
+  
+  &--justify-content-start {
+    justify-content: start;
+  }
+  
+  &--justify-content-end {
+    justify-content: end;
+  }
+  
+  &--justify-content-center {
+    justify-content: center;
+  }
+  
+  &--justify-content-stretch {
+    justify-content: stretch;
+  }
+  
+  &--justify-content-space-between {
+    justify-content: space-between;
+  }
+  
+  &--justify-content-space-around {
+    justify-content: space-around;
+  }
+  
+  &--justify-content-space-evenly {
+    justify-content: space-evenly;
+  }
+  
+  // ==============================================
+  // Size Modifiers
+  // ==============================================
+  &--full-height {
+    height: 100%;
+    min-height: 100vh;
+  }
+  
+  &--full-width {
+    width: 100%;
+  }
+  
+  // ==============================================
+  // Debug Mode
+  // ==============================================
+  &--debug {
+    border: var(--grid-debug-border);
+    background-color: var(--grid-debug-background);
+    position: relative;
+    
+    &::after {
+      content: 'GRID: ' attr(class);
+      position: absolute;
+      top: -1.5rem;
+      left: 0;
+      font-size: 0.75rem;
+      color: var(--spectrum-sys-color-success);
+      background: var(--spectrum-sys-color-background, #ffffff);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      white-space: nowrap;
+      z-index: 10;
+    }
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+.spectrum-grid--responsive-sm {
+  @media (max-width: calc(var(--grid-breakpoint-sm) - 1px)) {
+    grid-template-columns: var(--grid-mobile-columns) !important;
+  }
+}
+
+.spectrum-grid--responsive-md {
+  @media (max-width: calc(var(--grid-breakpoint-md) - 1px)) {
+    grid-template-columns: var(--grid-mobile-columns) !important;
+  }
+}
+
+.spectrum-grid--responsive-lg {
+  @media (max-width: calc(var(--grid-breakpoint-lg) - 1px)) {
+    grid-template-columns: var(--grid-mobile-columns) !important;
+  }
+}
+
+// ==============================================
+// Accessibility Support
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-grid {
+    // No specific motion to reduce in grid layout
+  }
+}
+
+// ==============================================
+// High Contrast Mode Support
+// ==============================================
+@media (prefers-contrast: high) {
+  .spectrum-grid--debug {
+    border-color: currentColor;
+  }
+}

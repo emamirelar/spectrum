@@ -48,6 +48,11 @@ export namespace Components {
          */
         "expandedIcon": string;
         /**
+          * Whether to enable haptic feedback Default: false
+          * @default false
+         */
+        "haptic": boolean;
+        /**
           * Whether to show content in horizontal scroll container Default: true
           * @default true
          */
@@ -72,6 +77,93 @@ export namespace Components {
           * @default 'secondary'
          */
         "variant": 'primary' | 'secondary';
+    }
+    /**
+     * Spectrum App Layout Component
+     * A comprehensive application layout with collapsible sidebar, header, main content, and footer.
+     * Based on CSS Grid with responsive behavior and smooth animations.
+     */
+    interface SpectrumAppLayout {
+        /**
+          * @default 'md'
+         */
+        "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
+        "collapseMobile": boolean;
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default '5rem'
+         */
+        "footerHeight": string;
+        /**
+          * @default 'md'
+         */
+        "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default '5rem'
+         */
+        "headerHeight": string;
+        /**
+          * @default ''
+         */
+        "headerTitle": string;
+        /**
+          * @default 'Logo'
+         */
+        "logoAlt": string;
+        /**
+          * @default ''
+         */
+        "logoSrc": string;
+        /**
+          * @default 'Profile'
+         */
+        "profileText": string;
+        /**
+          * @default true
+         */
+        "responsive": boolean;
+        /**
+          * @default true
+         */
+        "showFooter": boolean;
+        /**
+          * @default true
+         */
+        "showHeader": boolean;
+        /**
+          * @default true
+         */
+        "showLogo": boolean;
+        /**
+          * @default true
+         */
+        "showProfile": boolean;
+        /**
+          * @default '4rem'
+         */
+        "sidebarCollapsedWidth": string;
+        /**
+          * @default true
+         */
+        "sidebarCollapsible": boolean;
+        /**
+          * @default true
+         */
+        "sidebarExpanded": boolean;
+        /**
+          * @default '16rem'
+         */
+        "sidebarExpandedWidth": string;
+        /**
+          * @default 'left'
+         */
+        "sidebarPosition": 'left' | 'right';
     }
     /**
      * Spectrum Button Component
@@ -99,6 +191,10 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * @default false
+         */
+        "haptic": boolean;
         /**
           * @default false
          */
@@ -171,6 +267,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * @default false
+         */
+        "haptic": boolean;
+        /**
           * @default ''
          */
         "label": string;
@@ -211,6 +311,61 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
+    /**
+     * Spectrum Cluster Component
+     * A layout component for clustering items together with consistent spacing,
+     * natural wrapping, and flexible alignment options.
+     */
+    interface SpectrumCluster {
+        /**
+          * @default 'start'
+         */
+        "align": 'start' | 'center' | 'end';
+        /**
+          * @default 'md'
+         */
+        "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
+        "centerContainer": boolean;
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default 'horizontal'
+         */
+        "direction": 'horizontal' | 'vertical';
+        /**
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * @default 'start'
+         */
+        "justify": 'start' | 'center' | 'end' | 'space-between' | 'space-around';
+        /**
+          * @default false
+         */
+        "noWrap": boolean;
+        /**
+          * @default false
+         */
+        "responsive": boolean;
+        /**
+          * @default 'md'
+         */
+        "spacing": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "stackBelow": boolean;
+        /**
+          * @default true
+         */
+        "wrap": boolean;
+    }
     interface SpectrumCollapsibleList {
         /**
           * Context actions for all leaf nodes
@@ -237,6 +392,53 @@ export namespace Components {
           * @default true
          */
         "mutuallyExclusive": boolean;
+    }
+    /**
+     * Spectrum Container Component
+     * A container component with max-width constraints, responsive padding,
+     * and centering capabilities for content layout.
+     */
+    interface SpectrumContainer {
+        /**
+          * @default false
+         */
+        "centerContent": boolean;
+        /**
+          * @default true
+         */
+        "centered": boolean;
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default true
+         */
+        "fullWidthMobile": boolean;
+        /**
+          * @default ''
+         */
+        "maxWidth": string;
+        /**
+          * @default 'md'
+         */
+        "padding": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
+        "paddingX": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default ''
+         */
+        "paddingY": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default true
+         */
+        "responsive": boolean;
+        /**
+          * @default 'lg'
+         */
+        "size": 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'fluid';
     }
     /**
      * Spectrum Context Menu Component
@@ -296,6 +498,172 @@ export namespace Components {
           * @default ''
          */
         "sources": string;
+    }
+    /**
+     * Spectrum Flex Component
+     * An advanced flexbox layout component with comprehensive flex properties,
+     * responsive behavior, and fine-grained control over flex container and items.
+     */
+    interface SpectrumFlex {
+        /**
+          * @default 'stretch'
+         */
+        "align": 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+        /**
+          * @default 'stretch'
+         */
+        "alignContent": 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch';
+        /**
+          * @default 'md'
+         */
+        "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
+        "columnGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default 'row'
+         */
+        "direction": 'row' | 'row-reverse' | 'column' | 'column-reverse';
+        /**
+          * @default false
+         */
+        "fullHeight": boolean;
+        /**
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * @default 'md'
+         */
+        "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "inline": boolean;
+        /**
+          * @default 'flex-start'
+         */
+        "justify": 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'column'
+         */
+        "mobileDirection": 'row' | 'column';
+        /**
+          * @default false
+         */
+        "responsive": boolean;
+        /**
+          * @default ''
+         */
+        "rowGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default 'nowrap'
+         */
+        "wrap": 'nowrap' | 'wrap' | 'wrap-reverse';
+    }
+    /**
+     * Spectrum Grid Component
+     * A comprehensive CSS Grid layout component with support for grid templates,
+     * areas, responsive behavior, and auto-sizing capabilities.
+     */
+    interface SpectrumGrid {
+        /**
+          * @default 'stretch'
+         */
+        "alignContent": 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
+        "alignItems": 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
+        "areas": string;
+        /**
+          * @default ''
+         */
+        "autoColumns": string;
+        /**
+          * @default false
+         */
+        "autoFill": boolean;
+        /**
+          * @default false
+         */
+        "autoFit": boolean;
+        /**
+          * @default ''
+         */
+        "autoRows": string;
+        /**
+          * @default 'md'
+         */
+        "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
+        "columnGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default '1fr'
+         */
+        "columns": string;
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default false
+         */
+        "fullHeight": boolean;
+        /**
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * @default 'md'
+         */
+        "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "inline": boolean;
+        /**
+          * @default 'stretch'
+         */
+        "justifyContent": 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
+        "justifyItems": 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
+        "minColumnWidth": string;
+        /**
+          * @default ''
+         */
+        "minRowHeight": string;
+        /**
+          * @default '1fr'
+         */
+        "mobileColumns": string;
+        /**
+          * @default false
+         */
+        "responsive": boolean;
+        /**
+          * @default ''
+         */
+        "rowGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default ''
+         */
+        "rows": string;
     }
     /**
      * Spectrum Hero Component
@@ -694,6 +1062,112 @@ export namespace Components {
          */
         "virtualScrolling": boolean;
     }
+    /**
+     * Spectrum Sidebar Component
+     * A layout component for creating sidebar + main content layouts
+     * with responsive behavior and flexible positioning.
+     */
+    interface SpectrumSidebar {
+        /**
+          * @default 'md'
+         */
+        "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
+        "collapseBelow": boolean;
+        /**
+          * @default false
+         */
+        "collapsed": boolean;
+        /**
+          * @default false
+         */
+        "collapsible": boolean;
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default false
+         */
+        "fullHeight": boolean;
+        /**
+          * @default 'md'
+         */
+        "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
+        "maxSidebarWidth": string;
+        /**
+          * @default ''
+         */
+        "minSidebarWidth": string;
+        /**
+          * @default false
+         */
+        "overlay": boolean;
+        /**
+          * @default 'left'
+         */
+        "position": 'left' | 'right';
+        /**
+          * @default true
+         */
+        "responsive": boolean;
+        /**
+          * @default 'md'
+         */
+        "sidebarWidth": 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default true
+         */
+        "stackMobile": boolean;
+    }
+    /**
+     * Spectrum Stack Component
+     * A layout component for vertical or horizontal stacking of child elements
+     * with consistent spacing and alignment options.
+     */
+    interface SpectrumStack {
+        /**
+          * @default 'stretch'
+         */
+        "align": 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * @default 'md'
+         */
+        "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default 'vertical'
+         */
+        "direction": 'vertical' | 'horizontal' | 'column' | 'row';
+        /**
+          * @default 'start'
+         */
+        "justify": 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default false
+         */
+        "responsive": boolean;
+        /**
+          * @default false
+         */
+        "reverse": boolean;
+        /**
+          * @default 'md'
+         */
+        "spacing": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+        /**
+          * @default false
+         */
+        "wrap": boolean;
+    }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
@@ -862,6 +1336,10 @@ export interface SpectrumAccordionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumAccordionElement;
 }
+export interface SpectrumAppLayoutCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumAppLayoutElement;
+}
 export interface SpectrumButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumButtonElement;
@@ -931,6 +1409,29 @@ declare global {
         prototype: HTMLSpectrumAccordionElement;
         new (): HTMLSpectrumAccordionElement;
     };
+    interface HTMLSpectrumAppLayoutElementEventMap {
+        "sidebarToggle": { action: string; expanded: boolean };
+        "profileAction": { action: string; type: 'profile' };
+    }
+    /**
+     * Spectrum App Layout Component
+     * A comprehensive application layout with collapsible sidebar, header, main content, and footer.
+     * Based on CSS Grid with responsive behavior and smooth animations.
+     */
+    interface HTMLSpectrumAppLayoutElement extends Components.SpectrumAppLayout, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumAppLayoutElementEventMap>(type: K, listener: (this: HTMLSpectrumAppLayoutElement, ev: SpectrumAppLayoutCustomEvent<HTMLSpectrumAppLayoutElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumAppLayoutElementEventMap>(type: K, listener: (this: HTMLSpectrumAppLayoutElement, ev: SpectrumAppLayoutCustomEvent<HTMLSpectrumAppLayoutElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumAppLayoutElement: {
+        prototype: HTMLSpectrumAppLayoutElement;
+        new (): HTMLSpectrumAppLayoutElement;
+    };
     interface HTMLSpectrumButtonElementEventMap {
         "buttonAction": { action?: string; label: string };
     }
@@ -975,6 +1476,17 @@ declare global {
         prototype: HTMLSpectrumChipElement;
         new (): HTMLSpectrumChipElement;
     };
+    /**
+     * Spectrum Cluster Component
+     * A layout component for clustering items together with consistent spacing,
+     * natural wrapping, and flexible alignment options.
+     */
+    interface HTMLSpectrumClusterElement extends Components.SpectrumCluster, HTMLStencilElement {
+    }
+    var HTMLSpectrumClusterElement: {
+        prototype: HTMLSpectrumClusterElement;
+        new (): HTMLSpectrumClusterElement;
+    };
     interface HTMLSpectrumCollapsibleListElementEventMap {
         "childAction": { action: string; label: string; id: string };
         "expandAction": { action: string; label: string; id: string };
@@ -995,6 +1507,17 @@ declare global {
     var HTMLSpectrumCollapsibleListElement: {
         prototype: HTMLSpectrumCollapsibleListElement;
         new (): HTMLSpectrumCollapsibleListElement;
+    };
+    /**
+     * Spectrum Container Component
+     * A container component with max-width constraints, responsive padding,
+     * and centering capabilities for content layout.
+     */
+    interface HTMLSpectrumContainerElement extends Components.SpectrumContainer, HTMLStencilElement {
+    }
+    var HTMLSpectrumContainerElement: {
+        prototype: HTMLSpectrumContainerElement;
+        new (): HTMLSpectrumContainerElement;
     };
     interface HTMLSpectrumContextMenuElementEventMap {
         "actionClick": { action: string; targetKey: string };
@@ -1038,6 +1561,28 @@ declare global {
     var HTMLSpectrumConversationPanelElement: {
         prototype: HTMLSpectrumConversationPanelElement;
         new (): HTMLSpectrumConversationPanelElement;
+    };
+    /**
+     * Spectrum Flex Component
+     * An advanced flexbox layout component with comprehensive flex properties,
+     * responsive behavior, and fine-grained control over flex container and items.
+     */
+    interface HTMLSpectrumFlexElement extends Components.SpectrumFlex, HTMLStencilElement {
+    }
+    var HTMLSpectrumFlexElement: {
+        prototype: HTMLSpectrumFlexElement;
+        new (): HTMLSpectrumFlexElement;
+    };
+    /**
+     * Spectrum Grid Component
+     * A comprehensive CSS Grid layout component with support for grid templates,
+     * areas, responsive behavior, and auto-sizing capabilities.
+     */
+    interface HTMLSpectrumGridElement extends Components.SpectrumGrid, HTMLStencilElement {
+    }
+    var HTMLSpectrumGridElement: {
+        prototype: HTMLSpectrumGridElement;
+        new (): HTMLSpectrumGridElement;
     };
     interface HTMLSpectrumHeroElementEventMap {
         "heroAction": { action: string; slideIndex: number; slideTitle?: string };
@@ -1188,6 +1733,28 @@ declare global {
         prototype: HTMLSpectrumSelectElement;
         new (): HTMLSpectrumSelectElement;
     };
+    /**
+     * Spectrum Sidebar Component
+     * A layout component for creating sidebar + main content layouts
+     * with responsive behavior and flexible positioning.
+     */
+    interface HTMLSpectrumSidebarElement extends Components.SpectrumSidebar, HTMLStencilElement {
+    }
+    var HTMLSpectrumSidebarElement: {
+        prototype: HTMLSpectrumSidebarElement;
+        new (): HTMLSpectrumSidebarElement;
+    };
+    /**
+     * Spectrum Stack Component
+     * A layout component for vertical or horizontal stacking of child elements
+     * with consistent spacing and alignment options.
+     */
+    interface HTMLSpectrumStackElement extends Components.SpectrumStack, HTMLStencilElement {
+    }
+    var HTMLSpectrumStackElement: {
+        prototype: HTMLSpectrumStackElement;
+        new (): HTMLSpectrumStackElement;
+    };
     interface HTMLSpectrumThemeElement extends Components.SpectrumTheme, HTMLStencilElement {
     }
     var HTMLSpectrumThemeElement: {
@@ -1225,11 +1792,16 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "spectrum-accordion": HTMLSpectrumAccordionElement;
+        "spectrum-app-layout": HTMLSpectrumAppLayoutElement;
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-chip": HTMLSpectrumChipElement;
+        "spectrum-cluster": HTMLSpectrumClusterElement;
         "spectrum-collapsible-list": HTMLSpectrumCollapsibleListElement;
+        "spectrum-container": HTMLSpectrumContainerElement;
         "spectrum-context-menu": HTMLSpectrumContextMenuElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
+        "spectrum-flex": HTMLSpectrumFlexElement;
+        "spectrum-grid": HTMLSpectrumGridElement;
         "spectrum-hero": HTMLSpectrumHeroElement;
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
         "spectrum-menu": HTMLSpectrumMenuElement;
@@ -1237,6 +1809,8 @@ declare global {
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-select": HTMLSpectrumSelectElement;
+        "spectrum-sidebar": HTMLSpectrumSidebarElement;
+        "spectrum-stack": HTMLSpectrumStackElement;
         "spectrum-theme": HTMLSpectrumThemeElement;
         "spectrum-toast": HTMLSpectrumToastElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
@@ -1275,6 +1849,11 @@ declare namespace LocalJSX {
          */
         "expandedIcon"?: string;
         /**
+          * Whether to enable haptic feedback Default: false
+          * @default false
+         */
+        "haptic"?: boolean;
+        /**
           * Whether to show content in horizontal scroll container Default: true
           * @default true
          */
@@ -1308,6 +1887,95 @@ declare namespace LocalJSX {
         "variant"?: 'primary' | 'secondary';
     }
     /**
+     * Spectrum App Layout Component
+     * A comprehensive application layout with collapsible sidebar, header, main content, and footer.
+     * Based on CSS Grid with responsive behavior and smooth animations.
+     */
+    interface SpectrumAppLayout {
+        /**
+          * @default 'md'
+         */
+        "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
+        "collapseMobile"?: boolean;
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default '5rem'
+         */
+        "footerHeight"?: string;
+        /**
+          * @default 'md'
+         */
+        "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default '5rem'
+         */
+        "headerHeight"?: string;
+        /**
+          * @default ''
+         */
+        "headerTitle"?: string;
+        /**
+          * @default 'Logo'
+         */
+        "logoAlt"?: string;
+        /**
+          * @default ''
+         */
+        "logoSrc"?: string;
+        "onProfileAction"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; type: 'profile' }>) => void;
+        "onSidebarToggle"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; expanded: boolean }>) => void;
+        /**
+          * @default 'Profile'
+         */
+        "profileText"?: string;
+        /**
+          * @default true
+         */
+        "responsive"?: boolean;
+        /**
+          * @default true
+         */
+        "showFooter"?: boolean;
+        /**
+          * @default true
+         */
+        "showHeader"?: boolean;
+        /**
+          * @default true
+         */
+        "showLogo"?: boolean;
+        /**
+          * @default true
+         */
+        "showProfile"?: boolean;
+        /**
+          * @default '4rem'
+         */
+        "sidebarCollapsedWidth"?: string;
+        /**
+          * @default true
+         */
+        "sidebarCollapsible"?: boolean;
+        /**
+          * @default true
+         */
+        "sidebarExpanded"?: boolean;
+        /**
+          * @default '16rem'
+         */
+        "sidebarExpandedWidth"?: string;
+        /**
+          * @default 'left'
+         */
+        "sidebarPosition"?: 'left' | 'right';
+    }
+    /**
      * Spectrum Button Component
      * A versatile button component with multiple variants, sizes, and states.
      * Supports icons, text, and various interactive states.
@@ -1333,6 +2001,10 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * @default false
+         */
+        "haptic"?: boolean;
         /**
           * @default false
          */
@@ -1406,6 +2078,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * @default false
+         */
+        "haptic"?: boolean;
+        /**
           * @default ''
          */
         "label"?: string;
@@ -1446,6 +2122,61 @@ declare namespace LocalJSX {
           * @default 'primary'
          */
         "variant"?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
+    }
+    /**
+     * Spectrum Cluster Component
+     * A layout component for clustering items together with consistent spacing,
+     * natural wrapping, and flexible alignment options.
+     */
+    interface SpectrumCluster {
+        /**
+          * @default 'start'
+         */
+        "align"?: 'start' | 'center' | 'end';
+        /**
+          * @default 'md'
+         */
+        "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
+        "centerContainer"?: boolean;
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default 'horizontal'
+         */
+        "direction"?: 'horizontal' | 'vertical';
+        /**
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * @default 'start'
+         */
+        "justify"?: 'start' | 'center' | 'end' | 'space-between' | 'space-around';
+        /**
+          * @default false
+         */
+        "noWrap"?: boolean;
+        /**
+          * @default false
+         */
+        "responsive"?: boolean;
+        /**
+          * @default 'md'
+         */
+        "spacing"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "stackBelow"?: boolean;
+        /**
+          * @default true
+         */
+        "wrap"?: boolean;
     }
     interface SpectrumCollapsibleList {
         /**
@@ -1493,6 +2224,53 @@ declare namespace LocalJSX {
           * Event emitted when an item is renamed
          */
         "onItemRenamed"?: (event: SpectrumCollapsibleListCustomEvent<{ action: string; id: string; oldName: string; newName: string }>) => void;
+    }
+    /**
+     * Spectrum Container Component
+     * A container component with max-width constraints, responsive padding,
+     * and centering capabilities for content layout.
+     */
+    interface SpectrumContainer {
+        /**
+          * @default false
+         */
+        "centerContent"?: boolean;
+        /**
+          * @default true
+         */
+        "centered"?: boolean;
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default true
+         */
+        "fullWidthMobile"?: boolean;
+        /**
+          * @default ''
+         */
+        "maxWidth"?: string;
+        /**
+          * @default 'md'
+         */
+        "padding"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
+        "paddingX"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default ''
+         */
+        "paddingY"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default true
+         */
+        "responsive"?: boolean;
+        /**
+          * @default 'lg'
+         */
+        "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'fluid';
     }
     /**
      * Spectrum Context Menu Component
@@ -1554,6 +2332,172 @@ declare namespace LocalJSX {
           * @default ''
          */
         "sources"?: string;
+    }
+    /**
+     * Spectrum Flex Component
+     * An advanced flexbox layout component with comprehensive flex properties,
+     * responsive behavior, and fine-grained control over flex container and items.
+     */
+    interface SpectrumFlex {
+        /**
+          * @default 'stretch'
+         */
+        "align"?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+        /**
+          * @default 'stretch'
+         */
+        "alignContent"?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch';
+        /**
+          * @default 'md'
+         */
+        "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
+        "columnGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default 'row'
+         */
+        "direction"?: 'row' | 'row-reverse' | 'column' | 'column-reverse';
+        /**
+          * @default false
+         */
+        "fullHeight"?: boolean;
+        /**
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * @default 'md'
+         */
+        "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "inline"?: boolean;
+        /**
+          * @default 'flex-start'
+         */
+        "justify"?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'column'
+         */
+        "mobileDirection"?: 'row' | 'column';
+        /**
+          * @default false
+         */
+        "responsive"?: boolean;
+        /**
+          * @default ''
+         */
+        "rowGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default 'nowrap'
+         */
+        "wrap"?: 'nowrap' | 'wrap' | 'wrap-reverse';
+    }
+    /**
+     * Spectrum Grid Component
+     * A comprehensive CSS Grid layout component with support for grid templates,
+     * areas, responsive behavior, and auto-sizing capabilities.
+     */
+    interface SpectrumGrid {
+        /**
+          * @default 'stretch'
+         */
+        "alignContent"?: 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
+        "alignItems"?: 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
+        "areas"?: string;
+        /**
+          * @default ''
+         */
+        "autoColumns"?: string;
+        /**
+          * @default false
+         */
+        "autoFill"?: boolean;
+        /**
+          * @default false
+         */
+        "autoFit"?: boolean;
+        /**
+          * @default ''
+         */
+        "autoRows"?: string;
+        /**
+          * @default 'md'
+         */
+        "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
+        "columnGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default '1fr'
+         */
+        "columns"?: string;
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default false
+         */
+        "fullHeight"?: boolean;
+        /**
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * @default 'md'
+         */
+        "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
+        "inline"?: boolean;
+        /**
+          * @default 'stretch'
+         */
+        "justifyContent"?: 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
+        "justifyItems"?: 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
+        "minColumnWidth"?: string;
+        /**
+          * @default ''
+         */
+        "minRowHeight"?: string;
+        /**
+          * @default '1fr'
+         */
+        "mobileColumns"?: string;
+        /**
+          * @default false
+         */
+        "responsive"?: boolean;
+        /**
+          * @default ''
+         */
+        "rowGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default ''
+         */
+        "rows"?: string;
     }
     /**
      * Spectrum Hero Component
@@ -1989,6 +2933,112 @@ declare namespace LocalJSX {
          */
         "virtualScrolling"?: boolean;
     }
+    /**
+     * Spectrum Sidebar Component
+     * A layout component for creating sidebar + main content layouts
+     * with responsive behavior and flexible positioning.
+     */
+    interface SpectrumSidebar {
+        /**
+          * @default 'md'
+         */
+        "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
+        "collapseBelow"?: boolean;
+        /**
+          * @default false
+         */
+        "collapsed"?: boolean;
+        /**
+          * @default false
+         */
+        "collapsible"?: boolean;
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default false
+         */
+        "fullHeight"?: boolean;
+        /**
+          * @default 'md'
+         */
+        "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
+        "maxSidebarWidth"?: string;
+        /**
+          * @default ''
+         */
+        "minSidebarWidth"?: string;
+        /**
+          * @default false
+         */
+        "overlay"?: boolean;
+        /**
+          * @default 'left'
+         */
+        "position"?: 'left' | 'right';
+        /**
+          * @default true
+         */
+        "responsive"?: boolean;
+        /**
+          * @default 'md'
+         */
+        "sidebarWidth"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default true
+         */
+        "stackMobile"?: boolean;
+    }
+    /**
+     * Spectrum Stack Component
+     * A layout component for vertical or horizontal stacking of child elements
+     * with consistent spacing and alignment options.
+     */
+    interface SpectrumStack {
+        /**
+          * @default 'stretch'
+         */
+        "align"?: 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * @default 'md'
+         */
+        "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default 'vertical'
+         */
+        "direction"?: 'vertical' | 'horizontal' | 'column' | 'row';
+        /**
+          * @default 'start'
+         */
+        "justify"?: 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default false
+         */
+        "responsive"?: boolean;
+        /**
+          * @default false
+         */
+        "reverse"?: boolean;
+        /**
+          * @default 'md'
+         */
+        "spacing"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+        /**
+          * @default false
+         */
+        "wrap"?: boolean;
+    }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
@@ -2153,11 +3203,16 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "spectrum-accordion": SpectrumAccordion;
+        "spectrum-app-layout": SpectrumAppLayout;
         "spectrum-button": SpectrumButton;
         "spectrum-chip": SpectrumChip;
+        "spectrum-cluster": SpectrumCluster;
         "spectrum-collapsible-list": SpectrumCollapsibleList;
+        "spectrum-container": SpectrumContainer;
         "spectrum-context-menu": SpectrumContextMenu;
         "spectrum-conversation-panel": SpectrumConversationPanel;
+        "spectrum-flex": SpectrumFlex;
+        "spectrum-grid": SpectrumGrid;
         "spectrum-hero": SpectrumHero;
         "spectrum-image-gallery": SpectrumImageGallery;
         "spectrum-menu": SpectrumMenu;
@@ -2165,6 +3220,8 @@ declare namespace LocalJSX {
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
         "spectrum-select": SpectrumSelect;
+        "spectrum-sidebar": SpectrumSidebar;
+        "spectrum-stack": SpectrumStack;
         "spectrum-theme": SpectrumTheme;
         "spectrum-toast": SpectrumToast;
         "spectrum-wallpaper": SpectrumWallpaper;
@@ -2175,6 +3232,12 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "spectrum-accordion": LocalJSX.SpectrumAccordion & JSXBase.HTMLAttributes<HTMLSpectrumAccordionElement>;
+            /**
+             * Spectrum App Layout Component
+             * A comprehensive application layout with collapsible sidebar, header, main content, and footer.
+             * Based on CSS Grid with responsive behavior and smooth animations.
+             */
+            "spectrum-app-layout": LocalJSX.SpectrumAppLayout & JSXBase.HTMLAttributes<HTMLSpectrumAppLayoutElement>;
             /**
              * Spectrum Button Component
              * A versatile button component with multiple variants, sizes, and states.
@@ -2187,13 +3250,37 @@ declare module "@stencil/core" {
              * Supports leading/trailing icons, selection states, and various interactive behaviors.
              */
             "spectrum-chip": LocalJSX.SpectrumChip & JSXBase.HTMLAttributes<HTMLSpectrumChipElement>;
+            /**
+             * Spectrum Cluster Component
+             * A layout component for clustering items together with consistent spacing,
+             * natural wrapping, and flexible alignment options.
+             */
+            "spectrum-cluster": LocalJSX.SpectrumCluster & JSXBase.HTMLAttributes<HTMLSpectrumClusterElement>;
             "spectrum-collapsible-list": LocalJSX.SpectrumCollapsibleList & JSXBase.HTMLAttributes<HTMLSpectrumCollapsibleListElement>;
+            /**
+             * Spectrum Container Component
+             * A container component with max-width constraints, responsive padding,
+             * and centering capabilities for content layout.
+             */
+            "spectrum-container": LocalJSX.SpectrumContainer & JSXBase.HTMLAttributes<HTMLSpectrumContainerElement>;
             /**
              * Spectrum Context Menu Component
              * A popup menu for contextual actions that can be attached to any element.
              */
             "spectrum-context-menu": LocalJSX.SpectrumContextMenu & JSXBase.HTMLAttributes<HTMLSpectrumContextMenuElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
+            /**
+             * Spectrum Flex Component
+             * An advanced flexbox layout component with comprehensive flex properties,
+             * responsive behavior, and fine-grained control over flex container and items.
+             */
+            "spectrum-flex": LocalJSX.SpectrumFlex & JSXBase.HTMLAttributes<HTMLSpectrumFlexElement>;
+            /**
+             * Spectrum Grid Component
+             * A comprehensive CSS Grid layout component with support for grid templates,
+             * areas, responsive behavior, and auto-sizing capabilities.
+             */
+            "spectrum-grid": LocalJSX.SpectrumGrid & JSXBase.HTMLAttributes<HTMLSpectrumGridElement>;
             /**
              * Spectrum Hero Component
              * A hero section component that supports both images and video backgrounds,
@@ -2221,6 +3308,18 @@ declare module "@stencil/core" {
              * Based on the Spectrum design system and Material Design 3 patterns.
              */
             "spectrum-select": LocalJSX.SpectrumSelect & JSXBase.HTMLAttributes<HTMLSpectrumSelectElement>;
+            /**
+             * Spectrum Sidebar Component
+             * A layout component for creating sidebar + main content layouts
+             * with responsive behavior and flexible positioning.
+             */
+            "spectrum-sidebar": LocalJSX.SpectrumSidebar & JSXBase.HTMLAttributes<HTMLSpectrumSidebarElement>;
+            /**
+             * Spectrum Stack Component
+             * A layout component for vertical or horizontal stacking of child elements
+             * with consistent spacing and alignment options.
+             */
+            "spectrum-stack": LocalJSX.SpectrumStack & JSXBase.HTMLAttributes<HTMLSpectrumStackElement>;
             "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
             /**
              * Spectrum Toast Component

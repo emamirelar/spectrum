@@ -1,0 +1,343 @@
+// ==============================================
+// Spectrum Flex Component Styles
+// ==============================================
+// BEM naming convention: spectrum-flex (block), __element (element), --modifier (modifier)
+// Advanced Flexbox layout with comprehensive properties
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+:host {
+  display: block;
+  
+  // Core flex properties
+  --flex-gap: var(--spectrum-sys-spacing, 1rem);
+  --flex-gap-none: 0;
+  --flex-gap-xs: var(--spectrum-sys-spacing-xs, 0.25rem);
+  --flex-gap-sm: var(--spectrum-sys-spacing-small, 0.5rem);
+  --flex-gap-md: var(--spectrum-sys-spacing, 1rem);
+  --flex-gap-lg: var(--spectrum-sys-spacing-large, 2rem);
+  --flex-gap-xl: var(--spectrum-sys-spacing-xl, 3rem);
+  
+  // Custom gap values (set dynamically)
+  --flex-gap-custom: var(--flex-gap);
+  --flex-row-gap-custom: var(--flex-gap);
+  --flex-column-gap-custom: var(--flex-gap);
+  
+  // Debug styles
+  --flex-debug-border: 2px dashed var(--spectrum-sys-color-secondary, #005fb2);
+  --flex-debug-background: rgba(0, 95, 178, 0.1);
+  
+  // Responsive breakpoints
+  --flex-breakpoint-sm: 576px;
+  --flex-breakpoint-md: 768px;
+  --flex-breakpoint-lg: 992px;
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-flex {
+  display: flex;
+  
+  // ==============================================
+  // Display Variations
+  // ==============================================
+  &--inline {
+    display: inline-flex;
+  }
+  
+  // ==============================================
+  // Direction Variations
+  // ==============================================
+  &--direction-row {
+    flex-direction: row;
+  }
+  
+  &--direction-row-reverse {
+    flex-direction: row-reverse;
+  }
+  
+  &--direction-column {
+    flex-direction: column;
+  }
+  
+  &--direction-column-reverse {
+    flex-direction: column-reverse;
+  }
+  
+  // ==============================================
+  // Wrap Variations
+  // ==============================================
+  &--wrap-nowrap {
+    flex-wrap: nowrap;
+  }
+  
+  &--wrap-wrap {
+    flex-wrap: wrap;
+  }
+  
+  &--wrap-wrap-reverse {
+    flex-wrap: wrap-reverse;
+  }
+  
+  // ==============================================
+  // Justify Content Variations
+  // ==============================================
+  &--justify-flex-start {
+    justify-content: flex-start;
+  }
+  
+  &--justify-flex-end {
+    justify-content: flex-end;
+  }
+  
+  &--justify-center {
+    justify-content: center;
+  }
+  
+  &--justify-space-between {
+    justify-content: space-between;
+  }
+  
+  &--justify-space-around {
+    justify-content: space-around;
+  }
+  
+  &--justify-space-evenly {
+    justify-content: space-evenly;
+  }
+  
+  // ==============================================
+  // Align Items Variations
+  // ==============================================
+  &--align-flex-start {
+    align-items: flex-start;
+  }
+  
+  &--align-flex-end {
+    align-items: flex-end;
+  }
+  
+  &--align-center {
+    align-items: center;
+  }
+  
+  &--align-baseline {
+    align-items: baseline;
+  }
+  
+  &--align-stretch {
+    align-items: stretch;
+  }
+  
+  // ==============================================
+  // Align Content Variations
+  // ==============================================
+  &--align-content-flex-start {
+    align-content: flex-start;
+  }
+  
+  &--align-content-flex-end {
+    align-content: flex-end;
+  }
+  
+  &--align-content-center {
+    align-content: center;
+  }
+  
+  &--align-content-space-between {
+    align-content: space-between;
+  }
+  
+  &--align-content-space-around {
+    align-content: space-around;
+  }
+  
+  &--align-content-stretch {
+    align-content: stretch;
+  }
+  
+  // ==============================================
+  // Gap Variations
+  // ==============================================
+  &--gap-none {
+    gap: var(--flex-gap-none);
+  }
+  
+  &--gap-xs {
+    gap: var(--flex-gap-xs);
+  }
+  
+  &--gap-sm {
+    gap: var(--flex-gap-sm);
+  }
+  
+  &--gap-md {
+    gap: var(--flex-gap-md);
+  }
+  
+  &--gap-lg {
+    gap: var(--flex-gap-lg);
+  }
+  
+  &--gap-xl {
+    gap: var(--flex-gap-xl);
+  }
+  
+  &--gap-custom {
+    gap: var(--flex-gap-custom);
+  }
+  
+  // Row Gap Variations
+  &--row-gap-none {
+    row-gap: var(--flex-gap-none);
+  }
+  
+  &--row-gap-xs {
+    row-gap: var(--flex-gap-xs);
+  }
+  
+  &--row-gap-sm {
+    row-gap: var(--flex-gap-sm);
+  }
+  
+  &--row-gap-md {
+    row-gap: var(--flex-gap-md);
+  }
+  
+  &--row-gap-lg {
+    row-gap: var(--flex-gap-lg);
+  }
+  
+  &--row-gap-xl {
+    row-gap: var(--flex-gap-xl);
+  }
+  
+  &--row-gap-custom {
+    row-gap: var(--flex-row-gap-custom);
+  }
+  
+  // Column Gap Variations
+  &--column-gap-none {
+    column-gap: var(--flex-gap-none);
+  }
+  
+  &--column-gap-xs {
+    column-gap: var(--flex-gap-xs);
+  }
+  
+  &--column-gap-sm {
+    column-gap: var(--flex-gap-sm);
+  }
+  
+  &--column-gap-md {
+    column-gap: var(--flex-gap-md);
+  }
+  
+  &--column-gap-lg {
+    column-gap: var(--flex-gap-lg);
+  }
+  
+  &--column-gap-xl {
+    column-gap: var(--flex-gap-xl);
+  }
+  
+  &--column-gap-custom {
+    column-gap: var(--flex-column-gap-custom);
+  }
+  
+  // ==============================================
+  // Size Modifiers
+  // ==============================================
+  &--full-height {
+    height: 100%;
+    min-height: 100vh;
+  }
+  
+  &--full-width {
+    width: 100%;
+  }
+  
+  // ==============================================
+  // Debug Mode
+  // ==============================================
+  &--debug {
+    border: var(--flex-debug-border);
+    background-color: var(--flex-debug-background);
+    position: relative;
+    
+    &::after {
+      content: 'FLEX: ' attr(class);
+      position: absolute;
+      top: -1.5rem;
+      left: 0;
+      font-size: 0.75rem;
+      color: var(--spectrum-sys-color-secondary);
+      background: var(--spectrum-sys-color-background, #ffffff);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      white-space: nowrap;
+      z-index: 10;
+    }
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+.spectrum-flex--responsive-sm {
+  @media (max-width: calc(var(--flex-breakpoint-sm) - 1px)) {
+    &.spectrum-flex--mobile-column {
+      flex-direction: column !important;
+    }
+    
+    &.spectrum-flex--mobile-row {
+      flex-direction: row !important;
+    }
+  }
+}
+
+.spectrum-flex--responsive-md {
+  @media (max-width: calc(var(--flex-breakpoint-md) - 1px)) {
+    &.spectrum-flex--mobile-column {
+      flex-direction: column !important;
+    }
+    
+    &.spectrum-flex--mobile-row {
+      flex-direction: row !important;
+    }
+  }
+}
+
+.spectrum-flex--responsive-lg {
+  @media (max-width: calc(var(--flex-breakpoint-lg) - 1px)) {
+    &.spectrum-flex--mobile-column {
+      flex-direction: column !important;
+    }
+    
+    &.spectrum-flex--mobile-row {
+      flex-direction: row !important;
+    }
+  }
+}
+
+// ==============================================
+// Accessibility Support
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-flex {
+    // No specific motion to reduce in flex layout
+  }
+}
+
+// ==============================================
+// High Contrast Mode Support
+// ==============================================
+@media (prefers-contrast: high) {
+  .spectrum-flex--debug {
+    border-color: currentColor;
+  }
+}
