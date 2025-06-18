@@ -116,7 +116,7 @@ spectrum-conversation-panel .conversation-title {
   // --adjusted-spacing: calc(var(--conversation-panel-spacing) / 2);
   // margin: var(--conversation-panel-spacing) var(--adjusted-spacing);
   // padding: var(--adjusted-spacing);
-  padding: 0 var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large);
+  padding: 0 var(--conversation-panel-spacing-large) 0 var(--conversation-panel-spacing-large);
   font-size: var(--conversation-panel-font-size-x-large);
   color: var(--conversation-panel-on-surface);
   flex-shrink: 1;
@@ -674,20 +674,56 @@ spectrum-conversation-panel .message-content {
 
 /* Message content with inline chips */
 spectrum-conversation-panel .message-content-with-chips {
-  display: inline;
+  display: block;
   
   /* Ensure chips display inline with text */
   spectrum-chip[size="extra-small"] {
-    margin: 0 2px;
+    margin: 0 4px 0 6px !important; /* top right bottom left - more space on left side */
     vertical-align: baseline;
-    display: inline-flex;
+    display: inline-flex !important;
     cursor: pointer;
     --chip-padding: var(--spectrum-sys-spacing-xl, 3rem);
   }
   
-  /* Ensure text spans display inline */
-  span {
+  /* Ensure text content flows properly */
+  & > * {
     display: inline;
+  }
+  
+  /* Proper list styling */
+  ul, ol {
+    display: block !important;
+    margin: 1em 0;
+    padding-left: 2em;
+  }
+  
+  li {
+    display: list-item !important;
+    margin: 0.5em 0;
+    
+    /* Citation chips within list items */
+    spectrum-chip[size="extra-small"] {
+      margin: 0 4px 0 6px !important; /* top right bottom left - more space on left side */
+      vertical-align: baseline;
+      display: inline-flex !important;
+      cursor: pointer;
+      --chip-padding: var(--spectrum-sys-spacing-xl, 3rem);
+    }
+  }
+  
+  /* Block elements should remain block */
+  p, div, h1, h2, h3, h4, h5, h6 {
+    display: block !important;
+  }
+  
+  /* Inline elements */
+  span, strong, em, a {
+    display: inline !important;
+  }
+  
+  /* Line breaks */
+  br {
+    display: block !important;
   }
 }
 
@@ -700,4 +736,11 @@ spectrum-conversation-panel .message-content-with-chips {
   spectrum-conversation-panel .mobile-source-card {
     max-height: 80vh;
   }
+}
+
+/* High-specificity override for citation chip spacing */
+spectrum-conversation-panel spectrum-chip[size="extra-small"] {
+  margin: 0 4px 0 6px !important;
+  vertical-align: baseline !important;
+  display: inline-flex !important;
 }

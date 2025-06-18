@@ -1314,7 +1314,7 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
       },
       {
         "id": "msg-004",
-        "message": "There are several major types of renewable energy sources:\\n\\n**Solar Energy**: Photovoltaic panels<sup>1</sup> and thermal systems<sup>2</sup> harness sunlight. **Wind Energy**: Onshore<cite>3</cite> and offshore<cite>4</cite><cite>5</cite> wind turbines generate electricity. **Hydropower**: Traditional dams<sup>6</sup> and run-of-river systems<sup>7</sup><sup>8</sup> use flowing water. **Geothermal**: Underground heat<cite>9</cite> powers turbines. **Biomass**: Organic materials<sup>10</sup> provide fuel and energy.",
+        "message": "There are several major types of renewable energy sources:<br><br><strong>Solar Energy</strong>: Photovoltaic panels<sup>1</sup> and thermal systems<sup>2</sup> harness sunlight. <strong>Wind Energy</strong>: Onshore<cite>3</cite> and offshore<cite>4</cite><cite>5</cite> wind turbines generate electricity. <strong>Hydropower</strong>: Traditional dams<sup>6</sup> and run-of-river systems<sup>7</sup><sup>8</sup> use flowing water. <strong>Geothermal</strong>: Underground heat<cite>9</cite> powers turbines. <strong>Biomass</strong>: Organic materials<sup>10</sup> provide fuel and energy.<br><br><strong>Key advantages by technology type:</strong><ul><li>Solar panels are cost-effective<sup>11</sup><sup>12</sup> and have minimal maintenance requirements<cite>13</cite></li><li>Wind turbines offer excellent scalability<cite>14</cite><cite>15</cite><cite>16</cite> for both small and large installations</li><li>Hydroelectric systems provide reliable baseload power<sup>17</sup> with long operational lifespans<sup>18</sup><sup>19</sup></li><li>Geothermal energy delivers consistent output<cite>20</cite> regardless of weather conditions</li><li>Biomass technology enables carbon-neutral energy production<sup>21</sup><sup>22</sup> from waste materials<cite>23</cite></li></ul>",
         "sender": "response",
         "timestamp": "2024-03-20T10:01:15Z",
         "sources": [
@@ -1377,6 +1377,84 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
             "value": "https://www.energy.gov/eere/bioenergy/biomass-basics",
             "snippet": "Converting organic materials like wood, agricultural waste, and dedicated energy crops into electricity and fuel.",
             "number": "10"
+          },
+          {
+            "label": "Solar Panel Cost Analysis 2024",
+            "value": "https://www.solar.com/learn/solar-panel-cost/",
+            "snippet": "Comprehensive analysis of solar panel costs, showing dramatic price reductions and improved cost-effectiveness.",
+            "number": "11"
+          },
+          {
+            "label": "IRENA Solar Cost Trends Report",
+            "value": "https://www.irena.org/costs/solar",
+            "snippet": "International renewable energy analysis of solar technology cost trends and market competitiveness.",
+            "number": "12"
+          },
+          {
+            "label": "Solar Maintenance Requirements Study",
+            "value": "https://www.nrel.gov/docs/solar-maintenance",
+            "snippet": "Research on solar panel maintenance needs, showing minimal requirements for optimal performance.",
+            "number": "13"
+          },
+          {
+            "label": "Wind Energy Scalability Report",
+            "value": "https://www.energy.gov/eere/wind/wind-energy-scalability",
+            "snippet": "Analysis of wind energy scalability from residential to utility-scale applications.",
+            "number": "14"
+          },
+          {
+            "label": "Distributed Wind Energy Systems",
+            "value": "https://www.distributedwind.org/",
+            "snippet": "Small-scale wind turbine systems for residential and commercial applications.",
+            "number": "15"
+          },
+          {
+            "label": "Utility-Scale Wind Development",
+            "value": "https://www.windpowerengineering.com/utility-scale/",
+            "snippet": "Large-scale wind farm development, installation, and grid integration strategies.",
+            "number": "16"
+          },
+          {
+            "label": "Hydroelectric Baseload Power Study",
+            "value": "https://www.hydro.org/baseload-power",
+            "snippet": "Research on hydroelectric power's role in providing reliable, consistent baseload electricity generation.",
+            "number": "17"
+          },
+          {
+            "label": "Hydropower Infrastructure Longevity",
+            "value": "https://www.usbr.gov/power/data/longevity.html",
+            "snippet": "US Bureau of Reclamation data on hydroelectric facility operational lifespans and longevity.",
+            "number": "18"
+          },
+          {
+            "label": "Dam Lifespan and Maintenance Analysis",
+            "value": "https://www.icold-cigb.org/dam-lifespan",
+            "snippet": "International Commission on Large Dams analysis of hydroelectric infrastructure longevity.",
+            "number": "19"
+          },
+          {
+            "label": "Geothermal Consistent Output Analysis",
+            "value": "https://www.geothermal-energy.org/consistent-output",
+            "snippet": "Analysis of geothermal energy's ability to provide consistent power output regardless of weather.",
+            "number": "20"
+          },
+          {
+            "label": "Biomass Carbon Neutrality Research",
+            "value": "https://www.biomassmagazine.com/articles/carbon-neutral",
+            "snippet": "Research on biomass energy's carbon-neutral potential and lifecycle carbon analysis.",
+            "number": "21"
+          },
+          {
+            "label": "Sustainable Biomass Production Methods",
+            "value": "https://www.sustainablebiomass.org/production-methods",
+            "snippet": "Sustainable methods for biomass production and energy conversion with minimal environmental impact.",
+            "number": "22"
+          },
+          {
+            "label": "Waste-to-Energy Biomass Systems",
+            "value": "https://www.energy.gov/eere/bioenergy/waste-to-energy",
+            "snippet": "Converting agricultural and organic waste materials into clean, renewable energy sources.",
+            "number": "23"
           }
         ]
       }
@@ -1408,6 +1486,7 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
             <strong>This demonstrates the new grouped citation functionality:</strong><br>
             • <strong>Adjacent citations</strong> (like <sup>1</sup><sup>2</sup><sup>3</sup>) are automatically grouped into chips showing "3 citations"<br>
             • <strong>Single citations</strong> continue to show the source title as before<br>
+            • <strong>List items with citations</strong> work seamlessly with grouped citations<br>
             • <strong>Hover over grouped chips</strong> to see individual cards for each citation<br>
             • <strong>Mixed citation styles</strong> are supported: &lt;sup&gt; and &lt;cite&gt; tags both work<br>
             • Debug mode is enabled for detailed console logging
@@ -1448,7 +1527,11 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
             • <strong>Message 1:</strong> &lt;cite&gt;4&lt;/cite&gt; → single citation showing source title<br>
             • <strong>Message 1:</strong> &lt;cite&gt;6&lt;/cite&gt;&lt;cite&gt;7&lt;/cite&gt;&lt;cite&gt;8&lt;/cite&gt; → "3 citations" group<br>
             • <strong>Message 1:</strong> &lt;sup&gt;10&lt;/sup&gt;&lt;sup&gt;11&lt;/sup&gt; → "2 citations" group<br>
-            • <strong>Message 2:</strong> Mixed single and grouped citations throughout the text
+            • <strong>Message 2:</strong> Mixed single and grouped citations throughout the text<br>
+            • <strong>List Items:</strong> &lt;sup&gt;11&lt;/sup&gt;&lt;sup&gt;12&lt;/sup&gt; → "2 citations" group in list<br>
+            • <strong>List Items:</strong> &lt;cite&gt;14&lt;/cite&gt;&lt;cite&gt;15&lt;/cite&gt;&lt;cite&gt;16&lt;/cite&gt; → "3 citations" group in list<br>
+            • <strong>List Items:</strong> &lt;sup&gt;18&lt;/sup&gt;&lt;sup&gt;19&lt;/sup&gt; → "2 citations" group in list<br>
+            • <strong>List Items:</strong> &lt;sup&gt;21&lt;/sup&gt;&lt;sup&gt;22&lt;/sup&gt; → "2 citations" group in list
           </p>
         </div>
       </div>
@@ -1458,7 +1541,7 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
     docs: {
       description: {
         story: `
-          Demonstrates the new grouped citation functionality where adjacent citations are automatically grouped together.
+          Demonstrates the new grouped citation functionality where adjacent citations are automatically grouped together in both regular text and list items.
           
           ## Key Features Demonstrated:
           
@@ -1466,11 +1549,18 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
           - Citations like \`<sup>1</sup><sup>2</sup><sup>3</sup>\` become a single chip showing "3 citations"
           - Works with both \`<sup>\` and \`<cite>\` tags
           - Groups citations separated by whitespace, punctuation, or ≤3 characters
+          - **List item support**: Citations within bullet points are grouped the same way as in regular text
+          
+          ### Content Types Supported
+          - **Regular text**: Standard paragraph text with grouped citations
+          - **List items**: Bullet point lists with both single and grouped citations
+          - **Mixed content**: Both text and lists can contain citations in the same message
           
           ### Hover Behavior
           - **Single citations**: Show individual source card with title, URL, and snippet
           - **Grouped citations**: Show stacked cards for each citation in the group
           - Each card in a group can be clicked individually
+          - **Works in lists**: Same hover behavior applies to citations within list items
           
           ### Responsive Design
           - Desktop: Hover overlay with multiple cards for groups
@@ -1484,8 +1574,9 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
           ## Test the Functionality:
           1. **Hover over grouped citations** (showing "X citations") to see multiple cards
           2. **Hover over single citations** to see individual source cards  
-          3. **Click any citation** to emit sourceClick events (check Actions panel)
-          4. **Test on mobile** by resizing browser window below 768px width
+          3. **Test list item citations** - they work identically to text citations
+          4. **Click any citation** to emit sourceClick events (check Actions panel)
+          5. **Test on mobile** by resizing browser window below 768px width
         `,
       },
     },

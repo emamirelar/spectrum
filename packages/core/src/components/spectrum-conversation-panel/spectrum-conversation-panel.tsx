@@ -467,7 +467,7 @@ export class SpectrumConversationPanel {
   }
 
   /**
-   * Parse HTML content and replace <cite> and <sup> tags with source chips
+   * Parse HTML content and replace <cite> and <sup> tags with source chips using DOM traversal
    */
   private parseAndReplaceSourceTags(htmlContent: string, sources: any[], messageId: string): any {
     this.debugLog('parseAndReplaceSourceTags called', { htmlContent, sourcesLength: sources?.length, messageId });
@@ -477,153 +477,255 @@ export class SpectrumConversationPanel {
       return <div innerHTML={htmlContent}></div>;
     }
 
-    // Check for both cite and sup tags
-    const citeRegex = /<cite>(\d+)<\/cite>/g;
-    const supRegex = /<sup>(\d+)<\/sup>/g;
+    // Parse HTML using DOMParser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<div>${htmlContent}</div>`, 'text/html');
+    const container = doc.body.firstChild as HTMLElement;
     
-    const citeMatches = [...htmlContent.matchAll(citeRegex)];
-    const supMatches = [...htmlContent.matchAll(supRegex)];
-    
-    // Combine all matches and sort by position
-    const allMatches = [
-      ...citeMatches.map(match => ({ ...match, tagType: 'cite' as const })),
-      ...supMatches.map(match => ({ ...match, tagType: 'sup' as const }))
-    ].sort((a, b) => a.index! - b.index!);
-    
-    if (allMatches.length === 0) {
-      this.debugLog('No cite or sup tags found in content');
+    if (!container) {
+      this.debugLog('Failed to parse HTML content');
       return <div innerHTML={htmlContent}></div>;
     }
 
-    this.debugLog('Found citation tags, processing...', { 
-      matchCount: allMatches.length, 
-      citeCount: citeMatches.length, 
-      supCount: supMatches.length 
-    });
+    // Find all citation elements (cite and sup tags)
+    const citationElements = container.querySelectorAll('cite, sup');
     
-    // Group adjacent citations
-    const citationGroups = this.groupAdjacentCitations(allMatches, htmlContent);
-    
-    // Build an array of elements
-    const elements: any[] = [];
-    let lastIndex = 0;
-    
-    citationGroups.forEach((group) => {
-      const groupStart = group.matches[0].index!;
-      const groupEnd = group.matches[group.matches.length - 1].index! + group.matches[group.matches.length - 1][0].length;
-
-      // Add text before the citation group
-      if (groupStart > lastIndex) {
-        const beforeText = htmlContent.substring(lastIndex, groupStart);
-        if (beforeText.trim()) {
-          elements.push(<span innerHTML={beforeText} />);
-        }
-      }
-
-      if (group.matches.length === 1) {
-        // Single citation - render as before
-        const match = group.matches[0];
-        const sourceNumber = match[1];
-        const source = sources.find(s => 
-          s.number === sourceNumber || 
-          s.number === parseInt(sourceNumber) || 
-          s.number?.toString() === sourceNumber
-        );
-
-        if (source) {
-          elements.push(
-            <spectrum-chip
-              size="extra-small"
-              variant="secondary"
-              outline={true}
-              label={source.label}
-              sound={this.sound}
-              style={{ margin: '0 2px', verticalAlign: 'middle', display: 'inline-flex' }}
-              onMouseEnter={(e) => this.handleSourceChipHover(e, messageId, sourceNumber, source)}
-              onMouseLeave={() => this.handleSourceChipLeave()}
-              onClick={(e) => this.handleSourceChipClick(e, messageId, sourceNumber, source)}
-            />
-          );
-        }
-      } else {
-        // Multiple adjacent citations - render as grouped chip
-        const sourceNumbers = group.matches.map(m => m[1]);
-        const validSources = sourceNumbers
-          .map(num => sources.find(s => 
-            s.number === num || 
-            s.number === parseInt(num) || 
-            s.number?.toString() === num
-          ))
-          .filter(Boolean);
-
-        if (validSources.length > 0) {
-          elements.push(
-            <spectrum-chip
-              size="extra-small"
-              variant="secondary"
-              outline={true}
-              label={`${validSources.length} citations`}
-              sound={this.sound}
-              style={{ margin: '0 2px', verticalAlign: 'middle', display: 'inline-flex' }}
-              onMouseEnter={(e) => this.handleGroupedSourceChipHover(e, messageId, sourceNumbers)}
-              onMouseLeave={() => this.handleSourceChipLeave()}
-              onClick={(e) => this.handleGroupedSourceChipClick(e, messageId, sourceNumbers, validSources)}
-            />
-          );
-        }
-      }
-
-      lastIndex = groupEnd;
-    });
-
-    // Add remaining text after the last citation group
-    if (lastIndex < htmlContent.length) {
-      const remainingText = htmlContent.substring(lastIndex);
-      if (remainingText.trim()) {
-        elements.push(<span innerHTML={remainingText} />);
-      }
+    if (citationElements.length === 0) {
+      this.debugLog('No cite or sup tags found in parsed content');
+      return <div innerHTML={htmlContent}></div>;
     }
 
-    this.debugLog('Created elements for rendering', { elementsLength: elements.length });
+    this.debugLog('Found citation elements', { count: citationElements.length });
+
+    // Convert citations to data for grouping
+    const citationData: Array<{
+      element: Element;
+      sourceNumber: string;
+      source: any;
+      position: number;
+    }> = [];
+
+    citationElements.forEach((element, index) => {
+      const sourceNumber = element.textContent?.trim() || '';
+      const source = sources.find(s => 
+        s.number === sourceNumber || 
+        s.number === parseInt(sourceNumber) || 
+        s.number?.toString() === sourceNumber
+      );
+
+      if (source) {
+        citationData.push({
+          element,
+          sourceNumber,
+          source,
+          position: index
+        });
+      }
+    });
+
+    // Group adjacent citations by checking DOM proximity
+    const citationGroups = this.groupAdjacentCitationElements(citationData);
     
-    // Return a div containing all elements
-    return <div style={{ display: 'inline' }}>{elements}</div>;
+    // Convert DOM tree to JSX elements
+    const convertedContent = this.convertDOMToJSX(container, citationGroups, messageId);
+
+    this.debugLog('Converted DOM to JSX successfully');
+    
+    return convertedContent;
   }
 
   /**
-   * Group adjacent citations together
+   * Group adjacent citation elements in the DOM
    */
-  private groupAdjacentCitations(matches: any[], htmlContent: string): { matches: any[] }[] {
-    if (matches.length === 0) return [];
+  private groupAdjacentCitationElements(citationData: Array<{
+    element: Element;
+    sourceNumber: string;
+    source: any;
+    position: number;
+  }>): Array<{
+    elements: Array<{element: Element; sourceNumber: string; source: any}>;
+    isGrouped: boolean;
+  }> {
+    if (citationData.length === 0) return [];
+
+    const groups: Array<{
+      elements: Array<{element: Element; sourceNumber: string; source: any}>;
+      isGrouped: boolean;
+    }> = [];
     
-    const groups: { matches: any[] }[] = [];
-    let currentGroup: any[] = [matches[0]];
-    
-    for (let i = 1; i < matches.length; i++) {
-      const currentMatch = matches[i];
-      const previousMatch = matches[i - 1];
+    let currentGroup = [citationData[0]];
+
+    for (let i = 1; i < citationData.length; i++) {
+      const current = citationData[i];
+      const previous = citationData[i - 1];
       
-      // Calculate the text between this citation and the previous one
-      const previousEnd = previousMatch.index! + previousMatch[0].length;
-      const currentStart = currentMatch.index!;
-      const textBetween = htmlContent.substring(previousEnd, currentStart);
-      
-      // Consider citations adjacent if there's only whitespace, punctuation, or very short text between them
-      const isAdjacent = /^[\s,;.!?\-–—]*$/.test(textBetween) || textBetween.length <= 3;
+      // Check if elements are adjacent in DOM
+      const isAdjacent = this.areElementsAdjacent(previous.element, current.element);
       
       if (isAdjacent) {
-        currentGroup.push(currentMatch);
+        currentGroup.push(current);
       } else {
-        groups.push({ matches: currentGroup });
-        currentGroup = [currentMatch];
+        // Finish current group
+        groups.push({
+          elements: currentGroup.map(({ element, sourceNumber, source }) => ({ element, sourceNumber, source })),
+          isGrouped: currentGroup.length > 1
+        });
+        currentGroup = [current];
       }
     }
     
-    // Don't forget the last group
-    groups.push({ matches: currentGroup });
-    
+    // Add the last group
+    groups.push({
+      elements: currentGroup.map(({ element, sourceNumber, source }) => ({ element, sourceNumber, source })),
+      isGrouped: currentGroup.length > 1
+    });
+
     return groups;
   }
+
+  /**
+   * Check if two elements are adjacent (only whitespace/punctuation between them)
+   */
+  private areElementsAdjacent(elem1: Element, elem2: Element): boolean {
+    let nextNode = elem1.nextSibling;
+    
+    while (nextNode && nextNode !== elem2) {
+      if (nextNode.nodeType === Node.TEXT_NODE) {
+        const text = nextNode.textContent || '';
+        // If there's significant text between them, they're not adjacent
+        if (text.trim().length > 3 && !/^[\s,;.!?\-–—]*$/.test(text.trim())) {
+          return false;
+        }
+      } else if (nextNode.nodeType === Node.ELEMENT_NODE) {
+        // If there's another element between them, they're not adjacent
+        return false;
+      }
+      nextNode = nextNode.nextSibling;
+    }
+    
+    return nextNode === elem2;
+  }
+
+  /**
+   * Convert DOM nodes to JSX elements, replacing citation groups with spectrum-chip components
+   */
+  private convertDOMToJSX(node: Node, citationGroups: Array<{
+    elements: Array<{element: Element; sourceNumber: string; source: any}>;
+    isGrouped: boolean;
+  }>, messageId: string): any {
+    
+    if (node.nodeType === Node.TEXT_NODE) {
+      return node.textContent;
+    }
+    
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const element = node as Element;
+      
+      // Check if this element is part of a citation group
+      const citationGroup = citationGroups.find(group => 
+        group.elements.some(item => item.element === element)
+      );
+      
+      if (citationGroup) {
+        // If this is the first element in a group, render the group
+        const isFirstInGroup = citationGroup.elements[0].element === element;
+        
+        if (isFirstInGroup) {
+          if (citationGroup.isGrouped) {
+            // Render grouped citation chip
+            const sourceNumbers = citationGroup.elements.map(item => item.sourceNumber);
+            const validSources = citationGroup.elements.map(item => item.source);
+            
+            return [
+              ' ',
+              <spectrum-chip
+                size="extra-small"
+                variant="secondary"
+                outline={true}
+                label={`${validSources.length} citations`}
+                sound={this.sound}
+                onMouseEnter={(e) => this.handleGroupedSourceChipHover(e, messageId, sourceNumbers)}
+                onMouseLeave={() => this.handleSourceChipLeave()}
+                onClick={(e) => this.handleGroupedSourceChipClick(e, messageId, sourceNumbers, validSources)}
+              />
+            ];
+          } else {
+            // Render single citation chip
+            const { sourceNumber, source } = citationGroup.elements[0];
+            return [
+              ' ',
+              <spectrum-chip
+                size="extra-small"
+                variant="secondary"
+                outline={true}
+                label={source.label}
+                sound={this.sound}
+                onMouseEnter={(e) => this.handleSourceChipHover(e, messageId, sourceNumber, source)}
+                onMouseLeave={() => this.handleSourceChipLeave()}
+                onClick={(e) => this.handleSourceChipClick(e, messageId, sourceNumber, source)}
+              />
+            ];
+          }
+        } else {
+          // Skip other elements in the group (they're handled by the first element)
+          return null;
+        }
+      }
+      
+      // Regular element - convert children and create JSX element
+      const tagName = element.tagName.toLowerCase();
+      const children: any[] = [];
+      
+      for (let i = 0; i < node.childNodes.length; i++) {
+        const child = this.convertDOMToJSX(node.childNodes[i], citationGroups, messageId);
+        if (child !== null) {
+          children.push(child);
+        }
+      }
+      
+      // Create JSX element based on tag name
+      const props: any = {};
+      
+      // Copy attributes
+      if (element.attributes) {
+        for (let i = 0; i < element.attributes.length; i++) {
+          const attr = element.attributes[i];
+          props[attr.name] = attr.value;
+        }
+      }
+      
+      // Return appropriate JSX element
+      switch (tagName) {
+        case 'ul':
+          return <ul {...props}>{children}</ul>;
+        case 'ol':
+          return <ol {...props}>{children}</ol>;
+        case 'li':
+          return <li {...props}>{children}</li>;
+        case 'p':
+          return <p {...props}>{children}</p>;
+        case 'div':
+          return <div {...props}>{children}</div>;
+        case 'span':
+          return <span {...props}>{children}</span>;
+        case 'strong':
+          return <strong {...props}>{children}</strong>;
+        case 'em':
+          return <em {...props}>{children}</em>;
+        case 'br':
+          return <br />;
+        case 'a':
+          return <a {...props}>{children}</a>;
+        default:
+          // For any other elements, use a span
+          return <span {...props}>{children}</span>;
+      }
+    }
+    
+    return null;
+  }
+
+
 
   /**
    * Handle source chip hover
