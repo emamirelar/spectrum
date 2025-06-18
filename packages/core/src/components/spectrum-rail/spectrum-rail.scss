@@ -23,9 +23,11 @@
   --rail-spacing-medium: var(--spectrum-sys-spacing-medium, 12px);
   --rail-spacing-lg: var(--spectrum-sys-spacing-large, 16px);
   
-  // Shadow and transitions
+  // Shadow and transitions - Optimized for smooth animation
   --rail-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --rail-transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --rail-transition-duration: 400ms;
+  --rail-transition-timing: cubic-bezier(0.25, 1, 0.5, 1); // More fluid easing
+  --rail-fast-transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rail {
@@ -42,38 +44,41 @@
   box-shadow: var(--rail-shadow);
   position: relative;
   overflow: hidden;
-  transition: margin var(--rail-transition), width var(--rail-transition), height var(--rail-transition), border-radius var(--rail-transition);
-  will-change: margin, width, height, border-radius;  
+  
+  // GPU acceleration and optimized transitions
+  transform: translateZ(0);
+  will-change: width, border-radius;
+  
+  // Optimized width animation with containment
+  transition: 
+    width var(--rail-transition-duration) var(--rail-transition-timing),
+    border-radius var(--rail-transition-duration) var(--rail-transition-timing),
+    box-shadow var(--rail-fast-transition);
+  
+  // Use CSS containment for better performance
+  contain: layout style;
+  
   margin: 0;
   margin-left: var(--rail-collapsed-offset);
   padding: var(--rail-spacing-lg) 0;
-  
-  // &.rail--absolute {
-  //   position: absolute;
-  //   top: var(--rail-spacing-lg);
-  //   left: var(--rail-spacing-lg);
-  //   height: calc(100% - 32px);
-  // }
 
   &--expanded {
+    // Use actual width change with performance optimizations
     width: var(--rail-expanded-width);
+    
     height: 100%;
     border-radius: 0;
     gap: 0;
     margin: 0; // Reset all margins when expanded
-
     padding-bottom: 0;
+    
+    // Enhanced shadow for expanded state
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     
     .rail-expanded-content {
       opacity: 1;
-      // width: calc(100% - var(--rail-item-size) - var(--rail-spacing));
       pointer-events: all;
-      // transform: translateX(0);
     }
-    
-    // .rail-icon-only {
-    //   margin-right: var(--rail-spacing);
-    // }
 
     // Consolidate button text visibility in expanded state
     .menu-button,
@@ -100,32 +105,60 @@
       width: 100%;
     }
   }
+  
+  // Hover effect for better user feedback
+  &:not(.rail--expanded):hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .rail-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--rail-transition);
   padding: 0 var(--rail-spacing-medium);
   width: 100%;
   box-sizing: border-box;
   padding-bottom: var(--rail-spacing-lg);
   
-  &.menu .menu-expanded {
-    width: 100%;
-    display: flex;
-    
-    .menu-button {
+  // Optimized transitions for content
+  transition: justify-content var(--rail-fast-transition);
+  
+  // Stagger content animations for smoother experience
+  &.menu {
+    .menu-expanded {
       width: 100%;
-      justify-content: flex-start;
-      border-radius: 24px;
-      overflow: hidden;
+      display: flex;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-20px);
+      transition: 
+        opacity var(--rail-transition-duration) var(--rail-transition-timing) 100ms,
+        visibility 0ms var(--rail-transition-duration) 100ms,
+        transform var(--rail-transition-duration) var(--rail-transition-timing) 100ms;
       
-      span {
-        display: inline-block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+      .rail--expanded & {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+        transition: 
+          opacity var(--rail-transition-duration) var(--rail-transition-timing) 100ms,
+          visibility 0ms 0ms,
+          transform var(--rail-transition-duration) var(--rail-transition-timing) 100ms;
+      }
+      
+      .menu-button {
+        width: 100%;
+        justify-content: flex-start;
+        border-radius: 24px;
+        overflow: hidden;
+        
+        span {
+          display: inline-block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
       }
     }
   }
@@ -136,6 +169,23 @@
       display: flex;
       align-items: center;
       gap: var(--rail-spacing);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-20px);
+      transition: 
+        opacity var(--rail-transition-duration) var(--rail-transition-timing) 150ms,
+        visibility 0ms var(--rail-transition-duration) 150ms,
+        transform var(--rail-transition-duration) var(--rail-transition-timing) 150ms;
+      
+      .rail--expanded & {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+        transition: 
+          opacity var(--rail-transition-duration) var(--rail-transition-timing) 150ms,
+          visibility 0ms 0ms,
+          transform var(--rail-transition-duration) var(--rail-transition-timing) 150ms;
+      }
       
       spectrum-search-input {
         flex-grow: 1;
@@ -164,7 +214,10 @@
       opacity: 0;
       width: 0;
       overflow: hidden;
-      transition: opacity var(--rail-transition), width var(--rail-transition), transform var(--rail-transition);
+      transition: 
+        opacity var(--rail-fast-transition),
+        width var(--rail-fast-transition),
+        transform var(--rail-fast-transition);
       transform: translateX(-10px);
       pointer-events: none;
       flex-grow: 1;
@@ -177,18 +230,33 @@
   
   &.items {
     flex-grow: 1;
-    // min-height: var(--rail-item-size);
     overflow-y: auto;
     padding-bottom: 0;
 
     .rail-items-container {
       width: 100%;
       height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: 
+        opacity var(--rail-transition-duration) var(--rail-transition-timing) 200ms,
+        visibility 0ms var(--rail-transition-duration) 200ms,
+        transform var(--rail-transition-duration) var(--rail-transition-timing) 200ms;
+      
+      .rail--expanded & {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition: 
+          opacity var(--rail-transition-duration) var(--rail-transition-timing) 200ms,
+          visibility 0ms 0ms,
+          transform var(--rail-transition-duration) var(--rail-transition-timing) 200ms;
+      }
     }
     
     ::slotted(*) {
       width: 100%;
-      // max-height: 100%;
       overflow-y: auto;
     }
   }
@@ -207,12 +275,6 @@
         flex-grow: 1;
         text-align: left;
       }
-      
-      // span {
-      //   display: inline-block !important;
-      //   visibility: visible !important;
-      //   opacity: 1 !important;
-      // }
     }
 
     .more-expanded {
@@ -224,6 +286,23 @@
       padding: var(--rail-spacing-lg) var(--rail-spacing-medium);
       box-shadow: 0px -2px 37px 0px rgba(0, 0, 0, 0.29);
       border-top: 1px solid rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: 
+        opacity var(--rail-transition-duration) var(--rail-transition-timing) 250ms,
+        visibility 0ms var(--rail-transition-duration) 250ms,
+        transform var(--rail-transition-duration) var(--rail-transition-timing) 250ms;
+      
+      .rail--expanded & {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition: 
+          opacity var(--rail-transition-duration) var(--rail-transition-timing) 250ms,
+          visibility 0ms 0ms,
+          transform var(--rail-transition-duration) var(--rail-transition-timing) 250ms;
+      }
     }
   }
 
@@ -233,56 +312,32 @@
   }
 }
 
-// Consolidate rail item styles
-// .rail-item,
-// .rail-icon-only {
-//   width: var(--rail-item-size);
-//   height: var(--rail-item-size);
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   flex-shrink: 0;
-// }
+// Performance optimization for reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .rail {
+    --rail-transition-duration: 0ms;
+    --rail-fast-transition: 0ms;
+    
+    .rail-section .menu-expanded,
+    .rail-section .search-expanded,
+    .rail-section .rail-items-container,
+    .rail-section .more-expanded {
+      transition: none;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+}
 
-// .rail-icon-only {
-//   margin: 0 auto;
-//   border-radius: 50%;
-//   overflow: hidden;
-// }
-
-// Consolidate button text visibility
-// .menu-button .spectrum-button__text,
-// .menu-button span {
-//   display: inline-flex !important;
-//   visibility: visible !important;
-//   opacity: 1 !important;
-//   color: var(--rail-text-color) !important;
-//   margin-left: var(--rail-spacing) !important;
-// }
-
-// Force all button spans to be visible
-// spectrum-button:not([icon-only]) span {
-//   display: inline-block !important;
-//   visibility: visible !important;
-//   opacity: 1 !important;
-// }
-
-// Slotted element styles
-// ::slotted(spectrum-button) {
-//   width: var(--rail-item-size) !important;
-//   height: var(--rail-item-size) !important;
-//   padding: 0 !important;
-//   margin: 0 !important;
-//   display: flex !important;
-//   align-items: center !important;
-//   justify-content: center !important;
-// }
-
-// ::slotted(spectrum-collapsible-list) {
-//   ::slotted(*) {  
-//   border-top: 1px solid red;
-//   max-height: 100%;
-//   overflow-y: auto;
-//   width: 100%;
-//   display: block;
-// }
+// High contrast support
+@media (prefers-contrast: high) {
+  .rail {
+    border-width: 2px;
+    
+    &--expanded {
+      box-shadow: none;
+      border: 2px solid var(--rail-border-color);
+    }
+  }
+}
