@@ -53,7 +53,8 @@ export const SpectrumAccordion: StencilReactComponent<SpectrumAccordionElement, 
 
 type SpectrumAppLayoutEvents = {
     onSidebarToggle: EventName<CustomEvent<{ action: string; expanded: boolean }>>,
-    onProfileAction: EventName<CustomEvent<{ action: string; type: 'profile' }>>
+    onProfileAction: EventName<CustomEvent<{ action: string; type: 'profile' }>>,
+    onRightBarToggle: EventName<CustomEvent<{ action: string; expanded: boolean }>>
 };
 
 export const SpectrumAppLayout: StencilReactComponent<SpectrumAppLayoutElement, SpectrumAppLayoutEvents> = /*@__PURE__*/ createComponent<SpectrumAppLayoutElement, SpectrumAppLayoutEvents>({
@@ -63,7 +64,8 @@ export const SpectrumAppLayout: StencilReactComponent<SpectrumAppLayoutElement, 
     react: React,
     events: {
         onSidebarToggle: 'sidebarToggle',
-        onProfileAction: 'profileAction'
+        onProfileAction: 'profileAction',
+        onRightBarToggle: 'rightBarToggle'
     } as SpectrumAppLayoutEvents,
     defineCustomElement: defineSpectrumAppLayout
 });

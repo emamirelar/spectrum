@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, h, Prop, State, Event, EventEmitter, Watch } from '@stencil/core';
 
 /**
  * Spectrum App Layout Component
@@ -20,9 +20,15 @@ export class SpectrumAppLayout {
   @Prop() sidebarCollapsedWidth: string = '4rem';
   
   // Sidebar Configuration
-  @Prop() sidebarExpanded: boolean = true;
+  @Prop({ mutable: true }) sidebarExpanded: boolean = true;
   @Prop() sidebarCollapsible: boolean = true;
   @Prop() sidebarPosition: 'left' | 'right' = 'left';
+  
+  // Right Bar Configuration
+  @Prop() showRightBar: boolean = true;
+  @Prop() rightBarWidth: string = '16rem';
+  @Prop() rightBarCollapsible: boolean = true;
+  @Prop({ mutable: true }) rightBarExpanded: boolean = true;
   
   // Header Configuration
   @Prop() showHeader: boolean = true;
@@ -48,6 +54,7 @@ export class SpectrumAppLayout {
   // ============== Component State ==============
   
   @State() internalSidebarExpanded: boolean = this.sidebarExpanded;
+  @State() internalRightBarExpanded: boolean = this.rightBarExpanded;
 
   // ============== Component Events ==============
   
@@ -65,16 +72,30 @@ export class SpectrumAppLayout {
     bubbles: true
   }) profileAction: EventEmitter<{ action: string; type: 'profile' }>;
 
+  @Event({
+    eventName: 'rightBarToggle',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) rightBarToggle: EventEmitter<{ action: string; expanded: boolean }>;
+
+  // ============== Watchers ==============
+  
+  @Watch('sidebarExpanded')
+  watchSidebarExpanded(newValue: boolean) {
+    this.internalSidebarExpanded = newValue;
+  }
+
+  @Watch('rightBarExpanded')
+  watchRightBarExpanded(newValue: boolean) {
+    this.internalRightBarExpanded = newValue;
+  }
+
   // ============== Lifecycle Methods ==============
   
   componentWillLoad() {
     this.internalSidebarExpanded = this.sidebarExpanded;
-  }
-
-  componentDidUpdate() {
-    if (this.sidebarExpanded !== this.internalSidebarExpanded) {
-      this.internalSidebarExpanded = this.sidebarExpanded;
-    }
+    this.internalRightBarExpanded = this.rightBarExpanded;
   }
 
   // ============== Event Handlers ==============
@@ -82,12 +103,14 @@ export class SpectrumAppLayout {
   private handleSidebarToggle = () => {
     if (!this.sidebarCollapsible) return;
     
-    // Update state to trigger re-render
-    this.internalSidebarExpanded = !this.internalSidebarExpanded;
+    // Update both internal state and prop
+    const newExpanded = !this.internalSidebarExpanded;
+    this.internalSidebarExpanded = newExpanded;
+    this.sidebarExpanded = newExpanded;
     
     this.sidebarToggle.emit({
       action: 'toggle',
-      expanded: this.internalSidebarExpanded
+      expanded: newExpanded
     });
   };
 
@@ -95,6 +118,20 @@ export class SpectrumAppLayout {
     this.profileAction.emit({
       action: 'click',
       type: 'profile'
+    });
+  };
+
+  private handleRightBarToggle = () => {
+    if (!this.rightBarCollapsible) return;
+    
+    // Update both internal state and prop
+    const newExpanded = !this.internalRightBarExpanded;
+    this.internalRightBarExpanded = newExpanded;
+    this.rightBarExpanded = newExpanded;
+    
+    this.rightBarToggle.emit({
+      action: 'toggle',
+      expanded: newExpanded
     });
   };
 
@@ -134,6 +171,16 @@ export class SpectrumAppLayout {
       classes.push('spectrum-app-layout--collapse-mobile');
     }
     
+    // Right bar
+    if (this.showRightBar) {
+      classes.push('spectrum-app-layout--with-right-bar');
+      if (this.internalRightBarExpanded) {
+        classes.push('spectrum-app-layout--right-bar-expanded');
+      } else {
+        classes.push('spectrum-app-layout--right-bar-collapsed');
+      }
+    }
+    
     // Debug
     if (this.debug) {
       classes.push('spectrum-app-layout--debug');
@@ -168,6 +215,32 @@ export class SpectrumAppLayout {
     return classes.join(' ');
   }
   
+  private getRightBarClasses(): string {
+    const classes = ['spectrum-app-layout__right-bar'];
+    
+    if (this.internalRightBarExpanded) {
+      classes.push('spectrum-app-layout__right-bar--expanded');
+    } else {
+      classes.push('spectrum-app-layout__right-bar--collapsed');
+    }
+    
+    if (this.rightBarCollapsible) {
+      classes.push('spectrum-app-layout__right-bar--collapsible');
+    }
+    
+    return classes.join(' ');
+  }
+  
+  private getRightBarToggleClasses(): string {
+    const classes = ['spectrum-app-layout__right-bar-toggle'];
+    
+    if (this.internalRightBarExpanded) {
+      classes.push('spectrum-app-layout__right-bar-toggle--expanded');
+    }
+    
+    return classes.join(' ');
+  }
+  
   private getCustomStyles(): { [key: string]: string } {
     const styles: { [key: string]: string } = {};
     
@@ -182,6 +255,16 @@ export class SpectrumAppLayout {
       ? this.sidebarExpandedWidth 
       : this.sidebarCollapsedWidth;
     styles['--app-layout-sidebar-current-width'] = currentSidebarWidth;
+    
+    // Right bar dimensions
+    styles['--app-layout-right-bar-width'] = this.rightBarWidth;
+    styles['--app-layout-right-bar-collapsed-width'] = '3rem';
+    
+    // Current right bar width
+    const currentRightBarWidth = this.internalRightBarExpanded 
+      ? this.rightBarWidth 
+      : '3rem';
+    styles['--app-layout-right-bar-current-width'] = currentRightBarWidth;
     
     return styles;
   }
@@ -248,6 +331,26 @@ export class SpectrumAppLayout {
         <main class="spectrum-app-layout__main">
           <slot></slot>
         </main>
+        
+        {/* Right Bar */}
+        {this.showRightBar && (
+          <aside class={this.getRightBarClasses()}>
+            {this.rightBarCollapsible && (
+              <button 
+                class={this.getRightBarToggleClasses()} 
+                onClick={this.handleRightBarToggle}
+                type="button"
+                aria-label={this.internalRightBarExpanded ? 'Collapse right bar' : 'Expand right bar'}
+              >
+                <span>‹</span>
+              </button>
+            )}
+            
+            <div class="spectrum-app-layout__right-bar-content">
+              <slot name="right-bar"></slot>
+            </div>
+          </aside>
+        )}
         
         {/* Footer */}
         {this.showFooter && (
