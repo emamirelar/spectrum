@@ -937,14 +937,15 @@ export class SpectrumConversationPanel {
     const message = this.messageArray.find((_msg, index) => this.messageIdMap.get(index) === messageId);
     if (!message || !message.sources) return null;
 
-    // Get all sources for the hovered citation(s)
+    // Get all sources for the hovered citation(s) - limit to 9 cards max
     const sources = sourceNumbers
       .map(num => message.sources.find(s => 
         s.number === num || 
         s.number === parseInt(num) || 
         s.number?.toString() === num
       ))
-      .filter(Boolean);
+      .filter(Boolean)
+      .slice(0, 9); // Limit to 9 cards maximum
 
     if (sources.length === 0) return null;
 
@@ -954,15 +955,13 @@ export class SpectrumConversationPanel {
 
     const isGrouped = sources.length > 1;
 
+    // Smart positioning logic to avoid clipping
+    const { overlayStyle, gridClass } = this.calculateOverlayPosition(chipRect, sources.length, isGrouped);
+
     return (
       <div 
-        class="source-hover-overlay"
-        style={{
-          position: 'fixed',
-          top: `${chipRect.bottom + 8}px`,
-          left: `${chipRect.left}px`,
-          zIndex: '1000'
-        }}
+        class={`source-hover-overlay ${gridClass}`}
+        style={overlayStyle}
         onMouseEnter={this.handleSourceOverlayEnter}
         onMouseLeave={this.handleSourceOverlayLeave}
       >
@@ -990,7 +989,6 @@ export class SpectrumConversationPanel {
                     value: source.value,
                     messageId: messageId
                   })}
-                  style={{ marginBottom: index < sources.length - 1 ? '8px' : '0' }}
                 >
                   {source.number && (
                     <div class="number">{source.number}</div>
@@ -1047,6 +1045,71 @@ export class SpectrumConversationPanel {
         )}
       </div>
     );
+  }
+
+  /**
+   * Calculate optimal overlay position to avoid clipping
+   */
+  private calculateOverlayPosition(chipRect: DOMRect, sourceCount: number, isGrouped: boolean): {
+    overlayStyle: any;
+    gridClass: string;
+  } {
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    
+    // Estimated card dimensions
+    const cardHeight = 120; // Approximate height of a source card
+    const cardWidth = 280; // Approximate width of a source card
+    const gap = 8; // Gap between cards
+    
+    // Calculate grid dimensions
+    let columns = 1;
+    let rows = 1;
+    
+    if (isGrouped && sourceCount > 1) {
+      columns = Math.min(3, sourceCount);
+      rows = Math.min(3, Math.ceil(sourceCount / 3));
+    }
+    
+    // Calculate total overlay dimensions
+    const overlayWidth = (cardWidth * columns) + (gap * (columns - 1));
+    const overlayHeight = (cardHeight * rows) + (gap * (rows - 1));
+    
+    // Default position (below the chip)
+    let top = chipRect.bottom + 8;
+    let left = chipRect.left;
+    let positionClass = 'position-below';
+    
+    // Check if overlay would be clipped at the bottom
+    const spaceBelow = viewportHeight - chipRect.bottom;
+    const spaceAbove = chipRect.top;
+    
+    if (spaceBelow < overlayHeight + 16 && spaceAbove > overlayHeight + 16) {
+      // Position above the chip if there's more space above
+      top = chipRect.top - overlayHeight - 8;
+      positionClass = 'position-above';
+    }
+    
+    // Check if overlay would be clipped on the right
+    const spaceRight = viewportWidth - chipRect.left;
+    if (spaceRight < overlayWidth + 16) {
+      // Adjust left position to keep overlay in viewport
+      left = Math.max(16, viewportWidth - overlayWidth - 16);
+    }
+    
+    // Generate grid class based on layout
+    const gridClass = `grid-${columns}x${rows} ${positionClass}`;
+    
+    const overlayStyle = {
+      position: 'fixed',
+      top: `${top}px`,
+      left: `${left}px`,
+      zIndex: '1000',
+      maxWidth: `${overlayWidth}px`,
+      maxHeight: `${overlayHeight}px`
+    };
+    
+    return { overlayStyle, gridClass };
   }
 
   /**

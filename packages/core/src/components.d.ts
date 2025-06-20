@@ -888,6 +888,8 @@ export namespace Components {
          */
         "showAddButton": boolean;
     }
+    interface SpectrumRailAlternative {
+    }
     /**
      * Spectrum Rail Item Component
      * A component designed to work within the rail that automatically
@@ -1706,6 +1708,12 @@ declare global {
         prototype: HTMLSpectrumRailElement;
         new (): HTMLSpectrumRailElement;
     };
+    interface HTMLSpectrumRailAlternativeElement extends Components.SpectrumRailAlternative, HTMLStencilElement {
+    }
+    var HTMLSpectrumRailAlternativeElement: {
+        prototype: HTMLSpectrumRailAlternativeElement;
+        new (): HTMLSpectrumRailAlternativeElement;
+    };
     /**
      * Spectrum Rail Item Component
      * A component designed to work within the rail that automatically
@@ -1840,6 +1848,7 @@ declare global {
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
         "spectrum-menu": HTMLSpectrumMenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
+        "spectrum-rail-alternative": HTMLSpectrumRailAlternativeElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-select": HTMLSpectrumSelectElement;
@@ -2784,6 +2793,8 @@ declare namespace LocalJSX {
          */
         "showAddButton"?: boolean;
     }
+    interface SpectrumRailAlternative {
+    }
     /**
      * Spectrum Rail Item Component
      * A component designed to work within the rail that automatically
@@ -3279,6 +3290,7 @@ declare namespace LocalJSX {
         "spectrum-image-gallery": SpectrumImageGallery;
         "spectrum-menu": SpectrumMenu;
         "spectrum-rail": SpectrumRail;
+        "spectrum-rail-alternative": SpectrumRailAlternative;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
         "spectrum-select": SpectrumSelect;
@@ -3362,6 +3374,7 @@ declare module "@stencil/core" {
              * - Flexible width and positioning options
              */
             "spectrum-rail": LocalJSX.SpectrumRail & JSXBase.HTMLAttributes<HTMLSpectrumRailElement>;
+            "spectrum-rail-alternative": LocalJSX.SpectrumRailAlternative & JSXBase.HTMLAttributes<HTMLSpectrumRailAlternativeElement>;
             /**
              * Spectrum Rail Item Component
              * A component designed to work within the rail that automatically

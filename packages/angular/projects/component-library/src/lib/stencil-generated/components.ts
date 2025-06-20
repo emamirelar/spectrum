@@ -458,6 +458,27 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
 
 
 @ProxyCmp({
+})
+@Component({
+  selector: 'spectrum-rail-alternative',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: [],
+})
+export class SpectrumRailAlternative {
+  protected el: HTMLSpectrumRailAlternativeElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumRailAlternative extends Components.SpectrumRailAlternative {}
+
+
+@ProxyCmp({
   inputs: ['action', 'expanded', 'icon', 'label'],
   methods: ['onRailExpandedChange']
 })

@@ -19,6 +19,131 @@ interface SpectrumStackArgs {
 const meta = {
   title: "Spectrum/Layouts/SpectrumStack",
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Spectrum Stack Layout Component
+
+The \`spectrum-stack\` component provides vertical or horizontal stacking of child elements with consistent spacing and alignment options. It's the simplest layout component, perfect for linear arrangements of content with uniform spacing.
+
+## Purpose
+
+Stack is designed for simple linear layouts where you need consistent spacing between items. It handles the common pattern of arranging items in a single direction with uniform gaps.
+
+## Key Features
+
+- **Direction Control**: Vertical or horizontal stacking
+- **Consistent Spacing**: Uniform gaps between all items  
+- **Alignment Options**: Control alignment along both axes
+- **Wrap Support**: Items can wrap to new lines when needed
+- **Reverse Order**: Option to reverse the order of items
+- **Responsive Behavior**: Different behavior on different screen sizes
+- **Auto Spacing**: Automatic spacing distribution option
+
+## When to Use
+
+- **Simple Lists**: Vertical lists of items with consistent spacing
+- **Button Groups**: Horizontal or vertical button arrangements  
+- **Form Sections**: Stacking form fields with consistent spacing
+- **Content Sections**: Stacking content blocks vertically
+- **Navigation Items**: Simple navigation menus
+- **Card Stacks**: Vertical arrangements of cards or panels
+- **Any Linear Layout**: When you need simple, consistent item spacing
+
+## Basic Usage
+
+\`\`\`html
+<!-- Vertical stack (default) -->
+<spectrum-stack spacing="md">
+  <div class="item">Item 1</div>
+  <div class="item">Item 2</div>
+  <div class="item">Item 3</div>
+</spectrum-stack>
+
+<!-- Horizontal stack -->
+<spectrum-stack direction="horizontal" spacing="lg" align="center">
+  <spectrum-button variant="primary">Save</spectrum-button>
+  <spectrum-button variant="secondary">Cancel</spectrum-button>
+  <spectrum-button variant="tertiary">Reset</spectrum-button>
+</spectrum-stack>
+\`\`\`
+
+## Common Patterns
+
+### Form Field Stack
+Perfect for stacking form elements with consistent spacing:
+
+\`\`\`html
+<spectrum-stack spacing="lg" align="stretch">
+  <h2>Contact Form</h2>
+  <div class="field-group">
+    <label>Full Name</label>
+    <input type="text" />
+  </div>
+  <div class="field-group">
+    <label>Email</label>
+    <input type="email" />
+  </div>
+  <spectrum-stack direction="horizontal" justify="flex-end" spacing="md">
+    <spectrum-button variant="secondary">Clear</spectrum-button>
+    <spectrum-button variant="primary">Submit</spectrum-button>
+  </spectrum-stack>
+</spectrum-stack>
+\`\`\`
+
+### Navigation Menu
+Horizontal navigation with consistent spacing:
+
+\`\`\`html
+<spectrum-stack direction="horizontal" spacing="lg" align="center" wrap="true">
+  <a href="#home" class="nav-link active">Home</a>
+  <a href="#about" class="nav-link">About</a>
+  <a href="#services" class="nav-link">Services</a>
+</spectrum-stack>
+\`\`\`
+
+### Content Sections
+Vertical content stacking with generous spacing:
+
+\`\`\`html
+<spectrum-stack spacing="xl" align="stretch">
+  <header class="page-header">
+    <h1>Welcome</h1>
+    <p>Introduction text</p>
+  </header>
+  <section class="hero-section">
+    <!-- Hero content -->
+  </section>
+  <section class="features">
+    <!-- Features content -->
+  </section>
+</spectrum-stack>
+\`\`\`
+
+## Layout Comparison
+
+**Use Stack when:**
+- Simple linear arrangements
+- Consistent spacing between items
+- Single direction layouts
+- Basic alignment needs
+
+**Use Flex when:**
+- Complex alignment requirements
+- Need flexbox-specific features
+- Advanced responsive behavior
+- Multiple alignment axes
+
+**Use Grid when:**
+- Two-dimensional layouts
+- Precise positioning control
+- Complex responsive patterns
+- Grid template areas
+        `
+      }
+    }
+  },
   args: {
     direction: "vertical",
     spacing: "md",

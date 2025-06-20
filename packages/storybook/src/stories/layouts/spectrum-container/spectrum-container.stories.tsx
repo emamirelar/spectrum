@@ -20,6 +20,204 @@ interface SpectrumContainerArgs {
 const meta = {
   title: "Spectrum/Layouts/SpectrumContainer",
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Spectrum Container Layout Component
+
+The \`spectrum-container\` component provides content containment with max-width constraints, responsive padding, and centering capabilities. It's the foundation for creating consistent, readable layouts with proper content boundaries and spacing.
+
+## Purpose
+
+Container provides content width control and consistent padding for readable, well-structured layouts. It ensures content doesn't become too wide on large screens while maintaining proper spacing.
+
+## Key Features
+
+- **Max-Width Control**: Prevents content from becoming too wide on large screens
+- **Responsive Padding**: Automatic padding adjustment based on screen size
+- **Centering Options**: Both container and content centering capabilities
+- **Size Variations**: Multiple preset sizes (xs, sm, md, lg, xl) plus custom options
+- **Mobile Optimization**: Special handling for mobile devices
+- **Flexible Padding**: Independent control of horizontal and vertical padding
+
+## When to Use
+
+- **Content Sections**: Wrapping main content areas with consistent boundaries
+- **Reading Content**: Articles, blog posts, documentation where readability matters
+- **Form Layouts**: Containing forms with appropriate width constraints
+- **Card Content**: Interior content of cards or panels
+- **Page Sections**: Different sections of a page that need consistent width
+- **Responsive Design**: Any content that needs to adapt gracefully to screen sizes
+
+## Basic Usage
+
+\`\`\`html
+<!-- Basic content container -->
+<spectrum-container>
+  <h1>Welcome to Our Platform</h1>
+  <p>Your content here with optimal reading width and spacing.</p>
+</spectrum-container>
+
+<!-- Large container with extra padding -->
+<spectrum-container size="xl" padding="lg">
+  <div class="hero-content">
+    <h1>Hero Section</h1>
+    <p>Large hero content with generous spacing.</p>
+  </div>
+</spectrum-container>
+\`\`\`
+
+## Size Examples
+
+### Different Container Sizes
+Perfect for different content types and layouts:
+
+\`\`\`html
+<!-- Small container for focused content -->
+<spectrum-container size="sm">
+  <form class="login-form">
+    <h2>Sign In</h2>
+    <!-- Form fields -->
+  </form>
+</spectrum-container>
+
+<!-- Medium container for articles -->
+<spectrum-container size="md">
+  <article>
+    <h1>Article Title</h1>
+    <p>Article content with comfortable reading width.</p>
+  </article>
+</spectrum-container>
+
+<!-- Large container for dashboards -->
+<spectrum-container size="lg">
+  <div class="dashboard">
+    <h1>Dashboard</h1>
+    <!-- Dashboard widgets -->
+  </div>
+</spectrum-container>
+
+<!-- Full width container -->
+<spectrum-container size="full">
+  <div class="full-width-content">
+    <p>Content that uses full available width.</p>
+  </div>
+</spectrum-container>
+\`\`\`
+
+### Custom Width and Padding
+Fine-tune container behavior:
+
+\`\`\`html
+<!-- Custom max-width -->
+<spectrum-container max-width="900px" padding="xl">
+  <div class="custom-content">
+    <h2>Custom Container</h2>
+    <p>Content with custom width constraints.</p>
+  </div>
+</spectrum-container>
+
+<!-- Different horizontal and vertical padding -->
+<spectrum-container padding-x="lg" padding-y="sm">
+  <div class="asymmetric-padding">
+    <h3>Asymmetric Spacing</h3>
+    <p>More horizontal padding, less vertical padding.</p>
+  </div>
+</spectrum-container>
+\`\`\`
+
+### Responsive Behavior
+Adapts to different screen sizes:
+
+\`\`\`html
+<!-- Responsive container with mobile optimization -->
+<spectrum-container 
+  responsive="true" 
+  full-width-mobile="true"
+  padding="lg">
+  <div class="responsive-content">
+    <h1>Responsive Content</h1>
+    <p>Full width on mobile, constrained on desktop.</p>
+  </div>
+</spectrum-container>
+
+<!-- Centered content within container -->
+<spectrum-container 
+  size="md" 
+  center-content="true"
+  padding="xl">
+  <div class="centered-content">
+    <h2>Centered Content</h2>
+    <p>Both container and content are centered.</p>
+  </div>
+</spectrum-container>
+\`\`\`
+
+## Layout Comparison
+
+**Use Container when:**
+- Need max-width constraints
+- Creating readable content layouts
+- Want consistent padding across sections
+- Building responsive content areas
+
+**Use Stack when:**
+- Simple linear item arrangements
+- Need consistent spacing between items
+- Building lists or sequences
+
+**Use Flex when:**
+- Complex alignment requirements
+- Need flexbox-specific features
+- Building component arrangements
+
+**Use Grid when:**
+- Two-dimensional layouts
+- Precise positioning control
+- Complex responsive patterns
+
+## Common Patterns
+
+### Article Layout
+\`\`\`html
+<spectrum-container size="md" padding="xl">
+  <article>
+    <header>
+      <h1>Article Title</h1>
+      <div class="meta">By Author • Date</div>
+    </header>
+    <div class="content">
+      <p>Article content...</p>
+    </div>
+  </article>
+</spectrum-container>
+\`\`\`
+
+### Form Container
+\`\`\`html
+<spectrum-container size="sm" padding="lg" center-content="true">
+  <form>
+    <h2>Contact Us</h2>
+    <!-- Form fields -->
+  </form>
+</spectrum-container>
+\`\`\`
+
+### Section Wrapper
+\`\`\`html
+<spectrum-container size="lg" padding="xl">
+  <section class="hero">
+    <h1>Hero Title</h1>
+    <p>Hero description</p>
+    <button>Call to Action</button>
+  </section>
+</spectrum-container>
+\`\`\`
+        `
+      }
+    }
+  },
   args: {
     size: "lg",
     maxWidth: "",

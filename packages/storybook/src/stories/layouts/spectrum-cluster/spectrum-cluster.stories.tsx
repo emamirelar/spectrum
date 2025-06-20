@@ -22,6 +22,179 @@ interface SpectrumClusterArgs {
 const meta = {
   title: "Spectrum/Layouts/SpectrumCluster",
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Spectrum Cluster Layout Component
+
+The \`spectrum-cluster\` component is designed for clustering items together with consistent spacing, natural wrapping behavior, and flexible alignment options. It's perfect for layouts where you need to group related elements that should flow naturally and wrap responsively.
+
+## Purpose
+
+Cluster handles the common pattern of grouping related items that should wrap naturally when space runs out. It's designed for collections of similar elements that need consistent spacing.
+
+## Key Features
+
+- **Natural Wrapping**: Items wrap automatically when space runs out
+- **Consistent Spacing**: Uniform gaps between all items
+- **Flexible Alignment**: Control both horizontal and vertical alignment
+- **Direction Control**: Horizontal or vertical primary flow
+- **Responsive Behavior**: Adapt layout based on screen size
+- **Custom Spacing**: Support for both preset and custom spacing values
+
+## When to Use
+
+- **Tag Lists**: Displaying collections of tags, chips, or labels
+- **Button Groups**: Arranging multiple related buttons
+- **Card Collections**: Small card layouts that should wrap naturally
+- **Icon Collections**: Groups of icons or small interactive elements
+- **Badge/Chip Layouts**: Status indicators, categories, or filters
+- **Responsive Toolbars**: Tool collections that adapt to container width
+
+## Basic Usage
+
+\`\`\`html
+<!-- Simple tag cluster -->
+<spectrum-cluster spacing="sm" align="center">
+  <spectrum-chip>React</spectrum-chip>
+  <spectrum-chip>JavaScript</spectrum-chip>
+  <spectrum-chip>TypeScript</spectrum-chip>
+  <spectrum-chip>CSS</spectrum-chip>
+</spectrum-cluster>
+
+<!-- Button group -->
+<spectrum-cluster spacing="md" justify="center">
+  <spectrum-button variant="primary">Save</spectrum-button>
+  <spectrum-button variant="secondary">Cancel</spectrum-button>
+  <spectrum-button variant="tertiary">Reset</spectrum-button>
+</spectrum-cluster>
+\`\`\`
+
+## Common Patterns
+
+### Responsive Tag Cloud
+Tags that wrap and adapt to container size:
+
+\`\`\`html
+<spectrum-cluster 
+  responsive="true"
+  breakpoint="md"
+  stack-below="true"
+  spacing="sm"
+  justify="center">
+  <span class="tag">Design</span>
+  <span class="tag">Development</span>
+  <span class="tag">Marketing</span>
+  <span class="tag">Sales</span>
+</spectrum-cluster>
+\`\`\`
+
+### Icon Toolbar
+Icons that maintain spacing without wrapping:
+
+\`\`\`html
+<spectrum-cluster 
+  direction="horizontal"
+  align="center"
+  spacing="lg"
+  no-wrap="true">
+  <button class="icon-btn">📁</button>
+  <button class="icon-btn">📊</button>
+  <button class="icon-btn">⚙️</button>
+  <button class="icon-btn">👤</button>
+</spectrum-cluster>
+\`\`\`
+
+### Centered Content Group
+Items distributed with equal spacing:
+
+\`\`\`html
+<spectrum-cluster 
+  full-width="true" 
+  center-container="true"
+  justify="space-between"
+  align="center"
+  spacing="xl">
+  <div class="info-block">Block 1</div>
+  <div class="info-block">Block 2</div>
+  <div class="info-block">Block 3</div>
+</spectrum-cluster>
+\`\`\`
+
+### Badge Collection
+Status badges or chips that wrap naturally:
+
+\`\`\`html
+<spectrum-cluster spacing="xs" align="center" wrap="true">
+  <span class="badge success">Active</span>
+  <span class="badge warning">Pending</span>
+  <span class="badge info">In Review</span>
+  <span class="badge error">Failed</span>
+  <span class="badge neutral">Draft</span>
+</spectrum-cluster>
+\`\`\`
+
+## Layout Comparison
+
+**Use Cluster when:**
+- Items should wrap naturally
+- Collection of similar elements
+- Need consistent spacing between items
+- Items may vary in size
+- Want natural flow behavior
+
+**Use Stack when:**
+- Simple linear arrangements
+- All items in single direction
+- No wrapping needed
+- Basic alignment requirements
+
+**Use Flex when:**
+- Complex alignment control needed
+- Specific flexbox features required
+- Advanced responsive behavior
+- Parent-child size relationships
+
+**Use Grid when:**
+- Two-dimensional control needed
+- Precise positioning required
+- Complex layout patterns
+- Grid template areas
+
+## Advanced Features
+
+### Custom Spacing
+\`\`\`html
+<!-- Custom spacing value -->
+<spectrum-cluster spacing="2.5rem">
+  <div>Item 1</div>
+  <div>Item 2</div>
+</spectrum-cluster>
+\`\`\`
+
+### Responsive Behavior
+\`\`\`html
+<!-- Stack vertically on mobile -->
+<spectrum-cluster 
+  responsive="true"
+  breakpoint="md"
+  stack-below="true">
+  <!-- Items -->
+</spectrum-cluster>
+\`\`\`
+
+### No Wrap Control
+\`\`\`html
+<!-- Prevent wrapping -->
+<spectrum-cluster no-wrap="true" spacing="md">
+  <!-- Items stay on one line -->
+</spectrum-cluster>
+\`\`\`
+        `
+      }
+    }
+  },
   args: {
     spacing: "md",
     align: "start",

@@ -314,6 +314,9 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
 ]);
 
 
+export const SpectrumRailAlternative = /*@__PURE__*/ defineContainer<JSX.SpectrumRailAlternative>('spectrum-rail-alternative', undefined);
+
+
 export const SpectrumRailItem = /*@__PURE__*/ defineContainer<JSX.SpectrumRailItem>('spectrum-rail-item', undefined, [
   'icon',
   'label',

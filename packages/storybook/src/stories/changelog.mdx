@@ -27,6 +27,93 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.1-alpha.27] - 2025-01-20
+
+### 🧪 Pre-release
+
+### ⚠️ CRITICAL WARNING - LAYOUT COMPONENTS STILL NOT READY FOR PRODUCTION
+**🚨 URGENT: Layout components remain work in progress and MUST NOT be used in production environments.**
+
+**The following layout components are in active development and are NOT stable:**
+- `spectrum-app-layout` - Application layout container (UNSTABLE)
+- `spectrum-stack` - Vertical content stacking (UNSTABLE)
+- `spectrum-cluster` - Flexible content clustering (UNSTABLE) 
+- `spectrum-container` - Content containerization (UNSTABLE)
+- `spectrum-flex` - Flexbox layout utility (UNSTABLE)
+- `spectrum-grid` - CSS Grid layout utility (UNSTABLE)
+- `spectrum-sidebar` - Sidebar navigation layout (UNSTABLE)
+- `spectrum-rail-alternative` - Alternative rail navigation (BASIC SKELETON ONLY)
+
+### 🚀 Major Enhancements
+
+#### **spectrum-conversation-panel**: Enhanced Source Card Overlay System
+- **Smart Positioning Logic**: Intelligent overlay positioning to prevent viewport clipping
+  - **Above/Below Detection**: Automatically positions overlay above citation when insufficient space below
+  - **Left/Right Adjustment**: Dynamically adjusts horizontal position to keep overlay within viewport
+  - **Viewport Awareness**: Considers viewport height and width for optimal placement
+- **Grid-Based Layout**: Redesigned source card layout system
+  - **Up to 9 Cards**: Support for displaying up to 9 source cards in grid format (3x3 maximum)
+  - **Dynamic Grid Classes**: Smart grid classes (`grid-1x1`, `grid-2x1`, `grid-3x1`, `grid-1x2`, `grid-2x2`, `grid-3x2`, `grid-1x3`, `grid-2x3`, `grid-3x3`)
+  - **Fixed Card Dimensions**: Consistent 280px width × 120px height for all source cards
+  - **Responsive Columns**: Automatically arranges cards in optimal grid layout based on count
+- **Enhanced Hover Interactions**: Improved hover behavior for source cards
+  - **Consistent Animations**: Unified hover animations across single and grouped cards
+  - **Static Positioning**: Proper positioning to avoid stacking context issues
+  - **Shadow Enhancement**: Enhanced box shadows on hover for better visual feedback
+- **Position Classes**: Contextual CSS classes for overlay positioning
+  - **`position-above`**: Applied when overlay appears above the citation
+  - **`position-below`**: Applied when overlay appears below the citation (default)
+  - **Dynamic Width**: Overlay width adapts to grid layout and card count
+
+#### **Layout Components**: Enhanced Documentation and Implementation Progress
+- **spectrum-cluster**: 📖 **Comprehensive Documentation**
+  - **Purpose and Features**: Clear explanation of clustering behavior, spacing, and alignment
+  - **Usage Examples**: Practical examples for tag lists, button groups, card collections, icon toolbars
+  - **Responsive Patterns**: Documentation for responsive behavior and breakpoint management
+  - **Layout Scenarios**: Examples for responsive tag clouds, icon toolbars, and centered content groups
+  - **Property Guide**: Complete documentation of all component properties and their effects
+- **Implementation Progress**: All layout components now have:
+  - **Enhanced README files**: Comprehensive documentation with usage examples
+  - **Component Structure**: Basic component scaffolding and property definitions
+  - **Storybook Integration**: Updated story files with proper documentation
+
+### 🆕 Added
+- **spectrum-rail-alternative**: 🚧 **Basic Component Skeleton**
+  - **Component Structure**: Basic Stencil component with host and slot rendering
+  - **File Structure**: Complete component file structure with TypeScript, SCSS, and test files
+  - **Status**: Placeholder component - requires full implementation
+  - **Purpose**: Alternative implementation pattern for rail navigation (future development)
+
+### 🔄 Changed
+- **Package Version**: Incremented to `0.0.1-alpha.27` for release preparation
+- **Dependency Map**: Updated with layout components and spectrum-rail-alternative
+  - **Layout Component Status**: All layout components marked as WIP with production warnings
+  - **Dependency Flow**: Updated hierarchy to include layout components in WIP section
+  - **Component Descriptions**: Enhanced descriptions for all layout components
+- **Storybook Stories**: Updated story files for layout components
+  - **Enhanced Documentation**: Improved story structure and documentation
+  - **Layout Examples**: Better examples demonstrating layout component capabilities
+  - **Warning Integration**: Production warnings integrated into story documentation
+
+### 🐛 Fixed
+- **spectrum-conversation-panel**: Source card overlay viewport clipping issues
+  - **Overlay Positioning**: Fixed cases where source card overlays were clipped by viewport edges
+  - **Grid Layout Stability**: Resolved grid layout issues with varying source card counts
+  - **Hover State Consistency**: Fixed inconsistent hover behavior between single and grouped cards
+  - **Position Calculation**: Improved position calculation accuracy for different screen sizes
+
+### 📝 Documentation
+- **Release Preparation**: Complete release preparation for alpha.27
+  - **Version Updates**: Updated package.json and dependency documentation
+  - **Changelog Maintenance**: Comprehensive changelog entry with all changes
+  - **Dependency Map Updates**: Current state of all components with proper status indicators
+- **Layout Component Documentation**: Enhanced documentation for all layout components
+  - **Implementation Status**: Clear status indicators for each component
+  - **Usage Guidelines**: Comprehensive usage examples and best practices
+  - **Production Warnings**: Prominent warnings about work-in-progress status
+
+---
+
 ## [0.0.1-alpha.26] - 2025-01-03
 
 ### 🧪 Pre-release

@@ -438,18 +438,84 @@ spectrum-conversation-panel .source-hover-overlay {
     }
   }
   
-  /* Grouped sources container */
+  /* Grouped sources container - Grid layout for up to 9 cards (3x3) */
   .grouped-sources {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--conversation-panel-spacing-small) var(--conversation-panel-spacing-small);
-    max-width: 520px; /* Slightly wider to accommodate regular grid */
+    gap: 8px;
     padding: 0;
     margin: 0;
+  }
+  
+  /* Grid layout classes based on card count */
+  &.grid-1x1 .grouped-sources {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    width: 280px;
+  }
+  
+  &.grid-2x1 .grouped-sources {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    width: 576px; /* (280 * 2) + 8px gap + 8px padding */
+  }
+  
+  &.grid-3x1 .grouped-sources {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    width: 872px; /* (280 * 3) + (8px * 2) gaps + 8px padding */
+  }
+  
+  &.grid-1x2 .grouped-sources {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    width: 280px;
+  }
+  
+  &.grid-2x2 .grouped-sources {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    width: 576px;
+  }
+  
+  &.grid-3x2 .grouped-sources {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    width: 872px;
+  }
+  
+  &.grid-1x3 .grouped-sources {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    width: 280px;
+  }
+  
+  &.grid-2x3 .grouped-sources {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 576px;
+  }
+  
+  &.grid-3x3 .grouped-sources {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 872px;
+  }
+  
+  /* Position above the citation when needed */
+  &.position-above {
+    .grouped-sources {
+      /* Grid will appear above the citation */
+    }
+  }
+  
+  &.position-below {
+    .grouped-sources {
+      /* Grid will appear below the citation (default) */
+    }
     
     .content-card.hover-card.grouped-card {
-      /* Fixed dimensions for consistent layout */
-      width: 100% !important;
+      /* Fixed dimensions optimized for grid layout */
+      width: 280px !important; /* Fixed width for consistent grid */
       height: 120px !important; /* Fixed height for all cards */
       margin: 0 !important; /* Force no margins */
       padding: 12px !important;
@@ -457,20 +523,18 @@ spectrum-conversation-panel .source-hover-overlay {
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--conversation-panel-outline-variant);
       text-decoration: none;
-      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out !important; /* Include transform for hover animation */
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out !important;
       box-sizing: border-box !important;
-      position: static !important; /* Use static positioning to avoid stacking context issues */
+      position: static !important;
       
       /* Hover effects for individual grouped cards - match single card behavior */
       &:hover {
-        transform: translateY(-2px) !important; /* Same as single cards */
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2) !important; /* Same as single cards */
-        /* No background change - same as single cards */
-        position: static !important; /* Keep static positioning */
-        margin: 0 !important; /* Force no margin changes */
-        width: 100% !important; /* Keep width */
-        height: 120px !important; /* Keep height */
-        /* Remove all z-index changes to prevent stacking context recalculation */
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2) !important;
+        position: static !important;
+        margin: 0 !important;
+        width: 280px !important; /* Maintain fixed width */
+        height: 120px !important; /* Maintain fixed height */
       }
       
       /* Layout for card content */
