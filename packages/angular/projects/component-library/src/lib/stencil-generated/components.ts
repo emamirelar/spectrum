@@ -36,21 +36,21 @@ export declare interface SpectrumAccordion extends Components.SpectrumAccordion 
 
 
 @ProxyCmp({
-  inputs: ['breakpoint', 'collapseMobile', 'debug', 'footerHeight', 'gap', 'headerHeight', 'headerTitle', 'logoAlt', 'logoSrc', 'profileText', 'responsive', 'showFooter', 'showHeader', 'showLogo', 'showProfile', 'sidebarCollapsedWidth', 'sidebarCollapsible', 'sidebarExpanded', 'sidebarExpandedWidth', 'sidebarPosition']
+  inputs: ['breakpoint', 'collapseMobile', 'debug', 'footerHeight', 'gap', 'headerHeight', 'headerTitle', 'logoAlt', 'logoSrc', 'profileText', 'responsive', 'rightBarCollapsible', 'rightBarExpanded', 'rightBarWidth', 'showFooter', 'showHeader', 'showLogo', 'showProfile', 'showRightBar', 'sidebarCollapsedWidth', 'sidebarCollapsible', 'sidebarExpanded', 'sidebarExpandedWidth', 'sidebarPosition']
 })
 @Component({
   selector: 'spectrum-app-layout',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['breakpoint', 'collapseMobile', 'debug', 'footerHeight', 'gap', 'headerHeight', 'headerTitle', 'logoAlt', 'logoSrc', 'profileText', 'responsive', 'showFooter', 'showHeader', 'showLogo', 'showProfile', 'sidebarCollapsedWidth', 'sidebarCollapsible', 'sidebarExpanded', 'sidebarExpandedWidth', 'sidebarPosition'],
+  inputs: ['breakpoint', 'collapseMobile', 'debug', 'footerHeight', 'gap', 'headerHeight', 'headerTitle', 'logoAlt', 'logoSrc', 'profileText', 'responsive', 'rightBarCollapsible', 'rightBarExpanded', 'rightBarWidth', 'showFooter', 'showHeader', 'showLogo', 'showProfile', 'showRightBar', 'sidebarCollapsedWidth', 'sidebarCollapsible', 'sidebarExpanded', 'sidebarExpandedWidth', 'sidebarPosition'],
 })
 export class SpectrumAppLayout {
   protected el: HTMLSpectrumAppLayoutElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['sidebarToggle', 'profileAction']);
+    proxyOutputs(this, this.el, ['sidebarToggle', 'profileAction', 'rightBarToggle']);
   }
 }
 
@@ -60,6 +60,8 @@ export declare interface SpectrumAppLayout extends Components.SpectrumAppLayout 
   sidebarToggle: EventEmitter<CustomEvent<{ action: string; expanded: boolean }>>;
 
   profileAction: EventEmitter<CustomEvent<{ action: string; type: 'profile' }>>;
+
+  rightBarToggle: EventEmitter<CustomEvent<{ action: string; expanded: boolean }>>;
 }
 
 
@@ -415,7 +417,7 @@ export declare interface SpectrumMenu extends Components.SpectrumMenu {
 
 
 @ProxyCmp({
-  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreIcon', 'moreLabel', 'showAddButton'],
   methods: ['setExpanded', 'setShowAddButton']
 })
 @Component({
@@ -423,7 +425,7 @@ export declare interface SpectrumMenu extends Components.SpectrumMenu {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreIcon', 'moreLabel', 'showAddButton'],
 })
 export class SpectrumRail {
   protected el: HTMLSpectrumRailElement;
@@ -453,6 +455,27 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
    */
   addAction: EventEmitter<CustomEvent<{ action: string }>>;
 }
+
+
+@ProxyCmp({
+})
+@Component({
+  selector: 'spectrum-rail-alternative',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: [],
+})
+export class SpectrumRailAlternative {
+  protected el: HTMLSpectrumRailAlternativeElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumRailAlternative extends Components.SpectrumRailAlternative {}
 
 
 @ProxyCmp({

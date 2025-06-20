@@ -25,6 +25,199 @@ interface SpectrumFlexArgs {
 const meta = {
   title: "Spectrum/Layouts/SpectrumFlex",
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Spectrum Flex Layout Component
+
+The \`spectrum-flex\` component provides advanced flexbox layout capabilities with comprehensive control over flex properties, responsive behavior, and fine-grained alignment options. It's designed for complex layouts that require precise control over how items are arranged and distributed.
+
+## Purpose
+
+Flex provides complete flexbox control for layouts that need more sophisticated alignment, distribution, and responsive behavior than simple stacking. It's the go-to choice for complex component arrangements.
+
+## Key Features
+
+- **Complete Flexbox Control**: All flexbox properties (direction, wrap, justify, align)
+- **Responsive Behavior**: Different layouts for different screen sizes
+- **Custom Gap Control**: Both uniform and separate row/column gaps
+- **Alignment Options**: Precise control over main and cross axis alignment
+- **Container Sizing**: Full width, full height, and inline options
+- **Mobile Optimization**: Special mobile direction handling
+
+## When to Use
+
+- **Complex Layouts**: Multi-column layouts with precise alignment needs
+- **Navigation Bars**: Headers, toolbars, and navigation components
+- **Card Layouts**: Flexible card arrangements with equal spacing
+- **Form Layouts**: Complex form arrangements with aligned inputs
+- **Dashboard Widgets**: Responsive widget arrangements
+- **Media Objects**: Content with images and text that need alignment
+- **Any Flexbox Layout**: When you need more control than basic stack/cluster
+
+## Basic Usage
+
+\`\`\`html
+<!-- Horizontal layout with center alignment -->
+<spectrum-flex direction="row" justify="center" align="center" gap="md">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</spectrum-flex>
+
+<!-- Vertical stack with space between -->
+<spectrum-flex direction="column" justify="space-between" gap="lg">
+  <header>Header Content</header>
+  <main>Main Content</main>
+  <footer>Footer Content</footer>
+</spectrum-flex>
+\`\`\`
+
+## Common Patterns
+
+### Navigation Header
+Perfect for app headers with logo, navigation, and actions:
+
+\`\`\`html
+<spectrum-flex 
+  direction="row" 
+  justify="space-between" 
+  align="center"
+  full-width="true"
+  gap="md">
+  <!-- Logo -->
+  <div class="logo">
+    <img src="/logo.svg" alt="Logo" />
+  </div>
+  
+  <!-- Navigation -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+  </nav>
+  
+  <!-- Actions -->
+  <div class="actions">
+    <spectrum-button variant="primary">Sign In</spectrum-button>
+  </div>
+</spectrum-flex>
+\`\`\`
+
+### Responsive Card Grid
+Cards that wrap and adapt to screen size:
+
+\`\`\`html
+<spectrum-flex 
+  wrap="wrap"
+  justify="space-between"
+  align="stretch"
+  gap="xl"
+  responsive="true"
+  mobile-direction="column">
+  <div class="card">Card 1</div>
+  <div class="card">Card 2</div>
+  <div class="card">Card 3</div>
+</spectrum-flex>
+\`\`\`
+
+### Form Layout
+Complex form with aligned sections:
+
+\`\`\`html
+<spectrum-flex direction="column" gap="lg" full-width="true">
+  <!-- Form header -->
+  <spectrum-flex direction="row" justify="space-between" align="center">
+    <h2>Contact Form</h2>
+    <span class="required">* Required</span>
+  </spectrum-flex>
+  
+  <!-- Form fields -->
+  <spectrum-flex direction="row" gap="md" wrap="wrap">
+    <div class="field">
+      <label>First Name *</label>
+      <input type="text" required />
+    </div>
+    <div class="field">
+      <label>Last Name *</label>
+      <input type="text" required />
+    </div>
+  </spectrum-flex>
+  
+  <!-- Form actions -->
+  <spectrum-flex direction="row" justify="flex-end" gap="sm">
+    <spectrum-button variant="secondary">Cancel</spectrum-button>
+    <spectrum-button variant="primary">Submit</spectrum-button>
+  </spectrum-flex>
+</spectrum-flex>
+\`\`\`
+
+### Media Object Pattern
+Image with flexible content area:
+
+\`\`\`html
+<spectrum-flex direction="row" align="flex-start" gap="md">
+  <!-- Image/Avatar -->
+  <div class="media-object">
+    <img src="/avatar.jpg" alt="User" class="avatar" />
+  </div>
+  
+  <!-- Content -->
+  <spectrum-flex direction="column" gap="sm" style="flex: 1;">
+    <h3>John Doe</h3>
+    <p>This is a media object pattern with flexible content area...</p>
+    <div class="meta">2 hours ago</div>
+  </spectrum-flex>
+</spectrum-flex>
+\`\`\`
+
+## Layout Comparison
+
+**Use Flex when:**
+- Complex alignment requirements
+- Need flexbox-specific features (justify-content, align-items)
+- Advanced responsive behavior
+- Wrapping layouts
+- Space distribution control
+
+**Use Stack when:**
+- Simple linear arrangements
+- Basic spacing needs
+- Single direction layouts
+
+**Use Grid when:**
+- Two-dimensional layouts
+- Precise positioning control
+- Grid template areas
+- Complex responsive patterns
+
+## Advanced Features
+
+### Custom Gap Control
+\`\`\`html
+<!-- Different row and column gaps -->
+<spectrum-flex 
+  wrap="wrap"
+  row-gap="xl"
+  column-gap="sm">
+  <!-- Items with custom spacing -->
+</spectrum-flex>
+\`\`\`
+
+### Responsive Direction
+\`\`\`html
+<spectrum-flex 
+  direction="row"
+  responsive="true"
+  mobile-direction="column"
+  breakpoint="md">
+  <!-- Horizontal on desktop, vertical on mobile -->
+</spectrum-flex>
+\`\`\`
+        `
+      }
+    }
+  },
   args: {
     direction: "row",
     wrap: "nowrap",

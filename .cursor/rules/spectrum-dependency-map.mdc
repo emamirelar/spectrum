@@ -91,6 +91,7 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Dependencies: spectrum-accordion, spectrum-button, spectrum-chip
   - Used by: AI/chat applications
   - Purpose: Message display and interaction with expandable content
+  - Recent Updates: Enhanced source card overlay system with smart positioning to prevent viewport clipping, grid-based layout for up to 9 source cards (3x3), improved hover interactions
 
 ### Standalone Components (External Dependencies Only)
 - **spectrum-carousel**: Image/content carousel
@@ -108,6 +109,49 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: Navigation systems, header menus, sidebar navigation
   - Purpose: Horizontal/vertical menus with regular submenus or full-width megamenu dropdowns
   - Features: Mobile responsive, Material icons, accessibility support
+
+### Layout Components (Work in Progress) ⚠️
+**WARNING: Layout components are currently work in progress and not ready for production use.**
+
+- **spectrum-app-layout**: Application layout container
+  - Dependencies: None (pure component)
+  - Status: Work in progress - documentation and implementation in progress
+  - Purpose: Main application layout structure with responsive design
+
+- **spectrum-cluster**: Flexible clustering layout component
+  - Dependencies: None (pure component)  
+  - Status: Work in progress - documentation and implementation in progress
+  - Purpose: Clustering items together with consistent spacing and natural wrapping
+  
+- **spectrum-container**: Content container layout
+  - Dependencies: None (pure component)
+  - Status: Work in progress - documentation and implementation in progress
+  - Purpose: Content containerization with responsive behavior
+
+- **spectrum-flex**: Flexbox layout utility
+  - Dependencies: None (pure component)
+  - Status: Work in progress - documentation and implementation in progress
+  - Purpose: Flexible box layout arrangements
+
+- **spectrum-grid**: CSS Grid layout utility
+  - Dependencies: None (pure component)
+  - Status: Work in progress - documentation and implementation in progress
+  - Purpose: Grid-based layout system
+
+- **spectrum-sidebar**: Sidebar layout component
+  - Dependencies: None (pure component)
+  - Status: Work in progress - documentation and implementation in progress
+  - Purpose: Sidebar navigation and content layout
+
+- **spectrum-stack**: Vertical stacking layout
+  - Dependencies: None (pure component)
+  - Status: Work in progress - documentation and implementation in progress
+  - Purpose: Vertical content arrangement with consistent spacing
+
+- **spectrum-rail-alternative**: Alternative rail navigation component
+  - Dependencies: None (basic component structure)
+  - Status: Basic component skeleton - needs full implementation
+  - Purpose: Alternative navigation rail implementation (placeholder)
 
 ## Dependency Flow Hierarchy
 
@@ -129,14 +173,24 @@ Level 2 (Composed):
 ├── spectrum-accordion (depends on: spectrum-chip)
 ├── spectrum-search-input (depends on: spectrum-button)
 ├── spectrum-rail-item (depends on: spectrum-button)
+├── spectrum-collapsible-list (depends on: spectrum-context-menu)
 ├── spectrum-select (depends on: spectrum-button)
 ├── spectrum-image-gallery (depends on: spectrum-button)
-├── spectrum-hero (depends on: spectrum-button)
-└── spectrum-collapsible-list (depends on: spectrum-context-menu)
+└── spectrum-hero (depends on: spectrum-button)
 
 Level 3 (Complex):
 ├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item)
 └── spectrum-conversation-panel (depends on: spectrum-accordion, spectrum-button, spectrum-chip)
+
+⚠️ Layout Components (WIP - DO NOT USE IN PRODUCTION):
+├── spectrum-app-layout
+├── spectrum-cluster  
+├── spectrum-container
+├── spectrum-flex
+├── spectrum-grid
+├── spectrum-sidebar
+├── spectrum-stack
+└── spectrum-rail-alternative (basic skeleton only)
 ```
 
 ## Key Integration Patterns

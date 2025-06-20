@@ -26,7 +26,7 @@
   font-size: var(--app-layout-font-size);
   font-weight: var(--app-layout-font-weight);
   color: var(--app-layout-text);
-  transition: var(--app-layout-transition);
+  transition: grid-template-columns var(--app-layout-transition);
   
   // Core layout properties
   --app-layout-background: var(--spectrum-sys-color-surface, #ffffff);
@@ -42,6 +42,11 @@
   --app-layout-sidebar-expanded-width: 16rem;
   --app-layout-sidebar-collapsed-width: 4rem;
   --app-layout-sidebar-current-width: var(--app-layout-sidebar-expanded-width);
+  
+  // Right bar dimensions
+  --app-layout-right-bar-width: 16rem;
+  --app-layout-right-bar-collapsed-width: 3rem;
+  --app-layout-right-bar-current-width: var(--app-layout-right-bar-width);
   
   // Component sizing
   --app-layout-logo-size: 2.5rem;
@@ -59,6 +64,9 @@
   
   // Sidebar colors
   --app-layout-sidebar-background: var(--spectrum-sys-color-surface-container, #f5f5f5);
+  
+  // Right bar colors
+  --app-layout-right-bar-background: var(--spectrum-sys-color-surface-container-low, #f8f8f8);
   
   // Interactive states
   --app-layout-hover-background: var(--spectrum-sys-color-surface-container-hover, rgba(0, 0, 0, 0.05));
@@ -172,6 +180,9 @@
   overflow: hidden;
   transition: var(--app-layout-transition);
   z-index: var(--app-layout-z-sidebar);
+  width: var(--app-layout-sidebar-current-width);
+  min-width: var(--app-layout-sidebar-current-width);
+  max-width: var(--app-layout-sidebar-current-width);
 }
 
 .spectrum-app-layout__toggle {
@@ -216,9 +227,23 @@
   transition: var(--app-layout-transition);
 }
 
-// When sidebar is collapsed, hide text content
+// When sidebar is collapsed, hide text content and adjust layout
 :host(.spectrum-app-layout--sidebar-collapsed) .spectrum-app-layout__sidebar-content {
   padding: var(--app-layout-spacing-small);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+:host(.spectrum-app-layout--sidebar-collapsed) .spectrum-app-layout__sidebar-content > * {
+  opacity: 0;
+  transition: opacity var(--app-layout-transition-fast);
+  pointer-events: none;
+}
+
+:host(.spectrum-app-layout--sidebar-expanded) .spectrum-app-layout__sidebar-content > * {
+  opacity: 1;
+  transition: opacity var(--app-layout-transition-fast);
+  pointer-events: auto;
 }
 
 .spectrum-app-layout__sidebar-content::-webkit-scrollbar {
@@ -264,6 +289,102 @@
 }
 
 .spectrum-app-layout__main::-webkit-scrollbar-thumb:hover {
+  background: var(--spectrum-sys-color-outline, #999);
+}
+
+// ==============================================
+// Right Bar Styles
+// ==============================================
+
+.spectrum-app-layout__right-bar {
+  grid-area: right-bar;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--app-layout-right-bar-background);
+  border-left: 1px solid var(--app-layout-border);
+  overflow: hidden;
+  transition: var(--app-layout-transition);
+  z-index: var(--app-layout-z-sidebar);
+  width: var(--app-layout-right-bar-current-width);
+  min-width: var(--app-layout-right-bar-current-width);
+  max-width: var(--app-layout-right-bar-current-width);
+}
+
+.spectrum-app-layout__right-bar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--app-layout-toggle-size);
+  width: var(--app-layout-toggle-size);
+  margin: var(--app-layout-spacing);
+  background-color: var(--spectrum-sys-color-surface-container, rgba(0, 0, 0, 0.04));
+  border: 1px solid var(--app-layout-border);
+  border-radius: var(--spectrum-sys-shape-corner-small, 4px);
+  cursor: pointer;
+  transition: var(--app-layout-transition-fast);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--app-layout-text);
+}
+
+.spectrum-app-layout__right-bar-toggle:hover {
+  background-color: var(--app-layout-hover-background);
+}
+
+.spectrum-app-layout__right-bar-toggle:active {
+  background-color: var(--app-layout-active-background);
+}
+
+.spectrum-app-layout__right-bar-toggle span {
+  transition: var(--app-layout-transition);
+  transform: rotate(0deg);
+}
+
+.spectrum-app-layout__right-bar-toggle--expanded span {
+  transform: rotate(180deg);
+}
+
+.spectrum-app-layout__right-bar-content {
+  flex: 1;
+  padding: var(--app-layout-spacing);
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: var(--app-layout-transition);
+}
+
+// When right bar is collapsed, hide text content and adjust layout
+:host(.spectrum-app-layout--right-bar-collapsed) .spectrum-app-layout__right-bar-content {
+  padding: var(--app-layout-spacing-small);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+:host(.spectrum-app-layout--right-bar-collapsed) .spectrum-app-layout__right-bar-content > * {
+  opacity: 0;
+  transition: opacity var(--app-layout-transition-fast);
+  pointer-events: none;
+}
+
+:host(.spectrum-app-layout--right-bar-expanded) .spectrum-app-layout__right-bar-content > * {
+  opacity: 1;
+  transition: opacity var(--app-layout-transition-fast);
+  pointer-events: auto;
+}
+
+.spectrum-app-layout__right-bar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.spectrum-app-layout__right-bar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.spectrum-app-layout__right-bar-content::-webkit-scrollbar-thumb {
+  background: var(--spectrum-sys-color-outline-variant, #ccc);
+  border-radius: 3px;
+}
+
+.spectrum-app-layout__right-bar-content::-webkit-scrollbar-thumb:hover {
   background: var(--spectrum-sys-color-outline, #999);
 }
 
@@ -345,6 +466,74 @@
 }
 
 // ==============================================
+// Right Bar Layout Modifiers
+// ==============================================
+
+// Default layout with right bar
+:host(.spectrum-app-layout--with-right-bar) {
+  grid-template-columns: var(--app-layout-sidebar-current-width) 1fr var(--app-layout-right-bar-current-width);
+  grid-template-areas: 
+    "header header header"
+    "sidebar main right-bar"
+    "footer footer footer";
+}
+
+:host(.spectrum-app-layout--with-right-bar):host(.spectrum-app-layout--no-header) {
+  grid-template-rows: 1fr var(--app-layout-footer-height);
+  grid-template-areas: 
+    "sidebar main right-bar"
+    "footer footer footer";
+}
+
+:host(.spectrum-app-layout--with-right-bar):host(.spectrum-app-layout--no-footer) {
+  grid-template-rows: var(--app-layout-header-height) 1fr;
+  grid-template-areas: 
+    "header header header"
+    "sidebar main right-bar";
+}
+
+:host(.spectrum-app-layout--with-right-bar):host(.spectrum-app-layout--no-header):host(.spectrum-app-layout--no-footer) {
+  grid-template-rows: 1fr;
+  grid-template-areas: "sidebar main right-bar";
+}
+
+// Right bar with right sidebar
+:host(.spectrum-app-layout--with-right-bar):host(.spectrum-app-layout--sidebar-right) {
+  grid-template-areas: 
+    "header header header"
+    "right-bar main sidebar"
+    "footer footer footer";
+}
+
+:host(.spectrum-app-layout--with-right-bar):host(.spectrum-app-layout--sidebar-right):host(.spectrum-app-layout--no-header) {
+  grid-template-areas: 
+    "right-bar main sidebar"
+    "footer footer footer";
+}
+
+:host(.spectrum-app-layout--with-right-bar):host(.spectrum-app-layout--sidebar-right):host(.spectrum-app-layout--no-footer) {
+  grid-template-areas: 
+    "header header header"
+    "right-bar main sidebar";
+}
+
+:host(.spectrum-app-layout--with-right-bar):host(.spectrum-app-layout--sidebar-right):host(.spectrum-app-layout--no-header):host(.spectrum-app-layout--no-footer) {
+  grid-template-areas: "right-bar main sidebar";
+}
+
+// ==============================================
+// Right Bar State Modifiers
+// ==============================================
+
+:host(.spectrum-app-layout--right-bar-collapsed) {
+  --app-layout-right-bar-current-width: var(--app-layout-right-bar-collapsed-width);
+}
+
+:host(.spectrum-app-layout--right-bar-expanded) {
+  --app-layout-right-bar-current-width: var(--app-layout-right-bar-width);
+}
+
+// ==============================================
 // Gap Modifiers
 // ==============================================
 
@@ -396,6 +585,11 @@
   background-color: rgba(255, 165, 0, 0.1) !important;
 }
 
+:host(.spectrum-app-layout--debug) .spectrum-app-layout__right-bar {
+  border: 2px solid purple !important;
+  background-color: rgba(128, 0, 128, 0.1) !important;
+}
+
 // ==============================================
 // Responsive Design
 // ==============================================
@@ -409,13 +603,14 @@
       "footer";
   }
   
-  :host(.spectrum-app-layout--responsive-sm):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar {
+  :host(.spectrum-app-layout--responsive-sm):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar,
+  :host(.spectrum-app-layout--responsive-sm):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__right-bar {
     display: none;
   }
 }
 
 @media (max-width: 768px) {
-  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile) {
+  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile):not(.spectrum-app-layout--with-right-bar) {
     grid-template-columns: 1fr;
     grid-template-areas: 
       "header"
@@ -423,8 +618,18 @@
       "footer";
   }
   
-  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar {
+  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar,
+  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__right-bar {
     display: none;
+  }
+  
+  /* Special handling for right bar on mobile */
+  :host(.spectrum-app-layout--responsive-md):host(.spectrum-app-layout--collapse-mobile):host(.spectrum-app-layout--with-right-bar) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "main"
+      "footer";
   }
 }
 
@@ -437,7 +642,8 @@
       "footer";
   }
   
-  :host(.spectrum-app-layout--responsive-lg):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar {
+  :host(.spectrum-app-layout--responsive-lg):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__sidebar,
+  :host(.spectrum-app-layout--responsive-lg):host(.spectrum-app-layout--collapse-mobile) .spectrum-app-layout__right-bar {
     display: none;
   }
 }
@@ -459,6 +665,7 @@
 
 // Focus states
 .spectrum-app-layout__toggle:focus-visible,
+.spectrum-app-layout__right-bar-toggle:focus-visible,
 .spectrum-app-layout__profile:focus-visible {
   outline: 2px solid var(--app-layout-focus-outline);
   outline-offset: 2px;

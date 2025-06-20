@@ -3,6 +3,13 @@ import { Component, Event, EventEmitter, Host, h, Prop, Element, State, Watch, M
 /**
  * Spectrum Rail Component
  * A vertical navigation rail with two states: expanded and contracted
+ * 
+ * Features:
+ * - Customizable more section with configurable icon and label
+ * - Expandable/collapsible states with smooth transitions
+ * - Integrated search functionality
+ * - Configurable add button with custom icon and label
+ * - Flexible width and positioning options
  */
 @Component({
   tag: 'spectrum-rail',
@@ -20,6 +27,9 @@ export class SpectrumRail {
   
   /** More section label (displayed in expanded state) */
   @Prop() moreLabel: string = 'More';
+
+  /** More section icon (displayed in both states) */
+  @Prop() moreIcon: string = 'settings';
 
   /** Whether the rail should be initially expanded */
   @Prop() initialExpanded: boolean = false;
@@ -254,6 +264,7 @@ export class SpectrumRail {
 
   @Watch('appName')
   @Watch('moreLabel')
+  @Watch('moreIcon')
   @Watch('addLabel')
   @Watch('showAddButton')
   @Watch('collapsedOffset')
@@ -407,7 +418,7 @@ export class SpectrumRail {
                 size="base"
                 iconOnly={true}
                 showLeftIcon={true}
-                leftIcon="settings"
+                leftIcon={this.moreIcon}
                 onClick={() => this.handleMoreClick()}
                 title={this.moreLabel}
                 aria-label={this.moreLabel}
@@ -419,7 +430,7 @@ export class SpectrumRail {
                   outline={true}
                   size="base"
                   showLeftIcon={true}
-                  leftIcon="instant_mix"
+                  leftIcon={this.moreIcon}
                   buttonText={this.moreLabel || 'Explore more'}
                   showButtonText={true}
                   showRightIcon={true}

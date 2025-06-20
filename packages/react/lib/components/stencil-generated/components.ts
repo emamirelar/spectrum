@@ -24,6 +24,7 @@ import { SpectrumGrid as SpectrumGridElement, defineCustomElement as defineSpect
 import { SpectrumHero as SpectrumHeroElement, defineCustomElement as defineSpectrumHero } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-hero.js";
 import { SpectrumImageGallery as SpectrumImageGalleryElement, defineCustomElement as defineSpectrumImageGallery } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-image-gallery.js";
 import { SpectrumMenu as SpectrumMenuElement, defineCustomElement as defineSpectrumMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-menu.js";
+import { SpectrumRailAlternative as SpectrumRailAlternativeElement, defineCustomElement as defineSpectrumRailAlternative } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-alternative.js";
 import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-item.js";
 import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail.js";
 import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-search-input.js";
@@ -53,7 +54,8 @@ export const SpectrumAccordion: StencilReactComponent<SpectrumAccordionElement, 
 
 type SpectrumAppLayoutEvents = {
     onSidebarToggle: EventName<CustomEvent<{ action: string; expanded: boolean }>>,
-    onProfileAction: EventName<CustomEvent<{ action: string; type: 'profile' }>>
+    onProfileAction: EventName<CustomEvent<{ action: string; type: 'profile' }>>,
+    onRightBarToggle: EventName<CustomEvent<{ action: string; expanded: boolean }>>
 };
 
 export const SpectrumAppLayout: StencilReactComponent<SpectrumAppLayoutElement, SpectrumAppLayoutEvents> = /*@__PURE__*/ createComponent<SpectrumAppLayoutElement, SpectrumAppLayoutEvents>({
@@ -63,7 +65,8 @@ export const SpectrumAppLayout: StencilReactComponent<SpectrumAppLayoutElement, 
     react: React,
     events: {
         onSidebarToggle: 'sidebarToggle',
-        onProfileAction: 'profileAction'
+        onProfileAction: 'profileAction',
+        onRightBarToggle: 'rightBarToggle'
     } as SpectrumAppLayoutEvents,
     defineCustomElement: defineSpectrumAppLayout
 });
@@ -272,6 +275,17 @@ export const SpectrumRail: StencilReactComponent<SpectrumRailElement, SpectrumRa
         onAddAction: 'addAction'
     } as SpectrumRailEvents,
     defineCustomElement: defineSpectrumRail
+});
+
+type SpectrumRailAlternativeEvents = NonNullable<unknown>;
+
+export const SpectrumRailAlternative: StencilReactComponent<SpectrumRailAlternativeElement, SpectrumRailAlternativeEvents> = /*@__PURE__*/ createComponent<SpectrumRailAlternativeElement, SpectrumRailAlternativeEvents>({
+    tagName: 'spectrum-rail-alternative',
+    elementClass: SpectrumRailAlternativeElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumRailAlternativeEvents,
+    defineCustomElement: defineSpectrumRailAlternative
 });
 
 type SpectrumRailItemEvents = NonNullable<unknown>;

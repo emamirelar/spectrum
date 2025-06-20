@@ -4,8 +4,9 @@ import { action } from '@storybook/addon-actions';
 
 interface SpectrumRailArgs {
   appName: string;
-  expandedWidth: string;
+  expandedWidth: number;
   moreLabel: string;
+  moreIcon: string;
   initialExpanded?: boolean;
   showAddButton?: boolean;
   collapsedOffset?: string;
@@ -23,8 +24,9 @@ const meta = {
   tags: ['autodocs'],
   args: {
     appName: 'PleaseAI',
-    expandedWidth: '340px',
+    expandedWidth: 340,
     moreLabel: 'Explore more',
+    moreIcon: 'settings',
     initialExpanded: false,
     showAddButton: true,
     collapsedOffset: '0px',
@@ -41,11 +43,11 @@ const meta = {
       }
     },
     expandedWidth: { 
-      control: 'text',
-      description: 'Width of the rail when expanded',
+      control: 'number',
+      description: 'Width of the rail when expanded (in pixels)',
       table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '340px' }
+        type: { summary: 'number' },
+        defaultValue: { summary: '340' }
       }
     },
     moreLabel: { 
@@ -54,6 +56,14 @@ const meta = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'Explore more' }
+      }
+    },
+    moreIcon: { 
+      control: 'text',
+      description: 'Icon for the more section (displayed in both states)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'settings' }
       }
     },
     initialExpanded: {
@@ -293,6 +303,7 @@ export const Default: Story = {
           .appName=${args.appName}
           .expandedWidth=${args.expandedWidth}
           .moreLabel=${args.moreLabel}
+          .moreIcon=${args.moreIcon}
           .initialExpanded=${args.initialExpanded}
           .collapsedOffset=${args.collapsedOffset}
           .addLabel=${args.addLabel}
@@ -695,7 +706,7 @@ export const WithCollapsibleListActions = {
   args: {},
   render: () => html`
     <div style="height: 600px; padding: 2rem; background: #f0f0f0;">
-      <spectrum-rail appName="Demo App" expandedWidth="320" initialExpanded="true" moreLabel="More">
+      <spectrum-rail appName="Demo App" .expandedWidth=${320} .initialExpanded=${true} moreLabel="More" .moreIcon=${"settings"}>
         <spectrum-collapsible-list
           slot="items"
           .items=${[
@@ -790,13 +801,30 @@ export const CustomAddIcon: Story = {
   render: Default.render
 };
 
+// Add a new story to demonstrate custom more icon
+export const CustomMoreIcon: Story = {
+  args: {
+    moreIcon: 'explore',
+    moreLabel: 'Explore',
+    initialExpanded: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the rail with a custom icon for the more section. This example uses the "explore" icon instead of the default "settings" icon.'
+      }
+    }
+  },
+  render: Default.render
+};
+
 // New story to demonstrate collapsed offset functionality
 export const CollapsedOffset: Story = {
   args: {
     appName: 'Offset Demo',
     collapsedOffset: '50px',
     initialExpanded: false,
-    expandedWidth: '300px',
+    expandedWidth: 300,
     moreLabel: 'More Options'
   },
   parameters: {
@@ -824,6 +852,7 @@ export const CollapsedOffset: Story = {
         .appName=${args.appName}
         .expandedWidth=${args.expandedWidth}
         .moreLabel=${args.moreLabel}
+        .moreIcon=${args.moreIcon}
         .initialExpanded=${args.initialExpanded}
         .showAddButton=${args.showAddButton}
         .collapsedOffset=${args.collapsedOffset}

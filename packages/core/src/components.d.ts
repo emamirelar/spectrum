@@ -131,6 +131,18 @@ export namespace Components {
         /**
           * @default true
          */
+        "rightBarCollapsible": boolean;
+        /**
+          * @default true
+         */
+        "rightBarExpanded": boolean;
+        /**
+          * @default '16rem'
+         */
+        "rightBarWidth": string;
+        /**
+          * @default true
+         */
         "showFooter": boolean;
         /**
           * @default true
@@ -144,6 +156,10 @@ export namespace Components {
           * @default true
          */
         "showProfile": boolean;
+        /**
+          * @default true
+         */
+        "showRightBar": boolean;
         /**
           * @default '4rem'
          */
@@ -810,6 +826,12 @@ export namespace Components {
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
+     * Features:
+     * - Customizable more section with configurable icon and label
+     * - Expandable/collapsible states with smooth transitions
+     * - Integrated search functionality
+     * - Configurable add button with custom icon and label
+     * - Flexible width and positioning options
      */
     interface SpectrumRail {
         /**
@@ -843,6 +865,11 @@ export namespace Components {
          */
         "initialExpanded": boolean;
         /**
+          * More section icon (displayed in both states)
+          * @default 'settings'
+         */
+        "moreIcon": string;
+        /**
           * More section label (displayed in expanded state)
           * @default 'More'
          */
@@ -860,6 +887,8 @@ export namespace Components {
           * @default true
          */
         "showAddButton": boolean;
+    }
+    interface SpectrumRailAlternative {
     }
     /**
      * Spectrum Rail Item Component
@@ -1412,6 +1441,7 @@ declare global {
     interface HTMLSpectrumAppLayoutElementEventMap {
         "sidebarToggle": { action: string; expanded: boolean };
         "profileAction": { action: string; type: 'profile' };
+        "rightBarToggle": { action: string; expanded: boolean };
     }
     /**
      * Spectrum App Layout Component
@@ -1657,6 +1687,12 @@ declare global {
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
+     * Features:
+     * - Customizable more section with configurable icon and label
+     * - Expandable/collapsible states with smooth transitions
+     * - Integrated search functionality
+     * - Configurable add button with custom icon and label
+     * - Flexible width and positioning options
      */
     interface HTMLSpectrumRailElement extends Components.SpectrumRail, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumRailElementEventMap>(type: K, listener: (this: HTMLSpectrumRailElement, ev: SpectrumRailCustomEvent<HTMLSpectrumRailElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1671,6 +1707,12 @@ declare global {
     var HTMLSpectrumRailElement: {
         prototype: HTMLSpectrumRailElement;
         new (): HTMLSpectrumRailElement;
+    };
+    interface HTMLSpectrumRailAlternativeElement extends Components.SpectrumRailAlternative, HTMLStencilElement {
+    }
+    var HTMLSpectrumRailAlternativeElement: {
+        prototype: HTMLSpectrumRailAlternativeElement;
+        new (): HTMLSpectrumRailAlternativeElement;
     };
     /**
      * Spectrum Rail Item Component
@@ -1806,6 +1848,7 @@ declare global {
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
         "spectrum-menu": HTMLSpectrumMenuElement;
         "spectrum-rail": HTMLSpectrumRailElement;
+        "spectrum-rail-alternative": HTMLSpectrumRailAlternativeElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-select": HTMLSpectrumSelectElement;
@@ -1929,6 +1972,7 @@ declare namespace LocalJSX {
          */
         "logoSrc"?: string;
         "onProfileAction"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; type: 'profile' }>) => void;
+        "onRightBarToggle"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; expanded: boolean }>) => void;
         "onSidebarToggle"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; expanded: boolean }>) => void;
         /**
           * @default 'Profile'
@@ -1938,6 +1982,18 @@ declare namespace LocalJSX {
           * @default true
          */
         "responsive"?: boolean;
+        /**
+          * @default true
+         */
+        "rightBarCollapsible"?: boolean;
+        /**
+          * @default true
+         */
+        "rightBarExpanded"?: boolean;
+        /**
+          * @default '16rem'
+         */
+        "rightBarWidth"?: string;
         /**
           * @default true
          */
@@ -1954,6 +2010,10 @@ declare namespace LocalJSX {
           * @default true
          */
         "showProfile"?: boolean;
+        /**
+          * @default true
+         */
+        "showRightBar"?: boolean;
         /**
           * @default '4rem'
          */
@@ -2663,6 +2723,12 @@ declare namespace LocalJSX {
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
+     * Features:
+     * - Customizable more section with configurable icon and label
+     * - Expandable/collapsible states with smooth transitions
+     * - Integrated search functionality
+     * - Configurable add button with custom icon and label
+     * - Flexible width and positioning options
      */
     interface SpectrumRail {
         /**
@@ -2696,6 +2762,11 @@ declare namespace LocalJSX {
          */
         "initialExpanded"?: boolean;
         /**
+          * More section icon (displayed in both states)
+          * @default 'settings'
+         */
+        "moreIcon"?: string;
+        /**
           * More section label (displayed in expanded state)
           * @default 'More'
          */
@@ -2721,6 +2792,8 @@ declare namespace LocalJSX {
           * @default true
          */
         "showAddButton"?: boolean;
+    }
+    interface SpectrumRailAlternative {
     }
     /**
      * Spectrum Rail Item Component
@@ -3217,6 +3290,7 @@ declare namespace LocalJSX {
         "spectrum-image-gallery": SpectrumImageGallery;
         "spectrum-menu": SpectrumMenu;
         "spectrum-rail": SpectrumRail;
+        "spectrum-rail-alternative": SpectrumRailAlternative;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
         "spectrum-select": SpectrumSelect;
@@ -3292,8 +3366,15 @@ declare module "@stencil/core" {
             /**
              * Spectrum Rail Component
              * A vertical navigation rail with two states: expanded and contracted
+             * Features:
+             * - Customizable more section with configurable icon and label
+             * - Expandable/collapsible states with smooth transitions
+             * - Integrated search functionality
+             * - Configurable add button with custom icon and label
+             * - Flexible width and positioning options
              */
             "spectrum-rail": LocalJSX.SpectrumRail & JSXBase.HTMLAttributes<HTMLSpectrumRailElement>;
+            "spectrum-rail-alternative": LocalJSX.SpectrumRailAlternative & JSXBase.HTMLAttributes<HTMLSpectrumRailAlternativeElement>;
             /**
              * Spectrum Rail Item Component
              * A component designed to work within the rail that automatically

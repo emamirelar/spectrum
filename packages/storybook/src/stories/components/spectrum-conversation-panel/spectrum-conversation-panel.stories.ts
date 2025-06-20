@@ -1583,4 +1583,270 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
   },
 };
 
+// Nine Citations Grid Test
+export const NineCitationsGrid: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    messages: `[
+      {
+        "id": "msg-001",
+        "message": "Can you explain how renewable energy has evolved over the past decade?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:55:00Z"
+      },
+      {
+        "id": "msg-002",
+        "message": "Renewable energy has undergone remarkable transformation over the past decade. The most significant changes include dramatic cost reductions, with solar and wind power becoming the cheapest sources of electricity in most regions. Technology improvements have increased efficiency rates across all renewable sources, while energy storage solutions have addressed intermittency challenges. Government policies and corporate commitments have accelerated adoption globally.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:55:15Z"
+      },
+      {
+        "id": "msg-003",
+        "message": "What role does energy storage play in renewable energy systems?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:56:00Z"
+      },
+      {
+        "id": "msg-004",
+        "message": "Energy storage is crucial for renewable energy systems because it addresses the intermittency challenge of solar and wind power. Battery technologies, particularly lithium-ion systems, have seen dramatic cost reductions and performance improvements. Grid-scale storage installations are now economically viable and help stabilize electricity supply. Other storage technologies like pumped hydro, compressed air, and emerging solutions like hydrogen storage are also contributing to a more flexible and reliable renewable energy grid.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:56:20Z"
+      },
+      {
+        "id": "msg-005",
+        "message": "How do government policies impact renewable energy adoption?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:57:00Z"
+      },
+      {
+        "id": "msg-006",
+        "message": "Government policies play a pivotal role in renewable energy adoption through various mechanisms. Tax incentives and subsidies make renewable projects more financially attractive to investors and developers. Renewable portfolio standards require utilities to source a certain percentage of electricity from clean sources. Net metering policies allow homeowners with solar panels to sell excess electricity back to the grid. International agreements like the Paris Climate Accord create policy frameworks that drive national renewable energy targets and investments.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:57:25Z"
+      },
+      {
+        "id": "msg-007",
+        "message": "What are the main challenges still facing renewable energy deployment?",
+        "sender": "request",
+        "timestamp": "2024-03-20T09:58:00Z"
+      },
+      {
+        "id": "msg-008",
+        "message": "Despite significant progress, renewable energy deployment still faces several key challenges. Grid infrastructure needs substantial upgrades to handle distributed generation and variable power sources. Intermittency remains a technical challenge, requiring advanced forecasting and storage solutions. Supply chain constraints and material shortages can impact project timelines and costs. Regulatory barriers and lengthy permitting processes can delay project development. Social acceptance and community engagement are also important factors, particularly for large-scale wind and solar installations.",
+        "sender": "response",
+        "timestamp": "2024-03-20T09:58:30Z"
+      },
+      {
+        "id": "msg-009",
+        "message": "What are the latest developments in renewable energy technology?",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "id": "msg-010",
+        "message": "Recent renewable energy developments show remarkable progress across multiple technologies. The latest innovations include advanced solar panel efficiency<sup>1</sup><sup>2</sup><sup>3</sup><sup>4</sup><sup>5</sup><sup>6</sup><sup>7</sup><sup>8</sup><sup>9</sup> reaching new record levels, making solar power more cost-effective than ever before.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "Advanced Perovskite Solar Cell Technology",
+            "value": "https://www.nature.com/articles/perovskite-solar-2024",
+            "snippet": "Revolutionary perovskite-silicon tandem cells achieve 33.7% efficiency in laboratory conditions, pushing beyond traditional silicon limits.",
+            "number": "1"
+          },
+          {
+            "label": "Organic Photovoltaic Breakthrough",
+            "value": "https://www.science.org/organic-pv-efficiency",
+            "snippet": "Flexible organic solar cells reach 19% efficiency with improved stability and manufacturing scalability.",
+            "number": "2"
+          },
+          {
+            "label": "Concentrated Solar Power Innovations",
+            "value": "https://www.nrel.gov/csp/molten-salt-storage",
+            "snippet": "Next-generation molten salt storage systems enable 24-hour solar power generation with 95% efficiency retention.",
+            "number": "3"
+          },
+          {
+            "label": "Bifacial Solar Panel Advances",
+            "value": "https://www.pv-magazine.com/bifacial-efficiency-2024",
+            "snippet": "Bifacial solar panels now capture up to 30% more energy by utilizing both direct and reflected sunlight.",
+            "number": "4"
+          },
+          {
+            "label": "Floating Solar Farm Technology",
+            "value": "https://www.reuters.com/floating-solar-innovations",
+            "snippet": "Floating photovoltaic systems reduce water evaporation while achieving 10-15% higher efficiency due to cooling effects.",
+            "number": "5"
+          },
+          {
+            "label": "AI-Optimized Solar Tracking Systems",
+            "value": "https://www.ieee.org/ai-solar-tracking-2024",
+            "snippet": "Machine learning algorithms optimize solar panel positioning, increasing energy capture by 25% compared to fixed installations.",
+            "number": "6"
+          },
+          {
+            "label": "Quantum Dot Solar Technology",
+            "value": "https://www.mit.edu/quantum-dot-solar-cells",
+            "snippet": "Quantum dot enhancement layers promise to unlock near-theoretical efficiency limits in silicon solar cells.",
+            "number": "7"
+          },
+          {
+            "label": "Solar Panel Recycling Breakthrough",
+            "value": "https://www.greentech.com/solar-recycling-2024",
+            "snippet": "New recycling processes recover 95% of materials from end-of-life solar panels, solving long-term sustainability concerns.",
+            "number": "8"
+          },
+          {
+            "label": "Building-Integrated Photovoltaics",
+            "value": "https://www.solar-today.com/bipv-innovations",
+            "snippet": "Transparent solar cells and solar roof tiles integrate seamlessly into building design while generating clean energy.",
+            "number": "9"
+          }
+        ],
+        "explorations": [
+          {
+            "label": "How do these new solar technologies compare in terms of cost?",
+            "value": "How do these new solar technologies compare in terms of cost?"
+          },
+          {
+            "label": "What are the manufacturing challenges for these advanced solar cells?",
+            "value": "What are the manufacturing challenges for these advanced solar cells?"
+          },
+          {
+            "label": "When will these technologies become commercially available?",
+            "value": "When will these technologies become commercially available?"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'Nine Citations Grid Test',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      },
+      {
+        "label": "Export",
+        "icon": "download",
+        "value": "export"
+      }
+    ]`,
+    sources: `[]`,
+    loading: false,
+    sound: false,
+    debug: true
+  },
+  render: (args) => html`
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="height: 600px; padding: 1rem; position: relative; background: var(--spectrum-sys-color-surface-variant, #f8f9fa); border: 1px solid var(--spectrum-sys-color-outline-variant, #e9ecef); border-radius: var(--spectrum-sys-shape-corner-large, 8px);">
+        <div style="margin-bottom: 1rem; padding: 1.5rem; background: linear-gradient(135deg, var(--spectrum-sys-color-primary, #667eea) 0%, var(--spectrum-sys-color-tertiary, #f093fb) 100%); color: var(--spectrum-sys-color-on-primary, white); border-radius: var(--spectrum-sys-shape-corner-large, 8px); box-shadow: var(--spectrum-sys-elevation-2, 0 4px 6px rgba(0,0,0,0.1));">
+          <h3 style="margin: 0 0 var(--spectrum-sys-spacing-small, 0.75rem) 0; font-size: var(--spectrum-sys-typescale-headline-small-size, 1.25rem); font-weight: var(--spectrum-sys-typescale-headline-small-weight, 600);">🎯 Nine Citations Grid Test</h3>
+                     <p style="margin: 0; opacity: 0.95; font-size: var(--spectrum-sys-typescale-body-small-size, 0.9rem); line-height: 1.5;">
+             <strong>Testing the new 3x3 grid layout for grouped citations:</strong><br>
+             • <strong>9 consecutive citations</strong> (&lt;sup&gt;1&lt;/sup&gt;&lt;sup&gt;2&lt;/sup&gt;...&lt;sup&gt;9&lt;/sup&gt;) in the final message<br>
+             • <strong>Multiple messages</strong> above to test overflow positioning behavior<br>
+             • <strong>3x3 grid layout</strong> with smart positioning to avoid viewport clipping<br>
+             • <strong>Scroll down</strong> to see the grid appear above citations when space is limited<br>
+             • <strong>Fixed card dimensions</strong> (280px width, 120px height) for consistent layout<br>
+             • Debug mode enabled for detailed console logging
+           </p>
+        </div>
+        
+        <spectrum-conversation-panel
+          .messages=${args.messages}
+          .conversationtitle=${args.conversationtitle}
+          .actions=${args.actions}
+          .sources=${args.sources}
+          .loading=${args.loading}
+          .sound=${args.sound}
+          .debug=${args.debug}
+          @action=${(e: CustomEvent) => action('Action')(e.detail)}
+          @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+          @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+          @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+          @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+        ></spectrum-conversation-panel>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing, 1rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-primary-container, #e3f2fd); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-primary, #2196f3);">
+          <p style="margin: 0; color: var(--spectrum-sys-color-on-primary-container, #0d47a1); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem); line-height: 1.5;">
+            <strong>🎯 Grid Layout Features:</strong><br>
+            • <strong>3x3 Maximum:</strong> Up to 9 cards arranged in a 3-column, 3-row grid<br>
+            • <strong>Smart Positioning:</strong> Grid appears above citation if it would be clipped below<br>
+            • <strong>Viewport Awareness:</strong> Horizontal position adjusts to stay within screen bounds<br>
+            • <strong>Fixed Dimensions:</strong> Each card is exactly 280px × 120px for consistent layout<br>
+            • <strong>Optimal Spacing:</strong> 8px gaps between cards for clean visual separation<br>
+            • <strong>Hover Interaction:</strong> Individual cards still have hover effects within the grid
+          </p>
+        </div>
+        
+        <div style="margin-top: var(--spectrum-sys-spacing-small, 0.5rem); padding: var(--spectrum-sys-spacing, 1rem); background: var(--spectrum-sys-color-warning-container, #fff3cd); border-radius: var(--spectrum-sys-shape-corner-medium, 6px); border-left: 4px solid var(--spectrum-sys-color-warning, #ffc107);">
+                     <p style="margin: 0; color: var(--spectrum-sys-color-on-warning-container, #856404); font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem); line-height: 1.5;">
+             <strong>🧪 Test Instructions:</strong><br>
+             1. <strong>Scroll down</strong> to the last message with 9 citations<br>
+             2. <strong>Hover over the "9 citations" chip</strong> to see the 3x3 grid layout<br>
+             3. <strong>Test overflow behavior:</strong> When near bottom, grid should appear above citation<br>
+             4. <strong>Test normal positioning:</strong> Scroll up so citation has space below<br>
+             5. <strong>Resize browser window</strong> to test viewport edge detection<br>
+             6. <strong>Hover individual cards</strong> within the grid to test card-level interactions<br>
+             7. <strong>Check console</strong> for debug information about grid calculations
+           </p>
+        </div>
+      </div>
+    </spectrum-theme>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+          Tests the new 3x3 grid layout functionality for grouped citations with 9 source cards.
+          
+          ## Grid Layout System
+          
+          ### Maximum Grid Size
+          - **3x3 Grid**: Up to 9 citations can be displayed in a single grouped hover overlay
+          - **Fixed Card Size**: Each card maintains 280px width × 120px height for consistency
+          - **Optimal Spacing**: 8px gaps between cards provide clean visual separation
+          
+          ### Smart Positioning Algorithm
+          - **Viewport Detection**: Calculates available space above and below the citation
+          - **Anti-Clipping Logic**: Automatically positions grid above citation if it would be clipped below
+          - **Horizontal Adjustment**: Shifts grid left if it would extend beyond right edge of viewport
+          - **Responsive Behavior**: Adapts to different screen sizes and window dimensions
+          
+          ### Grid Calculation
+          - **Dynamic Classes**: Grid receives classes like \`grid-3x3\`, \`position-above\`, etc.
+          - **CSS Grid Layout**: Uses CSS Grid for optimal card arrangement and spacing
+          - **Performance Optimized**: Efficient calculation of grid dimensions and positioning
+          
+          ### User Experience
+          - **Visual Consistency**: All cards maintain uniform appearance regardless of grid size
+          - **Hover Effects**: Individual cards still have elevation effects when hovered
+          - **Accessibility**: Full keyboard navigation and screen reader support maintained
+          - **Mobile Compatibility**: Falls back to mobile card behavior on small screens
+          
+          ## Testing Scenarios
+          
+          ### Positioning Tests
+          1. **Bottom Clipping**: Scroll conversation so citation is near bottom - grid should appear above
+          2. **Right Clipping**: Narrow browser window - grid should shift left to stay in viewport
+          3. **Normal Position**: With adequate space, grid appears below citation as expected
+          
+          ### Grid Layout Tests
+          1. **3x3 Layout**: Verify all 9 cards arrange in 3 columns and 3 rows
+          2. **Card Consistency**: Check that all cards maintain 280px × 120px dimensions
+          3. **Spacing Verification**: Confirm 8px gaps between all cards
+          4. **Hover Interactions**: Test individual card hover effects within the grid
+          
+          ### Performance Tests
+          1. **Smooth Positioning**: Grid should appear instantly without layout shifts
+          2. **Hover Responsiveness**: Quick hover on/off should not cause flickering
+          3. **Memory Efficiency**: No memory leaks from repeated grid calculations
+          
+          This test ensures the grid system works flawlessly with the maximum number of citations while maintaining optimal user experience across all device sizes and viewport configurations.
+        `,
+      },
+    },
+  },
+};
+
 export type Story = StoryObj<SpectrumConversationPanelArgs>;

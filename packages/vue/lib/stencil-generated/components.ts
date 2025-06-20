@@ -35,6 +35,10 @@ export const SpectrumAppLayout = /*@__PURE__*/ defineContainer<JSX.SpectrumAppLa
   'sidebarExpanded',
   'sidebarCollapsible',
   'sidebarPosition',
+  'showRightBar',
+  'rightBarWidth',
+  'rightBarCollapsible',
+  'rightBarExpanded',
   'showHeader',
   'headerTitle',
   'showLogo',
@@ -49,10 +53,12 @@ export const SpectrumAppLayout = /*@__PURE__*/ defineContainer<JSX.SpectrumAppLa
   'gap',
   'debug',
   'sidebarToggle',
-  'profileAction'
+  'profileAction',
+  'rightBarToggle'
 ], [
   'sidebarToggle',
-  'profileAction'
+  'profileAction',
+  'rightBarToggle'
 ]);
 
 
@@ -290,6 +296,7 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'appName',
   'expandedWidth',
   'moreLabel',
+  'moreIcon',
   'initialExpanded',
   'showAddButton',
   'addLabel',
@@ -305,6 +312,9 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'railAction',
   'addAction'
 ]);
+
+
+export const SpectrumRailAlternative = /*@__PURE__*/ defineContainer<JSX.SpectrumRailAlternative>('spectrum-rail-alternative', undefined);
 
 
 export const SpectrumRailItem = /*@__PURE__*/ defineContainer<JSX.SpectrumRailItem>('spectrum-rail-item', undefined, [
