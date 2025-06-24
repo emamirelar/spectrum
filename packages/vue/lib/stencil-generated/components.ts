@@ -292,6 +292,15 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
 ]);
 
 
+export const SpectrumPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumPanel>('spectrum-panel', undefined, [
+  'frost',
+  'debug',
+  'size',
+  'width',
+  'height'
+]);
+
+
 export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spectrum-rail', undefined, [
   'appName',
   'expandedWidth',

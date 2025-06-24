@@ -24,6 +24,7 @@ import { SpectrumGrid as SpectrumGridElement, defineCustomElement as defineSpect
 import { SpectrumHero as SpectrumHeroElement, defineCustomElement as defineSpectrumHero } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-hero.js";
 import { SpectrumImageGallery as SpectrumImageGalleryElement, defineCustomElement as defineSpectrumImageGallery } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-image-gallery.js";
 import { SpectrumMenu as SpectrumMenuElement, defineCustomElement as defineSpectrumMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-menu.js";
+import { SpectrumPanel as SpectrumPanelElement, defineCustomElement as defineSpectrumPanel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-panel.js";
 import { SpectrumRailAlternative as SpectrumRailAlternativeElement, defineCustomElement as defineSpectrumRailAlternative } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-alternative.js";
 import { SpectrumRailItem as SpectrumRailItemElement, defineCustomElement as defineSpectrumRailItem } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-item.js";
 import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpectrumRail } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail.js";
@@ -254,6 +255,17 @@ export const SpectrumMenu: StencilReactComponent<SpectrumMenuElement, SpectrumMe
     react: React,
     events: { onItemClick: 'itemClick' } as SpectrumMenuEvents,
     defineCustomElement: defineSpectrumMenu
+});
+
+type SpectrumPanelEvents = NonNullable<unknown>;
+
+export const SpectrumPanel: StencilReactComponent<SpectrumPanelElement, SpectrumPanelEvents> = /*@__PURE__*/ createComponent<SpectrumPanelElement, SpectrumPanelEvents>({
+    tagName: 'spectrum-panel',
+    elementClass: SpectrumPanelElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumPanelEvents,
+    defineCustomElement: defineSpectrumPanel
 });
 
 type SpectrumRailEvents = {

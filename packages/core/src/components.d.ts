@@ -823,6 +823,31 @@ export namespace Components {
          */
         "variant": 'default' | 'megamenu';
     }
+    interface SpectrumPanel {
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Whether to apply frost effect (translucent background with blur) Default: false
+          * @default false
+         */
+        "frost": boolean;
+        /**
+          * Custom height for the panel Can be any valid CSS height value (e.g., '200px', '100vh', 'auto')
+         */
+        "height"?: string;
+        /**
+          * Size preset for the panel Default: 'full' (occupies all available space)
+          * @default 'full'
+         */
+        "size": 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Custom width for the panel (overrides size preset) Can be any valid CSS width value (e.g., '300px', '50%', '20rem')
+         */
+        "width"?: string;
+    }
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
@@ -1678,6 +1703,12 @@ declare global {
         prototype: HTMLSpectrumMenuElement;
         new (): HTMLSpectrumMenuElement;
     };
+    interface HTMLSpectrumPanelElement extends Components.SpectrumPanel, HTMLStencilElement {
+    }
+    var HTMLSpectrumPanelElement: {
+        prototype: HTMLSpectrumPanelElement;
+        new (): HTMLSpectrumPanelElement;
+    };
     interface HTMLSpectrumRailElementEventMap {
         "expandedChange": { action: string; expanded: boolean };
         "searchChange": { action: string; value: string };
@@ -1847,6 +1878,7 @@ declare global {
         "spectrum-hero": HTMLSpectrumHeroElement;
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
         "spectrum-menu": HTMLSpectrumMenuElement;
+        "spectrum-panel": HTMLSpectrumPanelElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-rail-alternative": HTMLSpectrumRailAlternativeElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
@@ -2720,6 +2752,31 @@ declare namespace LocalJSX {
          */
         "variant"?: 'default' | 'megamenu';
     }
+    interface SpectrumPanel {
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Whether to apply frost effect (translucent background with blur) Default: false
+          * @default false
+         */
+        "frost"?: boolean;
+        /**
+          * Custom height for the panel Can be any valid CSS height value (e.g., '200px', '100vh', 'auto')
+         */
+        "height"?: string;
+        /**
+          * Size preset for the panel Default: 'full' (occupies all available space)
+          * @default 'full'
+         */
+        "size"?: 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Custom width for the panel (overrides size preset) Can be any valid CSS width value (e.g., '300px', '50%', '20rem')
+         */
+        "width"?: string;
+    }
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
@@ -3289,6 +3346,7 @@ declare namespace LocalJSX {
         "spectrum-hero": SpectrumHero;
         "spectrum-image-gallery": SpectrumImageGallery;
         "spectrum-menu": SpectrumMenu;
+        "spectrum-panel": SpectrumPanel;
         "spectrum-rail": SpectrumRail;
         "spectrum-rail-alternative": SpectrumRailAlternative;
         "spectrum-rail-item": SpectrumRailItem;
@@ -3363,6 +3421,7 @@ declare module "@stencil/core" {
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
             "spectrum-menu": LocalJSX.SpectrumMenu & JSXBase.HTMLAttributes<HTMLSpectrumMenuElement>;
+            "spectrum-panel": LocalJSX.SpectrumPanel & JSXBase.HTMLAttributes<HTMLSpectrumPanelElement>;
             /**
              * Spectrum Rail Component
              * A vertical navigation rail with two states: expanded and contracted
