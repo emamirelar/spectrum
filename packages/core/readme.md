@@ -17,11 +17,13 @@ To install this package in your project:
 
    # Login to GCP
    gcloud auth login
+   export NPM_TOKEN=$(gcloud auth print-access-token)   
+   npm publish
 
    # This command will:
    # 1. Get a fresh GCP access token
    # 2. Use it to authenticate with npm
-   # 3. Store the token in your .npmrc file
+   # 3. Store the token in your .npmrc file     
    gcloud auth print-access-token | npm login --registry=https://europe-west1-npm.pkg.dev/unops-itg-artifacts-prod/unops-itg-npm/ --always-auth
    ```
 

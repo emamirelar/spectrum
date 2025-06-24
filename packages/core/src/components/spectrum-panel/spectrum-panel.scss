@@ -1,0 +1,202 @@
+// ==============================================
+// Spectrum Panel Component Styles
+// ==============================================
+// Copy of conversation panel styling but simplified for general use
+// ==============================================
+
+/* Root variables and custom properties for spectrum-panel */
+spectrum-panel {
+  display: block;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  
+  /* Size presets */
+  --panel-size-small: 300px;
+  --panel-size-medium: 500px;
+  --panel-size-large: 800px;
+  --panel-size-full-width: 100%;
+  --panel-size-full-height: 100%;
+  --panel-size-auto: auto;
+  
+  /* Custom dimension variables */
+  --panel-custom-width: unset;
+  --panel-custom-height: unset;
+  
+  /* Ensure all child elements use border-box */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  /* Core panel properties - copied from conversation panel */
+  --panel-background: var(--spectrum-color-background, #f6f6f6);
+  --panel-surface: var(--spectrum-color-surface, #f6f6f6);
+  --panel-on-surface: var(--spectrum-color-on-surface, #333333);
+  --panel-on-surface-variant: var(--spectrum-color-on-surface-variant, #42474e);
+  --panel-outline: var(--spectrum-color-outline, #72777f);
+  --panel-outline-variant: var(--spectrum-color-outline-variant, #c2c7cf);
+  --panel-shadow: var(--spectrum-color-shadow, #000000);
+  
+  /* Typography */
+  --panel-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --panel-font-size: var(--spectrum-sys-font-size, 16px);
+  --panel-font-size-small: var(--spectrum-sys-font-size-small, 14px);
+  --panel-font-size-large: var(--spectrum-sys-font-size-large, 20px);
+  --panel-font-size-x-large: var(--spectrum-sys-font-size-x-large, 24px);
+  --panel-font-weight-regular: var(--spectrum-sys-font-weight-regular, 400);
+  --panel-font-weight-medium: var(--spectrum-sys-font-weight-medium, 500);
+  
+  /* Spacing */
+  --panel-spacing: var(--spectrum-sys-spacing, 1em);
+  --panel-spacing-small: var(--spectrum-sys-spacing-small, 0.5em);
+  --panel-spacing-large: var(--spectrum-sys-spacing-large, 2em);
+  
+  /* Border radius - exact copy from conversation panel */
+  --panel-border-radius: var(--spectrum-sys-border-radius, 4px);
+  --panel-border-radius-large: calc(var(--panel-border-radius) * 4);
+  --panel-border-radius-x-large: calc(var(--panel-border-radius) * 12);
+  
+  /* Animation */
+  --panel-transition-duration: var(--spectrum-sys-animation-duration, 300ms);
+  --panel-transition-timing: var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  --panel-transition: all var(--panel-transition-duration) var(--panel-transition-timing);
+}
+
+/* Base Styles */
+spectrum-panel body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--panel-font-family);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+spectrum-panel .panel-host {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Utility Classes - exact copy from conversation panel */
+spectrum-panel .frost {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+}
+
+/* Panel Styles - exact copy from conversation panel */
+spectrum-panel .panel {
+  box-sizing: border-box;
+  flex-grow: 2;
+  border-radius: var(--panel-border-radius-x-large);
+  border: 1px solid var(--panel-outline);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: var(--panel-spacing-large);
+  will-change: transform;
+  overflow: hidden;
+  position: relative;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  font-family: var(--panel-font-family);
+  color: var(--panel-on-surface);
+}
+
+/* Content styling */
+spectrum-panel .panel {
+  // Ensure slotted content inherits proper styling
+  ::slotted(*) {
+    color: inherit;
+    font-family: inherit;
+  }
+  
+  // Ensure proper spacing for common elements
+  ::slotted(h1),
+  ::slotted(h2),
+  ::slotted(h3),
+  ::slotted(h4),
+  ::slotted(h5),
+  ::slotted(h6) {
+    margin-top: 0;
+    margin-bottom: var(--panel-spacing);
+    line-height: 1.2;
+    font-weight: var(--panel-font-weight-medium);
+  }
+  
+  ::slotted(p) {
+    margin-top: 0;
+    margin-bottom: var(--panel-spacing);
+    line-height: 1.5;
+  }
+  
+  ::slotted(:last-child) {
+    margin-bottom: 0;
+  }
+}
+
+/* ==============================================
+ * Size Variations
+ * ============================================== */
+
+/* Size presets */
+spectrum-panel .panel.size-small {
+  width: var(--panel-size-small);
+  max-width: var(--panel-size-small);
+  height: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+spectrum-panel .panel.size-medium {
+  width: var(--panel-size-medium);
+  max-width: var(--panel-size-medium);
+  height: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+spectrum-panel .panel.size-large {
+  width: var(--panel-size-large);
+  max-width: var(--panel-size-large);
+  height: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+spectrum-panel .panel.size-full {
+  width: var(--panel-size-full-width);
+  height: var(--panel-size-full-height);
+  max-width: 100%;
+  max-height: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  box-sizing: border-box;
+}
+
+spectrum-panel .panel.size-auto {
+  width: var(--panel-size-auto);
+  height: var(--panel-size-auto);
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+/* Custom dimensions support */
+spectrum-panel:has(.panel) {
+  &[style*="--panel-custom-width"] .panel {
+    width: var(--panel-custom-width) !important;
+    max-width: var(--panel-custom-width) !important;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+  
+  &[style*="--panel-custom-height"] .panel {
+    height: var(--panel-custom-height) !important;
+    max-height: var(--panel-custom-height) !important;
+  }
+}

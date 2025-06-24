@@ -417,6 +417,28 @@ export declare interface SpectrumMenu extends Components.SpectrumMenu {
 
 
 @ProxyCmp({
+  inputs: ['debug', 'frost', 'height', 'size', 'width']
+})
+@Component({
+  selector: 'spectrum-panel',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['debug', 'frost', 'height', 'size', 'width'],
+})
+export class SpectrumPanel {
+  protected el: HTMLSpectrumPanelElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumPanel extends Components.SpectrumPanel {}
+
+
+@ProxyCmp({
   inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreIcon', 'moreLabel', 'showAddButton'],
   methods: ['setExpanded', 'setShowAddButton']
 })
