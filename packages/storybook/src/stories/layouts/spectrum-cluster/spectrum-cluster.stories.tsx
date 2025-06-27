@@ -366,4 +366,44 @@ export const CustomSpacing = {
       </spectrum-cluster>
     </div>
   `
+};
+
+export const ChipsCluster = {
+  args: {
+    spacing: "md",
+    align: "start",
+    wrap: true
+  },
+  render: (args: SpectrumClusterArgs) => html`
+    <div style="border: 2px dashed #ccc; padding: 1rem;">
+      <h4>Spectrum Chips with Default Spacing (md)</h4>
+      <spectrum-cluster 
+        spacing=${args.spacing}
+        align=${args.align}
+        justify=${args.justify}
+        ?wrap=${args.wrap}
+        ?noWrap=${args.noWrap}
+        direction=${args.direction}
+        ?responsive=${args.responsive}
+        breakpoint=${args.breakpoint}
+        ?stackBelow=${args.stackBelow}
+        ?fullWidth=${args.fullWidth}
+        ?centerContainer=${args.centerContainer}
+        ?debug=${args.debug}
+      >
+        <spectrum-chip label="React"></spectrum-chip>
+        <spectrum-chip label="TypeScript"></spectrum-chip>
+        <spectrum-chip label="JavaScript"></spectrum-chip>
+        <spectrum-chip label="CSS"></spectrum-chip>
+        <spectrum-chip label="HTML"></spectrum-chip>
+        <spectrum-chip label="Stencil"></spectrum-chip>
+        <spectrum-chip label="Web Components"></spectrum-chip>
+        <spectrum-chip label="Frontend"></spectrum-chip>
+        <spectrum-chip label="UI/UX"></spectrum-chip>
+        <spectrum-chip label="Design System"></spectrum-chip>
+        <spectrum-chip label="Responsive"></spectrum-chip>
+        <spectrum-chip label="Accessibility"></spectrum-chip>
+      </spectrum-cluster>
+    </div>
+  `
 }; 

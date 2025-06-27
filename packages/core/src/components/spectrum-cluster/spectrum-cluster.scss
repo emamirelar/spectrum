@@ -1,3 +1,199 @@
+// ==============================================
+// Spectrum Cluster Component Styles
+// ==============================================
+// BEM naming convention: spectrum-cluster (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
 :host {
   display: block;
+  
+  // ==============================================
+  // Root Variables and Custom Properties
+  // ==============================================
+  
+  // Spacing using proper Spectrum tokens
+  --cluster-spacing-none: 0;
+  --cluster-spacing-xs: var(--spectrum-sys-spacing-x-small, 0.25rem);
+  --cluster-spacing-sm: var(--spectrum-sys-spacing-small, 0.5rem);
+  --cluster-spacing-md: var(--spectrum-sys-spacing, 1rem);
+  --cluster-spacing-lg: var(--spectrum-sys-spacing-large, 1.5rem);
+  --cluster-spacing-xl: var(--spectrum-sys-spacing-x-large, 2rem);
+  
+  // Default spacing
+  --cluster-spacing: var(--cluster-spacing-md);
+  
+  // Animation and transitions
+  --cluster-transition: all 0.2s ease-in-out;
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-cluster {
+  display: flex;
+  gap: var(--cluster-spacing);
+  
+  // Default to horizontal, wrapping layout
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  
+  // ==============================================
+  // Spacing Variations
+  // ==============================================
+  &--spacing-none {
+    --cluster-spacing: var(--cluster-spacing-none);
+  }
+  
+  &--spacing-xs {
+    --cluster-spacing: var(--cluster-spacing-xs);
+  }
+  
+  &--spacing-sm {
+    --cluster-spacing: var(--cluster-spacing-sm);
+  }
+  
+  &--spacing-md {
+    --cluster-spacing: var(--cluster-spacing-md);
+  }
+  
+  &--spacing-lg {
+    --cluster-spacing: var(--cluster-spacing-lg);
+  }
+  
+  &--spacing-xl {
+    --cluster-spacing: var(--cluster-spacing-xl);
+  }
+  
+  &--spacing-custom {
+    --cluster-spacing: var(--cluster-spacing-custom);
+  }
+  
+  // ==============================================
+  // Direction Variations
+  // ==============================================
+  &--horizontal {
+    flex-direction: row;
+  }
+  
+  &--vertical {
+    flex-direction: column;
+  }
+  
+  // ==============================================
+  // Alignment Variations
+  // ==============================================
+  &--align-start {
+    align-items: flex-start;
+  }
+  
+  &--align-center {
+    align-items: center;
+  }
+  
+  &--align-end {
+    align-items: flex-end;
+  }
+  
+  // ==============================================
+  // Justify Content Variations
+  // ==============================================
+  &--justify-start {
+    justify-content: flex-start;
+  }
+  
+  &--justify-center {
+    justify-content: center;
+  }
+  
+  &--justify-end {
+    justify-content: flex-end;
+  }
+  
+  &--justify-space-between {
+    justify-content: space-between;
+  }
+  
+  &--justify-space-around {
+    justify-content: space-around;
+  }
+  
+  // ==============================================
+  // Wrapping Behavior
+  // ==============================================
+  &--wrap {
+    flex-wrap: wrap;
+  }
+  
+  &--no-wrap {
+    flex-wrap: nowrap;
+  }
+  
+  // ==============================================
+  // Container Properties
+  // ==============================================
+  &--full-width {
+    width: 100%;
+  }
+  
+  &--center-container {
+    margin: 0 auto;
+  }
+  
+  // ==============================================
+  // Responsive Design
+  // ==============================================
+  &--responsive-sm {
+    @media (max-width: 640px) {
+      &.spectrum-cluster--stack-below {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  }
+  
+  &--responsive-md {
+    @media (max-width: 768px) {
+      &.spectrum-cluster--stack-below {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  }
+  
+  &--responsive-lg {
+    @media (max-width: 1024px) {
+      &.spectrum-cluster--stack-below {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  }
+  
+  // ==============================================
+  // Debug Mode - Development Only
+  // ==============================================
+  &--debug {
+    // Only add minimal debug indicators in development
+    // No visual styling in production
+    position: relative;
+    
+    // Only show debug info via browser dev tools or data attributes
+    &::after {
+      content: '';
+      // No visual output - invisible layout component
+    }
+  }
+}
+
+// ==============================================
+// Performance Optimization
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-cluster {
+    --cluster-transition: none;
+  }
 }

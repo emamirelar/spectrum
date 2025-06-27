@@ -1,3 +1,231 @@
+// ==============================================
+// Spectrum Container Component Styles
+// ==============================================
+// BEM naming convention: spectrum-container (block), __element (element), --modifier (modifier)
+// Container layout with max-width constraints and responsive padding
+// CSS custom properties for theming integration
+// ==============================================
+
 :host {
   display: block;
+  
+  // ==============================================
+  // Root Variables and Custom Properties
+  // ==============================================
+  
+  // Spacing using proper Spectrum tokens
+  --container-padding-none: 0;
+  --container-padding-xs: var(--spectrum-sys-spacing-x-small, 0.25rem);
+  --container-padding-sm: var(--spectrum-sys-spacing-small, 0.5rem);
+  --container-padding-md: var(--spectrum-sys-spacing, 1rem);
+  --container-padding-lg: var(--spectrum-sys-spacing-large, 1.5rem);
+  --container-padding-xl: var(--spectrum-sys-spacing-x-large, 2rem);
+  
+  // Container max-width sizes
+  --container-size-xs: 576px;
+  --container-size-sm: 768px;
+  --container-size-md: 992px;
+  --container-size-lg: 1200px;
+  --container-size-xl: 1400px;
+  --container-size-full: 100%;
+  --container-size-fluid: 100%;
+  
+  // Custom max-width (set dynamically)
+  --container-max-width-custom: 100%;
+  
+  // Default values
+  --container-padding: var(--container-padding-md);
+  --container-max-width: var(--container-size-lg);
+}
+
+// ==============================================
+// Base Component Styles (Invisible Layout)
+// ==============================================
+.spectrum-container {
+  // Container behavior
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--container-max-width);
+  padding: var(--container-padding);
+  
+  // ==============================================
+  // Size Variations
+  // ==============================================
+  &--xs {
+    --container-max-width: var(--container-size-xs);
+  }
+  
+  &--sm {
+    --container-max-width: var(--container-size-sm);
+  }
+  
+  &--md {
+    --container-max-width: var(--container-size-md);
+  }
+  
+  &--lg {
+    --container-max-width: var(--container-size-lg);
+  }
+  
+  &--xl {
+    --container-max-width: var(--container-size-xl);
+  }
+  
+  &--full {
+    --container-max-width: var(--container-size-full);
+  }
+  
+  &--fluid {
+    --container-max-width: var(--container-size-fluid);
+  }
+  
+  &--custom-width {
+    --container-max-width: var(--container-max-width-custom);
+  }
+  
+  // ==============================================
+  // Padding Variations
+  // ==============================================
+  &--padding-none {
+    --container-padding: var(--container-padding-none);
+  }
+  
+  &--padding-xs {
+    --container-padding: var(--container-padding-xs);
+  }
+  
+  &--padding-sm {
+    --container-padding: var(--container-padding-sm);
+  }
+  
+  &--padding-md {
+    --container-padding: var(--container-padding-md);
+  }
+  
+  &--padding-lg {
+    --container-padding: var(--container-padding-lg);
+  }
+  
+  &--padding-xl {
+    --container-padding: var(--container-padding-xl);
+  }
+  
+  // Horizontal padding overrides
+  &--padding-x-none {
+    padding-left: var(--container-padding-none);
+    padding-right: var(--container-padding-none);
+  }
+  
+  &--padding-x-xs {
+    padding-left: var(--container-padding-xs);
+    padding-right: var(--container-padding-xs);
+  }
+  
+  &--padding-x-sm {
+    padding-left: var(--container-padding-sm);
+    padding-right: var(--container-padding-sm);
+  }
+  
+  &--padding-x-md {
+    padding-left: var(--container-padding-md);
+    padding-right: var(--container-padding-md);
+  }
+  
+  &--padding-x-lg {
+    padding-left: var(--container-padding-lg);
+    padding-right: var(--container-padding-lg);
+  }
+  
+  &--padding-x-xl {
+    padding-left: var(--container-padding-xl);
+    padding-right: var(--container-padding-xl);
+  }
+  
+  // Vertical padding overrides
+  &--padding-y-none {
+    padding-top: var(--container-padding-none);
+    padding-bottom: var(--container-padding-none);
+  }
+  
+  &--padding-y-xs {
+    padding-top: var(--container-padding-xs);
+    padding-bottom: var(--container-padding-xs);
+  }
+  
+  &--padding-y-sm {
+    padding-top: var(--container-padding-sm);
+    padding-bottom: var(--container-padding-sm);
+  }
+  
+  &--padding-y-md {
+    padding-top: var(--container-padding-md);
+    padding-bottom: var(--container-padding-md);
+  }
+  
+  &--padding-y-lg {
+    padding-top: var(--container-padding-lg);
+    padding-bottom: var(--container-padding-lg);
+  }
+  
+  &--padding-y-xl {
+    padding-top: var(--container-padding-xl);
+    padding-bottom: var(--container-padding-xl);
+  }
+  
+  // ==============================================
+  // Centering Behavior
+  // ==============================================
+  &--centered {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  &--center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+  }
+  
+  // ==============================================
+  // Responsive Behavior
+  // ==============================================
+  &--responsive {
+    // Responsive padding adjustments
+    @media (max-width: 768px) {
+      --container-padding: var(--container-padding-sm);
+    }
+    
+    @media (max-width: 480px) {
+      --container-padding: var(--container-padding-xs);
+    }
+  }
+  
+  &--full-width-mobile {
+    @media (max-width: 768px) {
+      --container-max-width: 100%;
+      padding-left: var(--container-padding-sm);
+      padding-right: var(--container-padding-sm);
+    }
+    
+    @media (max-width: 480px) {
+      padding-left: var(--container-padding-xs);
+      padding-right: var(--container-padding-xs);
+    }
+  }
+  
+  // ==============================================
+  // Debug Mode - Development Only
+  // ==============================================
+  &--debug {
+    // Only add minimal debug indicators in development
+    // No visual styling in production
+    position: relative;
+    
+    // Only show debug info via browser dev tools or data attributes
+    &::after {
+      content: '';
+      // No visual output - invisible layout component
+    }
+  }
 }
