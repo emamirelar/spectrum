@@ -243,32 +243,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--gallery-spacing-large);
   text-align: center;
   color: var(--gallery-text-secondary);
   min-height: 300px;
   flex: 1;
+  margin: 0 0 calc(var(--gallery-spacing) * 2) 0;
+  padding: 0;
   border: 2px dashed var(--gallery-border);
   border-radius: var(--gallery-border-radius);
   background: var(--gallery-secondary);
-  margin: var(--gallery-spacing);
-  margin-bottom: calc(var(--gallery-spacing) * 2);
-  
-  // Horizontal layout adjustments
-  .gallery--horizontal & {
-    margin: var(--gallery-spacing);
-    margin-right: calc(var(--gallery-spacing) * 2);
-    margin-bottom: var(--gallery-spacing);
-    min-width: 400px;
-    
-    @media (max-width: 768px) {
-      min-width: 300px;
-    }
-    
-    @media (max-width: 480px) {
-      min-width: 250px;
-    }
-  }
   
   svg {
     width: 64px;
@@ -288,6 +271,22 @@
     margin: 0;
     font-size: var(--gallery-font-size);
   }
+  
+  // Horizontal layout adjustments
+  .gallery--horizontal & {
+    margin: var(--gallery-spacing);
+    margin-right: calc(var(--gallery-spacing) * 2);
+    margin-bottom: var(--gallery-spacing);
+    min-width: 400px;
+    
+    @media (max-width: 768px) {
+      min-width: 300px;
+    }
+    
+    @media (max-width: 480px) {
+      min-width: 250px;
+    }
+  }
 }
 
 // Controls
@@ -298,12 +297,15 @@
   gap: var(--gallery-spacing-small);
   justify-content: flex-end;
   padding: var(--gallery-spacing);
+  margin: 0; // Ensure no margins
   z-index: 10;
   
-  // Frost background effect like conversation panel
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(6px);
-  border-top: 1px solid var(--gallery-border);
+  // True frost/glass effect - see through with blur
+  background: rgba(255, 255, 255, 0.1); /* Subtle fallback for browsers without backdrop-filter */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
   
   // Vertical layout (default) - sticky bottom
   &--vertical {

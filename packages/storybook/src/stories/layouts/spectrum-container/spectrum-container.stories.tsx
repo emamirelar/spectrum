@@ -236,7 +236,15 @@ export default meta;
 
 export const Default = {
   render: (args: SpectrumContainerArgs) => html`
-    <div style="background: #f5f5f5; min-height: 300px;">
+    <!-- 
+      NOTE: The gray background below is added by this Storybook demo for visualization only.
+      The spectrum-container component itself is completely invisible and only provides layout functionality.
+      In real applications, the container has no visual presence - it only controls spacing and max-width.
+    -->
+    <div style="background: #f5f5f5; min-height: 300px; position: relative;">
+      <div style="position: absolute; top: 8px; left: 8px; font-size: 12px; color: #666; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px;">
+        📋 Demo background - Container is invisible
+      </div>
       <spectrum-container 
         size=${args.size}
         maxWidth=${args.maxWidth}
@@ -253,6 +261,7 @@ export const Default = {
           <h2 style="margin-top: 0;">Container Content</h2>
           <p>This content is contained within a spectrum-container with responsive max-width constraints and proper padding.</p>
           <p>The container centers itself and provides consistent spacing across different screen sizes.</p>
+          <p><strong>Note:</strong> The gray area around this white box is added by Storybook for visualization. The actual container component is invisible.</p>
         </div>
       </spectrum-container>
     </div>
@@ -261,7 +270,10 @@ export const Default = {
 
 export const SizeVariations = {
   render: (args: SpectrumContainerArgs) => html`
-    <div style="background: #f5f5f5; padding: 2rem;">
+    <div style="background: #f5f5f5; padding: 2rem; position: relative;">
+      <div style="position: absolute; top: 8px; right: 8px; font-size: 12px; color: #666; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px;">
+        📋 Demo background only
+      </div>
       <div style="margin-bottom: 2rem;">
         <h3>Extra Small (xs)</h3>
         <spectrum-container size="xs" ?debug=${args.debug}>
@@ -331,7 +343,10 @@ export const CustomMaxWidth = {
 
 export const PaddingVariations = {
   render: (args: SpectrumContainerArgs) => html`
-    <div style="background: #f5f5f5; padding: 2rem;">
+    <div style="background: #f5f5f5; padding: 2rem; position: relative;">
+      <div style="position: absolute; top: 8px; right: 8px; font-size: 12px; color: #666; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px;">
+        📋 Demo background only
+      </div>
       <div style="margin-bottom: 2rem;">
         <h3>No Padding</h3>
         <spectrum-container padding="none" ?debug=${true}>
