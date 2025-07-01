@@ -105,12 +105,6 @@
       width: 100%;
     }
   }
-  
-  // Hover effect for better user feedback
-  &:not(.rail--expanded):hover {
-    transform: translateY(-2px) translateZ(0);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  }
 }
 
 .rail-section {
