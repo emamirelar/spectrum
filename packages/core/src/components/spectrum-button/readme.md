@@ -17,7 +17,7 @@ Supports icons, text, and various interactive states.
 | ------------------ | ------------------- | ----------- | ------------------------------------------------------------------------------------------------- | ----------- |
 | `action`           | `action`            |             | `string`                                                                                          | `''`        |
 | `buttonText`       | `button-text`       |             | `string`                                                                                          | `''`        |
-| `customStyle`      | `custom-style`      |             | `{ [key: string]: string; }`                                                                      | `{}`        |
+| `customStyle`      | --                  |             | `{ [key: string]: string; }`                                                                      | `{}`        |
 | `debug`            | `debug`             |             | `boolean`                                                                                         | `false`     |
 | `disabled`         | `disabled`          |             | `boolean`                                                                                         | `false`     |
 | `haptic`           | `haptic`            |             | `boolean`                                                                                         | `false`     |

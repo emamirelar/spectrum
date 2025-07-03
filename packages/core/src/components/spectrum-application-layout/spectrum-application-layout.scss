@@ -1,0 +1,595 @@
+// ==============================================
+// Spectrum Application Layout Component Styles
+// ==============================================
+// BEM naming convention: spectrum-application-layout (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  
+  // ==============================================
+  // CSS Variables - Layout Foundation
+  // ==============================================
+  
+  /* Layout Heights - Fixed in px from Figma Frame */
+  --layout-header-height: 72px;       /* h-[72px] from Figma */
+  --layout-footer-height: 72px;       /* h-[72px] from Figma */
+  
+  /* Layout Widths - Based on original Figma proportions */
+  --layout-topbar-width: 100vw;       /* Full viewport width */
+  --layout-left-width-default: 240px; /* Default left area width */
+  --layout-left-width-min: 96px;      /* Left area min-width */
+  --layout-left-width-max: 320px;     /* Left area max-width */
+  --layout-left-width-collapsed: 96px; /* Left area collapsed width */
+  --layout-right-width-default: 240px; /* Default right area width */
+  --layout-right-width-min: 96px;     /* Right area min-width */
+  --layout-right-width-max: 320px;    /* Right area max-width */
+  --layout-right-width-collapsed: 96px; /* Right area collapsed width */
+  
+  /* Flex Properties - Simplified for better control */
+  --layout-left-flex: 0 0 var(--layout-left-width-default);   /* Left area: fixed default width */
+  --layout-center-flex: 1;                                    /* Center area: take available space */
+  --layout-right-flex: 0 0 var(--layout-right-width-default); /* Right area: fixed default width */
+  
+  /* Z-Index Layers */
+  --z-header: 100;
+  --z-footer: 100;
+  --z-content: 1;
+  
+  // ==============================================
+  // Semantic Color System
+  // ==============================================
+  
+  /* Header/Topbar Colors */
+  --color-app-id-bg: #d7fff6;                    /* Light teal - App branding area */
+  --color-header-middle-bg: #eedeff;             /* Light purple - Search/header content */
+  --color-utility-bg: rgba(255, 252, 233, 0.7);  /* Light yellow - User actions/utilities */
+  
+  /* Main Content Colors */
+  --color-navigation-bg: #a2ffe9;                /* Mint green - Navigation area */
+  --color-content-bg: rgba(221, 161, 251, 0.6);  /* Light purple - Main content */
+  --color-right-pane-bg: #fff7b4;                /* Light yellow - Sidebar/panels */
+  
+  /* Footer Colors */
+  --color-footer-left-bg: #77d6c0;               /* Darker teal - Footer navigation */
+  --color-footer-center-bg: #f398ff;             /* Bright magenta - Footer content */
+  --color-footer-right-bg: rgba(188, 181, 66, 0.7); /* Olive yellow - Footer utilities */
+  
+  /* Base Colors */
+  --color-background: #ffffff;                    /* Primary background */
+  --color-overlay: rgba(255, 255, 255, 0.3);     /* Topbar overlay */
+  --color-text-primary: #000000;                 /* Primary text */
+  --color-text-secondary: #666666;               /* Secondary text */
+  
+  // ==============================================
+  // Typography System
+  // ==============================================
+  
+  /* Font Families */
+  --font-primary: 'Noto Sans', system-ui, -apple-system, sans-serif;
+  --font-secondary: 'Noto Sans', Arial, sans-serif;
+  
+  /* Font Sizes - Kept in px for readability across all screen sizes */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.8;
+  
+  // ==============================================
+  // Spacing System
+  // ==============================================
+  
+  /* Horizontal Spacing - vw units for proportional width scaling */
+  --spacing-h-xs: 0.29vw;    /* 4px -> (4/1366)*100 = 0.29vw */
+  --spacing-h-sm: 0.59vw;    /* 8px -> (8/1366)*100 = 0.59vw */
+  --spacing-h-md: 0.88vw;    /* 12px -> (12/1366)*100 = 0.88vw - Base spacing from design token 3:12 */
+  --spacing-h-lg: 1.17vw;    /* 16px -> (16/1366)*100 = 1.17vw */
+  --spacing-h-xl: 1.76vw;    /* 24px -> (24/1366)*100 = 1.76vw */
+  --spacing-h-2xl: 2.34vw;   /* 32px -> (32/1366)*100 = 2.34vw */
+  --spacing-h-3xl: 3.51vw;   /* 48px -> (48/1366)*100 = 3.51vw */
+  
+  /* Vertical Spacing - px units for consistent heights */
+  --spacing-v-xs: 4px;
+  --spacing-v-sm: 8px;
+  --spacing-v-md: 12px;  /* Base spacing from design token 3:12 */
+  --spacing-v-lg: 16px;
+  --spacing-v-xl: 24px;
+  --spacing-v-2xl: 32px;
+  --spacing-v-3xl: 48px;
+  
+  /* Component Internal Spacing */
+  --header-padding: var(--spacing-v-md);
+  --content-padding: var(--spacing-v-lg);
+  --footer-padding: var(--spacing-v-md);
+  
+  // ==============================================
+  // Responsive Breakpoints
+  // ==============================================
+  
+  /* Breakpoint Variables - Traditional px-based for media queries */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  // ==============================================
+  // Transition System
+  // ==============================================
+  
+  /* Animation Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  
+  /* Easing Functions */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  
+  /* Transition Presets */
+  --transition-all: all var(--duration-normal) var(--ease-in-out);
+  --transition-transform: transform var(--duration-normal) var(--ease-in-out);
+  --transition-opacity: opacity var(--duration-fast) var(--ease-out);
+  
+  // ==============================================
+  // Base Styles
+  // ==============================================
+  
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ==============================================
+// Application Layout Container
+// ==============================================
+.application-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-background);
+  box-sizing: border-box;
+}
+
+// ==============================================
+// Hidden Element Utility
+// ==============================================
+.hidden {
+  display: none !important;
+}
+
+// ==============================================
+// Header Layout
+// ==============================================
+.layout-header {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  height: var(--layout-header-height);
+  background-color: transparent;
+  z-index: var(--z-header);
+  position: relative;
+  gap: 0; /* No gaps between header sections */
+  flex-shrink: 0;
+}
+
+.header-app-id {
+  flex: var(--layout-left-flex);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--header-padding);
+  min-width: var(--layout-left-width-min);
+  max-width: var(--layout-left-width-max);
+  box-sizing: border-box;
+}
+
+.header-middle {
+  flex: var(--layout-center-flex);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--header-padding);
+  box-sizing: border-box;
+}
+
+.header-utility {
+  flex: var(--layout-right-flex);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--header-padding);
+  min-width: var(--layout-right-width-min);
+  max-width: var(--layout-right-width-max);
+  box-sizing: border-box;
+}
+
+// ==============================================
+// Main Content Layout
+// ==============================================
+.layout-content {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  flex: 1;
+  gap: 0; /* No gaps between sections */
+  min-height: 0;
+}
+
+.content-navigation {
+  flex: var(--layout-left-flex);
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  padding: var(--content-padding);
+  min-width: var(--layout-left-width-min);
+  max-width: var(--layout-left-width-max);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.content-main {
+  flex: var(--layout-center-flex);
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  padding: var(--content-padding);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.content-sidebar {
+  flex: var(--layout-right-flex);
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  padding: var(--content-padding);
+  min-width: var(--layout-right-width-min);
+  max-width: var(--layout-right-width-max);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+// ==============================================
+// Footer Layout
+// ==============================================
+.layout-footer {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  height: var(--layout-footer-height);
+  z-index: var(--z-footer);
+  position: relative;
+  gap: 0; /* No gaps between footer sections */
+  flex-shrink: 0;
+}
+
+.footer-left {
+  flex: var(--layout-left-flex);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--footer-padding);
+  min-width: var(--layout-left-width-min);
+  max-width: var(--layout-left-width-max);
+  box-sizing: border-box;
+}
+
+.footer-center {
+  flex: var(--layout-center-flex);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--footer-padding);
+  box-sizing: border-box;
+}
+
+.footer-right {
+  flex: var(--layout-right-flex);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--footer-padding);
+  min-width: var(--layout-right-width-min);
+  max-width: var(--layout-right-width-max);
+  box-sizing: border-box;
+}
+
+// ==============================================
+// Slot Content Styling
+// ==============================================
+.slot-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.slot-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-v-xs);
+  color: var(--color-text-primary);
+}
+
+.slot-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-tight);
+}
+
+.app-brand {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-v-xs);
+  color: var(--color-text-primary);
+}
+
+// ==============================================
+// Accessibility Features
+// ==============================================
+/* Focus States */
+.header-app-id:focus-within,
+.header-middle:focus-within,
+.header-utility:focus-within,
+.content-navigation:focus-within,
+.content-main:focus-within,
+.content-sidebar:focus-within,
+.footer-left:focus-within,
+.footer-center:focus-within,
+.footer-right:focus-within {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :host {
+    --color-app-id-bg: #00ff00;
+    --color-header-middle-bg: #0000ff;
+    --color-utility-bg: #ffff00;
+    --color-navigation-bg: #00ffff;
+    --color-content-bg: #ff00ff;
+    --color-right-pane-bg: #ff8000;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --transition-all: none;
+    --transition-transform: none;
+    --transition-opacity: none;
+  }
+}
+
+// ==============================================
+// Responsive Design Implementation
+// ==============================================
+/* Tablet Layout (≤ 1024px) */
+@media (max-width: 1024px) {
+  :host {
+    /* Adjust width constraints for tablets */
+    --layout-left-width-default: 200px; /* Smaller default width for tablets */
+    --layout-left-width-min: 80px;      /* Smaller minimum width */
+    --layout-left-width-max: 250px;     /* Smaller maximum width */
+    --layout-right-width-default: 200px; /* Smaller default width for tablets */
+    --layout-right-width-min: 80px;     /* Smaller minimum width */
+    --layout-right-width-max: 250px;    /* Smaller maximum width */
+    
+    /* Update flex properties for tablets */
+    --layout-left-flex: 0 0 var(--layout-left-width-default);   /* Left area: fixed tablet width */
+    --layout-center-flex: 1;                                    /* Center area: take available space */
+    --layout-right-flex: 0 0 var(--layout-right-width-default); /* Right area: fixed tablet width */
+    
+    /* Adjust horizontal spacing for smaller screens */
+    --spacing-h-xs: 0.5vw;     /* Slightly larger relative spacing on smaller screens */
+    --spacing-h-sm: 0.8vw;
+    --spacing-h-md: 1.2vw;
+    --spacing-h-lg: 1.6vw;
+    --spacing-h-xl: 2.4vw;
+    --spacing-h-2xl: 3.2vw;
+    --spacing-h-3xl: 4.8vw;
+    
+    /* Vertical spacing remains consistent in px */
+    --spacing-v-sm: 6px;      /* Slightly smaller padding on tablets */
+    --spacing-v-md: 10px;
+    --spacing-v-lg: 14px;
+    
+    --header-padding: var(--spacing-v-sm);
+    --content-padding: var(--spacing-v-md);
+    --footer-padding: var(--spacing-v-sm);
+  }
+  
+  /* Keep 3-column layout on tablets, just with smaller widths */
+}
+
+/* Mobile Layout (≤ 768px) */
+@media (max-width: 768px) {
+  :host {
+    /* Mobile width constraints - smaller but still 3-column */
+    --layout-left-width-default: 80px;  /* Very small but visible on mobile */
+    --layout-left-width-min: 60px;      /* Minimum mobile width */
+    --layout-left-width-max: 120px;     /* Maximum mobile width */
+    --layout-right-width-default: 80px; /* Very small but visible on mobile */
+    --layout-right-width-min: 60px;     /* Minimum mobile width */
+    --layout-right-width-max: 120px;    /* Maximum mobile width */
+    
+    /* Update flex properties for mobile */
+    --layout-left-flex: 0 0 var(--layout-left-width-default);   /* Left area: fixed mobile width */
+    --layout-center-flex: 1;                                    /* Center area: take available space */
+    --layout-right-flex: 0 0 var(--layout-right-width-default); /* Right area: fixed mobile width */
+    
+    /* Mobile-optimized horizontal spacing */
+    --spacing-h-xs: 0.8vw;
+    --spacing-h-sm: 1.2vw;
+    --spacing-h-md: 1.8vw;
+    --spacing-h-lg: 2.4vw;
+    --spacing-h-xl: 3.6vw;
+    --spacing-h-2xl: 4.8vw;
+    --spacing-h-3xl: 7.2vw;
+    
+    /* Mobile vertical spacing */
+    --spacing-v-xs: 3px;
+    --spacing-v-sm: 6px;
+    --spacing-v-md: 8px;
+    --spacing-v-lg: 12px;
+    
+    /* Mobile header/footer heights remain fixed */
+    --layout-header-height: 60px;
+    --layout-footer-height: 60px;
+    --font-size-base: 14px;
+  }
+  
+  /* Keep 3-column layout on mobile, just with very small side columns */
+  
+  .slot-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .app-brand {
+    font-size: var(--font-size-lg);
+  }
+}
+
+// ==============================================
+// Debug Mode - Semantic Colors Only When Enabled
+// ==============================================
+.application-layout.debug {
+  .layout-header {
+    background-color: var(--color-overlay);
+  }
+  
+  .header-app-id {
+    background-color: var(--color-app-id-bg);
+  }
+  
+  .header-middle {
+    background-color: var(--color-header-middle-bg);
+  }
+  
+  .header-utility {
+    background-color: var(--color-utility-bg);
+  }
+  
+  .content-navigation {
+    background-color: var(--color-navigation-bg);
+  }
+  
+  .content-main {
+    background-color: var(--color-content-bg);
+  }
+  
+  .content-sidebar {
+    background-color: var(--color-right-pane-bg);
+  }
+  
+  .footer-left {
+    background-color: var(--color-footer-left-bg);
+  }
+  
+  .footer-center {
+    background-color: var(--color-footer-center-bg);
+  }
+  
+  .footer-right {
+    background-color: var(--color-footer-right-bg);
+  }
+}
+
+// ==============================================
+// Collapsed States - Left and Right Sidebar Control
+// ==============================================
+.application-layout.left-collapsed {
+  .content-navigation {
+    flex: 0 0 var(--layout-left-width-collapsed);
+    min-width: var(--layout-left-width-collapsed);
+    max-width: var(--layout-left-width-collapsed);
+  }
+  
+  .footer-left {
+    flex: 0 0 var(--layout-left-width-collapsed);
+    min-width: var(--layout-left-width-collapsed);
+    max-width: var(--layout-left-width-collapsed);
+  }
+}
+
+.application-layout.right-collapsed {
+  .content-sidebar {
+    flex: 0 0 var(--layout-right-width-collapsed);
+    min-width: var(--layout-right-width-collapsed);
+    max-width: var(--layout-right-width-collapsed);
+  }
+  
+  .footer-right {
+    flex: 0 0 var(--layout-right-width-collapsed);
+    min-width: var(--layout-right-width-collapsed);
+    max-width: var(--layout-right-width-collapsed);
+  }
+}
+
+// ==============================================
+// Collapsed States - Responsive Adjustments
+// ==============================================
+/* Tablet Layout - Collapsed States */
+@media (max-width: 1024px) {
+  .application-layout.left-collapsed {
+    --layout-left-width-collapsed: 80px; /* Smaller collapsed width on tablets */
+  }
+  
+  .application-layout.right-collapsed {
+    --layout-right-width-collapsed: 80px; /* Smaller collapsed width on tablets */
+  }
+}
+
+/* Mobile Layout - Collapsed States */
+@media (max-width: 768px) {
+  .application-layout.left-collapsed {
+    --layout-left-width-collapsed: 60px; /* Smaller collapsed width on mobile */
+  }
+  
+  .application-layout.right-collapsed {
+    --layout-right-width-collapsed: 60px; /* Smaller collapsed width on mobile */
+  }
+}
