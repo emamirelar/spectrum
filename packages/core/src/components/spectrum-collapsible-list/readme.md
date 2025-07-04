@@ -9,10 +9,10 @@
 
 | Property            | Attribute            | Description                                                                                                                    | Type                    | Default |
 | ------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------- | ------- |
-| `contextActions`    | `context-actions`    | Context actions for all leaf nodes                                                                                             | `ContextMenuAction[]`   | `[]`    |
+| `contextActions`    | --                   | Context actions for all leaf nodes                                                                                             | `ContextMenuAction[]`   | `[]`    |
 | `debug`             | `debug`              | Whether to enable debug logging                                                                                                | `boolean`               | `false` |
 | `filter`            | `filter`             | Filter value to filter list items                                                                                              | `string`                | `''`    |
-| `items`             | `items`              | The nested data structure for the list                                                                                         | `CollapsibleListItem[]` | `[]`    |
+| `items`             | --                   | The nested data structure for the list                                                                                         | `CollapsibleListItem[]` | `[]`    |
 | `mutuallyExclusive` | `mutually-exclusive` | Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion) | `boolean`               | `true`  |
 
 

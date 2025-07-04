@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Layout Template - Spectrum Design System</title>
+  <link rel="stylesheet" href="application-layout-template.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="application-layout">
+    <!-- Header Section -->
+    <header class="layout-header" role="banner">
+      <section class="header-app-id" aria-label="Application branding">
+        <div class="slot-content">
+          <h1 class="app-brand">App ID Slot</h1>
+          <span class="slot-label">Brand • Logo • Nav Toggle</span>
+        </div>
+      </section>
+      <section class="header-middle" aria-label="Primary header content">
+        <div class="slot-content">
+          <h2 class="slot-title">Middle Slot</h2>
+          <span class="slot-label">Search • Breadcrumbs • Page Title</span>
+        </div>
+      </section>
+      <section class="header-utility" aria-label="User actions and utilities">
+        <div class="slot-content">
+          <h2 class="slot-title">Utility Slot</h2>
+          <span class="slot-label">User Menu • Notifications • Settings</span>
+        </div>
+      </section>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="layout-content" role="main">
+      <!-- Left Area -->
+      <nav class="content-navigation" role="navigation" aria-label="Left area navigation">
+        <div class="slot-content">
+          <h2 class="slot-title">Navigation Slot</h2>
+          <span class="slot-label">Main Navigation • Left Content</span>
+          <ul class="nav-example">
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#settings">Settings</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Center Area -->
+      <section class="content-main" aria-label="Center area main content">
+        <div class="slot-content">
+          <h2 class="slot-title">Content Slot</h2>
+          <span class="slot-label">Primary Application Content</span>
+          <div class="content-example">
+            <header class="content-header">
+              <h3>Page Title</h3>
+              <nav class="breadcrumbs">
+                <a href="#home">Home</a> > <a href="#section">Section</a> > <span>Current Page</span>
+              </nav>
+            </header>
+            <div class="content-body">
+              <p>Main content area that takes up available space and grows with the viewport.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Area -->
+      <aside class="content-sidebar" role="complementary" aria-label="Right area sidebar">
+        <div class="slot-content">
+          <h2 class="slot-title">Right Pane Slot</h2>
+          <span class="slot-label">Sidebar • Right Content • Panels</span>
+          <div class="sidebar-example">
+            <div class="sidebar-panel">
+              <h4>Quick Actions</h4>
+              <button>Action 1</button>
+              <button>Action 2</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="layout-footer" role="contentinfo">
+      <section class="footer-left" aria-label="Footer navigation">
+        <div class="slot-content">
+          <h3 class="slot-title">Footer Left Slot</h3>
+          <span class="slot-label">Secondary Navigation • Footer Links</span>
+        </div>
+      </section>
+      <section class="footer-center" aria-label="Footer content">
+        <div class="slot-content">
+          <h3 class="slot-title">Footer Center Slot</h3>
+          <span class="slot-label">Status Information • Breadcrumbs</span>
+        </div>
+      </section>
+      <section class="footer-right" aria-label="Footer utilities">
+        <div class="slot-content">
+          <h3 class="slot-title">Footer Right Slot</h3>
+          <span class="slot-label">Additional Actions • Version Info</span>
+        </div>
+      </section>
+    </footer>
+  </div>
+
+  <!-- Screen Reader Support -->
+  <div class="sr-only" aria-live="polite" id="status-announcements"></div>
+</body>
+</html> 

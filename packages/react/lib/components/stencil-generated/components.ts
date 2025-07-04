@@ -12,6 +12,7 @@ import { createComponent } from '@stencil/react-output-target/runtime';
 import { type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumAppLayout as SpectrumAppLayoutElement, defineCustomElement as defineSpectrumAppLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-app-layout.js";
+import { SpectrumApplicationLayout as SpectrumApplicationLayoutElement, defineCustomElement as defineSpectrumApplicationLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-application-layout.js";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
 import { SpectrumCluster as SpectrumClusterElement, defineCustomElement as defineSpectrumCluster } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-cluster.js";
@@ -70,6 +71,17 @@ export const SpectrumAppLayout: StencilReactComponent<SpectrumAppLayoutElement, 
         onRightBarToggle: 'rightBarToggle'
     } as SpectrumAppLayoutEvents,
     defineCustomElement: defineSpectrumAppLayout
+});
+
+type SpectrumApplicationLayoutEvents = NonNullable<unknown>;
+
+export const SpectrumApplicationLayout: StencilReactComponent<SpectrumApplicationLayoutElement, SpectrumApplicationLayoutEvents> = /*@__PURE__*/ createComponent<SpectrumApplicationLayoutElement, SpectrumApplicationLayoutEvents>({
+    tagName: 'spectrum-application-layout',
+    elementClass: SpectrumApplicationLayoutElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumApplicationLayoutEvents,
+    defineCustomElement: defineSpectrumApplicationLayout
 });
 
 type SpectrumButtonEvents = { onButtonAction: EventName<CustomEvent<{ action?: string; label: string }>> };
