@@ -44,14 +44,20 @@ export class SpectrumWallpaper {
   @Prop() signalReady: boolean = false;
 
   /**
+   * Whether to apply theme variables to document root instead of host element
+   * This gives wallpaper theme higher priority over other theme components
+   */
+  @Prop() applyToRoot: boolean = false;
+
+  /**
    * The background image position
    */
-  @Prop({ attribute: 'backgroundposition' }) backgroundposition: string = 'center';
+  @Prop({ attribute: 'background-position' }) backgroundPosition: string = 'center';
 
   /**
    * The background image size
    */
-  @Prop({ attribute: 'backgroundsize' }) backgroundsize: string = 'cover';
+  @Prop({ attribute: 'background-size' }) backgroundSize: string = 'cover';
 
   /**
    * Debug logging utility
@@ -61,6 +67,33 @@ export class SpectrumWallpaper {
       console.log(`[spectrum-wallpaper] ${message}`, ...args);
     }
   }
+
+  /**
+   * Debug logging with color visualization
+   */
+  private debugLogColor(message: string, color: string, ...args: any[]) {
+    if (this.debug) {
+      const boxStyle = `background: ${color}; padding: 4px 8px; border-radius: 3px; margin-right: 4px;`;
+      const textStyle = `color: #333; font-weight: bold;`;
+      console.log(`[spectrum-wallpaper] ${message} %c  %c${color}`, boxStyle, textStyle, ...args);
+    }
+  }
+
+  /**
+   * Debug logging with multiple colors
+   */
+  private debugLogColors(message: string, colors: Record<string, string>, ...args: any[]) {
+    if (this.debug) {
+      console.log(`[spectrum-wallpaper] ${message}`, ...args);
+      Object.entries(colors).forEach(([name, color]) => {
+        const boxStyle = `background: ${color}; padding: 4px 8px; border-radius: 3px; margin-right: 4px;`;
+        const textStyle = `color: #333; font-weight: bold;`;
+        console.log(`  %c  %c${name}: ${color}`, boxStyle, textStyle);
+      });
+    }
+  }
+
+
 
   /**
    * Debug warning utility
@@ -152,6 +185,10 @@ export class SpectrumWallpaper {
   private async preloadAndExtractColors() {
     this.debugLog('Preloading colors for coordination');
     
+    // Reset state at the start of preloading
+    this.colorsReady = false;
+    this.extractedColors = null;
+    
     try {
       // Extract colors but don't apply theme yet
       const color = await this.extractColorOnly();
@@ -217,6 +254,19 @@ export class SpectrumWallpaper {
   @Watch('background')
   async extractDominantColor() {
     if (!this.background) return;
+
+    // Reset color state when background changes
+    this.colorsReady = false;
+    this.extractedColors = null;
+    this.debugLog('Background changed to:', this.background);
+    this.debugLog('Resetting color state and extracting new colors');
+
+    // Handle preload mode vs immediate mode
+    if (this.preloadColors) {
+      this.debugLog('Background changed, preloading colors');
+      await this.preloadAndExtractColors();
+      return;
+    }
 
     // If we already have a loading promise, wait for it to complete
     if (this.imageLoadPromise) {
@@ -286,7 +336,7 @@ export class SpectrumWallpaper {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const color = this.getAverageColor(imageData);
-      this.debugLog('Extracted color from image:', color);
+      this.debugLogColor('Extracted color from image:', color);
       return color;
     } catch (error) {
       this.debugWarn('Failed to extract color from image (likely CORS issue):', error);
@@ -308,13 +358,15 @@ export class SpectrumWallpaper {
     if (background.includes('url(')) {
       // For ocean images, default to blue
       if (background.includes('1439066615861')) { // Ocean image ID
-        this.debugLog('Ocean image detected, using blue fallback');
-        return '#1976d2';
+        const oceanColor = '#1976d2';
+        this.debugLogColor('Ocean image detected, using blue fallback:', oceanColor);
+        return oceanColor;
       }
       // For forest images, default to green  
       if (background.includes('1441974231531')) { // Forest image ID
-        this.debugLog('Forest image detected, using green fallback');
-        return '#388e3c';
+        const forestColor = '#388e3c';
+        this.debugLogColor('Forest image detected, using green fallback:', forestColor);
+        return forestColor;
       }
       // Generic image fallback
       return '#0070d2';
@@ -331,7 +383,9 @@ export class SpectrumWallpaper {
   private extractColorFromGradient(gradient: string): string {
     // Extract first color from gradient
     const colorMatch = gradient.match(/#[0-9a-fA-F]{6}/);
-    return colorMatch ? colorMatch[0] : '#000000';
+    const extractedColor = colorMatch ? colorMatch[0] : '#000000';
+    this.debugLogColor('Extracted color from gradient:', extractedColor);
+    return extractedColor;
   }
 
   private getAverageColor(imageData: ImageData): string {
@@ -353,7 +407,7 @@ export class SpectrumWallpaper {
   }
 
   private updateTheme(color: string) {
-    this.debugLog('Updating theme with color:', color);
+    this.debugLogColor('Updating theme with color:', color);
     try {
       const scheme = this.generateThemeFromColor(color);
       
@@ -362,9 +416,11 @@ export class SpectrumWallpaper {
         this.extractedColors = scheme;
         this.colorsReady = true;
         this.signalColorsReady();
+        this.debugLog('Theme colors preloaded and ready for coordination');
       } else {
         // Apply theme immediately
         this.applyTheme(scheme);
+        this.debugLog('Theme applied immediately');
         
         // Signal ready if coordination is enabled
         if (this.signalReady && !this.colorsReady) {
@@ -396,7 +452,7 @@ export class SpectrumWallpaper {
   }
 
   private applyFallbackTheme(color: string) {
-    this.debugLog('Applying fallback theme with color:', color);
+    this.debugLogColor('Applying fallback theme with color:', color);
     const fallbackProperties = {
       '--spectrum-color-primary': color,
       '--spectrum-color-on-primary': '#ffffff',
@@ -406,13 +462,123 @@ export class SpectrumWallpaper {
       '--spectrum-color-on-surface': '#000000',
     };
     
+    this.debugLogColors('Fallback theme properties:', fallbackProperties);
+    
+    // Apply the properties to host element or document root
+    const targetElement = this.applyToRoot ? document.documentElement : this.hostElement;
     Object.entries(fallbackProperties).forEach(([property, value]) => {
-      this.hostElement.style.setProperty(property, value);
+      targetElement.style.setProperty(property, value);
     });
+    
+    this.debugLog(`Applied fallback theme to ${this.applyToRoot ? 'document root' : 'host element'}`);
+    
+    // Validate fallback theme variables were set correctly (with small delay to ensure DOM updates)
+    setTimeout(() => {
+      this.validateThemeVariables(fallbackProperties, this.applyToRoot ? document.documentElement : this.hostElement);
+    }, 10);
+  }
+
+  /**
+   * Validate that theme variables were set correctly
+   */
+  private validateThemeVariables(expectedProperties: Record<string, string>, targetElement: HTMLElement = this.hostElement) {
+    if (!this.debug) return; // Only validate in debug mode
+    
+    this.debugLog('Validating theme variables...');
+    
+    // Get computed styles from multiple contexts to understand the inheritance chain
+    const targetStyles = getComputedStyle(targetElement);
+    const hostStyles = getComputedStyle(this.hostElement);
+    const rootStyles = getComputedStyle(document.documentElement);
+    
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    const info: string[] = [];
+    
+    // Check each property
+    Object.entries(expectedProperties).forEach(([property, expectedValue]) => {
+      const targetValue = targetStyles.getPropertyValue(property).trim();
+      const hostValue = hostStyles.getPropertyValue(property).trim();
+      const rootValue = rootStyles.getPropertyValue(property).trim();
+      const targetDirectValue = targetElement.style.getPropertyValue(property).trim();
+      
+      // Normalize colors for comparison (remove spaces, convert to lowercase)
+      const normalizedExpected = expectedValue.toLowerCase().replace(/\s+/g, '');
+      const normalizedTarget = targetValue.toLowerCase().replace(/\s+/g, '');
+      const normalizedHost = hostValue.toLowerCase().replace(/\s+/g, '');
+      const normalizedRoot = rootValue.toLowerCase().replace(/\s+/g, '');
+      
+      // Check if the value was set correctly on the target element directly
+      if (!targetDirectValue) {
+        errors.push(`${property}: Not set directly on target element`);
+      } else if (targetDirectValue.toLowerCase().replace(/\s+/g, '') !== normalizedExpected) {
+        errors.push(`${property}: Target element value mismatch - Expected: ${expectedValue}, Set: ${targetDirectValue}`);
+      }
+      
+      // Check computed value on target element
+      if (!targetValue) {
+        errors.push(`${property}: Variable not found in target computed styles`);
+      } else if (normalizedTarget !== normalizedExpected) {
+        // Check if it's a color format difference (e.g., hex vs rgb)
+        if (this.isColorFormatDifference(normalizedExpected, normalizedTarget)) {
+          warnings.push(`${property}: Target computed color format differs - Expected: ${expectedValue}, Actual: ${targetValue}`);
+        } else {
+          // Check if other elements have different values (indicating override/conflict)
+          if (this.applyToRoot && hostValue && normalizedHost !== normalizedExpected) {
+            errors.push(`${property}: Value conflict between root and host - Expected: ${expectedValue}, Root: ${targetValue}, Host: ${hostValue}`);
+            info.push(`  ↳ Host element may be overriding root theme or inheriting different values`);
+          } else if (!this.applyToRoot && rootValue && normalizedRoot !== normalizedExpected) {
+            errors.push(`${property}: Value overridden by root/theme - Expected: ${expectedValue}, Host: ${targetValue}, Root: ${rootValue}`);
+            info.push(`  ↳ This suggests spectrum-theme or other CSS is overriding wallpaper colors`);
+            info.push(`  ↳ Consider using applyToRoot="true" to give wallpaper higher priority`);
+          } else {
+            errors.push(`${property}: Target computed value mismatch - Expected: ${expectedValue}, Actual: ${targetValue}`);
+          }
+        }
+      }
+    });
+    
+    // Log results
+    if (errors.length === 0 && warnings.length === 0) {
+      this.debugLog('✅ All theme variables validated successfully');
+    } else {
+      if (errors.length > 0) {
+        this.debugError('❌ Theme variable validation errors:');
+        errors.forEach(error => this.debugError(`  • ${error}`));
+      }
+      if (warnings.length > 0) {
+        this.debugWarn('⚠️ Theme variable validation warnings:');
+        warnings.forEach(warning => this.debugWarn(`  • ${warning}`));
+      }
+      if (info.length > 0) {
+        this.debugLog('ℹ️ Additional context:');
+        info.forEach(message => this.debugLog(`  ${message}`));
+      }
+      
+      // Provide guidance on fixing the issue
+      this.debugLog('🔧 Troubleshooting suggestions:');
+      this.debugLog('  1. Use applyToRoot="true" to apply wallpaper theme to document root (higher priority)');
+      this.debugLog('  2. Check if spectrum-theme component is overriding wallpaper colors');
+      this.debugLog('  3. Ensure wallpaper component loads before spectrum-theme');
+      this.debugLog('  4. Consider using preloadColors="true" and signalReady="true" for coordination');
+      this.debugLog('  5. Check CSS specificity - other styles might be overriding wallpaper theme');
+    }
+  }
+
+  /**
+   * Check if the difference between expected and actual values is just a color format difference
+   */
+  private isColorFormatDifference(expected: string, actual: string): boolean {
+    // Basic check for hex vs rgb format differences
+    const hexPattern = /^#[0-9a-f]{6}$/;
+    const rgbPattern = /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/;
+    
+    return (hexPattern.test(expected) && rgbPattern.test(actual)) ||
+           (rgbPattern.test(expected) && hexPattern.test(actual));
   }
 
   private generateThemeFromColor(color: string): any {
-    this.debugLog('Generating theme from extracted color:', color);
+    this.debugLogColor('Generating theme from extracted color:', color);
     
     // Convert hex to RGB
     const r = parseInt(color.slice(1, 3), 16);
@@ -434,7 +600,7 @@ export class SpectrumWallpaper {
     this.debugLog('Light scheme:', scheme);
     
     // Log the key colors to verify they're different
-    this.debugLog('Key colors:', {
+    this.debugLogColors('Key colors:', {
       primary: hexFromArgb(scheme.primary),
       secondary: hexFromArgb(scheme.secondary),
       tertiary: hexFromArgb(scheme.tertiary)
@@ -446,10 +612,53 @@ export class SpectrumWallpaper {
   private applyTheme(scheme: any) {
     const customProperties = this.generateCustomProperties(scheme);
     this.debugLog('Applying theme with custom properties:', Object.keys(customProperties).length, 'properties');
+    
+    // Group properties by category for better visualization
+    const primaryColors = Object.fromEntries(
+      Object.entries(customProperties).filter(([key]) => key.includes('primary'))
+    );
+    const secondaryColors = Object.fromEntries(
+      Object.entries(customProperties).filter(([key]) => key.includes('secondary'))
+    );
+    const tertiaryColors = Object.fromEntries(
+      Object.entries(customProperties).filter(([key]) => key.includes('tertiary'))
+    );
+    const surfaceColors = Object.fromEntries(
+      Object.entries(customProperties).filter(([key]) => key.includes('surface') || key.includes('background'))
+    );
+    const utilityColors = Object.fromEntries(
+      Object.entries(customProperties).filter(([key]) => key.includes('error') || key.includes('outline') || key.includes('shadow') || key.includes('scrim') || key.includes('inverse'))
+    );
+    
+    // Log color groups
+    if (Object.keys(primaryColors).length > 0) {
+      this.debugLogColors('Primary colors:', primaryColors);
+    }
+    if (Object.keys(secondaryColors).length > 0) {
+      this.debugLogColors('Secondary colors:', secondaryColors);
+    }
+    if (Object.keys(tertiaryColors).length > 0) {
+      this.debugLogColors('Tertiary colors:', tertiaryColors);
+    }
+    if (Object.keys(surfaceColors).length > 0) {
+      this.debugLogColors('Surface colors:', surfaceColors);
+    }
+    if (Object.keys(utilityColors).length > 0) {
+      this.debugLogColors('Utility colors:', utilityColors);
+    }
+    
+    // Apply the properties to host element or document root
+    const targetElement = this.applyToRoot ? document.documentElement : this.hostElement;
     Object.entries(customProperties).forEach(([property, value]) => {
-      this.hostElement.style.setProperty(property, value);
-      this.debugLog(`Set ${property}: ${value}`);
+      targetElement.style.setProperty(property, value);
     });
+    
+    this.debugLog(`Applied theme variables to ${this.applyToRoot ? 'document root' : 'host element'}`);
+    
+    // Validate theme variables were set correctly (with small delay to ensure DOM updates)
+    setTimeout(() => {
+      this.validateThemeVariables(customProperties, this.applyToRoot ? document.documentElement : this.hostElement);
+    }, 10);
   }
 
   private generateCustomProperties(scheme: any): Record<string, string> {
@@ -542,8 +751,8 @@ export class SpectrumWallpaper {
   render() {
     const style = {
       background: this.background,
-      backgroundPosition: this.backgroundposition,
-      backgroundSize: this.backgroundsize,
+      backgroundPosition: this.backgroundPosition,
+      backgroundSize: this.backgroundSize,
       backgroundRepeat: 'no-repeat'
     };
 

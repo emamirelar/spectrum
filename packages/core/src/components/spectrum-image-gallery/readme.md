@@ -257,10 +257,10 @@ The component inherits theming from the Spectrum theme system. Key variables inc
 | `allowUrlInput`   | `allow-url-input`  |             | `boolean`                       | `true`       |
 | `debug`           | `debug`            |             | `boolean`                       | `false`      |
 | `frostBackground` | `frost-background` |             | `boolean`                       | `false`      |
-| `images`          | --                 |             | `ImageConfig[]`                 | `[]`         |
+| `images`          | `images`           |             | `ImageConfig[]`                 | `[]`         |
 | `previewMode`     | `preview-mode`     |             | `boolean`                       | `false`      |
 | `scrollDirection` | `scroll-direction` |             | `"horizontal" \| "vertical"`    | `'vertical'` |
-| `selectedImages`  | --                 |             | `string[]`                      | `[]`         |
+| `selectedImages`  | `selected-images`  |             | `string[]`                      | `[]`         |
 | `selectionMode`   | `selection-mode`   |             | `"multi" \| "none" \| "single"` | `'single'`   |
 
 

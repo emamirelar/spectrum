@@ -22,6 +22,8 @@ export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccor
   'accordionId',
   'debug',
   'accordionToggle'
+], [
+  'accordionToggle'
 ]);
 
 
@@ -50,6 +52,10 @@ export const SpectrumAppLayout = /*@__PURE__*/ defineContainer<JSX.SpectrumAppLa
   'collapseMobile',
   'gap',
   'debug',
+  'sidebarToggle',
+  'profileAction',
+  'rightBarToggle'
+], [
   'sidebarToggle',
   'profileAction',
   'rightBarToggle'
@@ -92,6 +98,8 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'haptic',
   'state',
   'buttonAction'
+], [
+  'buttonAction'
 ]);
 
 
@@ -110,6 +118,8 @@ export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spe
   'showTrailingIcon',
   'sound',
   'haptic',
+  'chipAction'
+], [
   'chipAction'
 ]);
 
@@ -141,6 +151,12 @@ export const SpectrumCollapsibleList = /*@__PURE__*/ defineContainer<JSX.Spectru
   'contractAction',
   'contextAction',
   'itemRenamed'
+], [
+  'childAction',
+  'expandAction',
+  'contractAction',
+  'contextAction',
+  'itemRenamed'
 ]);
 
 
@@ -162,6 +178,9 @@ export const SpectrumContextMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumCon
   'position',
   'actionClick',
   'menuClose'
+], [
+  'actionClick',
+  'menuClose'
 ]);
 
 
@@ -173,6 +192,12 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'loading',
   'sound',
   'debug',
+  'explorationSelected',
+  'action',
+  'explore',
+  'sourceClick',
+  'titleChanged'
+], [
   'explorationSelected',
   'action',
   'explore',
@@ -239,6 +264,9 @@ export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spe
   'debug',
   'heroAction',
   'slideChange'
+], [
+  'heroAction',
+  'slideChange'
 ]);
 
 
@@ -258,6 +286,12 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'imageAdded',
   'imageDeleted',
   'imagePreview'
+], [
+  'imageSelected',
+  'imageDeselect',
+  'imageAdded',
+  'imageDeleted',
+  'imagePreview'
 ]);
 
 
@@ -267,6 +301,8 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'items',
   'mobileBreakpoint',
   'mobileMenuTitle',
+  'itemClick'
+], [
   'itemClick'
 ]);
 
@@ -294,6 +330,11 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'searchChange',
   'railAction',
   'addAction'
+], [
+  'expandedChange',
+  'searchChange',
+  'railAction',
+  'addAction'
 ]);
 
 
@@ -316,6 +357,9 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
   'searchIconPosition',
   'searchButtonVariant',
   'clearOnSubmit',
+  'searchSubmit',
+  'searchInput'
+], [
   'searchSubmit',
   'searchInput'
 ]);
@@ -354,6 +398,11 @@ export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>(
   'touchOptimized',
   'mobileFullscreen',
   'state',
+  'selectChange',
+  'searchChange',
+  'dropdownOpen',
+  'dropdownClose'
+], [
   'selectChange',
   'searchChange',
   'dropdownOpen',
@@ -425,6 +474,9 @@ export const SpectrumToast = /*@__PURE__*/ defineContainer<JSX.SpectrumToast>('s
   'actionValue',
   'toastAction',
   'toastDismiss'
+], [
+  'toastAction',
+  'toastDismiss'
 ]);
 
 
@@ -434,7 +486,8 @@ export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallp
   'debug',
   'preloadColors',
   'signalReady',
-  'backgroundposition',
-  'backgroundsize'
+  'applyToRoot',
+  'backgroundPosition',
+  'backgroundSize'
 ]);
 

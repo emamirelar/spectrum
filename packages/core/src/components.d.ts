@@ -19,50 +19,62 @@ export namespace Components {
     interface SpectrumAccordion {
         /**
           * Unique identifier for the accordion
+          * @default `accordion-${Math.random().toString(36).substr(2, 9)}`
          */
         "accordionId": string;
         /**
           * The icon to show when collapsed Default: 'arrow_drop_down'
+          * @default 'arrow_drop_down'
          */
         "collapsedIcon": string;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug": boolean;
         /**
           * Whether the accordion should be disabled Default: false
+          * @default false
          */
         "disabled": boolean;
         /**
           * Whether the accordion is expanded Default: false
+          * @default false
          */
         "expanded": boolean;
         /**
           * The icon to show when expanded Default: 'arrow_drop_up'
+          * @default 'arrow_drop_up'
          */
         "expandedIcon": string;
         /**
           * Whether to enable haptic feedback Default: false
+          * @default false
          */
         "haptic": boolean;
         /**
           * Whether to show content in horizontal scroll container Default: true
+          * @default true
          */
         "horizontalScroll": boolean;
         /**
           * The label for the accordion trigger Default: 'Dive Deeper'
+          * @default 'Dive Deeper'
          */
         "label": string;
         /**
           * Whether the trigger chip should be outlined Default: true
+          * @default true
          */
         "outline": boolean;
         /**
           * Whether to enable sound effects Default: false
+          * @default false
          */
         "sound": boolean;
         /**
           * The variant of the trigger chip Default: 'secondary'
+          * @default 'secondary'
          */
         "variant": 'primary' | 'secondary';
     }
@@ -72,74 +84,157 @@ export namespace Components {
      * Based on CSS Grid with responsive behavior and smooth animations.
      */
     interface SpectrumAppLayout {
+        /**
+          * @default 'md'
+         */
         "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
         "collapseMobile": boolean;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default '5rem'
+         */
         "footerHeight": string;
+        /**
+          * @default 'md'
+         */
         "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default '5rem'
+         */
         "headerHeight": string;
+        /**
+          * @default ''
+         */
         "headerTitle": string;
+        /**
+          * @default 'Logo'
+         */
         "logoAlt": string;
+        /**
+          * @default ''
+         */
         "logoSrc": string;
+        /**
+          * @default 'Profile'
+         */
         "profileText": string;
+        /**
+          * @default true
+         */
         "responsive": boolean;
+        /**
+          * @default true
+         */
         "rightBarCollapsible": boolean;
+        /**
+          * @default true
+         */
         "rightBarExpanded": boolean;
+        /**
+          * @default '16rem'
+         */
         "rightBarWidth": string;
+        /**
+          * @default true
+         */
         "showFooter": boolean;
+        /**
+          * @default true
+         */
         "showHeader": boolean;
+        /**
+          * @default true
+         */
         "showLogo": boolean;
+        /**
+          * @default true
+         */
         "showProfile": boolean;
+        /**
+          * @default true
+         */
         "showRightBar": boolean;
+        /**
+          * @default '4rem'
+         */
         "sidebarCollapsedWidth": string;
+        /**
+          * @default true
+         */
         "sidebarCollapsible": boolean;
+        /**
+          * @default true
+         */
         "sidebarExpanded": boolean;
+        /**
+          * @default '16rem'
+         */
         "sidebarExpandedWidth": string;
+        /**
+          * @default 'left'
+         */
         "sidebarPosition": 'left' | 'right';
     }
     interface SpectrumApplicationLayout {
         /**
           * Enable debug mode to show semantic colors and placeholder content
+          * @default false
          */
         "debug": boolean;
         /**
           * Collapse the left sidebar and footer sections to 96px width
+          * @default false
          */
         "leftCollapsed": boolean;
         /**
           * Collapse the right sidebar and footer sections to 96px width
+          * @default false
          */
         "rightCollapsed": boolean;
         /**
           * Show/hide the content navigation slot (main navigation, left content)
+          * @default true
          */
         "showContentNavigation": boolean;
         /**
           * Show/hide the content sidebar slot (sidebar, right content, panels)
+          * @default false
          */
         "showContentSidebar": boolean;
         /**
           * Show/hide the footer center slot (status information, breadcrumbs)
+          * @default true
          */
         "showFooterCenter": boolean;
         /**
           * Show/hide the footer left slot (secondary navigation, footer links)
+          * @default true
          */
         "showFooterLeft": boolean;
         /**
           * Show/hide the footer right slot (additional actions, version info)
+          * @default false
          */
         "showFooterRight": boolean;
         /**
           * Show/hide the header app ID slot (brand, logo, nav toggle)
+          * @default true
          */
         "showHeaderAppId": boolean;
         /**
           * Show/hide the header middle slot (search, breadcrumbs, page title)
+          * @default true
          */
         "showHeaderMiddle": boolean;
         /**
           * Show/hide the header utility slot (user menu, notifications, settings)
+          * @default true
          */
         "showHeaderUtility": boolean;
     }
@@ -149,24 +244,81 @@ export namespace Components {
      * Supports icons, text, and various interactive states.
      */
     interface SpectrumButton {
+        /**
+          * @default ''
+         */
         "action": string;
+        /**
+          * @default ''
+         */
         "buttonText": string;
+        /**
+          * @default {}
+         */
         "customStyle": { [key: string]: string };
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default false
+         */
         "disabled": boolean;
+        /**
+          * @default false
+         */
         "haptic": boolean;
+        /**
+          * @default false
+         */
         "iconOnly": boolean;
+        /**
+          * @default ''
+         */
         "leftIcon": string;
+        /**
+          * @default false
+         */
         "minimalAnimation": boolean;
+        /**
+          * @default false
+         */
         "outline": boolean;
+        /**
+          * @default ''
+         */
         "rightIcon": string;
+        /**
+          * @default false
+         */
         "ripple": boolean;
+        /**
+          * @default true
+         */
         "showButtonText": boolean;
+        /**
+          * @default false
+         */
         "showLeftIcon": boolean;
+        /**
+          * @default false
+         */
         "showRightIcon": boolean;
+        /**
+          * @default 'base'
+         */
         "size": 'sm' | 'base' | 'lg';
+        /**
+          * @default false
+         */
         "sound": boolean;
+        /**
+          * @default 'default'
+         */
         "state": 'default' | 'hover' | 'active' | 'disabled';
+        /**
+          * @default 'primary'
+         */
         "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
     }
     /**
@@ -175,19 +327,61 @@ export namespace Components {
      * Supports leading/trailing icons, selection states, and various interactive behaviors.
      */
     interface SpectrumChip {
+        /**
+          * @default ''
+         */
         "action": string;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default false
+         */
         "disabled": boolean;
+        /**
+          * @default false
+         */
         "haptic": boolean;
+        /**
+          * @default ''
+         */
         "label": string;
+        /**
+          * @default ''
+         */
         "leadingIcon": string;
+        /**
+          * @default false
+         */
         "outline": boolean;
+        /**
+          * @default false
+         */
         "ripple": boolean;
+        /**
+          * @default false
+         */
         "selected": boolean;
+        /**
+          * @default false
+         */
         "showTrailingIcon": boolean;
+        /**
+          * @default 'medium'
+         */
         "size": 'small' | 'medium' | 'large' | 'extra-small';
+        /**
+          * @default false
+         */
         "sound": boolean;
+        /**
+          * @default 'close'
+         */
         "trailingIcon": string;
+        /**
+          * @default 'primary'
+         */
         "variant": 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
     /**
@@ -196,38 +390,79 @@ export namespace Components {
      * natural wrapping, and flexible alignment options.
      */
     interface SpectrumCluster {
+        /**
+          * @default 'start'
+         */
         "align": 'start' | 'center' | 'end';
+        /**
+          * @default 'md'
+         */
         "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
         "centerContainer": boolean;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default 'horizontal'
+         */
         "direction": 'horizontal' | 'vertical';
+        /**
+          * @default false
+         */
         "fullWidth": boolean;
+        /**
+          * @default 'start'
+         */
         "justify": 'start' | 'center' | 'end' | 'space-between' | 'space-around';
+        /**
+          * @default false
+         */
         "noWrap": boolean;
+        /**
+          * @default false
+         */
         "responsive": boolean;
+        /**
+          * @default 'md'
+         */
         "spacing": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "stackBelow": boolean;
+        /**
+          * @default true
+         */
         "wrap": boolean;
     }
     interface SpectrumCollapsibleList {
         /**
           * Context actions for all leaf nodes
+          * @default []
          */
         "contextActions": ContextMenuAction[];
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug": boolean;
         /**
           * Filter value to filter list items
+          * @default ''
          */
         "filter": string;
         /**
           * The nested data structure for the list
+          * @default []
          */
         "items": CollapsibleListItem[];
         /**
           * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
+          * @default true
          */
         "mutuallyExclusive": boolean;
     }
@@ -237,15 +472,45 @@ export namespace Components {
      * and centering capabilities for content layout.
      */
     interface SpectrumContainer {
+        /**
+          * @default false
+         */
         "centerContent": boolean;
+        /**
+          * @default true
+         */
         "centered": boolean;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default true
+         */
         "fullWidthMobile": boolean;
+        /**
+          * @default ''
+         */
         "maxWidth": string;
+        /**
+          * @default 'md'
+         */
         "padding": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
         "paddingX": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default ''
+         */
         "paddingY": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default true
+         */
         "responsive": boolean;
+        /**
+          * @default 'lg'
+         */
         "size": 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'fluid';
     }
     /**
@@ -257,6 +522,7 @@ export namespace Components {
         "isMenuOpen": () => Promise<boolean>;
         /**
           * The key identifying the target component that triggered this menu
+          * @default 'right'
          */
         "position": 'left' | 'right' | 'top' | 'bottom';
         /**
@@ -268,22 +534,27 @@ export namespace Components {
     interface SpectrumConversationPanel {
         /**
           * The actions to display in the messages Default: null
+          * @default ''
          */
         "actions": string;
         /**
           * The title to display in the conversation panel Default: null
+          * @default 'No title provided'
          */
         "conversationtitle": string;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug": boolean;
         /**
           * Whether to show the loading indicator Default: false
+          * @default false
          */
         "loading": boolean;
         /**
           * The messsages to display in the conversation panel Default: null
+          * @default ''
          */
         "messages": string;
         /**
@@ -292,10 +563,12 @@ export namespace Components {
         "scrollToLatest": () => Promise<void>;
         /**
           * Whether to enable sound effects Default: false
+          * @default false
          */
         "sound": boolean;
         /**
           * The sources to display in the messages Default: null
+          * @default ''
          */
         "sources": string;
     }
@@ -305,20 +578,65 @@ export namespace Components {
      * responsive behavior, and fine-grained control over flex container and items.
      */
     interface SpectrumFlex {
+        /**
+          * @default 'stretch'
+         */
         "align": 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+        /**
+          * @default 'stretch'
+         */
         "alignContent": 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch';
+        /**
+          * @default 'md'
+         */
         "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
         "columnGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default 'row'
+         */
         "direction": 'row' | 'row-reverse' | 'column' | 'column-reverse';
+        /**
+          * @default false
+         */
         "fullHeight": boolean;
+        /**
+          * @default false
+         */
         "fullWidth": boolean;
+        /**
+          * @default 'md'
+         */
         "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "inline": boolean;
+        /**
+          * @default 'flex-start'
+         */
         "justify": 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'column'
+         */
         "mobileDirection": 'row' | 'column';
+        /**
+          * @default false
+         */
         "responsive": boolean;
+        /**
+          * @default ''
+         */
         "rowGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default 'nowrap'
+         */
         "wrap": 'nowrap' | 'wrap' | 'wrap-reverse';
     }
     /**
@@ -327,28 +645,97 @@ export namespace Components {
      * areas, responsive behavior, and auto-sizing capabilities.
      */
     interface SpectrumGrid {
+        /**
+          * @default 'stretch'
+         */
         "alignContent": 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
         "alignItems": 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
         "areas": string;
+        /**
+          * @default ''
+         */
         "autoColumns": string;
+        /**
+          * @default false
+         */
         "autoFill": boolean;
+        /**
+          * @default false
+         */
         "autoFit": boolean;
+        /**
+          * @default ''
+         */
         "autoRows": string;
+        /**
+          * @default 'md'
+         */
         "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
         "columnGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default '1fr'
+         */
         "columns": string;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default false
+         */
         "fullHeight": boolean;
+        /**
+          * @default false
+         */
         "fullWidth": boolean;
+        /**
+          * @default 'md'
+         */
         "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "inline": boolean;
+        /**
+          * @default 'stretch'
+         */
         "justifyContent": 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
         "justifyItems": 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
         "minColumnWidth": string;
+        /**
+          * @default ''
+         */
         "minRowHeight": string;
+        /**
+          * @default '1fr'
+         */
         "mobileColumns": string;
+        /**
+          * @default false
+         */
         "responsive": boolean;
+        /**
+          * @default ''
+         */
         "rowGap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default ''
+         */
         "rows": string;
     }
     /**
@@ -359,57 +746,97 @@ export namespace Components {
     interface SpectrumHero {
         /**
           * Animation duration for slide transitions
+          * @default 1000
          */
         "animationDuration": number;
         /**
           * Enable carousel autoplay Time in milliseconds between slides (0 to disable)
+          * @default 0
          */
         "autoplay": number;
         /**
           * Debug mode
+          * @default false
          */
         "debug": boolean;
         /**
           * Hero height (CSS value)
+          * @default '100vh'
          */
         "height": string;
         /**
           * Enable keyboard navigation
+          * @default true
          */
         "keyboardNavigation": boolean;
         /**
           * Pause autoplay on hover
+          * @default true
          */
         "pauseOnHover": boolean;
         /**
           * Show navigation arrows
+          * @default true
          */
         "showArrows": boolean;
         /**
           * Show navigation dots
+          * @default true
          */
         "showDots": boolean;
         /**
           * Hero slides as JSON string Array of HeroSlide objects containing content for each slide
+          * @default '[]'
          */
         "slides": string;
     }
     interface SpectrumImageGallery {
+        /**
+          * @default true
+         */
         "allowDelete": boolean;
+        /**
+          * @default true
+         */
         "allowUpload": boolean;
+        /**
+          * @default true
+         */
         "allowUrlInput": boolean;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default false
+         */
         "frostBackground": boolean;
+        /**
+          * @default []
+         */
         "images": ImageConfig[];
+        /**
+          * @default false
+         */
         "previewMode": boolean;
+        /**
+          * @default 'vertical'
+         */
         "scrollDirection": ScrollDirection;
+        /**
+          * @default []
+         */
         "selectedImages": string[];
+        /**
+          * @default 'single'
+         */
         "selectionMode": SelectionMode;
     }
     interface SpectrumMenu {
         "close": () => Promise<void>;
         /**
           * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+          * @default []
          */
         "items": Array<{
     label: string;
@@ -434,28 +861,34 @@ export namespace Components {
   }>;
         /**
           * The breakpoint at which the menu switches to mobile view
+          * @default 768
          */
         "mobileBreakpoint": number;
         /**
           * The title displayed in the mobile menu header
+          * @default 'Menu'
          */
         "mobileMenuTitle": string;
         /**
           * The orientation of the menu
+          * @default 'horizontal'
          */
         "orientation": 'horizontal' | 'vertical';
         /**
           * The variant of the menu
+          * @default 'default'
          */
         "variant": 'default' | 'megamenu';
     }
     interface SpectrumPanel {
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug": boolean;
         /**
           * Whether to apply frost effect (translucent background with blur) Default: false
+          * @default false
          */
         "frost": boolean;
         /**
@@ -464,6 +897,7 @@ export namespace Components {
         "height"?: string;
         /**
           * Size preset for the panel Default: 'full' (occupies all available space)
+          * @default 'full'
          */
         "size": 'small' | 'medium' | 'large' | 'full' | 'auto';
         /**
@@ -484,34 +918,42 @@ export namespace Components {
     interface SpectrumRail {
         /**
           * Add button icon (displayed in both states)
+          * @default 'add'
          */
         "addIcon": string;
         /**
           * Add button label (displayed in expanded state)
+          * @default 'Add new'
          */
         "addLabel": string;
         /**
           * Application name to display in expanded menu
+          * @default ''
          */
         "appName": string;
         /**
           * Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.)
+          * @default '0px'
          */
         "collapsedOffset": string;
         /**
           * Expanded width for the rail (with units like px, rem, etc.)
+          * @default 280
          */
         "expandedWidth": number;
         /**
           * Whether the rail should be initially expanded
+          * @default false
          */
         "initialExpanded": boolean;
         /**
           * More section icon (displayed in both states)
+          * @default 'settings'
          */
         "moreIcon": string;
         /**
           * More section label (displayed in expanded state)
+          * @default 'More'
          */
         "moreLabel": string;
         /**
@@ -524,6 +966,7 @@ export namespace Components {
         "setShowAddButton": (show: boolean) => Promise<boolean>;
         /**
           * Whether to show the add button in the rail
+          * @default true
          */
         "showAddButton": boolean;
     }
@@ -541,6 +984,7 @@ export namespace Components {
         "action"?: string;
         /**
           * Current expanded state
+          * @default false
          */
         "expanded": boolean;
         /**
@@ -559,27 +1003,36 @@ export namespace Components {
     interface SpectrumSearchInput {
         /**
           * Whether to clear the input value after submitting a search
+          * @default false
          */
         "clearOnSubmit": boolean;
         /**
           * Whether to enable submitting search on Enter key press
+          * @default true
          */
         "enableEnterSubmit": boolean;
         /**
           * Whether to enable voice input capabilities (speech recognition)
+          * @default true
          */
         "enableVoiceInput": boolean;
+        /**
+          * @default 4
+         */
         "maxLines": number;
         /**
           * Placeholder text for the search input
+          * @default 'Ask anything...'
          */
         "placeholder": string;
         /**
           * Variant of the search button - 'primary' or 'ghost'
+          * @default 'primary'
          */
         "searchButtonVariant": 'primary' | 'ghost';
         /**
           * Position of the search icon - 'left' or 'right'
+          * @default 'right'
          */
         "searchIconPosition": 'left' | 'right';
         "setFocus": () => Promise<void>;
@@ -591,37 +1044,133 @@ export namespace Components {
      * Based on the Spectrum design system and Material Design 3 patterns.
      */
     interface SpectrumSelect {
+        /**
+          * @default ''
+         */
         "action": string;
+        /**
+          * @default {}
+         */
         "customStyle": { [key: string]: string };
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default false
+         */
         "disabled": boolean;
+        /**
+          * @default 'expand_more'
+         */
         "dropdownIcon": string;
+        /**
+          * @default ''
+         */
         "errorText": string;
+        /**
+          * @default false
+         */
         "invalid": boolean;
+        /**
+          * @default 40
+         */
         "itemHeight": number;
+        /**
+          * @default false
+         */
         "loading": boolean;
+        /**
+          * @default 'Loading...'
+         */
         "loadingText": string;
+        /**
+          * @default '200px'
+         */
         "maxHeight": string;
+        /**
+          * @default false
+         */
         "mobileFullscreen": boolean;
+        /**
+          * @default false
+         */
         "multiple": boolean;
+        /**
+          * @default 'No results found'
+         */
         "noResultsText": string;
+        /**
+          * @default []
+         */
         "options": SpectrumSelectOption[];
+        /**
+          * @default 'Select an option'
+         */
         "placeholder": string;
+        /**
+          * @default false
+         */
         "required": boolean;
+        /**
+          * @default 'Search options...'
+         */
         "searchPlaceholder": string;
+        /**
+          * @default ''
+         */
         "searchTitle": string;
+        /**
+          * @default false
+         */
         "searchable": boolean;
+        /**
+          * @default 'Select All'
+         */
         "selectAllText": string;
+        /**
+          * @default ''
+         */
         "selectedValue": string;
+        /**
+          * @default []
+         */
         "selectedValues": string[];
+        /**
+          * @default 'selections'
+         */
         "selectionsLabel": string;
+        /**
+          * @default true
+         */
         "showDropdownIcon": boolean;
+        /**
+          * @default true
+         */
         "showIcon": boolean;
+        /**
+          * @default false
+         */
         "showSelectAll": boolean;
+        /**
+          * @default 'base'
+         */
         "size": 'sm' | 'base' | 'lg';
+        /**
+          * @default 'default'
+         */
         "state": 'default' | 'hover' | 'focus' | 'disabled';
+        /**
+          * @default true
+         */
         "touchOptimized": boolean;
+        /**
+          * @default 'primary'
+         */
         "variant": 'primary' | 'secondary' | 'outline' | 'ghost';
+        /**
+          * @default false
+         */
         "virtualScrolling": boolean;
     }
     /**
@@ -630,19 +1179,61 @@ export namespace Components {
      * with responsive behavior and flexible positioning.
      */
     interface SpectrumSidebar {
+        /**
+          * @default 'md'
+         */
         "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
         "collapseBelow": boolean;
+        /**
+          * @default false
+         */
         "collapsed": boolean;
+        /**
+          * @default false
+         */
         "collapsible": boolean;
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default false
+         */
         "fullHeight": boolean;
+        /**
+          * @default 'md'
+         */
         "gap": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
         "maxSidebarWidth": string;
+        /**
+          * @default ''
+         */
         "minSidebarWidth": string;
+        /**
+          * @default false
+         */
         "overlay": boolean;
+        /**
+          * @default 'left'
+         */
         "position": 'left' | 'right';
+        /**
+          * @default true
+         */
         "responsive": boolean;
+        /**
+          * @default 'md'
+         */
         "sidebarWidth": 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default true
+         */
         "stackMobile": boolean;
     }
     /**
@@ -651,59 +1242,97 @@ export namespace Components {
      * with consistent spacing and alignment options.
      */
     interface SpectrumStack {
+        /**
+          * @default 'stretch'
+         */
         "align": 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * @default 'md'
+         */
         "breakpoint": 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
         "debug": boolean;
+        /**
+          * @default 'vertical'
+         */
         "direction": 'vertical' | 'horizontal' | 'column' | 'row';
+        /**
+          * @default 'start'
+         */
         "justify": 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default false
+         */
         "responsive": boolean;
+        /**
+          * @default false
+         */
         "reverse": boolean;
+        /**
+          * @default 'md'
+         */
         "spacing": 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+        /**
+          * @default false
+         */
         "wrap": boolean;
     }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
+          * @default true
          */
         "autoLoadFonts": boolean;
         /**
           * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
+          * @default '#0070d2'
          */
         "color": string;
         /**
           * Theme configuration object for custom overrides
+          * @default '{}'
          */
         "config": string;
         /**
           * Timeout for wallpaper coordination in milliseconds
+          * @default 2000
          */
         "coordinationTimeout": number;
         /**
           * Whether to use dark mode
+          * @default false
          */
         "dark": boolean;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug": boolean;
         /**
           * Font loading timeout in milliseconds
+          * @default 3000
          */
         "fontLoadTimeout": number;
         /**
           * Whether to hide content until theme is fully ready
+          * @default true
          */
         "hideContentUntilReady": boolean;
         /**
           * Whether to preload fonts via link elements
+          * @default true
          */
         "preloadFonts": boolean;
         /**
           * Whether to show theme color swatches (useful for development)
+          * @default false
          */
         "showSwatches": boolean;
         /**
           * Whether to wait for wallpaper colors before showing content
+          * @default false
          */
         "waitForWallpaper": boolean;
     }
@@ -713,52 +1342,108 @@ export namespace Components {
      * Supports various variants, positioning, and auto-dismiss functionality.
      */
     interface SpectrumToast {
+        /**
+          * @default ''
+         */
         "actionLabel": string;
+        /**
+          * @default ''
+         */
         "actionValue": string;
+        /**
+          * @default true
+         */
         "autoClose": boolean;
+        /**
+          * @default false
+         */
         "debug": boolean;
         "dismiss": () => Promise<void>;
+        /**
+          * @default true
+         */
         "dismissible": boolean;
+        /**
+          * @default 4000
+         */
         "duration": number;
         "hide": () => Promise<void>;
+        /**
+          * @default ''
+         */
         "icon": string;
+        /**
+          * @default ''
+         */
         "message": string;
+        /**
+          * @default false
+         */
         "persistent": boolean;
+        /**
+          * @default 'top'
+         */
         "position": 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
         "show": () => Promise<void>;
+        /**
+          * @default true
+         */
         "showCloseButton": boolean;
+        /**
+          * @default true
+         */
         "showIcon": boolean;
+        /**
+          * @default ''
+         */
         "toastTitle": string;
+        /**
+          * @default 'primary'
+         */
         "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';
+        /**
+          * @default false
+         */
         "visible": boolean;
     }
     interface SpectrumWallpaper {
+        /**
+          * Whether to apply theme variables to document root instead of host element This gives wallpaper theme higher priority over other theme components
+          * @default false
+         */
+        "applyToRoot": boolean;
         /**
           * The background value (color, gradient, or image URL)
          */
         "background": string;
         /**
           * The background image position
+          * @default 'center'
          */
-        "backgroundposition": string;
+        "backgroundPosition": string;
         /**
           * The background image size
+          * @default 'cover'
          */
-        "backgroundsize": string;
+        "backgroundSize": string;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug": boolean;
         /**
           * Whether to preload and extract colors before applying them
+          * @default false
          */
         "preloadColors": boolean;
         /**
           * Whether to show the theme color swatches
+          * @default false
          */
         "showSwatches": boolean;
         /**
           * Whether to signal when colors are ready for coordination
+          * @default false
          */
         "signalReady": boolean;
     }
@@ -1279,38 +1964,47 @@ declare namespace LocalJSX {
     interface SpectrumAccordion {
         /**
           * Unique identifier for the accordion
+          * @default `accordion-${Math.random().toString(36).substr(2, 9)}`
          */
         "accordionId"?: string;
         /**
           * The icon to show when collapsed Default: 'arrow_drop_down'
+          * @default 'arrow_drop_down'
          */
         "collapsedIcon"?: string;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Whether the accordion should be disabled Default: false
+          * @default false
          */
         "disabled"?: boolean;
         /**
           * Whether the accordion is expanded Default: false
+          * @default false
          */
         "expanded"?: boolean;
         /**
           * The icon to show when expanded Default: 'arrow_drop_up'
+          * @default 'arrow_drop_up'
          */
         "expandedIcon"?: string;
         /**
           * Whether to enable haptic feedback Default: false
+          * @default false
          */
         "haptic"?: boolean;
         /**
           * Whether to show content in horizontal scroll container Default: true
+          * @default true
          */
         "horizontalScroll"?: boolean;
         /**
           * The label for the accordion trigger Default: 'Dive Deeper'
+          * @default 'Dive Deeper'
          */
         "label"?: string;
         /**
@@ -1322,14 +2016,17 @@ declare namespace LocalJSX {
   }>) => void;
         /**
           * Whether the trigger chip should be outlined Default: true
+          * @default true
          */
         "outline"?: boolean;
         /**
           * Whether to enable sound effects Default: false
+          * @default false
          */
         "sound"?: boolean;
         /**
           * The variant of the trigger chip Default: 'secondary'
+          * @default 'secondary'
          */
         "variant"?: 'primary' | 'secondary';
     }
@@ -1339,77 +2036,160 @@ declare namespace LocalJSX {
      * Based on CSS Grid with responsive behavior and smooth animations.
      */
     interface SpectrumAppLayout {
+        /**
+          * @default 'md'
+         */
         "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
         "collapseMobile"?: boolean;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default '5rem'
+         */
         "footerHeight"?: string;
+        /**
+          * @default 'md'
+         */
         "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default '5rem'
+         */
         "headerHeight"?: string;
+        /**
+          * @default ''
+         */
         "headerTitle"?: string;
+        /**
+          * @default 'Logo'
+         */
         "logoAlt"?: string;
+        /**
+          * @default ''
+         */
         "logoSrc"?: string;
         "onProfileAction"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; type: 'profile' }>) => void;
         "onRightBarToggle"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; expanded: boolean }>) => void;
         "onSidebarToggle"?: (event: SpectrumAppLayoutCustomEvent<{ action: string; expanded: boolean }>) => void;
+        /**
+          * @default 'Profile'
+         */
         "profileText"?: string;
+        /**
+          * @default true
+         */
         "responsive"?: boolean;
+        /**
+          * @default true
+         */
         "rightBarCollapsible"?: boolean;
+        /**
+          * @default true
+         */
         "rightBarExpanded"?: boolean;
+        /**
+          * @default '16rem'
+         */
         "rightBarWidth"?: string;
+        /**
+          * @default true
+         */
         "showFooter"?: boolean;
+        /**
+          * @default true
+         */
         "showHeader"?: boolean;
+        /**
+          * @default true
+         */
         "showLogo"?: boolean;
+        /**
+          * @default true
+         */
         "showProfile"?: boolean;
+        /**
+          * @default true
+         */
         "showRightBar"?: boolean;
+        /**
+          * @default '4rem'
+         */
         "sidebarCollapsedWidth"?: string;
+        /**
+          * @default true
+         */
         "sidebarCollapsible"?: boolean;
+        /**
+          * @default true
+         */
         "sidebarExpanded"?: boolean;
+        /**
+          * @default '16rem'
+         */
         "sidebarExpandedWidth"?: string;
+        /**
+          * @default 'left'
+         */
         "sidebarPosition"?: 'left' | 'right';
     }
     interface SpectrumApplicationLayout {
         /**
           * Enable debug mode to show semantic colors and placeholder content
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Collapse the left sidebar and footer sections to 96px width
+          * @default false
          */
         "leftCollapsed"?: boolean;
         /**
           * Collapse the right sidebar and footer sections to 96px width
+          * @default false
          */
         "rightCollapsed"?: boolean;
         /**
           * Show/hide the content navigation slot (main navigation, left content)
+          * @default true
          */
         "showContentNavigation"?: boolean;
         /**
           * Show/hide the content sidebar slot (sidebar, right content, panels)
+          * @default false
          */
         "showContentSidebar"?: boolean;
         /**
           * Show/hide the footer center slot (status information, breadcrumbs)
+          * @default true
          */
         "showFooterCenter"?: boolean;
         /**
           * Show/hide the footer left slot (secondary navigation, footer links)
+          * @default true
          */
         "showFooterLeft"?: boolean;
         /**
           * Show/hide the footer right slot (additional actions, version info)
+          * @default false
          */
         "showFooterRight"?: boolean;
         /**
           * Show/hide the header app ID slot (brand, logo, nav toggle)
+          * @default true
          */
         "showHeaderAppId"?: boolean;
         /**
           * Show/hide the header middle slot (search, breadcrumbs, page title)
+          * @default true
          */
         "showHeaderMiddle"?: boolean;
         /**
           * Show/hide the header utility slot (user menu, notifications, settings)
+          * @default true
          */
         "showHeaderUtility"?: boolean;
     }
@@ -1419,25 +2199,82 @@ declare namespace LocalJSX {
      * Supports icons, text, and various interactive states.
      */
     interface SpectrumButton {
+        /**
+          * @default ''
+         */
         "action"?: string;
+        /**
+          * @default ''
+         */
         "buttonText"?: string;
+        /**
+          * @default {}
+         */
         "customStyle"?: { [key: string]: string };
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default false
+         */
         "disabled"?: boolean;
+        /**
+          * @default false
+         */
         "haptic"?: boolean;
+        /**
+          * @default false
+         */
         "iconOnly"?: boolean;
+        /**
+          * @default ''
+         */
         "leftIcon"?: string;
+        /**
+          * @default false
+         */
         "minimalAnimation"?: boolean;
         "onButtonAction"?: (event: SpectrumButtonCustomEvent<{ action?: string; label: string }>) => void;
+        /**
+          * @default false
+         */
         "outline"?: boolean;
+        /**
+          * @default ''
+         */
         "rightIcon"?: string;
+        /**
+          * @default false
+         */
         "ripple"?: boolean;
+        /**
+          * @default true
+         */
         "showButtonText"?: boolean;
+        /**
+          * @default false
+         */
         "showLeftIcon"?: boolean;
+        /**
+          * @default false
+         */
         "showRightIcon"?: boolean;
+        /**
+          * @default 'base'
+         */
         "size"?: 'sm' | 'base' | 'lg';
+        /**
+          * @default false
+         */
         "sound"?: boolean;
+        /**
+          * @default 'default'
+         */
         "state"?: 'default' | 'hover' | 'active' | 'disabled';
+        /**
+          * @default 'primary'
+         */
         "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
     }
     /**
@@ -1446,20 +2283,62 @@ declare namespace LocalJSX {
      * Supports leading/trailing icons, selection states, and various interactive behaviors.
      */
     interface SpectrumChip {
+        /**
+          * @default ''
+         */
         "action"?: string;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default false
+         */
         "disabled"?: boolean;
+        /**
+          * @default false
+         */
         "haptic"?: boolean;
+        /**
+          * @default ''
+         */
         "label"?: string;
+        /**
+          * @default ''
+         */
         "leadingIcon"?: string;
         "onChipAction"?: (event: SpectrumChipCustomEvent<{ action?: string; label: string }>) => void;
+        /**
+          * @default false
+         */
         "outline"?: boolean;
+        /**
+          * @default false
+         */
         "ripple"?: boolean;
+        /**
+          * @default false
+         */
         "selected"?: boolean;
+        /**
+          * @default false
+         */
         "showTrailingIcon"?: boolean;
+        /**
+          * @default 'medium'
+         */
         "size"?: 'small' | 'medium' | 'large' | 'extra-small';
+        /**
+          * @default false
+         */
         "sound"?: boolean;
+        /**
+          * @default 'close'
+         */
         "trailingIcon"?: string;
+        /**
+          * @default 'primary'
+         */
         "variant"?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
     }
     /**
@@ -1468,38 +2347,79 @@ declare namespace LocalJSX {
      * natural wrapping, and flexible alignment options.
      */
     interface SpectrumCluster {
+        /**
+          * @default 'start'
+         */
         "align"?: 'start' | 'center' | 'end';
+        /**
+          * @default 'md'
+         */
         "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
         "centerContainer"?: boolean;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default 'horizontal'
+         */
         "direction"?: 'horizontal' | 'vertical';
+        /**
+          * @default false
+         */
         "fullWidth"?: boolean;
+        /**
+          * @default 'start'
+         */
         "justify"?: 'start' | 'center' | 'end' | 'space-between' | 'space-around';
+        /**
+          * @default false
+         */
         "noWrap"?: boolean;
+        /**
+          * @default false
+         */
         "responsive"?: boolean;
+        /**
+          * @default 'md'
+         */
         "spacing"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "stackBelow"?: boolean;
+        /**
+          * @default true
+         */
         "wrap"?: boolean;
     }
     interface SpectrumCollapsibleList {
         /**
           * Context actions for all leaf nodes
+          * @default []
          */
         "contextActions"?: ContextMenuAction[];
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Filter value to filter list items
+          * @default ''
          */
         "filter"?: string;
         /**
           * The nested data structure for the list
+          * @default []
          */
         "items"?: CollapsibleListItem[];
         /**
           * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
+          * @default true
          */
         "mutuallyExclusive"?: boolean;
         /**
@@ -1529,15 +2449,45 @@ declare namespace LocalJSX {
      * and centering capabilities for content layout.
      */
     interface SpectrumContainer {
+        /**
+          * @default false
+         */
         "centerContent"?: boolean;
+        /**
+          * @default true
+         */
         "centered"?: boolean;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default true
+         */
         "fullWidthMobile"?: boolean;
+        /**
+          * @default ''
+         */
         "maxWidth"?: string;
+        /**
+          * @default 'md'
+         */
         "padding"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
         "paddingX"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default ''
+         */
         "paddingY"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '';
+        /**
+          * @default true
+         */
         "responsive"?: boolean;
+        /**
+          * @default 'lg'
+         */
         "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'fluid';
     }
     /**
@@ -1555,28 +2505,34 @@ declare namespace LocalJSX {
         "onMenuClose"?: (event: SpectrumContextMenuCustomEvent<{ action: string }>) => void;
         /**
           * The key identifying the target component that triggered this menu
+          * @default 'right'
          */
         "position"?: 'left' | 'right' | 'top' | 'bottom';
     }
     interface SpectrumConversationPanel {
         /**
           * The actions to display in the messages Default: null
+          * @default ''
          */
         "actions"?: string;
         /**
           * The title to display in the conversation panel Default: null
+          * @default 'No title provided'
          */
         "conversationtitle"?: string;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Whether to show the loading indicator Default: false
+          * @default false
          */
         "loading"?: boolean;
         /**
           * The messsages to display in the conversation panel Default: null
+          * @default ''
          */
         "messages"?: string;
         "onAction"?: (event: SpectrumConversationPanelCustomEvent<{action: string, type: string, value: string, messageId?: string}>) => void;
@@ -1586,10 +2542,12 @@ declare namespace LocalJSX {
         "onTitleChanged"?: (event: SpectrumConversationPanelCustomEvent<{action: string, value: string}>) => void;
         /**
           * Whether to enable sound effects Default: false
+          * @default false
          */
         "sound"?: boolean;
         /**
           * The sources to display in the messages Default: null
+          * @default ''
          */
         "sources"?: string;
     }
@@ -1599,20 +2557,65 @@ declare namespace LocalJSX {
      * responsive behavior, and fine-grained control over flex container and items.
      */
     interface SpectrumFlex {
+        /**
+          * @default 'stretch'
+         */
         "align"?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+        /**
+          * @default 'stretch'
+         */
         "alignContent"?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch';
+        /**
+          * @default 'md'
+         */
         "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
         "columnGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default 'row'
+         */
         "direction"?: 'row' | 'row-reverse' | 'column' | 'column-reverse';
+        /**
+          * @default false
+         */
         "fullHeight"?: boolean;
+        /**
+          * @default false
+         */
         "fullWidth"?: boolean;
+        /**
+          * @default 'md'
+         */
         "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "inline"?: boolean;
+        /**
+          * @default 'flex-start'
+         */
         "justify"?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'column'
+         */
         "mobileDirection"?: 'row' | 'column';
+        /**
+          * @default false
+         */
         "responsive"?: boolean;
+        /**
+          * @default ''
+         */
         "rowGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default 'nowrap'
+         */
         "wrap"?: 'nowrap' | 'wrap' | 'wrap-reverse';
     }
     /**
@@ -1621,28 +2624,97 @@ declare namespace LocalJSX {
      * areas, responsive behavior, and auto-sizing capabilities.
      */
     interface SpectrumGrid {
+        /**
+          * @default 'stretch'
+         */
         "alignContent"?: 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
         "alignItems"?: 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
         "areas"?: string;
+        /**
+          * @default ''
+         */
         "autoColumns"?: string;
+        /**
+          * @default false
+         */
         "autoFill"?: boolean;
+        /**
+          * @default false
+         */
         "autoFit"?: boolean;
+        /**
+          * @default ''
+         */
         "autoRows"?: string;
+        /**
+          * @default 'md'
+         */
         "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default ''
+         */
         "columnGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default '1fr'
+         */
         "columns"?: string;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default false
+         */
         "fullHeight"?: boolean;
+        /**
+          * @default false
+         */
         "fullWidth"?: boolean;
+        /**
+          * @default 'md'
+         */
         "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default false
+         */
         "inline"?: boolean;
+        /**
+          * @default 'stretch'
+         */
         "justifyContent"?: 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default 'stretch'
+         */
         "justifyItems"?: 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * @default ''
+         */
         "minColumnWidth"?: string;
+        /**
+          * @default ''
+         */
         "minRowHeight"?: string;
+        /**
+          * @default '1fr'
+         */
         "mobileColumns"?: string;
+        /**
+          * @default false
+         */
         "responsive"?: boolean;
+        /**
+          * @default ''
+         */
         "rowGap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default ''
+         */
         "rows"?: string;
     }
     /**
@@ -1653,22 +2725,27 @@ declare namespace LocalJSX {
     interface SpectrumHero {
         /**
           * Animation duration for slide transitions
+          * @default 1000
          */
         "animationDuration"?: number;
         /**
           * Enable carousel autoplay Time in milliseconds between slides (0 to disable)
+          * @default 0
          */
         "autoplay"?: number;
         /**
           * Debug mode
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Hero height (CSS value)
+          * @default '100vh'
          */
         "height"?: string;
         /**
           * Enable keyboard navigation
+          * @default true
          */
         "keyboardNavigation"?: boolean;
         /**
@@ -1681,41 +2758,76 @@ declare namespace LocalJSX {
         "onSlideChange"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; totalSlides: number }>) => void;
         /**
           * Pause autoplay on hover
+          * @default true
          */
         "pauseOnHover"?: boolean;
         /**
           * Show navigation arrows
+          * @default true
          */
         "showArrows"?: boolean;
         /**
           * Show navigation dots
+          * @default true
          */
         "showDots"?: boolean;
         /**
           * Hero slides as JSON string Array of HeroSlide objects containing content for each slide
+          * @default '[]'
          */
         "slides"?: string;
     }
     interface SpectrumImageGallery {
+        /**
+          * @default true
+         */
         "allowDelete"?: boolean;
+        /**
+          * @default true
+         */
         "allowUpload"?: boolean;
+        /**
+          * @default true
+         */
         "allowUrlInput"?: boolean;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default false
+         */
         "frostBackground"?: boolean;
+        /**
+          * @default []
+         */
         "images"?: ImageConfig[];
         "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
         "onImageDeleted"?: (event: SpectrumImageGalleryCustomEvent<ImageDeletedEvent>) => void;
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onImagePreview"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onImageSelected"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        /**
+          * @default false
+         */
         "previewMode"?: boolean;
+        /**
+          * @default 'vertical'
+         */
         "scrollDirection"?: ScrollDirection;
+        /**
+          * @default []
+         */
         "selectedImages"?: string[];
+        /**
+          * @default 'single'
+         */
         "selectionMode"?: SelectionMode;
     }
     interface SpectrumMenu {
         /**
           * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+          * @default []
          */
         "items"?: Array<{
     label: string;
@@ -1740,10 +2852,12 @@ declare namespace LocalJSX {
   }>;
         /**
           * The breakpoint at which the menu switches to mobile view
+          * @default 768
          */
         "mobileBreakpoint"?: number;
         /**
           * The title displayed in the mobile menu header
+          * @default 'Menu'
          */
         "mobileMenuTitle"?: string;
         /**
@@ -1755,20 +2869,24 @@ declare namespace LocalJSX {
   }>) => void;
         /**
           * The orientation of the menu
+          * @default 'horizontal'
          */
         "orientation"?: 'horizontal' | 'vertical';
         /**
           * The variant of the menu
+          * @default 'default'
          */
         "variant"?: 'default' | 'megamenu';
     }
     interface SpectrumPanel {
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Whether to apply frost effect (translucent background with blur) Default: false
+          * @default false
          */
         "frost"?: boolean;
         /**
@@ -1777,6 +2895,7 @@ declare namespace LocalJSX {
         "height"?: string;
         /**
           * Size preset for the panel Default: 'full' (occupies all available space)
+          * @default 'full'
          */
         "size"?: 'small' | 'medium' | 'large' | 'full' | 'auto';
         /**
@@ -1797,34 +2916,42 @@ declare namespace LocalJSX {
     interface SpectrumRail {
         /**
           * Add button icon (displayed in both states)
+          * @default 'add'
          */
         "addIcon"?: string;
         /**
           * Add button label (displayed in expanded state)
+          * @default 'Add new'
          */
         "addLabel"?: string;
         /**
           * Application name to display in expanded menu
+          * @default ''
          */
         "appName"?: string;
         /**
           * Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.)
+          * @default '0px'
          */
         "collapsedOffset"?: string;
         /**
           * Expanded width for the rail (with units like px, rem, etc.)
+          * @default 280
          */
         "expandedWidth"?: number;
         /**
           * Whether the rail should be initially expanded
+          * @default false
          */
         "initialExpanded"?: boolean;
         /**
           * More section icon (displayed in both states)
+          * @default 'settings'
          */
         "moreIcon"?: string;
         /**
           * More section label (displayed in expanded state)
+          * @default 'More'
          */
         "moreLabel"?: string;
         /**
@@ -1845,6 +2972,7 @@ declare namespace LocalJSX {
         "onSearchChange"?: (event: SpectrumRailCustomEvent<{ action: string; value: string }>) => void;
         /**
           * Whether to show the add button in the rail
+          * @default true
          */
         "showAddButton"?: boolean;
     }
@@ -1862,6 +2990,7 @@ declare namespace LocalJSX {
         "action"?: string;
         /**
           * Current expanded state
+          * @default false
          */
         "expanded"?: boolean;
         /**
@@ -1876,16 +3005,22 @@ declare namespace LocalJSX {
     interface SpectrumSearchInput {
         /**
           * Whether to clear the input value after submitting a search
+          * @default false
          */
         "clearOnSubmit"?: boolean;
         /**
           * Whether to enable submitting search on Enter key press
+          * @default true
          */
         "enableEnterSubmit"?: boolean;
         /**
           * Whether to enable voice input capabilities (speech recognition)
+          * @default true
          */
         "enableVoiceInput"?: boolean;
+        /**
+          * @default 4
+         */
         "maxLines"?: number;
         /**
           * Emits when input value changes, for real-time filtering
@@ -1894,14 +3029,17 @@ declare namespace LocalJSX {
         "onSearchSubmit"?: (event: SpectrumSearchInputCustomEvent<{ action: string; value: string }>) => void;
         /**
           * Placeholder text for the search input
+          * @default 'Ask anything...'
          */
         "placeholder"?: string;
         /**
           * Variant of the search button - 'primary' or 'ghost'
+          * @default 'primary'
          */
         "searchButtonVariant"?: 'primary' | 'ghost';
         /**
           * Position of the search icon - 'left' or 'right'
+          * @default 'right'
          */
         "searchIconPosition"?: 'left' | 'right';
     }
@@ -1912,19 +3050,61 @@ declare namespace LocalJSX {
      * Based on the Spectrum design system and Material Design 3 patterns.
      */
     interface SpectrumSelect {
+        /**
+          * @default ''
+         */
         "action"?: string;
+        /**
+          * @default {}
+         */
         "customStyle"?: { [key: string]: string };
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default false
+         */
         "disabled"?: boolean;
+        /**
+          * @default 'expand_more'
+         */
         "dropdownIcon"?: string;
+        /**
+          * @default ''
+         */
         "errorText"?: string;
+        /**
+          * @default false
+         */
         "invalid"?: boolean;
+        /**
+          * @default 40
+         */
         "itemHeight"?: number;
+        /**
+          * @default false
+         */
         "loading"?: boolean;
+        /**
+          * @default 'Loading...'
+         */
         "loadingText"?: string;
+        /**
+          * @default '200px'
+         */
         "maxHeight"?: string;
+        /**
+          * @default false
+         */
         "mobileFullscreen"?: boolean;
+        /**
+          * @default false
+         */
         "multiple"?: boolean;
+        /**
+          * @default 'No results found'
+         */
         "noResultsText"?: string;
         "onDropdownClose"?: (event: SpectrumSelectCustomEvent<void>) => void;
         "onDropdownOpen"?: (event: SpectrumSelectCustomEvent<void>) => void;
@@ -1936,23 +3116,77 @@ declare namespace LocalJSX {
     selectedValues?: string[];
     selectedOptions?: SpectrumSelectOption[];
   }>) => void;
+        /**
+          * @default []
+         */
         "options"?: SpectrumSelectOption[];
+        /**
+          * @default 'Select an option'
+         */
         "placeholder"?: string;
+        /**
+          * @default false
+         */
         "required"?: boolean;
+        /**
+          * @default 'Search options...'
+         */
         "searchPlaceholder"?: string;
+        /**
+          * @default ''
+         */
         "searchTitle"?: string;
+        /**
+          * @default false
+         */
         "searchable"?: boolean;
+        /**
+          * @default 'Select All'
+         */
         "selectAllText"?: string;
+        /**
+          * @default ''
+         */
         "selectedValue"?: string;
+        /**
+          * @default []
+         */
         "selectedValues"?: string[];
+        /**
+          * @default 'selections'
+         */
         "selectionsLabel"?: string;
+        /**
+          * @default true
+         */
         "showDropdownIcon"?: boolean;
+        /**
+          * @default true
+         */
         "showIcon"?: boolean;
+        /**
+          * @default false
+         */
         "showSelectAll"?: boolean;
+        /**
+          * @default 'base'
+         */
         "size"?: 'sm' | 'base' | 'lg';
+        /**
+          * @default 'default'
+         */
         "state"?: 'default' | 'hover' | 'focus' | 'disabled';
+        /**
+          * @default true
+         */
         "touchOptimized"?: boolean;
+        /**
+          * @default 'primary'
+         */
         "variant"?: 'primary' | 'secondary' | 'outline' | 'ghost';
+        /**
+          * @default false
+         */
         "virtualScrolling"?: boolean;
     }
     /**
@@ -1961,19 +3195,61 @@ declare namespace LocalJSX {
      * with responsive behavior and flexible positioning.
      */
     interface SpectrumSidebar {
+        /**
+          * @default 'md'
+         */
         "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default true
+         */
         "collapseBelow"?: boolean;
+        /**
+          * @default false
+         */
         "collapsed"?: boolean;
+        /**
+          * @default false
+         */
         "collapsible"?: boolean;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default false
+         */
         "fullHeight"?: boolean;
+        /**
+          * @default 'md'
+         */
         "gap"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
         "maxSidebarWidth"?: string;
+        /**
+          * @default ''
+         */
         "minSidebarWidth"?: string;
+        /**
+          * @default false
+         */
         "overlay"?: boolean;
+        /**
+          * @default 'left'
+         */
         "position"?: 'left' | 'right';
+        /**
+          * @default true
+         */
         "responsive"?: boolean;
+        /**
+          * @default 'md'
+         */
         "sidebarWidth"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * @default true
+         */
         "stackMobile"?: boolean;
     }
     /**
@@ -1982,59 +3258,97 @@ declare namespace LocalJSX {
      * with consistent spacing and alignment options.
      */
     interface SpectrumStack {
+        /**
+          * @default 'stretch'
+         */
         "align"?: 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * @default 'md'
+         */
         "breakpoint"?: 'sm' | 'md' | 'lg';
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default 'vertical'
+         */
         "direction"?: 'vertical' | 'horizontal' | 'column' | 'row';
+        /**
+          * @default 'start'
+         */
         "justify"?: 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * @default false
+         */
         "responsive"?: boolean;
+        /**
+          * @default false
+         */
         "reverse"?: boolean;
+        /**
+          * @default 'md'
+         */
         "spacing"?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+        /**
+          * @default false
+         */
         "wrap"?: boolean;
     }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
+          * @default true
          */
         "autoLoadFonts"?: boolean;
         /**
           * The primary color to generate the theme from Can be any valid CSS color (hex, rgb, hsl)
+          * @default '#0070d2'
          */
         "color"?: string;
         /**
           * Theme configuration object for custom overrides
+          * @default '{}'
          */
         "config"?: string;
         /**
           * Timeout for wallpaper coordination in milliseconds
+          * @default 2000
          */
         "coordinationTimeout"?: number;
         /**
           * Whether to use dark mode
+          * @default false
          */
         "dark"?: boolean;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Font loading timeout in milliseconds
+          * @default 3000
          */
         "fontLoadTimeout"?: number;
         /**
           * Whether to hide content until theme is fully ready
+          * @default true
          */
         "hideContentUntilReady"?: boolean;
         /**
           * Whether to preload fonts via link elements
+          * @default true
          */
         "preloadFonts"?: boolean;
         /**
           * Whether to show theme color swatches (useful for development)
+          * @default false
          */
         "showSwatches"?: boolean;
         /**
           * Whether to wait for wallpaper colors before showing content
+          * @default false
          */
         "waitForWallpaper"?: boolean;
     }
@@ -2044,51 +3358,107 @@ declare namespace LocalJSX {
      * Supports various variants, positioning, and auto-dismiss functionality.
      */
     interface SpectrumToast {
+        /**
+          * @default ''
+         */
         "actionLabel"?: string;
+        /**
+          * @default ''
+         */
         "actionValue"?: string;
+        /**
+          * @default true
+         */
         "autoClose"?: boolean;
+        /**
+          * @default false
+         */
         "debug"?: boolean;
+        /**
+          * @default true
+         */
         "dismissible"?: boolean;
+        /**
+          * @default 4000
+         */
         "duration"?: number;
+        /**
+          * @default ''
+         */
         "icon"?: string;
+        /**
+          * @default ''
+         */
         "message"?: string;
         "onToastAction"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
         "onToastDismiss"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
+        /**
+          * @default false
+         */
         "persistent"?: boolean;
+        /**
+          * @default 'top'
+         */
         "position"?: 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        /**
+          * @default true
+         */
         "showCloseButton"?: boolean;
+        /**
+          * @default true
+         */
         "showIcon"?: boolean;
+        /**
+          * @default ''
+         */
         "toastTitle"?: string;
+        /**
+          * @default 'primary'
+         */
         "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost';
+        /**
+          * @default false
+         */
         "visible"?: boolean;
     }
     interface SpectrumWallpaper {
+        /**
+          * Whether to apply theme variables to document root instead of host element This gives wallpaper theme higher priority over other theme components
+          * @default false
+         */
+        "applyToRoot"?: boolean;
         /**
           * The background value (color, gradient, or image URL)
          */
         "background"?: string;
         /**
           * The background image position
+          * @default 'center'
          */
-        "backgroundposition"?: string;
+        "backgroundPosition"?: string;
         /**
           * The background image size
+          * @default 'cover'
          */
-        "backgroundsize"?: string;
+        "backgroundSize"?: string;
         /**
           * Whether to enable debug logging
+          * @default false
          */
         "debug"?: boolean;
         /**
           * Whether to preload and extract colors before applying them
+          * @default false
          */
         "preloadColors"?: boolean;
         /**
           * Whether to show the theme color swatches
+          * @default false
          */
         "showSwatches"?: boolean;
         /**
           * Whether to signal when colors are ready for coordination
+          * @default false
          */
         "signalReady"?: boolean;
     }
