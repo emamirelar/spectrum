@@ -13,6 +13,7 @@ import { type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type Sp
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumAppLayout as SpectrumAppLayoutElement, defineCustomElement as defineSpectrumAppLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-app-layout.js";
 import { SpectrumApplicationLayout as SpectrumApplicationLayoutElement, defineCustomElement as defineSpectrumApplicationLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-application-layout.js";
+import { SpectrumBadge as SpectrumBadgeElement, defineCustomElement as defineSpectrumBadge } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-badge.js";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
 import { SpectrumCluster as SpectrumClusterElement, defineCustomElement as defineSpectrumCluster } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-cluster.js";
@@ -82,6 +83,17 @@ export const SpectrumApplicationLayout: StencilReactComponent<SpectrumApplicatio
     react: React,
     events: {} as SpectrumApplicationLayoutEvents,
     defineCustomElement: defineSpectrumApplicationLayout
+});
+
+type SpectrumBadgeEvents = NonNullable<unknown>;
+
+export const SpectrumBadge: StencilReactComponent<SpectrumBadgeElement, SpectrumBadgeEvents> = /*@__PURE__*/ createComponent<SpectrumBadgeElement, SpectrumBadgeEvents>({
+    tagName: 'spectrum-badge',
+    elementClass: SpectrumBadgeElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {} as SpectrumBadgeEvents,
+    defineCustomElement: defineSpectrumBadge
 });
 
 type SpectrumButtonEvents = { onButtonAction: EventName<CustomEvent<{ action?: string; label: string }>> };
@@ -235,7 +247,8 @@ type SpectrumImageGalleryEvents = {
     onImageDeselect: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
     onImageAdded: EventName<SpectrumImageGalleryCustomEvent<ImageAddedEvent>>,
     onImageDeleted: EventName<SpectrumImageGalleryCustomEvent<ImageDeletedEvent>>,
-    onImagePreview: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>
+    onImagePreview: EventName<SpectrumImageGalleryCustomEvent<ImageConfig>>,
+    onPrimaryAction: EventName<SpectrumImageGalleryCustomEvent<{ action: string; selectedImages: ImageConfig[]; selectedIds: string[]; count: number }>>
 };
 
 export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents> = /*@__PURE__*/ createComponent<SpectrumImageGalleryElement, SpectrumImageGalleryEvents>({
@@ -248,7 +261,8 @@ export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryEle
         onImageDeselect: 'imageDeselect',
         onImageAdded: 'imageAdded',
         onImageDeleted: 'imageDeleted',
-        onImagePreview: 'imagePreview'
+        onImagePreview: 'imagePreview',
+        onPrimaryAction: 'primaryAction'
     } as SpectrumImageGalleryEvents,
     defineCustomElement: defineSpectrumImageGallery
 });
@@ -284,7 +298,8 @@ type SpectrumRailEvents = {
     onExpandedChange: EventName<CustomEvent<{ action: string; expanded: boolean }>>,
     onSearchChange: EventName<CustomEvent<{ action: string; value: string }>>,
     onRailAction: EventName<CustomEvent<{ action: string; id: string }>>,
-    onAddAction: EventName<CustomEvent<{ action: string }>>
+    onAddAction: EventName<CustomEvent<{ action: string }>>,
+    onMoreContextAction: EventName<CustomEvent<{ action: string; label: string; id: string }>>
 };
 
 export const SpectrumRail: StencilReactComponent<SpectrumRailElement, SpectrumRailEvents> = /*@__PURE__*/ createComponent<SpectrumRailElement, SpectrumRailEvents>({
@@ -296,7 +311,8 @@ export const SpectrumRail: StencilReactComponent<SpectrumRailElement, SpectrumRa
         onExpandedChange: 'expandedChange',
         onSearchChange: 'searchChange',
         onRailAction: 'railAction',
-        onAddAction: 'addAction'
+        onAddAction: 'addAction',
+        onMoreContextAction: 'moreContextAction'
     } as SpectrumRailEvents,
     defineCustomElement: defineSpectrumRail
 });

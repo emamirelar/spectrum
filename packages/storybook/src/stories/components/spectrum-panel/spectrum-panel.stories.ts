@@ -5,6 +5,7 @@ import '../../../components/mermaid-diagram';
 // Local interface definition for the component props
 interface SpectrumPanel extends HTMLElement {
   frost: boolean;
+  background: 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
   debug: boolean;
   size: 'small' | 'medium' | 'large' | 'full' | 'auto';
   width?: string;
@@ -272,10 +273,19 @@ Debug mode provides:
   argTypes: {
     frost: {
       control: 'boolean',
-      description: 'Apply frost effect (blur background)',
+      description: 'Apply frost effect (blur background) - **DEPRECATED: Use background property instead**',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
+      }
+    },
+    background: {
+      control: 'select',
+      options: ['opaque', 'partial-frost', 'full-frost', 'transparent'],
+      description: 'Background level for the panel',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'opaque' }
       }
     },
     debug: {
@@ -314,6 +324,7 @@ Debug mode provides:
   },
   args: {
     frost: false,
+    background: 'opaque',
     debug: false,
     size: 'full',
     width: undefined,
@@ -330,6 +341,7 @@ export const Default: Story = {
   render: (args) => html`
     <spectrum-panel 
       .frost=${args.frost}
+      .background=${args.background}
       .debug=${args.debug}
       .size=${args.size}
       .width=${args.width}
@@ -341,22 +353,24 @@ export const Default: Story = {
   `
 };
 
-// Frost effect panel with background
+// Frost effect panel with background (deprecated - use BackgroundLevels instead)
 export const FrostEffect: Story = {
   args: {
-    frost: true
+    frost: true,
+    background: 'partial-frost'
   },
   render: (args) => html`
     <div style="width: 500px; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center;">
       <spectrum-panel 
         .frost=${args.frost}
+        .background=${args.background}
         .debug=${args.debug}
         .size=${args.size}
         .width=${args.width}
         .height=${args.height}>
         <h2>Frosted Glass Panel</h2>
         <p>This panel demonstrates the frost effect with a translucent background and blur filter.</p>
-        <p>Perfect for overlay content or modern glassmorphism designs, just like the conversation panel.</p>
+        <p><strong>Note:</strong> The frost property is deprecated. Use the background property instead.</p>
       </spectrum-panel>
     </div>
   `
@@ -442,12 +456,12 @@ export const SizeVariations: Story = {
 export const DifferentContent: Story = {
   render: () => html`
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; max-width: 1000px;">
-      <spectrum-panel size="auto">
+      <spectrum-panel size="auto" background="opaque">
         <h3>Simple Text</h3>
         <p>A panel with just text content.</p>
       </spectrum-panel>
       
-      <spectrum-panel frost size="auto">
+      <spectrum-panel background="partial-frost" size="auto">
         <h3>With Frost Effect</h3>
         <p>This panel has the frost effect enabled.</p>
         <button style="padding: 0.5rem 1rem; border: none; border-radius: 0.25rem; background: var(--spectrum-color-primary); color: white; cursor: pointer;">
@@ -455,7 +469,7 @@ export const DifferentContent: Story = {
         </button>
       </spectrum-panel>
       
-      <spectrum-panel size="auto">
+      <spectrum-panel size="auto" background="opaque">
         <h3>Mixed Content</h3>
         <ul>
           <li>List item one</li>
@@ -464,6 +478,72 @@ export const DifferentContent: Story = {
         </ul>
         <p>Mixed content with lists and paragraphs.</p>
       </spectrum-panel>
+    </div>
+  `
+};
+
+// Background Levels Demo
+export const BackgroundLevels: Story = {
+  name: 'Background Levels',
+  render: () => html`
+    <div style="padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+      <h2 style="color: white; margin-bottom: 2rem; text-align: center; font-size: 2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+        Panel Background Levels
+      </h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Opaque Background -->
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+          <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Opaque (Default)</h3>
+          <spectrum-panel background="opaque" size="auto">
+            <h4>Opaque Panel</h4>
+            <p>This panel has a solid background with no transparency.</p>
+            <p>Best for main content areas and ensuring content readability.</p>
+          </spectrum-panel>
+        </div>
+        
+        <!-- Partial Frost Background -->
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+          <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Partial Frost</h3>
+          <spectrum-panel background="partial-frost" size="auto">
+            <h4>Partial Frost Panel</h4>
+            <p>This panel has a 33% white tint with subtle blur.</p>
+            <p>Perfect for overlay content and modal dialogs.</p>
+          </spectrum-panel>
+        </div>
+        
+        <!-- Full Frost Background -->
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+          <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Full Frost</h3>
+          <spectrum-panel background="full-frost" size="auto">
+            <h4>Full Frost Panel</h4>
+            <p>This panel has a 66% white tint with strong blur.</p>
+            <p>Maximum glassmorphism effect for premium appearance.</p>
+          </spectrum-panel>
+        </div>
+        
+        <!-- Transparent Background -->
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+          <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Transparent</h3>
+          <spectrum-panel background="transparent" size="auto">
+            <h4>Transparent Panel</h4>
+            <p>This panel has no background, border, or shadow.</p>
+            <p>Content floats seamlessly over the background.</p>
+          </spectrum-panel>
+        </div>
+        
+      </div>
+      
+      <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Background Level Usage Guide</h3>
+        <ul style="color: white; opacity: 0.9; line-height: 1.6;">
+          <li><strong>Opaque:</strong> Main content areas, primary panels, default behavior</li>
+          <li><strong>Partial Frost:</strong> Overlay content, modal dialogs, secondary panels</li>
+          <li><strong>Full Frost:</strong> Hero sections, feature highlights, maximum visual impact</li>
+          <li><strong>Transparent:</strong> Floating content, minimalist designs, content that blends with background</li>
+        </ul>
+      </div>
     </div>
   `
 };

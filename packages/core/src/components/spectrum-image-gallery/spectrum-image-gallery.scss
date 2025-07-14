@@ -11,10 +11,12 @@
   // Spectrum design tokens
   --gallery-background: var(--spectrum-color-surface, #ffffff);
   --gallery-background-rgb: var(--spectrum-color-surface-rgb, 255, 255, 255);
-  --gallery-border-radius: var(--spectrum-sys-border-radius, 12px);
-  --gallery-spacing: var(--spectrum-sys-spacing, 16px);
-  --gallery-spacing-small: var(--spectrum-sys-spacing-small, 8px);
-  --gallery-spacing-large: var(--spectrum-sys-spacing-large, 24px);
+  --gallery-border-radius: var(--spectrum-sys-border-radius, 4px);
+  --gallery-border-radius-large: calc(var(--gallery-border-radius) * 4);
+  --gallery-border-radius-x-large: calc(var(--gallery-border-radius) * 12);
+  --gallery-spacing: var(--spectrum-spacing-300, 12px);
+  --gallery-spacing-small: var(--spectrum-spacing-200, 8px);
+  --gallery-spacing-large: var(--spectrum-spacing-400, 16px);
   
   // Colors
   --gallery-primary: var(--spectrum-color-primary, #0070d2);
@@ -39,18 +41,13 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  max-width: 100%;
   font-family: var(--gallery-font-family);
   color: var(--gallery-text);
   position: relative;
-  overflow: hidden; // Contain scrolling to grid elements
+  overflow: hidden;
   
-  // Frost background effect for the entire gallery
-  &--frost {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--gallery-border-radius);
-  }
+
   
   // Vertical scrolling (default masonry layout)
   &--vertical {
@@ -63,37 +60,87 @@
   }
 }
 
+// Panel structure - ensure proper flex layout
+:host {
+  spectrum-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    
+    // Horizontal layout adjustments
+    &:has(.gallery--horizontal) {
+      flex-direction: row;
+    }
+  }
+}
+
 // Masonry grid using CSS columns (Vertical)
 .gallery__grid {
   flex: 1;
-  min-height: 0; // Allow flex item to shrink below content size
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
   
-  // Vertical scrolling (masonry) - default
+
+  
+    // Vertical scrolling (native CSS masonry) - default
   &--vertical {
-    columns: 3;
-    column-gap: var(--gallery-spacing);
-    padding: var(--gallery-spacing);
-    padding-bottom: calc(var(--gallery-spacing) * 2);
+    display: grid;
+    grid-template-columns: 1fr; // Default: 1 column
+    grid-template-rows: masonry; // Native CSS masonry layout
+    gap: var(--gallery-spacing);
     overflow-y: auto;
     overflow-x: hidden;
+    padding: var(--gallery-spacing);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     
-    @media (max-width: 768px) {
-      columns: 2;
-      column-gap: var(--gallery-spacing-small);
-      padding: var(--gallery-spacing-small);
-      padding-bottom: calc(var(--gallery-spacing-small) * 2);
+
+    
+    // Media queries for different responsive behaviors
+    @media (min-width: 600px) {
+      grid-template-columns: repeat(2, 1fr); // 2 columns on medium screens
     }
     
-    @media (max-width: 480px) {
-      columns: 1;
+    @media (min-width: 900px) {
+      grid-template-columns: repeat(3, 1fr); // 3 columns on large screens
     }
     
-    @media (min-width: 1200px) {
-      columns: 4;
+    @media (min-width: 1100px) {
+      grid-template-columns: repeat(4, 1fr) !important; // 4 columns on extra large screens (1366px will get this)
     }
     
     @media (min-width: 1600px) {
-      columns: 5;
+      grid-template-columns: repeat(5, 1fr); // 5 columns on ultra wide screens
+    }
+    
+    // Fallback for browsers without native masonry support
+    @supports not (grid-template-rows: masonry) {
+      // Use CSS columns as fallback - provides better visual flow
+      display: block;
+      column-count: 1;
+      column-gap: var(--gallery-spacing);
+      
+
+      
+        @media (min-width: 600px) {
+          column-count: 2;
+        }
+        
+        @media (min-width: 900px) {
+          column-count: 3;
+        }
+        
+        @media (min-width: 1100px) {
+          column-count: 4 !important;
+        }
+        
+        @media (min-width: 1600px) {
+          column-count: 5;
+        }
     }
   }
   
@@ -102,58 +149,64 @@
     display: flex;
     flex-direction: row;
     gap: var(--gallery-spacing);
-    padding: var(--gallery-spacing);
-    padding-right: calc(var(--gallery-spacing) * 2);
     overflow-x: auto;
     overflow-y: hidden;
     align-items: flex-start;
     height: 100%;
     min-width: 100%;
-    
-    @media (max-width: 768px) {
-      gap: var(--gallery-spacing-small);
-      padding: var(--gallery-spacing-small);
-      padding-right: calc(var(--gallery-spacing-small) * 2);
-    }
+    padding: var(--panel-spacing-large, 2em); // Use panel's standard spacing
   }
 }
 
 // Individual gallery items
 .gallery__item {
   position: relative;
-  display: inline-block;
+  display: block;
   width: 100%;
-  margin-bottom: var(--gallery-spacing);
-  border-radius: var(--gallery-border-radius);
+  border-radius: var(--gallery-border-radius-x-large);
   overflow: hidden;
   transition: all 0.2s ease-in-out;
   background: var(--gallery-secondary);
   box-shadow: var(--gallery-shadow);
-  break-inside: avoid;
+  
+
+  
+
+  
+  // Masonry grid item properties
+  .gallery__grid--vertical & {
+    // Native masonry handles positioning automatically
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    
+    // Fallback for browsers without native masonry support
+    @supports not (grid-template-rows: masonry) {
+      // CSS columns fallback styles
+      break-inside: avoid;
+      margin-bottom: var(--gallery-spacing);
+      display: inline-block;
+      width: 100%;
+    }
+  }
   
   // Horizontal layout adjustments
   .gallery__grid--horizontal & {
     flex-shrink: 0;
     width: auto;
-    height: 250px; // Fixed height for horizontal scrolling
+    height: 250px;
     margin-bottom: 0;
-    margin-right: var(--gallery-spacing);
-    
-    &:last-child {
-      margin-right: 0;
-    }
     
     img {
       width: auto;
       height: 100%;
       object-fit: cover;
-      min-width: 200px; // Increased minimum width to force scrolling
-      max-width: 500px; // Increased maximum width for variety
+      min-width: 200px;
+      max-width: 500px;
     }
     
-    @media (max-width: 768px) {
+    @media (max-width: 500px) {
       height: 200px;
-      margin-right: var(--gallery-spacing-small);
       
       img {
         min-width: 150px;
@@ -161,7 +214,7 @@
       }
     }
     
-    @media (max-width: 480px) {
+    @media (max-width: 350px) {
       height: 150px;
       
       img {
@@ -192,14 +245,34 @@
       var(--gallery-shadow-hover),
       0 0 0 3px var(--gallery-primary);
     transform: translateY(-2px);
+  }
+  
+  // Selection overlay - partial frost effect
+  .gallery__selection-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: var(--gallery-border-radius-x-large);
+    z-index: 5;
+    pointer-events: none;
     
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 112, 210, 0.1);
-      pointer-events: none;
+    @media (prefers-color-scheme: dark) {
+      background: rgba(0, 0, 0, 0.45);
     }
+  }
+  
+  // Selection badge positioning - center middle
+  .gallery__selection-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
   }
   
   img {
@@ -207,33 +280,7 @@
     height: auto;
     display: block;
     object-fit: cover;
-    transition: opacity 0.2s ease-in-out;
-  }
-  
-  @media (max-width: 480px) {
-    margin-bottom: var(--gallery-spacing-small);
-  }
-}
-
-// Selection indicator
-.gallery__selection-indicator {
-  position: absolute;
-  top: var(--gallery-spacing-small);
-  right: var(--gallery-spacing-small);
-  width: 28px;
-  height: 28px;
-  background: var(--gallery-primary);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-  
-  svg {
-    width: 18px;
-    height: 18px;
+    border-radius: var(--gallery-border-radius-x-large);
   }
 }
 
@@ -243,15 +290,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  color: var(--gallery-text-secondary);
-  min-height: 300px;
   flex: 1;
-  margin: 0 0 calc(var(--gallery-spacing) * 2) 0;
-  padding: 0;
-  border: 2px dashed var(--gallery-border);
-  border-radius: var(--gallery-border-radius);
-  background: var(--gallery-secondary);
+  text-align: center;
+  padding: var(--panel-spacing-large, 2em); // Use panel's standard spacing
+  color: var(--gallery-text-secondary);
   
   svg {
     width: 64px;
@@ -270,94 +312,75 @@
   p {
     margin: 0;
     font-size: var(--gallery-font-size);
-  }
-  
-  // Horizontal layout adjustments
-  .gallery--horizontal & {
-    margin: var(--gallery-spacing);
-    margin-right: calc(var(--gallery-spacing) * 2);
-    margin-bottom: var(--gallery-spacing);
-    min-width: 400px;
-    
-    @media (max-width: 768px) {
-      min-width: 300px;
-    }
-    
-    @media (max-width: 480px) {
-      min-width: 250px;
-    }
+    opacity: 0.8;
+    max-width: 300px;
   }
 }
 
-// Controls
+// Controls - natural bottom bar (full width, no padding from panel)
 .gallery__controls {
-  position: sticky;
-  bottom: 0;
   display: flex;
   gap: var(--gallery-spacing-small);
   justify-content: flex-end;
-  padding: var(--gallery-spacing);
-  margin: 0; // Ensure no margins
-  z-index: 10;
+  align-items: center;
+  padding: var(--panel-spacing-large, 2em); // Use panel's standard spacing
+  margin-top: auto;
+  background: var(--gallery-background);
+  border-top: 1px solid var(--gallery-border);
   
-  // True frost/glass effect - see through with blur
-  background: rgba(255, 255, 255, 0.1); /* Subtle fallback for browsers without backdrop-filter */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); /* Safari support */
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
-  
-  // Vertical layout (default) - sticky bottom
+  // Vertical layout - standard bottom bar
   &--vertical {
-    position: sticky;
-    bottom: 0;
     flex-direction: row;
     
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       flex-direction: column;
-      padding: var(--gallery-spacing-small);
+      align-items: stretch;
+      
+      spectrum-button {
+        width: 100%;
+      }
     }
   }
   
-  // Horizontal layout - sticky right
+  // Horizontal layout - right sidebar
   &--horizontal {
-    position: sticky;
-    right: 0;
-    top: 0;
-    bottom: auto;
     flex-direction: column;
-    width: auto;
-    min-width: 200px;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    border-left: 1px solid var(--gallery-border);
-    border-top: none;
     justify-content: flex-start;
-    align-items: stretch;
+    border-top: none;
+    border-left: 1px solid var(--gallery-border);
     
     spectrum-button {
       width: 100%;
-      margin-bottom: var(--gallery-spacing-small);
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      min-width: 150px;
-      padding: var(--gallery-spacing-small);
-    }
-    
-    @media (max-width: 480px) {
-      min-width: 120px;
     }
   }
   
-  @media (max-width: 480px) {
-    flex-direction: column;
-    padding: var(--gallery-spacing-small);
+  // Frost effects
+  &--frost {
+    border-color: rgba(255, 255, 255, 0.2);
+    
+    @media (prefers-color-scheme: dark) {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  &--frost-partial {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    @media (prefers-color-scheme: dark) {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+  
+  &--frost-full {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    @media (prefers-color-scheme: dark) {
+      background: rgba(0, 0, 0, 0.95);
+    }
   }
 }
 
@@ -394,19 +417,58 @@
 
 .modal {
   background: var(--gallery-background);
-  border-radius: var(--gallery-border-radius);
+  border-radius: var(--gallery-border-radius-x-large);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  max-width: 600px;
   width: 100%;
   max-height: 80vh;
   overflow: hidden;
   animation: modalSlideIn 0.2s ease-out;
-  box-sizing: border-box; // Include padding and border in size calculation
-  margin: 0 var(--gallery-spacing); // Add horizontal margin for mobile spacing
+  box-sizing: border-box;
+  
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--gallery-spacing-large);
+    border-bottom: 1px solid var(--gallery-border);
+    
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: var(--gallery-font-weight);
+      color: var(--gallery-text);
+    }
+  }
+  
+  &__content {
+    padding: var(--gallery-spacing-large);
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--gallery-spacing-small);
+    padding: var(--gallery-spacing-large);
+    border-top: 1px solid var(--gallery-border);
+  }
 }
 
-// Preview modal styling
-.preview-modal-overlay {
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Preview modal
+.preview-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -418,180 +480,134 @@
   justify-content: center;
   z-index: 2000;
   padding: var(--gallery-spacing);
-  opacity: 0;
-  animation: previewFadeIn 0.3s ease-out forwards;
-  backdrop-filter: blur(4px);
-}
-
-.preview-modal {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--gallery-border-radius);
-  overflow: hidden;
-  transform: scale(0.8);
-  animation: previewZoomIn 0.3s ease-out forwards;
   
-  &__close {
-    position: absolute;
-    top: var(--gallery-spacing);
-    right: var(--gallery-spacing);
-    z-index: 2001;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    transition: opacity 0.2s ease-in-out;
-    
-    &:hover {
-      opacity: 1;
-      background: rgba(0, 0, 0, 0.7);
-    }
+  &__content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   &__image {
     max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    display: block;
+    max-height: 80vh;
     object-fit: contain;
     border-radius: var(--gallery-border-radius);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+  
+  &__close {
+    position: fixed;
+    top: var(--gallery-spacing);
+    right: var(--gallery-spacing);
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    z-index: 2010;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
   }
   
   &__caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    position: fixed;
+    top: var(--gallery-spacing);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
     color: white;
-    padding: var(--gallery-spacing-large) var(--gallery-spacing);
-    padding-top: calc(var(--gallery-spacing-large) * 2);
+    padding: var(--gallery-spacing-small) var(--gallery-spacing);
+    border-radius: var(--gallery-border-radius);
     font-size: var(--gallery-font-size);
-    font-weight: var(--gallery-font-weight);
     text-align: center;
-    border-radius: 0 0 var(--gallery-border-radius) var(--gallery-border-radius);
-  }
-}
-
-// Preview modal animations
-@keyframes previewFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes previewZoomIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-// Responsive preview modal
-@media (max-width: 768px) {
-  .preview-modal {
-    max-width: 95vw;
-    max-height: 95vh;
-    
-    &__close {
-      top: var(--gallery-spacing-small);
-      right: var(--gallery-spacing-small);
-    }
-    
-    &__caption {
-      padding: var(--gallery-spacing) var(--gallery-spacing-small);
-      padding-top: calc(var(--gallery-spacing) * 1.5);
-      font-size: calc(var(--gallery-font-size) * 0.9);
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .preview-modal-overlay {
-    padding: var(--gallery-spacing-small);
+    max-width: 80%;
+    word-wrap: break-word;
+    z-index: 2010;
   }
   
-  .preview-modal {
-    max-width: 100vw;
-    max-height: 100vh;
-    border-radius: var(--gallery-spacing-small);
-    
-    &__image {
-      border-radius: var(--gallery-spacing-small);
-    }
-    
-    &__caption {
-      border-radius: 0 0 var(--gallery-spacing-small) var(--gallery-spacing-small);
-    }
+  &__controls {
+    display: flex;
+    gap: var(--gallery-spacing);
+    margin-top: var(--gallery-spacing);
+    align-items: center;
+    justify-content: center;
   }
-}
-
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.modal__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--gallery-spacing);
-  border-bottom: 1px solid var(--gallery-border);
   
-  h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: var(--gallery-font-weight);
-    color: var(--gallery-text);
+  &__counter {
+    position: fixed;
+    bottom: var(--gallery-spacing);
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: var(--gallery-font-size);
+    background: rgba(0, 0, 0, 0.7);
+    padding: var(--gallery-spacing-small) var(--gallery-spacing);
+    border-radius: var(--gallery-border-radius);
+    opacity: 0.9;
+    z-index: 2010;
   }
-}
-
-.modal__content {
-  padding: var(--gallery-spacing);
-  overflow: hidden; // Prevent content overflow
-  box-sizing: border-box; // Include padding in width calculation
-}
-
-.modal__actions {
-  display: flex;
-  gap: var(--gallery-spacing-small);
-  justify-content: flex-end;
-  margin-top: var(--gallery-spacing);
+  
+  &__nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    z-index: 2010;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
+    
+    &--prev {
+      left: var(--gallery-spacing);
+    }
+    
+    &--next {
+      right: var(--gallery-spacing);
+    }
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
 }
 
 // Upload area
 .upload-area {
   position: relative;
+  cursor: pointer;
   
   &__input {
     position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
   }
   
   &__content {
@@ -599,6 +615,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-height: 200px;
     padding: var(--gallery-spacing-large);
     border: 2px dashed var(--gallery-border);
     border-radius: var(--gallery-border-radius);
@@ -638,7 +655,7 @@
   
   &__field {
     width: 100%;
-    max-width: 100%; // Prevent overflow
+    max-width: 100%;
     padding: 12px;
     border: 1px solid var(--gallery-border);
     border-radius: var(--gallery-border-radius);
@@ -647,7 +664,7 @@
     color: var(--gallery-text);
     background: var(--gallery-background);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    box-sizing: border-box; // Include padding and border in width calculation
+    box-sizing: border-box;
     
     &:focus {
       outline: none;
@@ -661,8 +678,65 @@
   }
 }
 
+// Add modal styling
+.add-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gallery-spacing);
+}
+
+.add-option {
+  h4 {
+    margin: 0 0 var(--gallery-spacing-small) 0;
+    font-size: 16px;
+    font-weight: var(--gallery-font-weight);
+    color: var(--gallery-text);
+  }
+  
+  .url-input {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gallery-spacing-small);
+    
+    label {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.add-option-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--gallery-spacing) 0;
+  position: relative;
+  
+  span {
+    padding: 0 var(--gallery-spacing);
+    color: var(--gallery-text-secondary);
+    font-size: calc(var(--gallery-font-size) * 0.9);
+    font-weight: var(--gallery-font-weight);
+    background: var(--gallery-background);
+    position: relative;
+    z-index: 2;
+    border-radius: var(--gallery-border-radius);
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: var(--gallery-spacing);
+    right: var(--gallery-spacing);
+    height: 1px;
+    background: var(--gallery-border);
+    z-index: 1;
+    transform: translateY(-50%);
+  }
+}
+
 // Responsive adjustments
-@media (max-width: 480px) {
+@media (max-width: 400px) {
   .modal {
     margin: var(--gallery-spacing);
     max-width: none;
@@ -675,6 +749,10 @@
   
   .upload-area__content {
     padding: var(--gallery-spacing);
+  }
+  
+  .add-options {
+    gap: var(--gallery-spacing-small);
   }
 }
 
@@ -705,7 +783,6 @@
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {
   .gallery__item,
-  .btn,
   .modal {
     transition: none;
     animation: none;
@@ -741,3 +818,4 @@
     opacity: 0.7;
   }
 }
+

@@ -16,11 +16,13 @@ export { SpectrumWallpaper } from './components/spectrum-wallpaper/spectrum-wall
 export { SpectrumButton } from './components/spectrum-button/spectrum-button';
 export { SpectrumSearchInput } from './components/spectrum-search-input/spectrum-search-input';
 export { SpectrumTheme } from './components/spectrum-theme/spectrum-theme';
+export { SpectrumPanel } from './components/spectrum-panel/spectrum-panel';
 export { SpectrumImageGallery } from './components/spectrum-image-gallery/spectrum-image-gallery';
 export { SpectrumToast } from './components/spectrum-toast/spectrum-toast';
 export { SpectrumSelect } from './components/spectrum-select/spectrum-select';
 export { SpectrumAccordion } from './components/spectrum-accordion/spectrum-accordion';
 export { SpectrumHero } from './components/spectrum-hero/spectrum-hero';
+export { SpectrumBadge } from './components/spectrum-badge/spectrum-badge';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';
@@ -28,3 +30,5 @@ import './styles/spectrum-variables.css';
 // Export component types and interfaces
 export type { SpectrumSelectOption } from './components/spectrum-select/spectrum-select';
 export type { HeroSlide } from './components/spectrum-hero/spectrum-hero';
+export type { BackgroundLevel } from './components/spectrum-panel/spectrum-panel';
+export type { BadgeVariant, BadgeSize } from './components/spectrum-badge/spectrum-badge';

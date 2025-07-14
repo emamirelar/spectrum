@@ -82,11 +82,7 @@ spectrum-panel .panel-host {
   box-sizing: border-box;
 }
 
-/* Utility Classes - exact copy from conversation panel */
-spectrum-panel .frost {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(6px);
-}
+/* Background Effects - four-level system matching image gallery */
 
 /* Panel Styles - exact copy from conversation panel */
 spectrum-panel .panel {
@@ -106,6 +102,55 @@ spectrum-panel .panel {
   width: 100%;
   font-family: var(--panel-font-family);
   color: var(--panel-on-surface);
+  
+  // Opaque background - solid background with border and shadow
+  &--opaque {
+    background: var(--panel-surface) !important;
+    border: 1px solid var(--panel-outline) !important;
+    box-shadow: 0 1px 3px var(--panel-shadow) !important;
+  }
+  
+  // Partial frost - 33% white tint with subtle blur
+  &--partial-frost {
+    background: rgba(255, 255, 255, 0.33) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.225) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1125) !important;
+    
+    @media (prefers-color-scheme: dark) {
+      background: rgba(0, 0, 0, 0.33) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.225) !important;
+    }
+  }
+  
+  // Full frost - blur effect with 66% tint
+  &--full-frost {
+    background: rgba(255, 255, 255, 0.66) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.225) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1125) !important;
+    
+    @media (prefers-color-scheme: dark) {
+      background: rgba(0, 0, 0, 0.66) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.225) !important;
+    }
+  }
+  
+  // Transparent background - no background, border, or shadow
+  &--transparent {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  // No padding variant - removes default padding
+  &--no-padding {
+    padding: 0 !important;
+  }
 }
 
 /* Content styling */

@@ -222,10 +222,13 @@ export class SpectrumWallpaper {
         imageUrl = urlMatch[1];
       }
 
-      // Only try image extraction for actual URLs
-      if (imageUrl.startsWith('http') || imageUrl.startsWith('//') || imageUrl.startsWith('blob:')) {
+      // Only try image extraction for actual URLs (including data URLs)
+      if (imageUrl.startsWith('http') || imageUrl.startsWith('//') || imageUrl.startsWith('blob:') || imageUrl.startsWith('data:')) {
         const img = new Image();
-        img.crossOrigin = 'anonymous';
+        // Only set crossOrigin for external URLs, not for data URLs
+        if (!imageUrl.startsWith('data:')) {
+          img.crossOrigin = 'anonymous';
+        }
         
         img.onload = () => {
           try {
@@ -282,10 +285,13 @@ export class SpectrumWallpaper {
         imageUrl = urlMatch[1];
       }
 
-      // Only try image extraction for actual URLs
-      if (imageUrl.startsWith('http') || imageUrl.startsWith('//') || imageUrl.startsWith('blob:')) {
+      // Only try image extraction for actual URLs (including data URLs)
+      if (imageUrl.startsWith('http') || imageUrl.startsWith('//') || imageUrl.startsWith('blob:') || imageUrl.startsWith('data:')) {
         const img = new Image();
-        img.crossOrigin = 'anonymous';
+        // Only set crossOrigin for external URLs, not for data URLs
+        if (!imageUrl.startsWith('data:')) {
+          img.crossOrigin = 'anonymous';
+        }
         
         img.onload = () => {
           this.debugLog('Image loaded successfully:', imageUrl);

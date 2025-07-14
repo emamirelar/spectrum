@@ -173,7 +173,7 @@ export class SpectrumSearchInput {
       <spectrum-button
         variant={this.searchButtonVariant}
         iconOnly={true}
-        size="base"
+        size="sm"
         leftIcon="search"
         showLeftIcon={true}
         onClick={this.handleSearch}
@@ -185,7 +185,7 @@ export class SpectrumSearchInput {
       <spectrum-button
         variant="ghost"
         iconOnly={true}
-        size="base"
+        size="sm"
         leftIcon="mic"
         showLeftIcon={true}
         onClick={this.handleVoiceInput}

@@ -77,6 +77,15 @@ export const SpectrumApplicationLayout = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumBadge = /*@__PURE__*/ defineContainer<JSX.SpectrumBadge>('spectrum-badge', undefined, [
+  'variant',
+  'size',
+  'text',
+  'circular',
+  'debug'
+]);
+
+
 export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>('spectrum-button', undefined, [
   'debug',
   'variant',
@@ -192,6 +201,7 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'loading',
   'sound',
   'debug',
+  'background',
   'explorationSelected',
   'action',
   'explore',
@@ -279,19 +289,25 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'selectedImages',
   'scrollDirection',
   'previewMode',
-  'frostBackground',
+  'background',
+  'frostControlBar',
   'debug',
+  'primaryActionText',
+  'primaryActionIcon',
+  'primaryActionValue',
   'imageSelected',
   'imageDeselect',
   'imageAdded',
   'imageDeleted',
-  'imagePreview'
+  'imagePreview',
+  'primaryAction'
 ], [
   'imageSelected',
   'imageDeselect',
   'imageAdded',
   'imageDeleted',
-  'imagePreview'
+  'imagePreview',
+  'primaryAction'
 ]);
 
 
@@ -309,10 +325,12 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
 
 export const SpectrumPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumPanel>('spectrum-panel', undefined, [
   'frost',
+  'background',
   'debug',
   'size',
   'width',
-  'height'
+  'height',
+  'noPadding'
 ]);
 
 
@@ -326,15 +344,19 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'addLabel',
   'addIcon',
   'collapsedOffset',
+  'moreContextActions',
+  'debug',
   'expandedChange',
   'searchChange',
   'railAction',
-  'addAction'
+  'addAction',
+  'moreContextAction'
 ], [
   'expandedChange',
   'searchChange',
   'railAction',
-  'addAction'
+  'addAction',
+  'moreContextAction'
 ]);
 
 

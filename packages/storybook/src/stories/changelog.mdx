@@ -14,16 +14,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### 🆕 Added
-- Ready for next release additions...
+- **spectrum-rail**: Added context menu support for the "more" button
+  - **Context Actions**: New `moreContextActions` prop to define custom context menu actions
+  - **Event Handling**: New `moreContextAction` event emitted when context menu actions are triggered
+  - **Debug Support**: New `debug` prop for enhanced development logging
+- **spectrum-context-menu**: Enhanced positioning system with bottom alignment support
+  - **Bottom Positioning**: Added support for `position: 'bottom'` to prevent screen edge clipping
+  - **Smart Positioning**: Improved positioning logic to handle different alignment modes
 
 ### 🔄 Changed
-- Ready for next release changes...
+- **spectrum-rail**: Enhanced "more" button behavior with context menu integration
+  - **Visual Indicators**: More button now shows appropriate icons (more_vert vs chevron_right) based on context menu availability
+  - **Positioning Logic**: Optimized context menu positioning for bottom-aligned buttons
+- **spectrum-context-menu**: Improved CSS positioning to prevent element stretching
+  - **CSS Properties**: Fixed conflicting top/bottom positioning properties
+  - **Render Logic**: Enhanced positioning calculation for proper menu sizing
 
 ### 🐛 Fixed
 - Ready for next release fixes...
 
 ### 📝 Documentation
-- Ready for next release documentation...
+- **spectrum-rail**: Updated component documentation with context menu examples
+- **Storybook Stories**: Added "WithContextMenu" story demonstrating context menu functionality
+- **Dependency Map**: Updated component dependency relationships and integration patterns
 
 ---
 

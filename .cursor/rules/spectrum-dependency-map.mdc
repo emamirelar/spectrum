@@ -27,6 +27,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: spectrum-accordion, spectrum-conversation-panel
   - Purpose: Display tags, selections, or actionable items
 
+- **spectrum-badge**: Status and notification badge component
+  - Dependencies: None (pure component)
+  - Used by: spectrum-image-gallery
+  - Purpose: Display status, counts, notifications, and selection indicators
+
 - **spectrum-toast**: Notification component for user feedback
   - Dependencies: None (pure component)
   - Used by: Standalone notifications and user feedback systems
@@ -35,9 +40,10 @@ This map shows the relationships between Spectrum components. Keep this updated 
 ### Utility Components
 - **spectrum-context-menu**: Contextual menu overlay
   - Dependencies: None (pure component)
-  - Used by: spectrum-collapsible-list
+  - Used by: spectrum-collapsible-list, spectrum-rail
   - Purpose: Provides contextual actions menu
   - Exports: ContextMenuAction interface
+  - Recent Updates: Enhanced positioning system with support for 'bottom' alignment to prevent clipping at screen edges
 
 - **spectrum-wallpaper**: Background theming component
   - Dependencies: None (pure component)
@@ -72,7 +78,7 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Purpose: Single and multiple selection dropdown with search capabilities
 
 - **spectrum-image-gallery**: Flexible image gallery with upload capabilities
-  - Dependencies: spectrum-button
+  - Dependencies: spectrum-button, spectrum-badge
   - Used by: Image management and display applications
   - Purpose: Responsive image gallery with thumbnail navigation, upload, and selection
 
@@ -83,9 +89,10 @@ This map shows the relationships between Spectrum components. Keep this updated 
 
 ### Complex Components (Multiple Internal Dependencies)
 - **spectrum-rail**: Main navigation rail
-  - Dependencies: spectrum-button, spectrum-search-input (via slots), spectrum-collapsible-list (via slots), spectrum-rail-item (via slots)
+  - Dependencies: spectrum-button, spectrum-search-input (via slots), spectrum-collapsible-list (via slots), spectrum-rail-item (via slots), spectrum-context-menu (imports ContextMenuAction interface)
   - Used by: Main navigation component
   - Purpose: Primary navigation with expand/collapse functionality
+  - Recent Updates: Added context menu support for the "more" button with customizable actions and proper positioning
 
 - **spectrum-conversation-panel**: Chat/conversation interface
   - Dependencies: spectrum-accordion, spectrum-button, spectrum-chip
@@ -162,6 +169,7 @@ Level 0 (Foundation):
 Level 1 (Atomic):
 ├── spectrum-button
 ├── spectrum-chip
+├── spectrum-badge
 ├── spectrum-toast
 ├── spectrum-context-menu
 ├── spectrum-wallpaper
@@ -175,11 +183,11 @@ Level 2 (Composed):
 ├── spectrum-rail-item (depends on: spectrum-button)
 ├── spectrum-collapsible-list (depends on: spectrum-context-menu)
 ├── spectrum-select (depends on: spectrum-button)
-├── spectrum-image-gallery (depends on: spectrum-button)
+├── spectrum-image-gallery (depends on: spectrum-button, spectrum-badge)
 └── spectrum-hero (depends on: spectrum-button)
 
 Level 3 (Complex):
-├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item)
+├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item, spectrum-context-menu)
 └── spectrum-conversation-panel (depends on: spectrum-accordion, spectrum-button, spectrum-chip)
 
 Level 4 (Layout Components - Production Ready) ✅:

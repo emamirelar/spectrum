@@ -5,6 +5,8 @@ import { action } from '@storybook/addon-actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
 import type { SpectrumConversationPanel } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-conversation-panel/spectrum-conversation-panel";
+import type { SpectrumWallpaper } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-wallpaper/spectrum-wallpaper";
+import type { SpectrumTheme } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-theme/spectrum-theme";
 
 interface SpectrumConversationPanelArgs {
   messages: string;
@@ -14,6 +16,7 @@ interface SpectrumConversationPanelArgs {
   loading: boolean;
   sound: boolean;
   debug?: boolean;
+  background: 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
 }
 
 const meta = {
@@ -107,7 +110,8 @@ const meta = {
       }
     ]`,
     loading: false,
-    sound: false
+    sound: false,
+    background: 'opaque'
   },
   argTypes: {
     messages: {
@@ -166,6 +170,14 @@ const meta = {
       description: 'Whether to enable debug mode',
       table: {
         type: { summary: 'boolean' }
+      }
+    },
+    background: {
+      control: 'select',
+      description: 'Background level',
+      options: ['opaque', 'partial-frost', 'full-frost', 'transparent'],
+      table: {
+        type: { summary: 'string' }
       }
     }
   },
@@ -797,7 +809,8 @@ export const SourceCitationsWithChips: StoryObj<SpectrumConversationPanelArgs> =
     sources: `[]`,
     loading: false,
     sound: false,
-    debug: false
+    debug: false,
+    background: 'opaque'
   },
   render: (args) => html`
     <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
@@ -1059,7 +1072,8 @@ export const CitationHoverScrollTest: StoryObj<SpectrumConversationPanelArgs> = 
     sources: `[]`,
     loading: false,
     sound: false,
-    debug: true
+    debug: true,
+    background: 'partial-frost'
   },
   render: (args) => html`
     <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
@@ -1154,7 +1168,8 @@ export const SoundSupport: StoryObj<SpectrumConversationPanelArgs> = {
     sources: `[]`,
     loading: false,
     sound: true,
-    debug: false
+    debug: false,
+    background: 'full-frost'
   },
   render: (args) => html`
     <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
@@ -1475,7 +1490,8 @@ export const GroupedCitations: StoryObj<SpectrumConversationPanelArgs> = {
     sources: `[]`,
     loading: false,
     sound: false,
-    debug: true
+    debug: true,
+    background: 'full-frost'
   },
   render: (args) => html`
     <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
@@ -1734,7 +1750,8 @@ export const NineCitationsGrid: StoryObj<SpectrumConversationPanelArgs> = {
     sources: `[]`,
     loading: false,
     sound: false,
-    debug: true
+    debug: true,
+    background: 'transparent'
   },
   render: (args) => html`
     <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
@@ -1849,4 +1866,590 @@ export const NineCitationsGrid: StoryObj<SpectrumConversationPanelArgs> = {
   },
 };
 
+// Background Levels Demo
+export const BackgroundLevels: StoryObj<SpectrumConversationPanelArgs> = {
+  name: 'Background Levels',
+  args: {
+    messages: `[
+      {
+        "id": "msg-001",
+        "message": "What are the different background levels available?",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "id": "msg-002",
+        "message": "The conversation panel now supports four background levels that match the image gallery approach: opaque (default), partial-frost, full-frost, and transparent. These provide different visual effects for various use cases.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "Background System Documentation",
+            "value": "https://example.com/background-system",
+            "snippet": "Complete guide to the four-level background system used across all panel components.",
+            "number": 1
+          }
+        ],
+        "explorations": [
+          {
+            "label": "When should I use each background level?",
+            "value": "When should I use each background level?"
+          },
+          {
+            "label": "How do frost effects work?",
+            "value": "How do frost effects work?"
+          }
+        ]
+      }
+    ]`,
+    conversationtitle: 'Background Levels Demo',
+    actions: `[
+      {
+        "label": "Share",
+        "icon": "share",
+        "value": "share"
+      }
+    ]`,
+    sources: `[]`,
+    loading: false,
+    sound: false,
+    debug: false,
+    background: 'opaque'
+  },
+  render: (args) => html`
+    <spectrum-theme color="#0070d2" auto-load-fonts preload-fonts hide-content-until-ready="false">
+      <div style="padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+        <h2 style="color: white; margin-bottom: 2rem; text-align: center; font-size: 2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+          Background Levels Demo
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; max-width: 1400px; margin: 0 auto;">
+          
+          <!-- Opaque Background -->
+          <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+            <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Opaque (Default)</h3>
+            <spectrum-conversation-panel
+              .messages=${args.messages}
+              .conversationtitle=${args.conversationtitle}
+              .actions=${args.actions}
+              .sources=${args.sources}
+              .loading=${args.loading}
+              .sound=${args.sound}
+              .debug=${args.debug}
+              .background=${'opaque'}
+              @action=${(e: CustomEvent) => action('Action')(e.detail)}
+              @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+              @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+              @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+              @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+            ></spectrum-conversation-panel>
+            <p style="color: white; font-size: 0.875rem; margin-top: 1rem; opacity: 0.9;">
+              <strong>Opaque:</strong> Solid background with no transparency. Best for main content areas.
+            </p>
+          </div>
+          
+          <!-- Partial Frost Background -->
+          <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+            <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Partial Frost</h3>
+            <spectrum-conversation-panel
+              .messages=${args.messages}
+              .conversationtitle=${args.conversationtitle}
+              .actions=${args.actions}
+              .sources=${args.sources}
+              .loading=${args.loading}
+              .sound=${args.sound}
+              .debug=${args.debug}
+              .background=${'partial-frost'}
+              @action=${(e: CustomEvent) => action('Action')(e.detail)}
+              @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+              @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+              @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+              @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+            ></spectrum-conversation-panel>
+            <p style="color: white; font-size: 0.875rem; margin-top: 1rem; opacity: 0.9;">
+              <strong>Partial Frost:</strong> 33% white tint with subtle blur. Good for overlay content.
+            </p>
+          </div>
+          
+          <!-- Full Frost Background -->
+          <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+            <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Full Frost</h3>
+            <spectrum-conversation-panel
+              .messages=${args.messages}
+              .conversationtitle=${args.conversationtitle}
+              .actions=${args.actions}
+              .sources=${args.sources}
+              .loading=${args.loading}
+              .sound=${args.sound}
+              .debug=${args.debug}
+              .background=${'full-frost'}
+              @action=${(e: CustomEvent) => action('Action')(e.detail)}
+              @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+              @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+              @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+              @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+            ></spectrum-conversation-panel>
+            <p style="color: white; font-size: 0.875rem; margin-top: 1rem; opacity: 0.9;">
+              <strong>Full Frost:</strong> 66% white tint with strong blur. Maximum glassmorphism effect.
+            </p>
+          </div>
+          
+          <!-- Transparent Background -->
+          <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+            <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Transparent</h3>
+            <spectrum-conversation-panel
+              .messages=${args.messages}
+              .conversationtitle=${args.conversationtitle}
+              .actions=${args.actions}
+              .sources=${args.sources}
+              .loading=${args.loading}
+              .sound=${args.sound}
+              .debug=${args.debug}
+              .background=${'transparent'}
+              @action=${(e: CustomEvent) => action('Action')(e.detail)}
+              @explorationSelected=${(e: CustomEvent) => action('Exploration Selected')(e.detail)}
+              @explore=${(e: CustomEvent) => action('Explore')(e.detail)}
+              @sourceClick=${(e: CustomEvent) => action('Source Clicked')(e.detail)}
+              @titleChanged=${(e: CustomEvent) => action('Title Changed')(e.detail)}
+            ></spectrum-conversation-panel>
+            <p style="color: white; font-size: 0.875rem; margin-top: 1rem; opacity: 0.9;">
+              <strong>Transparent:</strong> No background, border, or shadow. Content floats over background.
+            </p>
+          </div>
+          
+        </div>
+        
+        <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); max-width: 800px; margin-left: auto; margin-right: auto;">
+          <h3 style="color: white; margin-bottom: 1rem; font-size: 1.25rem;">Background Level Usage Guide</h3>
+          <ul style="color: white; opacity: 0.9; line-height: 1.6;">
+            <li><strong>Opaque:</strong> Main content areas, primary panels, default behavior</li>
+            <li><strong>Partial Frost:</strong> Overlay content, modal dialogs, secondary panels</li>
+            <li><strong>Full Frost:</strong> Hero sections, feature highlights, maximum visual impact</li>
+            <li><strong>Transparent:</strong> Floating content, minimalist designs, content that blends with background</li>
+          </ul>
+        </div>
+      </div>
+    </spectrum-theme>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+          Demonstrates all four background levels available for the conversation panel component.
+          
+          ## Background Levels
+          
+          ### Opaque (Default)
+          - **Usage**: Main content areas, primary panels
+          - **Effect**: Solid background with no transparency
+          - **Best For**: Default behavior, ensuring content readability
+          
+          ### Partial Frost
+          - **Usage**: Overlay content, modal dialogs  
+          - **Effect**: 33% white tint with subtle blur (5px)
+          - **Best For**: Content that needs to stand out while showing some background
+          
+          ### Full Frost
+          - **Usage**: Hero sections, feature highlights
+          - **Effect**: 66% white tint with strong blur (10px)
+          - **Best For**: Maximum glassmorphism effect, premium appearance
+          
+          ### Transparent
+          - **Usage**: Floating content, minimalist designs
+          - **Effect**: No background, border, or shadow
+          - **Best For**: Content that should blend seamlessly with background
+          
+          ## Implementation
+          
+          \`\`\`html
+          <!-- Opaque (default) -->
+          <spectrum-conversation-panel background="opaque">
+            <!-- Content -->
+          </spectrum-conversation-panel>
+          
+          <!-- Partial frost -->
+          <spectrum-conversation-panel background="partial-frost">
+            <!-- Content with subtle frost effect -->
+          </spectrum-conversation-panel>
+          
+          <!-- Full frost -->
+          <spectrum-conversation-panel background="full-frost">
+            <!-- Content with strong frost effect -->
+          </spectrum-conversation-panel>
+          
+          <!-- Transparent -->
+          <spectrum-conversation-panel background="transparent">
+            <!-- Content with no background -->
+          </spectrum-conversation-panel>
+          \`\`\`
+          
+          ## Design Considerations
+          
+          - **Accessibility**: All levels maintain proper contrast ratios
+          - **Performance**: Backdrop blur effects are optimized for smooth performance
+          - **Consistency**: Matches the background system used in image gallery and other panel components
+          - **Responsive**: All effects work consistently across different screen sizes
+          
+          Choose the background level that best fits your use case and design requirements.
+        `,
+      },
+    },
+  },
+};
+
 export type Story = StoryObj<SpectrumConversationPanelArgs>;
+
+// Wallpaper Background Examples
+export const WithWallpaperBackground: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    background: 'partial-frost',
+    conversationtitle: 'Chat with Frost Effect',
+    messages: `[
+      {
+        "id": "msg-001",
+        "message": "Show me the conversation panel with a beautiful background",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "id": "msg-002",
+        "message": "Here's the conversation panel displayed over a dynamic wallpaper background. Notice how the frost effect creates a beautiful glassmorphism appearance that allows the background to show through while maintaining readability of the text content.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "Glassmorphism Design Guide",
+            "value": "https://example.com/glassmorphism",
+            "snippet": "Glassmorphism is a design trend that uses transparency and blur effects to create depth.",
+            "number": 1
+          }
+        ],
+        "explorations": [
+          {
+            "label": "What other background effects are available?",
+            "value": "What other background effects are available?"
+          },
+          {
+            "label": "How does the frost effect work technically?",
+            "value": "How does the frost effect work technically?"
+          }
+        ]
+      }
+    ]`,
+    loading: false,
+    sound: false,
+    debug: false
+  },
+  render: (args) => html`
+    <div style="height: 100vh; width: 100%; position: relative;">
+      <!-- Theme Component with Wallpaper Coordination -->
+      <spectrum-theme
+        wait-for-wallpaper="true"
+        theme="material-auto"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+      </spectrum-theme>
+      
+      <!-- Wallpaper Background -->
+      <spectrum-wallpaper 
+        background="url(https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=1200&h=800&fit=crop&crop=entropy&cs=tinysrgb)"
+        background-size="cover"
+        background-position="center"
+        signal-ready="true"
+        apply-to-root="true"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+      </spectrum-wallpaper>
+      
+      <!-- Conversation Panel Overlay -->
+      <div style="position: absolute; top: 2rem; left: 2rem; right: 2rem; bottom: 2rem; z-index: 2;">
+        <spectrum-conversation-panel
+          messages=${args.messages}
+          conversationtitle=${args.conversationtitle}
+          actions=${ifDefined(args.actions)}
+          sources=${ifDefined(args.sources)}
+          ?loading=${args.loading}
+          ?sound=${args.sound}
+          ?debug=${args.debug}
+          background=${args.background}
+          @explorationSelected=${action('explorationSelected')}
+          @action=${action('action')}
+          @explore=${action('explore')}
+          @sourceClick=${action('sourceClick')}
+          @titleChanged=${action('titleChanged')}
+        ></spectrum-conversation-panel>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Conversation panel with coordinated theme and wallpaper background, demonstrating the frost effect with proper color extraction and theming.',
+      },
+    },
+  },
+};
+
+// Background Effect Comparison on Wallpaper
+export const BackgroundEffectsOnWallpaper: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    conversationtitle: 'Background Effects Demo',
+    messages: `[
+      {
+        "id": "msg-001",
+        "message": "Compare different background effects",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "id": "msg-002",
+        "message": "This demo shows how different background effects look over a wallpaper. Switch between opaque, partial-frost, full-frost, and transparent to see the differences.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z"
+      }
+    ]`,
+    loading: false,
+    sound: false,
+    debug: false,
+    background: 'partial-frost'
+  },
+  render: (args) => html`
+    <div style="height: 100vh; width: 100%; position: relative;">
+      <!-- Theme Component with Wallpaper Coordination -->
+      <spectrum-theme
+        wait-for-wallpaper="true"
+        theme="material-auto"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+      </spectrum-theme>
+      
+      <!-- Wallpaper Background -->
+      <spectrum-wallpaper 
+        background="url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&crop=entropy&cs=tinysrgb)"
+        background-size="cover"
+        background-position="center"
+        signal-ready="true"
+        apply-to-root="true"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+      </spectrum-wallpaper>
+      
+      <!-- Grid of panels with different background effects -->
+      <div style="position: absolute; top: 1rem; left: 1rem; right: 1rem; bottom: 1rem; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 1rem;">
+        
+        <!-- Opaque Background -->
+        <spectrum-conversation-panel
+          messages='[{"id": "1", "message": "Opaque Background - solid panel that completely blocks the background image", "sender": "response", "timestamp": "2024-03-20T10:00:00Z"}]'
+          conversationtitle="Opaque"
+          background="opaque"
+          style="grid-area: 1 / 1;"
+        ></spectrum-conversation-panel>
+        
+        <!-- Partial Frost Background -->
+        <spectrum-conversation-panel
+          messages='[{"id": "2", "message": "Partial Frost Effect - 33% tint with subtle blur for elegant glassmorphism", "sender": "response", "timestamp": "2024-03-20T10:00:00Z"}]'
+          conversationtitle="Partial Frost"
+          background="partial-frost"
+          style="grid-area: 1 / 2;"
+        ></spectrum-conversation-panel>
+        
+        <!-- Full Frost Background -->
+        <spectrum-conversation-panel
+          messages='[{"id": "3", "message": "Full Frost Effect - 66% tint with strong blur for enhanced readability", "sender": "response", "timestamp": "2024-03-20T10:00:00Z"}]'
+          conversationtitle="Full Frost"
+          background="full-frost"
+          style="grid-area: 2 / 1;"
+        ></spectrum-conversation-panel>
+        
+        <!-- Transparent Background -->
+        <spectrum-conversation-panel
+          messages='[{"id": "4", "message": "Transparent Background - no panel styling, content appears directly over the background", "sender": "response", "timestamp": "2024-03-20T10:00:00Z"}]'
+          conversationtitle="Transparent"
+          background="transparent"
+          style="grid-area: 2 / 2;"
+        ></spectrum-conversation-panel>
+        
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Side-by-side comparison of all background effects with coordinated theme and wallpaper color extraction from a mountain landscape.',
+      },
+    },
+  },
+};
+
+// Mobile Wallpaper Example
+export const MobileWithWallpaper: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    background: 'full-frost',
+    conversationtitle: 'Mobile Chat',
+    messages: `[
+      {
+        "id": "msg-001",
+        "message": "How does this look on mobile?",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "id": "msg-002",
+        "message": "The conversation panel adapts beautifully to mobile viewports while maintaining the frost effect over the dynamic wallpaper background. The source chips <cite>1</cite> work perfectly on touch devices.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "Mobile UX Best Practices",
+            "value": "https://example.com/mobile-ux",
+            "snippet": "Designing effective mobile interfaces requires careful attention to touch targets and readability.",
+            "number": 1
+          }
+        ]
+      }
+    ]`,
+    loading: false,
+    sound: false,
+    debug: false
+  },
+  render: (args) => html`
+    <div style="height: 100vh; width: 375px; max-width: 100%; margin: 0 auto; position: relative; border: 1px solid #ccc; border-radius: 8px; overflow: hidden;">
+      <!-- Theme Component with Wallpaper Coordination -->
+      <spectrum-theme
+        wait-for-wallpaper="true"
+        theme="material-auto"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+      </spectrum-theme>
+      
+      <!-- Wallpaper Background -->
+      <spectrum-wallpaper 
+        background="url(https://images.unsplash.com/photo-1551524164-6cf2ac8aee8c?w=600&h=800&fit=crop&crop=entropy&cs=tinysrgb)"
+        background-size="cover"
+        background-position="center"
+        signal-ready="true"
+        apply-to-root="true"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"
+        debug="false">
+      </spectrum-wallpaper>
+      
+      <!-- Conversation Panel Overlay -->
+      <div style="position: absolute; top: 0.5rem; left: 0.5rem; right: 0.5rem; bottom: 0.5rem; z-index: 2;">
+        <spectrum-conversation-panel
+          messages=${args.messages}
+          conversationtitle=${args.conversationtitle}
+          actions=${ifDefined(args.actions)}
+          sources=${ifDefined(args.sources)}
+          ?loading=${args.loading}
+          ?sound=${args.sound}
+          ?debug=${args.debug}
+          background=${args.background}
+          @explorationSelected=${action('explorationSelected')}
+          @action=${action('action')}
+          @explore=${action('explore')}
+          @sourceClick=${action('sourceClick')}
+          @titleChanged=${action('titleChanged')}
+        ></spectrum-conversation-panel>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Mobile-optimized view with coordinated theme and wallpaper color extraction from a city skyline background.',
+      },
+    },
+  },
+};
+
+// Urban Landscape Example
+export const UrbanLandscapeWallpaper: StoryObj<SpectrumConversationPanelArgs> = {
+  args: {
+    background: 'partial-frost',
+    conversationtitle: 'Urban Discussion',
+    messages: `[
+      {
+        "id": "msg-001",
+        "message": "Tell me about modern urban architecture",
+        "sender": "request",
+        "timestamp": "2024-03-20T10:00:00Z"
+      },
+      {
+        "id": "msg-002",
+        "message": "Modern urban architecture emphasizes sustainable design, mixed-use development, and integration with public transportation. Cities are increasingly adopting green building standards and smart infrastructure <cite>1</cite> to create more livable environments.",
+        "sender": "response",
+        "timestamp": "2024-03-20T10:00:05Z",
+        "sources": [
+          {
+            "label": "Smart Cities Initiative",
+            "value": "https://example.com/smart-cities",
+            "snippet": "Comprehensive guide to modern urban planning and sustainable architecture practices.",
+            "number": 1
+          }
+        ],
+        "explorations": [
+          {
+            "label": "What are green building standards?",
+            "value": "What are green building standards?"
+          },
+          {
+            "label": "How do smart cities use technology?",
+            "value": "How do smart cities use technology?"
+          }
+        ]
+      }
+    ]`,
+    loading: false,
+    sound: false,
+    debug: false
+  },
+  render: (args) => html`
+    <div style="height: 100vh; width: 100%; position: relative;">
+      <!-- Theme Component with Wallpaper Coordination -->
+      <spectrum-theme
+        wait-for-wallpaper="true"
+        theme="material-auto"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+      </spectrum-theme>
+      
+      <!-- Urban Wallpaper Background -->
+      <spectrum-wallpaper 
+        background="url(https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&h=800&fit=crop&crop=entropy&cs=tinysrgb)"
+        background-size="cover"
+        background-position="center"
+        signal-ready="true"
+        apply-to-root="true"
+        debug="false"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+      </spectrum-wallpaper>
+      
+      <!-- Conversation Panel Overlay -->
+      <div style="position: absolute; top: 3rem; left: 3rem; right: 3rem; bottom: 3rem; z-index: 2;">
+        <spectrum-conversation-panel
+          messages=${args.messages}
+          conversationtitle=${args.conversationtitle}
+          actions=${ifDefined(args.actions)}
+          sources=${ifDefined(args.sources)}
+          ?loading=${args.loading}
+          ?sound=${args.sound}
+          ?debug=${args.debug}
+          background=${args.background}
+          @explorationSelected=${action('explorationSelected')}
+          @action=${action('action')}
+          @explore=${action('explore')}
+          @sourceClick=${action('sourceClick')}
+          @titleChanged=${action('titleChanged')}
+        ></spectrum-conversation-panel>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Professional discussion with coordinated theme and wallpaper color extraction from an urban cityscape background.',
+      },
+    },
+  },
+};

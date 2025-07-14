@@ -78,6 +78,18 @@ spectrum-conversation-panel .conversation-panel-host {
   height: 100%;
 }
 
+/* Conversation panel container - remove any padding/margin since spectrum-panel handles it */
+spectrum-conversation-panel .conversation-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--conversation-panel-spacing);
+  height: 100%;
+  width: 100%;
+  /* Remove any padding/margin since spectrum-panel handles container spacing */
+  padding: 0;
+  margin: 0;
+}
+
 /* Material Icons */
 spectrum-conversation-panel .material-symbols-outlined {
   font-variation-settings: 
@@ -90,33 +102,17 @@ spectrum-conversation-panel .material-symbols-outlined {
 }
 
 
-/* Utility Classes */
-spectrum-conversation-panel .frost {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(6px);
-}
+/* Background Effects - four-level system matching image gallery */
 
 /* Panel and Message Styles */
-spectrum-conversation-panel .panel {
-  flex-grow: 2;
-  border-radius: var(--conversation-panel-border-radius-x-large);
-  border: 1px solid var(--conversation-panel-outline);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  padding: 0;
-  will-change: transform;
-  overflow: hidden;
-  position: relative;
-  min-height: 0;
-  height: 100%;
-}
+/* Panel styling now handled by spectrum-panel component */
+
+/* Remove duplicate panel styles - now handled by spectrum-panel */
 
 spectrum-conversation-panel .conversation-title {
-  // --adjusted-spacing: calc(var(--conversation-panel-spacing) / 2);
-  // margin: var(--conversation-panel-spacing) var(--adjusted-spacing);
-  // padding: var(--adjusted-spacing);
-  padding: 0 var(--conversation-panel-spacing-large) 0 var(--conversation-panel-spacing-large);
+  // Remove padding since spectrum-panel now handles container padding
+  padding: 0;
+  margin: 0;
   font-size: var(--conversation-panel-font-size-x-large);
   color: var(--conversation-panel-on-surface);
   flex-shrink: 1;

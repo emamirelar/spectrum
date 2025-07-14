@@ -1,4 +1,30 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Method, Watch } from '@stencil/core';
+import { BackgroundLevel } from '../spectrum-panel/spectrum-panel';
+
+export interface ContentCard {
+  title: string;
+  subtitle: string;
+  snippet: string;
+  url: string;
+  number: number;
+}
+
+export interface ExplorationItem {
+  label: string;
+  icon: string;
+  action: string;
+}
+
+export interface Message {
+  id: string;
+  isRequest: boolean;
+  content: string;
+  timestamp: string;
+  sources?: ContentCard[];
+  explorations?: ExplorationItem[];
+  title?: string;
+  isStepwise?: boolean;
+}
 
 @Component({
   tag: 'spectrum-conversation-panel',
@@ -53,6 +79,11 @@ export class SpectrumConversationPanel {
    * Whether to enable debug logging
    */
   @Prop() debug: boolean = false;
+
+  /**
+   * Background level for the panel
+   */
+  @Prop() background: BackgroundLevel = 'opaque';
 
   @State() explorationsExpanded: boolean = false;
   @State() expandedMessageId: string | null = null;
@@ -1266,7 +1297,11 @@ export class SpectrumConversationPanel {
   render() {
     return (
       <Host class="conversation-panel-host">
-          <div class="panel frost">
+          <spectrum-panel 
+            background={this.background}
+            debug={this.debug}
+            size="full"
+          >
               <h2 
                 class="conversation-title"
                 contentEditable={true}
@@ -1282,7 +1317,7 @@ export class SpectrumConversationPanel {
                 {this.conversationtitle}
               </h2>
               {this.renderMessages()}
-          </div>
+          </spectrum-panel>
           
           {/* Desktop hover/click overlay for source chips */}
           {(this.hoveredSourceChip || this.clickedSourceChip) && this.renderSourceHoverOverlay()}

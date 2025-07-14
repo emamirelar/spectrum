@@ -149,6 +149,240 @@ Use \`preload-colors="true"\` and \`signal-ready="true"\` for complex applicatio
 
 export default meta;
 
+export const Base64ImageBackground: StoryObj<SpectrumWallpaper> = {
+  name: 'Base64 Image Background',
+  args: {
+    background: '',
+    showSwatches: true,
+    debug: true,
+  },
+  render: (args) => {
+    const container = document.createElement('div');
+    container.innerHTML = `
+      <spectrum-wallpaper 
+        background="" 
+        show-swatches="${args.showSwatches}" 
+        debug="${args.debug}">
+        <div style="background: rgba(255,255,255,0.9); padding: 2rem; border-radius: 0.5rem; margin: 2rem; max-width: 600px; backdrop-filter: blur(10px);">
+          <h2 style="color: var(--spectrum-color-primary, #0070d2); margin-top: 0;">Loading Base64 Image...</h2>
+          <p>Reading base64.txt file and passing directly to component</p>
+          <div style="background: #e3f2fd; border: 1px solid #90caf9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+            <strong>🧪 Testing Component Handling:</strong>
+            <p style="margin: 0.5rem 0 0 0;">This story loads base64.txt and passes the content directly to the component without any parsing or conversion.</p>
+          </div>
+        </div>
+      </spectrum-wallpaper>
+    `;
+    
+    const wallpaperElement = container.querySelector('spectrum-wallpaper');
+    const contentDiv = wallpaperElement?.querySelector('div');
+    
+    if (!wallpaperElement || !contentDiv) {
+      console.error('Failed to find required DOM elements');
+      return container;
+    }
+    
+    // Load base64 content from file and pass directly to component
+    fetch('/base64.txt')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(base64Content => {
+        // Pass the base64 content wrapped in url() for CSS background format
+        const backgroundValue = `url(${base64Content.trim()})`;
+        wallpaperElement.setAttribute('background', backgroundValue);
+        
+        // Update the content to show success
+        contentDiv.innerHTML = `
+          <h2 style="color: var(--spectrum-color-primary, #0070d2); margin-top: 0;">✅ Base64 Data Loaded</h2>
+          <p>Raw content from base64.txt passed directly to component</p>
+          <div style="background: #e8f5e8; border: 1px solid #81c784; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+            <strong>✅ Component Test:</strong>
+            <p style="margin: 0.5rem 0 0 0;">The spectrum-wallpaper component should now handle the base64 data and extract colors automatically.</p>
+          </div>
+          <div style="background: #f8f9fa; padding: 1rem; border-radius: 4px; margin: 1rem 0; font-size: 0.85rem;">
+            <strong>Data Preview:</strong><br>
+            <code style="word-break: break-all;">${base64Content.trim().substring(0, 100)}...</code>
+          </div>
+        `;
+      })
+      .catch(error => {
+        console.error('Failed to load base64.txt:', error);
+        
+        contentDiv.innerHTML = `
+          <h2 style="color: #d32f2f; margin-top: 0;">❌ Failed to Load Base64 Data</h2>
+          <p>Error: ${error.message}</p>
+          <div style="background: #ffebee; border: 1px solid #f44336; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+            <strong>Troubleshooting:</strong>
+            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+              <li>Ensure base64.txt is in the storybook public directory</li>
+              <li>Check that the file is accessible from the web server</li>
+              <li>Verify the file exists and has content</li>
+            </ul>
+          </div>
+        `;
+      });
+    
+    return container;
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+# Base64 Image Background
+
+Demonstrates loading base64 data from a file and passing it directly to the spectrum-wallpaper component for processing.
+
+## Test Objectives
+
+🧪 **Component Handling**: Test that the web component can properly handle base64 image data  
+🎨 **Color Extraction**: Verify automatic color extraction from base64 images  
+🔧 **Data Processing**: Ensure the component handles file-loaded base64 content correctly  
+
+## Implementation
+
+This story:
+1. **Loads** base64.txt file content using fetch
+2. **Passes** raw content directly to the component's background property
+3. **Tests** that the component handles the data without any preprocessing
+4. **Verifies** automatic color extraction and theme generation
+
+## Benefits of This Approach
+
+✅ **Real-world Testing**: Simulates loading image data from external sources  
+✅ **Component Validation**: Tests the component's built-in data handling  
+✅ **No Preprocessing**: Ensures component robustness with raw data  
+✅ **Dynamic Loading**: Demonstrates runtime data loading capabilities  
+
+The component should automatically detect the base64 format and extract colors for Material Design 3 theming.
+        `
+      }
+    }
+  }
+};
+
+export const Base64ImageCheck: StoryObj<SpectrumWallpaper> = {
+  name: 'Base64 Image Check',
+  render: (args) => {
+    const container = document.createElement('div');
+    container.style.padding = '2rem';
+    container.style.maxWidth = '800px';
+    container.innerHTML = `
+      <h2 style="margin-bottom: 1rem; color: var(--spectrum-color-primary, #0070d2);">Base64 Image Check</h2>
+      <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #666;">
+        This story loads base64.txt and displays the image directly in an HTML image tag to verify the data is correct.
+      </p>
+      
+      <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 0.5rem; background: #f9f9f9;">
+        <h3 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Image Preview:</h3>
+        <div id="loading-message" style="padding: 1rem; text-align: center; color: #666;">
+          Loading base64.txt file...
+        </div>
+        <img 
+          id="base64-image"
+          style="display: none; max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 0.25rem;"
+          alt="Base64 Test Image"
+        />
+        <div id="error-message" style="display: none; padding: 2rem; text-align: center; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 0.25rem; color: #856404;">
+          <strong>⚠️ Image failed to load</strong><br>
+          <span style="font-size: 0.8rem;">Check that the base64 data is properly formatted and complete</span>
+        </div>
+      </div>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #e8f4f8; border-radius: 0.5rem; font-size: 0.85rem;">
+        <strong>Instructions:</strong><br>
+        1. This story automatically loads base64.txt from the same directory<br>
+        2. The image should display above if the data is valid<br>
+        3. If it works here, you can use it in the wallpaper component<br>
+        4. Check browser console for any loading errors
+      </div>
+    `;
+    
+    const loadingMessage = container.querySelector('#loading-message') as HTMLElement;
+    const imageElement = container.querySelector('#base64-image') as HTMLImageElement;
+    const errorMessage = container.querySelector('#error-message') as HTMLElement;
+    
+    if (!loadingMessage || !imageElement || !errorMessage) {
+      console.error('Failed to find required DOM elements');
+      return container;
+    }
+    
+    // Load base64 content from file
+    fetch('/base64.txt')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(base64Content => {
+        const trimmedContent = base64Content.trim();
+        
+        // Hide loading message
+        loadingMessage.style.display = 'none';
+        
+        // Set up image error handling
+        imageElement.onerror = () => {
+          imageElement.style.display = 'none';
+          errorMessage.style.display = 'block';
+        };
+        
+        // Set up image success handling
+        imageElement.onload = () => {
+          console.log('✅ Base64 image loaded successfully');
+        };
+        
+        // Set the image source with the loaded base64 content
+        imageElement.src = trimmedContent;
+        imageElement.style.display = 'block';
+        
+        console.log('📁 Loaded base64.txt content:', trimmedContent.substring(0, 50) + '...');
+      })
+      .catch(error => {
+        console.error('❌ Failed to load base64.txt:', error);
+        
+        loadingMessage.style.display = 'none';
+        errorMessage.innerHTML = `
+          <strong>❌ Failed to load base64.txt</strong><br>
+          <span style="font-size: 0.8rem;">Error: ${error.message}</span><br>
+          <span style="font-size: 0.8rem;">Make sure base64.txt exists in the storybook public directory</span>
+        `;
+        errorMessage.style.display = 'block';
+      });
+    
+    return container;
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+# Base64 Image Check
+
+A simple test story that displays the base64 image directly in an HTML \`<img>\` tag to verify the base64 data is working correctly.
+
+## How to Use
+
+1. **Copy Base64 Data**: Copy the content from \`base64.txt\` file
+2. **Replace Placeholder**: Replace \`PASTE_BASE64_CONTENT_HERE\` with your base64 data
+3. **Check Display**: The image should display if the base64 data is valid
+4. **Verify Format**: Ensure the base64 data doesn't include the \`data:image/jpeg;base64,\` prefix
+
+## Troubleshooting
+
+- **Image not showing**: Check that base64 data is complete and properly formatted
+- **Console errors**: Look for invalid character or truncated data errors
+- **File size**: Large base64 strings (>2MB) may cause performance issues
+
+This is a testing utility to validate base64 image data before using it in the wallpaper component.
+        `
+      }
+    }
+  }
+};
+
 export const Default: StoryObj<SpectrumWallpaper> = {
   name: 'Basic Image Background',
   parameters: {

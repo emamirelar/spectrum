@@ -5,15 +5,21 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
-import { ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
+export { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
-export { ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export namespace Components {
     interface SpectrumAccordion {
@@ -237,6 +243,33 @@ export namespace Components {
           * @default true
          */
         "showHeaderUtility": boolean;
+    }
+    interface SpectrumBadge {
+        /**
+          * Whether the badge should be circular (for single characters/icons)
+          * @default false
+         */
+        "circular": boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * The size of the badge
+          * @default 'medium'
+         */
+        "size": BadgeSize;
+        /**
+          * The text content of the badge
+          * @default ''
+         */
+        "text": string;
+        /**
+          * The variant/color of the badge
+          * @default 'primary'
+         */
+        "variant": BadgeVariant;
     }
     /**
      * Spectrum Button Component
@@ -538,6 +571,11 @@ export namespace Components {
          */
         "actions": string;
         /**
+          * Background level for the panel
+          * @default 'opaque'
+         */
+        "background": BackgroundLevel;
+        /**
           * The title to display in the conversation panel Default: null
           * @default 'No title provided'
          */
@@ -804,13 +842,17 @@ export namespace Components {
          */
         "allowUrlInput": boolean;
         /**
+          * @default 'opaque'
+         */
+        "background": BackgroundLevel;
+        /**
           * @default false
          */
         "debug": boolean;
         /**
-          * @default false
+          * @default 'no'
          */
-        "frostBackground": boolean;
+        "frostControlBar": FrostLevel;
         /**
           * @default []
          */
@@ -819,6 +861,18 @@ export namespace Components {
           * @default false
          */
         "previewMode": boolean;
+        /**
+          * @default ''
+         */
+        "primaryActionIcon": string;
+        /**
+          * @default ''
+         */
+        "primaryActionText": string;
+        /**
+          * @default ''
+         */
+        "primaryActionValue": string;
         /**
           * @default 'vertical'
          */
@@ -882,12 +936,18 @@ export namespace Components {
     }
     interface SpectrumPanel {
         /**
+          * Background level for the panel
+          * @default 'opaque'
+         */
+        "background": BackgroundLevel1;
+        /**
           * Whether to enable debug logging
           * @default false
          */
         "debug": boolean;
         /**
-          * Whether to apply frost effect (translucent background with blur) Default: false
+          * Whether to apply frost effect (translucent background with blur)
+          * @deprecated Use background property instead
           * @default false
          */
         "frost": boolean;
@@ -895,6 +955,11 @@ export namespace Components {
           * Custom height for the panel Can be any valid CSS height value (e.g., '200px', '100vh', 'auto')
          */
         "height"?: string;
+        /**
+          * Whether to remove the default padding from the panel Useful when the content needs to extend to the panel edges
+          * @default false
+         */
+        "noPadding": boolean;
         /**
           * Size preset for the panel Default: 'full' (occupies all available space)
           * @default 'full'
@@ -914,6 +979,7 @@ export namespace Components {
      * - Integrated search functionality
      * - Configurable add button with custom icon and label
      * - Flexible width and positioning options
+     * - Context menu support for the "more" button
      */
     interface SpectrumRail {
         /**
@@ -937,6 +1003,11 @@ export namespace Components {
          */
         "collapsedOffset": string;
         /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
           * Expanded width for the rail (with units like px, rem, etc.)
           * @default 280
          */
@@ -946,6 +1017,11 @@ export namespace Components {
           * @default false
          */
         "initialExpanded": boolean;
+        /**
+          * Context menu actions for the "more" button
+          * @default []
+         */
+        "moreContextActions": ContextMenuAction[];
         /**
           * More section icon (displayed in both states)
           * @default 'settings'
@@ -1555,6 +1631,12 @@ declare global {
         prototype: HTMLSpectrumApplicationLayoutElement;
         new (): HTMLSpectrumApplicationLayoutElement;
     };
+    interface HTMLSpectrumBadgeElement extends Components.SpectrumBadge, HTMLStencilElement {
+    }
+    var HTMLSpectrumBadgeElement: {
+        prototype: HTMLSpectrumBadgeElement;
+        new (): HTMLSpectrumBadgeElement;
+    };
     interface HTMLSpectrumButtonElementEventMap {
         "buttonAction": { action?: string; label: string };
     }
@@ -1736,6 +1818,7 @@ declare global {
         "imageAdded": ImageAddedEvent;
         "imageDeleted": ImageDeletedEvent;
         "imagePreview": ImageConfig;
+        "primaryAction": { action: string; selectedImages: ImageConfig[]; selectedIds: string[]; count: number };
     }
     interface HTMLSpectrumImageGalleryElement extends Components.SpectrumImageGallery, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumImageGalleryElementEventMap>(type: K, listener: (this: HTMLSpectrumImageGalleryElement, ev: SpectrumImageGalleryCustomEvent<HTMLSpectrumImageGalleryElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1782,6 +1865,7 @@ declare global {
         "searchChange": { action: string; value: string };
         "railAction": { action: string; id: string };
         "addAction": { action: string };
+        "moreContextAction": { action: string; label: string; id: string };
     }
     /**
      * Spectrum Rail Component
@@ -1792,6 +1876,7 @@ declare global {
      * - Integrated search functionality
      * - Configurable add button with custom icon and label
      * - Flexible width and positioning options
+     * - Context menu support for the "more" button
      */
     interface HTMLSpectrumRailElement extends Components.SpectrumRail, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumRailElementEventMap>(type: K, listener: (this: HTMLSpectrumRailElement, ev: SpectrumRailCustomEvent<HTMLSpectrumRailElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1935,6 +2020,7 @@ declare global {
         "spectrum-accordion": HTMLSpectrumAccordionElement;
         "spectrum-app-layout": HTMLSpectrumAppLayoutElement;
         "spectrum-application-layout": HTMLSpectrumApplicationLayoutElement;
+        "spectrum-badge": HTMLSpectrumBadgeElement;
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-chip": HTMLSpectrumChipElement;
         "spectrum-cluster": HTMLSpectrumClusterElement;
@@ -2192,6 +2278,33 @@ declare namespace LocalJSX {
           * @default true
          */
         "showHeaderUtility"?: boolean;
+    }
+    interface SpectrumBadge {
+        /**
+          * Whether the badge should be circular (for single characters/icons)
+          * @default false
+         */
+        "circular"?: boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * The size of the badge
+          * @default 'medium'
+         */
+        "size"?: BadgeSize;
+        /**
+          * The text content of the badge
+          * @default ''
+         */
+        "text"?: string;
+        /**
+          * The variant/color of the badge
+          * @default 'primary'
+         */
+        "variant"?: BadgeVariant;
     }
     /**
      * Spectrum Button Component
@@ -2516,6 +2629,11 @@ declare namespace LocalJSX {
          */
         "actions"?: string;
         /**
+          * Background level for the panel
+          * @default 'opaque'
+         */
+        "background"?: BackgroundLevel;
+        /**
           * The title to display in the conversation panel Default: null
           * @default 'No title provided'
          */
@@ -2791,13 +2909,17 @@ declare namespace LocalJSX {
          */
         "allowUrlInput"?: boolean;
         /**
+          * @default 'opaque'
+         */
+        "background"?: BackgroundLevel;
+        /**
           * @default false
          */
         "debug"?: boolean;
         /**
-          * @default false
+          * @default 'no'
          */
-        "frostBackground"?: boolean;
+        "frostControlBar"?: FrostLevel;
         /**
           * @default []
          */
@@ -2807,10 +2929,23 @@ declare namespace LocalJSX {
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onImagePreview"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onImageSelected"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
+        "onPrimaryAction"?: (event: SpectrumImageGalleryCustomEvent<{ action: string; selectedImages: ImageConfig[]; selectedIds: string[]; count: number }>) => void;
         /**
           * @default false
          */
         "previewMode"?: boolean;
+        /**
+          * @default ''
+         */
+        "primaryActionIcon"?: string;
+        /**
+          * @default ''
+         */
+        "primaryActionText"?: string;
+        /**
+          * @default ''
+         */
+        "primaryActionValue"?: string;
         /**
           * @default 'vertical'
          */
@@ -2880,12 +3015,18 @@ declare namespace LocalJSX {
     }
     interface SpectrumPanel {
         /**
+          * Background level for the panel
+          * @default 'opaque'
+         */
+        "background"?: BackgroundLevel1;
+        /**
           * Whether to enable debug logging
           * @default false
          */
         "debug"?: boolean;
         /**
-          * Whether to apply frost effect (translucent background with blur) Default: false
+          * Whether to apply frost effect (translucent background with blur)
+          * @deprecated Use background property instead
           * @default false
          */
         "frost"?: boolean;
@@ -2893,6 +3034,11 @@ declare namespace LocalJSX {
           * Custom height for the panel Can be any valid CSS height value (e.g., '200px', '100vh', 'auto')
          */
         "height"?: string;
+        /**
+          * Whether to remove the default padding from the panel Useful when the content needs to extend to the panel edges
+          * @default false
+         */
+        "noPadding"?: boolean;
         /**
           * Size preset for the panel Default: 'full' (occupies all available space)
           * @default 'full'
@@ -2912,6 +3058,7 @@ declare namespace LocalJSX {
      * - Integrated search functionality
      * - Configurable add button with custom icon and label
      * - Flexible width and positioning options
+     * - Context menu support for the "more" button
      */
     interface SpectrumRail {
         /**
@@ -2935,6 +3082,11 @@ declare namespace LocalJSX {
          */
         "collapsedOffset"?: string;
         /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
           * Expanded width for the rail (with units like px, rem, etc.)
           * @default 280
          */
@@ -2944,6 +3096,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "initialExpanded"?: boolean;
+        /**
+          * Context menu actions for the "more" button
+          * @default []
+         */
+        "moreContextActions"?: ContextMenuAction[];
         /**
           * More section icon (displayed in both states)
           * @default 'settings'
@@ -2962,6 +3119,10 @@ declare namespace LocalJSX {
           * Emits when the rail changes expanded state
          */
         "onExpandedChange"?: (event: SpectrumRailCustomEvent<{ action: string; expanded: boolean }>) => void;
+        /**
+          * Emits when a context menu action is triggered
+         */
+        "onMoreContextAction"?: (event: SpectrumRailCustomEvent<{ action: string; label: string; id: string }>) => void;
         /**
           * Emits when a rail action is triggered
          */
@@ -3466,6 +3627,7 @@ declare namespace LocalJSX {
         "spectrum-accordion": SpectrumAccordion;
         "spectrum-app-layout": SpectrumAppLayout;
         "spectrum-application-layout": SpectrumApplicationLayout;
+        "spectrum-badge": SpectrumBadge;
         "spectrum-button": SpectrumButton;
         "spectrum-chip": SpectrumChip;
         "spectrum-cluster": SpectrumCluster;
@@ -3503,6 +3665,7 @@ declare module "@stencil/core" {
              */
             "spectrum-app-layout": LocalJSX.SpectrumAppLayout & JSXBase.HTMLAttributes<HTMLSpectrumAppLayoutElement>;
             "spectrum-application-layout": LocalJSX.SpectrumApplicationLayout & JSXBase.HTMLAttributes<HTMLSpectrumApplicationLayoutElement>;
+            "spectrum-badge": LocalJSX.SpectrumBadge & JSXBase.HTMLAttributes<HTMLSpectrumBadgeElement>;
             /**
              * Spectrum Button Component
              * A versatile button component with multiple variants, sizes, and states.
@@ -3564,6 +3727,7 @@ declare module "@stencil/core" {
              * - Integrated search functionality
              * - Configurable add button with custom icon and label
              * - Flexible width and positioning options
+             * - Context menu support for the "more" button
              */
             "spectrum-rail": LocalJSX.SpectrumRail & JSXBase.HTMLAttributes<HTMLSpectrumRailElement>;
             "spectrum-rail-alternative": LocalJSX.SpectrumRailAlternative & JSXBase.HTMLAttributes<HTMLSpectrumRailAlternativeElement>;

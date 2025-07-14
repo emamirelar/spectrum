@@ -12,6 +12,8 @@ interface SpectrumRailArgs {
   collapsedOffset?: string;
   addLabel?: string;
   addIcon?: string;
+  moreContextActions?: any[];
+  debug?: boolean;
 }
 
 // Define interface for the rail element to help TypeScript understand the setExpanded method
@@ -31,7 +33,9 @@ const meta = {
     showAddButton: true,
     collapsedOffset: '0px',
     addLabel: 'Add new',
-    addIcon: 'add'
+    addIcon: 'add',
+    moreContextActions: [],
+    debug: false
   },
   argTypes: {
     appName: { 
@@ -104,6 +108,22 @@ const meta = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'add' }
+      }
+    },
+    moreContextActions: {
+      control: 'object',
+      description: 'Context menu actions for the "more" button',
+      table: {
+        type: { summary: 'ContextMenuAction[]' },
+        defaultValue: { summary: '[]' }
+      }
+    },
+    debug: {
+      control: 'boolean',
+      description: 'Enable debug logging for the rail component',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
       }
     }
   },
@@ -209,6 +229,14 @@ const pinnedContextActions = [
   { label: 'Unpin', icon: 'push_pin', action: 'unpin', id: 'unpin-action' },
   { label: 'Rename', icon: 'edit', action: 'rename', id: 'rename-action' },
   { label: 'Delete', icon: 'delete', action: 'delete', id: 'delete-action' }
+];
+
+// Context actions for More button
+const moreContextActions = [
+  { label: 'Settings', icon: 'settings', action: 'settings', id: 'settings-action' },
+  { label: 'Help & Support', icon: 'help', action: 'help', id: 'help-action' },
+  { label: 'Feedback', icon: 'feedback', action: 'feedback', id: 'feedback-action' },
+  { label: 'About', icon: 'info', action: 'about', id: 'about-action' }
 ];
 
 // Sample data for the collapsible list with Pinned items
@@ -879,6 +907,85 @@ export const CollapsedOffset: Story = {
           @contextAction=${handleContextAction}
         ></spectrum-collapsible-list>
       </spectrum-rail>
+    </div>
+  `,
+};
+
+// New story to demonstrate context menu functionality
+export const WithContextMenu: Story = {
+  args: {
+    appName: 'Context Menu Demo',
+    expandedWidth: 320,
+    moreLabel: 'More Options',
+    moreIcon: 'more_horiz',
+    initialExpanded: true,
+    showAddButton: true,
+    collapsedOffset: '0px',
+    addLabel: 'Add New',
+    addIcon: 'add'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `This story demonstrates the context menu functionality for the rail's "more" button. 
+        
+        **Features:**
+        - Click the "More Options" button to open a context menu with actions
+        - The context menu includes Settings, Help & Support, Feedback, and About options
+        - Each action is logged to the Actions panel when clicked
+        - The menu can be opened in both collapsed and expanded states
+        - In expanded state, the button shows a "more_vert" icon indicating context menu availability
+        - In collapsed state, the button shows the standard icon but still supports context menu on click
+        
+        **Usage:**
+        Try clicking the "More Options" button (either in expanded or collapsed state) to see the context menu in action.`
+      }
+    }
+  },
+  render: (args) => html`
+    <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
+      <spectrum-rail
+        .appName=${args.appName}
+        .expandedWidth=${args.expandedWidth}
+        .moreLabel=${args.moreLabel}
+        .moreIcon=${args.moreIcon}
+        .initialExpanded=${args.initialExpanded}
+        .showAddButton=${args.showAddButton}
+        .collapsedOffset=${args.collapsedOffset}
+        .addLabel=${args.addLabel}
+        .addIcon=${args.addIcon}
+        .moreContextActions=${moreContextActions}
+        debug=${true}
+        @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
+        @searchChange=${(e: CustomEvent) => {
+          const detail = e.detail;
+          action('Search Changed')({ action: detail.action, value: detail.value });
+          const list = document.querySelector('spectrum-collapsible-list');
+          if (list) {
+            list.setAttribute('filter', detail.value);
+          }
+        }}
+        @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+        @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
+        @moreContextAction=${(e: CustomEvent) => action('More Context Action')(e.detail)}
+      >
+        <spectrum-collapsible-list 
+          slot="items"
+          .items=${sampleItems}
+          @childAction=${handleChildAction}
+          @expandAction=${handleExpandAction}
+          @contractAction=${handleContractAction}
+          @contextAction=${handleContextAction}
+        ></spectrum-collapsible-list>
+      </spectrum-rail>
+      
+      <!-- Instructions for the user -->
+      <div style="position: absolute; bottom: 20px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 300px;">
+        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Try the Context Menu:</h4>
+        <p style="margin: 0; font-size: 12px; color: #666;">
+          Click the "More Options" button to open a context menu with Settings, Help, Feedback, and About options.
+        </p>
+      </div>
     </div>
   `,
 }; 

@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Watch } from '@stencil/core';
+import { BackgroundLevel } from '../spectrum-panel/spectrum-panel';
 
 export interface ImageConfig {
   id: string;
@@ -21,6 +22,7 @@ export interface ImageDeletedEvent {
 
 export type SelectionMode = 'single' | 'multi' | 'none';
 export type ScrollDirection = 'vertical' | 'horizontal';
+export type FrostLevel = 'no' | 'partial' | 'full';
 
 @Component({
   tag: 'spectrum-image-gallery',
@@ -39,14 +41,21 @@ export class SpectrumImageGallery {
   @Prop() selectedImages: string[] = [];
   @Prop() scrollDirection: ScrollDirection = 'vertical';
   @Prop() previewMode: boolean = false;
-  @Prop() frostBackground: boolean = false;
+  @Prop() background: BackgroundLevel = 'opaque';
+  @Prop() frostControlBar: FrostLevel = 'no';
   @Prop() debug: boolean = false;
+  
+  // Primary Action Properties
+  @Prop() primaryActionText: string = '';
+  @Prop() primaryActionIcon: string = '';
+  @Prop() primaryActionValue: string = '';
 
   // Internal State
   @State() allImages: ImageConfig[] = [];
   @State() internalSelectedImages: string[] = [];
   @State() isUploadModalOpen: boolean = false;
   @State() isUrlModalOpen: boolean = false;
+  @State() isAddModalOpen: boolean = false;
   @State() urlInputValue: string = '';
   @State() isLoading: boolean = false;
   @State() isPreviewModalOpen: boolean = false;
@@ -58,6 +67,7 @@ export class SpectrumImageGallery {
   @Event() imageAdded: EventEmitter<ImageAddedEvent>;
   @Event() imageDeleted: EventEmitter<ImageDeletedEvent>;
   @Event() imagePreview: EventEmitter<ImageConfig>;
+  @Event() primaryAction: EventEmitter<{ action: string; selectedImages: ImageConfig[]; selectedIds: string[]; count: number }>;
 
   // Element References
   private fileInputRef: HTMLInputElement;
@@ -94,9 +104,40 @@ export class SpectrumImageGallery {
     this.internalSelectedImages = [...this.selectedImages];
   }
 
+  connectedCallback() {
+    document.addEventListener('keydown', this.handlePreviewKeydown);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this.handlePreviewKeydown);
+  }
+
+  /**
+   * CSS columns handle masonry automatically - no manual calculation needed
+   */
+  private calculateMasonryRowSpan(_item: HTMLElement) {
+    if (this.scrollDirection !== 'vertical') return;
+    
+    // CSS columns handle the masonry layout automatically
+    // No manual row span calculation needed
+    this.debugLog(`Masonry handled by native CSS masonry`);
+  }
+
+
+
   @Watch('images')
   onImagesChange() {
     this.allImages = [...this.images];
+    // Recalculate masonry layout when images change
+    setTimeout(() => this.recalculateMasonryLayout(), 100);
+  }
+
+  /**
+   * Recalculate masonry layout for all items
+   */
+  private recalculateMasonryLayout() {
+    // CSS columns handle masonry automatically - no manual calculation needed
+    this.debugLog('Masonry layout handled by CSS columns');
   }
 
   @Watch('selectedImages')
@@ -156,21 +197,22 @@ export class SpectrumImageGallery {
     }
   }
 
-  private openUploadModal() {
-    this.isUploadModalOpen = true;
-  }
-
   private closeUploadModal() {
     this.isUploadModalOpen = false;
   }
 
-  private openUrlModal() {
-    this.isUrlModalOpen = true;
+  private closeUrlModal() {
+    this.isUrlModalOpen = false;
     this.urlInputValue = '';
   }
 
-  private closeUrlModal() {
-    this.isUrlModalOpen = false;
+  private openAddModal() {
+    this.isAddModalOpen = true;
+    this.urlInputValue = '';
+  }
+
+  private closeAddModal() {
+    this.isAddModalOpen = false;
     this.urlInputValue = '';
   }
 
@@ -180,6 +222,7 @@ export class SpectrumImageGallery {
     this.handleFileUpload(files);
     input.value = ''; // Reset input
     this.closeUploadModal();
+    this.closeAddModal();
   }
 
   private async handleFileUpload(files: File[]) {
@@ -274,6 +317,7 @@ export class SpectrumImageGallery {
       });
 
       this.closeUrlModal();
+      this.closeAddModal();
     } catch (error) {
       this.debugError('Invalid URL:', error);
       alert('Please enter a valid URL');
@@ -300,11 +344,18 @@ export class SpectrumImageGallery {
         aria-label={isClickable ? (image.alt || image.title || `Image ${index + 1}`) : undefined}
         aria-selected={isSelectable ? isSelected.toString() : undefined}
       >
-        <img
+                <img
           src={image.url}
           alt={image.alt || image.title || ''}
           loading="lazy"
           crossorigin="anonymous"
+          onLoad={(e) => {
+            const imgElement = e.target as HTMLImageElement;
+            const itemElement = imgElement.closest('.gallery__item') as HTMLElement;
+            if (itemElement) {
+              this.calculateMasonryRowSpan(itemElement);
+            }
+          }}
           onError={(e) => {
             const imgElement = e.target as HTMLImageElement;
             // Replace with a placeholder/broken image indicator
@@ -326,18 +377,23 @@ export class SpectrumImageGallery {
           }}
         />
         {isSelected && isSelectable && (
-          <div class="gallery__selection-indicator">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-          </div>
+          <div class="gallery__selection-overlay"></div>
+        )}
+        {isSelected && isSelectable && (
+          <spectrum-badge
+            variant="primary"
+            size="large"
+            text="✓"
+            circular={true}
+            class="gallery__selection-badge"
+          />
         )}
       </div>
     );
   }
 
   private renderUploadModal() {
-    if (!this.isUploadModalOpen) return null;
+    if (!this.isUploadModalOpen || this.isAddModalOpen) return null;
 
     return (
       <div class="modal-overlay" onClick={() => this.closeUploadModal()}>
@@ -385,7 +441,7 @@ export class SpectrumImageGallery {
   }
 
   private renderUrlModal() {
-    if (!this.isUrlModalOpen) return null;
+    if (!this.isUrlModalOpen || this.isAddModalOpen) return null;
 
     return (
       <div class="modal-overlay" onClick={() => this.closeUrlModal()}>
@@ -465,6 +521,30 @@ export class SpectrumImageGallery {
     this.debugLog(`Deleted ${selectedIds.length} images. Gallery now has ${this.allImages.length} images.`);
   }
 
+  private handlePrimaryAction() {
+    if (this.internalSelectedImages.length === 0 || !this.primaryActionText) return;
+
+    const selectedIds = [...this.internalSelectedImages];
+    
+    // Get the actual image objects that are selected
+    const selectedImages = this.allImages.filter(image => 
+      selectedIds.includes(image.id)
+    );
+    
+    // Emit the primary action event with selected image data
+    this.primaryAction.emit({
+      action: this.primaryActionValue || this.primaryActionText,
+      selectedImages: selectedImages,
+      selectedIds: selectedIds,
+      count: selectedIds.length
+    });
+    
+    this.debugLog(`Primary action triggered for ${selectedIds.length} images:`, {
+      action: this.primaryActionValue || this.primaryActionText,
+      selectedIds
+    });
+  }
+
   private handlePreview(image: ImageConfig) {
     this.previewImage = image;
     this.isPreviewModalOpen = true;
@@ -477,14 +557,51 @@ export class SpectrumImageGallery {
     this.debugLog('Closing preview modal');
   }
 
+  private navigatePreview(direction: 'next' | 'previous') {
+    if (!this.previewImage || this.allImages.length <= 1) return;
+
+    const currentIndex = this.allImages.findIndex(img => img.id === this.previewImage.id);
+    if (currentIndex === -1) return;
+
+    let newIndex: number;
+    if (direction === 'next') {
+      newIndex = (currentIndex + 1) % this.allImages.length;
+    } else {
+      newIndex = currentIndex === 0 ? this.allImages.length - 1 : currentIndex - 1;
+    }
+
+    this.previewImage = this.allImages[newIndex];
+    this.imagePreview.emit(this.previewImage);
+    this.debugLog(`Navigated to ${direction} image:`, this.previewImage.id);
+  }
+
+  private handlePreviewKeydown = (event: KeyboardEvent) => {
+    if (!this.isPreviewModalOpen) return;
+
+    switch (event.key) {
+      case 'Escape':
+        this.closePreviewModal();
+        break;
+      case 'ArrowLeft':
+        this.navigatePreview('previous');
+        break;
+      case 'ArrowRight':
+        this.navigatePreview('next');
+        break;
+    }
+  }
+
   private renderPreviewModal() {
     if (!this.isPreviewModalOpen || !this.previewImage) return null;
 
+    const currentIndex = this.allImages.findIndex(img => img.id === this.previewImage.id);
+    const hasMultipleImages = this.allImages.length > 1;
+
     return (
-      <div class="preview-modal-overlay" onClick={() => this.closePreviewModal()}>
-        <div class="preview-modal" onClick={(e) => e.stopPropagation()}>
+      <div class="preview-modal" onClick={() => this.closePreviewModal()}>
+        <div class="preview-modal__content" onClick={(e) => e.stopPropagation()}>
           <spectrum-button
-            variant="ghost"
+            variant="secondary"
             iconOnly={true}
             size="base"
             leftIcon="close"
@@ -493,6 +610,20 @@ export class SpectrumImageGallery {
             aria-label="Close preview"
             class="preview-modal__close"
           />
+          
+          {hasMultipleImages && (
+            <spectrum-button
+              variant="secondary"
+              iconOnly={true}
+              size="base"
+              leftIcon="keyboard_arrow_left"
+              showLeftIcon={true}
+              onClick={() => this.navigatePreview('previous')}
+              aria-label="Previous image"
+              class="preview-modal__nav preview-modal__nav--prev"
+            />
+          )}
+          
           <img
             src={this.previewImage.url}
             alt={this.previewImage.alt || this.previewImage.title || 'Preview image'}
@@ -500,11 +631,111 @@ export class SpectrumImageGallery {
             crossorigin="anonymous"
             class="preview-modal__image"
           />
+          
+          {hasMultipleImages && (
+            <spectrum-button
+              variant="secondary"
+              iconOnly={true}
+              size="base"
+              leftIcon="keyboard_arrow_right"
+              showLeftIcon={true}
+              onClick={() => this.navigatePreview('next')}
+              aria-label="Next image"
+              class="preview-modal__nav preview-modal__nav--next"
+            />
+          )}
+          
           {(this.previewImage.title || this.previewImage.alt) && (
             <div class="preview-modal__caption">
               {this.previewImage.title || this.previewImage.alt}
             </div>
           )}
+          
+          {hasMultipleImages && (
+            <div class="preview-modal__counter">
+              {currentIndex + 1} of {this.allImages.length}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  private renderAddModal() {
+    if (!this.isAddModalOpen) return null;
+
+    return (
+      <div class="modal-overlay" onClick={() => this.closeAddModal()}>
+        <div class="modal" onClick={(e) => e.stopPropagation()}>
+          <div class="modal__header">
+            <h3>Add Images</h3>
+            <spectrum-button
+              variant="ghost"
+              iconOnly={true}
+              size="base"
+              leftIcon="close"
+              showLeftIcon={true}
+              onClick={() => this.closeAddModal()}
+              aria-label="Close modal"
+            />
+          </div>
+          <div class="modal__content">
+            <div class="add-options">
+              <div class="add-option">
+                <h4>Upload from Computer</h4>
+                <div class="upload-area">
+                  <input
+                    type="file"
+                    ref={el => this.fileInputRef = el}
+                    multiple
+                    accept="image/*"
+                    onChange={(event) => this.handleFileInputChange(event)}
+                    class="upload-area__input"
+                  />
+                  <div class="upload-area__content">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                    <p>Drag & drop images here</p>
+                    <spectrum-button
+                      variant="secondary"
+                      size="base"
+                      buttonText="Browse Files"
+                      showButtonText={true}
+                      onClick={() => this.fileInputRef?.click()}
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="add-option-divider">
+                <span>OR</span>
+              </div>
+              
+              <div class="add-option">
+                <h4>Add from URL</h4>
+                <div class="url-input">
+                  <label htmlFor="url-field">Image URL:</label>
+                  <input
+                    id="url-field"
+                    type="url"
+                    value={this.urlInputValue}
+                    onInput={(event) => this.urlInputValue = (event.target as HTMLInputElement).value}
+                    placeholder="https://example.com/image.jpg"
+                    class="url-input__field"
+                  />
+                  <spectrum-button
+                    variant="secondary"
+                    size="base"
+                    buttonText="Add from URL"
+                    showButtonText={true}
+                    onClick={() => this.handleUrlAdd()}
+                    disabled={!this.urlInputValue.trim() || this.isLoading}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -517,52 +748,56 @@ export class SpectrumImageGallery {
 
     return (
       <Host>
-        <div class={{
-          'gallery': true,
-          'gallery--vertical': this.scrollDirection === 'vertical',
-          'gallery--horizontal': this.scrollDirection === 'horizontal',
-          'gallery--frost': this.frostBackground
-        }}>
-          {hasImages ? (
-            <div class={{
-              'gallery__grid': true,
-              'gallery__grid--vertical': this.scrollDirection === 'vertical',
-              'gallery__grid--horizontal': this.scrollDirection === 'horizontal'
-            }}>
-              {this.allImages.map((image, index) => {
-                this.debugLog(`Rendering image ${index}:`, image);
-                return this.renderThumbnail(image, index);
-              })}
-            </div>
-          ) : (
-            <div class="gallery__empty">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19M19,19H5V5H19M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z"/>
-              </svg>
-              <h3>No images in gallery</h3>
-              <p>Upload images or add them by URL to get started</p>
-            </div>
-          )}
-
-          {/* Always show controls container for frost background, but conditionally show buttons */}
+        <spectrum-panel 
+          background={this.background} 
+          debug={this.debug}
+          size="full"
+          noPadding={true}
+        >
           <div class={{
-            'gallery__controls': true,
-            'gallery__controls--vertical': this.scrollDirection === 'vertical',
-            'gallery__controls--horizontal': this.scrollDirection === 'horizontal'
+            'gallery': true,
+            'gallery--vertical': this.scrollDirection === 'vertical',
+            'gallery--horizontal': this.scrollDirection === 'horizontal'
           }}>
-            {this.previewMode ? (
-              // In preview mode, show a subtle indicator
-              <div class="gallery__preview-indicator">
-                <span>Preview Mode - Click images to enlarge</span>
+            {hasImages ? (
+              <div class={{
+                'gallery__grid': true,
+                'gallery__grid--vertical': this.scrollDirection === 'vertical',
+                'gallery__grid--horizontal': this.scrollDirection === 'horizontal'
+              }}>
+                {this.allImages.map((image, index) => {
+                  this.debugLog(`Rendering image ${index}:`, image);
+                  return this.renderThumbnail(image, index);
+                })}
               </div>
             ) : (
-              // Normal mode - show all control buttons
-              [
+              <div class="gallery__empty">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19M19,19H5V5H19M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z"/>
+                </svg>
+                <h3>No images in gallery</h3>
+                <p>Click the Add button to upload images or add them by URL</p>
+              </div>
+            )}
+          </div>
+
+          {/* Controls as a separate section within the panel */}
+          {!this.previewMode && (
+            <div class={{
+              'gallery__controls': true,
+              'gallery__controls--vertical': this.scrollDirection === 'vertical',
+              'gallery__controls--horizontal': this.scrollDirection === 'horizontal',
+              'gallery__controls--frost': this.frostControlBar !== 'no',
+              'gallery__controls--frost-partial': this.frostControlBar === 'partial',
+              'gallery__controls--frost-full': this.frostControlBar === 'full'
+            }}>
+              {[
+                // Delete button - shown when images are selected and delete is allowed (left position)
                 this.allowDelete && this.internalSelectedImages.length > 0 && (
                   <spectrum-button
                     variant="danger"
                     size="base"
-                    buttonText={`Delete (${this.internalSelectedImages.length})`}
+                    buttonText={this.internalSelectedImages.length === 1 ? 'Delete' : `Delete (${this.internalSelectedImages.length})`}
                     showButtonText={true}
                     leftIcon="delete"
                     showLeftIcon={true}
@@ -571,41 +806,45 @@ export class SpectrumImageGallery {
                   />
                 ),
 
-                this.allowUrlInput && (
-                  <spectrum-button
-                    variant="secondary"
-                    size="base"
-                    buttonText="Add Image URL"
-                    showButtonText={true}
-                    leftIcon="add_link"
-                    showLeftIcon={true}
-                    disabled={this.isLoading}
-                    onClick={() => this.openUrlModal()}
-                  />
-                ),
-
-                this.allowUpload && (
+                // Primary action button - shown when images are selected and primary action is configured (right position)
+                this.primaryActionText && this.internalSelectedImages.length > 0 && (
                   <spectrum-button
                     variant="primary"
                     size="base"
-                    buttonText="Upload Image"
+                    buttonText={this.primaryActionText}
                     showButtonText={true}
-                    leftIcon="upload_file"
+                    leftIcon={this.primaryActionIcon}
+                    showLeftIcon={!!this.primaryActionIcon}
+                    disabled={this.isLoading}
+                    onClick={() => this.handlePrimaryAction()}
+                  />
+                ),
+
+                // Add button - shown when no images are selected
+                (this.allowUrlInput || this.allowUpload) && this.internalSelectedImages.length === 0 && (
+                  <spectrum-button
+                    variant="primary"
+                    size="base"
+                    buttonText="Add"
+                    showButtonText={true}
+                    leftIcon="add"
                     showLeftIcon={true}
                     disabled={this.isLoading}
-                    onClick={() => this.openUploadModal()}
+                    onClick={() => this.openAddModal()}
                   />
                 )
-              ]
-            )}
-          </div>
+              ]}
+            </div>
+          )}
 
+          {this.renderAddModal()}
           {this.renderUploadModal()}
           {this.renderUrlModal()}
-        </div>
+        </spectrum-panel>
 
         {this.renderPreviewModal()}
       </Host>
     );
   }
 }
+

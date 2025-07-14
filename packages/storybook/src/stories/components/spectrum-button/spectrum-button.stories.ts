@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 // Local interface definition since components are loaded globally
 interface SpectrumButton extends HTMLElement {
   buttonText: string;
-  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
+  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
   size: 'sm' | 'base' | 'lg';
   outline: boolean;
   iconOnly: boolean;
@@ -24,7 +24,7 @@ interface SpectrumButton extends HTMLElement {
 }
 
 interface SpectrumButtonArgs {
-  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'fab';
+  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
   size: 'sm' | 'base' | 'lg';
   state: 'default' | 'hover' | 'active' | 'disabled';
   outline: boolean;
@@ -366,6 +366,77 @@ export const Outline: StoryObj<SpectrumButtonArgs> = {
     debug: false,
   },
   render: renderButton
+};
+
+// Outline Variants - All Button Types
+export const OutlineVariants: StoryObj<SpectrumButtonArgs> = {
+  args: {
+    variant: 'primary',
+    size: 'base',
+    outline: true,
+    buttonText: 'Outline Button',
+    showButtonText: true,
+    debug: false,
+  },
+  render: (args) => html`
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+      <spectrum-button
+        button-text="Primary Outline"
+        variant="primary"
+        size=${args.size}
+        ?outline=${args.outline}
+        ?disabled=${args.disabled}
+        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
+      ></spectrum-button>
+      <spectrum-button
+        button-text="Secondary Outline"
+        variant="secondary"
+        size=${args.size}
+        ?outline=${args.outline}
+        ?disabled=${args.disabled}
+        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
+      ></spectrum-button>
+      <spectrum-button
+        button-text="Success Outline"
+        variant="success"
+        size=${args.size}
+        ?outline=${args.outline}
+        ?disabled=${args.disabled}
+        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
+      ></spectrum-button>
+      <spectrum-button
+        button-text="Warning Outline"
+        variant="warning"
+        size=${args.size}
+        ?outline=${args.outline}
+        ?disabled=${args.disabled}
+        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
+      ></spectrum-button>
+      <spectrum-button
+        button-text="Danger Outline"
+        variant="danger"
+        size=${args.size}
+        ?outline=${args.outline}
+        ?disabled=${args.disabled}
+        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
+      ></spectrum-button>
+      <spectrum-button
+        button-text="Ghost Outline"
+        variant="ghost"
+        size=${args.size}
+        ?outline=${args.outline}
+        ?disabled=${args.disabled}
+        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}
+      ></spectrum-button>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Outline buttons in all variants. Each button uses its variant color for the border and text, with hover states that fill the background.',
+      },
+    },
+  },
 };
 
 // With Icons

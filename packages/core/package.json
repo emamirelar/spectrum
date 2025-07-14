@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
-    "@stencil/angular-output-target": "^0.10.0",
+    "@stencil/angular-output-target": "^0.10.2",
     "@stencil/core": "^4.22.2",
     "@stencil/playwright": "^0.2.1",
     "@stencil/react-output-target": "^0.7.4",
