@@ -911,6 +911,135 @@ export const CollapsedOffset: Story = {
   `,
 };
 
+// New story to demonstrate text truncation with long item names
+export const TextTruncation: Story = {
+  args: {
+    appName: 'Text Truncation Demo',
+    expandedWidth: 320,
+    moreLabel: 'More',
+    moreIcon: 'settings',
+    initialExpanded: true,
+    showAddButton: true,
+    collapsedOffset: '0px',
+    addLabel: 'Add New',
+    addIcon: 'add'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `This story demonstrates text truncation behavior with long item names in the collapsible list.
+        
+        **Features:**
+        - Items with very long names that exceed the available width
+        - Text truncation with ellipsis (...) when text overflows
+        - Proper truncation in both expanded and collapsed rail states
+        - Various lengths to test different truncation scenarios
+        - Tooltips on hover to show full text (if implemented in collapsible-list)
+        
+        **Testing:**
+        - Toggle between expanded and collapsed states to see how truncation adapts
+        - Try different rail widths using the expandedWidth control
+        - Hover over truncated items to see full names (if tooltip is enabled)`
+      }
+    }
+  },
+  render: (args) => {
+    // Sample data with intentionally long item names
+    const longNameItems = [
+      {
+        label: 'Project Documentation and Requirements',
+        icon: 'folder',
+        expanded: true,
+        id: 'project-docs',
+        children: [
+          { label: 'Comprehensive Technical Requirements Document for Q4 2024 Implementation Phase', action: 'open-tech-req', id: 'tech-req-long' },
+          { label: 'User Experience Design Guidelines and Best Practices Manual Version 3.2', action: 'open-ux-guidelines', id: 'ux-guidelines-long' },
+          { label: 'Project Management Methodology and Process Documentation Complete Guide', action: 'open-pm-guide', id: 'pm-guide-long' },
+          { label: 'Software Architecture Design Patterns and Implementation Strategy Document', action: 'open-arch-design', id: 'arch-design-long' },
+          { label: 'Quality Assurance Testing Procedures and Validation Protocols Handbook', action: 'open-qa-procedures', id: 'qa-procedures-long' },
+          { label: 'Short Name', action: 'open-short', id: 'short-name' },
+          { label: 'Security and Compliance Requirements Analysis Report for Enterprise Applications', action: 'open-security', id: 'security-long' },
+          { label: 'Medium Length Document Title Here', action: 'open-medium', id: 'medium-name' },
+          { label: 'Performance Optimization Strategies and Implementation Guidelines for Large Scale Systems', action: 'open-performance', id: 'performance-long' }
+        ]
+      },
+      {
+        label: 'Enterprise Solutions and Integration Framework Documentation Center',
+        icon: 'business_center',
+        expanded: false,
+        id: 'enterprise-solutions',
+        children: [
+          { label: 'Customer Relationship Management System Integration Documentation and API Reference Guide', action: 'open-crm-integration', id: 'crm-integration-long' },
+          { label: 'Enterprise Resource Planning Implementation Roadmap and Migration Strategy Document', action: 'open-erp-roadmap', id: 'erp-roadmap-long' },
+          { label: 'Business Intelligence Analytics Dashboard Configuration and Setup Instructions Manual', action: 'open-bi-config', id: 'bi-config-long' },
+          { label: 'Supply Chain Management Optimization Procedures and Best Practices Implementation Guide', action: 'open-scm-optimization', id: 'scm-optimization-long' },
+          { label: 'Financial Reporting and Compliance Automation Framework Documentation Package', action: 'open-financial-reporting', id: 'financial-reporting-long' }
+        ]
+      },
+      {
+        label: 'Development Team Resources',
+        icon: 'group',
+        expanded: false,
+        id: 'dev-resources',
+        children: [
+          { label: 'Frontend Development Best Practices and Code Review Guidelines for React Applications', action: 'open-frontend-practices', id: 'frontend-practices-long' },
+          { label: 'Backend API Development Standards and Documentation Requirements for Microservices Architecture', action: 'open-backend-standards', id: 'backend-standards-long' },
+          { label: 'Database Design Principles and Optimization Techniques for High Performance Applications', action: 'open-database-design', id: 'database-design-long' },
+          { label: 'DevOps and Continuous Integration Pipeline Configuration Guide for Multi-Environment Deployment', action: 'open-devops-guide', id: 'devops-guide-long' },
+          { label: 'Version Control System Best Practices and Branching Strategy Documentation for Large Teams', action: 'open-version-control', id: 'version-control-long' }
+        ]
+      }
+    ];
+
+    return html`
+      <div style="height: 600px; padding: 2rem; position: relative; background-color: #f0f0f0;">
+        <spectrum-rail
+          .appName=${args.appName}
+          .expandedWidth=${args.expandedWidth}
+          .moreLabel=${args.moreLabel}
+          .moreIcon=${args.moreIcon}
+          .initialExpanded=${args.initialExpanded}
+          .showAddButton=${args.showAddButton}
+          .collapsedOffset=${args.collapsedOffset}
+          .addLabel=${args.addLabel}
+          .addIcon=${args.addIcon}
+          @railAction=${(e: CustomEvent) => action('Rail Action')(e.detail)}
+          @searchChange=${(e: CustomEvent) => {
+            const detail = e.detail;
+            action('Search Changed')({ action: detail.action, value: detail.value });
+            const list = document.querySelector('spectrum-collapsible-list');
+            if (list) {
+              list.setAttribute('filter', detail.value);
+            }
+          }}
+          @expandedChange=${(e: CustomEvent) => action('Rail Expanded State Changed')({ action: e.detail.action, expanded: e.detail.expanded })}
+          @addAction=${(e: CustomEvent) => action('Add Action')({ action: e.detail.action })}
+        >
+          <spectrum-collapsible-list 
+            slot="items"
+            .items=${longNameItems}
+            @childAction=${handleChildAction}
+            @expandAction=${handleExpandAction}
+            @contractAction=${handleContractAction}
+            @contextAction=${handleContextAction}
+          ></spectrum-collapsible-list>
+        </spectrum-rail>
+        
+        <!-- Instructions for the user -->
+        <div style="position: absolute; bottom: 20px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 300px;">
+          <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Text Truncation Demo:</h4>
+          <ul style="margin: 0; padding-left: 15px; font-size: 12px; color: #666;">
+            <li>Toggle rail state to see truncation adapt</li>
+            <li>Adjust expanded width in controls</li>
+            <li>Expand categories to see long item names</li>
+            <li>Hover over items for tooltips (if available)</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+};
+
 // New story to demonstrate context menu functionality
 export const WithContextMenu: Story = {
   args: {

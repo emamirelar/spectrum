@@ -43,6 +43,8 @@ type SpectrumAccordionEvents = {
     onAccordionToggle: EventName<CustomEvent<{
         expanded: boolean;
         accordionId: string;
+        sectionId?: string;
+        expandedSections?: string[];
     }>>
 };
 

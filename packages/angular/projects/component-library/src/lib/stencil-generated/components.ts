@@ -8,14 +8,14 @@ import { Components } from '@unops-itg-npm/cpit-spectrum';
 
 
 @ProxyCmp({
-  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sound', 'variant']
+  inputs: ['accordionId', 'chipVariant', 'collapsedIcon', 'debug', 'disabled', 'expandMode', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sections', 'sound', 'variant']
 })
 @Component({
   selector: 'spectrum-accordion',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sound', 'variant'],
+  inputs: ['accordionId', 'chipVariant', 'collapsedIcon', 'debug', 'disabled', 'expandMode', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sections', 'sound', 'variant'],
 })
 export class SpectrumAccordion {
   protected el: HTMLSpectrumAccordionElement;
@@ -31,7 +31,7 @@ export declare interface SpectrumAccordion extends Components.SpectrumAccordion 
   /**
    * Event emitted when the accordion is toggled
    */
-  accordionToggle: EventEmitter<CustomEvent<{ expanded: boolean; accordionId: string; }>>;
+  accordionToggle: EventEmitter<CustomEvent<{ expanded: boolean; accordionId: string; sectionId?: string; expandedSections?: string[]; }>>;
 }
 
 

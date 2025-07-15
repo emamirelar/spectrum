@@ -360,6 +360,7 @@ export class SpectrumConversationPanel {
           </div>
           {hasExplorations && (
             <spectrum-accordion
+              variant="chip"
               expanded={activeAccordion === 'explorations'}
               label="Dive Deeper"
               sound={this.sound}

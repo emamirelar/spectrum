@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 import { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
@@ -13,6 +14,7 @@ import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
+export { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 export { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
@@ -29,6 +31,11 @@ export namespace Components {
          */
         "accordionId": string;
         /**
+          * The variant of the trigger chip (for chip variant) Default: 'secondary'
+          * @default 'secondary'
+         */
+        "chipVariant": 'primary' | 'secondary';
+        /**
           * The icon to show when collapsed Default: 'arrow_drop_down'
           * @default 'arrow_drop_down'
          */
@@ -44,7 +51,12 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Whether the accordion is expanded Default: false
+          * Expand behavior for standard variant - 'single': Only one section can be expanded at a time - 'multi': Multiple sections can be expanded simultaneously Default: 'single'
+          * @default 'single'
+         */
+        "expandMode": 'single' | 'multi';
+        /**
+          * Whether the accordion is expanded (for chip variant) Default: false
           * @default false
          */
         "expanded": boolean;
@@ -59,30 +71,35 @@ export namespace Components {
          */
         "haptic": boolean;
         /**
-          * Whether to show content in horizontal scroll container Default: true
+          * Whether to show content in horizontal scroll container (for chip variant) Default: true
           * @default true
          */
         "horizontalScroll": boolean;
         /**
-          * The label for the accordion trigger Default: 'Dive Deeper'
+          * The label for the accordion trigger (for chip variant) Default: 'Dive Deeper'
           * @default 'Dive Deeper'
          */
         "label": string;
         /**
-          * Whether the trigger chip should be outlined Default: true
+          * Whether the trigger chip should be outlined (for chip variant) Default: true
           * @default true
          */
         "outline": boolean;
+        /**
+          * Sections data for standard variant (JSON string or array)
+          * @default []
+         */
+        "sections": string | AccordionSection[];
         /**
           * Whether to enable sound effects Default: false
           * @default false
          */
         "sound": boolean;
         /**
-          * The variant of the trigger chip Default: 'secondary'
-          * @default 'secondary'
+          * The variant of the accordion Default: 'standard'
+          * @default 'standard'
          */
-        "variant": 'primary' | 'secondary';
+        "variant": 'chip' | 'standard';
     }
     /**
      * Spectrum App Layout Component
@@ -1599,6 +1616,8 @@ declare global {
         "accordionToggle": {
     expanded: boolean;
     accordionId: string;
+    sectionId?: string;
+    expandedSections?: string[];
   };
     }
     interface HTMLSpectrumAccordionElement extends Components.SpectrumAccordion, HTMLStencilElement {
@@ -2079,6 +2098,11 @@ declare namespace LocalJSX {
          */
         "accordionId"?: string;
         /**
+          * The variant of the trigger chip (for chip variant) Default: 'secondary'
+          * @default 'secondary'
+         */
+        "chipVariant"?: 'primary' | 'secondary';
+        /**
           * The icon to show when collapsed Default: 'arrow_drop_down'
           * @default 'arrow_drop_down'
          */
@@ -2094,7 +2118,12 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Whether the accordion is expanded Default: false
+          * Expand behavior for standard variant - 'single': Only one section can be expanded at a time - 'multi': Multiple sections can be expanded simultaneously Default: 'single'
+          * @default 'single'
+         */
+        "expandMode"?: 'single' | 'multi';
+        /**
+          * Whether the accordion is expanded (for chip variant) Default: false
           * @default false
          */
         "expanded"?: boolean;
@@ -2109,12 +2138,12 @@ declare namespace LocalJSX {
          */
         "haptic"?: boolean;
         /**
-          * Whether to show content in horizontal scroll container Default: true
+          * Whether to show content in horizontal scroll container (for chip variant) Default: true
           * @default true
          */
         "horizontalScroll"?: boolean;
         /**
-          * The label for the accordion trigger Default: 'Dive Deeper'
+          * The label for the accordion trigger (for chip variant) Default: 'Dive Deeper'
           * @default 'Dive Deeper'
          */
         "label"?: string;
@@ -2124,22 +2153,29 @@ declare namespace LocalJSX {
         "onAccordionToggle"?: (event: SpectrumAccordionCustomEvent<{
     expanded: boolean;
     accordionId: string;
+    sectionId?: string;
+    expandedSections?: string[];
   }>) => void;
         /**
-          * Whether the trigger chip should be outlined Default: true
+          * Whether the trigger chip should be outlined (for chip variant) Default: true
           * @default true
          */
         "outline"?: boolean;
+        /**
+          * Sections data for standard variant (JSON string or array)
+          * @default []
+         */
+        "sections"?: string | AccordionSection[];
         /**
           * Whether to enable sound effects Default: false
           * @default false
          */
         "sound"?: boolean;
         /**
-          * The variant of the trigger chip Default: 'secondary'
-          * @default 'secondary'
+          * The variant of the accordion Default: 'standard'
+          * @default 'standard'
          */
-        "variant"?: 'primary' | 'secondary';
+        "variant"?: 'chip' | 'standard';
     }
     /**
      * Spectrum App Layout Component

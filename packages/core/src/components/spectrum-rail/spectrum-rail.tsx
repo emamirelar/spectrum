@@ -331,7 +331,7 @@ export class SpectrumRail {
   componentDidLoad() {
     // Set custom properties from props
     if (this.expandedWidth) {
-      this.el.style.setProperty('--rail-expanded-width', this.expandedWidth.toString());
+      this.el.style.setProperty('--rail-expanded-width', `${this.expandedWidth}px`);
     }
 
     // Set collapsed offset
@@ -362,10 +362,14 @@ export class SpectrumRail {
   @Watch('addLabel')
   @Watch('showAddButton')
   @Watch('collapsedOffset')
+  @Watch('expandedWidth')
   propChanged() {
     // Property changed handler
     if (this.collapsedOffset !== undefined) {
       this.el.style.setProperty('--rail-collapsed-offset', this.collapsedOffset);
+    }
+    if (this.expandedWidth !== undefined) {
+      this.el.style.setProperty('--rail-expanded-width', `${this.expandedWidth}px`);
     }
   }
 
@@ -386,7 +390,7 @@ export class SpectrumRail {
             'rail--expanded': this.expanded
           }}
           style={{
-            '--rail-expanded-width': this.expandedWidth.toString(),
+            '--rail-expanded-width': `${this.expandedWidth}px`,
             '--rail-collapsed-offset': this.collapsedOffset
           }}
         >

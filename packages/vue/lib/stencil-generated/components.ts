@@ -18,7 +18,10 @@ export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccor
   'horizontalScroll',
   'disabled',
   'variant',
+  'chipVariant',
   'outline',
+  'expandMode',
+  'sections',
   'accordionId',
   'debug',
   'accordionToggle'

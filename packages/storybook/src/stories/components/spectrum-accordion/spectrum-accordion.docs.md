@@ -1,33 +1,65 @@
 # Spectrum Accordion Component
 
-The `spectrum-accordion` component provides collapsible content sections with smooth animations and configurable options. Perfect for "Dive Deeper" content, FAQ sections, and any collapsible content areas.
+The `spectrum-accordion` component provides two distinct variants for organizing and displaying expandable content with smooth animations and configurable options.
+
+## Variants Overview
+
+### Chip Variant
+A trigger-based accordion using a chip button for expansion. Perfect for "Dive Deeper" content, additional actions, and optional information that doesn't need to be immediately visible.
+
+### Standard Variant (Default)
+A traditional multi-section accordion with configurable expand behavior. Ideal for FAQ sections, content organization, navigation menus, and any scenario requiring multiple collapsible sections.
 
 ## Features
 
-- **Configurable trigger**: Customizable label, icons, and styling
-- **Sound support**: Optional audio feedback 
-- **Scroll options**: Horizontal scrolling container or standard layout
+- **Two distinct variants**: Chip-based trigger and traditional multi-section
+- **Flexible expand modes**: Single or multi-expand for standard variant
+- **Rich content support**: HTML content and slotted components
+- **Sound support**: Optional audio feedback
 - **Accessibility**: ARIA compliant with keyboard navigation
 - **Theming**: Inherits from Spectrum design system
-- **Events**: Emits toggle events for external state management
+- **Event system**: Comprehensive event handling for both variants
 
 ## Getting Started
 
+### Chip Variant
 Basic usage with horizontal scrolling content:
 
 ```html
-<spectrum-accordion label="Dive Deeper">
+<spectrum-accordion variant="chip" label="Dive Deeper">
   <spectrum-chip variant="secondary" label="Option 1" leadingIcon="prompt_suggestion"></spectrum-chip>
   <spectrum-chip variant="secondary" label="Option 2" leadingIcon="prompt_suggestion"></spectrum-chip>
   <spectrum-chip variant="secondary" label="Option 3" leadingIcon="prompt_suggestion"></spectrum-chip>
 </spectrum-accordion>
 ```
 
-## Usage Scenarios
+### Standard Variant
+Basic FAQ-style accordion:
+
+```html
+<spectrum-accordion 
+  variant="standard"
+  expand-mode="single"
+  sections='[
+    {
+      "id": "faq1",
+      "title": "How do I get started?",
+      "content": "<p>Getting started is easy! Simply follow our quick start guide.</p>"
+    },
+    {
+      "id": "faq2",
+      "title": "What are the system requirements?",
+      "content": "<p>Our platform works on all modern browsers and devices.</p>"
+    }
+  ]'>
+</spectrum-accordion>
+```
+
+## Chip Variant Usage
 
 ### 1. Default Horizontal Scroll
 ```html
-<spectrum-accordion label="Explore Options" horizontalScroll="true">
+<spectrum-accordion variant="chip" label="Explore Options" horizontal-scroll="true">
   <spectrum-chip variant="secondary" label="Renewable Energy" leadingIcon="prompt_suggestion"></spectrum-chip>
   <spectrum-chip variant="secondary" label="Solar Panels" leadingIcon="prompt_suggestion"></spectrum-chip>
   <spectrum-chip variant="secondary" label="Wind Power" leadingIcon="prompt_suggestion"></spectrum-chip>
@@ -36,84 +68,211 @@ Basic usage with horizontal scrolling content:
 
 ### 2. Vertical Stack Layout
 ```html
-<spectrum-accordion label="Show All Options" horizontalScroll="false">
+<spectrum-accordion variant="chip" label="Show All Options" horizontal-scroll="false">
   <spectrum-chip variant="secondary" label="Option 1" leadingIcon="prompt_suggestion"></spectrum-chip>
   <spectrum-chip variant="secondary" label="Option 2" leadingIcon="prompt_suggestion"></spectrum-chip>
   <spectrum-chip variant="secondary" label="Option 3" leadingIcon="prompt_suggestion"></spectrum-chip>
 </spectrum-accordion>
 ```
 
-### 3. Primary Variant
+### 3. Primary Chip Variant
 ```html
 <spectrum-accordion 
+  variant="chip"
   label="Primary Action" 
-  variant="primary" 
+  chip-variant="primary" 
   outline="false">
   <spectrum-chip variant="primary" label="Important Option" leadingIcon="star"></spectrum-chip>
 </spectrum-accordion>
 ```
 
-### 4. Custom Icons
+### 4. Expanded by Default
 ```html
 <spectrum-accordion 
-  label="Custom Configuration"
-  collapsedIcon="add"
-  expandedIcon="remove">
-  <spectrum-chip variant="secondary" label="Configuration 1" leadingIcon="settings"></spectrum-chip>
-  <spectrum-chip variant="secondary" label="Configuration 2" leadingIcon="settings"></spectrum-chip>
-</spectrum-accordion>
-```
-
-### 5. Expanded by Default
-```html
-<spectrum-accordion 
+  variant="chip"
   label="Already Open"
   expanded="true">
   <spectrum-chip variant="secondary" label="Visible Option" leadingIcon="prompt_suggestion"></spectrum-chip>
 </spectrum-accordion>
 ```
 
-### 6. With Sound Effects
+## Standard Variant Usage
+
+### 1. Single Expand Mode (FAQ Style)
 ```html
 <spectrum-accordion 
-  label="Sound Enabled"
-  sound="true">
-  <spectrum-chip variant="secondary" label="Audio Feedback" leadingIcon="volume_up" sound="true"></spectrum-chip>
+  variant="standard"
+  expand-mode="single"
+  sections='[
+    {
+      "id": "getting-started",
+      "title": "How do I get started?",
+      "content": "<p>Getting started is easy! Simply follow our comprehensive quick start guide.</p>"
+    },
+    {
+      "id": "support",
+      "title": "How do I contact support?",
+      "content": "<p>You can reach our support team via email or live chat 24/7.</p>"
+    },
+    {
+      "id": "pricing",
+      "title": "What are your pricing plans?",
+      "content": "<p>We offer flexible pricing plans starting from $10/month.</p>"
+    }
+  ]'>
+</spectrum-accordion>
+```
+
+### 2. Multi Expand Mode (Features List)
+```html
+<spectrum-accordion 
+  variant="standard"
+  expand-mode="multi"
+  sections='[
+    {
+      "id": "analytics",
+      "title": "Advanced Analytics",
+      "expanded": true,
+      "content": "<p>Get detailed insights with our analytics dashboard.</p>"
+    },
+    {
+      "id": "collaboration",
+      "title": "Real-time Collaboration",
+      "content": "<p>Work together with your team in real-time.</p>"
+    },
+    {
+      "id": "api",
+      "title": "API Integration",
+      "expanded": true,
+      "content": "<p>Connect with third-party services via our REST API.</p>"
+    }
+  ]'>
+</spectrum-accordion>
+```
+
+### 3. Using Named Slots for Custom Content
+```html
+<spectrum-accordion 
+  variant="standard"
+  expand-mode="single"
+  sections='[
+    {
+      "id": "custom1",
+      "title": "Custom Components Section"
+    },
+    {
+      "id": "custom2",
+      "title": "Interactive Elements"
+    }
+  ]'>
+  
+  <!-- Named slots for specific sections -->
+  <div slot="section-custom1">
+    <spectrum-button variant="primary">Custom Action</spectrum-button>
+    <p>This content uses a named slot and can contain any components.</p>
+  </div>
+  
+  <div slot="section-custom2">
+    <spectrum-chip variant="primary" label="Interactive"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="Components"></spectrum-chip>
+    <p>Mix of interactive components in accordion sections.</p>
+  </div>
+</spectrum-accordion>
+```
+
+### 4. Custom Icons and Styling
+```html
+<spectrum-accordion 
+  variant="standard"
+  expand-mode="single"
+  collapsed-icon="add"
+  expanded-icon="remove"
+  sections='[
+    {
+      "id": "config1",
+      "title": "Configuration Option 1",
+      "content": "<p>First configuration option details.</p>"
+    },
+    {
+      "id": "config2",
+      "title": "Configuration Option 2",
+      "content": "<p>Second configuration option details.</p>"
+    }
+  ]'>
 </spectrum-accordion>
 ```
 
 ## Event Handling
 
-The accordion emits an `accordionToggle` event when expanded or collapsed:
+Both variants emit `accordionToggle` events with different payload structures:
 
+### Chip Variant Events
 ```javascript
 document.querySelector('spectrum-accordion').addEventListener('accordionToggle', (event) => {
   const { expanded, accordionId } = event.detail;
-  console.log(`Accordion ${accordionId} is now ${expanded ? 'expanded' : 'collapsed'}`);
+  console.log(`Chip accordion ${accordionId} is now ${expanded ? 'expanded' : 'collapsed'}`);
+});
+```
+
+### Standard Variant Events
+```javascript
+document.querySelector('spectrum-accordion').addEventListener('accordionToggle', (event) => {
+  const { expanded, accordionId, sectionId, expandedSections } = event.detail;
+  console.log(`Section ${sectionId} is now ${expanded ? 'expanded' : 'collapsed'}`);
+  console.log('All expanded sections:', expandedSections);
 });
 ```
 
 ## Properties
 
+### Common Properties
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `variant` | `'chip'` \| `'standard'` | `'standard'` | The variant of the accordion |
+| `collapsedIcon` | string | `'arrow_drop_down'` | Icon to show when collapsed |
+| `expandedIcon` | string | `'arrow_drop_up'` | Icon to show when expanded |
+| `sound` | boolean | `false` | Enable sound effects |
+| `disabled` | boolean | `false` | Disable user interaction |
+| `accordionId` | string | auto-generated | Unique identifier for events |
+| `debug` | boolean | `false` | Enable debug logging |
+
+### Chip Variant Properties
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `expanded` | boolean | `false` | Whether the accordion starts expanded |
 | `label` | string | `'Dive Deeper'` | Text for the trigger button |
-| `collapsedIcon` | string | `'arrow_drop_down'` | Icon to show when collapsed |
-| `expandedIcon` | string | `'arrow_drop_up'` | Icon to show when expanded |
-| `sound` | boolean | `false` | Enable sound effects |
 | `horizontalScroll` | boolean | `true` | Enable horizontal scrolling layout |
-| `disabled` | boolean | `false` | Disable user interaction |
-| `variant` | `'primary'` \| `'secondary'` | `'secondary'` | Visual style variant |
+| `chipVariant` | `'primary'` \| `'secondary'` | `'secondary'` | Visual style of trigger chip |
 | `outline` | boolean | `true` | Show outline on the trigger chip |
-| `accordionId` | string | auto-generated | Unique identifier for events |
-| `debug` | boolean | `false` | Enable debug logging |
+
+### Standard Variant Properties
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `expandMode` | `'single'` \| `'multi'` | `'single'` | Expand behavior mode |
+| `sections` | string \| AccordionSection[] | `[]` | JSON string or array of sections |
+
+## AccordionSection Interface
+
+```typescript
+interface AccordionSection {
+  id: string;          // Unique identifier for the section
+  title: string;       // Display title for the section header
+  content?: string;    // HTML content (optional if using slots)
+  expanded?: boolean;  // Initial expanded state
+}
+```
 
 ## Events
 
+### Chip Variant Events
 | Event | Payload | Description |
 |-------|---------|-------------|
-| `accordionToggle` | `{ expanded: boolean, accordionId: string }` | Fired when accordion is expanded or collapsed |
+| `accordionToggle` | `{ expanded: boolean, accordionId: string }` | Fired when chip accordion is toggled |
+
+### Standard Variant Events
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `accordionToggle` | `{ expanded: boolean, accordionId: string, sectionId: string, expandedSections: string[] }` | Fired when a section is toggled |
 
 ## CSS Custom Properties
 
@@ -127,7 +286,12 @@ The accordion component inherits from the Spectrum design system:
 
 /* Spacing */
 --accordion-spacing: var(--spectrum-sys-spacing, 1em);
---accordion-spacing-small: var(--spectrum-sys-spacing-small, 0.5em);
+--accordion-section-padding: var(--accordion-spacing);
+--accordion-content-padding: var(--accordion-spacing);
+
+/* Standard variant specific */
+--accordion-section-border: 1px solid var(--accordion-outline-variant);
+--accordion-header-height: 3rem;
 
 /* Animation */
 --accordion-transition-duration: var(--spectrum-sys-animation-duration, 300ms);
@@ -136,46 +300,66 @@ The accordion component inherits from the Spectrum design system:
 
 ## Accessibility Features
 
-- **ARIA Compliance**: Proper ARIA attributes for screen readers
-- **Keyboard Navigation**: Full keyboard support
-- **Focus Management**: Clear focus indicators
+- **ARIA Compliance**: Proper ARIA attributes and roles for screen readers
+- **Keyboard Navigation**: Full keyboard support (Tab, Enter, Space)
+- **Focus Management**: Clear focus indicators and logical tab order
+- **Screen Reader Support**: Descriptive labels and state announcements
 - **Reduced Motion**: Respects `prefers-reduced-motion` settings
-- **High Contrast**: Supports high contrast mode
+- **High Contrast**: Enhanced visibility in high contrast mode
 
 ## Best Practices
 
+### Choosing the Right Variant
+
+**Use Chip Variant When:**
+- Showing optional actions or exploration options
+- Content is supplementary and doesn't need immediate visibility
+- You have 3-7 related items to display
+- Space is limited and you need a compact trigger
+
+**Use Standard Variant When:**
+- Creating FAQ sections or help documentation
+- Organizing content into logical sections
+- Users need to compare information across sections (multi-expand)
+- Building navigation or content hierarchies
+
 ### Content Organization
+
+**Chip Variant:**
 - **Horizontal Scroll**: Best for 3-7 short items (chips, tags)
 - **Vertical Stack**: Better for longer lists or items with more text
 - **Grouping**: Use clear, descriptive labels that indicate content type
 
-### Visual Hierarchy
-- **Primary Variant**: Use sparingly for the most important accordions
-- **Secondary Variant**: Standard choice for most use cases
-- **Custom Icons**: Choose icons that clearly indicate expand/collapse state
+**Standard Variant:**
+- **Single Expand**: Good for FAQs where focus on one answer is desired
+- **Multi Expand**: Better for feature comparisons or related content sections
+- **Section Titles**: Use clear, scannable titles that indicate content
 
-### Performance
-- **Lazy Loading**: Consider lazy loading accordion content for better performance
+### Performance Considerations
+
+- **Large Section Lists**: Consider pagination or virtual scrolling for 20+ sections
+- **Rich Content**: Use slots for complex components instead of HTML strings
 - **Animation**: Disable animations on low-powered devices if needed
-- **Sound**: Use sound effects judiciously to avoid overwhelming users
+- **Lazy Loading**: Consider lazy loading accordion content for better performance
 
-## Integration with Spectrum Components
+## Migration from Previous Version
 
-The accordion works seamlessly with other Spectrum components:
+If updating from the previous implementation:
 
-### With Chips
 ```html
-<spectrum-accordion label="Filter Options">
-  <spectrum-chip variant="secondary" label="Category 1" leadingIcon="filter_list"></spectrum-chip>
-  <spectrum-chip variant="secondary" label="Category 2" leadingIcon="filter_list"></spectrum-chip>
+<!-- Old version -->
+<spectrum-accordion 
+  variant="primary"
+  label="My Accordion">
+  Content here
 </spectrum-accordion>
-```
 
-### With Buttons (in vertical mode)
-```html
-<spectrum-accordion label="Actions" horizontalScroll="false">
-  <spectrum-button variant="ghost" buttonText="Action 1" showLeftIcon="true" leftIcon="play_arrow"></spectrum-button>
-  <spectrum-button variant="ghost" buttonText="Action 2" showLeftIcon="true" leftIcon="download"></spectrum-button>
+<!-- New version -->
+<spectrum-accordion 
+  variant="chip"
+  chip-variant="primary" 
+  label="My Accordion">
+  Content here
 </spectrum-accordion>
 ```
 
@@ -184,16 +368,27 @@ The accordion works seamlessly with other Spectrum components:
 ### Common Issues
 
 **Accordion content not showing**
-- Check that `expanded` property is set correctly
-- Verify slot content is properly nested inside the accordion
+- Check that `variant` is set correctly
+- For chip variant: verify `expanded` property
+- For standard variant: check `sections` JSON format
 - Enable `debug` mode to see state changes in console
+
+**Standard variant sections not rendering**
+- Verify `sections` prop contains valid JSON
+- Check that section IDs are unique
+- Ensure section titles are provided
+
+**Named slots not working**
+- Check slot name format: `slot="section-{sectionId}"`
+- Verify section ID matches exactly
+- Ensure section exists in sections array
 
 **Animation not working**
 - Check if `prefers-reduced-motion` is enabled
 - Verify CSS custom properties are loaded
 - Ensure no conflicting CSS animations
 
-**Sound not playing**
-- Check that `sound` property is `true`
-- Verify audio files are accessible
-- Check browser audio policies and user permissions 
+**Events not firing**
+- Check event listener is attached correctly
+- Verify event name: `accordionToggle`
+- Enable debug mode to see internal state changes 

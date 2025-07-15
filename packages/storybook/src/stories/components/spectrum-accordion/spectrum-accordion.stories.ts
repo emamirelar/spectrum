@@ -4,17 +4,25 @@ import { action } from '@storybook/addon-actions';
 import docs from './spectrum-accordion.docs.md?raw';
 
 interface SpectrumAccordionArgs {
+  // Common props
   expanded: boolean;
-  label: string;
   collapsedIcon: string;
   expandedIcon: string;
   sound: boolean;
-  horizontalScroll: boolean;
   disabled: boolean;
-  variant: 'primary' | 'secondary';
-  outline: boolean;
   accordionId: string;
   debug: boolean;
+  variant: 'chip' | 'standard';
+  
+  // Chip variant props
+  label: string;
+  horizontalScroll: boolean;
+  chipVariant: 'primary' | 'secondary';
+  outline: boolean;
+  
+  // Standard variant props
+  expandMode: 'single' | 'multi';
+  sections: string;
 }
 
 const meta: Meta<SpectrumAccordionArgs> = {
@@ -30,9 +38,18 @@ const meta: Meta<SpectrumAccordionArgs> = {
     }
   },
   argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['chip', 'standard'],
+      description: 'The variant of the accordion',
+      table: {
+        type: { summary: "'chip' | 'standard'" },
+        defaultValue: { summary: 'standard' }
+      }
+    },
     expanded: {
       control: 'boolean',
-      description: 'Whether the accordion is initially expanded',
+      description: 'Whether the accordion is initially expanded (chip variant only)',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -40,7 +57,7 @@ const meta: Meta<SpectrumAccordionArgs> = {
     },
     label: {
       control: 'text',
-      description: 'Label text for the accordion trigger',
+      description: 'Label text for the accordion trigger (chip variant only)',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'Dive Deeper' }
@@ -72,7 +89,7 @@ const meta: Meta<SpectrumAccordionArgs> = {
     },
     horizontalScroll: {
       control: 'boolean',
-      description: 'Enable horizontal scrolling container',
+      description: 'Enable horizontal scrolling container (chip variant only)',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' }
@@ -86,10 +103,10 @@ const meta: Meta<SpectrumAccordionArgs> = {
         defaultValue: { summary: 'false' }
       }
     },
-    variant: {
+    chipVariant: {
       control: { type: 'select' },
       options: ['primary', 'secondary'],
-      description: 'Visual variant of the trigger chip',
+      description: 'Visual variant of the trigger chip (chip variant only)',
       table: {
         type: { summary: "'primary' | 'secondary'" },
         defaultValue: { summary: 'secondary' }
@@ -97,10 +114,27 @@ const meta: Meta<SpectrumAccordionArgs> = {
     },
     outline: {
       control: 'boolean',
-      description: 'Show outline on the trigger chip',
+      description: 'Show outline on the trigger chip (chip variant only)',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' }
+      }
+    },
+    expandMode: {
+      control: { type: 'select' },
+      options: ['single', 'multi'],
+      description: 'Expand behavior for standard variant',
+      table: {
+        type: { summary: "'single' | 'multi'" },
+        defaultValue: { summary: 'single' }
+      }
+    },
+    sections: {
+      control: 'text',
+      description: 'JSON string of sections for standard variant',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '[]' }
       }
     },
     accordionId: {
@@ -125,7 +159,7 @@ const meta: Meta<SpectrumAccordionArgs> = {
 export default meta;
 type Story = StoryObj<SpectrumAccordionArgs>;
 
-// Sample exploration content
+// Sample exploration content for chip variant
 const sampleExplorations = [
   { label: 'Renewable Energy Sources', value: 'renewable-energy' },
   { label: 'Solar Panel Efficiency', value: 'solar-efficiency' },
@@ -134,8 +168,57 @@ const sampleExplorations = [
   { label: 'Energy Storage Solutions', value: 'energy-storage' }
 ];
 
-export const Default: Story = {
+// Sample sections for standard variant
+const faqSections = [
+  {
+    id: 'getting-started',
+    title: 'How do I get started?',
+    content: '<p>Getting started is easy! Simply follow our comprehensive quick start guide that walks you through the initial setup process.</p>'
+  },
+  {
+    id: 'system-requirements',
+    title: 'What are the system requirements?',
+    content: '<p>Our platform works on all modern browsers including Chrome, Firefox, Safari, and Edge. We also support mobile devices running iOS 12+ and Android 8+.</p>'
+  },
+  {
+    id: 'support',
+    title: 'How do I contact support?',
+    content: '<p>You can reach our support team via email at support@example.com or through our live chat feature available 24/7.</p>'
+  },
+  {
+    id: 'pricing',
+    title: 'What are your pricing plans?',
+    content: '<p>We offer flexible pricing plans starting from $10/month for basic usage up to enterprise solutions. Contact our sales team for custom pricing.</p>'
+  }
+];
+
+const featureSections = [
+  {
+    id: 'analytics',
+    title: 'Advanced Analytics',
+    expanded: true,
+    content: '<p>Get detailed insights with our comprehensive analytics dashboard featuring real-time data visualization and custom reporting.</p>'
+  },
+  {
+    id: 'collaboration',
+    title: 'Real-time Collaboration',
+    content: '<p>Work together with your team in real-time with live editing, commenting, and notification systems.</p>'
+  },
+  {
+    id: 'api-integration',
+    title: 'API Integration',
+    expanded: true,
+    content: '<p>Connect with third-party services via our robust REST API with comprehensive documentation and SDKs.</p>'
+  }
+];
+
+// ==============================================
+// Chip Variant Stories
+// ==============================================
+
+export const ChipVariantDefault: Story = {
   args: {
+    variant: 'chip',
     expanded: false,
     label: 'Dive Deeper',
     collapsedIcon: 'arrow_drop_down',
@@ -143,13 +226,16 @@ export const Default: Story = {
     sound: false,
     horizontalScroll: true,
     disabled: false,
-    variant: 'secondary',
+    chipVariant: 'secondary',
     outline: true,
-    accordionId: 'default-accordion',
-    debug: false
+    accordionId: 'chip-default-accordion',
+    debug: false,
+    expandMode: 'single',
+    sections: ''
   },
   render: (args) => html`
     <spectrum-accordion
+      .variant=${args.variant}
       .expanded=${args.expanded}
       .label=${args.label}
       .collapsedIcon=${args.collapsedIcon}
@@ -157,7 +243,7 @@ export const Default: Story = {
       .sound=${args.sound}
       .horizontalScroll=${args.horizontalScroll}
       .disabled=${args.disabled}
-      .variant=${args.variant}
+      .chipVariant=${args.chipVariant}
       .outline=${args.outline}
       .accordionId=${args.accordionId}
       .debug=${args.debug}
@@ -176,113 +262,56 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Basic accordion with horizontal scrolling content. Click the trigger to expand/collapse.'
+        story: 'Default chip variant accordion with horizontal scrolling content. This is the original implementation - perfect for showing additional actions or exploration options.'
       }
     }
   }
 };
 
-export const ExpandedByDefault: Story = {
+export const ChipVariantExpanded: Story = {
   args: {
-    ...Default.args,
+    ...ChipVariantDefault.args,
     expanded: true,
-    accordionId: 'expanded-accordion'
+    accordionId: 'chip-expanded-accordion'
   },
-  render: Default.render,
+  render: ChipVariantDefault.render,
   parameters: {
     docs: {
       description: {
-        story: 'Accordion that starts in the expanded state.'
+        story: 'Chip variant accordion that starts in the expanded state.'
       }
     }
   }
 };
 
-export const VerticalLayout: Story = {
+export const ChipVariantVertical: Story = {
   args: {
-    ...Default.args,
+    ...ChipVariantDefault.args,
     horizontalScroll: false,
     label: 'Show Options',
-    accordionId: 'vertical-accordion'
+    accordionId: 'chip-vertical-accordion'
   },
-  render: (args) => html`
-    <spectrum-accordion
-      .expanded=${args.expanded}
-      .label=${args.label}
-      .collapsedIcon=${args.collapsedIcon}
-      .expandedIcon=${args.expandedIcon}
-      .sound=${args.sound}
-      .horizontalScroll=${args.horizontalScroll}
-      .disabled=${args.disabled}
-      .variant=${args.variant}
-      .outline=${args.outline}
-      .accordionId=${args.accordionId}
-      .debug=${args.debug}
-      @accordionToggle=${(e: CustomEvent) => action('Accordion Toggled')(e.detail)}
-    >
-      ${sampleExplorations.map(exploration => html`
-        <spectrum-chip
-          variant="secondary"
-          label=${exploration.label}
-          leadingIcon="prompt_suggestion"
-          @click=${() => action('Exploration Clicked')(exploration)}
-        ></spectrum-chip>
-      `)}
-    </spectrum-accordion>
-  `,
+  render: ChipVariantDefault.render,
   parameters: {
     docs: {
       description: {
-        story: 'Accordion with vertical content layout instead of horizontal scrolling. Better for longer lists or items with more text.'
+        story: 'Chip variant with vertical content layout instead of horizontal scrolling. Better for longer lists or items with more text.'
       }
     }
   }
 };
 
-export const CustomIcons: Story = {
+export const ChipVariantPrimary: Story = {
   args: {
-    ...Default.args,
-    label: 'More Details',
-    collapsedIcon: 'expand_more',
-    expandedIcon: 'expand_less',
-    accordionId: 'custom-icons-accordion'
-  },
-  render: Default.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Accordion with custom expand/collapse icons and label.'
-      }
-    }
-  }
-};
-
-export const DisabledState: Story = {
-  args: {
-    ...Default.args,
-    disabled: true,
-    accordionId: 'disabled-accordion'
-  },
-  render: Default.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Accordion in disabled state - cannot be interacted with.'
-      }
-    }
-  }
-};
-
-export const PrimaryVariant: Story = {
-  args: {
-    ...Default.args,
-    variant: 'primary',
+    ...ChipVariantDefault.args,
+    chipVariant: 'primary',
     outline: false,
     label: 'Explore More',
-    accordionId: 'primary-accordion'
+    accordionId: 'chip-primary-accordion'
   },
   render: (args) => html`
     <spectrum-accordion
+      .variant=${args.variant}
       .expanded=${args.expanded}
       .label=${args.label}
       .collapsedIcon=${args.collapsedIcon}
@@ -290,7 +319,7 @@ export const PrimaryVariant: Story = {
       .sound=${args.sound}
       .horizontalScroll=${args.horizontalScroll}
       .disabled=${args.disabled}
-      .variant=${args.variant}
+      .chipVariant=${args.chipVariant}
       .outline=${args.outline}
       .accordionId=${args.accordionId}
       .debug=${args.debug}
@@ -309,95 +338,228 @@ export const PrimaryVariant: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Accordion using primary chip variant without outline for emphasis.'
+        story: 'Chip variant using primary styling without outline for emphasis.'
       }
     }
   }
 };
 
-export const SoundEnabled: Story = {
+// ==============================================
+// Standard Variant Stories
+// ==============================================
+
+export const StandardVariantSingle: Story = {
   args: {
-    ...Default.args,
-    sound: true,
-    accordionId: 'sound-accordion'
+    variant: 'standard',
+    expandMode: 'single',
+    sections: JSON.stringify(faqSections),
+    collapsedIcon: 'arrow_drop_down',
+    expandedIcon: 'arrow_drop_up',
+    disabled: false,
+    accordionId: 'standard-single-accordion',
+    debug: false,
+    // Chip variant props (not used but needed for interface)
+    expanded: false,
+    label: '',
+    horizontalScroll: true,
+    chipVariant: 'secondary',
+    outline: true,
+    sound: false
   },
   render: (args) => html`
     <spectrum-accordion
-      .expanded=${args.expanded}
-      .label=${args.label}
+      .variant=${args.variant}
+      .expandMode=${args.expandMode}
+      .sections=${args.sections}
       .collapsedIcon=${args.collapsedIcon}
       .expandedIcon=${args.expandedIcon}
-      .sound=${args.sound}
-      .horizontalScroll=${args.horizontalScroll}
       .disabled=${args.disabled}
-      .variant=${args.variant}
-      .outline=${args.outline}
       .accordionId=${args.accordionId}
       .debug=${args.debug}
-      @accordionToggle=${(e: CustomEvent) => action('Accordion Toggled')(e.detail)}
+      @accordionToggle=${(e: CustomEvent) => action('Section Toggled')(e.detail)}
     >
-      ${sampleExplorations.slice(0, 3).map(exploration => html`
-        <spectrum-chip
-          variant="secondary"
-          label=${exploration.label}
-          leadingIcon="prompt_suggestion"
-          sound=${args.sound}
-          @click=${() => action('Exploration Clicked')(exploration)}
-        ></spectrum-chip>
-      `)}
     </spectrum-accordion>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Accordion with sound effects enabled. Make sure your volume is on to hear the audio feedback!'
+        story: 'Standard accordion variant with single expand mode. Only one section can be expanded at a time. Perfect for FAQs and content organization where you want users to focus on one item.'
       }
     }
   }
 };
 
-export const MultipleAccordions: Story = {
+export const StandardVariantMulti: Story = {
   args: {
-    ...Default.args
+    ...StandardVariantSingle.args,
+    expandMode: 'multi',
+    sections: JSON.stringify(featureSections),
+    accordionId: 'standard-multi-accordion'
+  },
+  render: StandardVariantSingle.render,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Standard accordion variant with multi expand mode. Multiple sections can be expanded simultaneously. Some sections start expanded based on their initial state.'
+      }
+    }
+  }
+};
+
+export const StandardVariantWithSlots: Story = {
+  args: {
+    ...StandardVariantSingle.args,
+    expandMode: 'single',
+    sections: JSON.stringify([
+      { id: 'custom1', title: 'Custom Content Section' },
+      { id: 'custom2', title: 'Interactive Components' },
+      { id: 'fallback', title: 'Mixed Content' }
+    ]),
+    accordionId: 'standard-slots-accordion'
+  },
+  render: (args) => html`
+    <spectrum-accordion
+      .variant=${args.variant}
+      .expandMode=${args.expandMode}
+      .sections=${args.sections}
+      .collapsedIcon=${args.collapsedIcon}
+      .expandedIcon=${args.expandedIcon}
+      .disabled=${args.disabled}
+      .accordionId=${args.accordionId}
+      .debug=${args.debug}
+      @accordionToggle=${(e: CustomEvent) => action('Section Toggled')(e.detail)}
+    >
+      <!-- Named slots for specific sections -->
+      <div slot="section-custom1">
+        <spectrum-button variant="primary">Custom Action</spectrum-button>
+        <p>This content uses a named slot and can contain any components.</p>
+      </div>
+      
+      <div slot="section-custom2">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <spectrum-chip variant="primary" label="Interactive"></spectrum-chip>
+          <spectrum-chip variant="secondary" label="Components"></spectrum-chip>
+          <spectrum-button variant="secondary">Click Me</spectrum-button>
+        </div>
+        <p>This section demonstrates interactive components within accordion sections.</p>
+      </div>
+      
+      <!-- Fallback content for sections without named slots -->
+      <div>
+        <p>This is fallback content that will be used for the "Mixed Content" section since it doesn't have a named slot.</p>
+        <spectrum-chip variant="secondary" label="Fallback Content"></spectrum-chip>
+      </div>
+    </spectrum-accordion>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Standard accordion with custom slotted content. Shows how to use named slots for specific sections and fallback content for others.'
+      }
+    }
+  }
+};
+
+export const StandardVariantDisabled: Story = {
+  args: {
+    ...StandardVariantSingle.args,
+    disabled: true,
+    accordionId: 'standard-disabled-accordion'
+  },
+  render: StandardVariantSingle.render,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Standard accordion in disabled state - sections cannot be expanded or collapsed.'
+      }
+    }
+  }
+};
+
+// ==============================================
+// Comparison and Advanced Examples
+// ==============================================
+
+export const BothVariantsComparison: Story = {
+  args: {
+    ...ChipVariantDefault.args
   },
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Chip Variant</h3>
+        <spectrum-accordion
+          variant="chip"
+          label="Show Energy Sources"
+          accordionId="comparison-chip"
+          @accordionToggle=${(e: CustomEvent) => action('Chip Accordion Toggled')(e.detail)}
+        >
+          ${sampleExplorations.slice(0, 3).map(exploration => html`
+            <spectrum-chip
+              variant="secondary"
+              label=${exploration.label}
+              leadingIcon="prompt_suggestion"
+              @click=${() => action('Chip Content Clicked')(exploration)}
+            ></spectrum-chip>
+          `)}
+        </spectrum-accordion>
+      </div>
+      
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Standard Variant</h3>
+        <spectrum-accordion
+          variant="standard"
+          expand-mode="single"
+          sections=${JSON.stringify(faqSections.slice(0, 3))}
+          accordionId="comparison-standard"
+          @accordionToggle=${(e: CustomEvent) => action('Standard Accordion Toggled')(e.detail)}
+        >
+        </spectrum-accordion>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Side-by-side comparison of both accordion variants showing their different use cases and interaction patterns.'
+      }
+    }
+  }
+};
+
+export const MultipleStandardAccordions: Story = {
+  args: {
+    ...StandardVariantSingle.args
+  },
+  render: () => html`
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
       <spectrum-accordion
-        label="Energy Sources"
-        accordionId="energy-accordion"
-        @accordionToggle=${(e: CustomEvent) => action('Energy Accordion Toggled')(e.detail)}
+        variant="standard"
+        expand-mode="single"
+        sections=${JSON.stringify(faqSections.slice(0, 2))}
+        accordionId="multiple-faq"
+        @accordionToggle=${(e: CustomEvent) => action('FAQ Accordion Toggled')(e.detail)}
       >
-        ${sampleExplorations.slice(0, 3).map(exploration => html`
-          <spectrum-chip
-            variant="secondary"
-            label=${exploration.label}
-            leadingIcon="prompt_suggestion"
-            @click=${() => action('Energy Exploration Clicked')(exploration)}
-          ></spectrum-chip>
-        `)}
       </spectrum-accordion>
       
       <spectrum-accordion
-        label="Technology Solutions"
-        accordionId="tech-accordion"
-        @accordionToggle=${(e: CustomEvent) => action('Tech Accordion Toggled')(e.detail)}
+        variant="standard"
+        expand-mode="multi"
+        sections=${JSON.stringify(featureSections)}
+        accordionId="multiple-features"
+        @accordionToggle=${(e: CustomEvent) => action('Features Accordion Toggled')(e.detail)}
       >
-        ${sampleExplorations.slice(3).map(exploration => html`
-          <spectrum-chip
-            variant="secondary"
-            label=${exploration.label}
-            leadingIcon="prompt_suggestion"
-            @click=${() => action('Tech Exploration Clicked')(exploration)}
-          ></spectrum-chip>
-        `)}
       </spectrum-accordion>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Multiple independent accordions working together. Each accordion maintains its own state.'
+        story: 'Multiple independent standard accordions with different expand modes working together on the same page.'
       }
     }
   }
-}; 
+};
+
+// Alias for backward compatibility
+export const Default = ChipVariantDefault; 
