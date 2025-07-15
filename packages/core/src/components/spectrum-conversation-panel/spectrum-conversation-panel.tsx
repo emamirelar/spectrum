@@ -211,6 +211,53 @@ export class SpectrumConversationPanel {
     }
   }
 
+  /**
+   * Scrolls to the bottom of the expanded accordion containing explorations
+   * @param messageId - The ID of the message containing the explorations
+   * @param explorationsCount - The total number of explorations (unused but kept for compatibility)
+   */
+  private scrollToLastExploration(messageId: string, explorationsCount: number) {
+    // Wait for DOM to update after accordion expansion and animations
+    setTimeout(() => {
+      if (!this.conversationPanelRef) {
+        return;
+      }
+      
+      // Find the message container first
+      const messageContainer = this.el?.querySelector(`#message-${messageId}`);
+      if (!messageContainer) {
+        return;
+      }
+      
+      // Find the accordion within this message container
+      const accordion = messageContainer.querySelector('spectrum-accordion');
+      if (!accordion) {
+        return;
+      }
+      
+      // Check if accordion has chips (meaning it's expanded)
+      const chips = accordion.querySelectorAll('spectrum-chip');
+      if (chips.length === 0) {
+        // Retry with longer delay if accordion not expanded yet
+        setTimeout(() => this.scrollToLastExploration(messageId, explorationsCount), 200);
+        return;
+      }
+      
+      // Scroll to the bottom of the expanded accordion
+      const accordionRect = accordion.getBoundingClientRect();
+      const panelRect = this.conversationPanelRef.getBoundingClientRect();
+      
+      // Calculate scroll position to show the bottom of the accordion
+      const scrollTop = this.conversationPanelRef.scrollTop + 
+                       accordionRect.bottom - panelRect.bottom + 20; // 20px padding
+      
+      this.conversationPanelRef.scrollTo({
+        top: Math.max(0, scrollTop),
+        behavior: 'smooth'
+      });
+    }, 500); // Wait for accordion expansion animations
+  }
+
   componentDidLoad() {
     this.debugLog('Component loaded, updating messages and scrolling to latest');
     this.updateMessages(this.messages);
@@ -347,6 +394,12 @@ export class SpectrumConversationPanel {
 
     // Check if data exists for conditional rendering
     const hasExplorations = response.explorations && Array.isArray(response.explorations) && response.explorations.length > 0;
+    console.log('renderResponse - checking explorations', { 
+      messageId, 
+      hasExplorations, 
+      explorations: response.explorations, 
+      explorationsLength: response.explorations?.length 
+    });
 
     return [
       <div class="message-wrapper response" id={`message-${messageId}`}>
@@ -358,19 +411,28 @@ export class SpectrumConversationPanel {
           <div class="actions">
             {this.renderActions(messageId)}
           </div>
-          {hasExplorations && (
-            <spectrum-accordion
-              variant="chip"
-              expanded={activeAccordion === 'explorations'}
-              label="Dive Deeper"
-              sound={this.sound}
-              horizontalScroll={false}
-              accordionId={`explorations-${messageId}`}
-              onAccordionToggle={(event) => this.handleAccordionToggle(event, messageId, 'explorations')}
-            >
-              {this.renderExplorations(response.explorations, messageId)}
-            </spectrum-accordion>
-          )}
+          {hasExplorations && (() => {
+            console.log('RENDERING ACCORDION!', { 
+              messageId, 
+              expanded: activeAccordion === 'explorations',
+              activeAccordion,
+              expandedMessageId: this.expandedMessageId,
+              expandedAccordionType: this.expandedAccordionType
+            });
+            return (
+              <spectrum-accordion
+                variant="chip"
+                expanded={activeAccordion === 'explorations'}
+                label="Dive Deeper"
+                sound={this.sound}
+                horizontalScroll={false}
+                accordionId={`explorations-${messageId}`}
+                onAccordionToggle={(event) => this.handleAccordionToggle(event, messageId, 'explorations')}
+              >
+                {this.renderExplorations(response.explorations, messageId)}
+              </spectrum-accordion>
+            );
+          })()}
         </div>
       </div>
     ];
@@ -424,36 +486,54 @@ export class SpectrumConversationPanel {
    * @param messageId - the ID of the message these explorations belong to
    */
   renderExplorations(explorations: any, messageId?: string) {
+    console.log('renderExplorations CALLED!', { explorations, messageId, explorationsLength: explorations?.length });
     this.debugLog('renderExplorations called', { explorations, messageId });
     if (!explorations || !Array.isArray(explorations) || explorations.length === 0) {
+      console.log('NO VALID EXPLORATIONS - returning null', { explorations });
       this.debugLog('No valid explorations provided');
       return null;
     }
     
     // Return chips directly without container div for accordion usage
-    return explorations.map((exploration) => (
-      <spectrum-chip
-        variant="secondary"
-        label={exploration.label}
-        leadingIcon="prompt_suggestion"
-        sound={this.sound}
-        onClick={() => this.action.emit({
-          action: 'explore',
-          type: 'exploration',
-          value: exploration.value,
-          messageId: messageId
-        })}
-      />
-    ));
+    console.log('CREATING EXPLORATION CHIPS!', { count: explorations.length, messageId });
+    return explorations.map((exploration) => {
+      console.log('Creating chip for exploration:', exploration.label);
+      return (
+        <spectrum-chip
+          variant="secondary"
+          label={exploration.label}
+          leadingIcon="prompt_suggestion"
+          sound={this.sound}
+          onClick={() => {
+            console.log('EXPLORATION CLICKED!', { exploration: exploration.label, messageId, debug: this.debug });
+            this.debugLog('Exploration clicked', { exploration: exploration.label, messageId });
+            this.action.emit({
+              action: 'explore',
+              type: 'exploration',
+              value: exploration.value,
+              messageId: messageId
+            });
+          }}
+        />
+      );
+    });
   }
 
   private handleAccordionToggle = (event: CustomEvent, messageId: string, accordionType: 'explorations') => {
     const { expanded } = event.detail;
+    console.log('ACCORDION TOGGLED!', { messageId, accordionType, expanded, event: event.detail });
     
     if (expanded) {
+      console.log('ACCORDION EXPANDED - setting state', { messageId, accordionType });
       this.expandedMessageId = messageId;
       this.expandedAccordionType = accordionType;
+      
+      // Scroll to show the bottom of the expanded accordion
+      if (accordionType === 'explorations') {
+        this.scrollToLastExploration(messageId, 0); // explorationsCount not needed for this approach
+      }
     } else {
+      console.log('ACCORDION COLLAPSED - clearing state');
       this.expandedMessageId = null;
       this.expandedAccordionType = null;
     }
