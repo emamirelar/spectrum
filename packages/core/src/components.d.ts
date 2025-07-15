@@ -853,6 +853,7 @@ export namespace Components {
           * @default 'no'
          */
         "frostControlBar": FrostLevel;
+        "galleryTitle"?: string;
         /**
           * @default []
          */
@@ -961,10 +962,19 @@ export namespace Components {
          */
         "noPadding": boolean;
         /**
+          * Title to display at the top of the panel
+         */
+        "panelTitle"?: string;
+        /**
           * Size preset for the panel Default: 'full' (occupies all available space)
           * @default 'full'
          */
         "size": 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Whether the title should be editable Default: false
+          * @default false
+         */
+        "titleEditable": boolean;
         /**
           * Custom width for the panel (overrides size preset) Can be any valid CSS width value (e.g., '300px', '50%', '20rem')
          */
@@ -1564,6 +1574,10 @@ export interface SpectrumMenuCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumMenuElement;
 }
+export interface SpectrumPanelCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumPanelElement;
+}
 export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumRailElement;
@@ -1854,7 +1868,18 @@ declare global {
         prototype: HTMLSpectrumMenuElement;
         new (): HTMLSpectrumMenuElement;
     };
+    interface HTMLSpectrumPanelElementEventMap {
+        "titleChanged": {action: string, value: string};
+    }
     interface HTMLSpectrumPanelElement extends Components.SpectrumPanel, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumPanelElement, ev: SpectrumPanelCustomEvent<HTMLSpectrumPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumPanelElement, ev: SpectrumPanelCustomEvent<HTMLSpectrumPanelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLSpectrumPanelElement: {
         prototype: HTMLSpectrumPanelElement;
@@ -2920,6 +2945,7 @@ declare namespace LocalJSX {
           * @default 'no'
          */
         "frostControlBar"?: FrostLevel;
+        "galleryTitle"?: string;
         /**
           * @default []
          */
@@ -3040,10 +3066,23 @@ declare namespace LocalJSX {
          */
         "noPadding"?: boolean;
         /**
+          * Event emitted when the title is changed (only when titleEditable is true)
+         */
+        "onTitleChanged"?: (event: SpectrumPanelCustomEvent<{action: string, value: string}>) => void;
+        /**
+          * Title to display at the top of the panel
+         */
+        "panelTitle"?: string;
+        /**
           * Size preset for the panel Default: 'full' (occupies all available space)
           * @default 'full'
          */
         "size"?: 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Whether the title should be editable Default: false
+          * @default false
+         */
+        "titleEditable"?: boolean;
         /**
           * Custom width for the panel (overrides size preset) Can be any valid CSS width value (e.g., '300px', '50%', '20rem')
          */

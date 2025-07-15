@@ -394,14 +394,14 @@ export declare interface SpectrumHero extends Components.SpectrumHero {
 
 
 @ProxyCmp({
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode']
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({
   selector: 'spectrum-image-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode'],
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
   protected el: HTMLSpectrumImageGalleryElement;
@@ -463,25 +463,31 @@ export declare interface SpectrumMenu extends Components.SpectrumMenu {
 
 
 @ProxyCmp({
-  inputs: ['background', 'debug', 'frost', 'height', 'noPadding', 'size', 'width']
+  inputs: ['background', 'debug', 'frost', 'height', 'noPadding', 'panelTitle', 'size', 'titleEditable', 'width']
 })
 @Component({
   selector: 'spectrum-panel',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['background', 'debug', 'frost', 'height', 'noPadding', 'size', 'width'],
+  inputs: ['background', 'debug', 'frost', 'height', 'noPadding', 'panelTitle', 'size', 'titleEditable', 'width'],
 })
 export class SpectrumPanel {
   protected el: HTMLSpectrumPanelElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['titleChanged']);
   }
 }
 
 
-export declare interface SpectrumPanel extends Components.SpectrumPanel {}
+export declare interface SpectrumPanel extends Components.SpectrumPanel {
+  /**
+   * Event emitted when the title is changed (only when titleEditable is true)
+   */
+  titleChanged: EventEmitter<CustomEvent<{action: string, value: string}>>;
+}
 
 
 @ProxyCmp({

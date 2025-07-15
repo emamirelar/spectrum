@@ -44,6 +44,7 @@ export class SpectrumImageGallery {
   @Prop() background: BackgroundLevel = 'opaque';
   @Prop() frostControlBar: FrostLevel = 'no';
   @Prop() debug: boolean = false;
+  @Prop() galleryTitle?: string;
   
   // Primary Action Properties
   @Prop() primaryActionText: string = '';
@@ -753,6 +754,8 @@ export class SpectrumImageGallery {
           debug={this.debug}
           size="full"
           noPadding={true}
+          panelTitle={this.galleryTitle}
+          titleEditable={false}
         >
           <div class={{
             'gallery': true,

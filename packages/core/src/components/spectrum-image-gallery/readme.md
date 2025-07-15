@@ -15,6 +15,7 @@
 | `background`         | `background`           |             | `"full-frost" \| "opaque" \| "partial-frost" \| "transparent"` | `'opaque'`   |
 | `debug`              | `debug`                |             | `boolean`                                                      | `false`      |
 | `frostControlBar`    | `frost-control-bar`    |             | `"full" \| "no" \| "partial"`                                  | `'no'`       |
+| `galleryTitle`       | `gallery-title`        |             | `string`                                                       | `undefined`  |
 | `images`             | `images`               |             | `ImageConfig[]`                                                | `[]`         |
 | `previewMode`        | `preview-mode`         |             | `boolean`                                                      | `false`      |
 | `primaryActionIcon`  | `primary-action-icon`  |             | `string`                                                       | `''`         |

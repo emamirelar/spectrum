@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title Functionality Test</title>
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .test-item {
+            margin: 20px 0;
+            height: 300px;
+        }
+        
+        .result {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+    <script type="module" src="../www/build/index.esm.js"></script>
+</head>
+<body>
+    <h1>Title Functionality Test</h1>
+    
+    <div class="test-container">
+        
+        <!-- Basic Panel Title Tests -->
+        <div class="test-section">
+            <h2>Basic Panel - Non-editable Title</h2>
+            <div class="test-item">
+                <spectrum-panel 
+                    panelTitle="Static Panel Title"
+                    titleEditable="false"
+                    background="opaque"
+                    size="full"
+                >
+                    <p>This panel has a non-editable title. The title should display but not be editable.</p>
+                </spectrum-panel>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Basic Panel - Editable Title</h2>
+            <div class="test-item">
+                <spectrum-panel 
+                    panelTitle="Editable Panel Title"
+                    titleEditable="true"
+                    background="opaque"
+                    size="full"
+                >
+                    <p>This panel has an editable title. Click on the title to edit it.</p>
+                </spectrum-panel>
+            </div>
+            <div class="result" id="panel-title-result">
+                Title changes will appear here...
+            </div>
+        </div>
+        
+        <!-- Conversation Panel Test -->
+        <div class="test-section">
+            <h2>Conversation Panel - Editable Title</h2>
+            <div class="test-item">
+                <spectrum-conversation-panel 
+                    conversationtitle="Editable Conversation Title"
+                    background="opaque"
+                    messages='[
+                        {
+                            "id": "msg-001",
+                            "message": "Hello! This is a test message.",
+                            "sender": "request",
+                            "timestamp": "2024-03-20T10:00:00Z"
+                        },
+                        {
+                            "id": "msg-002",
+                            "message": "This is a response with an editable title above.",
+                            "sender": "response",
+                            "timestamp": "2024-03-20T10:00:05Z"
+                        }
+                    ]'
+                >
+                </spectrum-conversation-panel>
+            </div>
+            <div class="result" id="conversation-title-result">
+                Title changes will appear here...
+            </div>
+        </div>
+        
+        <!-- Image Gallery Test -->
+        <div class="test-section">
+            <h2>Image Gallery - Non-editable Title</h2>
+            <div class="test-item">
+                <spectrum-image-gallery 
+                    galleryTitle="Gallery Title (Non-editable)"
+                    background="opaque"
+                    selectionMode="single"
+                    allowUpload="true"
+                    allowUrlInput="true"
+                    allowDelete="true"
+                >
+                </spectrum-image-gallery>
+            </div>
+            <div class="result">
+                This gallery has a non-editable title. The title should display but not be editable.
+            </div>
+        </div>
+        
+        <!-- No Title Test -->
+        <div class="test-section full-width">
+            <h2>Panel Without Title</h2>
+            <div class="test-item">
+                <spectrum-panel 
+                    background="opaque"
+                    size="full"
+                >
+                    <p>This panel has no title. The title area should not appear.</p>
+                </spectrum-panel>
+            </div>
+        </div>
+        
+    </div>
+    
+    <script>
+        // Test event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Listen for title changes from basic panel
+            const editablePanel = document.querySelector('spectrum-panel[titleEditable="true"]');
+            if (editablePanel) {
+                editablePanel.addEventListener('titleChanged', function(event) {
+                    console.log('Panel title changed:', event.detail);
+                    document.getElementById('panel-title-result').textContent = 
+                        `Title changed to: "${event.detail.value}" (Action: ${event.detail.action})`;
+                });
+            }
+            
+            // Listen for title changes from conversation panel
+            const conversationPanel = document.querySelector('spectrum-conversation-panel');
+            if (conversationPanel) {
+                conversationPanel.addEventListener('titleChanged', function(event) {
+                    console.log('Conversation title changed:', event.detail);
+                    document.getElementById('conversation-title-result').textContent = 
+                        `Title changed to: "${event.detail.value}" (Action: ${event.detail.action})`;
+                });
+            }
+            
+            console.log('Title functionality test loaded');
+        });
+    </script>
+</body>
+</html> 

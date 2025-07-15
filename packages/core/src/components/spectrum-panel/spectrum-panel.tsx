@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 export type BackgroundLevel = 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
 
@@ -49,12 +49,85 @@ export class SpectrumPanel {
   @Prop() noPadding: boolean = false;
 
   /**
+   * Title to display at the top of the panel
+   */
+  @Prop() panelTitle?: string;
+
+  /**
+   * Whether the title should be editable
+   * Default: false
+   */
+  @Prop() titleEditable: boolean = false;
+
+  /**
+   * Event emitted when the title is changed (only when titleEditable is true)
+   */
+  @Event({
+    eventName: 'titleChanged',
+    bubbles: true,
+    composed: true,
+    cancelable: true
+  }) titleChanged: EventEmitter<{action: string, value: string}>;
+
+  /**
    * Debug logging utility
    */
   private debugLog(message: string, ...args: any[]) {
     if (this.debug) {
       console.log(`[spectrum-panel] ${message}`, ...args);
     }
+  }
+
+  /**
+   * Handle title edit events
+   */
+  private handleTitleEdit = (event: KeyboardEvent | FocusEvent, newTitle: string) => {
+    const eventType = event.type;
+    
+    if (eventType === 'keydown') {
+      const keyEvent = event as KeyboardEvent;
+      if (keyEvent.key === 'Enter') {
+        keyEvent.preventDefault();
+        (event.target as HTMLElement).blur(); // Remove focus to trigger blur event
+        this.titleChanged.emit({
+          action: 'titleChanged',
+          value: newTitle.trim()
+        });
+      }
+    } else if (eventType === 'blur') {
+      this.titleChanged.emit({
+        action: 'titleChanged',
+        value: newTitle.trim()
+      });
+    }
+  }
+
+  /**
+   * Render the title element
+   */
+  private renderTitle() {
+    if (!this.panelTitle) return null;
+
+    return (
+      <h2 
+        class={{
+          'panel__title': true,
+          'panel__title--editable': this.titleEditable,
+          'panel__title--readonly': !this.titleEditable
+        }}
+        contentEditable={this.titleEditable}
+        onKeyDown={this.titleEditable ? (event) => {
+          const target = event.target as HTMLElement;
+          this.handleTitleEdit(event, target.textContent || '');
+        } : undefined}
+        onBlur={this.titleEditable ? (event) => {
+          const target = event.target as HTMLElement;
+          this.handleTitleEdit(event, target.textContent || '');
+        } : undefined}
+      >
+        {this.panelTitle}
+      </h2>
+    );
   }
 
   render() {
@@ -64,7 +137,9 @@ export class SpectrumPanel {
       size: this.size, 
       width: this.width, 
       height: this.height,
-      noPadding: this.noPadding
+      noPadding: this.noPadding,
+      panelTitle: this.panelTitle,
+      titleEditable: this.titleEditable
     });
     
     // Use background property, but fall back to frost for backward compatibility
@@ -77,6 +152,7 @@ export class SpectrumPanel {
       'panel--full-frost': effectiveBackground === 'full-frost',
       'panel--transparent': effectiveBackground === 'transparent',
       'panel--no-padding': this.noPadding,
+      'panel--has-title': !!this.panelTitle,
       [`size-${this.size}`]: true
     };
 
@@ -88,7 +164,10 @@ export class SpectrumPanel {
     return (
       <Host class="panel-host" style={Object.keys(customStyles).length > 0 ? customStyles : undefined}>
         <div class={panelClasses}>
-          <slot></slot>
+          {this.renderTitle()}
+          <div class="panel__content">
+            <slot></slot>
+          </div>
         </div>
       </Host>
     );

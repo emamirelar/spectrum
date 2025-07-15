@@ -23,11 +23,6 @@ spectrum-panel {
   --panel-custom-width: unset;
   --panel-custom-height: unset;
   
-  /* Ensure all child elements use border-box */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  
   /* Core panel properties - copied from conversation panel */
   --panel-background: var(--spectrum-color-background, #f6f6f6);
   --panel-surface: var(--spectrum-color-surface, #f6f6f6);
@@ -45,6 +40,7 @@ spectrum-panel {
   --panel-font-size-x-large: var(--spectrum-sys-font-size-x-large, 24px);
   --panel-font-weight-regular: var(--spectrum-sys-font-weight-regular, 400);
   --panel-font-weight-medium: var(--spectrum-sys-font-weight-medium, 500);
+  --panel-font-weight-bold: var(--spectrum-sys-font-weight-bold, 700);
   
   /* Spacing */
   --panel-spacing: var(--spectrum-sys-spacing, 1em);
@@ -60,6 +56,34 @@ spectrum-panel {
   --panel-transition-duration: var(--spectrum-sys-animation-duration, 300ms);
   --panel-transition-timing: var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
   --panel-transition: all var(--panel-transition-duration) var(--panel-transition-timing);
+  
+  /* Title properties */
+  --panel-title-font-size: var(--panel-font-size-x-large);
+  --panel-title-font-weight: var(--panel-font-weight-bold);
+  --panel-title-color: var(--panel-on-surface);
+  --panel-title-margin-bottom: var(--panel-spacing);
+  --panel-title-padding: var(--panel-spacing-small);
+  --panel-title-border-radius: var(--panel-border-radius);
+  
+  /* Editable title properties */
+  --panel-title-editable-background: transparent;
+  --panel-title-editable-background-hover: rgba(0, 0, 0, 0.05);
+  --panel-title-editable-background-focus: rgba(0, 0, 0, 0.08);
+  --panel-title-editable-border: 1px solid transparent;
+  --panel-title-editable-border-hover: 1px solid var(--panel-outline-variant);
+  --panel-title-editable-border-focus: 2px solid var(--spectrum-color-primary, #0078d4);
+  --panel-title-editable-cursor: text;
+  
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    --panel-title-editable-background-hover: rgba(255, 255, 255, 0.05);
+    --panel-title-editable-background-focus: rgba(255, 255, 255, 0.08);
+  }
+  
+  /* Ensure all child elements use border-box */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 }
 
 /* Base Styles */
@@ -147,10 +171,87 @@ spectrum-panel .panel {
     box-shadow: none !important;
   }
   
-  // No padding variant - removes default padding
+  // No padding variant - removes default padding from content only, title keeps spacing
   &--no-padding {
     padding: 0 !important;
+    
+    // Title should always have proper spacing even with noPadding
+    .panel__title {
+      margin: var(--panel-spacing-large) var(--panel-spacing-large) var(--panel-title-margin-bottom) var(--panel-spacing-large);
+      padding: var(--panel-title-padding);
+    }
+    
+    // Content wrapper should not get padding back when noPadding is true
+    &.panel--has-title .panel__content {
+      padding: 0;
+    }
   }
+  
+  // Has title variant - adjusts layout for title presence
+  &--has-title {
+    .panel__content {
+      flex: 1;
+    }
+  }
+}
+
+/* ==============================================
+ * Title Styles
+ * ============================================== */
+
+/* Panel title base styles */
+spectrum-panel .panel__title {
+  font-family: var(--panel-font-family);
+  font-size: var(--panel-title-font-size);
+  font-weight: var(--panel-title-font-weight);
+  color: var(--panel-title-color);
+  margin: var(--panel-spacing-large) 0 var(--panel-title-margin-bottom) 0;
+  padding: var(--panel-title-padding);
+  border-radius: var(--panel-title-border-radius);
+  line-height: 1.2;
+  outline: none;
+  transition: var(--panel-transition);
+  flex-shrink: 0; /* Prevent title from shrinking */
+  
+  // Editable title styles
+  &--editable {
+    cursor: var(--panel-title-editable-cursor);
+    background: var(--panel-title-editable-background);
+    border: var(--panel-title-editable-border);
+    min-height: 1.2em;
+    
+    &:hover {
+      background: var(--panel-title-editable-background-hover);
+      border: var(--panel-title-editable-border-hover);
+    }
+    
+    &:focus {
+      background: var(--panel-title-editable-background-focus);
+      border: var(--panel-title-editable-border-focus);
+    }
+    
+    // Placeholder-like styling when empty
+    &:empty::before {
+      content: 'Enter title...';
+      color: var(--panel-on-surface-variant);
+      font-style: italic;
+    }
+  }
+  
+  // Read-only title styles
+  &--readonly {
+    cursor: default;
+    user-select: text;
+  }
+}
+
+/* Panel content wrapper */
+spectrum-panel .panel__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0; /* Allow content to shrink properly */
 }
 
 /* Content styling */

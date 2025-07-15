@@ -21,6 +21,7 @@ interface SpectrumImageGalleryArgs {
   primaryActionText: string;
   primaryActionIcon: string;
   primaryActionValue: string;
+  galleryTitle?: string;
 }
 
 // Beautiful Unsplash images for demo
@@ -152,6 +153,7 @@ const meta: Meta<SpectrumImageGallery> = {
     primaryActionText: '',
     primaryActionIcon: '',
     primaryActionValue: '',
+    galleryTitle: '',
   },
   argTypes: {
     images: {
@@ -278,6 +280,54 @@ const meta: Meta<SpectrumImageGallery> = {
         defaultValue: { summary: '' },
       },
     },
+    galleryTitle: {
+      control: 'text',
+      description: 'Title to display at the top of the gallery (non-editable)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' },
+      },
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: `
+          A responsive image gallery component with masonry layout, upload capabilities, and selection features.
+          
+          ## Gallery Title
+          The gallery supports an optional **non-editable title** that appears at the top of the gallery:
+          
+          - **Display only**: Gallery titles are read-only and cannot be edited by users
+          - **Optional**: Use the \`galleryTitle\` prop to add a title, or leave empty for no title
+          - **Theming**: Titles use the same styling as other panel titles in the design system
+          - **Accessibility**: Proper heading structure and screen reader support
+          
+          ## Usage Examples
+          \`\`\`html
+          <!-- Gallery with title -->
+          <spectrum-image-gallery
+            galleryTitle="My Photo Collection"
+            .images=[\{...\}]
+          />
+          
+          <!-- Gallery without title -->
+          <spectrum-image-gallery
+            .images=[\{...\}]
+          />
+          \`\`\`
+          
+          ## Features
+          - **Masonry Layout**: Automatically arranges images in a responsive grid
+          - **Upload Support**: Drag & drop or click to upload images
+          - **URL Input**: Add images by URL
+          - **Selection Modes**: Single, multi, or no selection
+          - **Preview Mode**: Full-screen image previews with navigation
+          - **Background Effects**: Frost effects and transparency options
+          - **Primary Actions**: Configurable action buttons for selected images
+        `,
+      },
+    },
   },
 } satisfies Meta<SpectrumImageGallery>;
 
@@ -300,6 +350,7 @@ const renderGallery = (args: SpectrumImageGalleryArgs) => html`
       .primaryActionText=${args.primaryActionText}
       .primaryActionIcon=${args.primaryActionIcon}
       .primaryActionValue=${args.primaryActionValue}
+      .galleryTitle=${args.galleryTitle}
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
@@ -327,6 +378,7 @@ export const Docs: StoryObj<SpectrumImageGalleryArgs> = {
     primaryActionText: 'Export',
     primaryActionIcon: 'file_download',
     primaryActionValue: 'export-selected',
+    galleryTitle: 'Image Gallery with Title',
     debug: false,
   },
   render: renderGallery,
@@ -494,6 +546,7 @@ const renderFullscreenGallery = (args: SpectrumImageGalleryArgs, backgroundImage
         .primaryActionText=${args.primaryActionText}
         .primaryActionIcon=${args.primaryActionIcon}
         .primaryActionValue=${args.primaryActionValue}
+        .galleryTitle=${args.galleryTitle}
       @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
       @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
       @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
@@ -516,9 +569,26 @@ export const Default: StoryObj<SpectrumImageGalleryArgs> = {
   },
 };
 
+export const WithTitle: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.slice(0, 6),
+    galleryTitle: 'My Gallery Title',
+    selectionMode: 'multi',
+  },
+  render: renderGallery,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Gallery with a non-editable title displayed at the top. Gallery titles are read-only and provide context for the image collection.',
+      },
+    },
+  },
+};
+
 export const WithImages: StoryObj<SpectrumImageGalleryArgs> = {
   args: {
     images: unsplashImages,
+    galleryTitle: 'Unsplash Image Collection',
   },
   render: renderGallery,
   parameters: {
@@ -571,6 +641,7 @@ export const MultiSelect: StoryObj<SpectrumImageGalleryArgs> = {
     images: unsplashImages.slice(0, 8),
     selectionMode: 'multi',
     selectedImages: ['nature-1', 'architecture-1', 'nature-3'],
+    galleryTitle: 'Multi-Selection Gallery',
   },
   render: renderGallery,
   parameters: {
@@ -730,6 +801,7 @@ export const PrimaryActionWithIcon: StoryObj<SpectrumImageGalleryArgs> = {
     primaryActionText: 'Share',
     primaryActionIcon: 'share',
     primaryActionValue: 'share-images',
+    galleryTitle: 'Shareable Image Gallery',
   },
   render: renderGallery,
   parameters: {
@@ -749,6 +821,7 @@ export const PrimaryActionBulkOperations: StoryObj<SpectrumImageGalleryArgs> = {
     primaryActionText: 'Add to Album',
     primaryActionIcon: 'photo_library',
     primaryActionValue: 'add-to-album',
+    galleryTitle: 'Photo Album Manager',
   },
   render: renderGallery,
   parameters: {
@@ -774,6 +847,29 @@ export const PrimaryActionWorkflow: StoryObj<SpectrumImageGalleryArgs> = {
     docs: {
       description: {
         story: 'Gallery with primary action for image processing workflow. Demonstrates how the primary action can trigger complex operations on selected images.',
+      },
+    },
+  },
+};
+
+export const TitleWithPartialFrostAndOpaqueControls: StoryObj<SpectrumImageGalleryArgs> = {
+  args: {
+    images: unsplashImages.slice(0, 15),
+    galleryTitle: 'Mountain Photography Collection',
+    selectionMode: 'multi',
+    background: 'partial-frost',
+    frostControlBar: 'no',
+    selectedImages: ['nature-1', 'nature-3'],
+    primaryActionText: 'Export',
+    primaryActionIcon: 'download',
+    primaryActionValue: 'export-selected',
+  },
+  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'),
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'Complete gallery example with title, partial frost effect on the wallpaper background, and fully opaque control bar. The background has a subtle frost effect while the control bar remains completely solid for clear visibility and interaction. Perfect for showcasing collections over beautiful backgrounds.',
       },
     },
   },

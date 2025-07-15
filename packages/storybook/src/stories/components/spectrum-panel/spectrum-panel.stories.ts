@@ -10,6 +10,8 @@ interface SpectrumPanel extends HTMLElement {
   size: 'small' | 'medium' | 'large' | 'full' | 'auto';
   width?: string;
   height?: string;
+  panelTitle?: string;
+  titleEditable: boolean;
 }
 
 const meta = {
@@ -28,6 +30,7 @@ The Panel component provides a flexible, beautiful container with optional frost
 ## Features
 
 - **Slot-based Content**: Accepts any HTML content through a single default slot
+- **Panel Titles**: Optional titles with editable and non-editable modes
 - **Flexible Sizing**: Size presets (small, medium, large, full, auto) and custom dimensions
 - **Full Size by Default**: Occupies all available width and height in parent container by default
 - **Frost Effect**: Optional glassmorphism effect for modern aesthetics  

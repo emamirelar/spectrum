@@ -476,27 +476,6 @@ export class SpectrumConversationPanel {
    * @param event - The keyboard or focus event
    * @param newTitle - The new title value
    */
-  private handleTitleEdit = (event: KeyboardEvent | FocusEvent, newTitle: string) => {
-    const eventType = event.type;
-    
-    if (eventType === 'keydown') {
-      const keyEvent = event as KeyboardEvent;
-      if (keyEvent.key === 'Enter') {
-        keyEvent.preventDefault();
-        (event.target as HTMLElement).blur(); // Remove focus to trigger blur event
-        this.titleChanged.emit({
-          action: 'titleChanged',
-          value: newTitle.trim()
-        });
-      }
-    } else if (eventType === 'blur') {
-      this.titleChanged.emit({
-        action: 'titleChanged',
-        value: newTitle.trim()
-      });
-    }
-  }
-
   /**
    * Parse HTML content and replace <cite> and <sup> tags with source chips using DOM traversal
    */
@@ -1301,21 +1280,12 @@ export class SpectrumConversationPanel {
             background={this.background}
             debug={this.debug}
             size="full"
+            panelTitle={this.conversationtitle}
+            titleEditable={true}
+            onTitleChanged={(event) => {
+              this.titleChanged.emit(event.detail);
+            }}
           >
-              <h2 
-                class="conversation-title"
-                contentEditable={true}
-                onKeyDown={(event) => {
-                  const target = event.target as HTMLElement;
-                  this.handleTitleEdit(event, target.textContent || '');
-                }}
-                onBlur={(event) => {
-                  const target = event.target as HTMLElement;
-                  this.handleTitleEdit(event, target.textContent || '');
-                }}
-              >
-                {this.conversationtitle}
-              </h2>
               {this.renderMessages()}
           </spectrum-panel>
           

@@ -212,6 +212,14 @@ const meta = {
           ## Message IDs
           Messages can now include an optional \`id\` field. If provided, this ID will be used internally and emitted with actions. If not provided, a fallback ID will be generated (e.g., "msg-0", "msg-1").
           
+          ## Title Editing
+          The conversation panel now features an **editable title** that users can click to modify. The title editing is handled by the underlying spectrum-panel component with:
+          
+          - **Click to edit**: Simply click the title to make it editable
+          - **Enter or blur to save**: Press Enter or click outside to save changes
+          - **Event emission**: Title changes emit \`titleChanged\` events with the new value
+          - **Keyboard support**: Full keyboard navigation and accessibility support
+          
           ## Events
           All events now include an action attribute to identify the type of action performed. Actions related to specific messages also include a \`messageId\` field:
           

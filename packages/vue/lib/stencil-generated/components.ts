@@ -292,6 +292,7 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'background',
   'frostControlBar',
   'debug',
+  'galleryTitle',
   'primaryActionText',
   'primaryActionIcon',
   'primaryActionValue',
@@ -330,7 +331,12 @@ export const SpectrumPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumPanel>('s
   'size',
   'width',
   'height',
-  'noPadding'
+  'noPadding',
+  'panelTitle',
+  'titleEditable',
+  'titleChanged'
+], [
+  'titleChanged'
 ]);
 
 

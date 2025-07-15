@@ -33,6 +33,9 @@
   --gallery-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
   --gallery-font-size: var(--spectrum-sys-font-size, 14px);
   --gallery-font-weight: var(--spectrum-sys-font-weight-medium, 500);
+  
+  // Selection border width
+  --gallery-selection-border-width: 3px;
 }
 
 // Main gallery container
@@ -46,6 +49,7 @@
   color: var(--gallery-text);
   position: relative;
   overflow: hidden;
+  padding: 0 calc(var(--panel-spacing-large, 2em) - var(--gallery-selection-border-width)); // Use panel title spacing to align with title
   
 
   
@@ -82,6 +86,7 @@
   min-height: 0;
   width: 100%;
   max-width: 100%;
+  overflow: hidden; // Ensure grid doesn't overflow its container
   
 
   
@@ -93,7 +98,7 @@
     gap: var(--gallery-spacing);
     overflow-y: auto;
     overflow-x: hidden;
-    padding: var(--gallery-spacing);
+    padding: var(--gallery-spacing) var(--gallery-selection-border-width); // Add selection border width horizontal padding to accommodate selection border
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
@@ -123,6 +128,7 @@
       display: block;
       column-count: 1;
       column-gap: var(--gallery-spacing);
+      padding: var(--gallery-spacing) var(--gallery-selection-border-width); // Add selection border width horizontal padding to accommodate selection border
       
 
       
@@ -154,7 +160,7 @@
     align-items: flex-start;
     height: 100%;
     min-width: 100%;
-    padding: var(--panel-spacing-large, 2em); // Use panel's standard spacing
+    padding: var(--panel-spacing-large, 2em) var(--gallery-selection-border-width); // Add selection border width horizontal padding to accommodate selection border
   }
 }
 
@@ -243,7 +249,7 @@
   &--selected {
     box-shadow: 
       var(--gallery-shadow-hover),
-      0 0 0 3px var(--gallery-primary);
+      0 0 0 var(--gallery-selection-border-width) var(--gallery-primary);
     transform: translateY(-2px);
   }
   
@@ -292,7 +298,7 @@
   justify-content: center;
   flex: 1;
   text-align: center;
-  padding: var(--panel-spacing-large, 2em); // Use panel's standard spacing
+  padding: var(--panel-spacing-large, 2em) 0; // Only vertical padding since horizontal padding is on parent
   color: var(--gallery-text-secondary);
   
   svg {
@@ -317,16 +323,17 @@
   }
 }
 
-// Controls - natural bottom bar (full width, no padding from panel)
+// Controls - natural bottom bar aligned with gallery content
 .gallery__controls {
   display: flex;
   gap: var(--gallery-spacing-small);
   justify-content: flex-end;
   align-items: center;
-  padding: var(--panel-spacing-large, 2em); // Use panel's standard spacing
-  margin-top: auto;
+  padding: var(--gallery-spacing-large) calc(var(--panel-spacing-large, 2em) - var(--gallery-selection-border-width)); // Match gallery horizontal padding to align with images
+  flex-shrink: 0; // Prevent controls from shrinking
   background: var(--gallery-background);
   border-top: 1px solid var(--gallery-border);
+  margin: 0; // No negative margin - align with gallery content
   
   // Vertical layout - standard bottom bar
   &--vertical {
@@ -348,6 +355,7 @@
     justify-content: flex-start;
     border-top: none;
     border-left: 1px solid var(--gallery-border);
+    padding: calc(var(--panel-spacing-large, 2em) - var(--gallery-selection-border-width)) var(--gallery-spacing-large); // Match gallery horizontal padding for consistency
     
     spectrum-button {
       width: 100%;

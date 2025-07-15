@@ -283,14 +283,14 @@ export const SpectrumMenu: StencilReactComponent<SpectrumMenuElement, SpectrumMe
     defineCustomElement: defineSpectrumMenu
 });
 
-type SpectrumPanelEvents = NonNullable<unknown>;
+type SpectrumPanelEvents = { onTitleChanged: EventName<CustomEvent<{ action: string, value: string }>> };
 
 export const SpectrumPanel: StencilReactComponent<SpectrumPanelElement, SpectrumPanelEvents> = /*@__PURE__*/ createComponent<SpectrumPanelElement, SpectrumPanelEvents>({
     tagName: 'spectrum-panel',
     elementClass: SpectrumPanelElement,
     // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
     react: React,
-    events: {} as SpectrumPanelEvents,
+    events: { onTitleChanged: 'titleChanged' } as SpectrumPanelEvents,
     defineCustomElement: defineSpectrumPanel
 });
 
