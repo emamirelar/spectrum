@@ -1,8 +1,41 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 
-// Local interface definition since components are loaded globally
-interface SpectrumBadge extends HTMLElement {
+// Import example components
+import { 
+  basicPrimaryBadge, 
+  basicSecondaryBadge, 
+  basicCircularBadge,
+  basicSizeExamples,
+  basicSlottedContent
+} from './Examples/BasicExamples';
+import { 
+  allVariants, 
+  circularVariants,
+  statusVariants,
+  notificationVariants,
+  variantSizeComparison
+} from './Examples/VariantExamples';
+import { 
+  circularFeature,
+  slottedContentFeatures,
+  sizeFeatures,
+  notificationCountProgression,
+  statusIndicatorPatterns,
+  debugFeature
+} from './Examples/FeatureExamples';
+import { 
+  navigationUsage,
+  cardStatusUsage,
+  userRoleUsage,
+  ecommerceUsage,
+  dashboardMetricsUsage,
+  mobileNotificationUsage,
+  accessibilityUsage
+} from './Examples/UsageExamples';
+
+// TypeScript interface for the component
+interface SpectrumBadgeElement extends HTMLElement {
   variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   size: 'small' | 'medium' | 'large';
   text: string;
@@ -10,447 +43,368 @@ interface SpectrumBadge extends HTMLElement {
   debug: boolean;
 }
 
-interface SpectrumBadgeArgs {
-  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-  size: 'small' | 'medium' | 'large';
-  text: string;
-  circular: boolean;
-  debug: boolean;
-}
+// Story arguments interface
+interface SpectrumBadgeArgs extends SpectrumBadgeElement {}
 
-const meta: Meta<SpectrumBadge> = {
+const meta: Meta<SpectrumBadgeArgs> = {
   title: 'Spectrum/Components/SpectrumBadge',
-  component: 'spectrum-badge',
   tags: ['autodocs'],
   parameters: {
     docs: {
       description: {
         component: `
-# Spectrum Badge Component
+The Spectrum Badge component provides a flexible display element for status indicators, notifications, counts, and labels. It supports multiple variants, sizes, and configurations to fit various design contexts.
 
-The \`spectrum-badge\` component is a flexible badge for displaying status, counts, or other short information.
+### Basic Usage
 
-## Features
-
-- **Multiple Variants**: Primary, Secondary, Success, Warning, Danger
-- **Three Sizes**: Small, Medium, Large
-- **Circular Option**: Perfect for icons or single characters
-- **Spectrum Design System**: Uses proper Spectrum color tokens and spacing
-- **Accessible**: Proper contrast ratios and responsive design
-
-## Usage
-
-### Basic Badge
 \`\`\`html
-<spectrum-badge text="New" variant="primary"></spectrum-badge>
-\`\`\`
-
-### Circular Badge
-\`\`\`html
-<spectrum-badge text="5" circular="true" variant="danger"></spectrum-badge>
-\`\`\`
-
-### With Custom Content
-\`\`\`html
-<spectrum-badge circular="true" variant="success">
-  <span>✓</span>
+<spectrum-badge 
+  text="New" 
+  variant="primary">
 </spectrum-badge>
 \`\`\`
-        `,
-      },
-    },
+
+### Circular Badges
+
+\`\`\`html
+<spectrum-badge 
+  text="5" 
+  variant="danger" 
+  circular>
+</spectrum-badge>
+\`\`\`
+
+### Slotted Content
+
+\`\`\`html
+<spectrum-badge variant="success">
+  <span>✓ Verified</span>
+</spectrum-badge>
+\`\`\`
+        `
+      }
+    }
+  },
+  args: {
+    text: 'Badge',
+    variant: 'primary',
+    size: 'medium',
+    circular: false,
+    debug: false
   },
   argTypes: {
-    variant: {
-      control: { type: 'select' },
-      options: ['primary', 'secondary', 'success', 'warning', 'danger'],
-      description: 'The color variant of the badge',
+    text: {
+      control: 'text',
+      description: 'The text content displayed in the badge',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: 'primary' },
-      },
+        defaultValue: { summary: "''" }
+      }
+    },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'success', 'warning', 'danger'],
+      description: 'The visual style variant of the badge',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "'primary'" }
+      }
     },
     size: {
-      control: { type: 'select' },
+      control: 'select',
       options: ['small', 'medium', 'large'],
       description: 'The size of the badge',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: 'medium' },
-      },
-    },
-    text: {
-      control: { type: 'text' },
-      description: 'The text content of the badge',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
+        defaultValue: { summary: "'medium'" }
+      }
     },
     circular: {
-      control: { type: 'boolean' },
-      description: 'Whether the badge should be circular',
+      control: 'boolean',
+      description: 'Whether the badge should be circular (ideal for single characters or icons)',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
+        defaultValue: { summary: 'false' }
+      }
     },
     debug: {
-      control: { type: 'boolean' },
-      description: 'Enable debug logging',
+      control: 'boolean',
+      description: 'Enable debug logging in browser console',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
-  },
-  args: {
-    variant: 'primary',
-    size: 'medium',
-    text: 'Badge',
-    circular: false,
-    debug: false,
-  },
+        defaultValue: { summary: 'false' }
+      }
+    }
+  }
 };
 
 export default meta;
 type Story = StoryObj<SpectrumBadgeArgs>;
 
-// Documentation story
-export const Docs: Story = {
+/**
+ * Interactive playground for exploring badge properties and configurations.
+ */
+export const SpectrumPlayground: Story = {
+  render: (args) => html`
+    <spectrum-badge 
+      text=${args.text}
+      variant=${args.variant}
+      size=${args.size}
+      ?circular=${args.circular}
+      ?debug=${args.debug}>
+    </spectrum-badge>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactive playground to experiment with different badge configurations and see real-time changes.'
+      }
+    }
+  }
+};
+
+/**
+ * Basic badge examples demonstrating core functionality.
+ */
+export const SpectrumBasicExamples: Story = {
   render: () => html`
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6;">
-      <h2>Badge Component Overview</h2>
-      <p>The <code>spectrum-badge</code> component is a flexible badge for displaying status, counts, or other short information.</p>
-      
-      <h3>Variants</h3>
-      <div style="display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap;">
-        <spectrum-badge text="Primary" variant="primary"></spectrum-badge>
-        <spectrum-badge text="Secondary" variant="secondary"></spectrum-badge>
-        <spectrum-badge text="Success" variant="success"></spectrum-badge>
-        <spectrum-badge text="Warning" variant="warning"></spectrum-badge>
-        <spectrum-badge text="Danger" variant="danger"></spectrum-badge>
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+      <div>
+        <h3>Primary Badge</h3>
+        ${basicPrimaryBadge()}
       </div>
-
-      <h3>Sizes</h3>
-      <div style="display: flex; gap: 1rem; margin: 1rem 0; align-items: center;">
-        <spectrum-badge text="Small" variant="primary" size="small"></spectrum-badge>
-        <spectrum-badge text="Medium" variant="primary" size="medium"></spectrum-badge>
-        <spectrum-badge text="Large" variant="primary" size="large"></spectrum-badge>
-      </div>
-
-      <h3>Circular Badges</h3>
-      <div style="display: flex; gap: 1rem; margin: 1rem 0; align-items: center;">
-        <spectrum-badge text="1" variant="primary" circular="true" size="small"></spectrum-badge>
-        <spectrum-badge text="5" variant="danger" circular="true" size="medium"></spectrum-badge>
-        <spectrum-badge text="99" variant="warning" circular="true" size="large"></spectrum-badge>
-      </div>
-
-      <h3>Icon Badges</h3>
-      <div style="display: flex; gap: 1rem; margin: 1rem 0; align-items: center;">
-        <spectrum-badge variant="success" circular="true" size="small">
-          <span style="font-size: 10px;">✓</span>
-        </spectrum-badge>
-        <spectrum-badge variant="danger" circular="true" size="medium">
-          <span style="font-size: 12px;">✕</span>
-        </spectrum-badge>
-        <spectrum-badge variant="warning" circular="true" size="large">
-          <span style="font-size: 14px;">!</span>
-        </spectrum-badge>
-      </div>
-
-      <h3>Usage Examples</h3>
       
-      <h4>Basic Badge</h4>
-      <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>&lt;spectrum-badge text="New" variant="primary"&gt;&lt;/spectrum-badge&gt;</code></pre>
+      <div>
+        <h3>Secondary Badge</h3>
+        ${basicSecondaryBadge()}
+      </div>
       
-      <h4>Circular Badge</h4>
-      <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>&lt;spectrum-badge text="5" circular="true" variant="danger"&gt;&lt;/spectrum-badge&gt;</code></pre>
+      <div>
+        <h3>Circular Badge</h3>
+        ${basicCircularBadge()}
+      </div>
       
-      <h4>Icon Badge</h4>
-      <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>&lt;spectrum-badge circular="true" variant="success"&gt;
-  &lt;span&gt;✓&lt;/span&gt;
-&lt;/spectrum-badge&gt;</code></pre>
-
-      <h3>Properties</h3>
-      <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
-        <thead>
-          <tr style="background: #f8f9fa;">
-            <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left;">Property</th>
-            <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left;">Type</th>
-            <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left;">Default</th>
-            <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left;">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;"><code>variant</code></td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">string</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">'primary'</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">Color variant: primary, secondary, success, warning, danger</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;"><code>size</code></td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">string</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">'medium'</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">Size: small, medium, large</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;"><code>text</code></td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">string</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">''</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">Text content of the badge</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;"><code>circular</code></td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">boolean</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">false</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">Whether the badge should be circular</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;"><code>debug</code></td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">boolean</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">false</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">Enable debug logging</td>
-          </tr>
-        </tbody>
-      </table>
+      <div>
+        <h3>Size Examples</h3>
+        ${basicSizeExamples()}
+      </div>
+      
+      <div>
+        <h3>Slotted Content</h3>
+        ${basicSlottedContent()}
+      </div>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Comprehensive overview of the Spectrum Badge component featuring all variants, sizes, and usage examples.',
+        story: 'Fundamental badge configurations showing primary usage patterns and core features.'
       },
-    },
-  },
+      source: {
+        code: `<spectrum-badge text="New" variant="primary"></spectrum-badge>
+<spectrum-badge text="5" variant="danger" circular></spectrum-badge>
+<spectrum-badge variant="success">
+  <span>✓ Complete</span>
+</spectrum-badge>`
+      }
+    }
+  }
 };
 
-// Default story
-export const Default: Story = {
-  args: {
-    text: 'Badge',
-    variant: 'primary',
-    size: 'medium',
-  },
-  render: (args: SpectrumBadgeArgs) => html`
-    <spectrum-badge
-      variant="${args.variant}"
-      size="${args.size}"
-      text="${args.text}"
-      ?circular="${args.circular}"
-      ?debug="${args.debug}"
-    ></spectrum-badge>
-  `,
-};
-
-// Variant showcase
-export const Variants: Story = {
+/**
+ * Comprehensive showcase of all badge variants.
+ */
+export const SpectrumAllVariants: Story = {
   render: () => html`
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-      <spectrum-badge text="Primary" variant="primary"></spectrum-badge>
-      <spectrum-badge text="Secondary" variant="secondary"></spectrum-badge>
-      <spectrum-badge text="Success" variant="success"></spectrum-badge>
-      <spectrum-badge text="Warning" variant="warning"></spectrum-badge>
-      <spectrum-badge text="Danger" variant="danger"></spectrum-badge>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'All available color variants of the badge component.',
-      },
-    },
-  },
-};
-
-// Size showcase
-export const Sizes: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; align-items: center;">
-      <spectrum-badge text="Small" variant="primary" size="small"></spectrum-badge>
-      <spectrum-badge text="Medium" variant="primary" size="medium"></spectrum-badge>
-      <spectrum-badge text="Large" variant="primary" size="large"></spectrum-badge>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Badge component in different sizes.',
-      },
-    },
-  },
-};
-
-// Circular badges
-export const Circular: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; align-items: center;">
-      <spectrum-badge text="1" variant="primary" circular="true" size="small"></spectrum-badge>
-      <spectrum-badge text="5" variant="danger" circular="true" size="medium"></spectrum-badge>
-      <spectrum-badge text="99" variant="warning" circular="true" size="large"></spectrum-badge>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Circular badges perfect for notifications, counts, or status indicators.',
-      },
-    },
-  },
-};
-
-// Icon badges
-export const IconBadges: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; align-items: center;">
-      <spectrum-badge variant="success" circular="true" size="small">
-        <span style="font-size: 10px;">✓</span>
-      </spectrum-badge>
-      <spectrum-badge variant="danger" circular="true" size="medium">
-        <span style="font-size: 12px;">✕</span>
-      </spectrum-badge>
-      <spectrum-badge variant="warning" circular="true" size="large">
-        <span style="font-size: 14px;">!</span>
-      </spectrum-badge>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Circular badges with icon content using slot.',
-      },
-    },
-  },
-};
-
-// Status badges
-export const StatusBadges: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-      <spectrum-badge text="New" variant="primary" size="small"></spectrum-badge>
-      <spectrum-badge text="Active" variant="success" size="small"></spectrum-badge>
-      <spectrum-badge text="Pending" variant="warning" size="small"></spectrum-badge>
-      <spectrum-badge text="Inactive" variant="secondary" size="small"></spectrum-badge>
-      <spectrum-badge text="Error" variant="danger" size="small"></spectrum-badge>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Common status badges for different states.',
-      },
-    },
-  },
-};
-
-// Notification badges
-export const NotificationBadges: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 2rem; align-items: center;">
-      <div style="position: relative; display: inline-block;">
-        <div style="width: 40px; height: 40px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          📧
-        </div>
-        <spectrum-badge text="3" variant="danger" circular="true" size="small" 
-                       style="position: absolute; top: -8px; right: -8px;"></spectrum-badge>
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+      <div>
+        <h3>All Variants</h3>
+        ${allVariants()}
       </div>
       
-      <div style="position: relative; display: inline-block;">
-        <div style="width: 40px; height: 40px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          🔔
-        </div>
-        <spectrum-badge text="99+" variant="danger" size="small" 
-                       style="position: absolute; top: -8px; right: -12px;"></spectrum-badge>
+      <div>
+        <h3>Circular Variants</h3>
+        ${circularVariants()}
       </div>
       
-      <div style="position: relative; display: inline-block;">
-        <div style="width: 40px; height: 40px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          💬
-        </div>
-        <spectrum-badge variant="success" circular="true" size="small" 
-                       style="position: absolute; top: -4px; right: -4px;">
-          <span style="font-size: 8px;">✓</span>
-        </spectrum-badge>
+      <div>
+        <h3>Status Variants</h3>
+        ${statusVariants()}
+      </div>
+      
+      <div>
+        <h3>Notification Counts</h3>
+        ${notificationVariants()}
+      </div>
+      
+      <div>
+        <h3>Size Comparison</h3>
+        ${variantSizeComparison()}
       </div>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Notification badges positioned on icons or other elements.',
+        story: 'Complete overview of all available badge variants, sizes, and styling options.'
       },
-    },
-  },
+      source: {
+        code: `<!-- All variants -->
+<spectrum-badge text="Primary" variant="primary"></spectrum-badge>
+<spectrum-badge text="Secondary" variant="secondary"></spectrum-badge>
+<spectrum-badge text="Success" variant="success"></spectrum-badge>
+<spectrum-badge text="Warning" variant="warning"></spectrum-badge>
+<spectrum-badge text="Danger" variant="danger"></spectrum-badge>
+
+<!-- Circular variants -->
+<spectrum-badge text="1" variant="primary" circular></spectrum-badge>
+<spectrum-badge text="99+" variant="danger" circular></spectrum-badge>`
+      }
+    }
+  }
 };
 
-// Interactive example
-export const Interactive: Story = {
-  args: {
-    text: 'Interactive',
-    variant: 'primary',
-    size: 'medium',
-    circular: false,
-  },
-  render: (args: SpectrumBadgeArgs) => html`
-    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
-      <div style="display: flex; gap: 1rem; align-items: center;">
-        <spectrum-badge
-          variant="${args.variant}"
-          size="${args.size}"
-          text="${args.text}"
-          ?circular="${args.circular}"
-          ?debug="${args.debug}"
-        ></spectrum-badge>
-        <span style="font-size: 14px; color: #666;">
-          ${args.variant} • ${args.size} • ${args.circular ? 'circular' : 'rectangular'}
-        </span>
-      </div>
-      
-      <div style="font-size: 12px; color: #888; background: #f8f9fa; padding: 1rem; border-radius: 4px;">
-        <strong>Current Configuration:</strong><br>
-        variant: "${args.variant}"<br>
-        size: "${args.size}"<br>
-        text: "${args.text}"<br>
-        circular: ${args.circular}
-      </div>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Interactive badge with controls to experiment with different properties.',
-      },
-    },
-  },
-};
-
-// Usage in image gallery context
-export const ImageGallerySelection: Story = {
+/**
+ * Interactive feature demonstrations.
+ */
+export const SpectrumFeatureDemonstrations: Story = {
   render: () => html`
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-      <div style="position: relative; width: 120px; height: 120px; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-        <img src="https://picsum.photos/120/120?random=1" alt="Sample image" style="width: 100%; height: 100%; object-fit: cover;">
-        <spectrum-badge text="✓" variant="primary" circular="true" size="small" 
-                       style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);"></spectrum-badge>
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+      <div>
+        <h3>Circular Feature</h3>
+        ${circularFeature()}
       </div>
       
-      <div style="position: relative; width: 120px; height: 120px; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-        <img src="https://picsum.photos/120/120?random=2" alt="Sample image" style="width: 100%; height: 100%; object-fit: cover;">
-        <spectrum-badge text="✓" variant="primary" circular="true" size="small" 
-                       style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);"></spectrum-badge>
+      <div>
+        <h3>Slotted Content Features</h3>
+        ${slottedContentFeatures()}
       </div>
       
-      <div style="position: relative; width: 120px; height: 120px; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-        <img src="https://picsum.photos/120/120?random=3" alt="Sample image" style="width: 100%; height: 100%; object-fit: cover;">
+      <div>
+        <h3>Size Features</h3>
+        ${sizeFeatures()}
+      </div>
+      
+      <div>
+        <h3>Notification Count Progression</h3>
+        ${notificationCountProgression()}
+      </div>
+      
+      <div>
+        <h3>Status Indicator Patterns</h3>
+        ${statusIndicatorPatterns()}
+      </div>
+      
+      <div>
+        <h3>Debug Feature</h3>
+        ${debugFeature()}
       </div>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Example usage of badges as selection indicators in image galleries.',
+        story: 'Detailed demonstrations of specific badge features including circular mode, slotted content, sizing, and debug capabilities.'
       },
-    },
-  },
+      source: {
+        code: `<!-- Circular feature -->
+<spectrum-badge text="New" variant="primary"></spectrum-badge>
+<spectrum-badge text="5" variant="primary" circular></spectrum-badge>
+
+<!-- Slotted content -->
+<spectrum-badge variant="primary">
+  <span>✓ Verified</span>
+</spectrum-badge>
+
+<!-- Debug mode -->
+<spectrum-badge text="Debug" variant="primary" debug></spectrum-badge>`
+      }
+    }
+  }
+};
+
+/**
+ * Real-world usage examples and patterns.
+ */
+export const SpectrumUsageExamples: Story = {
+  render: () => html`
+    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 3rem;">
+      <div>
+        <h3>Navigation with Notifications</h3>
+        ${navigationUsage()}
+      </div>
+      
+      <div>
+        <h3>Project Status Cards</h3>
+        ${cardStatusUsage()}
+      </div>
+      
+      <div>
+        <h3>User Role Management</h3>
+        ${userRoleUsage()}
+      </div>
+      
+      <div>
+        <h3>E-commerce Product Badges</h3>
+        ${ecommerceUsage()}
+      </div>
+      
+      <div>
+        <h3>Dashboard Metrics</h3>
+        ${dashboardMetricsUsage()}
+      </div>
+      
+      <div>
+        <h3>Mobile Notifications</h3>
+        ${mobileNotificationUsage()}
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Practical examples showing how badges integrate into real-world applications and user interfaces.'
+      },
+      source: {
+        code: `<!-- Navigation notification -->
+<span>Messages</span>
+<spectrum-badge text="5" variant="danger" circular size="small"></spectrum-badge>
+
+<!-- Status card -->
+<h3>Project Alpha</h3>
+<spectrum-badge text="Active" variant="success"></spectrum-badge>
+
+<!-- User role -->
+<div>John Doe</div>
+<spectrum-badge text="Admin" variant="danger"></spectrum-badge>`
+      }
+    }
+  }
+};
+
+/**
+ * Accessibility-focused badge examples.
+ */
+export const SpectrumAccessibilityExamples: Story = {
+  render: () => html`
+    <div style="max-width: 800px; margin: 0 auto;">
+      ${accessibilityUsage()}
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Examples demonstrating accessibility best practices including high contrast, appropriate sizing, and meaningful content.'
+      },
+      source: {
+        code: `<!-- Accessible badges with meaningful text -->
+<spectrum-badge text="✓ Approved" variant="success"></spectrum-badge>
+<spectrum-badge text="⚠ Review Required" variant="warning"></spectrum-badge>
+<spectrum-badge text="✗ Rejected" variant="danger"></spectrum-badge>
+
+<!-- Large badges for better visibility -->
+<spectrum-badge text="Easy to Read" variant="primary" size="large"></spectrum-badge>`
+      }
+    }
+  }
 }; 

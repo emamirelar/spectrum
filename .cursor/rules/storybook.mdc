@@ -1,36 +1,243 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+title: Storybook Stories Rule
 ---
 
 # Storybook Stories Rule
 
 Components need storybook stories that demonstrate their functionality and variants.
 
-## Story Location
+## Story Location and Naming (CRITICAL)
+
+### ⚠️ IMPORTANT: Always Use Correct Title Format
+**ALL STORY TITLES MUST START WITH `Spectrum/Components/`**
+
 - Stories should be placed in `packages/storybook/src/stories/components/{component-name}`
 - The path should mirror the component's location in the core package
 - For example:
   - Component: `packages/core/src/components/spectrum-button/spectrum-button.tsx`
   - Story: `packages/storybook/src/stories/components/spectrum-button/spectrum-button.stories.tsx`
-- Titles should be of the form `Components/{component-name}`
+
+### 🔴 MANDATORY Title Formats:
+- **Main Story File**: `title: 'Spectrum/Components/SpectrumComponentName'`
+- **Dependencies MDX**: `<Meta title="Spectrum/Components/SpectrumComponentName/Dependencies" />`
+- **Use Cases MDX**: `<Meta title="Spectrum/Components/SpectrumComponentName/Use Cases" />`
+
+### ✅ Before Creating Stories:
+1. **CHECK EXISTING PATTERN**: Look at SpectrumBadge, SpectrumButton stories in Storybook navigation
+2. **VERIFY PREFIX**: All titles must start with "Spectrum/Components/"
+3. **CONFIRM LOCATION**: Stories appear under Spectrum > Components in navigation
+
+### ❌ Common Mistakes to Avoid:
+- **WRONG**: `title: 'Components/SpectrumComponentName'` (missing Spectrum prefix)
+- **WRONG**: `<Meta title="Components/SpectrumComponentName/Dependencies" />` (missing Spectrum prefix)
+
+- Stories should be grouped in alphabetical order
+- If there is deeper structure in Core, this should be reflected in Storybook with nested folders
 
 ## Story Requirements
-- Each component should have a comprehensive story file
-- There should be full documentation for each story
-- Stories should demonstrate all variants, states, and use cases
-- Keep stories up to date with component changes
-- Use proper TypeScript types and Storybook controls
-- Include examples of all component features
 
-## Story Name
-- Stories are prefixed with Spectrum, SpectrumButton as an example
+### Core Story Structure
+Each component should have a comprehensive story ecosystem with the following files:
+
+#### 1. Main Story File (`component-name.stories.ts`)
+- **Comprehensive TypeScript story** with proper types and controls
+- **Component documentation** with basic usage examples
+- **Story categories**: Playground, Basic Examples, Variant Showcase, Feature Demonstrations, Real-World Usage Examples
+- **All stories prefixed with "Spectrum"** (e.g., SpectrumPrimary, SpectrumAllVariants)
+- **Organized import structure** from Examples folder
+- **Proper argTypes** with descriptions and default values
+
+#### 2. Examples Folder (`Examples/`)
+Organized example files for maintainable story structure:
+- **BasicExamples.ts** - Core button configurations and fundamental usage
+- **VariantExamples.ts** - All variant showcases (primary, secondary, success, etc.)
+- **FeatureExamples.ts** - Interactive features (sound, haptic, ripple, icons, sizes, animations)
+- **UsageExamples.ts** - Real-world patterns (forms, navigation, media controls, toolbars, CTAs, loading states, accessibility)
+
+#### 3. Dependencies MDX (`component-name-dependencies.mdx`)
+- **Meta title format**: `<Meta title="Spectrum/Components/ComponentName/Dependencies" />`
+- **Visual mermaid diagram** showing component relationships
+- **Dependency documentation** with integration patterns
+- **Usage examples** in dependent components
+- **Architecture context** explaining component's role in the system
+
+#### 4. Use Cases MDX (`component-name-use-cases.mdx`)
+- **Meta title format**: `<Meta title="Spectrum/Components/ComponentName/Use Cases" />`
+- **Real-world scenarios** organized by category
+- **Complete code examples** for each use case
+- **Best practices** for different contexts
+- **Business application examples** (e-commerce, dashboards, content creation)
+- **Accessibility and mobile considerations**
+
+#### 5. Component README (`README.md`)
+- **Complete usage guidelines** and API documentation
+- **Properties documentation** with examples
+- **Installation and setup** instructions
+- **Code examples** for common patterns
+
+### Story Organization Pattern
+```
+📁 spectrum-button/
+  📄 spectrum-button.stories.ts        # Main story file
+  📄 spectrum-button-dependencies.mdx  # Dependency visualization
+  📄 spectrum-button-use-cases.mdx     # Real-world scenarios
+  📄 README.md                         # Component documentation
+  📁 Examples/
+    📄 BasicExamples.ts               # Core configurations
+    📄 VariantExamples.ts            # All variants
+    📄 FeatureExamples.ts            # Interactive features
+    📄 UsageExamples.ts              # Real-world patterns
+```
+
+### Content Requirements
+- **Comprehensive coverage** of all component variants, states, and features
+- **TypeScript types** and proper Storybook controls for all properties
+- **Mermaid diagrams** for dependency visualization (MDX only)
+- **Real-world use cases** with complete code examples
+- **Accessibility examples** and best practices
+- **Mobile/responsive considerations** where applicable
+- **Business context** examples (forms, e-commerce, dashboards, etc.)
+
+### Mermaid Diagram Standards (Dependencies MDX)
+**ALL dependency diagrams MUST follow the spectrum-button pattern exactly:**
+
+#### ✅ Required Structure
+1. **Foundation Component** → **Dependent Components** → **Application Use Cases**
+2. **Three-tier hierarchy only** - no complex feature/variant branches
+3. **Consistent color coding**:
+   - `classDef foundation fill:#e1f5fe` (blue)
+   - `classDef dependent fill:#f3e5f5` (purple) 
+   - `classDef application fill:#fff3e0` (orange)
+
+#### ✅ Correct Syntax
+```mdx
+<mermaid-diagram chart="graph TD
+    SC[spectrum-component] --> |Direct Use| SA[spectrum-accordion]
+    SC --> |Direct Use| SB[spectrum-button]
+    
+    SA --> |Application Use| CONTENT[Content Systems]
+    SB --> |Application Use| FORMS[Form Systems]
+    
+    classDef foundation fill:#e1f5fe
+    classDef dependent fill:#f3e5f5
+    classDef application fill:#fff3e0
+    
+    class SC foundation
+    class SA,SB dependent
+    class CONTENT,FORMS application"></mermaid-diagram>
+```
+
+#### ❌ Incorrect Patterns
+- **NO** markdown code blocks: ```` ```mermaid ````
+- **NO** function imports: `import { createMermaidDiagram }`
+- **NO** complex feature branches (variants, sound, animations, etc.)
+- **NO** overly detailed dependency chains
+- **NO** custom colors outside the three standard classes
+
+#### 🎯 Reference Pattern
+Always use **spectrum-button-dependencies.mdx** as the reference implementation for:
+- Diagram structure and complexity level
+- Color scheme and visual hierarchy  
+- Content organization and documentation flow
+- Integration pattern examples
+
+### Documentation Standards
+- **Clear descriptions** for all stories and examples
+- **Code samples** for each feature demonstration
+- **Integration patterns** showing how components work together
+- **Best practices** for different scenarios and contexts
+- **Consistent naming** following "Spectrum" prefix pattern
+
+## Story Naming Conventions
+
+### Main Story Files
+- **Story titles** follow the format: `Spectrum/Components/SpectrumComponentName`
+- **Individual stories** are prefixed with "Spectrum" (e.g., SpectrumPrimary, SpectrumAllVariants)
+- **Story categories** use descriptive names that match the Examples file structure
+
+### MDX Documentation Files
+- **Dependencies**: `Spectrum/Components/SpectrumComponentName/Dependencies`
+- **Use Cases**: `Spectrum/Components/SpectrumComponentName/Use Cases`
+- **Additional docs**: Follow the same nested pattern for consistency
+
+### Example Naming Patterns
+```typescript
+// Main story exports
+export const SpectrumPlayground: Story = { ... }
+export const SpectrumBasicExamples: Story = { ... }
+export const SpectrumAllVariants: Story = { ... }
+export const SpectrumFeatureDemonstrations: Story = { ... }
+export const SpectrumUsageExamples: Story = { ... }
+export const SpectrumAccessibilityExamples: Story = { ... }
+
+// File structure
+spectrum-button.stories.ts              // 'Spectrum/Components/SpectrumButton'
+spectrum-button-dependencies.mdx        // 'Spectrum/Components/SpectrumButton/Dependencies'
+spectrum-button-use-cases.mdx          // 'Spectrum/Components/SpectrumButton/Use Cases'
+```
 
 ## Best Practices
-- Use meaningful story titles that reflect the component hierarchy
-- Group related stories using the `title` property
-- Provide controls for all component props
-- Include documentation and usage examples
-- Test all component states and variants
+
+### Story Development
+- **Meaningful story titles** that reflect the component hierarchy and functionality
+- **Group related stories** using organized categories (Basic, Variants, Features, Usage)
+- **Comprehensive controls** for all component props with proper descriptions
+- **Progressive complexity** from basic examples to advanced use cases
+- **Real-world context** showing practical applications
+
+### Documentation Quality
+- **Complete coverage** of all component features and variants
+- **Clear explanations** of when and how to use each variant
+- **Code examples** that developers can copy and implement immediately
+- **Visual hierarchy** that guides users from basic usage to advanced patterns
+- **Cross-references** between related components and dependencies
+
+### File Organization
+- **Logical separation** of concerns across multiple files
+- **Consistent naming** patterns across all component stories
+- **Maintainable structure** that scales with component complexity
+- **Reusable examples** that can be imported and composed
+- **Clear file hierarchy** that matches the Storybook navigation
+
+### Content Standards
+- **Accessibility examples** demonstrating proper implementation
+- **Mobile considerations** for responsive design patterns
+- **Business context** showing real-world application scenarios
+- **Error states** and edge cases where applicable
+- **Performance considerations** for complex interactive features
+
+### Testing Coverage
+- **All component states** (default, hover, focus, active, disabled)
+- **All variants** and size combinations
+- **Interactive features** (animations, sound, haptic feedback)
+- **Integration patterns** with other components
+- **Accessibility compliance** across all examples
+
+## Implementation Standard
+
+### Spectrum Button Pattern (Reference Implementation)
+The `spectrum-button` component stories serve as the **gold standard** for all future component documentation. This pattern includes:
+
+1. **Comprehensive main story** with organized categories and proper TypeScript types
+2. **Modular Examples folder** with logical separation of concerns
+3. **Visual dependency mapping** in dedicated MDX file with mermaid diagrams
+4. **Real-world use cases** showing practical business applications
+5. **Complete documentation** covering all features, variants, and integration patterns
+
+### Adoption Requirements
+**All new component stories MUST follow this established pattern:**
+- ✅ Use the same file structure and naming conventions
+- ✅ Include all five core documentation files
+- ✅ Provide comprehensive coverage of component capabilities
+- ✅ Demonstrate real-world usage scenarios
+- ✅ Include accessibility and mobile considerations
+
+### Maintenance Guidelines
+When updating existing component stories:
+- **Migrate gradually** to the new pattern structure
+- **Prioritize high-use components** for pattern adoption
+- **Maintain consistency** with the spectrum-button reference implementation
+- **Update dependency maps** when component relationships change
+
+This standardized approach ensures consistent, high-quality documentation across the entire Spectrum component system.
 

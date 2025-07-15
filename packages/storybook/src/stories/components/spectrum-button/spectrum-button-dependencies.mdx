@@ -1,0 +1,97 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Spectrum/Components/SpectrumButton/Dependencies" />
+
+# 🔗 Spectrum Button Dependencies
+
+This document shows the dependency relationships for the spectrum-button component and how it integrates with other components in the Spectrum system.
+
+---
+
+## 📋 Component Usage Overview
+
+**spectrum-button** is a foundational atomic component used by 7 other components in the system. It provides consistent interactive behavior, theming, and accessibility across all button implementations.
+
+### Components Using spectrum-button
+
+- **spectrum-rail** (main navigation)
+- **spectrum-search-input** (search functionality)  
+- **spectrum-rail-item** (navigation items)
+- **spectrum-select** (form components)
+- **spectrum-image-gallery** (image management)
+- **spectrum-hero** (landing pages)
+- **spectrum-conversation-panel** (AI/chat systems)
+
+---
+
+## 🔍 Visual Dependencies
+
+<mermaid-diagram chart="graph TD
+    SB[spectrum-button] --> |Direct Use| SR[spectrum-rail]
+    SB --> |Direct Use| SSI[spectrum-search-input] 
+    SB --> |Direct Use| SRI[spectrum-rail-item]
+    SB --> |Direct Use| SS[spectrum-select]
+    SB --> |Direct Use| SIG[spectrum-image-gallery]
+    SB --> |Direct Use| SH[spectrum-hero]
+    SB --> |Direct Use| SCP[spectrum-conversation-panel]
+    
+    SR --> |Application Use| NAV[Navigation Systems]
+    SSI --> |Application Use| SEARCH[Search Features]
+    SRI --> |Application Use| NAV
+    SS --> |Application Use| FORMS[Form Components]
+    SIG --> |Application Use| MEDIA[Image Management]
+    SH --> |Application Use| LANDING[Landing Pages]
+    SCP --> |Application Use| AI[AI/Chat Systems]
+    
+    classDef foundation fill:#e1f5fe
+    classDef dependent fill:#f3e5f5
+    classDef application fill:#fff3e0
+    
+    class SB foundation
+    class SR,SSI,SRI,SS,SIG,SH,SCP dependent
+    class NAV,SEARCH,FORMS,MEDIA,LANDING,AI application"></mermaid-diagram>
+
+---
+
+## 📦 Integration Patterns
+
+### Button Integration Pattern
+Multiple components use spectrum-button as internal trigger:
+- Properties pass through directly: `variant`, `size`, `disabled`
+- Button handles all visual states (hover, focus, active) and animations
+- Parent wrapper becomes transparent container
+
+### Usage Examples in Dependent Components
+
+#### spectrum-rail
+```html
+<spectrum-button 
+  variant="ghost" 
+  icon-only 
+  show-left-icon 
+  left-icon="menu">
+</spectrum-button>
+```
+
+#### spectrum-search-input
+```html
+<spectrum-button 
+  variant="primary" 
+  show-left-icon 
+  left-icon="search" 
+  button-text="Search">
+</spectrum-button>
+```
+
+#### spectrum-hero
+```html
+<spectrum-button 
+  variant="primary" 
+  size="lg" 
+  button-text="Get Started">
+</spectrum-button>
+```
+
+---
+
+This dependency map helps maintain proper component architecture and ensures consistent button behavior across the entire Spectrum component system. 

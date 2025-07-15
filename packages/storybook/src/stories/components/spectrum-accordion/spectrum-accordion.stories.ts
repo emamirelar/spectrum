@@ -1,7 +1,57 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
-import docs from './spectrum-accordion.docs.md?raw';
+
+// Import organized examples
+import {
+  ChipBasic,
+  ChipExpanded,
+  ChipVertical,
+  StandardSingle,
+  StandardMulti,
+  StandardWithInitialExpanded,
+  SimpleChip,
+  SimpleStandard,
+  sampleExplorations,
+  basicFAQSections,
+  basicFeatureSections
+} from './Examples/BasicExamples';
+
+import {
+  ChipVariantPrimary,
+  ChipVariantSecondary,
+  ChipVariantOutlined,
+  ChipVariantFilled,
+  StandardVariantSingleExpand,
+  StandardVariantMultiExpand,
+  StandardVariantCustomIcons,
+  ChipVsStandardComparison,
+  AllVariantsShowcase
+} from './Examples/VariantExamples';
+
+import {
+  AccordionWithSound,
+  AccordionWithHaptic,
+  AccordionWithBothFeedbacks,
+  AccordionCustomIcons,
+  AccordionAnimatedContent,
+  AccordionWithInteractiveContent,
+  AccordionWithSlottedContent,
+  AccordionWithDebug,
+  AccordionDisabledState,
+  AccordionHorizontalScroll,
+  AccordionVerticalLayout
+} from './Examples/FeatureExamples';
+
+import {
+  FAQAccordion,
+  ProductFeaturesAccordion,
+  NavigationAccordion,
+  DocumentationAccordion,
+  ActionToolsAccordion,
+  ExplorationChipsAccordion,
+  ProductCategoriesAccordion
+} from './Examples/UsageExamples';
 
 interface SpectrumAccordionArgs {
   // Common props
@@ -9,6 +59,7 @@ interface SpectrumAccordionArgs {
   collapsedIcon: string;
   expandedIcon: string;
   sound: boolean;
+  haptic: boolean;
   disabled: boolean;
   accordionId: string;
   debug: boolean;
@@ -33,7 +84,46 @@ const meta: Meta<SpectrumAccordionArgs> = {
     layout: 'padded',
     docs: {
       description: {
-        component: docs
+        component: `
+# Spectrum Accordion
+
+The Spectrum Accordion component provides two distinct variants for organizing and displaying expandable content with rich interactive features.
+
+## Key Features
+
+- **Two Variants**: Chip variant for trigger-based expansion and Standard variant for multi-section organization
+- **Flexible Expansion**: Single or multi-expand modes for standard variant
+- **Interactive Feedback**: Optional sound and haptic feedback
+- **Custom Content**: Support for slotted content and HTML content
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Responsive Design**: Horizontal and vertical layout options
+
+## Dependencies
+
+This component depends on:
+- **spectrum-chip**: Used internally by the chip variant for triggers
+
+## Usage in Other Components
+
+- **spectrum-conversation-panel**: Uses accordion for expandable content sections
+
+## Mermaid Dependency Diagram
+
+\`\`\`mermaid
+graph TD;
+  spectrum-accordion --> spectrum-chip
+  spectrum-conversation-panel --> spectrum-accordion
+  style spectrum-accordion fill:#f9f,stroke:#333,stroke-width:4px
+\`\`\`
+
+## Variants
+
+### Chip Variant
+Perfect for collapsing/expanding additional actions or content with a single trigger button.
+
+### Standard Variant  
+Traditional multi-section accordion ideal for FAQs, navigation, and content organization.
+        `
       }
     }
   },
@@ -82,6 +172,14 @@ const meta: Meta<SpectrumAccordionArgs> = {
     sound: {
       control: 'boolean',
       description: 'Enable sound effects on interaction',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    haptic: {
+      control: 'boolean',
+      description: 'Enable haptic feedback on interaction',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -159,79 +257,27 @@ const meta: Meta<SpectrumAccordionArgs> = {
 export default meta;
 type Story = StoryObj<SpectrumAccordionArgs>;
 
-// Sample exploration content for chip variant
-const sampleExplorations = [
-  { label: 'Renewable Energy Sources', value: 'renewable-energy' },
-  { label: 'Solar Panel Efficiency', value: 'solar-efficiency' },
-  { label: 'Wind Power Generation', value: 'wind-power' },
-  { label: 'Hydroelectric Systems', value: 'hydro-systems' },
-  { label: 'Energy Storage Solutions', value: 'energy-storage' }
-];
-
-// Sample sections for standard variant
-const faqSections = [
-  {
-    id: 'getting-started',
-    title: 'How do I get started?',
-    content: '<p>Getting started is easy! Simply follow our comprehensive quick start guide that walks you through the initial setup process.</p>'
-  },
-  {
-    id: 'system-requirements',
-    title: 'What are the system requirements?',
-    content: '<p>Our platform works on all modern browsers including Chrome, Firefox, Safari, and Edge. We also support mobile devices running iOS 12+ and Android 8+.</p>'
-  },
-  {
-    id: 'support',
-    title: 'How do I contact support?',
-    content: '<p>You can reach our support team via email at support@example.com or through our live chat feature available 24/7.</p>'
-  },
-  {
-    id: 'pricing',
-    title: 'What are your pricing plans?',
-    content: '<p>We offer flexible pricing plans starting from $10/month for basic usage up to enterprise solutions. Contact our sales team for custom pricing.</p>'
-  }
-];
-
-const featureSections = [
-  {
-    id: 'analytics',
-    title: 'Advanced Analytics',
-    expanded: true,
-    content: '<p>Get detailed insights with our comprehensive analytics dashboard featuring real-time data visualization and custom reporting.</p>'
-  },
-  {
-    id: 'collaboration',
-    title: 'Real-time Collaboration',
-    content: '<p>Work together with your team in real-time with live editing, commenting, and notification systems.</p>'
-  },
-  {
-    id: 'api-integration',
-    title: 'API Integration',
-    expanded: true,
-    content: '<p>Connect with third-party services via our robust REST API with comprehensive documentation and SDKs.</p>'
-  }
-];
-
 // ==============================================
-// Chip Variant Stories
+// Playground Story
 // ==============================================
 
-export const ChipVariantDefault: Story = {
+export const SpectrumPlayground: Story = {
   args: {
     variant: 'chip',
     expanded: false,
-    label: 'Dive Deeper',
+    label: 'Explore Topics',
     collapsedIcon: 'arrow_drop_down',
     expandedIcon: 'arrow_drop_up',
     sound: false,
+    haptic: false,
     horizontalScroll: true,
     disabled: false,
     chipVariant: 'secondary',
     outline: true,
-    accordionId: 'chip-default-accordion',
-    debug: false,
     expandMode: 'single',
-    sections: ''
+    sections: JSON.stringify(basicFAQSections),
+    accordionId: 'playground-accordion',
+    debug: false
   },
   render: (args) => html`
     <spectrum-accordion
@@ -241,325 +287,282 @@ export const ChipVariantDefault: Story = {
       .collapsedIcon=${args.collapsedIcon}
       .expandedIcon=${args.expandedIcon}
       .sound=${args.sound}
+      .haptic=${args.haptic}
       .horizontalScroll=${args.horizontalScroll}
       .disabled=${args.disabled}
       .chipVariant=${args.chipVariant}
       .outline=${args.outline}
+      .expandMode=${args.expandMode}
+      .sections=${args.sections}
       .accordionId=${args.accordionId}
       .debug=${args.debug}
       @accordionToggle=${(e: CustomEvent) => action('Accordion Toggled')(e.detail)}
     >
-      ${sampleExplorations.map(exploration => html`
-        <spectrum-chip
-          variant="secondary"
-          label=${exploration.label}
-          leadingIcon="prompt_suggestion"
-          @click=${() => action('Exploration Clicked')(exploration)}
-        ></spectrum-chip>
-      `)}
+      ${args.variant === 'chip' ? html`
+        ${sampleExplorations.slice(0, 4).map(exploration => html`
+          <spectrum-chip
+            variant="secondary"
+            label=${exploration.label}
+            leadingIcon=${exploration.icon}
+            @click=${() => action('Exploration Clicked')(exploration)}
+          ></spectrum-chip>
+        `)}
+      ` : ''}
     </spectrum-accordion>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Default chip variant accordion with horizontal scrolling content. This is the original implementation - perfect for showing additional actions or exploration options.'
-      }
-    }
-  }
-};
-
-export const ChipVariantExpanded: Story = {
-  args: {
-    ...ChipVariantDefault.args,
-    expanded: true,
-    accordionId: 'chip-expanded-accordion'
-  },
-  render: ChipVariantDefault.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Chip variant accordion that starts in the expanded state.'
-      }
-    }
-  }
-};
-
-export const ChipVariantVertical: Story = {
-  args: {
-    ...ChipVariantDefault.args,
-    horizontalScroll: false,
-    label: 'Show Options',
-    accordionId: 'chip-vertical-accordion'
-  },
-  render: ChipVariantDefault.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Chip variant with vertical content layout instead of horizontal scrolling. Better for longer lists or items with more text.'
-      }
-    }
-  }
-};
-
-export const ChipVariantPrimary: Story = {
-  args: {
-    ...ChipVariantDefault.args,
-    chipVariant: 'primary',
-    outline: false,
-    label: 'Explore More',
-    accordionId: 'chip-primary-accordion'
-  },
-  render: (args) => html`
-    <spectrum-accordion
-      .variant=${args.variant}
-      .expanded=${args.expanded}
-      .label=${args.label}
-      .collapsedIcon=${args.collapsedIcon}
-      .expandedIcon=${args.expandedIcon}
-      .sound=${args.sound}
-      .horizontalScroll=${args.horizontalScroll}
-      .disabled=${args.disabled}
-      .chipVariant=${args.chipVariant}
-      .outline=${args.outline}
-      .accordionId=${args.accordionId}
-      .debug=${args.debug}
-      @accordionToggle=${(e: CustomEvent) => action('Accordion Toggled')(e.detail)}
-    >
-      ${sampleExplorations.slice(0, 3).map(exploration => html`
-        <spectrum-chip
-          variant="primary"
-          label=${exploration.label}
-          leadingIcon="prompt_suggestion"
-          @click=${() => action('Exploration Clicked')(exploration)}
-        ></spectrum-chip>
-      `)}
-    </spectrum-accordion>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Chip variant using primary styling without outline for emphasis.'
+        story: 'Interactive playground for testing accordion configurations. Switch between chip and standard variants to explore different features and behaviors.'
       }
     }
   }
 };
 
 // ==============================================
-// Standard Variant Stories
+// Basic Examples
 // ==============================================
 
-export const StandardVariantSingle: Story = {
-  args: {
-    variant: 'standard',
-    expandMode: 'single',
-    sections: JSON.stringify(faqSections),
-    collapsedIcon: 'arrow_drop_down',
-    expandedIcon: 'arrow_drop_up',
-    disabled: false,
-    accordionId: 'standard-single-accordion',
-    debug: false,
-    // Chip variant props (not used but needed for interface)
-    expanded: false,
-    label: '',
-    horizontalScroll: true,
-    chipVariant: 'secondary',
-    outline: true,
-    sound: false
-  },
-  render: (args) => html`
-    <spectrum-accordion
-      .variant=${args.variant}
-      .expandMode=${args.expandMode}
-      .sections=${args.sections}
-      .collapsedIcon=${args.collapsedIcon}
-      .expandedIcon=${args.expandedIcon}
-      .disabled=${args.disabled}
-      .accordionId=${args.accordionId}
-      .debug=${args.debug}
-      @accordionToggle=${(e: CustomEvent) => action('Section Toggled')(e.detail)}
-    >
-    </spectrum-accordion>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Standard accordion variant with single expand mode. Only one section can be expanded at a time. Perfect for FAQs and content organization where you want users to focus on one item.'
-      }
-    }
-  }
-};
-
-export const StandardVariantMulti: Story = {
-  args: {
-    ...StandardVariantSingle.args,
-    expandMode: 'multi',
-    sections: JSON.stringify(featureSections),
-    accordionId: 'standard-multi-accordion'
-  },
-  render: StandardVariantSingle.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Standard accordion variant with multi expand mode. Multiple sections can be expanded simultaneously. Some sections start expanded based on their initial state.'
-      }
-    }
-  }
-};
-
-export const StandardVariantWithSlots: Story = {
-  args: {
-    ...StandardVariantSingle.args,
-    expandMode: 'single',
-    sections: JSON.stringify([
-      { id: 'custom1', title: 'Custom Content Section' },
-      { id: 'custom2', title: 'Interactive Components' },
-      { id: 'fallback', title: 'Mixed Content' }
-    ]),
-    accordionId: 'standard-slots-accordion'
-  },
-  render: (args) => html`
-    <spectrum-accordion
-      .variant=${args.variant}
-      .expandMode=${args.expandMode}
-      .sections=${args.sections}
-      .collapsedIcon=${args.collapsedIcon}
-      .expandedIcon=${args.expandedIcon}
-      .disabled=${args.disabled}
-      .accordionId=${args.accordionId}
-      .debug=${args.debug}
-      @accordionToggle=${(e: CustomEvent) => action('Section Toggled')(e.detail)}
-    >
-      <!-- Named slots for specific sections -->
-      <div slot="section-custom1">
-        <spectrum-button variant="primary">Custom Action</spectrum-button>
-        <p>This content uses a named slot and can contain any components.</p>
-      </div>
+export const SpectrumBasicExamples: Story = {
+  render: () => html`
+    <div style="display: flex; flex-direction: column; gap: 3rem;">
       
-      <div slot="section-custom2">
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <spectrum-chip variant="primary" label="Interactive"></spectrum-chip>
-          <spectrum-chip variant="secondary" label="Components"></spectrum-chip>
-          <spectrum-button variant="secondary">Click Me</spectrum-button>
-        </div>
-        <p>This section demonstrates interactive components within accordion sections.</p>
-      </div>
-      
-      <!-- Fallback content for sections without named slots -->
       <div>
-        <p>This is fallback content that will be used for the "Mixed Content" section since it doesn't have a named slot.</p>
-        <spectrum-chip variant="secondary" label="Fallback Content"></spectrum-chip>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Chip Variant Examples</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Basic Chip</h4>
+            ${ChipBasic.render(ChipBasic.args)}
+          </div>
+          
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Pre-expanded</h4>
+            ${ChipExpanded.render(ChipExpanded.args)}
+          </div>
+          
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Vertical Layout</h4>
+            ${ChipVertical.render(ChipVertical.args)}
+          </div>
+          
+        </div>
       </div>
-    </spectrum-accordion>
+      
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Standard Variant Examples</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Single Expand Mode</h4>
+            ${StandardSingle.render(StandardSingle.args)}
+          </div>
+          
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Multi Expand Mode</h4>
+            ${StandardMulti.render(StandardMulti.args)}
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Standard accordion with custom slotted content. Shows how to use named slots for specific sections and fallback content for others.'
+        story: 'Basic accordion configurations demonstrating both chip and standard variants with their core functionality.'
       }
     }
   }
 };
 
-export const StandardVariantDisabled: Story = {
-  args: {
-    ...StandardVariantSingle.args,
-    disabled: true,
-    accordionId: 'standard-disabled-accordion'
-  },
-  render: StandardVariantSingle.render,
+// ==============================================
+// Variant Showcase
+// ==============================================
+
+export const SpectrumAllVariants: Story = {
+  render: AllVariantsShowcase.render,
   parameters: {
     docs: {
       description: {
-        story: 'Standard accordion in disabled state - sections cannot be expanded or collapsed.'
+        story: 'Comprehensive showcase of all accordion variants and their different styling options. Compare chip variants (primary/secondary, filled/outlined) and standard variants (single/multi expand modes).'
+      }
+    }
+  }
+};
+
+export const SpectrumVariantComparison: Story = {
+  render: ChipVsStandardComparison.render,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Direct comparison between chip and standard variants, highlighting their different use cases and interaction patterns.'
       }
     }
   }
 };
 
 // ==============================================
-// Comparison and Advanced Examples
+// Feature Demonstrations
 // ==============================================
 
-export const BothVariantsComparison: Story = {
-  args: {
-    ...ChipVariantDefault.args
-  },
+export const SpectrumFeatureDemonstrations: Story = {
+  render: () => html`
+    <div style="display: flex; flex-direction: column; gap: 3rem;">
+      
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Interactive Feedback</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Sound Feedback</h4>
+            ${AccordionWithSound.render(AccordionWithSound.args)}
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Haptic Feedback</h4>
+            ${AccordionWithHaptic.render(AccordionWithHaptic.args)}
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Combined Feedback</h4>
+            ${AccordionWithBothFeedbacks.render(AccordionWithBothFeedbacks.args)}
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Custom Content & Layout</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Interactive Content</h4>
+            ${AccordionWithInteractiveContent.render(AccordionWithInteractiveContent.args)}
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Horizontal Scroll</h4>
+            ${AccordionHorizontalScroll.render(AccordionHorizontalScroll.args)}
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Advanced Features</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Slotted Content</h4>
+            ${AccordionWithSlottedContent.render(AccordionWithSlottedContent.args)}
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Debug Mode</h4>
+            ${AccordionWithDebug.render(AccordionWithDebug.args)}
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Advanced accordion features including sound/haptic feedback, interactive content, custom layouts, and development tools.'
+      }
+    }
+  }
+};
+
+// ==============================================
+// Real-World Usage Examples
+// ==============================================
+
+export const SpectrumUsageExamples: Story = {
+  render: () => html`
+    <div style="display: flex; flex-direction: column; gap: 4rem;">
+      
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">FAQ & Documentation</h3>
+        ${FAQAccordion.render(FAQAccordion.args)}
+      </div>
+      
+      <div>
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Product Features & Pricing</h3>
+        ${ProductFeaturesAccordion.render(ProductFeaturesAccordion.args)}
+      </div>
+      
+      <div style="display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start;">
+        <div>
+          <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Navigation Menu</h3>
+          ${NavigationAccordion.render(NavigationAccordion.args)}
+        </div>
+        <div>
+          <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Action Tools</h3>
+          ${ActionToolsAccordion.render(ActionToolsAccordion.args)}
+          <br><br>
+          ${ExplorationChipsAccordion.render(ExplorationChipsAccordion.args)}
+        </div>
+      </div>
+      
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Real-world usage patterns including FAQs, product features, navigation menus, documentation, and e-commerce applications.'
+      }
+    }
+  }
+};
+
+export const SpectrumAccessibilityExamples: Story = {
   render: () => html`
     <div style="display: flex; flex-direction: column; gap: 2rem;">
-      <div>
-        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Chip Variant</h3>
-        <spectrum-accordion
-          variant="chip"
-          label="Show Energy Sources"
-          accordionId="comparison-chip"
-          @accordionToggle=${(e: CustomEvent) => action('Chip Accordion Toggled')(e.detail)}
-        >
-          ${sampleExplorations.slice(0, 3).map(exploration => html`
-            <spectrum-chip
-              variant="secondary"
-              label=${exploration.label}
-              leadingIcon="prompt_suggestion"
-              @click=${() => action('Chip Content Clicked')(exploration)}
-            ></spectrum-chip>
-          `)}
-        </spectrum-accordion>
+      
+      <div style="padding: 1rem; background: var(--spectrum-color-surface-variant); border-radius: 8px;">
+        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">♿ Accessibility Features</h3>
+        <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8; color: var(--spectrum-color-on-surface-variant);">
+          <li><strong>Keyboard Navigation:</strong> Use Tab, Enter, and Space keys to navigate and toggle sections</li>
+          <li><strong>Screen Reader Support:</strong> Proper ARIA labels, roles, and state announcements</li>
+          <li><strong>Focus Management:</strong> Visible focus indicators and logical tab order</li>
+          <li><strong>High Contrast:</strong> Enhanced visibility in high contrast mode</li>
+          <li><strong>Reduced Motion:</strong> Respects user's motion preferences</li>
+        </ul>
       </div>
       
       <div>
-        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Standard Variant</h3>
+        <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Accessible FAQ Example</h4>
         <spectrum-accordion
           variant="standard"
           expand-mode="single"
-          sections=${JSON.stringify(faqSections.slice(0, 3))}
-          accordionId="comparison-standard"
-          @accordionToggle=${(e: CustomEvent) => action('Standard Accordion Toggled')(e.detail)}
+          sections=${JSON.stringify([
+            {
+              id: 'a11y-keyboard',
+              title: 'How do I navigate with keyboard?',
+              content: '<p>Use <strong>Tab</strong> to navigate between accordion headers, <strong>Enter</strong> or <strong>Space</strong> to toggle sections, and <strong>Arrow keys</strong> to move between headers within the accordion.</p>'
+            },
+            {
+              id: 'a11y-screen-reader',
+              title: 'How does this work with screen readers?',
+              content: '<p>Each accordion section has proper ARIA labels and roles. The screen reader announces the current state (expanded/collapsed) and provides context about the content structure.</p>'
+            },
+            {
+              id: 'a11y-contrast',
+              title: 'What about high contrast mode?',
+              content: '<p>The accordion automatically adapts to high contrast mode with enhanced borders and improved text visibility for users with visual impairments.</p>'
+            }
+          ])}
+          accordionId="accessibility-demo"
+          @accordionToggle=${(e: CustomEvent) => action('Accessible Accordion Toggled')(e.detail)}
         >
         </spectrum-accordion>
       </div>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Side-by-side comparison of both accordion variants showing their different use cases and interaction patterns.'
-      }
-    }
-  }
-};
-
-export const MultipleStandardAccordions: Story = {
-  args: {
-    ...StandardVariantSingle.args
-  },
-  render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-      <spectrum-accordion
-        variant="standard"
-        expand-mode="single"
-        sections=${JSON.stringify(faqSections.slice(0, 2))}
-        accordionId="multiple-faq"
-        @accordionToggle=${(e: CustomEvent) => action('FAQ Accordion Toggled')(e.detail)}
-      >
-      </spectrum-accordion>
       
-      <spectrum-accordion
-        variant="standard"
-        expand-mode="multi"
-        sections=${JSON.stringify(featureSections)}
-        accordionId="multiple-features"
-        @accordionToggle=${(e: CustomEvent) => action('Features Accordion Toggled')(e.detail)}
-      >
-      </spectrum-accordion>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Multiple independent standard accordions with different expand modes working together on the same page.'
+        story: 'Accessibility features and best practices for accordion components, including keyboard navigation, screen reader support, and visual accessibility enhancements.'
       }
     }
   }
 };
 
-// Alias for backward compatibility
-export const Default = ChipVariantDefault; 
+// Legacy alias for backward compatibility
+export const Default = SpectrumPlayground; 

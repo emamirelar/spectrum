@@ -1,0 +1,416 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Spectrum/Components/SpectrumButton/Use Cases" />
+
+# 🎯 Spectrum Button Use Cases
+
+This document showcases real-world scenarios and practical applications where the spectrum-button component provides optimal user experiences across different contexts.
+
+---
+
+## 🚀 Primary Actions
+
+### Call-to-Action Buttons
+High-visibility actions that drive user engagement and conversions.
+
+```html
+<!-- Landing page CTA -->
+<spectrum-button 
+  variant="primary" 
+  size="lg" 
+  button-text="Get Started Free" 
+  show-left-icon 
+  left-icon="rocket_launch">
+</spectrum-button>
+
+<!-- Product signup -->
+<spectrum-button 
+  variant="primary" 
+  button-text="Start Your Trial" 
+  show-right-icon 
+  right-icon="arrow_forward">
+</spectrum-button>
+```
+
+### Form Submissions
+Essential form actions with clear user feedback.
+
+```html
+<!-- Form submit -->
+<spectrum-button 
+  variant="primary" 
+  button-text="Submit Application" 
+  show-left-icon 
+  left-icon="send">
+</spectrum-button>
+
+<!-- Save draft -->
+<spectrum-button 
+  variant="secondary" 
+  button-text="Save Draft" 
+  show-left-icon 
+  left-icon="save">
+</spectrum-button>
+```
+
+---
+
+## 🛡️ Destructive Actions
+
+### Data Management
+Actions that require user confirmation and careful consideration.
+
+```html
+<!-- Delete confirmation -->
+<spectrum-button 
+  variant="danger" 
+  button-text="Delete Project" 
+  show-left-icon 
+  left-icon="delete_forever">
+</spectrum-button>
+
+<!-- Remove item -->
+<spectrum-button 
+  variant="danger" 
+  outline 
+  button-text="Remove" 
+  show-left-icon 
+  left-icon="remove">
+</spectrum-button>
+```
+
+### Account Actions
+Critical account management functions.
+
+```html
+<!-- Account deletion -->
+<spectrum-button 
+  variant="danger" 
+  button-text="Close Account" 
+  show-left-icon 
+  left-icon="account_box">
+</spectrum-button>
+
+<!-- Reset data -->
+<spectrum-button 
+  variant="warning" 
+  button-text="Reset All Data" 
+  show-left-icon 
+  left-icon="restart_alt">
+</spectrum-button>
+```
+
+---
+
+## 🎮 Interactive Controls
+
+### Media Controls
+Intuitive media playback and control interfaces.
+
+```html
+<!-- Play/Pause -->
+<spectrum-button 
+  variant="primary" 
+  icon-only 
+  show-left-icon 
+  left-icon="play_arrow" 
+  action="play">
+</spectrum-button>
+
+<!-- Volume control -->
+<spectrum-button 
+  variant="ghost" 
+  icon-only 
+  show-left-icon 
+  left-icon="volume_up">
+</spectrum-button>
+
+<!-- Fullscreen -->
+<spectrum-button 
+  variant="ghost" 
+  icon-only 
+  show-left-icon 
+  left-icon="fullscreen">
+</spectrum-button>
+```
+
+### Navigation Controls
+Clear navigation patterns for user flows.
+
+```html
+<!-- Back navigation -->
+<spectrum-button 
+  variant="ghost" 
+  button-text="Back" 
+  show-left-icon 
+  left-icon="arrow_back">
+</spectrum-button>
+
+<!-- Next step -->
+<spectrum-button 
+  variant="primary" 
+  button-text="Continue" 
+  show-right-icon 
+  right-icon="arrow_forward">
+</spectrum-button>
+
+<!-- Finish flow -->
+<spectrum-button 
+  variant="success" 
+  button-text="Complete Setup" 
+  show-left-icon 
+  left-icon="check_circle">
+</spectrum-button>
+```
+
+---
+
+## 📱 Mobile & Touch Interfaces
+
+### FAB (Floating Action Button)
+Primary actions in mobile interfaces with optimal touch targets.
+
+```html
+<!-- Add new item -->
+<spectrum-button 
+  variant="fab" 
+  icon-only 
+  show-left-icon 
+  left-icon="add" 
+  action="add-item">
+</spectrum-button>
+
+<!-- Quick action -->
+<spectrum-button 
+  variant="fab" 
+  icon-only 
+  show-left-icon 
+  left-icon="edit" 
+  action="quick-edit">
+</spectrum-button>
+```
+
+### Touch-Optimized Actions
+Buttons designed for finger navigation with adequate spacing.
+
+```html
+<!-- Mobile CTA -->
+<spectrum-button 
+  variant="primary" 
+  size="lg" 
+  button-text="Download App" 
+  show-left-icon 
+  left-icon="download">
+</spectrum-button>
+
+<!-- Touch-friendly secondary -->
+<spectrum-button 
+  variant="secondary" 
+  size="lg" 
+  button-text="Learn More">
+</spectrum-button>
+```
+
+---
+
+## 💼 Business Applications
+
+### E-commerce
+Shopping and transaction-focused interactions.
+
+```html
+<!-- Add to cart -->
+<spectrum-button 
+  variant="primary" 
+  button-text="Add to Cart" 
+  show-left-icon 
+  left-icon="add_shopping_cart" 
+  action="add-to-cart">
+</spectrum-button>
+
+<!-- Checkout -->
+<spectrum-button 
+  variant="success" 
+  button-text="Proceed to Checkout" 
+  show-right-icon 
+  right-icon="payment">
+</spectrum-button>
+
+<!-- Wishlist -->
+<spectrum-button 
+  variant="outline" 
+  button-text="Save for Later" 
+  show-left-icon 
+  left-icon="favorite_border">
+</spectrum-button>
+```
+
+### Dashboard Actions
+Administrative and management interfaces.
+
+```html
+<!-- Export data -->
+<spectrum-button 
+  variant="secondary" 
+  button-text="Export Report" 
+  show-left-icon 
+  left-icon="download">
+</spectrum-button>
+
+<!-- Refresh data -->
+<spectrum-button 
+  variant="ghost" 
+  icon-only 
+  show-left-icon 
+  left-icon="refresh">
+</spectrum-button>
+
+<!-- Settings -->
+<spectrum-button 
+  variant="ghost" 
+  icon-only 
+  show-left-icon 
+  left-icon="settings">
+</spectrum-button>
+```
+
+---
+
+## 🎨 Creative & Content
+
+### Content Creation
+Tools for content creators and editors.
+
+```html
+<!-- Publish content -->
+<spectrum-button 
+  variant="success" 
+  button-text="Publish Now" 
+  show-left-icon 
+  left-icon="publish">
+</spectrum-button>
+
+<!-- Save draft -->
+<spectrum-button 
+  variant="secondary" 
+  button-text="Save Draft" 
+  show-left-icon 
+  left-icon="edit_note">
+</spectrum-button>
+
+<!-- Preview -->
+<spectrum-button 
+  variant="outline" 
+  button-text="Preview" 
+  show-left-icon 
+  left-icon="visibility">
+</spectrum-button>
+```
+
+### File Management
+Document and media file operations.
+
+```html
+<!-- Upload files -->
+<spectrum-button 
+  variant="primary" 
+  button-text="Upload Files" 
+  show-left-icon 
+  left-icon="upload">
+</spectrum-button>
+
+<!-- Share content -->
+<spectrum-button 
+  variant="secondary" 
+  button-text="Share" 
+  show-left-icon 
+  left-icon="share">
+</spectrum-button>
+```
+
+---
+
+## 🔧 Utility Actions
+
+### Quick Actions
+Frequently used utility functions.
+
+```html
+<!-- Copy to clipboard -->
+<spectrum-button 
+  variant="ghost" 
+  button-text="Copy" 
+  show-left-icon 
+  left-icon="content_copy">
+</spectrum-button>
+
+<!-- Print -->
+<spectrum-button 
+  variant="ghost" 
+  button-text="Print" 
+  show-left-icon 
+  left-icon="print">
+</spectrum-button>
+
+<!-- Help -->
+<spectrum-button 
+  variant="ghost" 
+  icon-only 
+  show-left-icon 
+  left-icon="help">
+</spectrum-button>
+```
+
+### Status Actions
+Buttons that reflect or change system states.
+
+```html
+<!-- Enable feature -->
+<spectrum-button 
+  variant="success" 
+  button-text="Enable" 
+  show-left-icon 
+  left-icon="toggle_on">
+</spectrum-button>
+
+<!-- Disable feature -->
+<spectrum-button 
+  variant="warning" 
+  button-text="Disable" 
+  show-left-icon 
+  left-icon="toggle_off">
+</spectrum-button>
+```
+
+---
+
+## 🎯 Best Practices by Use Case
+
+### High-Stakes Actions
+- Use `variant="danger"` for destructive actions
+- Include confirmation dialogs for critical operations
+- Add clear icons that reinforce the action meaning
+
+### Primary User Flows
+- Use `variant="primary"` for main conversion actions
+- Implement `size="lg"` for important CTAs
+- Position prominently in the interface hierarchy
+
+### Secondary Actions
+- Use `variant="secondary"` or `variant="outline"` 
+- Maintain visual hierarchy with primary actions
+- Group related secondary actions together
+
+### Mobile Considerations
+- Use `variant="fab"` for primary mobile actions
+- Ensure minimum 44px touch targets
+- Consider thumb-friendly positioning
+
+### Accessibility Focus
+- Always include meaningful `action` attributes
+- Use appropriate `aria-label` for icon-only buttons
+- Ensure sufficient color contrast in all variants
+
+---
+
+This comprehensive guide helps developers choose the right button configuration for their specific use case, ensuring consistent and intuitive user experiences across all applications. 

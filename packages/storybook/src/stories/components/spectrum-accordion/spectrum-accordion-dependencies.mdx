@@ -1,0 +1,336 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumAccordion/Dependencies" />
+
+# Spectrum Accordion Dependencies
+
+The Spectrum Accordion component has strategic dependencies that enable rich functionality and integration across the component system.
+
+## Component Dependency Graph
+
+<mermaid-diagram chart="graph TD;
+  %% Component Dependencies
+  spectrum-accordion --> spectrum-chip
+  spectrum-conversation-panel --> spectrum-accordion
+  
+  %% Styling Dependencies
+  spectrum-accordion -.-> spectrum-theme[spectrum-theme<br/>CSS Custom Properties]
+  
+  %% Event Communication
+  spectrum-accordion -.->|accordionToggle event| ParentComponents[Parent Components]
+  
+  %% Content Dependencies
+  spectrum-accordion -.->|slot content| spectrum-button
+  spectrum-accordion -.->|slot content| spectrum-badge
+  spectrum-accordion -.->|slot content| spectrum-image-gallery
+  spectrum-accordion -.->|slot content| AnyComponent[Any Component]
+  
+  %% Style accordion node
+  style spectrum-accordion fill:#f9f,stroke:#333,stroke-width:4px
+  
+  %% Style direct dependencies
+  style spectrum-chip fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+  style spectrum-conversation-panel fill:#fff3e0,stroke:#e65100,stroke-width:2px
+  
+  %% Style optional content
+  style spectrum-button fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,stroke-dasharray: 5 5
+  style spectrum-badge fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,stroke-dasharray: 5 5
+  style spectrum-image-gallery fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,stroke-dasharray: 5 5
+  style AnyComponent fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,stroke-dasharray: 5 5"></mermaid-diagram>
+
+## Direct Dependencies
+
+### spectrum-chip
+- **Relationship**: Direct internal dependency
+- **Usage**: The chip variant uses `spectrum-chip` as the trigger element
+- **Why**: Provides consistent chip styling and interaction patterns
+- **Props Passed**: `variant`, `outline`, `label`, `leadingIcon`, `sound`, `haptic`, `disabled`
+
+```typescript
+// Internal chip usage in accordion
+<spectrum-chip 
+  variant={this.chipVariant}
+  outline={this.outline}
+  label={this.label}
+  sound={this.sound}
+  haptic={this.haptic}
+  leadingIcon={this.isExpanded ? this.expandedIcon : this.collapsedIcon}
+  onClick={this.handleChipToggle}
+  selected={this.isExpanded}
+  disabled={this.disabled}
+/>
+```
+
+## Dependent Components
+
+### spectrum-conversation-panel
+- **Relationship**: Uses accordion for expandable content sections
+- **Usage**: Integrates accordion to organize conversation content
+- **Integration Pattern**: Embeds accordion with custom content
+- **Event Handling**: Listens to `accordionToggle` events for state management
+
+```typescript
+// Usage in conversation panel
+<spectrum-accordion
+  variant="chip"
+  label="Additional Resources"
+  @accordionToggle=${this.handleAccordionToggle}
+>
+  <div slot>
+    <!-- Custom conversation content -->
+  </div>
+</spectrum-accordion>
+```
+
+## Content Integration Patterns
+
+### Slot-based Content
+The accordion supports flexible content through slots:
+
+```html
+<!-- Standard variant with named slots -->
+<spectrum-accordion variant="standard" sections='[...]'>
+  <div slot="section-custom1">
+    <spectrum-button variant="primary">Action</spectrum-button>
+    <spectrum-badge variant="success" label="Status"></spectrum-badge>
+  </div>
+  
+  <div slot="section-custom2">
+    <spectrum-image-gallery></spectrum-image-gallery>
+  </div>
+</spectrum-accordion>
+
+<!-- Chip variant with any content -->
+<spectrum-accordion variant="chip" label="Tools">
+  <spectrum-button>Tool 1</spectrum-button>
+  <spectrum-button>Tool 2</spectrum-button>
+  <spectrum-chip label="Option 3"></spectrum-chip>
+</spectrum-accordion>
+```
+
+### Event-Driven Communication
+Components communicate through well-defined events:
+
+```typescript
+// Accordion emits events
+this.accordionToggle.emit({
+  expanded: boolean,
+  accordionId: string,
+  sectionId?: string,
+  expandedSections?: string[]
+});
+
+// Parent components listen
+@Listen('accordionToggle')
+handleAccordionToggle(event: CustomEvent) {
+  const { expanded, accordionId, sectionId } = event.detail;
+  // Handle state changes
+}
+```
+
+## Styling Dependencies
+
+### CSS Custom Properties
+The accordion inherits from the global design system:
+
+```css
+:host {
+  /* Inherited from spectrum-theme */
+  --accordion-background: var(--spectrum-color-surface);
+  --accordion-color: var(--spectrum-color-on-surface);
+  --accordion-border: var(--spectrum-color-outline);
+  
+  /* Component-specific properties */
+  --accordion-transition: var(--spectrum-motion-duration-medium);
+  --accordion-spacing: var(--spectrum-spacing-medium);
+}
+```
+
+### Responsive Design
+Accordions adapt to container constraints and work with layout components:
+
+```html
+<!-- Within layout components -->
+<spectrum-container>
+  <spectrum-stack gap="large">
+    <spectrum-accordion variant="standard">
+      <!-- Content automatically adapts to container width -->
+    </spectrum-accordion>
+  </spectrum-stack>
+</spectrum-container>
+```
+
+## Integration Best Practices
+
+### 1. Event Propagation
+Always handle accordion events at the appropriate level:
+
+```typescript
+// ✅ Good: Handle at parent level
+<parent-component @accordionToggle=${this.handleToggle}>
+  <spectrum-accordion variant="chip">
+    <!-- Content -->
+  </spectrum-accordion>
+</parent-component>
+
+// ❌ Avoid: Stopping event propagation unnecessarily
+handleToggle(event: CustomEvent) {
+  event.stopPropagation(); // Only if required
+}
+```
+
+### 2. Content Organization
+Structure content logically within accordions:
+
+```html
+<!-- ✅ Good: Logical content grouping -->
+<spectrum-accordion variant="standard" sections='[
+  {"id": "overview", "title": "Overview"},
+  {"id": "details", "title": "Details"},
+  {"id": "actions", "title": "Actions"}
+]'>
+  <div slot="section-actions">
+    <spectrum-button variant="primary">Primary Action</spectrum-button>
+    <spectrum-button variant="secondary">Secondary Action</spectrum-button>
+  </div>
+</spectrum-accordion>
+```
+
+### 3. State Management
+Coordinate accordion state with parent components:
+
+```typescript
+// ✅ Good: Sync state between components
+@State() accordionExpanded: boolean = false;
+
+handleAccordionToggle = (event: CustomEvent) => {
+  this.accordionExpanded = event.detail.expanded;
+  // Update other related UI state
+  this.updateRelatedComponents();
+}
+```
+
+## Performance Considerations
+
+### 1. Lazy Content Loading
+For complex content, consider lazy loading:
+
+```typescript
+// Only render content when expanded
+{this.isExpanded && (
+  <div slot="section-heavy-content">
+    <expensive-component></expensive-component>
+  </div>
+)}
+```
+
+### 2. Event Optimization
+Debounce rapid accordion toggles if needed:
+
+```typescript
+private toggleDebounce: any;
+
+handleToggle = (event: CustomEvent) => {
+  clearTimeout(this.toggleDebounce);
+  this.toggleDebounce = setTimeout(() => {
+    this.processToggle(event.detail);
+  }, 100);
+}
+```
+
+## Migration Patterns
+
+### From Basic Accordions
+When migrating from simpler accordion implementations:
+
+```typescript
+// Before: Basic accordion
+<basic-accordion title="Section">
+  Content
+</basic-accordion>
+
+// After: Spectrum accordion
+<spectrum-accordion 
+  variant="standard"
+  sections='[{"id": "section", "title": "Section", "content": "Content"}]'>
+</spectrum-accordion>
+```
+
+### Integration with Existing Systems
+When integrating with existing component systems:
+
+```typescript
+// Wrapper component for legacy integration
+@Component({
+  tag: 'legacy-accordion-wrapper'
+})
+export class LegacyAccordionWrapper {
+  @Prop() legacyConfig: any;
+  
+  render() {
+    return (
+      <spectrum-accordion
+        variant={this.convertVariant(this.legacyConfig)}
+        sections={this.convertSections(this.legacyConfig)}
+        @accordionToggle={this.handleLegacyEvent}
+      >
+      </spectrum-accordion>
+    );
+  }
+}
+```
+
+## Testing Integration
+
+### Component Testing
+Test accordion integration with dependent components:
+
+```typescript
+// Test accordion within conversation panel
+it('should handle accordion events in conversation panel', async () => {
+  const page = await newE2EPage();
+  await page.setContent(`
+    <spectrum-conversation-panel>
+      <spectrum-accordion variant="chip" label="Test">
+        Content
+      </spectrum-accordion>
+    </spectrum-conversation-panel>
+  `);
+  
+  const accordion = await page.find('spectrum-accordion');
+  const eventSpy = await page.spyOnEvent('accordionToggle');
+  
+  await accordion.click();
+  expect(eventSpy).toHaveReceivedEvent();
+});
+```
+
+### Integration Testing
+Verify cross-component communication:
+
+```typescript
+// Test event flow between components
+it('should propagate accordion events correctly', async () => {
+  const page = await newE2EPage();
+  // Test setup...
+  
+  const parentEventSpy = await page.spyOnEvent('parentComponentUpdate');
+  await accordion.click();
+  
+  expect(parentEventSpy).toHaveReceivedEventDetail({
+    source: 'accordion',
+    action: 'toggle'
+  });
+});
+```
+
+## Future Dependencies
+
+As the component system evolves, potential future dependencies:
+
+- **spectrum-animation**: Enhanced transition effects
+- **spectrum-gesture**: Advanced touch/gesture support  
+- **spectrum-accessibility**: Enhanced a11y features
+- **spectrum-data**: Dynamic content loading
+
+The accordion's modular design ensures these future integrations can be added without breaking existing implementations. 

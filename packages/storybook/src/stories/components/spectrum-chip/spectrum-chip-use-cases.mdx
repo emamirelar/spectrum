@@ -1,0 +1,393 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumChip/Use Cases" />
+
+# Spectrum Chip Use Cases
+
+Real-world applications and business scenarios where Spectrum Chips provide optimal user experience and functionality.
+
+## Content Management Systems
+
+### Blog Post Tagging
+**Business Context:** Content creators need to categorize and tag articles for better discoverability and organization.
+
+**Implementation:**
+```html
+<!-- Article tagging interface -->
+<div class="article-tags">
+  <h3>Article Tags</h3>
+  <div class="tag-list">
+    <spectrum-chip variant="input" label="Technology" showTrailingIcon="true"></spectrum-chip>
+    <spectrum-chip variant="input" label="Web Development" showTrailingIcon="true"></spectrum-chip>
+    <spectrum-chip variant="input" label="JavaScript" showTrailingIcon="true"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="+ Add Tag" leadingIcon="add"></spectrum-chip>
+  </div>
+</div>
+```
+
+**User Benefits:**
+- Quick tag removal with trailing icons
+- Visual tag organization
+- Consistent tagging interface across platform
+
+### Document Categories
+**Business Context:** Enterprise document management requiring dynamic categorization and filtering.
+
+```html
+<!-- Document filter interface -->
+<div class="document-filters">
+  <spectrum-chip variant="filter" label="All Documents (247)" selected="true"></spectrum-chip>
+  <spectrum-chip variant="filter" label="Proposals (23)"></spectrum-chip>
+  <spectrum-chip variant="filter" label="Contracts (45)"></spectrum-chip>
+  <spectrum-chip variant="filter" label="Reports (89)"></spectrum-chip>
+  <spectrum-chip variant="filter" label="Archived (90)"></spectrum-chip>
+</div>
+```
+
+## E-commerce Applications
+
+### Product Filtering
+**Business Context:** Online retailers need sophisticated filtering to help customers find products quickly.
+
+**Advanced Filter Implementation:**
+```html
+<!-- E-commerce product filters -->
+<div class="product-filters">
+  <div class="filter-section">
+    <h4>Price Range</h4>
+    <spectrum-chip variant="filter" label="Under $25" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="$25 - $50"></spectrum-chip>
+    <spectrum-chip variant="filter" label="$50 - $100"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Over $100"></spectrum-chip>
+  </div>
+  
+  <div class="filter-section">
+    <h4>Brands</h4>
+    <spectrum-chip variant="filter" label="Nike" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Adidas" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Puma"></spectrum-chip>
+  </div>
+  
+  <div class="filter-section">
+    <h4>Features</h4>
+    <spectrum-chip variant="assist" label="Free Shipping" leadingIcon="local_shipping"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Prime Eligible" leadingIcon="star"></spectrum-chip>
+  </div>
+</div>
+```
+
+### Shopping Cart Tags
+**Business Context:** Enhanced shopping experience with product categorization and quick actions.
+
+```html
+<!-- Shopping cart with intelligent grouping -->
+<div class="cart-items">
+  <div class="item-tags">
+    <spectrum-chip variant="secondary" label="Electronics" leadingIcon="devices"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="Free Shipping" leadingIcon="local_shipping"></spectrum-chip>
+    <spectrum-chip variant="input" label="Gift Item" showTrailingIcon="true"></spectrum-chip>
+  </div>
+</div>
+```
+
+## Social Media & Communication
+
+### Hashtag Management
+**Business Context:** Social media platforms need efficient hashtag input and management for content discovery.
+
+```html
+<!-- Social post composer -->
+<div class="hashtag-composer">
+  <div class="active-hashtags">
+    <spectrum-chip variant="input" label="#webdevelopment" showTrailingIcon="true"></spectrum-chip>
+    <spectrum-chip variant="input" label="#javascript" showTrailingIcon="true"></spectrum-chip>
+    <spectrum-chip variant="input" label="#frontend" showTrailingIcon="true"></spectrum-chip>
+  </div>
+  
+  <div class="suggested-hashtags">
+    <h4>Suggested Tags</h4>
+    <spectrum-chip variant="suggestion" label="#react" leadingIcon="add_circle_outline"></spectrum-chip>
+    <spectrum-chip variant="suggestion" label="#typescript" leadingIcon="add_circle_outline"></spectrum-chip>
+    <spectrum-chip variant="suggestion" label="#webdesign" leadingIcon="add_circle_outline"></spectrum-chip>
+  </div>
+</div>
+```
+
+### Contact Groups
+**Business Context:** Messaging applications need intuitive contact grouping and recipient management.
+
+```html
+<!-- Message recipient selection -->
+<div class="message-recipients">
+  <div class="selected-contacts">
+    <spectrum-chip variant="input" label="John Smith" showTrailingIcon="true"></spectrum-chip>
+    <spectrum-chip variant="input" label="Sarah Johnson" showTrailingIcon="true"></spectrum-chip>
+    <spectrum-chip variant="input" label="Team Alpha (5)" showTrailingIcon="true"></spectrum-chip>
+  </div>
+  
+  <div class="quick-groups">
+    <spectrum-chip variant="assist" label="Recent Contacts" leadingIcon="history"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Favorites" leadingIcon="star"></spectrum-chip>
+  </div>
+</div>
+```
+
+## Task Management & Productivity
+
+### Project Organization
+**Business Context:** Project management tools need flexible labeling and quick task categorization.
+
+```html
+<!-- Task board with labels -->
+<div class="task-labels">
+  <div class="priority-chips">
+    <spectrum-chip variant="primary" label="High Priority" leadingIcon="priority_high"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="Medium Priority"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Low Priority"></spectrum-chip>
+  </div>
+  
+  <div class="category-chips">
+    <spectrum-chip variant="filter" label="Bug Fix" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Feature" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Documentation"></spectrum-chip>
+  </div>
+  
+  <div class="status-chips">
+    <spectrum-chip variant="assist" label="In Progress" leadingIcon="schedule"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Review" leadingIcon="rate_review"></spectrum-chip>
+  </div>
+</div>
+```
+
+### Skill Portfolio
+**Business Context:** Professional networking platforms need rich skill representation and endorsement systems.
+
+```html
+<!-- Professional skills section -->
+<div class="skills-portfolio">
+  <div class="core-skills">
+    <h4>Core Skills</h4>
+    <spectrum-chip variant="primary" label="JavaScript (5 years)" leadingIcon="code"></spectrum-chip>
+    <spectrum-chip variant="primary" label="React (3 years)" leadingIcon="web"></spectrum-chip>
+    <spectrum-chip variant="primary" label="Node.js (4 years)" leadingIcon="dns"></spectrum-chip>
+  </div>
+  
+  <div class="learning-skills">
+    <h4>Currently Learning</h4>
+    <spectrum-chip variant="suggestion" label="Machine Learning" leadingIcon="psychology"></spectrum-chip>
+    <spectrum-chip variant="suggestion" label="GraphQL" leadingIcon="device_hub"></spectrum-chip>
+  </div>
+  
+  <div class="endorsed-skills">
+    <spectrum-chip variant="secondary" label="Leadership (12 endorsements)" leadingIcon="groups"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="Problem Solving (8 endorsements)" leadingIcon="lightbulb"></spectrum-chip>
+  </div>
+</div>
+```
+
+## Educational Platforms
+
+### Course Categories
+**Business Context:** Online learning platforms need intuitive course discovery and enrollment management.
+
+```html
+<!-- Course catalog filtering -->
+<div class="course-filters">
+  <div class="difficulty-levels">
+    <spectrum-chip variant="filter" label="Beginner" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Intermediate"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Advanced"></spectrum-chip>
+  </div>
+  
+  <div class="course-types">
+    <spectrum-chip variant="assist" label="Free Courses" leadingIcon="school"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Certified" leadingIcon="verified"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Hands-on" leadingIcon="build"></spectrum-chip>
+  </div>
+</div>
+```
+
+### Student Progress
+**Business Context:** Educational dashboards need clear progress indication and achievement tracking.
+
+```html
+<!-- Student achievement dashboard -->
+<div class="student-achievements">
+  <div class="completed-modules">
+    <spectrum-chip variant="primary" label="HTML Basics ✓" leadingIcon="check_circle"></spectrum-chip>
+    <spectrum-chip variant="primary" label="CSS Fundamentals ✓" leadingIcon="check_circle"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="JavaScript Intro (75%)" leadingIcon="schedule"></spectrum-chip>
+  </div>
+  
+  <div class="certifications">
+    <spectrum-chip variant="assist" label="Web Developer Certificate" leadingIcon="verified"></spectrum-chip>
+    <spectrum-chip variant="suggestion" label="Advanced CSS (Next)" leadingIcon="trending_up"></spectrum-chip>
+  </div>
+</div>
+```
+
+## Enterprise Applications
+
+### User Permissions
+**Business Context:** Enterprise software needs clear permission and role management interfaces.
+
+```html
+<!-- User role management -->
+<div class="user-permissions">
+  <div class="assigned-roles">
+    <spectrum-chip variant="primary" label="Administrator" leadingIcon="admin_panel_settings"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="Content Editor" leadingIcon="edit"></spectrum-chip>
+  </div>
+  
+  <div class="available-permissions">
+    <spectrum-chip variant="filter" label="Read Access" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Write Access" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Delete Access"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Admin Access"></spectrum-chip>
+  </div>
+</div>
+```
+
+### Data Analytics
+**Business Context:** Business intelligence tools need interactive data filtering and dimension selection.
+
+```html
+<!-- Analytics dashboard filters -->
+<div class="analytics-filters">
+  <div class="time-ranges">
+    <spectrum-chip variant="filter" label="Last 7 Days" selected="true"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Last 30 Days"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Last Quarter"></spectrum-chip>
+  </div>
+  
+  <div class="data-dimensions">
+    <spectrum-chip variant="assist" label="By Region" leadingIcon="map"></spectrum-chip>
+    <spectrum-chip variant="assist" label="By Product" leadingIcon="inventory_2"></spectrum-chip>
+    <spectrum-chip variant="assist" label="By Channel" leadingIcon="settings_input_antenna"></spectrum-chip>
+  </div>
+</div>
+```
+
+## Mobile & Responsive Design
+
+### Touch-Optimized Interfaces
+**Business Context:** Mobile applications need touch-friendly chip interactions with proper sizing.
+
+```html
+<!-- Mobile-optimized chip interface -->
+<div class="mobile-chip-interface">
+  <div class="filter-chips" style="touch-action: manipulation;">
+    <spectrum-chip variant="filter" label="Nearby" size="large" leadingIcon="location_on"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Open Now" size="large" leadingIcon="access_time"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Highly Rated" size="large" leadingIcon="star"></spectrum-chip>
+  </div>
+  
+  <div class="action-chips">
+    <spectrum-chip variant="assist" label="Call" size="large" leadingIcon="phone" sound="true" haptic="true"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Directions" size="large" leadingIcon="directions" sound="true" haptic="true"></spectrum-chip>
+  </div>
+</div>
+```
+
+## AI & Machine Learning Applications
+
+### Smart Suggestions
+**Business Context:** AI-powered applications need contextual suggestion chips that adapt to user behavior.
+
+```html
+<!-- AI-powered content suggestions -->
+<div class="ai-suggestions">
+  <div class="context-chips">
+    <spectrum-chip variant="suggestion" label="Based on your reading" leadingIcon="auto_awesome"></spectrum-chip>
+    <spectrum-chip variant="suggestion" label="Trending in Tech" leadingIcon="trending_up"></spectrum-chip>
+    <spectrum-chip variant="suggestion" label="From your network" leadingIcon="group"></spectrum-chip>
+  </div>
+  
+  <div class="action-suggestions">
+    <spectrum-chip variant="assist" label="Save for Later" leadingIcon="bookmark_add"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Share with Team" leadingIcon="share"></spectrum-chip>
+  </div>
+</div>
+```
+
+### Content Moderation
+**Business Context:** Content moderation interfaces need quick tagging and classification tools.
+
+```html
+<!-- Content moderation dashboard -->
+<div class="moderation-tools">
+  <div class="content-flags">
+    <spectrum-chip variant="primary" label="Inappropriate Content" leadingIcon="flag"></spectrum-chip>
+    <spectrum-chip variant="secondary" label="Spam" leadingIcon="report"></spectrum-chip>
+    <spectrum-chip variant="filter" label="Needs Review" leadingIcon="visibility"></spectrum-chip>
+  </div>
+  
+  <div class="quick-actions">
+    <spectrum-chip variant="assist" label="Approve" leadingIcon="check_circle" sound="true"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Reject" leadingIcon="cancel" sound="true"></spectrum-chip>
+    <spectrum-chip variant="assist" label="Escalate" leadingIcon="report_problem"></spectrum-chip>
+  </div>
+</div>
+```
+
+## Performance Optimization Patterns
+
+### Large Dataset Handling
+**Business Context:** Applications with thousands of filterable items need efficient chip management.
+
+```javascript
+// Efficient chip rendering for large datasets
+const FilterChipList = ({ filters, onFilterChange }) => {
+  const [visibleFilters, setVisibleFilters] = useState(filters.slice(0, 10));
+  
+  return html`
+    <div class="filter-container">
+      ${visibleFilters.map(filter => html`
+        <spectrum-chip
+          variant="filter"
+          label="${filter.label} (${filter.count})"
+          .selected=${filter.selected}
+          @chipAction=${(e) => onFilterChange(filter.id, e.detail)}
+        ></spectrum-chip>
+      `)}
+      
+      ${filters.length > 10 ? html`
+        <spectrum-chip
+          variant="secondary"
+          label="Show More (${filters.length - 10})"
+          leadingIcon="expand_more"
+          @chipAction=${() => setVisibleFilters(filters)}
+        ></spectrum-chip>
+      ` : ''}
+    </div>
+  `;
+};
+```
+
+### Accessibility Best Practices
+Ensuring chips work seamlessly for all users:
+
+```html
+<!-- Accessible chip implementation -->
+<div class="accessible-chip-group" role="group" aria-label="Product filters">
+  <spectrum-chip
+    variant="filter"
+    label="Electronics (23 items)"
+    selected="true"
+    aria-pressed="true"
+    aria-describedby="filter-help"
+  ></spectrum-chip>
+  
+  <spectrum-chip
+    variant="filter"
+    label="Clothing (45 items)"
+    aria-pressed="false"
+  ></spectrum-chip>
+  
+  <div id="filter-help" class="sr-only">
+    Use these filters to narrow your search results. Selected filters are applied immediately.
+  </div>
+</div>
+```
+
+These comprehensive use cases demonstrate how Spectrum Chips enhance user experience across diverse business applications, from simple tagging to complex enterprise workflows, while maintaining consistency, accessibility, and performance standards. 

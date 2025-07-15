@@ -1,0 +1,292 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumConversationPanel/Dependencies" />
+
+# Spectrum Conversation Panel Dependencies
+
+## Component Dependency Diagram
+
+<mermaid-diagram chart="graph TD
+    A[spectrum-conversation-panel] --> B[spectrum-panel]
+    A --> C[spectrum-accordion]
+    A --> D[spectrum-button]
+    A --> E[spectrum-chip]
+    
+    B --> F[spectrum-theme]
+    C --> E
+    D --> F
+    E --> F
+    
+    A --> G[BackgroundLevel interface]
+    A --> H[ContentCard interface]
+    A --> I[ExplorationItem interface]
+    A --> J[Message interface]
+    
+    K[Parent Applications] --> A
+    K --> L[Event Handlers]
+    L --> M[action events]
+    L --> N[explorationSelected events]
+    L --> O[explore events]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5  
+    style C fill:#f3e5f5
+    style D fill:#f3e5f5
+    style E fill:#f3e5f5
+    style F fill:#fff3e0"></mermaid-diagram>
+
+## Direct Dependencies
+
+### Core Components
+- **spectrum-panel**: Primary container providing layout, background levels, and title editing functionality
+- **spectrum-accordion**: Used for expandable exploration sections with chip-based triggers
+- **spectrum-button**: Action buttons within messages for user interactions
+- **spectrum-chip**: Source citations and exploration suggestions as interactive chips
+
+### Foundation Dependency
+- **spectrum-theme**: Inherited through all child components for consistent theming and color systems
+
+## Interfaces and Types
+
+### ContentCard Interface
+```typescript
+interface ContentCard {
+  title: string;
+  subtitle: string;
+  snippet: string;
+  url: string;
+  number: number;
+}
+```
+
+### ExplorationItem Interface
+```typescript
+interface ExplorationItem {
+  label: string;
+  icon: string;
+  action: string;
+}
+```
+
+### Message Interface
+```typescript
+interface Message {
+  id: string;
+  isRequest: boolean;
+  content: string;
+  timestamp: string;
+  sources?: ContentCard[];
+  explorations?: ExplorationItem[];
+  title?: string;
+  isStepwise?: boolean;
+}
+```
+
+### BackgroundLevel Type
+```typescript
+type BackgroundLevel = 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
+```
+
+## Event System Integration
+
+### Event Emission Pattern
+All events follow a consistent structure with action identification:
+
+```typescript
+// Action button events
+this.action.emit({
+  action: "share",
+  type: "action", 
+  value: "share",
+  messageId: "msg-001"
+});
+
+// Source citation events
+this.sourceClick.emit({
+  action: "sourceClick",
+  label: "NASA",
+  value: "https://nasa.gov",
+  messageId: "msg-001"
+});
+
+// Exploration events
+this.explore.emit({
+  action: "explore",
+  value: "exploration content",
+  messageId: "msg-001"
+});
+
+// Title change events
+this.titleChanged.emit({
+  action: "titleChanged",
+  value: "New Title"
+});
+```
+
+## Audio Resource Dependencies
+
+### Sound File Requirements
+- **button.mp3**: Played when action buttons are clicked
+- **chip.mp3**: Played when chips (explorations, citations) are clicked
+- **waiting.mp3**: Looped during loading states
+
+### Audio Integration
+```typescript
+// Audio initialization
+private initializeAudio() {
+  this.audioElement = new Audio('./waiting.mp3');
+  this.audioElement.preload = 'auto';
+  this.audioElement.volume = 0.3;
+  this.audioElement.loop = true;
+}
+
+// Sound propagation to child components
+<spectrum-button sound={this.sound} />
+<spectrum-chip sound={this.sound} />
+<spectrum-accordion sound={this.sound} />
+```
+
+## Integration Patterns
+
+### Message Processing Flow
+<mermaid-diagram chart="graph LR
+    A[Raw HTML Message] --> B[DOM Parser]
+    B --> C[Citation Detection]
+    C --> D[Citation Grouping]
+    D --> E[JSX Conversion]
+    E --> F[Rendered Message]
+    
+    G[Sources Array] --> H[Citation Matching]
+    H --> E
+    
+    I[Explorations Array] --> J[Accordion Content]
+    J --> F
+    
+    style A fill:#e1f5fe
+    style F fill:#f3e5f5"></mermaid-diagram>
+
+### Citation Processing Pipeline
+1. **HTML Parsing**: Uses DOMParser to safely parse message content
+2. **Tag Detection**: Identifies `<sup>` and `<cite>` tags with numeric content
+3. **Adjacent Grouping**: Groups consecutive citations for better UX
+4. **Source Matching**: Matches citation numbers to source objects
+5. **Chip Conversion**: Converts tags to interactive spectrum-chip components
+6. **Event Binding**: Attaches hover and click handlers for source display
+
+### Event Bubbling Architecture
+<mermaid-diagram chart="graph BT
+    A[spectrum-chip clicks] --> B[spectrum-conversation-panel]
+    C[spectrum-button clicks] --> B
+    D[spectrum-accordion toggles] --> B
+    E[spectrum-panel title edits] --> B
+    
+    B --> F[Parent Application]
+    F --> G[Event Handlers]
+    G --> H[Application Logic]
+    
+    style B fill:#e1f5fe
+    style F fill:#f3e5f5"></mermaid-diagram>
+
+## Performance Considerations
+
+### Efficient Rendering
+- **Lazy DOM Updates**: Only re-renders when messages or loading state change
+- **Event Delegation**: Uses efficient event handling for multiple citations
+- **Memory Management**: Proper cleanup of audio resources and event listeners
+
+### Citation Overlay Positioning
+- **Viewport Awareness**: Calculates optimal overlay position to prevent clipping
+- **Grid Layout**: Uses CSS Grid for grouped citation displays
+- **Mobile Adaptation**: Switches to slide-up cards on mobile devices
+
+### Auto-Scroll Optimization
+```typescript
+// Optimized scroll behavior
+componentDidUpdate() {
+  const currentMessageCount = this.messageArray.length;
+  const currentLoadingState = this.loading;
+  
+  // Only scroll when content actually changes
+  if (currentMessageCount !== this.previousMessageCount || 
+      currentLoadingState !== this.previousLoadingState) {
+    setTimeout(() => this.scrollToLatest(), 50);
+  }
+  
+  this.previousMessageCount = currentMessageCount;
+  this.previousLoadingState = currentLoadingState;
+}
+```
+
+## Common Integration Patterns
+
+### Customer Support Applications
+```typescript
+<spectrum-conversation-panel
+  messages={supportMessages}
+  conversationtitle="Support Case #12345"
+  actions='[{"label": "Escalate", "icon": "person_add", "value": "escalate"}]'
+  @action=${handleSupportAction}
+  @sourceClick=${trackSupportResource}
+/>
+```
+
+### Educational Platforms
+```typescript
+<spectrum-conversation-panel
+  messages={tutorialMessages}
+  conversationtitle="Math Tutoring Session"
+  actions='[{"label": "Save Notes", "icon": "bookmark", "value": "save"}]'
+  sound={true}
+  @explore=${handleLearningExploration}
+  @titleChanged=${updateSessionTitle}
+/>
+```
+
+### Research Assistants
+```typescript
+<spectrum-conversation-panel
+  messages={researchMessages}
+  conversationtitle="Literature Review"
+  actions='[{"label": "Export Bibliography", "icon": "assignment", "value": "bibliography"}]'
+  @sourceClick=${addToBibliography}
+  @explore=${generateResearchQuery}
+/>
+```
+
+## Accessibility Integration
+
+### Screen Reader Support
+- **Semantic HTML**: Proper heading structure and ARIA labels
+- **Focus Management**: Logical tab order and visible focus indicators
+- **Event Context**: All events include message context for screen readers
+
+### Keyboard Navigation
+- **Title Editing**: Full keyboard support for inline title editing
+- **Citation Access**: Keyboard navigation for source citation chips
+- **Action Triggering**: Space/Enter activation for all interactive elements
+
+### High Contrast Support
+```css
+@media (prefers-contrast: high) {
+  .spectrum-conversation-panel {
+    border: 1px solid;
+    background: var(--spectrum-sys-color-surface);
+  }
+}
+```
+
+## Testing Dependencies
+
+### Unit Testing Requirements
+- Mock audio resources for headless testing
+- Stub DOM APIs (DOMParser, getBoundingClientRect)
+- Test event emission with proper payloads
+- Validate citation processing pipeline
+
+### Integration Testing
+- Test with various spectrum-theme configurations
+- Verify audio playback in different browsers
+- Test citation hover positioning across viewport sizes
+- Validate mobile touch interactions
+
+This comprehensive dependency structure enables the conversation panel to function as a sophisticated, accessible, and performant component for modern conversational interfaces. 

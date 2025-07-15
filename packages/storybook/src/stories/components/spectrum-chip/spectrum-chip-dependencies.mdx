@@ -1,0 +1,73 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumChip/Dependencies" />
+
+# 🔗 Spectrum Chip Dependencies
+
+This document shows the dependency relationships for the spectrum-chip component and how it integrates with other components in the Spectrum system.
+
+---
+
+## 📋 Component Usage Overview
+
+**spectrum-chip** is a foundational atomic component used by 2 other components in the system. It provides consistent interactive behavior, selection states, and accessibility across all chip implementations.
+
+### Components Using spectrum-chip
+
+- **spectrum-accordion** (chip variant triggers)
+- **spectrum-conversation-panel** (interactive tags and citations)
+
+---
+
+## 🔍 Visual Dependencies
+
+<mermaid-diagram chart="graph TD
+    SC[spectrum-chip] --> |Direct Use| SA[spectrum-accordion]
+    SC --> |Direct Use| SCP[spectrum-conversation-panel]
+    
+    SA --> |Application Use| CONTENT[Content Organization]
+    SCP --> |Application Use| AI[AI/Chat Systems]
+    
+    classDef foundation fill:#e1f5fe
+    classDef dependent fill:#f3e5f5
+    classDef application fill:#fff3e0
+    
+    class SC foundation
+    class SA,SCP dependent
+    class CONTENT,AI application"></mermaid-diagram>
+
+---
+
+## 📦 Integration Patterns
+
+### Chip Integration Pattern
+Multiple components use spectrum-chip as internal interactive element:
+- Properties pass through directly: `variant`, `label`, `selected`, `disabled`
+- Chip handles all visual states (hover, focus, active, selected) and animations
+- Parent wrapper provides context and event handling
+
+### Usage Examples in Dependent Components
+
+#### spectrum-accordion
+```html
+<spectrum-chip
+  variant="primary"
+  label="Section Title"
+  leading-icon="keyboard_arrow_down"
+  @chipAction=${this.handleToggle}>
+</spectrum-chip>
+```
+
+#### spectrum-conversation-panel
+```html
+<spectrum-chip
+  variant="input" 
+  label="Source Citation"
+  show-trailing-icon="true"
+  @chipAction=${this.handleTagAction}>
+</spectrum-chip>
+```
+
+---
+
+This dependency map helps maintain proper component architecture and ensures consistent chip behavior across the entire Spectrum component system. 
