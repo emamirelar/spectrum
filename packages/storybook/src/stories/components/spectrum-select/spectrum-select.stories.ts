@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
 import type { SpectrumSelect, SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-select/spectrum-select";

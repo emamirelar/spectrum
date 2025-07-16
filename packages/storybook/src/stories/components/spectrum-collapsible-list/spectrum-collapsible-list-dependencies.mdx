@@ -1,0 +1,149 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Spectrum/Components/SpectrumCollapsibleList/Dependencies" />
+
+# 🔗 Spectrum Collapsible List Dependencies
+
+This document shows the dependency relationships for the spectrum-collapsible-list component and how it integrates with other components in the Spectrum system.
+
+---
+
+## 📋 Component Usage Overview
+
+**spectrum-collapsible-list** is a Level 2 composed component that depends on the spectrum-context-menu component. It provides hierarchical list functionality and is used by 1 other component in the system.
+
+### Dependencies
+- **spectrum-context-menu** (imports ContextMenuAction interface)
+
+### Components Using spectrum-collapsible-list
+
+- **spectrum-rail** (via slots for navigation structure)
+
+---
+
+## 🔍 Visual Dependencies
+
+<mermaid-diagram chart="graph TD
+    SCM[spectrum-context-menu] --> |Interface Import| SCL[spectrum-collapsible-list]
+    SCL --> |Slot Usage| SR[spectrum-rail]
+    
+    SR --> |Application Use| NAV[Navigation Systems]
+    SCL --> |Direct Use| HIER[Hierarchical Data Display]
+    
+    style SCM fill:#e1f5fe
+    style SCL fill:#f3e5f5
+    style SR fill:#e8f5e8
+    
+    classDef dependency fill:#e1f5fe,stroke:#0277bd
+    classDef component fill:#f3e5f5,stroke:#7b1fa2  
+    classDef consumer fill:#e8f5e8,stroke:#388e3c" />
+
+---
+
+## 🏗️ Architecture Integration
+
+### Context Menu Integration
+```typescript
+// spectrum-collapsible-list imports interface from context-menu
+import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
+
+// Uses the interface for type-safe context menu actions
+private contextMenuActions: ContextMenuAction[] = [
+  { label: 'Rename', action: 'rename', icon: 'edit' },
+  { label: 'Delete', action: 'delete', icon: 'delete' },
+  { label: 'Copy', action: 'copy', icon: 'content_copy' }
+];
+```
+
+### Rail Slot Integration
+```html
+<!-- spectrum-rail uses collapsible-list via slots -->
+<spectrum-rail>
+  <spectrum-collapsible-list slot="navigation-list">
+    <spectrum-collapsible-list-item label="Dashboard"></spectrum-collapsible-list-item>
+    <spectrum-collapsible-list-item label="Settings" expandable="true">
+      <spectrum-collapsible-list-item label="Profile"></spectrum-collapsible-list-item>
+    </spectrum-collapsible-list-item>
+  </spectrum-collapsible-list>
+</spectrum-rail>
+```
+
+---
+
+## 🔄 Event Flow
+
+### Context Menu Events
+1. User right-clicks on list item
+2. `spectrum-collapsible-list` creates context menu
+3. Context menu actions defined using `ContextMenuAction` interface
+4. Context menu emits action events
+5. List component handles and forwards events
+
+### Rail Integration Events
+1. List item actions bubble up to rail
+2. Rail coordinates with other rail components
+3. Navigation state changes propagate through the system
+
+---
+
+## 🚀 Integration Benefits
+
+### Type Safety
+- Shared `ContextMenuAction` interface ensures consistent menu structure
+- TypeScript compilation catches interface mismatches
+- Reliable event contracts between components
+
+### Loose Coupling
+- Slot-based composition in spectrum-rail
+- Event-driven communication
+- Components can be used independently
+
+### Maintainability
+- Single source of truth for context menu actions
+- Consistent behavior across all list implementations
+- Centralized updates to menu functionality
+
+---
+
+## 🔧 Development Considerations
+
+### When Modifying spectrum-collapsible-list
+1. **Check spectrum-rail integration** - Changes may affect navigation behavior
+2. **Verify context menu compatibility** - Ensure ContextMenuAction interface usage remains valid
+3. **Test event propagation** - Validate that rail receives expected events
+4. **Update documentation** - Keep dependency map current
+
+### When Modifying spectrum-context-menu
+1. **Review ContextMenuAction interface changes** - Breaking changes affect collapsible-list
+2. **Test collapsible-list integration** - Ensure menu functionality still works
+3. **Coordinate with collapsible-list team** - Plan interface updates together
+
+---
+
+## 📊 Usage Statistics
+
+- **Direct Usage**: File managers, navigation trees, content organization
+- **Rail Integration**: Primary navigation systems, admin panels
+- **Context Menu Integration**: 100% of interactive list scenarios
+
+---
+
+## 🛠️ Implementation Notes
+
+### Required Imports
+```typescript
+import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
+```
+
+### Peer Dependencies
+- `spectrum-context-menu` must be available in the component registry
+- Rail components should load collapsible-list before initialization
+
+### Performance Considerations
+- Context menu creation is lazy-loaded on first right-click
+- Large hierarchies benefit from virtual scrolling
+- Event delegation minimizes memory usage
+
+---
+
+**Integration Documentation** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Architecture Guidelines](../../../ARCHITECTURE.md) 

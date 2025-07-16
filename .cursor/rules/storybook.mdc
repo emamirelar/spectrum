@@ -241,3 +241,323 @@ When updating existing component stories:
 
 This standardized approach ensures consistent, high-quality documentation across the entire Spectrum component system.
 
+## Property Binding and Component Interface Guidelines
+
+### Critical: Stencil Property Binding Syntax
+Spectrum components are built with Stencil and require specific property binding syntax that differs from standard HTML attributes:
+
+```typescript
+// ✅ Correct - Stencil Property Binding
+<spectrum-button 
+  .buttonText=${"Click me!"}
+  .variant=${"primary"}
+  .size=${"base"}
+  .leftIcon=${"save"}
+  .showLeftIcon=${true}
+  ?disabled=${false}
+  ?iconOnly=${false}
+/>
+
+// ❌ Incorrect - HTML Attribute Binding (won't work)
+<spectrum-button 
+  label="Click me!"
+  variant="primary"
+  size="base"
+  icon="save"
+  disabled
+  icon-only
+/>
+```
+
+### Property Binding Rules
+1. **Properties**: Use `.propertyName=${value}` syntax for all object/string/number properties
+2. **Booleans**: Use `?propertyName=${boolean}` syntax for boolean properties
+3. **CamelCase**: Properties are camelCase (`.buttonText`), not kebab-case (`button-text`)
+4. **Value Types**: String values need `${"string"}`, booleans need `${true/false}`, numbers use `${123}`
+
+### Common Property Binding Patterns
+```typescript
+// Text properties
+.buttonText=${"Save Changes"}
+.placeholder=${"Enter search term"}
+.label=${"Form Label"}
+
+// Enum/option properties  
+.variant=${"primary"}
+.size=${"large"}
+.iconPosition=${"left"}
+
+// Boolean properties
+?disabled=${true}
+?expanded=${false}
+?outline=${true}
+
+// Numeric properties
+.maxItems=${10}
+.delay=${300}
+
+// Object/Array properties
+.items=${[{id: 1, name: 'Item'}]}
+.config=${{theme: 'dark', size: 'lg'}}
+```
+
+## Component Interface Investigation (MANDATORY)
+
+### Read Actual Component Files Before Creating Stories
+You MUST read the component's `.tsx` file to understand actual properties. Never assume property names:
+
+1. **Read the component's `.tsx` file** from `packages/core/src/components/spectrum-[component]/`
+2. **Verify property names** from the `@Prop()` decorators
+3. **Check event names** from the `@Event()` decorators  
+4. **Understand prop types** and validation rules
+5. **Note any special property combinations** (e.g., iconOnly + showLeftIcon)
+
+### Property Discovery Process
+```bash
+# Navigate to component directory
+cd packages/core/src/components/spectrum-[component]
+
+# Read the main component file
+cat spectrum-[component].tsx
+
+# Look for @Prop() declarations to find actual property names
+grep -A 2 "@Prop()" spectrum-[component].tsx
+
+# Look for @Event() declarations to find event names
+grep -A 2 "@Event()" spectrum-[component].tsx
+```
+
+### Real Examples of Property Name Mismatches
+These are actual discrepancies we discovered:
+
+```typescript
+// spectrum-button component actual vs assumed properties:
+
+// ❌ WRONG Assumptions:
+label: "Click me!"           // Wrong property name
+icon: "save"                 // Wrong - component uses separate left/right icons
+size: "medium"               // Wrong - component uses "base" not "medium"
+size: "x-large"              // Wrong - component uses "lg" not "x-large"
+variant: "error"             // Wrong - component uses "danger" not "error"
+
+// ✅ CORRECT Actual Properties from spectrum-button.tsx:
+buttonText: "Click me!"      // Correct property name
+leftIcon: "save"             // Correct - separate left/right icon properties
+showLeftIcon: true           // Required to actually display the icon
+size: "base"                 // Correct size value (options: "sm", "base", "lg")
+variant: "danger"            // Correct variant name
+```
+
+### Critical Component Interface Patterns
+Some components have special property requirements:
+
+```typescript
+// spectrum-button: Icon-only buttons need BOTH properties
+?iconOnly=${true}
+.showLeftIcon=${true}        // Required even for icon-only buttons
+.leftIcon=${"add"}
+
+// spectrum-button: Icon with text needs specific properties
+.buttonText=${"Save"}
+.leftIcon=${"save"}
+.showLeftIcon=${true}        // Must be true to display icon
+
+// spectrum-button: Available sizes are limited
+.size=${"sm"}               // ✅ Available
+.size=${"base"}             // ✅ Available (default)
+.size=${"lg"}               // ✅ Available
+.size=${"medium"}           // ❌ Not available
+.size=${"x-large"}          // ❌ Not available
+```
+
+## Icon Font Requirements
+
+### Material Symbols Font Loading
+Spectrum components use Material Symbols for icons. Stories must account for font loading:
+
+```typescript
+const meta: Meta<SpectrumButton> = {
+  title: 'Spectrum/Components/SpectrumButton',
+  component: 'spectrum-button',
+  parameters: {
+    docs: {
+      description: {
+        component: 'Requires Material Symbols font to be loaded for icon display. Icons may not appear immediately if font is still loading.'
+      }
+    }
+  }
+};
+```
+
+### Icon Display Requirements
+```typescript
+// Icon-only button (requires both iconOnly and show properties)
+?iconOnly=${true}
+.showLeftIcon=${true}
+.leftIcon=${"add"}
+
+// Button with left icon and text
+.buttonText=${"Save"}
+.leftIcon=${"save"}
+.showLeftIcon=${true}        // Critical: icon won't show without this
+
+// Button with right icon and text  
+.buttonText=${"Next"}
+.rightIcon=${"arrow_forward"}
+.showRightIcon=${true}       // Critical: icon won't show without this
+
+// Verify icon names from Material Symbols documentation
+.leftIcon=${"format_underline"}  // ✅ Correct spelling
+.leftIcon=${"format_underlined"} // ❌ Incorrect - missing 'd'
+```
+
+### Font Loading in Storybook
+Ensure Material Symbols font is available in your Storybook environment:
+- Font should be loaded in Storybook's HTML head
+- Icons may not display immediately during font loading
+- Document this behavior in component descriptions
+
+## Story Development Workflow
+
+### Pre-Development Checklist
+Before creating any component stories:
+
+- [ ] Read the actual component `.tsx` file thoroughly
+- [ ] Document all `@Prop()` properties with their exact names and types
+- [ ] Document all `@Event()` events with their exact names and payloads
+- [ ] Identify any special property combinations or requirements
+- [ ] Test icon display if component uses icons
+- [ ] Verify Material Symbols font is loaded in Storybook
+
+### Development Process
+1. **Component Analysis**: Read `.tsx` file, document actual interface
+2. **Property Mapping**: Create mapping of actual vs expected property names
+3. **Icon Testing**: Test icon display with proper show/hide properties
+4. **Binding Validation**: Ensure all properties use correct Stencil syntax
+5. **Story Creation**: Build stories using verified component interface
+6. **Integration Testing**: Test stories in Storybook to ensure proper display
+
+### Post-Development Validation
+After creating stories:
+
+- [ ] All controls work correctly in Storybook playground
+- [ ] Icons display properly (not just empty spaces)
+- [ ] All component variants render as expected
+- [ ] Event handlers fire with correct payloads
+- [ ] TypeScript compilation succeeds without errors
+- [ ] Component displays match design specifications
+
+## Common Issues and Solutions
+
+### Property Binding Issues
+```typescript
+// ❌ PROBLEM: Using HTML attributes instead of Stencil properties
+<spectrum-button label="Click" variant="primary" size="large" disabled>
+
+// ✅ SOLUTION: Use proper Stencil property binding
+<spectrum-button .buttonText=${"Click"} .variant=${"primary"} .size=${"lg"} ?disabled=${true}>
+```
+
+### Icon Display Issues
+```typescript
+// ❌ PROBLEM: Icon not showing despite setting icon property
+<spectrum-button .leftIcon=${"save"} ?iconOnly=${true}>
+
+// ✅ SOLUTION: Include required show property
+<spectrum-button .leftIcon=${"save"} .showLeftIcon=${true} ?iconOnly=${true}>
+```
+
+### Property Name Issues
+```typescript
+// ❌ PROBLEM: Using assumed property names
+<spectrum-component .label=${"Text"} .size=${"medium"}>
+
+// ✅ SOLUTION: Use actual property names from component interface
+<spectrum-component .componentText=${"Text"} .size=${"base"}>
+```
+
+### TypeScript Interface Issues
+```typescript
+// ❌ PROBLEM: Using generic or assumed interfaces
+interface ButtonArgs {
+  label: string;
+  size: 'small' | 'medium' | 'large';
+}
+
+// ✅ SOLUTION: Import and use actual component interface
+import type { SpectrumButton } from '../../../../core/src/components/spectrum-button/spectrum-button';
+
+interface ButtonArgs extends SpectrumButton {
+  // Additional story-specific properties if needed
+}
+```
+
+### Event Handling Issues
+```typescript
+// ❌ PROBLEM: Generic event handling without action validation
+@buttonClick=${(e) => console.log(e.detail)}
+
+// ✅ SOLUTION: Properly typed event handling with action validation
+@buttonClick=${(e: CustomEvent<ButtonActionPayload>) => {
+  console.log('Action:', e.detail.action);
+  console.log('Payload:', e.detail);
+}}
+```
+
+## Performance and Best Practices
+
+### Efficient Story Rendering
+```typescript
+// ✅ Efficient - reuse render function across stories
+const renderComponent = (args: Partial<SpectrumComponent>) => html`
+  <spectrum-component
+    .primaryProp=${args.primaryProp}
+    ?booleanProp=${args.booleanProp}
+  >
+    ${args.slotContent || 'Default content'}
+  </spectrum-component>
+`;
+
+export const BasicExample: Story = {
+  args: { primaryProp: 'value1' },
+  render: renderComponent
+};
+
+export const VariantExample: Story = {
+  args: { primaryProp: 'value2' },
+  render: renderComponent  // Reuse same function
+};
+
+// ❌ Inefficient - duplicate render logic
+export const BasicExample: Story = {
+  render: (args) => html`<spectrum-component .primaryProp=${args.primaryProp}></spectrum-component>`
+};
+
+export const VariantExample: Story = {
+  render: (args) => html`<spectrum-component .primaryProp=${args.primaryProp}></spectrum-component>` // Duplicated
+};
+```
+
+### Large Dataset Handling
+```typescript
+// For components that handle large datasets
+export const LargeDatasetExample: Story = {
+  args: {
+    items: Array.from({length: 1000}, (_, i) => ({
+      id: i,
+      name: `Item ${i}`,
+      value: `value-${i}`
+    }))
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Performance test with 1000 items - demonstrates component scalability'
+      }
+    }
+  }
+};
+```
+
+This comprehensive update ensures Storybook stories are built with proper Stencil component understanding, correct property binding, and functional icon display.
+

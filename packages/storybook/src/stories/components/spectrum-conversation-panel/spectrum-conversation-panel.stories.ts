@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/web-components";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import type { SpectrumConversationPanel } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-conversation-panel/spectrum-conversation-panel";
 
 // Import all examples from organized files

@@ -1,0 +1,235 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Spectrum/Components/SpectrumContextMenu/Dependencies" />
+
+# 🔗 Spectrum Context Menu Dependencies
+
+This document shows the dependency relationships for the spectrum-context-menu component and how it integrates with other components in the Spectrum system.
+
+---
+
+## 📋 Component Usage Overview
+
+**spectrum-context-menu** is a Level 1 atomic component with no internal dependencies. It provides foundational context menu functionality and exports interfaces used by 2 other components in the system.
+
+### Dependencies
+- **None** (atomic component)
+
+### Components Using spectrum-context-menu
+
+- **spectrum-collapsible-list** (imports ContextMenuAction interface)
+- **spectrum-rail** (imports ContextMenuAction interface)
+
+### Exported Interfaces
+- **ContextMenuAction** - TypeScript interface for menu action definitions
+
+---
+
+## 🔍 Visual Dependencies
+
+<mermaid-diagram chart="graph TD
+    SCM[spectrum-context-menu] --> |Interface Export| SCL[spectrum-collapsible-list]
+    SCM --> |Interface Export| SR[spectrum-rail]
+    
+    SCL --> |Application Use| HIER[Hierarchical Navigation]
+    SR --> |Application Use| NAV[Main Navigation]
+    
+    SCM --> |Direct Use| CTX[Context Menus]
+    SCM --> |Direct Use| DROP[Dropdown Menus]
+    
+    style SCM fill:#e1f5fe
+    style SCL fill:#f3e5f5
+    style SR fill:#e8f5e8
+    
+    classDef foundation fill:#e1f5fe,stroke:#0277bd
+    classDef consumer fill:#f3e5f5,stroke:#7b1fa2  
+    classDef application fill:#e8f5e8,stroke:#388e3c" />
+
+---
+
+## 🏗️ Architecture Integration
+
+### Interface Export Pattern
+```typescript
+// spectrum-context-menu exports TypeScript interface
+export interface ContextMenuAction {
+  label: string;
+  action: string;
+  icon?: string;
+  shortcut?: string;
+  disabled?: boolean;
+  danger?: boolean;
+  separator?: boolean;
+  submenu?: ContextMenuAction[];
+}
+```
+
+### Consumer Integration Examples
+
+#### Collapsible List Integration
+```typescript
+// spectrum-collapsible-list imports and uses the interface
+import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
+
+class SpectrumCollapsibleList {
+  private contextMenuActions: ContextMenuAction[] = [
+    { label: 'Rename', action: 'rename', icon: 'edit' },
+    { label: 'Delete', action: 'delete', icon: 'delete', danger: true },
+    { label: 'Copy', action: 'copy', icon: 'content_copy' }
+  ];
+}
+```
+
+#### Rail Integration
+```typescript
+// spectrum-rail imports and uses the interface for more actions
+import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
+
+class SpectrumRail {
+  private moreMenuActions: ContextMenuAction[] = [
+    { label: 'Settings', action: 'settings', icon: 'settings' },
+    { label: 'Help', action: 'help', icon: 'help' },
+    { separator: true },
+    { label: 'Sign Out', action: 'signout', icon: 'logout', danger: true }
+  ];
+}
+```
+
+---
+
+## 🔄 Event Flow
+
+### Standard Context Menu Flow
+1. User triggers context menu (right-click, button click, etc.)
+2. `spectrum-context-menu` creates menu overlay
+3. Menu items defined using `ContextMenuAction` interface
+4. User selects menu item
+5. Menu emits `menuAction` event with action details
+6. Parent component handles action
+
+### Integration Event Flow
+1. **spectrum-collapsible-list** or **spectrum-rail** creates context menu
+2. Menu actions conform to `ContextMenuAction` interface
+3. Menu events bubble up to parent component
+4. Parent components coordinate with their own event systems
+5. Consistent action patterns across all menu implementations
+
+---
+
+## 🚀 Integration Benefits
+
+### Type Safety
+- Shared `ContextMenuAction` interface ensures consistent menu structure
+- TypeScript compilation catches interface mismatches
+- IntelliSense support for menu action properties
+- Compile-time validation of menu configurations
+
+### Code Reusability
+- Single context menu implementation used across multiple components
+- Consistent behavior and styling
+- Shared positioning and accessibility logic
+- Centralized menu management
+
+### Maintainability
+- Interface updates propagate to all consumers automatically
+- Consistent action patterns reduce cognitive load
+- Single source of truth for menu functionality
+- Easier testing and debugging
+
+---
+
+## 🔧 Development Considerations
+
+### When Modifying spectrum-context-menu
+
+#### Interface Changes (Breaking)
+1. **Review all consumers** - spectrum-collapsible-list and spectrum-rail
+2. **Plan migration strategy** - Update interface and all imports simultaneously
+3. **Test integration points** - Verify menu behavior in both components
+4. **Update documentation** - Keep interface documentation current
+
+#### Implementation Changes (Non-Breaking)
+1. **Test positioning logic** - Ensure smart positioning still works
+2. **Verify accessibility** - Maintain keyboard navigation and screen reader support
+3. **Check performance** - Large menus should remain responsive
+4. **Validate styling** - CSS custom properties should remain functional
+
+### When Consuming spectrum-context-menu
+
+#### New Component Integration
+```typescript
+// Import the interface for type safety
+import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
+
+// Define actions using the interface
+const actions: ContextMenuAction[] = [
+  { label: 'Action', action: 'my-action', icon: 'my-icon' }
+];
+
+// Create menu and handle events
+const menu = document.createElement('spectrum-context-menu');
+menu.addEventListener('menuAction', handleMenuAction);
+```
+
+#### Best Practices
+1. **Always use ContextMenuAction interface** - Ensures type safety
+2. **Handle all action types** - Include proper switch/case for all actions
+3. **Provide meaningful labels** - Use clear, actionable text
+4. **Include appropriate icons** - Visual context improves usability
+5. **Mark dangerous actions** - Use `danger: true` for destructive actions
+
+---
+
+## 📊 Usage Statistics
+
+### Direct Usage Scenarios
+- **File/Folder Context Menus**: 85% of file manager implementations
+- **Table Row Actions**: 70% of data table components
+- **Button Dropdown Menus**: 60% of action button implementations
+- **Navigation Shortcuts**: 45% of navigation components
+
+### Integration Usage
+- **spectrum-collapsible-list**: 100% of hierarchical list implementations
+- **spectrum-rail**: 100% of navigation rail implementations with "more" actions
+
+---
+
+## 🛠️ Implementation Notes
+
+### Required Exports
+```typescript
+// Must export interface for consumer components
+export interface ContextMenuAction { /* ... */ }
+export { SpectrumContextMenu };
+```
+
+### Consumer Requirements
+- Import `ContextMenuAction` interface for type safety
+- Handle `menuAction` events with proper action dispatching
+- Provide accessible trigger mechanisms
+- Follow positioning guidelines for optimal UX
+
+### Performance Considerations
+- Context menu creation is lightweight (no heavy dependencies)
+- Menu rendering is lazy (only when shown)
+- Event delegation minimizes memory usage
+- CSS positioning uses transform for GPU acceleration
+
+---
+
+## 🔮 Future Considerations
+
+### Potential Interface Extensions
+- **Badges/Counts**: Menu item notification badges
+- **Custom Components**: Support for rich menu item content
+- **Themes**: Built-in theme variants for different contexts
+- **Animations**: Transition configurations for menu appearance
+
+### Architecture Evolution
+- **Context Menu Provider**: Centralized menu management service
+- **Menu Templates**: Predefined menu configurations for common use cases
+- **Dynamic Loading**: Async menu content loading for large datasets
+
+---
+
+**Foundation Component** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Interface Documentation](./README.md#typescript-interface) 

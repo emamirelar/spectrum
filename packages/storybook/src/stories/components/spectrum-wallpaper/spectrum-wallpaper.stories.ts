@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import type { Meta, StoryObj } from "@storybook/web-components";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 // @ts-ignore because VSCode does not understand imports within Lerna monorepos
 import type { SpectrumWallpaper } from "../../../../core/src/components/spectrum-wallpaper/spectrum-wallpaper";

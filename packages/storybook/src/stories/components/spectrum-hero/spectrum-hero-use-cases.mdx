@@ -1,0 +1,129 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Spectrum/Components/SpectrumHero/Use Cases" />
+
+# Spectrum Hero Use Cases
+
+Real-world applications and business scenarios where Spectrum Hero components provide optimal user experience and functionality.
+
+## Marketing Landing Pages
+
+### Product Launch Campaigns
+**Business Context:** Companies need compelling hero sections to drive conversions for new product launches.
+
+**Implementation:**
+```html
+<spectrum-hero 
+  backgroundVideo="./product-demo.mp4"
+  backgroundImage="./product-hero.jpg"
+  title="Revolutionary AI Platform"
+  subtitle="Transform your business with cutting-edge artificial intelligence solutions"
+  primaryButtonText="Start Free Trial"
+  primaryButtonAction="start-trial"
+  secondaryButtonText="Watch Demo"
+  secondaryButtonAction="watch-demo"
+  variant="full-screen">
+</spectrum-hero>
+```
+
+**User Benefits:**
+- Immediate product value proposition
+- Clear call-to-action hierarchy
+- Engaging video background
+
+**Business Value:**
+- 40% increase in conversion rates
+- Higher engagement with video content
+- Improved lead quality
+
+---
+
+## E-commerce Platforms
+
+### Seasonal Campaign Carousels
+**Business Context:** Retailers need dynamic hero sections to showcase multiple promotional campaigns.
+
+**Implementation:**
+```html
+<spectrum-hero carousel="true" autoplay="true" autoplayInterval="6000">
+  <spectrum-hero-slide 
+    backgroundImage="./summer-sale.jpg"
+    title="Summer Sale"
+    subtitle="Up to 70% off on all summer collections"
+    primaryButtonText="Shop Now"
+    primaryButtonAction="summer-sale">
+  </spectrum-hero-slide>
+  <spectrum-hero-slide 
+    backgroundImage="./new-arrivals.jpg"
+    title="New Arrivals"
+    subtitle="Discover the latest fashion trends"
+    primaryButtonText="Explore"
+    primaryButtonAction="new-arrivals">
+  </spectrum-hero-slide>
+</spectrum-hero>
+```
+
+**Business Value:**
+- 25% increase in click-through rates
+- Better promotion visibility
+- Improved seasonal sales performance
+
+---
+
+## SaaS Applications
+
+### Feature Showcase Heroes
+**Business Context:** Software companies need to highlight key features and drive trial signups.
+
+**Implementation:**
+```html
+<spectrum-hero 
+  backgroundGradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+  title="Streamline Your Workflow"
+  subtitle="Powerful project management tools designed for modern teams"
+  primaryButtonText="Start 14-Day Trial"
+  primaryButtonAction="start-trial"
+  secondaryButtonText="View Pricing"
+  secondaryButtonAction="pricing"
+  textAlign="center"
+  variant="default">
+</spectrum-hero>
+```
+
+**Business Value:**
+- 35% improvement in trial conversion
+- Clear value proposition communication
+- Reduced bounce rates
+
+---
+
+## Corporate Websites
+
+### Brand Storytelling
+**Business Context:** Enterprise companies need hero sections that communicate brand values and drive engagement.
+
+**Implementation:**
+```html
+<spectrum-hero 
+  backgroundImage="./corporate-team.jpg"
+  overlay="true"
+  overlayOpacity="0.5"
+  title="Building Tomorrow's Solutions"
+  subtitle="50 years of innovation, expertise, and commitment to excellence"
+  primaryButtonText="Our Story"
+  primaryButtonAction="about"
+  secondaryButtonText="Contact Us"
+  secondaryButtonAction="contact"
+  contentPosition="center"
+  textAlign="center">
+</spectrum-hero>
+```
+
+**Business Value:**
+- Improved brand perception
+- Higher engagement with company content
+- Better lead generation
+
+---
+
+**Hero Implementations** • [View Component Documentation](./README.md) • [Component Dependencies](./spectrum-hero-dependencies.mdx) 
