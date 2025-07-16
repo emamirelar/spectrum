@@ -10,30 +10,29 @@ import { action } from 'storybook/actions';
  * features, and modern interaction capabilities including sound effects, haptic feedback, and visual animations.
  * 
  * ### Key Features
- * - **4 Semantic Variants**: Assist, Filter, Input, Suggestion with role-specific styling and behavior
- * - **3 Size Options**: Small, Medium, Large for different interface density requirements
+ * - **6 Semantic Variants**: Primary, Secondary, Assist, Filter, Input, Suggestion with role-specific styling and behavior
+ * - **4 Size Options**: Extra Small, Small, Medium, Large for different interface density requirements
  * - **Interactive States**: Hover, Active, Focus, Selected, Disabled with smooth transitions
  * - **Accessibility**: Full keyboard navigation, ARIA support, screen reader compatibility
  * - **Sound Effects**: Optional audio feedback with customizable sound files
  * - **Haptic Feedback**: Tactile response on supported devices
- * - **Icon Support**: Material Design icons with flexible positioning
- * - **Removable Option**: Dismissible chips with remove functionality
+ * - **Icon Support**: Material Design icons with leading/trailing positioning
+ * - **Removable Option**: Dismissible chips with trailing icon functionality
  * - **Event System**: Component Events Rule compliant with structured action attributes
  * 
  * ### Usage Guidelines
+ * - Use **Primary** for main chip elements and primary selections
+ * - Use **Secondary** for alternative and secondary chip elements
  * - Use **Assist** for helpful suggestions and guidance
  * - Use **Filter** for filtering and categorization controls
  * - Use **Input** for user-generated content and tags
  * - Use **Suggestion** for system recommendations and autocomplete
- * - Enable **removable** for dismissible content and tags
+ * - Enable **showTrailingIcon** for dismissible content and tags
  * - Provide **meaningful action values** for analytics and event handling
  * 
  * ### Event System (Component Events Rule Compliant)
  * All chip events follow the Component Events Rule with consistent action attributes:
- * - **chipAction**: Primary chip interaction - `{ action: string, label: string, variant?: string, selected?: boolean }`
- * - **chipRemove**: When chip is removed - `{ action: "remove", label: string, chipId?: string }`
- * - **soundTriggered**: When sound effect is triggered - `{ action: "soundTriggered", soundFile: string }`
- * - **hapticTriggered**: When haptic feedback occurs - `{ action: "hapticTriggered", intensity: string }`
+ * - **chipAction**: Primary chip interaction - `{ action?: string, label: string }`
  * 
  * ### Component Dependencies
  * 
@@ -47,49 +46,34 @@ import { action } from 'storybook/actions';
  * ```
  * 
  * The chip component is used by accordion and conversation panel components for interactive elements and tags.
+ * 
+ * ### Integration Patterns
+ * - **Component Integration**: Used within complex components for tags, labels, and interactive micro-elements
+ * - **Form Systems**: Integrated with form controls for tag input and selection systems
+ * - **Event Propagation**: Events bubble up through component hierarchies for centralized handling
+ * - **Theme Integration**: Responds to theme changes and supports dark/light mode variations
  */
 
 // Component interfaces for TypeScript support
 interface ChipActionPayload {
-  action: string;
+  action?: string;
   label: string;
-  variant?: string;
-  selected?: boolean;
-  chipId?: string;
-}
-
-interface ChipRemovePayload {
-  action: "remove";
-  label: string;
-  chipId?: string;
-}
-
-interface SoundTriggeredPayload {
-  action: "soundTriggered";
-  soundFile: string;
-}
-
-interface HapticTriggeredPayload {
-  action: "hapticTriggered";
-  intensity: string;
 }
 
 interface SpectrumChipElement extends HTMLElement {
-  label: string;
-  variant?: 'assist' | 'filter' | 'input' | 'suggestion';
-  size?: 'small' | 'medium' | 'large';
-  icon?: string;
-  iconPosition?: 'left' | 'right';
-  removable?: boolean;
+  variant?: 'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion';
+  size?: 'extra-small' | 'small' | 'medium' | 'large';
   selected?: boolean;
   disabled?: boolean;
-  outlined?: boolean;
-  sound?: boolean;
-  soundFile?: string;
-  haptic?: boolean;
-  hapticIntensity?: 'light' | 'medium' | 'heavy';
+  outline?: boolean;
+  ripple?: boolean;
   action?: string;
-  chipId?: string;
+  label: string;
+  leadingIcon?: string;
+  trailingIcon?: string;
+  showTrailingIcon?: boolean;
+  sound?: boolean;
+  haptic?: boolean;
   debug?: boolean;
 }
 
@@ -110,9 +94,6 @@ all interactions.
 ### Event System
 All events include action attributes:
 - chipAction: Primary chip interactions with action context
-- chipRemove: When removable chips are dismissed
-- soundTriggered: When audio feedback is triggered
-- hapticTriggered: When tactile feedback occurs
 
 ### Basic Usage
 Use .label property for chip text and listen for chipAction events with action attributes.
@@ -122,20 +103,18 @@ Use .label property for chip text and listen for chipAction events with action a
   },
   args: {
     label: 'Sample Chip',
-    variant: 'assist',
+    variant: 'primary',
     size: 'medium',
-    icon: '',
-    iconPosition: 'left',
-    removable: false,
+    leadingIcon: '',
+    trailingIcon: 'close',
+    showTrailingIcon: false,
     selected: false,
     disabled: false,
-    outlined: false,
+    outline: false,
+    ripple: false,
     sound: false,
-    soundFile: '/chip.mp3',
     haptic: false,
-    hapticIntensity: 'medium',
     action: 'chip-click',
-    chipId: '',
     debug: false
   },
   argTypes: {
@@ -149,50 +128,51 @@ Use .label property for chip text and listen for chipAction events with action a
     },
     variant: {
       control: 'select',
-      options: ['assist', 'filter', 'input', 'suggestion'],
+      options: ['primary', 'secondary', 'assist', 'filter', 'input', 'suggestion'],
       description: 'Semantic variant that determines the chip appearance and usage context',
       table: {
         type: { 
-          summary: "'assist' | 'filter' | 'input' | 'suggestion'",
+          summary: "'primary' | 'secondary' | 'assist' | 'filter' | 'input' | 'suggestion'",
           detail: `
+            - primary: Main chip elements and primary selections
+            - secondary: Alternative and secondary chip elements
             - assist: Helper suggestions and guidance
             - filter: Filtering and categorization controls
             - input: User-generated content and tags
             - suggestion: System recommendations and autocomplete
           `
         },
-        defaultValue: { summary: "'assist'" }
+        defaultValue: { summary: "'primary'" }
       }
     },
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
+      options: ['extra-small', 'small', 'medium', 'large'],
       description: 'Chip size affecting padding, font size, and overall dimensions',
       table: {
-        type: { summary: "'small' | 'medium' | 'large'" },
+        type: { summary: "'extra-small' | 'small' | 'medium' | 'large'" },
         defaultValue: { summary: "'medium'" }
       }
     },
-    icon: {
+    leadingIcon: {
       control: 'text',
-      description: 'Material Design icon name to display alongside text',
+      description: 'Material Design icon name to display at the start of the chip',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: "''" }
       }
     },
-    iconPosition: {
-      control: 'select',
-      options: ['left', 'right'],
-      description: 'Position of the icon relative to the chip text',
+    trailingIcon: {
+      control: 'text',
+      description: 'Material Design icon name to display at the end of the chip',
       table: {
-        type: { summary: "'left' | 'right'" },
-        defaultValue: { summary: "'left'" }
+        type: { summary: 'string' },
+        defaultValue: { summary: "'close'" }
       }
     },
-    removable: {
+    showTrailingIcon: {
       control: 'boolean',
-      description: 'Shows remove button and enables dismissal functionality',
+      description: 'Shows trailing icon and enables dismissal functionality',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -214,9 +194,17 @@ Use .label property for chip text and listen for chipAction events with action a
         defaultValue: { summary: 'false' }
       }
     },
-    outlined: {
+    outline: {
       control: 'boolean',
       description: 'Applies outlined styling with transparent background and border',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    ripple: {
+      control: 'boolean',
+      description: 'Enables ripple animation effect on interaction',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -230,14 +218,6 @@ Use .label property for chip text and listen for chipAction events with action a
         defaultValue: { summary: 'false' }
       }
     },
-    soundFile: {
-      control: 'text',
-      description: 'Path to audio file for sound feedback',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "'/chip.mp3'" }
-      }
-    },
     haptic: {
       control: 'boolean',
       description: 'Enables haptic feedback on supported devices',
@@ -246,29 +226,12 @@ Use .label property for chip text and listen for chipAction events with action a
         defaultValue: { summary: 'false' }
       }
     },
-    hapticIntensity: {
-      control: 'select',
-      options: ['light', 'medium', 'heavy'],
-      description: 'Intensity level for haptic feedback',
-      table: {
-        type: { summary: "'light' | 'medium' | 'heavy'" },
-        defaultValue: { summary: "'medium'" }
-      }
-    },
     action: {
       control: 'text',
       description: 'Action value included in chipAction events',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: "'chip-click'" }
-      }
-    },
-    chipId: {
-      control: 'text',
-      description: 'Unique identifier for the chip, included in events',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "''" }
       }
     },
     debug: {
@@ -292,23 +255,18 @@ const renderChip = (args: SpectrumChipArgs) => html`
       .label=${args.label}
       .variant=${args.variant}
       .size=${args.size}
-      .icon=${args.icon}
-      .iconPosition=${args.iconPosition}
-      ?removable=${args.removable}
+      .leadingIcon=${args.leadingIcon}
+      .trailingIcon=${args.trailingIcon}
+      ?showTrailingIcon=${args.showTrailingIcon}
       ?selected=${args.selected}
       ?disabled=${args.disabled}
-      ?outlined=${args.outlined}
+      ?outline=${args.outline}
+      ?ripple=${args.ripple}
       ?sound=${args.sound}
-      .soundFile=${args.soundFile}
       ?haptic=${args.haptic}
-      .hapticIntensity=${args.hapticIntensity}
       .action=${args.action}
-      .chipId=${args.chipId}
       ?debug=${args.debug}
       @chipAction=${(e: CustomEvent<ChipActionPayload>) => action('chipAction')(e.detail)}
-      @chipRemove=${(e: CustomEvent<ChipRemovePayload>) => action('chipRemove')(e.detail)}
-      @soundTriggered=${(e: CustomEvent<SoundTriggeredPayload>) => action('soundTriggered')(e.detail)}
-      @hapticTriggered=${(e: CustomEvent<HapticTriggeredPayload>) => action('hapticTriggered')(e.detail)}
     ></spectrum-chip>
   </div>
 `;
@@ -321,7 +279,7 @@ const renderChip = (args: SpectrumChipArgs) => html`
  * Interactive playground to test all chip properties and event handling.
  * Use the controls panel to experiment with different configurations and see how events work.
  * 
- * **Event Testing**: Click the chip to see chipAction events, enable removable to test chipRemove events.
+ * **Event Testing**: Click the chip to see chipAction events, enable showTrailingIcon to test removal functionality.
  * All events include action attributes following the Component Events Rule.
  */
 export const Playground: Story = {
@@ -337,7 +295,7 @@ The Actions panel will show all emitted events with their action attributes.
 - Click the chip to trigger chipAction events with custom action values
 - Change variants to see different semantic styles and meanings
 - Test different sizes for various interface contexts
-- Enable removable to test chipRemove events
+- Enable showTrailingIcon to test removal functionality
 - Enable sound/haptic feedback to test multimedia interactions
         `
       }
@@ -351,33 +309,45 @@ The Actions panel will show all emitted events with their action attributes.
 
 /**
  * Basic chip variants showing the core semantic styles.
- * Demonstrates the assist, filter, input, and suggestion chip types.
+ * Demonstrates the primary, secondary, assist, filter, input, and suggestion chip types.
  */
 export const BasicVariants: Story = {
   render: () => html`
     <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
       <spectrum-chip 
-        label="Assist Chip" 
-        variant="assist" 
-        action="assist-action"
+        .label=${"Primary Chip"} 
+        .variant=${"primary"} 
+        .action=${"primary-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Filter Chip" 
-        variant="filter" 
-        action="filter-action"
+        .label=${"Secondary Chip"} 
+        .variant=${"secondary"} 
+        .action=${"secondary-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Input Chip" 
-        variant="input" 
-        action="input-action"
+        .label=${"Assist Chip"} 
+        .variant=${"assist"} 
+        .action=${"assist-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Suggestion Chip" 
-        variant="suggestion" 
-        action="suggestion-action"
+        .label=${"Filter Chip"} 
+        .variant=${"filter"} 
+        .action=${"filter-action"}
+        @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
+      </spectrum-chip>
+      <spectrum-chip 
+        .label=${"Input Chip"} 
+        .variant=${"input"} 
+        .action=${"input-action"}
+        @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
+      </spectrum-chip>
+      <spectrum-chip 
+        .label=${"Suggestion Chip"} 
+        .variant=${"suggestion"} 
+        .action=${"suggestion-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
     </div>
@@ -390,7 +360,7 @@ The core chip variants with semantic styling for different use cases. Each varia
 styling and semantic meaning for consistent user interface patterns.
 
 **Event Structure:**
-- \`chipAction\`: \`{ action: "assist-action", label: "Assist Chip", variant: "assist" }\`
+- \`chipAction\`: \`{ action: "primary-action", label: "Primary Chip" }\`
 - Each variant emits events with its specific action and styling context
         `
       }
@@ -406,21 +376,27 @@ export const SizeVariations: Story = {
   render: () => html`
     <div style="display: flex; gap: 1rem; padding: 2rem; align-items: center; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
       <spectrum-chip 
-        label="Small" 
-        size="small" 
-        action="small-action"
+        .label=${"Extra Small"} 
+        .size=${"extra-small"} 
+        .action=${"extra-small-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Medium" 
-        size="medium" 
-        action="medium-action"
+        .label=${"Small"} 
+        .size=${"small"} 
+        .action=${"small-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Large" 
-        size="large" 
-        action="large-action"
+        .label=${"Medium"} 
+        .size=${"medium"} 
+        .action=${"medium-action"}
+        @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
+      </spectrum-chip>
+      <spectrum-chip 
+        .label=${"Large"} 
+        .size=${"large"} 
+        .action=${"large-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
     </div>
@@ -433,6 +409,7 @@ Different chip sizes for various interface contexts. Size affects padding, font 
 while maintaining consistent proportions and visual hierarchy.
 
 **Size Usage:**
+- Extra Small: Most compact interfaces, micro-interactions, minimal space
 - Small: Dense interfaces, compact tag lists, inline elements
 - Medium: Standard interface elements, most common use case
 - Large: Prominent elements, primary selection interfaces
@@ -450,28 +427,27 @@ export const ChipStates: Story = {
   render: () => html`
     <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
       <spectrum-chip 
-        label="Normal" 
-        action="normal-action"
+        .label=${"Normal"} 
+        .action=${"normal-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Selected" 
-        selected
-        action="selected-action"
+        .label=${"Selected"} 
+        ?selected=${true}
+        .action=${"selected-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Disabled" 
-        disabled
-        action="disabled-action"
+        .label=${"Disabled"} 
+        ?disabled=${true}
+        .action=${"disabled-action"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Removable" 
-        removable
-        action="removable-action"
-        @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-        @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+        .label=${"Removable"} 
+        ?showTrailingIcon=${true}
+        .action=${"removable-action"}
+        @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
     </div>
   `,
@@ -486,7 +462,7 @@ user interactions appropriately.
 - Normal: Standard interactive state with hover/focus effects
 - Selected: Indicates active/chosen state with enhanced styling
 - Disabled: Non-interactive state with reduced opacity
-- Removable: Shows remove button and enables dismissal
+- Removable: Shows trailing icon and enables dismissal
         `
       }
     }
@@ -505,29 +481,27 @@ export const WithIcons: Story = {
   render: () => html`
     <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
       <spectrum-chip 
-        label="Save Document" 
-        icon="save"
-        icon-position="left"
-        variant="assist"
-        action="save-document"
+        .label=${"Save Document"} 
+        .leadingIcon=${"save"}
+        .variant=${"assist"}
+        .action=${"save-document"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Next Step" 
-        icon="arrow_forward"
-        icon-position="right"
-        variant="suggestion"
-        action="next-step"
+        .label=${"JavaScript"} 
+        .leadingIcon=${"code"}
+        .variant=${"input"}
+        ?showTrailingIcon=${true}
+        .action=${"remove-tag"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="JavaScript" 
-        icon="code"
-        variant="input"
-        removable
-        action="remove-tag"
-        @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-        @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+        .label=${"Filter Active"} 
+        .leadingIcon=${"filter_list"}
+        .variant=${"filter"}
+        ?selected=${true}
+        .action=${"toggle-filter"}
+        @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
     </div>
   `,
@@ -536,12 +510,12 @@ export const WithIcons: Story = {
       description: {
         story: `
 Icons enhance chip functionality by providing visual context and improved recognition. Icons can be
-positioned before or after text for different visual effects.
+positioned at the leading edge for category identification.
 
 **Icon Patterns:**
-- Left icons: Most common for category identification
-- Right icons: Good for directional actions or status
-- With removable: Common for tag-style chips
+- Leading icons: Most common for category identification and visual context
+- Trailing icons: Used for actions like removal or expansion
+- Combined: Leading icon with trailing action for full functionality
         `
       }
     }
@@ -557,35 +531,29 @@ export const RemovableChips: Story = {
     <div style="display: flex; gap: 1rem; padding: 2rem; flex-direction: column; align-items: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
       <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
         <spectrum-chip 
-          label="React" 
-          variant="input"
-          removable
-          chip-id="react-tag"
-          action="remove-skill"
-          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-          @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+          .label=${"React"} 
+          .variant=${"input"}
+          ?showTrailingIcon=${true}
+          .action=${"remove-skill"}
+          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
         </spectrum-chip>
         <spectrum-chip 
-          label="TypeScript" 
-          variant="input"
-          removable
-          chip-id="typescript-tag"
-          action="remove-skill"
-          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-          @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+          .label=${"TypeScript"} 
+          .variant=${"input"}
+          ?showTrailingIcon=${true}
+          .action=${"remove-skill"}
+          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
         </spectrum-chip>
         <spectrum-chip 
-          label="Stencil" 
-          variant="input"
-          removable
-          chip-id="stencil-tag"
-          action="remove-skill"
-          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-          @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+          .label=${"Stencil"} 
+          .variant=${"input"}
+          ?showTrailingIcon=${true}
+          .action=${"remove-skill"}
+          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
         </spectrum-chip>
       </div>
       <p style="text-align: center; color: var(--spectrum-sys-color-on-surface-variant); font-size: 0.875rem; margin: 1rem 0 0 0;">
-        Click the × button to remove chips and see chipRemove events with chip IDs
+        Click the × button to remove chips and see chipAction events with remove action
       </p>
     </div>
   `,
@@ -593,12 +561,12 @@ export const RemovableChips: Story = {
     docs: {
       description: {
         story: `
-Removable chips for tag-style interfaces where users can dismiss items. Each chip has a unique ID
-that is included in removal events for proper state management.
+Removable chips for tag-style interfaces where users can dismiss items. Each chip emits chipAction
+events when the trailing icon is clicked for proper state management.
 
 **Removal Events:**
-- \`chipRemove\`: \`{ action: "remove", label: "React", chipId: "react-tag" }\`
-- Events include chip ID for state management
+- \`chipAction\`: \`{ action: "remove", label: "React" }\`
+- Events include removal context for state management
         `
       }
     }
@@ -613,31 +581,31 @@ export const OutlinedVariants: Story = {
   render: () => html`
     <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
       <spectrum-chip 
-        label="Outlined Assist" 
-        variant="assist"
-        outlined
-        action="assist-outlined"
+        .label=${"Outlined Primary"} 
+        .variant=${"primary"}
+        ?outline=${true}
+        .action=${"primary-outlined"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Outlined Filter" 
-        variant="filter"
-        outlined
-        action="filter-outlined"
+        .label=${"Outlined Assist"} 
+        .variant=${"assist"}
+        ?outline=${true}
+        .action=${"assist-outlined"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Outlined Input" 
-        variant="input"
-        outlined
-        action="input-outlined"
+        .label=${"Outlined Filter"} 
+        .variant=${"filter"}
+        ?outline=${true}
+        .action=${"filter-outlined"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
       <spectrum-chip 
-        label="Outlined Suggestion" 
-        variant="suggestion"
-        outlined
-        action="suggestion-outlined"
+        .label=${"Outlined Input"} 
+        .variant=${"input"}
+        ?outline=${true}
+        .action=${"input-outlined"}
         @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
       </spectrum-chip>
     </div>
@@ -660,6 +628,61 @@ or when you need visual hierarchy without heavy visual weight.
   }
 };
 
+/**
+ * Interactive chips with sound and haptic feedback.
+ * Demonstrates multimedia interaction capabilities.
+ */
+export const WithFeedback: Story = {
+  render: () => html`
+    <div style="display: flex; gap: 1rem; padding: 2rem; flex-direction: column; align-items: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+        <spectrum-chip 
+          .label=${"Sound Feedback"} 
+          ?sound=${true}
+          .variant=${"assist"}
+          .action=${"sound-test"}
+          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
+        </spectrum-chip>
+        <spectrum-chip 
+          .label=${"Haptic Feedback"} 
+          ?haptic=${true}
+          .variant=${"assist"}
+          .action=${"haptic-test"}
+          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
+        </spectrum-chip>
+        <spectrum-chip 
+          .label=${"Both Feedbacks"} 
+          ?sound=${true}
+          ?haptic=${true}
+          .variant=${"primary"}
+          .action=${"both-feedback"}
+          @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
+        </spectrum-chip>
+      </div>
+      <p style="text-align: center; color: var(--spectrum-sys-color-on-surface-variant); font-size: 0.875rem; margin: 1rem 0 0 0; max-width: 500px;">
+        <strong>Enhanced User Experience:</strong><br>
+        Sound and haptic feedback provide additional sensory confirmation of chip interactions,
+        improving accessibility and user confidence in their actions.
+      </p>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Enhanced interaction experience with audio and tactile feedback. These features improve accessibility
+and provide confirmation of user actions across different sensory channels.
+
+**Feedback Types:**
+- **Sound**: Audio feedback on chip interaction (higher pitch than buttons)
+- **Haptic**: Tactile vibration feedback on supported devices (lighter than buttons)
+- **Combined**: Both audio and haptic feedback for maximum confirmation
+        `
+      }
+    }
+  }
+};
+
 // =================================================================
 // USAGE EXAMPLES
 // =================================================================
@@ -675,31 +698,25 @@ export const TagManagement: Story = {
         <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">Skills</h4>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <spectrum-chip 
-            label="JavaScript" 
-            variant="input"
-            removable
-            chip-id="js-skill"
-            action="remove-skill"
-            @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-            @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+            .label=${"JavaScript"} 
+            .variant=${"input"}
+            ?showTrailingIcon=${true}
+            .action=${"remove-skill"}
+            @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="React" 
-            variant="input"
-            removable
-            chip-id="react-skill"
-            action="remove-skill"
-            @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-            @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+            .label=${"React"} 
+            .variant=${"input"}
+            ?showTrailingIcon=${true}
+            .action=${"remove-skill"}
+            @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="Node.js" 
-            variant="input"
-            removable
-            chip-id="node-skill"
-            action="remove-skill"
-            @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}
-            @chipRemove=${(e: CustomEvent) => action('chipRemove')(e.detail)}>
+            .label=${"Node.js"} 
+            .variant=${"input"}
+            ?showTrailingIcon=${true}
+            .action=${"remove-skill"}
+            @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
         </div>
       </div>
@@ -708,21 +725,21 @@ export const TagManagement: Story = {
         <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">Suggested Skills</h4>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <spectrum-chip 
-            label="TypeScript" 
-            variant="suggestion"
-            action="add-skill"
+            .label=${"TypeScript"} 
+            .variant=${"suggestion"}
+            .action=${"add-skill"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="Python" 
-            variant="suggestion"
-            action="add-skill"
+            .label=${"Python"} 
+            .variant=${"suggestion"}
+            .action=${"add-skill"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="Docker" 
-            variant="suggestion"
-            action="add-skill"
+            .label=${"Docker"} 
+            .variant=${"suggestion"}
+            .action=${"add-skill"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
         </div>
@@ -757,28 +774,28 @@ export const FilterInterface: Story = {
         <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">Categories</h4>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <spectrum-chip 
-            label="All Products" 
-            variant="filter"
-            selected
-            action="filter-all"
+            .label=${"All Products"} 
+            .variant=${"filter"}
+            ?selected=${true}
+            .action=${"filter-all"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="Electronics" 
-            variant="filter"
-            action="filter-electronics"
+            .label=${"Electronics"} 
+            .variant=${"filter"}
+            .action=${"filter-electronics"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="Clothing" 
-            variant="filter"
-            action="filter-clothing"
+            .label=${"Clothing"} 
+            .variant=${"filter"}
+            .action=${"filter-clothing"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="Books" 
-            variant="filter"
-            action="filter-books"
+            .label=${"Books"} 
+            .variant=${"filter"}
+            .action=${"filter-books"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
         </div>
@@ -788,22 +805,22 @@ export const FilterInterface: Story = {
         <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">Price Range</h4>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <spectrum-chip 
-            label="Under $25" 
-            variant="filter"
-            action="filter-price-low"
+            .label=${"Under $25"} 
+            .variant=${"filter"}
+            .action=${"filter-price-low"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="$25 - $100" 
-            variant="filter"
-            selected
-            action="filter-price-medium"
+            .label=${"$25 - $100"} 
+            .variant=${"filter"}
+            ?selected=${true}
+            .action=${"filter-price-medium"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
           <spectrum-chip 
-            label="Over $100" 
-            variant="filter"
-            action="filter-price-high"
+            .label=${"Over $100"} 
+            .variant=${"filter"}
+            .action=${"filter-price-high"}
             @chipAction=${(e: CustomEvent) => action('chipAction')(e.detail)}>
           </spectrum-chip>
         </div>

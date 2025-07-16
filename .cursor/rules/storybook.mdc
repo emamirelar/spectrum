@@ -559,5 +559,251 @@ export const LargeDatasetExample: Story = {
 };
 ```
 
-This comprehensive update ensures Storybook stories are built with proper Stencil component understanding, correct property binding, and functional icon display.
+## MDX Syntax Guidelines and Validation
+
+### Critical MDX Syntax Requirements
+
+MDX files (`.mdx`) require special attention to syntax because they combine Markdown with JSX. Follow these guidelines to prevent parsing errors that break Storybook builds.
+
+#### HTML Entity Escaping (MANDATORY)
+```mdx
+<!-- ✅ CORRECT - Escape less-than signs -->
+- **Load Time**: &lt;20ms component initialization
+- **Performance**: &lt;100ms rendering time
+- **Target Range**: Values &lt;50% are optimal
+
+<!-- ❌ INCORRECT - Will cause "Unexpected character" errors -->
+- **Load Time**: <20ms component initialization
+- **Performance**: <100ms rendering time  
+- **Target Range**: Values <50% are optimal
+```
+
+#### Special Character Handling
+```mdx
+<!-- ✅ CORRECT - Safe percentage usage -->
+- 32% increase in user engagement
+- Performance improved by 45%
+- **Success Rate**: 28% improvement
+
+<!-- ✅ CORRECT - Escaped angle brackets -->
+- **Range**: Values between 10% and &lt;90%
+- **Memory**: &lt;500MB typical usage
+
+<!-- ❌ INCORRECT - Problematic bold + percentage combinations -->
+- **32% increase** in user engagement (can cause parsing issues)
+- **<50% range** for optimal performance (double problem)
+```
+
+#### Number-Starting Tags Prevention
+```mdx
+<!-- ✅ CORRECT - No JSX interpretation -->
+Use &lt;20ms for optimal performance
+
+<!-- ❌ INCORRECT - MDX tries to parse as JSX tag -->
+Use <20ms for optimal performance
+```
+
+### Pre-Development Validation Checklist
+
+Before creating or editing any `.mdx` files:
+
+- [ ] **Scan for `<` followed by numbers**: Replace with `&lt;`
+- [ ] **Check percentage signs in bold text**: Simplify formatting if needed
+- [ ] **Validate special characters**: Escape `<`, `>`, `&` when not part of intentional HTML
+- [ ] **Test locally**: Always run Storybook locally before committing
+- [ ] **Check browser console**: Look for MDX parsing errors during development
+
+### Linting and Validation Setup
+
+#### Recommended Linting Configuration
+Add to your project's `.eslintrc.js` or similar:
+
+```javascript
+// ESLint configuration for MDX files
+module.exports = {
+  overrides: [
+    {
+      files: ["**/*.mdx"],
+      extends: ["plugin:mdx/recommended"],
+      rules: {
+        // Prevent common MDX syntax issues
+        "mdx/no-unescaped-entities": "error",
+        "mdx/no-jsx-in-markdown": "warn"
+      }
+    }
+  ]
+};
+```
+
+#### Pre-commit Hook (Recommended)
+```bash
+# Add to .husky/pre-commit or similar
+#!/bin/sh
+echo "Validating MDX syntax..."
+
+# Check for unescaped less-than signs followed by numbers
+if grep -r "<[0-9]" packages/storybook/src/stories/ --include="*.mdx"; then
+    echo "❌ Found unescaped < followed by numbers in MDX files"
+    echo "Replace with &lt; to fix MDX parsing errors"
+    exit 1
+fi
+
+# Check for potential problematic percentage patterns
+if grep -r "\*\*[0-9][0-9]*%[^*]*\*\*" packages/storybook/src/stories/ --include="*.mdx"; then
+    echo "⚠️  Found potentially problematic bold percentage formatting"
+    echo "Consider simplifying formatting to avoid MDX parsing issues"
+fi
+
+echo "✅ MDX syntax validation passed"
+```
+
+#### Manual Validation Commands
+```bash
+# Quick syntax check for common issues
+cd packages/storybook
+
+# Find unescaped less-than signs
+grep -r "<[0-9]" src/stories/ --include="*.mdx"
+
+# Find potential percentage formatting issues  
+grep -r "\*\*.*%.*\*\*" src/stories/ --include="*.mdx"
+
+# Test Storybook build
+npm run build-storybook
+```
+
+### Common MDX Pitfalls and Solutions
+
+#### 1. Performance Metrics
+```mdx
+<!-- ✅ CORRECT -->
+### Technical Performance
+- **Load Time**: &lt;20ms component initialization
+- **Memory Usage**: Under 500KB per component
+- **Rendering**: &lt;100ms for complex layouts
+
+<!-- ❌ INCORRECT -->
+### Technical Performance  
+- **Load Time**: <20ms component initialization
+- **Memory Usage**: <500KB per component
+- **Rendering**: <100ms for complex layouts
+```
+
+#### 2. Mathematical Ranges
+```mdx
+<!-- ✅ CORRECT -->
+- Optimal range: 10% to &lt;90%
+- Performance threshold: &lt;50ms response time
+- Error rate: Keep below &lt;1% for production
+
+<!-- ❌ INCORRECT -->
+- Optimal range: 10% to <90%
+- Performance threshold: <50ms response time  
+- Error rate: Keep below <1% for production
+```
+
+#### 3. Code Examples in MDX
+```mdx
+<!-- ✅ CORRECT - Use code blocks for HTML -->
+```html
+<spectrum-button size="large">
+  Click me
+</spectrum-button>
+\```
+
+<!-- ❌ INCORRECT - Raw HTML in markdown -->
+Use <spectrum-button> with size="large" for prominence
+```
+
+#### 4. Bold Formatting with Special Characters
+```mdx
+<!-- ✅ CORRECT - Simple formatting -->
+**Business Value:**
+- 32% increase in user engagement
+- 45% improvement in task completion
+- 28% reduction in support tickets
+
+<!-- ❌ PROBLEMATIC - Bold around percentages -->
+**Business Value:**
+- **32% increase** in user engagement
+- **45% improvement** in task completion
+- **28% reduction** in support tickets
+```
+
+### Development Workflow Integration
+
+#### 1. Story Creation Process
+```bash
+# 1. Create stories following the pattern
+npm run generate component-name
+
+# 2. Write MDX documentation
+# 3. Validate syntax before committing
+grep -r "<[0-9]" src/stories/components/component-name/ --include="*.mdx"
+
+# 4. Test locally
+npm run storybook
+
+# 5. Check browser console for errors
+# 6. Commit only after successful build
+```
+
+#### 2. VS Code Integration
+Add to your VS Code settings:
+```json
+{
+  "files.associations": {
+    "*.mdx": "mdx"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+```
+
+#### 3. Automated Testing
+```javascript
+// Jest test for MDX syntax validation
+describe('MDX Syntax Validation', () => {
+  test('should not contain unescaped angle brackets', async () => {
+    const mdxFiles = glob.sync('src/stories/**/*.mdx');
+    
+    for (const file of mdxFiles) {
+      const content = fs.readFileSync(file, 'utf8');
+      
+      // Check for unescaped < followed by numbers
+      expect(content).not.toMatch(/<\d/);
+      
+      // Check for problematic bold percentage patterns
+      expect(content).not.toMatch(/\*\*\d+%[^*]*\*\*/);
+    }
+  });
+});
+```
+
+### Error Recovery Process
+
+When MDX parsing errors occur:
+
+1. **Identify the Error**: Look for "Unexpected character" messages
+2. **Locate the File**: Check the file path in the error message
+3. **Find the Pattern**: Search for `<` followed by numbers or special formatting
+4. **Apply the Fix**: Replace with proper HTML entities
+5. **Validate the Fix**: Run Storybook locally to confirm
+6. **Document the Issue**: Add to this guide if it's a new pattern
+
+### Maintenance and Updates
+
+#### Monthly MDX Health Check
+```bash
+# Run comprehensive syntax validation
+find packages/storybook/src/stories -name "*.mdx" -exec grep -l "<[0-9]" {} \;
+find packages/storybook/src/stories -name "*.mdx" -exec grep -l "\*\*.*%.*\*\*" {} \;
+
+# Build test
+cd packages/storybook && npm run build-storybook
+```
+
+This comprehensive update ensures Storybook stories are built with proper Stencil component understanding, correct property binding, functional icon display, and error-free MDX syntax.
 
