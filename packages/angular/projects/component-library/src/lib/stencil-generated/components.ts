@@ -88,6 +88,32 @@ export declare interface SpectrumApplicationLayout extends Components.SpectrumAp
 
 
 @ProxyCmp({
+  inputs: ['action', 'alt', 'avatarId', 'clickable', 'customStyle', 'debug', 'disabled', 'icon', 'initials', 'label', 'shape', 'showStatus', 'size', 'src', 'status', 'variant']
+})
+@Component({
+  selector: 'spectrum-avatar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['action', 'alt', 'avatarId', 'clickable', 'customStyle', 'debug', 'disabled', 'icon', 'initials', 'label', 'shape', 'showStatus', 'size', 'src', 'status', 'variant'],
+})
+export class SpectrumAvatar {
+  protected el: HTMLSpectrumAvatarElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['avatarAction']);
+  }
+}
+
+
+export declare interface SpectrumAvatar extends Components.SpectrumAvatar {
+
+  avatarAction: EventEmitter<CustomEvent<{ action?: string; label?: string; id?: string }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['circular', 'debug', 'size', 'text', 'variant']
 })
 @Component({

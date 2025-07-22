@@ -6,6 +6,7 @@ export const DIRECTIVES = [
   d.SpectrumAppLayout,
   d.SpectrumApplicationLayout,
   d.SpectrumAvatar,
+  d.SpectrumBadge,
   d.SpectrumButton,
   d.SpectrumChip,
   d.SpectrumCluster,

@@ -261,6 +261,77 @@ export namespace Components {
          */
         "showHeaderUtility": boolean;
     }
+    /**
+     * Spectrum Avatar Component
+     * A versatile avatar component for displaying user profile images, initials, or icons.
+     * Supports multiple sizes, shapes, status indicators, and interactive states.
+     */
+    interface SpectrumAvatar {
+        /**
+          * @default ''
+         */
+        "action": string;
+        /**
+          * @default ''
+         */
+        "alt": string;
+        /**
+          * @default ''
+         */
+        "avatarId": string;
+        /**
+          * @default false
+         */
+        "clickable": boolean;
+        /**
+          * @default {}
+         */
+        "customStyle": { [key: string]: string };
+        /**
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default ''
+         */
+        "icon": string;
+        /**
+          * @default ''
+         */
+        "initials": string;
+        /**
+          * @default ''
+         */
+        "label": string;
+        /**
+          * @default 'circle'
+         */
+        "shape": 'circle' | 'square' | 'rounded';
+        /**
+          * @default false
+         */
+        "showStatus": boolean;
+        /**
+          * @default 'base'
+         */
+        "size": 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
+        "src": string;
+        /**
+          * @default 'none'
+         */
+        "status": 'none' | 'online' | 'offline' | 'busy' | 'away';
+        /**
+          * @default 'default'
+         */
+        "variant": 'default' | 'outlined' | 'filled';
+    }
     interface SpectrumBadge {
         /**
           * Whether the badge should be circular (for single characters/icons)
@@ -1669,6 +1740,28 @@ declare global {
         prototype: HTMLSpectrumApplicationLayoutElement;
         new (): HTMLSpectrumApplicationLayoutElement;
     };
+    interface HTMLSpectrumAvatarElementEventMap {
+        "avatarAction": { action?: string; label?: string; id?: string };
+    }
+    /**
+     * Spectrum Avatar Component
+     * A versatile avatar component for displaying user profile images, initials, or icons.
+     * Supports multiple sizes, shapes, status indicators, and interactive states.
+     */
+    interface HTMLSpectrumAvatarElement extends Components.SpectrumAvatar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumAvatarElementEventMap>(type: K, listener: (this: HTMLSpectrumAvatarElement, ev: SpectrumAvatarCustomEvent<HTMLSpectrumAvatarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumAvatarElementEventMap>(type: K, listener: (this: HTMLSpectrumAvatarElement, ev: SpectrumAvatarCustomEvent<HTMLSpectrumAvatarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumAvatarElement: {
+        prototype: HTMLSpectrumAvatarElement;
+        new (): HTMLSpectrumAvatarElement;
+    };
     interface HTMLSpectrumBadgeElement extends Components.SpectrumBadge, HTMLStencilElement {
     }
     var HTMLSpectrumBadgeElement: {
@@ -2069,6 +2162,7 @@ declare global {
         "spectrum-accordion": HTMLSpectrumAccordionElement;
         "spectrum-app-layout": HTMLSpectrumAppLayoutElement;
         "spectrum-application-layout": HTMLSpectrumApplicationLayoutElement;
+        "spectrum-avatar": HTMLSpectrumAvatarElement;
         "spectrum-badge": HTMLSpectrumBadgeElement;
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-chip": HTMLSpectrumChipElement;
@@ -2344,6 +2438,78 @@ declare namespace LocalJSX {
           * @default true
          */
         "showHeaderUtility"?: boolean;
+    }
+    /**
+     * Spectrum Avatar Component
+     * A versatile avatar component for displaying user profile images, initials, or icons.
+     * Supports multiple sizes, shapes, status indicators, and interactive states.
+     */
+    interface SpectrumAvatar {
+        /**
+          * @default ''
+         */
+        "action"?: string;
+        /**
+          * @default ''
+         */
+        "alt"?: string;
+        /**
+          * @default ''
+         */
+        "avatarId"?: string;
+        /**
+          * @default false
+         */
+        "clickable"?: boolean;
+        /**
+          * @default {}
+         */
+        "customStyle"?: { [key: string]: string };
+        /**
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default ''
+         */
+        "icon"?: string;
+        /**
+          * @default ''
+         */
+        "initials"?: string;
+        /**
+          * @default ''
+         */
+        "label"?: string;
+        "onAvatarAction"?: (event: SpectrumAvatarCustomEvent<{ action?: string; label?: string; id?: string }>) => void;
+        /**
+          * @default 'circle'
+         */
+        "shape"?: 'circle' | 'square' | 'rounded';
+        /**
+          * @default false
+         */
+        "showStatus"?: boolean;
+        /**
+          * @default 'base'
+         */
+        "size"?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+        /**
+          * @default ''
+         */
+        "src"?: string;
+        /**
+          * @default 'none'
+         */
+        "status"?: 'none' | 'online' | 'offline' | 'busy' | 'away';
+        /**
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'outlined' | 'filled';
     }
     interface SpectrumBadge {
         /**
@@ -3708,6 +3874,7 @@ declare namespace LocalJSX {
         "spectrum-accordion": SpectrumAccordion;
         "spectrum-app-layout": SpectrumAppLayout;
         "spectrum-application-layout": SpectrumApplicationLayout;
+        "spectrum-avatar": SpectrumAvatar;
         "spectrum-badge": SpectrumBadge;
         "spectrum-button": SpectrumButton;
         "spectrum-chip": SpectrumChip;
@@ -3746,6 +3913,12 @@ declare module "@stencil/core" {
              */
             "spectrum-app-layout": LocalJSX.SpectrumAppLayout & JSXBase.HTMLAttributes<HTMLSpectrumAppLayoutElement>;
             "spectrum-application-layout": LocalJSX.SpectrumApplicationLayout & JSXBase.HTMLAttributes<HTMLSpectrumApplicationLayoutElement>;
+            /**
+             * Spectrum Avatar Component
+             * A versatile avatar component for displaying user profile images, initials, or icons.
+             * Supports multiple sizes, shapes, status indicators, and interactive states.
+             */
+            "spectrum-avatar": LocalJSX.SpectrumAvatar & JSXBase.HTMLAttributes<HTMLSpectrumAvatarElement>;
             "spectrum-badge": LocalJSX.SpectrumBadge & JSXBase.HTMLAttributes<HTMLSpectrumBadgeElement>;
             /**
              * Spectrum Button Component

@@ -27,8 +27,6 @@ export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccor
   'accordionToggle'
 ], [
   'accordionToggle'
-], [
-  'accordionToggle'
 ]);
 
 
@@ -230,12 +228,6 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'sound',
   'debug',
   'background',
-  'explorationSelected',
-  'action',
-  'explore',
-  'sourceClick',
-  'titleChanged'
-], [
   'explorationSelected',
   'action',
   'explore',

@@ -4,7 +4,7 @@ export default create({
   base: 'light',
   
   brandTitle: 'Spectrum Design System',
-  brandUrl: 'https://unops.org',
+  brandUrl: 'https://supreme-dollop-rwrkrw6.pages.github.io/',
   brandImage: '/spectrum.svg',
   brandImageHeight: 50,
   brandTarget: '_self',
