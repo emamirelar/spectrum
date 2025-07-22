@@ -89,11 +89,13 @@ Type: `Promise<void>`
 ### Used by
 
  - [spectrum-collapsible-list](../spectrum-collapsible-list)
+ - [spectrum-rail](../spectrum-rail)
 
 ### Graph
 ```mermaid
 graph TD;
   spectrum-collapsible-list --> spectrum-context-menu
+  spectrum-rail --> spectrum-context-menu
   style spectrum-context-menu fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -1,4 +1,30 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Method, Watch } from '@stencil/core';
+import { BackgroundLevel } from '../spectrum-panel/spectrum-panel';
+
+export interface ContentCard {
+  title: string;
+  subtitle: string;
+  snippet: string;
+  url: string;
+  number: number;
+}
+
+export interface ExplorationItem {
+  label: string;
+  icon: string;
+  action: string;
+}
+
+export interface Message {
+  id: string;
+  isRequest: boolean;
+  content: string;
+  timestamp: string;
+  sources?: ContentCard[];
+  explorations?: ExplorationItem[];
+  title?: string;
+  isStepwise?: boolean;
+}
 
 @Component({
   tag: 'spectrum-conversation-panel',
@@ -53,6 +79,11 @@ export class SpectrumConversationPanel {
    * Whether to enable debug logging
    */
   @Prop() debug: boolean = false;
+
+  /**
+   * Background level for the panel
+   */
+  @Prop() background: BackgroundLevel = 'opaque';
 
   @State() explorationsExpanded: boolean = false;
   @State() expandedMessageId: string | null = null;
@@ -178,6 +209,53 @@ export class SpectrumConversationPanel {
         }
       });
     }
+  }
+
+  /**
+   * Scrolls to the bottom of the expanded accordion containing explorations
+   * @param messageId - The ID of the message containing the explorations
+   * @param explorationsCount - The total number of explorations (unused but kept for compatibility)
+   */
+  private scrollToLastExploration(messageId: string, explorationsCount: number) {
+    // Wait for DOM to update after accordion expansion and animations
+    setTimeout(() => {
+      if (!this.conversationPanelRef) {
+        return;
+      }
+      
+      // Find the message container first
+      const messageContainer = this.el?.querySelector(`#message-${messageId}`);
+      if (!messageContainer) {
+        return;
+      }
+      
+      // Find the accordion within this message container
+      const accordion = messageContainer.querySelector('spectrum-accordion');
+      if (!accordion) {
+        return;
+      }
+      
+      // Check if accordion has chips (meaning it's expanded)
+      const chips = accordion.querySelectorAll('spectrum-chip');
+      if (chips.length === 0) {
+        // Retry with longer delay if accordion not expanded yet
+        setTimeout(() => this.scrollToLastExploration(messageId, explorationsCount), 200);
+        return;
+      }
+      
+      // Scroll to the bottom of the expanded accordion
+      const accordionRect = accordion.getBoundingClientRect();
+      const panelRect = this.conversationPanelRef.getBoundingClientRect();
+      
+      // Calculate scroll position to show the bottom of the accordion
+      const scrollTop = this.conversationPanelRef.scrollTop + 
+                       accordionRect.bottom - panelRect.bottom + 20; // 20px padding
+      
+      this.conversationPanelRef.scrollTo({
+        top: Math.max(0, scrollTop),
+        behavior: 'smooth'
+      });
+    }, 500); // Wait for accordion expansion animations
   }
 
   componentDidLoad() {
@@ -316,6 +394,12 @@ export class SpectrumConversationPanel {
 
     // Check if data exists for conditional rendering
     const hasExplorations = response.explorations && Array.isArray(response.explorations) && response.explorations.length > 0;
+    console.log('renderResponse - checking explorations', { 
+      messageId, 
+      hasExplorations, 
+      explorations: response.explorations, 
+      explorationsLength: response.explorations?.length 
+    });
 
     return [
       <div class="message-wrapper response" id={`message-${messageId}`}>
@@ -327,18 +411,28 @@ export class SpectrumConversationPanel {
           <div class="actions">
             {this.renderActions(messageId)}
           </div>
-          {hasExplorations && (
-            <spectrum-accordion
-              expanded={activeAccordion === 'explorations'}
-              label="Dive Deeper"
-              sound={this.sound}
-              horizontalScroll={false}
-              accordionId={`explorations-${messageId}`}
-              onAccordionToggle={(event) => this.handleAccordionToggle(event, messageId, 'explorations')}
-            >
-              {this.renderExplorations(response.explorations, messageId)}
-            </spectrum-accordion>
-          )}
+          {hasExplorations && (() => {
+            console.log('RENDERING ACCORDION!', { 
+              messageId, 
+              expanded: activeAccordion === 'explorations',
+              activeAccordion,
+              expandedMessageId: this.expandedMessageId,
+              expandedAccordionType: this.expandedAccordionType
+            });
+            return (
+              <spectrum-accordion
+                variant="chip"
+                expanded={activeAccordion === 'explorations'}
+                label="Dive Deeper"
+                sound={this.sound}
+                horizontalScroll={false}
+                accordionId={`explorations-${messageId}`}
+                onAccordionToggle={(event) => this.handleAccordionToggle(event, messageId, 'explorations')}
+              >
+                {this.renderExplorations(response.explorations, messageId)}
+              </spectrum-accordion>
+            );
+          })()}
         </div>
       </div>
     ];
@@ -392,36 +486,54 @@ export class SpectrumConversationPanel {
    * @param messageId - the ID of the message these explorations belong to
    */
   renderExplorations(explorations: any, messageId?: string) {
+    console.log('renderExplorations CALLED!', { explorations, messageId, explorationsLength: explorations?.length });
     this.debugLog('renderExplorations called', { explorations, messageId });
     if (!explorations || !Array.isArray(explorations) || explorations.length === 0) {
+      console.log('NO VALID EXPLORATIONS - returning null', { explorations });
       this.debugLog('No valid explorations provided');
       return null;
     }
     
     // Return chips directly without container div for accordion usage
-    return explorations.map((exploration) => (
-      <spectrum-chip
-        variant="secondary"
-        label={exploration.label}
-        leadingIcon="prompt_suggestion"
-        sound={this.sound}
-        onClick={() => this.action.emit({
-          action: 'explore',
-          type: 'exploration',
-          value: exploration.value,
-          messageId: messageId
-        })}
-      />
-    ));
+    console.log('CREATING EXPLORATION CHIPS!', { count: explorations.length, messageId });
+    return explorations.map((exploration) => {
+      console.log('Creating chip for exploration:', exploration.label);
+      return (
+        <spectrum-chip
+          variant="secondary"
+          label={exploration.label}
+          leadingIcon="prompt_suggestion"
+          sound={this.sound}
+          onClick={() => {
+            console.log('EXPLORATION CLICKED!', { exploration: exploration.label, messageId, debug: this.debug });
+            this.debugLog('Exploration clicked', { exploration: exploration.label, messageId });
+            this.action.emit({
+              action: 'explore',
+              type: 'exploration',
+              value: exploration.value,
+              messageId: messageId
+            });
+          }}
+        />
+      );
+    });
   }
 
   private handleAccordionToggle = (event: CustomEvent, messageId: string, accordionType: 'explorations') => {
     const { expanded } = event.detail;
+    console.log('ACCORDION TOGGLED!', { messageId, accordionType, expanded, event: event.detail });
     
     if (expanded) {
+      console.log('ACCORDION EXPANDED - setting state', { messageId, accordionType });
       this.expandedMessageId = messageId;
       this.expandedAccordionType = accordionType;
+      
+      // Scroll to show the bottom of the expanded accordion
+      if (accordionType === 'explorations') {
+        this.scrollToLastExploration(messageId, 0); // explorationsCount not needed for this approach
+      }
     } else {
+      console.log('ACCORDION COLLAPSED - clearing state');
       this.expandedMessageId = null;
       this.expandedAccordionType = null;
     }
@@ -445,27 +557,6 @@ export class SpectrumConversationPanel {
    * @param event - The keyboard or focus event
    * @param newTitle - The new title value
    */
-  private handleTitleEdit = (event: KeyboardEvent | FocusEvent, newTitle: string) => {
-    const eventType = event.type;
-    
-    if (eventType === 'keydown') {
-      const keyEvent = event as KeyboardEvent;
-      if (keyEvent.key === 'Enter') {
-        keyEvent.preventDefault();
-        (event.target as HTMLElement).blur(); // Remove focus to trigger blur event
-        this.titleChanged.emit({
-          action: 'titleChanged',
-          value: newTitle.trim()
-        });
-      }
-    } else if (eventType === 'blur') {
-      this.titleChanged.emit({
-        action: 'titleChanged',
-        value: newTitle.trim()
-      });
-    }
-  }
-
   /**
    * Parse HTML content and replace <cite> and <sup> tags with source chips using DOM traversal
    */
@@ -1266,23 +1357,18 @@ export class SpectrumConversationPanel {
   render() {
     return (
       <Host class="conversation-panel-host">
-          <div class="panel frost">
-              <h2 
-                class="conversation-title"
-                contentEditable={true}
-                onKeyDown={(event) => {
-                  const target = event.target as HTMLElement;
-                  this.handleTitleEdit(event, target.textContent || '');
-                }}
-                onBlur={(event) => {
-                  const target = event.target as HTMLElement;
-                  this.handleTitleEdit(event, target.textContent || '');
-                }}
-              >
-                {this.conversationtitle}
-              </h2>
+          <spectrum-panel 
+            background={this.background}
+            debug={this.debug}
+            size="full"
+            panelTitle={this.conversationtitle}
+            titleEditable={true}
+            onTitleChanged={(event) => {
+              this.titleChanged.emit(event.detail);
+            }}
+          >
               {this.renderMessages()}
-          </div>
+          </spectrum-panel>
           
           {/* Desktop hover/click overlay for source chips */}
           {(this.hoveredSourceChip || this.clickedSourceChip) && this.renderSourceHoverOverlay()}

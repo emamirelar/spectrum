@@ -5,7 +5,7 @@ Use this template when adding new entries to the changelog. Copy the relevant se
 ## Version Entry Template
 
 ```markdown
-## [VERSION] - YYYY-MM-DD
+## [VERSION] - dd/mmm/yy
 
 ### 🚀 Major Release | ✨ Minor Release | 🔧 Patch Release | 🧪 Pre-release
 
@@ -44,6 +44,11 @@ Use this template when adding new entries to the changelog. Copy the relevant se
 
 ## Quick Reference
 
+### Date Format Requirements
+- **Format**: `dd/mmm/yy` (e.g., `22/Jul/25`, `03/Dec/24`)
+- **Get Current Date**: `date +'%d/%b/%y'`
+- **Never Use Placeholder Dates**: Always use actual current date
+
 ### Change Categories (use as needed)
 - `### 🆕 Added` - New features, components, functionality
 - `### 🔄 Changed` - Modifications to existing behavior
@@ -67,8 +72,9 @@ Use this template when adding new entries to the changelog. Copy the relevant se
 - Current version from: `packages/core/package.json`
 
 ### Date Format
-- Use: `YYYY-MM-DD` (ISO 8601)
-- Example: `2024-01-15`
+- Use: `dd/mmm/yy` (22/Jul/25, 03/Dec/24)
+- Command: `date +'%d/%b/%y'`
+- Never use: YYYY-MM-DD, full month names, or placeholder dates
 
 ### Links and References
 - Link to issues: `[#123](https://github.com/user/repo/issues/123)`
@@ -78,8 +84,9 @@ Use this template when adding new entries to the changelog. Copy the relevant se
 ## Workflow Checklist
 
 Before committing changelog updates:
+- [ ] Get current date with: `date +'%d/%b/%y'`
 - [ ] Version number matches `packages/core/package.json`
-- [ ] Date format is correct (YYYY-MM-DD)
+- [ ] Date format is correct (dd/mmm/yy)
 - [ ] All changes since last release are documented
 - [ ] Breaking changes are clearly marked
 - [ ] Component names use correct format
@@ -90,7 +97,7 @@ Before committing changelog updates:
 ## Example Entry
 
 ```markdown
-## [0.0.1-alpha.17] - 2024-01-15
+## [0.0.1-alpha.17] - 22/Jul/25
 
 ### 🧪 Pre-release
 

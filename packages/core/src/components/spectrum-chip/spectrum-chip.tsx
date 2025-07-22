@@ -50,7 +50,7 @@ export class SpectrumChip {
 
   // ============== Debug Helpers ==============
   private log(message: string, data?: any) {
-    if (this.debug || message.toLowerCase().includes('audio') || message.toLowerCase().includes('sound') || message.toLowerCase().includes('beep')) {
+    if (this.debug) {
       console.log(`[spectrum-chip] ${message}`, data);
     }
   }

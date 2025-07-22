@@ -1,6 +1,6 @@
 import './globals.css'
 import '../src/components/mermaid-diagram.ts'
-import type { Preview } from "@storybook/web-components";
+import type { Preview } from "@storybook/web-components-vite";
 
 // Initialize Spectrum components
 async function initializeSpectrum() {
@@ -32,6 +32,53 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+      },
+    },
+    // Custom backgrounds for testing components
+    backgrounds: {
+      default: 'light',
+      values: [
+        {
+          name: 'light',
+          value: '#ffffff',
+        },
+        {
+          name: 'spectrum-surface',
+          value: '#fafafa',
+        },
+        {
+          name: 'dark',
+          value: '#121212',
+        },
+        {
+          name: 'primary',
+          value: '#1976d2',
+        },
+      ],
+    },
+    // Enhanced viewport options
+    viewport: {
+      viewports: {
+        mobile: {
+          name: 'Mobile',
+          styles: { width: '375px', height: '667px' },
+          type: 'mobile',
+        },
+        tablet: {
+          name: 'Tablet',
+          styles: { width: '768px', height: '1024px' },
+          type: 'tablet',
+        },
+        desktop: {
+          name: 'Desktop',
+          styles: { width: '1200px', height: '800px' },
+          type: 'desktop',
+        },
+        large: {
+          name: 'Large Desktop',
+          styles: { width: '1920px', height: '1080px' },
+          type: 'desktop',
+        },
       },
     },
   },

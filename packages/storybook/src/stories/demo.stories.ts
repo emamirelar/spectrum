@@ -1,6 +1,6 @@
 import { html } from 'lit';
-import type { Meta, StoryObj } from "@storybook/web-components";
-import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import { action } from 'storybook/actions';
 
 const meta = {
   title: 'Spectrum/Demo',

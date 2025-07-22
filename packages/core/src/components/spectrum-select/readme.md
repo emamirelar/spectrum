@@ -15,7 +15,7 @@ Based on the Spectrum design system and Material Design 3 patterns.
 | Property            | Attribute            | Description | Type                                               | Default               |
 | ------------------- | -------------------- | ----------- | -------------------------------------------------- | --------------------- |
 | `action`            | `action`             |             | `string`                                           | `''`                  |
-| `customStyle`       | --                   |             | `{ [key: string]: string; }`                       | `{}`                  |
+| `customStyle`       | `custom-style`       |             | `{ [key: string]: string; }`                       | `{}`                  |
 | `debug`             | `debug`              |             | `boolean`                                          | `false`               |
 | `disabled`          | `disabled`           |             | `boolean`                                          | `false`               |
 | `dropdownIcon`      | `dropdown-icon`      |             | `string`                                           | `'expand_more'`       |
@@ -28,7 +28,7 @@ Based on the Spectrum design system and Material Design 3 patterns.
 | `mobileFullscreen`  | `mobile-fullscreen`  |             | `boolean`                                          | `false`               |
 | `multiple`          | `multiple`           |             | `boolean`                                          | `false`               |
 | `noResultsText`     | `no-results-text`    |             | `string`                                           | `'No results found'`  |
-| `options`           | --                   |             | `SpectrumSelectOption[]`                           | `[]`                  |
+| `options`           | `options`            |             | `SpectrumSelectOption[]`                           | `[]`                  |
 | `placeholder`       | `placeholder`        |             | `string`                                           | `'Select an option'`  |
 | `required`          | `required`           |             | `boolean`                                          | `false`               |
 | `searchPlaceholder` | `search-placeholder` |             | `string`                                           | `'Search options...'` |
@@ -36,7 +36,7 @@ Based on the Spectrum design system and Material Design 3 patterns.
 | `searchable`        | `searchable`         |             | `boolean`                                          | `false`               |
 | `selectAllText`     | `select-all-text`    |             | `string`                                           | `'Select All'`        |
 | `selectedValue`     | `selected-value`     |             | `string`                                           | `''`                  |
-| `selectedValues`    | --                   |             | `string[]`                                         | `[]`                  |
+| `selectedValues`    | `selected-values`    |             | `string[]`                                         | `[]`                  |
 | `selectionsLabel`   | `selections-label`   |             | `string`                                           | `'selections'`        |
 | `showDropdownIcon`  | `show-dropdown-icon` |             | `boolean`                                          | `true`                |
 | `showIcon`          | `show-icon`          |             | `boolean`                                          | `true`                |

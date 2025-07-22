@@ -1,0 +1,1680 @@
+The rules section has a number of possible rules/memories/context that you should consider. In each subsection, we provide instructions about what information the subsection contains and how you should consider/follow the contents of the subsection.
+
+
+<always_applied_workspace_rules description="These are workspace-level rules that the agent must always follow.">
+- Do not run builds yourself unless asked to do so. 
+This includes storybook builds and core builds.
+- # Component Events Rule
+
+## Overview
+Components should emit well-structured, consistent events that enable loose coupling and maintainable integrations across the component system.
+
+## Event Naming Conventions
+
+### 1. Property Names
+- Component event properties should use **camelCase** naming
+- Example: `@Event() childAction: EventEmitter<...>`
+
+### 2. Event Names (eventName)
+- **Default**: Use camelCase matching the property name
+- **Legacy/Integration**: Use kebab-case only when required for backward compatibility with existing integrations
+- **Decision Factors**:
+  - New components: Use camelCase
+  - Components with existing dependents: Check dependency map before changing
+  - Integration components: Maintain compatibility with dependent components
+
+```typescript
+// ✅ Preferred (New Components)
+@Event({
+  eventName: 'childAction',
+  composed: true,
+  cancelable: true,
+  bubbles: true
+}) childAction: EventEmitter<{...}>;
+
+// ✅ Acceptable (Legacy Integration)
+@Event({
+  eventName: 'action-click', // kebab-case for backward compatibility
+  composed: true,
+  cancelable: true,
+  bubbles: true
+}) actionClick: EventEmitter<{...}>;
+```
+
+## Event Payload Structure
+
+### 1. Action Attribute (Required)
+All events MUST include an `action` attribute to identify the type of action performed:
+
+```typescript
+// ✅ Correct
+{ action: "expand", label: "Folder Name", id: "folder-1" }
+{ action: "delete", targetKey: "item-123" }
+{ action: "search", value: "search term" }
+
+// ❌ Incorrect
+{ label: "Folder Name", id: "folder-1" } // Missing action
+```
+
+### 2. Contextual Attributes
+Include additional attributes relevant to the specific action:
+- `id`: Unique identifier of the target element
+- `label`: Human-readable label
+- `value`: Action-specific data
+- `targetKey`: Reference to external elements
+
+### 3. Type Safety
+Always use TypeScript interfaces for event payloads:
+
+```typescript
+interface ChildActionPayload {
+  action: string;
+  label: string;
+  id: string;
+}
+
+@Event() childAction: EventEmitter<ChildActionPayload>;
+```
+
+## Event Configuration
+
+### 1. Standard Configuration
+Use this configuration for most events:
+
+```typescript
+@Event({
+  eventName: 'eventName',
+  composed: true,    // Event can cross shadow DOM boundaries
+  cancelable: true,  // Event can be prevented
+  bubbles: true     // Event bubbles up the DOM tree
+}) eventName: EventEmitter<PayloadType>;
+```
+
+### 2. Special Cases
+- **Simple notifications**: `cancelable: false` for informational events
+- **Internal events**: `composed: false` for component-internal events
+
+## Integration Patterns
+
+### 1. Component Dependencies
+Before changing event names, check the dependency map:
+- **Emitting Component**: Can have dependents listening to its events
+- **Listening Component**: May break if emitting component changes event names
+- **Integration Chain**: Changes can cascade through multiple components
+
+### 2. Event Listening Patterns
+
+#### Direct Event Binding (Preferred)
+```typescript
+<spectrum-component 
+  @childAction=${(e: CustomEvent) => this.handleAction(e.detail)}
+/>
+```
+
+#### Document-Level Listening (Integration)
+```typescript
+@Listen('action-click', { target: 'document' })
+handleGlobalAction(event: CustomEvent<{action: string; targetKey: string}>) {
+  // Handle cross-component communication
+}
+```
+
+### 3. Event Forwarding
+When components forward events from child components:
+
+```typescript
+// ✅ Forward with context
+this.contextAction.emit({
+  action: event.detail.action,
+  label: node.label,
+  id: node.id
+});
+
+// ❌ Direct forwarding without context
+this.contextAction.emit(event.detail);
+```
+
+## Documentation Requirements
+
+### 1. Component Documentation
+Document all events with:
+- Event name and payload structure
+- When the event is triggered
+- Example usage
+
+```typescript
+/**
+ * Event emitted when a child item is clicked
+ * @event childAction
+ * @payload {action: string, label: string, id: string}
+ * @example
+ * component.addEventListener('childAction', (e) => {
+ *   console.log('Child clicked:', e.detail.label);
+ * });
+ */
+@Event() childAction: EventEmitter<{action: string; label: string; id: string}>;
+```
+
+### 2. Storybook Documentation
+Update Storybook stories to:
+- Show event payloads with action attributes
+- Include example event handlers
+- Document integration patterns
+
+## Backward Compatibility
+
+### 1. Dependency Analysis
+Before changing events:
+1. Check the dependency map for dependent components
+2. Search codebase for event listeners
+3. Verify Storybook integration
+4. Test component interactions
+
+### 2. Migration Strategy
+When updating events:
+1. **Safe Changes**: Adding new attributes to payload
+2. **Breaking Changes**: Changing event names or removing attributes
+3. **Coordination Required**: Update all dependent components simultaneously
+
+### 3. Integration Testing
+Always test event integrations:
+- Component → Component communication
+- Context menu → Collapsible list integration
+- Rail → Search input → Collapsible list chain
+
+## Examples
+
+### ✅ Well-Structured Events
+```typescript
+// Simple action with context
+@Event() buttonAction: EventEmitter<{ 
+  action?: string; 
+  label: string 
+}>;
+
+// State change with action context  
+@Event() expandedChange: EventEmitter<{ 
+  action: string; 
+  expanded: boolean 
+}>;
+
+// Complex interaction with full context
+@Event() itemRenamed: EventEmitter<{ 
+  action: "rename"; 
+  id: string; 
+  oldName: string; 
+  newName: string 
+}>;
+```
+
+### ❌ Problematic Events
+```typescript
+// Missing action attribute
+@Event() change: EventEmitter<boolean>;
+
+// Inconsistent naming
+@Event({
+  eventName: 'my-custom-event'
+}) myEvent: EventEmitter<string>;
+
+// No type safety
+@Event() genericAction: EventEmitter<any>;
+```
+
+## Maintenance
+
+When adding or modifying components:
+1. ✅ Follow this event structure
+2. ✅ Update dependency map
+3. ✅ Update Storybook documentation
+4. ✅ Test integration chains
+5. ✅ Document payload structures
+- # README Mining Rule for Rich Storybook Examples
+
+## Overview
+Component README files contain the blueprint for creating rich, meaningful Storybook examples. This rule ensures systematic extraction of usage patterns, variants, and real-world scenarios from README documentation to create comprehensive, professional-quality Storybook stories.
+
+## README Mining Process
+
+### 1. Content Extraction Patterns
+
+#### Code Examples
+Extract HTML examples from README code blocks:
+```markdown
+```html
+<spectrum-accordion 
+  variant="chip"
+  label="Show More Options">
+  <div>Additional content</div>
+</spectrum-accordion>
+```
+```
+
+#### Variant Identification
+Look for sections describing different component variants:
+- **Chip Variant**: Trigger-based expansion
+- **Standard Variant**: Multi-section accordion
+- Each variant should have its own story
+
+#### Usage Scenarios
+Extract real-world use cases:
+- FAQ sections
+- Navigation menus  
+- Feature showcases
+- Settings panels
+
+#### Features and Benefits
+Mine feature lists for story descriptions:
+- **Two distinct interaction patterns**: Chip trigger vs multi-section
+- **Flexible expand modes**: Single or multiple sections
+- **Rich content support**: HTML content, slotted content
+
+### 2. Story Generation Strategy
+
+#### Progressive Complexity
+Create stories that build from simple to complex:
+
+```typescript
+// Basic Examples
+export const BasicExample: Story = {
+  // Simple, common use case
+};
+
+// Variant Examples  
+export const ChipVariant: Story = {
+  // Showcase chip variant with multiple configurations
+};
+
+export const StandardVariant: Story = {
+  // Demonstrate standard variant capabilities
+};
+
+// Advanced Examples
+export const AdvancedExamples: Story = {
+  // Complex configurations, custom slots, rich content
+};
+
+// Accessibility Examples
+export const AccessibilityExample: Story = {
+  // Keyboard navigation, screen reader support
+};
+```
+
+#### Real-World Content
+Replace placeholder content with meaningful examples:
+
+```typescript
+// ❌ Weak Examples
+sections: [
+  { id: "1", title: "Section One", content: "Content for section one" }
+]
+
+// ✅ Rich Examples
+sections: [
+  {
+    id: "getting-started",
+    title: "How do I get started?",
+    content: "<p>Getting started is easy! Simply follow our quick start guide and you'll be up and running in no time.</p>"
+  }
+]
+```
+
+### 3. Component API Understanding
+
+#### Property Binding Patterns
+Understand each component's specific API requirements:
+
+```typescript
+// ❌ Incorrect (slot-based approach)
+<spectrum-button>Click Me</spectrum-button>
+
+// ✅ Correct (prop-based approach)  
+<spectrum-button 
+  button-text="Click Me" 
+  show-button-text="true"
+  variant="primary">
+</spectrum-button>
+```
+
+#### Event Integration
+Extract event patterns from README examples:
+
+```typescript
+// Mine event handling patterns
+@accordionToggle=${(e: CustomEvent) => {
+  console.log('Section toggled:', e.detail.sectionId);
+}}
+```
+
+### 4. Story Documentation Enhancement
+
+#### Rich Descriptions
+Use README content to create comprehensive story descriptions:
+
+```typescript
+parameters: {
+  docs: {
+    description: {
+      story: `
+The chip variant is perfect for "show more" interactions where you want to reveal additional content or actions without overwhelming the interface initially.
+
+Key features demonstrated:
+- Different chip variants (primary/secondary)  
+- Horizontal scrolling for overflow content
+- Custom icons and labels
+- Rich content support beyond just buttons
+      `
+    }
+  }
+}
+```
+
+#### Contextual Examples
+Create examples that demonstrate actual use cases:
+
+```typescript
+// FAQ Section Example
+.sections=${[
+  {
+    id: "getting-started",
+    title: "How do I get started?",
+    content: "<p>Getting started is easy! Simply follow our quick start guide.</p>"
+  },
+  {
+    id: "system-requirements",
+    title: "What are the system requirements?", 
+    content: "<p>Our platform works on all modern browsers and devices.</p>"
+  }
+]}
+```
+
+### 5. Automation Integration
+
+#### README Mining Script
+The automation script (`generate-component-docs.js`) includes README mining functions:
+
+```javascript
+// Extract patterns from README
+const readmeData = mineREADME(componentName);
+
+// Generate enhanced configuration
+const enhancedConfig = createREADMEBasedConfig(componentName, readmeData);
+
+// Create stories with real examples
+generateStoriesFromREADME(componentName, readmeData);
+```
+
+#### Pattern Recognition
+Automatically detect and extract:
+- Code blocks with HTML examples
+- Variant sections and descriptions
+- Feature lists and benefits
+- Usage scenarios and use cases
+- Accessibility information
+
+### 6. Quality Indicators
+
+#### Rich Examples Checklist
+✅ **Multiple Variants**: Each variant has dedicated examples
+✅ **Real Content**: Meaningful data instead of placeholders  
+✅ **Progressive Complexity**: Basic → Intermediate → Advanced
+✅ **Use Case Scenarios**: FAQ, navigation, dashboards, etc.
+✅ **Accessibility Demos**: Keyboard navigation, screen readers
+✅ **Interactive Features**: Working controls and event handlers
+
+#### Content Quality Standards
+- **No Lorem Ipsum**: Use domain-appropriate content
+- **Meaningful Data**: Realistic user names, meaningful labels
+- **Complete Examples**: Fully functional, not just syntax demos
+- **Visual Variety**: Different layouts, styles, configurations
+
+### 7. Implementation Template
+
+#### Enhanced Story Structure
+```typescript
+export const ComponentVariant: Story = {
+  render: () => html`
+    <div style="display: flex; flex-direction: column; gap: 3rem; padding: 2rem; max-width: 900px; margin: 0 auto;">
+      
+      <div>
+        <h3>Real-World Scenario Title</h3>
+        <spectrum-component 
+          variant="specific"
+          meaningful-prop="realistic-value"
+          @componentEvent=${(e: CustomEvent) => action('eventName')(e.detail)}
+        >
+          <!-- Rich, contextual content -->
+        </spectrum-component>
+      </div>
+      
+      <!-- Additional examples with increasing complexity -->
+      
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Detailed explanation of the variant with:
+- When to use this configuration
+- Key features demonstrated  
+- Business value and user benefits
+        `
+      }
+    }
+  }
+};
+```
+
+### 8. Maintenance and Updates
+
+#### README-Story Synchronization
+- When README examples change, update corresponding stories
+- Ensure story examples remain aligned with documented usage
+- Verify component API changes are reflected in stories
+
+#### Continuous Improvement
+- Regularly review story quality against this standard
+- Update automation to capture new README patterns
+- Enhance examples based on user feedback and usage
+
+## Benefits of README Mining
+
+### Developer Experience
+- **Faster Onboarding**: Rich examples show real usage patterns
+- **Better Understanding**: See components in context
+- **Copy-Paste Ready**: Examples work out of the box
+
+### Quality Assurance  
+- **Consistent Documentation**: README drives story content
+- **Real-World Testing**: Examples test actual use cases
+- **Professional Presentation**: Industry-standard documentation
+
+### Maintenance Efficiency
+- **Single Source of Truth**: README examples drive stories
+- **Automated Generation**: Scripts extract and apply patterns
+- **Scalable Process**: Works across all components
+
+## Examples of Success
+
+### Accordion Component Success
+The accordion component demonstrates this approach:
+- **README Analysis**: Extracted chip vs standard variants
+- **Rich Examples**: FAQ sections, feature lists, dashboards
+- **Progressive Stories**: Basic → Variants → Advanced → Accessibility  
+- **Real Content**: Meaningful questions, realistic scenarios
+- **Working Demos**: Proper button integration, event handling
+
+This approach transformed weak placeholder examples into professional, comprehensive documentation that showcases the full component capabilities.
+- # Spectrum CSS Architecture Guidelines
+
+## Overview
+Follow these CSS patterns and conventions for all Spectrum components. Use `spectrum-button` as the exemplar for proper CSS architecture.
+
+## 1. File Structure and Documentation
+
+### File Header Documentation
+```scss
+// ==============================================
+// Spectrum [Component] Component Styles
+// ==============================================
+// BEM naming convention: spectrum-[component] (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+```
+
+### Section Comments
+Use clear section dividers for different parts of your CSS:
+```scss
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+
+// ==============================================
+// Size Variations
+// ==============================================
+
+// ==============================================
+// Variant Styles
+// ==============================================
+
+// ==============================================
+// State Styles
+// ==============================================
+
+// ==============================================
+// Responsive Design
+// ==============================================
+```
+
+## 2. CSS Custom Properties Pattern
+
+### :host Variable Declaration
+Always declare component-level CSS custom properties in `:host` using Spectrum design tokens:
+
+```scss
+:host {
+  display: block; // or inline-block for inline components
+  
+  // Core component properties
+  --component-background: var(--spectrum-sys-color-surface, #ffffff);
+  --component-color: var(--spectrum-sys-color-on-surface, #000000);
+  --component-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --component-padding: var(--spectrum-sys-spacing, 1rem);
+  --component-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --component-font-size: var(--spectrum-sys-font-size, 1rem);
+  
+  // Interactive states
+  --component-hover-background: var(--spectrum-sys-color-surface-hover);
+  --component-active-background: var(--spectrum-sys-color-surface-active);
+  --component-focus-outline: var(--spectrum-sys-color-primary);
+  --component-disabled-opacity: 0.5;
+  
+  // Animation and transitions
+  --component-transition: all 0.2s ease-in-out;
+  --component-transition-duration: 0.2s;
+  --component-transition-timing: ease-in-out;
+  
+  // Size variations
+  --component-size-small: var(--spectrum-sys-spacing-large, 2rem);
+  --component-size-medium: var(--spectrum-sys-spacing-x-large, 3rem);
+  --component-size-large: var(--spectrum-sys-spacing-xx-large, 4rem);
+  
+  // Spacing variations
+  --component-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --component-spacing: var(--spectrum-sys-spacing, 1rem);
+  --component-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+}
+```
+
+### Variable Naming Convention
+- Use `--component-property` format
+- Group related properties together
+- Always provide fallback values
+- Reference Spectrum design tokens first
+
+## 3. BEM Naming Convention
+
+### Block-Element-Modifier Structure
+```scss
+// Block (component root)
+.spectrum-component {
+  // Base styles
+}
+
+// Elements (child components)
+.spectrum-component__header {
+  // Header styles
+}
+
+.spectrum-component__content {
+  // Content styles
+}
+
+.spectrum-component__footer {
+  // Footer styles
+}
+
+// Modifiers (variations)
+.spectrum-component--primary {
+  // Primary variant
+}
+
+.spectrum-component--large {
+  // Large size variant
+}
+
+.spectrum-component--disabled {
+  // Disabled state
+}
+```
+
+### Nested BEM Structure
+```scss
+.spectrum-component {
+  // Base component styles
+  
+  // Size modifiers
+  &--small {
+    --component-size: var(--component-size-small);
+  }
+  
+  &--medium {
+    --component-size: var(--component-size-medium);
+  }
+  
+  &--large {
+    --component-size: var(--component-size-large);
+  }
+  
+  // Variant modifiers
+  &--primary {
+    --component-background: var(--spectrum-sys-color-primary);
+    --component-color: var(--spectrum-sys-color-on-primary);
+  }
+  
+  &--secondary {
+    --component-background: var(--spectrum-sys-color-secondary);
+    --component-color: var(--spectrum-sys-color-on-secondary);
+  }
+  
+  // State modifiers
+  &--disabled {
+    opacity: var(--component-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+  
+  // Element styles
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--component-icon-size);
+  }
+  
+  &__text {
+    font-family: var(--component-font-family);
+    font-size: inherit;
+    line-height: 1;
+  }
+}
+```
+
+## 4. Responsive Design Patterns
+
+### Mobile-First Approach
+```scss
+// Base styles (mobile)
+.spectrum-component {
+  padding: var(--component-spacing-small);
+  font-size: var(--spectrum-sys-typescale-body-small-size);
+}
+
+// Tablet and up
+@media (min-width: 768px) {
+  .spectrum-component {
+    padding: var(--component-spacing);
+    font-size: var(--spectrum-sys-typescale-body-medium-size);
+  }
+}
+
+// Desktop and up
+@media (min-width: 1024px) {
+  .spectrum-component {
+    padding: var(--component-spacing-large);
+    font-size: var(--spectrum-sys-typescale-body-large-size);
+  }
+}
+```
+
+### Responsive Variables
+```scss
+:host {
+  // Responsive spacing
+  --component-spacing-responsive: var(--component-spacing-small);
+  
+  @media (min-width: 768px) {
+    --component-spacing-responsive: var(--component-spacing);
+  }
+  
+  @media (min-width: 1024px) {
+    --component-spacing-responsive: var(--component-spacing-large);
+  }
+}
+```
+
+## 5. Layout Patterns
+
+### Flexbox for Component Layout
+```scss
+.spectrum-component {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--component-spacing);
+  
+  // Responsive flex direction
+  flex-direction: column;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+```
+
+### CSS Grid for Complex Layouts
+```scss
+.spectrum-component {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+    "header"
+    "content"
+    "footer";
+  gap: var(--component-spacing);
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 200px 1fr;
+    grid-template-areas: 
+      "header header"
+      "sidebar content"
+      "footer footer";
+  }
+}
+
+.spectrum-component__header {
+  grid-area: header;
+}
+
+.spectrum-component__sidebar {
+  grid-area: sidebar;
+}
+
+.spectrum-component__content {
+  grid-area: content;
+}
+
+.spectrum-component__footer {
+  grid-area: footer;
+}
+```
+
+## 6. Animation and Transitions
+
+### Standard Transitions
+```scss
+.spectrum-component {
+  transition: var(--component-transition);
+  
+  // Hover states
+  &:hover {
+    background-color: var(--component-hover-background);
+    transform: var(--component-hover-transform, translateY(-1px));
+  }
+  
+  // Active states
+  &:active {
+    background-color: var(--component-active-background);
+    transform: var(--component-active-transform, translateY(1px));
+  }
+  
+  // Focus states
+  &:focus-visible {
+    outline: 2px solid var(--component-focus-outline);
+    outline-offset: 2px;
+  }
+}
+```
+
+### Reduced Motion Support
+```scss
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-component {
+    --component-transition-duration: 0.01ms;
+    --component-hover-transform: none;
+    --component-active-transform: none;
+  }
+}
+```
+
+## 7. Accessibility Patterns
+
+### Focus Management
+```scss
+.spectrum-component {
+  // Remove default outline
+  outline: none;
+  
+  // Custom focus styles
+  &:focus-visible {
+    outline: 2px solid var(--spectrum-sys-color-primary);
+    outline-offset: 2px;
+  }
+  
+  // High contrast mode support
+  @media (prefers-contrast: high) {
+    border: 1px solid;
+  }
+}
+```
+
+### Screen Reader Support
+```scss
+.spectrum-component {
+  // Ensure proper text contrast
+  color: var(--spectrum-sys-color-on-surface);
+  background-color: var(--spectrum-sys-color-surface);
+  
+  // Hidden content for screen readers
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+```
+
+## 8. Performance Optimization
+
+### Efficient Selectors
+```scss
+// ✅ Good - specific and efficient
+.spectrum-component__icon {
+  display: flex;
+}
+
+// ❌ Avoid - overly nested
+.spectrum-component .content .icon {
+  display: flex;
+}
+```
+
+### GPU Acceleration
+```scss
+.spectrum-component {
+  // Use transform and opacity for animations
+  transform: translateZ(0); // Force GPU layer
+  will-change: transform; // Hint to browser
+  
+  &:hover {
+    transform: translateY(-1px) translateZ(0);
+  }
+}
+```
+
+## 9. Common Patterns
+
+### Overlay Pattern
+```scss
+.spectrum-component {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    transition: background-color var(--component-transition-duration);
+  }
+  
+  &:hover::before {
+    background-color: var(--component-hover-overlay, rgba(0, 0, 0, 0.1));
+  }
+}
+```
+
+### Loading State Pattern
+```scss
+.spectrum-component {
+  &--loading {
+    position: relative;
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid var(--spectrum-sys-color-primary);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+```
+
+## 10. Best Practices
+
+### Do's ✅
+- Use Spectrum design tokens for all values
+- Follow BEM naming convention consistently
+- Document CSS sections with clear comments
+- Use CSS custom properties for theming
+- Implement responsive design mobile-first
+- Support accessibility features
+- Use efficient CSS selectors
+- Group related properties together
+- Provide fallback values for custom properties
+
+### Don'ts ❌
+- Don't use hardcoded values (use design tokens)
+- Don't use `!important` unless absolutely necessary
+- Don't nest selectors more than 3 levels deep
+- Don't use overly specific selectors
+- Don't forget responsive design
+- Don't ignore accessibility requirements
+- Don't use deprecated CSS properties
+- Don't mix different naming conventions
+
+## 11. Example: Complete Component CSS
+
+```scss
+// ==============================================
+// Spectrum Example Component Styles
+// ==============================================
+// BEM naming convention: spectrum-example (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: block;
+  
+  // Core component properties
+  --example-background: var(--spectrum-sys-color-surface, #ffffff);
+  --example-color: var(--spectrum-sys-color-on-surface, #000000);
+  --example-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --example-padding: var(--spectrum-sys-spacing, 1rem);
+  --example-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  
+  // Spacing using proper Spectrum tokens
+  --example-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --example-spacing: var(--spectrum-sys-spacing, 1rem);
+  --example-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+}
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-example {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--example-background);
+  color: var(--example-color);
+  border-radius: var(--example-border-radius);
+  padding: var(--example-padding);
+  font-family: var(--example-font-family);
+  gap: var(--example-spacing);
+  
+  // ==============================================
+  // Size Variations
+  // ==============================================
+  &--small {
+    padding: var(--example-spacing-small);
+    font-size: var(--spectrum-sys-typescale-body-small-size);
+  }
+  
+  &--large {
+    padding: var(--example-spacing-large);
+    font-size: var(--spectrum-sys-typescale-body-large-size);
+  }
+  
+  // ==============================================
+  // Variant Styles
+  // ==============================================
+  &--primary {
+    --example-background: var(--spectrum-sys-color-primary);
+    --example-color: var(--spectrum-sys-color-on-primary);
+  }
+  
+  // ==============================================
+  // Element Styles
+  // ==============================================
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--example-spacing-small);
+    border-bottom: 1px solid var(--spectrum-sys-color-outline);
+  }
+  
+  &__content {
+    flex: 1;
+    padding: var(--example-spacing-small) 0;
+  }
+  
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--example-spacing-small);
+    padding-top: var(--example-spacing-small);
+    border-top: 1px solid var(--spectrum-sys-color-outline);
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (min-width: 768px) {
+  .spectrum-example {
+    flex-direction: row;
+    
+    &__content {
+      padding: 0 var(--example-spacing);
+    }
+  }
+}
+```
+
+This comprehensive guide ensures consistent, maintainable, and accessible CSS across all Spectrum components.
+- # Component Dependency Change Management Rule
+
+## Overview
+When changing the signature, API, or behavior of any Spectrum component, you MUST analyze and update all dependent components to maintain system integrity and prevent breaking changes.
+
+## What Constitutes a Component Signature Change
+
+### API Changes
+- Adding, removing, or modifying `@Prop()` properties
+- Changing prop types, default values, or validation rules
+- Modifying `@Event()` signatures, names, or payload structures
+- Adding or removing public `@Method()` functions
+- Changing method parameters or return types
+
+### Behavioral Changes
+- Modifying event emission logic or timing
+- Changing default component behavior
+- Altering slot usage or slot names
+- Modifying CSS class names or structure that dependents rely on
+- Changing internal state management that affects external interactions
+
+### Breaking vs Non-Breaking Changes
+**Breaking Changes (Require Dependent Updates):**
+- Removing props, events, or methods
+- Changing prop/event/method signatures
+- Modifying event payload structure
+- Renaming CSS classes used by dependents
+- Changing default behavior that dependents expect
+
+**Non-Breaking Changes (Generally Safe):**
+- Adding new optional props with sensible defaults
+- Adding new events (without removing existing ones)
+- Adding new methods
+- Internal refactoring without API changes
+- CSS improvements that don't affect dependent selectors
+
+## Step-by-Step Process
+
+### 1. Identify Direct Dependencies
+Consult the **Component Dependency Map** in the workspace rules to identify:
+- Which components directly import or use the component you're changing
+- Components that listen to events from your component
+- Components that call methods on your component
+- Components that depend on specific CSS classes or styling
+
+### 2. Analyze Impact Scope
+For each dependent component, determine:
+- How it uses the component you're changing
+- Which specific props, events, or methods it relies on
+- Whether your changes will break existing functionality
+- If the dependent component needs updates to work with your changes
+
+### 3. Plan Coordinated Updates
+Create a change plan that includes:
+- The main component changes
+- Required updates to each dependent component
+- Test coverage for the integration points
+- Storybook story updates to reflect new functionality
+- Documentation updates
+
+### 4. Implementation Order
+Follow this order to minimize integration issues:
+1. **Foundation First**: Update the main component
+2. **Direct Dependencies**: Update components that directly use the changed component
+3. **Cascade Updates**: Update components that depend on the updated dependents
+4. **Integration Testing**: Test the full dependency chain
+5. **Documentation**: Update stories, README files, and dependency map
+
+## Required Actions Checklist
+
+### Before Making Changes
+- [ ] Review dependency map for the component you're changing
+- [ ] Identify all components that import, use, or listen to your component
+- [ ] Plan the scope of required updates across dependent components
+- [ ] Consider backward compatibility strategies if possible
+
+### During Implementation
+- [ ] Update the main component with your changes
+- [ ] Update each dependent component to work with the new signature
+- [ ] Verify event contracts still work correctly
+- [ ] Update prop passing and method calls in dependent components
+- [ ] Fix any TypeScript compilation errors in dependent components
+
+### After Implementation
+- [ ] Test all integration points between components
+- [ ] Update Storybook stories for the changed component and its dependents
+- [ ] Update README documentation for affected components
+- [ ] Update the Component Dependency Map if new relationships are created
+- [ ] Run the full test suite to catch any missed integration issues
+
+## Examples
+
+### Example 1: Adding Required Prop
+**Change**: Adding a required `variant` prop to `spectrum-button`
+**Dependents**: `spectrum-accordion`, `spectrum-search-input`, `spectrum-rail-item`, `spectrum-select`, `spectrum-image-gallery`, `spectrum-hero`, `spectrum-rail`, `spectrum-conversation-panel`
+**Required Actions**:
+```typescript
+// Before: <spectrum-button>Click me</spectrum-button>
+// After: <spectrum-button variant="primary">Click me</spectrum-button>
+```
+- Update all 8+ dependent components to pass the required `variant` prop
+- Choose appropriate variant values for each use case
+- Update Storybook stories to demonstrate the new prop
+
+### Example 2: Changing Event Payload
+**Change**: Modifying `spectrum-context-menu` event payload structure
+**Dependents**: `spectrum-collapsible-list`, `spectrum-rail`
+**Required Actions**:
+```typescript
+// Before: event.detail = { action: "click" }
+// After: event.detail = { action: "click", targetId: "item-1", context: {...} }
+```
+- Update event listeners in dependent components
+- Modify event handling logic to use new payload structure
+- Update TypeScript interfaces if imported
+
+### Example 3: Removing a Method
+**Change**: Removing `toggleExpansion()` method from `spectrum-accordion`
+**Dependents**: `spectrum-conversation-panel`
+**Required Actions**:
+- Replace method calls with equivalent prop-based control
+- Update the dependent's internal state management
+- Modify integration tests
+
+## Documentation Updates
+
+### Update Dependency Map
+When changes create new relationships or break existing ones:
+```markdown
+// Add to Component Dependency Map
+- **spectrum-new-component**: Enhanced component with new dependencies
+  - Dependencies: spectrum-button, spectrum-chip (newly added)
+  - Used by: spectrum-conversation-panel (updated integration)
+  - Purpose: Extended functionality with chip-based interactions
+```
+
+### Update Component README
+Reflect changes in component documentation:
+```markdown
+## Breaking Changes
+- v2.0.0: Added required `variant` prop - all instances must specify variant
+- v2.0.0: Changed `buttonClick` event payload to include `targetId`
+
+## Migration Guide
+```
+
+## Testing Requirements
+
+### Integration Testing
+- Test all component-to-component communications
+- Verify event flows work correctly
+- Test method calls and prop passing
+- Validate CSS integration and styling dependencies
+
+### Storybook Validation
+- Ensure all stories still work with changes
+- Add new stories for new functionality
+- Update story descriptions and documentation
+- Test interactive examples with new API
+
+### Cross-Component Testing
+- Test complete user flows that span multiple components
+- Verify accessibility is maintained across component boundaries
+- Test responsive behavior in integrated scenarios
+
+## Emergency Procedures
+
+### Rollback Strategy
+If breaking changes are discovered after implementation:
+1. Identify the minimal set of changes needed to restore functionality
+2. Implement temporary compatibility layer if possible
+3. Document the technical debt created by the compatibility layer
+4. Plan proper migration path for future release
+
+### Hotfix Process
+For critical issues in component dependencies:
+1. Assess blast radius using dependency map
+2. Implement minimal fix in main component
+3. Test all dependent components immediately
+4. Deploy with targeted testing of integration points
+
+## Tools and Resources
+
+### Dependency Analysis Commands
+```bash
+# Search for component usage across codebase
+grep -r "spectrum-button" packages/core/src/components/
+
+# Find event listeners
+grep -r "@Listen.*buttonAction" packages/core/src/
+
+# Find method calls
+grep -r "\.toggleExpansion" packages/core/src/
+```
+
+### Component Generation
+When creating new components with dependencies:
+```bash
+cd packages/core
+npm run generate my-new-component
+```
+Follow the component dependency patterns established in the dependency map.
+
+This comprehensive approach ensures component changes don't break the modular, composable architecture of the Spectrum component system while maintaining type safety and integration stability.
+- # Spectrum Components Dependency Map and Rules
+
+## Component Dependency Map
+
+This map shows the relationships between Spectrum components. Keep this updated when implementing or modifying components.
+
+### Core Infrastructure Components (Foundation Layer)
+- **spectrum-theme**: Foundation theming component
+  - Dependencies: @material/material-color-utilities, FontLoader utility
+  - Used by: All components (through CSS custom properties)
+  - Coordinates with: spectrum-wallpaper (via events for color extraction)
+  - Purpose: Provides Material Design 3 color system, theming, and FOUC prevention
+
+### Atomic Components (No Internal Dependencies)
+- **spectrum-button**: Interactive button component
+  - Dependencies: None (pure component)
+  - Used by: spectrum-conversation-panel, spectrum-image-gallery, spectrum-rail, spectrum-rail-item, spectrum-search-input, spectrum-select
+  - Purpose: Primary interactive element
+
+- **spectrum-chip**: Small interactive element for tags/selections
+  - Dependencies: None (pure component)  
+  - Used by: spectrum-accordion, spectrum-conversation-panel
+  - Purpose: Display tags, selections, or actionable items
+
+- **spectrum-badge**: Status and notification badge component
+  - Dependencies: None (pure component)
+  - Used by: spectrum-image-gallery
+  - Purpose: Display status, counts, notifications, and selection indicators
+
+- **spectrum-toast**: Notification component for user feedback
+  - Dependencies: None (pure component)
+  - Used by: Standalone notifications and user feedback systems
+  - Purpose: Display temporary notifications, alerts, and user feedback messages
+
+- **spectrum-panel**: Versatile container component with optional frost effects
+  - Dependencies: None (pure component)
+  - Used by: spectrum-conversation-panel, spectrum-image-gallery
+  - Purpose: Flexible content container with background effects and customizable sizing
+
+### Utility Components
+- **spectrum-context-menu**: Contextual menu overlay
+  - Dependencies: None (pure component)
+  - Used by: spectrum-collapsible-list, spectrum-rail
+  - Purpose: Provides contextual actions menu
+  - Exports: ContextMenuAction interface
+  - Recent Updates: Enhanced positioning system with support for 'bottom' alignment to prevent clipping at screen edges
+
+- **spectrum-wallpaper**: Background theming component
+  - Dependencies: None (pure component)
+  - Used by: Standalone background theming
+  - Coordinates with: spectrum-theme (via events for color coordination)
+  - Purpose: Dynamic background with color extraction and theme coordination
+
+### Composed Components (With Internal Dependencies)
+- **spectrum-accordion**: Expandable content container
+  - Dependencies: spectrum-chip
+  - Used by: spectrum-conversation-panel
+  - Purpose: Collapsible content sections with chip-based triggers
+
+- **spectrum-search-input**: Enhanced search input with voice
+  - Dependencies: spectrum-button
+  - Used by: spectrum-rail
+  - Purpose: Advanced search functionality
+
+- **spectrum-rail-item**: Individual rail navigation item
+  - Dependencies: spectrum-button
+  - Used by: spectrum-rail (via slots)
+  - Purpose: Rail navigation items with expand/collapse states
+
+- **spectrum-collapsible-list**: Hierarchical list with context menus
+  - Dependencies: spectrum-context-menu (imports ContextMenuAction interface)
+  - Used by: spectrum-rail (via slots)
+  - Purpose: Expandable/collapsible navigation lists
+
+- **spectrum-select**: Comprehensive select/dropdown component
+  - Dependencies: spectrum-button
+  - Used by: Form components and data input applications
+  - Purpose: Single and multiple selection dropdown with search capabilities
+
+- **spectrum-image-gallery**: Flexible image gallery with upload capabilities
+  - Dependencies: spectrum-button, spectrum-badge, spectrum-panel
+  - Used by: Image management and display applications
+  - Purpose: Responsive image gallery with thumbnail navigation, upload, and selection
+
+- **spectrum-hero**: Hero section component with carousel functionality
+  - Dependencies: spectrum-button
+  - Used by: Landing pages, feature highlights, and content showcase applications
+  - Purpose: Hero sections with image/video backgrounds, text overlays, and call-to-action buttons
+
+### Complex Components (Multiple Internal Dependencies)
+- **spectrum-rail**: Main navigation rail
+  - Dependencies: spectrum-button, spectrum-search-input (via slots), spectrum-collapsible-list (via slots), spectrum-rail-item (via slots), spectrum-context-menu (imports ContextMenuAction interface)
+  - Used by: Main navigation component
+  - Purpose: Primary navigation with expand/collapse functionality
+  - Recent Updates: Added context menu support for the "more" button with customizable actions and proper positioning
+
+- **spectrum-conversation-panel**: Chat/conversation interface
+  - Dependencies: spectrum-accordion, spectrum-button, spectrum-chip, spectrum-panel
+  - Used by: AI/chat applications
+  - Purpose: Message display and interaction with expandable content
+  - Recent Updates: Enhanced source card overlay system with smart positioning to prevent viewport clipping, grid-based layout for up to 9 source cards (3x3), improved hover interactions
+
+### Standalone Components (External Dependencies Only)
+- **spectrum-carousel**: Image/content carousel
+  - Dependencies: @glidejs/glide (external)
+  - Used by: Content display
+  - Purpose: Interactive content carousel
+
+- **spectrum-megamenu**: Full-screen navigation menu
+  - Dependencies: None (uses native popover API)
+  - Used by: Complex navigation scenarios
+  - Purpose: Large navigation overlay
+
+- **spectrum-menu**: Responsive navigation menu with megamenu variant
+  - Dependencies: None (pure component)
+  - Used by: Navigation systems, header menus, sidebar navigation
+  - Purpose: Horizontal/vertical menus with regular submenus or full-width megamenu dropdowns
+  - Features: Mobile responsive, Material icons, accessibility support
+
+### Layout Components (Production Ready) ✅
+**Layout components are now stable and ready for production use.**
+
+- **spectrum-app-layout**: Application layout container
+  - Dependencies: None (pure component)
+  - Status: Production ready ✅
+  - Purpose: Main application layout structure with responsive design
+
+- **spectrum-cluster**: Flexible clustering layout component
+  - Dependencies: None (pure component)  
+  - Status: Production ready ✅
+  - Purpose: Clustering items together with consistent spacing and natural wrapping
+  
+- **spectrum-container**: Content container layout
+  - Dependencies: None (pure component)
+  - Status: Production ready ✅
+  - Purpose: Content containerization with responsive behavior
+
+- **spectrum-flex**: Flexbox layout utility
+  - Dependencies: None (pure component)
+  - Status: Production ready ✅
+  - Purpose: Flexible box layout arrangements
+
+- **spectrum-grid**: CSS Grid layout utility
+  - Dependencies: None (pure component)
+  - Status: Production ready ✅
+  - Purpose: Grid-based layout system
+
+- **spectrum-sidebar**: Sidebar layout component
+  - Dependencies: None (pure component)
+  - Status: Production ready ✅
+  - Purpose: Sidebar navigation and content layout
+
+- **spectrum-stack**: Vertical stacking layout
+  - Dependencies: None (pure component)
+  - Status: Production ready ✅
+  - Purpose: Vertical content arrangement with consistent spacing
+
+- **spectrum-rail-alternative**: Alternative rail navigation component
+  - Dependencies: None (basic component structure)
+  - Status: Basic component skeleton - needs full implementation
+  - Purpose: Alternative navigation rail implementation (placeholder)
+
+## Dependency Flow Hierarchy
+
+```
+Level 0 (Foundation):
+└── spectrum-theme
+
+Level 1 (Atomic):
+├── spectrum-button
+├── spectrum-chip
+├── spectrum-badge
+├── spectrum-toast
+├── spectrum-panel
+├── spectrum-context-menu
+├── spectrum-wallpaper
+├── spectrum-carousel
+├── spectrum-megamenu
+└── spectrum-menu
+
+Level 2 (Composed):
+├── spectrum-accordion (depends on: spectrum-chip)
+├── spectrum-search-input (depends on: spectrum-button)
+├── spectrum-rail-item (depends on: spectrum-button)
+├── spectrum-collapsible-list (depends on: spectrum-context-menu)
+├── spectrum-select (depends on: spectrum-button)
+├── spectrum-image-gallery (depends on: spectrum-button, spectrum-badge, spectrum-panel)
+└── spectrum-hero (depends on: spectrum-button)
+
+Level 3 (Complex):
+├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item, spectrum-context-menu)
+└── spectrum-conversation-panel (depends on: spectrum-accordion, spectrum-button, spectrum-chip, spectrum-panel)
+
+Level 4 (Layout Components - Production Ready) ✅:
+├── spectrum-app-layout
+├── spectrum-cluster  
+├── spectrum-container
+├── spectrum-flex
+├── spectrum-grid
+├── spectrum-sidebar
+└── spectrum-stack
+
+⚠️ Components Still in Development:
+└── spectrum-rail-alternative (basic skeleton only)
+```
+
+## Key Integration Patterns
+
+### Event Communication
+- Components communicate via CustomEvents, not direct imports
+- Events bubble up the DOM tree for loose coupling
+- Standard event naming: camelCase with descriptive names
+
+### Slot-based Composition
+- spectrum-rail uses slots for spectrum-collapsible-list and spectrum-rail-item
+- Allows flexible composition without tight coupling
+- Components can detect parent state through method calls
+
+### Interface Sharing
+- spectrum-context-menu exports ContextMenuAction interface
+- spectrum-collapsible-list imports and uses this interface
+- Shared interfaces maintain type safety across components
+
+### Button Integration Pattern
+- Multiple components use spectrum-button as internal trigger
+- Properties pass through directly: variant, size, disabled
+- Button handles all visual states (hover, focus, active) and animations
+- Parent wrapper becomes transparent container
+
+### Chip Integration Pattern
+- spectrum-accordion uses spectrum-chip as trigger element
+- spectrum-conversation-panel uses spectrum-chip for tags and interactive elements
+- Chips provide consistent micro-interactions across different contexts
+
+### Theme-Wallpaper Coordination Pattern
+- spectrum-theme and spectrum-wallpaper coordinate via document-level events
+- spectrum-wallpaper emits `wallpaper-colors-ready` and `wallpaper-colors-failed` events
+- spectrum-theme listens for wallpaper events when `waitForWallpaper` is enabled
+- Color coordination prevents FOUC by waiting for wallpaper color extraction
+- Both components manage document CSS classes for loading states
+- FontLoader utility provides singleton font loading to prevent duplicate operations
+- Event-based coordination maintains loose coupling between components
+
+## Rules for Maintaining This Map
+
+When implementing or modifying components, you MUST:
+
+1. **Update this dependency map** immediately after any changes
+2. **Add new components** to the appropriate hierarchy level
+3. **Document new dependencies** when components use other spectrum components
+4. **Update the dependency flow** when relationships change
+5. **Maintain the integration patterns** described above
+6. **Use this map as the single source of truth** for all dependency documentation generation
+
+## Dependency Documentation Generation Rule
+
+### Single Source of Truth Principle
+The `COMPONENT_DEPENDENCY_MAP` in `scripts/generate-component-docs.js` is the **authoritative source** for all component relationships. All dependency documentation, Storybook stories, and architectural diagrams MUST derive their information from this map.
+
+### Automation Requirements
+When generating component dependency documentation:
+
+#### 1. Dependencies (What This Component Uses)
+```javascript
+// ✅ Correct: Use the dependency map
+const dependencies = COMPONENT_DEPENDENCY_MAP[componentName] || [];
+
+// ❌ Incorrect: Hardcoded or placeholder text
+const dependencies = ['placeholder-component'];
+```
+
+#### 2. Dependents (What Uses This Component)
+```javascript
+// ✅ Correct: Calculate reverse dependencies from the map
+function getComponentDependents(componentName) {
+  const dependents = [];
+  for (const [component, dependencies] of Object.entries(COMPONENT_DEPENDENCY_MAP)) {
+    if (dependencies.includes(componentName)) {
+      dependents.push(component);
+    }
+  }
+  return dependents;
+}
+
+// ❌ Incorrect: Placeholder or manual text
+const dependents = ['Documentation needed - analyze codebase for usage'];
+```
+
+#### 3. Mermaid Diagram Generation
+```javascript
+// ✅ Correct: Generate diagrams from map data
+const diagramContent = [
+  // Dependencies flowing into this component
+  ...dependencies.map(dep => `${dep} --> |Used by| ${componentName}`),
+  // This component flowing to dependents
+  ...dependents.map(dep => `${componentName} --> |Used by| ${dep}`)
+].join('\n');
+
+// ❌ Incorrect: Static or placeholder diagrams
+const diagramContent = 'SC --> |Used by| DEP1[Component 1]';
+```
+
+### Documentation Accuracy Standards
+
+#### Required Information
+Every component dependency document MUST include:
+- **Accurate Dependencies**: List of components this component internally uses
+- **Accurate Dependents**: List of components that use this component
+- **Visual Diagram**: Mermaid diagram showing relationships in both directions
+- **Integration Examples**: Code examples showing how dependents use this component
+
+#### Validation Checklist
+Before generating dependency documentation:
+- [ ] Verify `COMPONENT_DEPENDENCY_MAP` is up-to-date
+- [ ] Check that new components are added to the map
+- [ ] Confirm dependency changes are reflected in the map
+- [ ] Test that automation functions reference the map correctly
+
+#### Quality Assurance
+- **No Placeholders**: Never use "Documentation needed" or generic text
+- **Real Relationships**: Only show actual component dependencies
+- **Bidirectional Accuracy**: Show both what a component uses and what uses it
+- **Visual Consistency**: Mermaid diagrams must match the textual dependency lists
+
+### Maintenance Workflow
+
+#### When Adding Components
+1. Add to `COMPONENT_DEPENDENCY_MAP` with correct dependencies
+2. Run automation to generate dependency documentation
+3. Verify generated docs show correct relationships
+4. Update any dependent component docs if needed
+
+#### When Modifying Dependencies
+1. Update `COMPONENT_DEPENDENCY_MAP` immediately
+2. Regenerate documentation for affected components
+3. Verify dependency chains are correctly represented
+4. Test that Mermaid diagrams flow correctly
+
+#### When Removing Components
+1. Remove from `COMPONENT_DEPENDENCY_MAP`
+2. Update any components that listed it as a dependency
+3. Regenerate documentation for affected components
+4. Clean up orphaned dependency references
+
+### Example: Correct Implementation
+
+```javascript
+// In generate-component-docs.js
+function generateDependenciesFile(component, outputDir) {
+  // Get dependencies from the authoritative map
+  const dependencies = COMPONENT_DEPENDENCY_MAP[component.name] || [];
+  
+  // Calculate reverse dependencies from the map
+  const dependents = getComponentDependents(component.name);
+  
+  // Generate accurate documentation
+  const template = `
+### Dependencies
+${dependencies.length > 0 ? 
+  dependencies.map(dep => `- **${dep}** (internal dependency)`).join('\n') : 
+  '- **None** (pure atomic component)'
+}
+
+### Components Using ${component.name}
+${dependents.length > 0 ? 
+  dependents.map(dep => `- **${dep}**`).join('\n') : 
+  '- None (not used by other components)'
+}
+  `;
+}
+```
+
+This ensures all dependency documentation remains accurate, up-to-date, and consistent across the entire component system.
+
+### Adding New Components
+- Place in appropriate hierarchy level based on dependencies
+- Document what it depends on and what depends on it
+- Follow established patterns for event communication and composition
+- Update the dependency flow diagram
+
+### Modifying Existing Components
+- Check if dependency changes affect the hierarchy
+- Update documentation for components that use the modified component
+- Ensure event contracts remain stable
+- Update integration patterns if new patterns emerge
+
+### Component Creation Guidelines
+- Use `npm run generate <component-name>` in packages/core
+- Follow BEM CSS naming conventions
+- Emit events with camelCase names and action attributes
+- Use slots for composition when appropriate
+- Maintain loose coupling through events, not direct imports
+
+This dependency map ensures proper component architecture and helps maintain the modular, composable nature of the Spectrum component system.
+- # Your rule content
+Components are created by:
+
+Navigating to the stencil core package: cd /packages/core
+Generating a new component with npm run generate <component-nam>
+
+Do not create new directories.
+Do not create components without running npm run generate 
