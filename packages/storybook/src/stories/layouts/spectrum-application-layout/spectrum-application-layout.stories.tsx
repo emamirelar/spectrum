@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/web-components";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 
 // @ts-ignore
-import type { SpectrumApplicationLayout } from "@unops-itg-npm/cpit-spectrum/src/components/spectrum-application-layout/spectrum-application-layout";
+import type { SpectrumApplicationLayout } from "../../../../core/src/components/spectrum-application-layout/spectrum-application-layout";
 
 interface SpectrumApplicationLayoutArgs {
   showHeaderAppId: boolean;

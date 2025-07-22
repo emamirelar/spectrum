@@ -8,14 +8,14 @@ import { Components } from '@unops-itg-npm/cpit-spectrum';
 
 
 @ProxyCmp({
-  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sound', 'variant']
+  inputs: ['accordionId', 'chipVariant', 'collapsedIcon', 'debug', 'disabled', 'expandMode', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sections', 'sound', 'variant']
 })
 @Component({
   selector: 'spectrum-accordion',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['accordionId', 'collapsedIcon', 'debug', 'disabled', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sound', 'variant'],
+  inputs: ['accordionId', 'chipVariant', 'collapsedIcon', 'debug', 'disabled', 'expandMode', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sections', 'sound', 'variant'],
 })
 export class SpectrumAccordion {
   protected el: HTMLSpectrumAccordionElement;
@@ -31,7 +31,7 @@ export declare interface SpectrumAccordion extends Components.SpectrumAccordion 
   /**
    * Event emitted when the accordion is toggled
    */
-  accordionToggle: EventEmitter<CustomEvent<{ expanded: boolean; accordionId: string; }>>;
+  accordionToggle: EventEmitter<CustomEvent<{ expanded: boolean; accordionId: string; sectionId?: string; expandedSections?: string[]; }>>;
 }
 
 
@@ -88,29 +88,25 @@ export declare interface SpectrumApplicationLayout extends Components.SpectrumAp
 
 
 @ProxyCmp({
-  inputs: ['action', 'alt', 'avatarId', 'clickable', 'customStyle', 'debug', 'disabled', 'icon', 'initials', 'label', 'shape', 'showStatus', 'size', 'src', 'status', 'variant']
+  inputs: ['circular', 'debug', 'size', 'text', 'variant']
 })
 @Component({
-  selector: 'spectrum-avatar',
+  selector: 'spectrum-badge',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'alt', 'avatarId', 'clickable', 'customStyle', 'debug', 'disabled', 'icon', 'initials', 'label', 'shape', 'showStatus', 'size', 'src', 'status', 'variant'],
+  inputs: ['circular', 'debug', 'size', 'text', 'variant'],
 })
-export class SpectrumAvatar {
-  protected el: HTMLSpectrumAvatarElement;
+export class SpectrumBadge {
+  protected el: HTMLSpectrumBadgeElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['avatarAction']);
   }
 }
 
 
-export declare interface SpectrumAvatar extends Components.SpectrumAvatar {
-
-  avatarAction: EventEmitter<CustomEvent<{ action?: string; label?: string; id?: string }>>;
-}
+export declare interface SpectrumBadge extends Components.SpectrumBadge {}
 
 
 @ProxyCmp({
@@ -287,7 +283,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
 
 
 @ProxyCmp({
-  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sound', 'sources'],
+  inputs: ['actions', 'background', 'conversationtitle', 'debug', 'loading', 'messages', 'sound', 'sources'],
   methods: ['scrollToLatest']
 })
 @Component({
@@ -295,7 +291,7 @@ export declare interface SpectrumContextMenu extends Components.SpectrumContextM
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['actions', 'conversationtitle', 'debug', 'loading', 'messages', 'sound', 'sources'],
+  inputs: ['actions', 'background', 'conversationtitle', 'debug', 'loading', 'messages', 'sound', 'sources'],
 })
 export class SpectrumConversationPanel {
   protected el: HTMLSpectrumConversationPanelElement;
@@ -398,21 +394,21 @@ export declare interface SpectrumHero extends Components.SpectrumHero {
 
 
 @ProxyCmp({
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode']
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({
   selector: 'spectrum-image-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'debug', 'frostBackground', 'images', 'previewMode', 'scrollDirection', 'selectedImages', 'selectionMode'],
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
   protected el: HTMLSpectrumImageGalleryElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted', 'imagePreview']);
+    proxyOutputs(this, this.el, ['imageSelected', 'imageDeselect', 'imageAdded', 'imageDeleted', 'imagePreview', 'primaryAction']);
   }
 }
 
@@ -432,6 +428,8 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   imageDeleted: EventEmitter<CustomEvent<ISpectrumImageGalleryImageDeletedEvent>>;
 
   imagePreview: EventEmitter<CustomEvent<ISpectrumImageGalleryImageConfig>>;
+
+  primaryAction: EventEmitter<CustomEvent<{ action: string; selectedImages: [object Object][]; selectedIds: string[]; count: number }>>;
 }
 
 
@@ -465,29 +463,35 @@ export declare interface SpectrumMenu extends Components.SpectrumMenu {
 
 
 @ProxyCmp({
-  inputs: ['debug', 'frost', 'height', 'size', 'width']
+  inputs: ['background', 'debug', 'frost', 'height', 'noPadding', 'panelTitle', 'size', 'titleEditable', 'width']
 })
 @Component({
   selector: 'spectrum-panel',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['debug', 'frost', 'height', 'size', 'width'],
+  inputs: ['background', 'debug', 'frost', 'height', 'noPadding', 'panelTitle', 'size', 'titleEditable', 'width'],
 })
 export class SpectrumPanel {
   protected el: HTMLSpectrumPanelElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['titleChanged']);
   }
 }
 
 
-export declare interface SpectrumPanel extends Components.SpectrumPanel {}
+export declare interface SpectrumPanel extends Components.SpectrumPanel {
+  /**
+   * Event emitted when the title is changed (only when titleEditable is true)
+   */
+  titleChanged: EventEmitter<CustomEvent<{action: string, value: string}>>;
+}
 
 
 @ProxyCmp({
-  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreIcon', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'debug', 'expandedWidth', 'initialExpanded', 'moreContextActions', 'moreIcon', 'moreLabel', 'showAddButton'],
   methods: ['setExpanded', 'setShowAddButton']
 })
 @Component({
@@ -495,14 +499,14 @@ export declare interface SpectrumPanel extends Components.SpectrumPanel {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'expandedWidth', 'initialExpanded', 'moreIcon', 'moreLabel', 'showAddButton'],
+  inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'debug', 'expandedWidth', 'initialExpanded', 'moreContextActions', 'moreIcon', 'moreLabel', 'showAddButton'],
 })
 export class SpectrumRail {
   protected el: HTMLSpectrumRailElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['expandedChange', 'searchChange', 'railAction', 'addAction']);
+    proxyOutputs(this, this.el, ['expandedChange', 'searchChange', 'railAction', 'addAction', 'moreContextAction']);
   }
 }
 
@@ -524,6 +528,10 @@ export declare interface SpectrumRail extends Components.SpectrumRail {
    * Emits when the add button is clicked
    */
   addAction: EventEmitter<CustomEvent<{ action: string }>>;
+  /**
+   * Emits when a context menu action is triggered
+   */
+  moreContextAction: EventEmitter<CustomEvent<{ action: string; label: string; id: string }>>;
 }
 
 
@@ -732,14 +740,14 @@ export declare interface SpectrumToast extends Components.SpectrumToast {
 
 
 @ProxyCmp({
-  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'preloadColors', 'showSwatches', 'signalReady']
+  inputs: ['applyToRoot', 'background', 'backgroundPosition', 'backgroundSize', 'debug', 'preloadColors', 'showSwatches', 'signalReady']
 })
 @Component({
   selector: 'spectrum-wallpaper',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['background', 'backgroundposition', 'backgroundsize', 'debug', 'preloadColors', 'showSwatches', 'signalReady'],
+  inputs: ['applyToRoot', 'background', 'backgroundPosition', 'backgroundSize', 'debug', 'preloadColors', 'showSwatches', 'signalReady'],
 })
 export class SpectrumWallpaper {
   protected el: HTMLSpectrumWallpaperElement;

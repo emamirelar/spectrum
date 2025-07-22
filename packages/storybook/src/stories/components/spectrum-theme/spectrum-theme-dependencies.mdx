@@ -1,0 +1,143 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Spectrum/Components/SpectrumTheme/Dependencies" />
+
+# 🔗 SpectrumTheme Dependencies
+
+This document shows the dependency relationships for the spectrum-theme component and how it integrates with other components in the Spectrum system.
+
+---
+
+## 📋 Component Usage Overview
+
+**spectrum-theme** is a Level 0 foundation component that provides Material Design 3 color system, theming, and FOUC prevention for all Spectrum applications.
+
+### Dependencies
+- **@material/material-color-utilities**: Material Design 3 color generation algorithms
+- **FontLoader utility**: Automatic font loading and FOUC prevention system
+
+### Components Using spectrum-theme
+- **All Components**: Used by every component in the Spectrum system (through CSS custom properties)
+- **spectrum-wallpaper**: Coordinates via events for color extraction and theme synchronization
+
+### Coordination Patterns
+- **Event-based coordination** with spectrum-wallpaper for dynamic color theming
+- **Global CSS custom properties** provide theme values to all components
+- **Singleton font loading** prevents duplicate font initialization across components
+
+---
+
+## 🔍 Visual Dependencies
+
+```
+📦 spectrum-theme (Foundation Component)
+├── 🎨 Material Design 3 Color Generation
+├── 🔤 Automatic Font Loading & FOUC Prevention  
+├── 🖼️ Wallpaper Color Coordination
+└── ⚙️ Theme Configuration & Debug Tools
+
+Used by: All Spectrum Components (Global Theme Provider)
+└── 🏗️ Application Layout Components
+└── 🧩 UI Components  
+└── 📱 Mobile & Desktop Applications
+```
+
+---
+
+## 🏗️ Architecture Integration
+
+### SpectrumTheme Integration Pattern
+The spectrum-theme component follows a simple integration pattern as an atomic component:
+
+```typescript
+// Integration pattern example
+import { Component, h, Prop } from '@stencil/core';
+
+@Component({
+  tag: 'example-component'
+})
+export class ExampleComponent {
+  @Prop() color?: string;
+  @Prop() dark?: boolean;
+  @Prop() showSwatches?: boolean;
+
+  render() {
+    return (
+      <div class="example-component">
+        <spectrum-theme
+          color={this.color}
+          dark={this.dark}
+        >
+          Component Content
+        </spectrum-theme>
+      </div>
+    );
+  }
+}
+```
+
+---
+
+## 🔄 Event Flow
+
+### Theme Lifecycle Events
+- **themeready**: Emitted when theme is fully loaded (fonts + colors)
+- **themefontsloaded**: Font loading completed successfully  
+- **themefontsfailed**: Font loading failed, using fallbacks
+- **themewallpaperready**: Wallpaper coordination completed
+
+### Global Font Events  
+- **fontsloaded**: Global font loading success (all components)
+- **fontsfailed**: Global font loading failure
+
+### Wallpaper Coordination Events
+- **wallpaper-colors-ready**: Received when wallpaper color extraction completes
+- **wallpaper-colors-failed**: Received when wallpaper color extraction fails
+
+### Event Coordination Pattern
+```
+spectrum-theme ←→ spectrum-wallpaper
+     ↓                    ↓
+  Font Loading      Color Extraction
+     ↓                    ↓
+    Theme Ready Event (Combined)
+     ↓
+  CSS Classes Applied
+     ↓
+  Content Visibility Enabled
+```
+
+
+---
+
+## 🚀 Integration Benefits
+
+### Consistency
+- Uniform component behavior across applications
+- Consistent styling and interaction patterns
+- Standardized accessibility features
+
+### Maintainability  
+- Atomic design enables reliable independent updates
+- Centralized component logic
+- Simplified testing and debugging
+
+### Performance
+- Optimized component implementation
+- Minimal overhead as atomic component
+- Consistent memory usage patterns
+
+---
+
+## 🔧 Development Considerations
+
+### When Modifying spectrum-theme
+1. **Impact Assessment** - Changes affect dependent components
+2. **Breaking Change Analysis** - Property or event signature changes require coordination
+3. **Comprehensive Testing** - Test all integration scenarios  
+4. **Performance Testing** - Verify no performance regressions
+5. **Documentation Updates** - Update component and integration documentation
+
+---
+
+**Integration Documentation** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Architecture Guidelines](../../../ARCHITECTURE.md)

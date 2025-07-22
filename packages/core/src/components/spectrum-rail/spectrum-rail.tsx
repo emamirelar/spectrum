@@ -1,4 +1,5 @@
 import { Component, Event, EventEmitter, Host, h, Prop, Element, State, Watch, Method } from '@stencil/core';
+import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
 
 /**
  * Spectrum Rail Component
@@ -10,6 +11,7 @@ import { Component, Event, EventEmitter, Host, h, Prop, Element, State, Watch, M
  * - Integrated search functionality
  * - Configurable add button with custom icon and label
  * - Flexible width and positioning options
+ * - Context menu support for the "more" button
  */
 @Component({
   tag: 'spectrum-rail',
@@ -45,6 +47,12 @@ export class SpectrumRail {
   
   /** Offset from the left when rail is collapsed (e.g. '20px', '1rem', etc.) */
   @Prop() collapsedOffset: string = '0px';
+
+  /** Context menu actions for the "more" button */
+  @Prop() moreContextActions: ContextMenuAction[] = [];
+
+  /** Whether to enable debug logging */
+  @Prop() debug: boolean = false;
   
   /** Current expanded state of the rail */
   @State() expanded: boolean = false;
@@ -84,7 +92,22 @@ export class SpectrumRail {
     bubbles: true
   }) addAction: EventEmitter<{ action: string }>;
 
+  /** Emits when a context menu action is triggered */
+  @Event({
+    eventName: 'moreContextAction',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) moreContextAction: EventEmitter<{ action: string; label: string; id: string }>;
+
   private searchInputRef?: HTMLElement;
+
+  /** Debug logging utility */
+  private debugLog(message: string, ...args: any[]) {
+    if (this.debug) {
+      console.log(`[spectrum-rail] ${message}`, ...args);
+    }
+  }
 
   /** Handle menu button click - toggle expanded state */
   private handleMenuClick() {
@@ -158,7 +181,16 @@ export class SpectrumRail {
   }
 
   /** Handle more button click */
-  private handleMoreClick() {
+  private handleMoreClick(event?: MouseEvent) {
+    // If there are context actions defined, show the context menu
+    if (this.moreContextActions && this.moreContextActions.length > 0 && event) {
+      event.stopPropagation();
+      event.preventDefault();
+      this.showContextMenu(event);
+      return;
+    }
+
+    // Default behavior: expand if not already expanded
     if (!this.expanded) {
       this.expanded = true;
       this.expandedChange.emit({
@@ -173,6 +205,60 @@ export class SpectrumRail {
       id: ''
     });
   }
+
+  /** Show context menu for the more button */
+  private async showContextMenu(event: MouseEvent) {
+    const buttonElement = event.currentTarget as HTMLElement;
+    if (!buttonElement) {
+      this.debugLog('Missing button element for context menu');
+      return;
+    }
+
+    // Create or get the global context menu
+    let menu = document.querySelector('spectrum-context-menu') as any;
+    if (!menu) {
+      menu = document.createElement('spectrum-context-menu');
+      document.body.appendChild(menu);
+      this.debugLog('Created global context menu');
+    }
+
+    // Check if the menu is already open
+    let isOpen = false;
+    if (typeof menu['isMenuOpen'] === 'function') {
+      isOpen = await menu['isMenuOpen']();
+    }
+
+    if (isOpen) {
+      // If menu is open, hide it
+      if (typeof menu['hide'] === 'function') {
+        menu['hide']();
+        this.debugLog('Context menu hidden');
+      }
+    } else {
+      // If menu is closed, show it
+      const buttonRect = buttonElement.getBoundingClientRect();
+      if (typeof menu['show'] === 'function') {
+        // Set position to bottom so the menu appears above the button
+        menu.position = 'bottom';
+        
+        // Show the menu positioned so its bottom aligns with the button's top
+        menu['show'](this.moreContextActions, buttonRect.right, buttonRect.top, 'more-button');
+        this.debugLog('Context menu shown with actions:', this.moreContextActions);
+      }
+    }
+  }
+
+  /** Handle context menu action clicks */
+  private handleContextMenuAction = (event: CustomEvent<{ action: string; targetKey: string }>) => {
+    if (event.detail.targetKey === 'more-button') {
+      this.debugLog('Context menu action triggered:', event.detail.action);
+      this.moreContextAction.emit({
+        action: event.detail.action,
+        label: this.moreLabel,
+        id: 'more-button'
+      });
+    }
+  };
 
   /** Update the filter prop of the collapsible list when the filter state changes */
   @Watch('searchValue')
@@ -245,7 +331,7 @@ export class SpectrumRail {
   componentDidLoad() {
     // Set custom properties from props
     if (this.expandedWidth) {
-      this.el.style.setProperty('--rail-expanded-width', this.expandedWidth.toString());
+      this.el.style.setProperty('--rail-expanded-width', `${this.expandedWidth}px`);
     }
 
     // Set collapsed offset
@@ -260,6 +346,14 @@ export class SpectrumRail {
       });
       this.notifySlottedComponents(true);
     }
+
+    // Add event listener for context menu actions
+    document.addEventListener('actionClick', this.handleContextMenuAction);
+  }
+
+  disconnectedCallback() {
+    // Remove event listener
+    document.removeEventListener('actionClick', this.handleContextMenuAction);
   }
 
   @Watch('appName')
@@ -268,10 +362,14 @@ export class SpectrumRail {
   @Watch('addLabel')
   @Watch('showAddButton')
   @Watch('collapsedOffset')
+  @Watch('expandedWidth')
   propChanged() {
     // Property changed handler
     if (this.collapsedOffset !== undefined) {
       this.el.style.setProperty('--rail-collapsed-offset', this.collapsedOffset);
+    }
+    if (this.expandedWidth !== undefined) {
+      this.el.style.setProperty('--rail-expanded-width', `${this.expandedWidth}px`);
     }
   }
 
@@ -292,7 +390,7 @@ export class SpectrumRail {
             'rail--expanded': this.expanded
           }}
           style={{
-            '--rail-expanded-width': this.expandedWidth.toString(),
+            '--rail-expanded-width': `${this.expandedWidth}px`,
             '--rail-collapsed-offset': this.collapsedOffset
           }}
         >
@@ -419,7 +517,7 @@ export class SpectrumRail {
                 iconOnly={true}
                 showLeftIcon={true}
                 leftIcon={this.moreIcon}
-                onClick={() => this.handleMoreClick()}
+                onClick={(event) => this.handleMoreClick(event)}
                 title={this.moreLabel}
                 aria-label={this.moreLabel}
               />
@@ -433,9 +531,9 @@ export class SpectrumRail {
                   leftIcon={this.moreIcon}
                   buttonText={this.moreLabel || 'Explore more'}
                   showButtonText={true}
-                  showRightIcon={true}
-                  rightIcon="chevron_right"
-                  onClick={() => this.handleMoreClick()}
+                  showRightIcon={this.moreContextActions && this.moreContextActions.length > 0 ? true : true}
+                  rightIcon={this.moreContextActions && this.moreContextActions.length > 0 ? "more_vert" : "chevron_right"}
+                  onClick={(event) => this.handleMoreClick(event)}
                   class="more-button"
                   customStyle={{ width: '100%', justifyContent: 'space-between' }}
                 >

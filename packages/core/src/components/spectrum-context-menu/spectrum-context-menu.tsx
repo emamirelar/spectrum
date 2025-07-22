@@ -229,17 +229,38 @@ export class SpectrumContextMenu {
   render() {
     this.log('Rendering context menu', { isOpen: this.isOpen, actions: this.actions });
     
+    // Calculate positioning based on position prop
+    const getPositionStyle = () => {
+      const baseStyle = {
+        position: 'fixed',
+        zIndex: '9999',
+      };
+
+      switch (this.position) {
+        case 'bottom':
+          return {
+            ...baseStyle,
+            left: `${this.x}px`,
+            bottom: `${window.innerHeight - this.y}px`,
+            top: 'auto', // Explicitly unset top
+          };
+        case 'top':
+        default:
+          return {
+            ...baseStyle,
+            left: `${this.x}px`,
+            top: `${this.y}px`,
+            bottom: 'auto', // Explicitly unset bottom
+          };
+      }
+    };
+    
     return (
       <Host>
         {this.isOpen && (
           <div
             class="spectrum-context-menu"
-            style={{
-              position: 'fixed',
-              left: `${this.x}px`,
-              top: `${this.y}px`,
-              zIndex: '9999',
-            }}
+            style={getPositionStyle()}
             role="menu"
             aria-orientation="vertical"
           >

@@ -1,0 +1,208 @@
+---
+alwaysApply: true
+---
+
+# Component Dependency Change Management Rule
+
+## Overview
+When changing the signature, API, or behavior of any Spectrum component, you MUST analyze and update all dependent components to maintain system integrity and prevent breaking changes.
+
+## What Constitutes a Component Signature Change
+
+### API Changes
+- Adding, removing, or modifying `@Prop()` properties
+- Changing prop types, default values, or validation rules
+- Modifying `@Event()` signatures, names, or payload structures
+- Adding or removing public `@Method()` functions
+- Changing method parameters or return types
+
+### Behavioral Changes
+- Modifying event emission logic or timing
+- Changing default component behavior
+- Altering slot usage or slot names
+- Modifying CSS class names or structure that dependents rely on
+- Changing internal state management that affects external interactions
+
+### Breaking vs Non-Breaking Changes
+**Breaking Changes (Require Dependent Updates):**
+- Removing props, events, or methods
+- Changing prop/event/method signatures
+- Modifying event payload structure
+- Renaming CSS classes used by dependents
+- Changing default behavior that dependents expect
+
+**Non-Breaking Changes (Generally Safe):**
+- Adding new optional props with sensible defaults
+- Adding new events (without removing existing ones)
+- Adding new methods
+- Internal refactoring without API changes
+- CSS improvements that don't affect dependent selectors
+
+## Step-by-Step Process
+
+### 1. Identify Direct Dependencies
+Consult the **Component Dependency Map** in the workspace rules to identify:
+- Which components directly import or use the component you're changing
+- Components that listen to events from your component
+- Components that call methods on your component
+- Components that depend on specific CSS classes or styling
+
+### 2. Analyze Impact Scope
+For each dependent component, determine:
+- How it uses the component you're changing
+- Which specific props, events, or methods it relies on
+- Whether your changes will break existing functionality
+- If the dependent component needs updates to work with your changes
+
+### 3. Plan Coordinated Updates
+Create a change plan that includes:
+- The main component changes
+- Required updates to each dependent component
+- Test coverage for the integration points
+- Storybook story updates to reflect new functionality
+- Documentation updates
+
+### 4. Implementation Order
+Follow this order to minimize integration issues:
+1. **Foundation First**: Update the main component
+2. **Direct Dependencies**: Update components that directly use the changed component
+3. **Cascade Updates**: Update components that depend on the updated dependents
+4. **Integration Testing**: Test the full dependency chain
+5. **Documentation**: Update stories, README files, and dependency map
+
+## Required Actions Checklist
+
+### Before Making Changes
+- [ ] Review dependency map for the component you're changing
+- [ ] Identify all components that import, use, or listen to your component
+- [ ] Plan the scope of required updates across dependent components
+- [ ] Consider backward compatibility strategies if possible
+
+### During Implementation
+- [ ] Update the main component with your changes
+- [ ] Update each dependent component to work with the new signature
+- [ ] Verify event contracts still work correctly
+- [ ] Update prop passing and method calls in dependent components
+- [ ] Fix any TypeScript compilation errors in dependent components
+
+### After Implementation
+- [ ] Test all integration points between components
+- [ ] Update Storybook stories for the changed component and its dependents
+- [ ] Update README documentation for affected components
+- [ ] Update the Component Dependency Map if new relationships are created
+- [ ] Run the full test suite to catch any missed integration issues
+
+## Examples
+
+### Example 1: Adding Required Prop
+**Change**: Adding a required `variant` prop to `spectrum-button`
+**Dependents**: `spectrum-accordion`, `spectrum-search-input`, `spectrum-rail-item`, `spectrum-select`, `spectrum-image-gallery`, `spectrum-hero`, `spectrum-rail`, `spectrum-conversation-panel`
+**Required Actions**:
+```typescript
+// Before: <spectrum-button>Click me</spectrum-button>
+// After: <spectrum-button variant="primary">Click me</spectrum-button>
+```
+- Update all 8+ dependent components to pass the required `variant` prop
+- Choose appropriate variant values for each use case
+- Update Storybook stories to demonstrate the new prop
+
+### Example 2: Changing Event Payload
+**Change**: Modifying `spectrum-context-menu` event payload structure
+**Dependents**: `spectrum-collapsible-list`, `spectrum-rail`
+**Required Actions**:
+```typescript
+// Before: event.detail = { action: "click" }
+// After: event.detail = { action: "click", targetId: "item-1", context: {...} }
+```
+- Update event listeners in dependent components
+- Modify event handling logic to use new payload structure
+- Update TypeScript interfaces if imported
+
+### Example 3: Removing a Method
+**Change**: Removing `toggleExpansion()` method from `spectrum-accordion`
+**Dependents**: `spectrum-conversation-panel`
+**Required Actions**:
+- Replace method calls with equivalent prop-based control
+- Update the dependent's internal state management
+- Modify integration tests
+
+## Documentation Updates
+
+### Update Dependency Map
+When changes create new relationships or break existing ones:
+```markdown
+// Add to Component Dependency Map
+- **spectrum-new-component**: Enhanced component with new dependencies
+  - Dependencies: spectrum-button, spectrum-chip (newly added)
+  - Used by: spectrum-conversation-panel (updated integration)
+  - Purpose: Extended functionality with chip-based interactions
+```
+
+### Update Component README
+Reflect changes in component documentation:
+```markdown
+## Breaking Changes
+- v2.0.0: Added required `variant` prop - all instances must specify variant
+- v2.0.0: Changed `buttonClick` event payload to include `targetId`
+
+## Migration Guide
+```
+
+## Testing Requirements
+
+### Integration Testing
+- Test all component-to-component communications
+- Verify event flows work correctly
+- Test method calls and prop passing
+- Validate CSS integration and styling dependencies
+
+### Storybook Validation
+- Ensure all stories still work with changes
+- Add new stories for new functionality
+- Update story descriptions and documentation
+- Test interactive examples with new API
+
+### Cross-Component Testing
+- Test complete user flows that span multiple components
+- Verify accessibility is maintained across component boundaries
+- Test responsive behavior in integrated scenarios
+
+## Emergency Procedures
+
+### Rollback Strategy
+If breaking changes are discovered after implementation:
+1. Identify the minimal set of changes needed to restore functionality
+2. Implement temporary compatibility layer if possible
+3. Document the technical debt created by the compatibility layer
+4. Plan proper migration path for future release
+
+### Hotfix Process
+For critical issues in component dependencies:
+1. Assess blast radius using dependency map
+2. Implement minimal fix in main component
+3. Test all dependent components immediately
+4. Deploy with targeted testing of integration points
+
+## Tools and Resources
+
+### Dependency Analysis Commands
+```bash
+# Search for component usage across codebase
+grep -r "spectrum-button" packages/core/src/components/
+
+# Find event listeners
+grep -r "@Listen.*buttonAction" packages/core/src/
+
+# Find method calls
+grep -r "\.toggleExpansion" packages/core/src/
+```
+
+### Component Generation
+When creating new components with dependencies:
+```bash
+cd packages/core
+npm run generate my-new-component
+```
+Follow the component dependency patterns established in the dependency map.
+
+This comprehensive approach ensures component changes don't break the modular, composable architecture of the Spectrum component system while maintaining type safety and integration stability.

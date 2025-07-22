@@ -83,8 +83,8 @@
   // Button variants
   --button-primary-background: var(--spectrum-color-primary, #0070d2);
   --button-primary-color: var(--spectrum-color-on-primary, #ffffff);
-  --button-secondary-background: var(--spectrum-color-secondary, #005fb2);
-  --button-secondary-color: var(--spectrum-color-on-secondary, #ffffff);
+  --button-secondary-background: var(--spectrum-color-secondary-container, #e1f5fe);
+  --button-secondary-color: var(--spectrum-color-on-secondary-container, #0d47a1);
   --button-success-background: var(--spectrum-color-success, #2e844a);
   --button-success-color: var(--spectrum-color-on-success, #ffffff);
   --button-warning-background: var(--spectrum-color-warning, #ff9900);
@@ -109,12 +109,12 @@
   letter-spacing: .06em;
   border: var(--button-border) solid transparent;
   border-radius: var(--button-border-radius);
-  padding: 0 var(--button-padding);
+  padding: var(--button-padding) var(--button-padding);
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
   gap: var(--button-gap);
-  min-height: var(--button-min-height);
+  min-height: calc(var(--button-icon-size-base) + var(--button-padding) * 2);
   transition: var(--button-transition);
   position: relative;
   overflow: hidden;
@@ -139,11 +139,11 @@
     background-color: rgba(0, 0, 0, 0.4);
   }
 
-  // Size variations
+  // Size variations - ensure all buttons match height of buttons with icons
   &--base {
     font-size: var(--button-font-size-base);
-    min-height: var(--button-size-base);
-    padding: var(--button-padding-base);
+    min-height: calc(var(--button-icon-size-base) + var(--button-padding-base) * 2);
+    padding: var(--button-padding-base) var(--button-padding-base);
     
     .spectrum-button__icon {
       font-size: var(--button-icon-size-base);
@@ -152,8 +152,8 @@
 
   &--sm {
     font-size: var(--button-font-size-sm);
-    min-height: var(--button-size-sm);
-    padding: 0 var(--button-padding-sm);
+    min-height: calc(var(--button-icon-size-sm) + var(--button-padding-sm) * 2);
+    padding: var(--button-padding-sm) var(--button-padding-sm);
     
     .spectrum-button__icon {
       font-size: var(--button-icon-size-sm);
@@ -162,8 +162,8 @@
 
   &--lg {
     font-size: var(--button-font-size-lg);
-    min-height: var(--button-size-lg);
-    padding: 0 var(--button-padding-lg);
+    min-height: calc(var(--button-icon-size-lg) + var(--button-padding-lg) * 2);
+    padding: var(--button-padding-lg) var(--button-padding-lg);
     
     .spectrum-button__icon {
       font-size: var(--button-icon-size-lg);
@@ -213,8 +213,99 @@
   // Outline variant
   &--outline {
     background-color: transparent;
-    border-color: currentColor;
-    color: inherit;
+    border-color: var(--spectrum-color-outline, #e0e0e0);
+    color: var(--spectrum-color-on-surface, #333333);
+    
+    // Primary outline
+    &.spectrum-button--primary {
+      border-color: var(--button-primary-background);
+      color: var(--button-primary-background);
+      
+      &:hover {
+        background-color: var(--button-primary-background);
+        color: var(--button-primary-color);
+      }
+      
+      &:hover::before {
+        background-color: transparent;
+      }
+    }
+    
+    // Secondary outline
+    &.spectrum-button--secondary {
+      border-color: var(--spectrum-color-secondary, #005fb2);
+      color: var(--spectrum-color-secondary, #005fb2);
+      
+      &:hover {
+        background-color: var(--button-secondary-background);
+        color: var(--button-secondary-color);
+      }
+      
+      &:hover::before {
+        background-color: transparent;
+      }
+    }
+    
+    // Success outline
+    &.spectrum-button--success {
+      border-color: var(--button-success-background);
+      color: var(--button-success-background);
+      
+      &:hover {
+        background-color: var(--button-success-background);
+        color: var(--button-success-color);
+      }
+      
+      &:hover::before {
+        background-color: transparent;
+      }
+    }
+    
+    // Warning outline
+    &.spectrum-button--warning {
+      border-color: var(--button-warning-background);
+      color: var(--button-warning-background);
+      
+      &:hover {
+        background-color: var(--button-warning-background);
+        color: var(--button-warning-color);
+      }
+      
+      &:hover::before {
+        background-color: transparent;
+      }
+    }
+    
+    // Danger outline
+    &.spectrum-button--danger {
+      border-color: var(--button-danger-background);
+      color: var(--button-danger-background);
+      
+      &:hover {
+        background-color: var(--button-danger-background);
+        color: var(--button-danger-color);
+      }
+      
+      &:hover::before {
+        background-color: transparent;
+      }
+    }
+    
+    // Ghost outline (uses text color)
+    &.spectrum-button--ghost {
+      border-color: var(--button-ghost-color);
+      color: var(--button-ghost-color);
+      
+      &:hover {
+        background-color: var(--button-ghost-hover);
+        border-color: var(--button-ghost-color);
+        color: var(--button-ghost-color);
+      }
+      
+      &:hover::before {
+        background-color: transparent;
+      }
+    }
   }
 
   // FAB (Floating Action Button) variant
@@ -331,24 +422,34 @@
   &__text {
     font-family: var(--button-font-family);
     font-size: inherit;
-    line-height: 1;
+    line-height: var(--button-icon-size-base); // Match icon height for consistent button height
     position: relative;
     z-index: 1;
-    // padding: var(--button-padding) 0;
+    
+    // Size-specific line heights to match icon sizes
+    .spectrum-button--sm & {
+      line-height: var(--button-icon-size-sm);
+    }
+    
+    .spectrum-button--lg & {
+      line-height: var(--button-icon-size-lg);
+    }
   }
 
   // Icon-only variant
   &--icon-only {
-    padding: 0;
+    padding: var(--button-padding-base);
     aspect-ratio: 1;
-    min-width: var(--button-size-icon-only);
+    min-width: calc(var(--button-icon-size-base) + var(--button-padding-base) * 2);
     
     &.spectrum-button--sm {
-      min-width: var(--button-size-icon-only-sm);
+      padding: var(--button-padding-sm);
+      min-width: calc(var(--button-icon-size-sm) + var(--button-padding-sm) * 2);
     }
 
     &.spectrum-button--lg {
-      min-width: var(--button-size-icon-only-lg);
+      padding: var(--button-padding-lg);
+      min-width: calc(var(--button-icon-size-lg) + var(--button-padding-lg) * 2);
     }
   }
 

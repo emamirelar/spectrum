@@ -1,3 +1,11 @@
+// ==============================================
+// Spectrum Accordion Component Styles
+// ==============================================
+// BEM naming convention: spectrum-accordion (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
 /* Root variables and custom properties for spectrum-accordion */
 spectrum-accordion {
   display: block;
@@ -45,7 +53,17 @@ spectrum-accordion {
   
   /* Component specific dimensions */
   --accordion-card-width: 300px;
+  
+  /* Standard variant specific variables */
+  --accordion-section-border: 1px solid var(--accordion-outline-variant);
+  --accordion-section-padding: var(--accordion-spacing);
+  --accordion-header-height: 3rem;
+  --accordion-content-padding: var(--accordion-spacing);
 }
+
+// ==============================================
+// Base Component Styles
+// ==============================================
 
 /* BEM Base Block */
 spectrum-accordion .spectrum-accordion {
@@ -54,8 +72,12 @@ spectrum-accordion .spectrum-accordion {
   width: 100%;
 }
 
-/* BEM Element: Trigger */
-spectrum-accordion .spectrum-accordion__trigger {
+// ==============================================
+// Chip Variant Styles (Original Implementation)
+// ==============================================
+
+/* BEM Element: Trigger (Chip Variant) */
+spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__trigger {
   display: flex;
   gap: calc(var(--accordion-spacing-small) * 1.5);
   justify-content: flex-start;
@@ -88,27 +110,27 @@ spectrum-accordion .spectrum-accordion__trigger {
   }
 }
 
-/* BEM Element: Content */
-spectrum-accordion .spectrum-accordion__content {
+/* BEM Element: Content (Chip Variant) */
+spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__content {
   position: relative;
   background: transparent;
   width: 100%;
   margin-top: var(--accordion-spacing-small);
 }
 
-/* BEM Modifier: Expanded Content */
-spectrum-accordion .spectrum-accordion__content--expanded {
+/* BEM Modifier: Expanded Content (Chip Variant) */
+spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__content--expanded {
   display: block;
   animation: fadeInDown var(--accordion-transition-duration) var(--accordion-transition-timing);
 }
 
-/* BEM Modifier: Collapsed Content */
-spectrum-accordion .spectrum-accordion__content--collapsed {
+/* BEM Modifier: Collapsed Content (Chip Variant) */
+spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__content--collapsed {
   display: none;
 }
 
-/* BEM Element: Scroll Container */
-spectrum-accordion .spectrum-accordion__scroll-container {
+/* BEM Element: Scroll Container (Chip Variant) */
+spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__scroll-container {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -126,8 +148,8 @@ spectrum-accordion .spectrum-accordion__scroll-container {
   scrollbar-width: none;
 }
 
-/* BEM Element: Content Container (for non-scrollable content) */
-spectrum-accordion .spectrum-accordion__content-container {
+/* BEM Element: Content Container (Chip Variant) */
+spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__content-container {
   padding: var(--accordion-spacing-small) 0 var(--accordion-spacing) 0;
   display: flex;
   flex-direction: column;
@@ -135,7 +157,130 @@ spectrum-accordion .spectrum-accordion__content-container {
   align-items: flex-start;
 }
 
-/* Animation keyframes */
+// ==============================================
+// Standard Variant Styles (New Implementation)
+// ==============================================
+
+/* BEM Element: Standard Container */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__standard {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--accordion-border-radius);
+  overflow: hidden;
+  background: var(--accordion-surface);
+  border: var(--accordion-section-border);
+}
+
+/* BEM Element: Section */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section {
+  border-bottom: var(--accordion-section-border);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+/* BEM Element: Section Header */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--accordion-header-height);
+  padding: 0 var(--accordion-section-padding);
+  background: var(--accordion-surface);
+  color: var(--accordion-on-surface);
+  border: none;
+  cursor: pointer;
+  transition: var(--accordion-transition);
+  font-family: var(--accordion-font-family);
+  font-size: var(--accordion-font-size);
+  font-weight: var(--accordion-font-weight-medium);
+  text-align: left;
+  
+  &:hover {
+    background: var(--accordion-surface-hover);
+  }
+  
+  &:active {
+    background: var(--accordion-surface-active);
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--accordion-primary);
+    outline-offset: -2px;
+  }
+  
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    
+    &:hover {
+      background: var(--accordion-surface);
+    }
+  }
+}
+
+/* BEM Modifier: Expanded Header */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-header--expanded {
+  background: var(--accordion-primary-container);
+  color: var(--accordion-on-primary-container);
+  
+  &:hover {
+    background: var(--accordion-primary-container);
+  }
+}
+
+/* BEM Element: Section Title */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-weight: inherit;
+}
+
+/* BEM Element: Section Icon */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: transform var(--accordion-transition-duration) var(--accordion-transition-timing);
+  color: var(--accordion-on-surface-variant);
+}
+
+/* BEM Element: Section Content */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-content {
+  overflow: hidden;
+  background: var(--accordion-background);
+  transition: max-height var(--accordion-transition-duration) var(--accordion-transition-timing);
+}
+
+/* BEM Modifier: Expanded Section Content */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-content--expanded {
+  max-height: 1000px; /* Large enough for most content */
+  animation: fadeInUp var(--accordion-transition-duration) var(--accordion-transition-timing);
+}
+
+/* BEM Modifier: Collapsed Section Content */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-content--collapsed {
+  max-height: 0;
+}
+
+/* BEM Element: Section Content Inner */
+spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-content-inner {
+  padding: var(--accordion-content-padding);
+  color: var(--accordion-on-surface);
+  font-family: var(--accordion-font-family);
+  font-size: var(--accordion-font-size);
+  line-height: 1.5;
+}
+
+// ==============================================
+// Animation Keyframes
+// ==============================================
+
+/* Chip variant animations */
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -147,27 +292,66 @@ spectrum-accordion .spectrum-accordion__content-container {
   }
 }
 
-/* Responsive design */
+/* Standard variant animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
 @media (max-width: 768px) {
   spectrum-accordion {
     --accordion-card-width: 280px;
+    --accordion-header-height: 2.75rem;
+    --accordion-section-padding: var(--accordion-spacing-small);
+    --accordion-content-padding: var(--accordion-spacing-small);
   }
   
-  spectrum-accordion .spectrum-accordion__scroll-container {
+  spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__scroll-container {
     padding: var(--accordion-spacing-small) 0;
     gap: var(--accordion-spacing-small);
   }
   
-  spectrum-accordion .spectrum-accordion__trigger {
+  spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__trigger {
     margin-top: var(--accordion-spacing-small);
   }
+  
+  spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-header {
+    font-size: var(--accordion-font-size-small);
+  }
+  
+  spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-icon {
+    font-size: 1.25rem;
+  }
 }
+
+// ==============================================
+// Accessibility and Reduced Motion
+// ==============================================
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   spectrum-accordion {
     --accordion-outline: #000000;
     --accordion-shadow: #000000;
+    --accordion-section-border: 2px solid #000000;
+  }
+  
+  spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-header {
+    border: 1px solid;
+    
+    &:focus-visible {
+      outline: 3px solid;
+    }
   }
 }
 
@@ -181,12 +365,24 @@ spectrum-accordion .spectrum-accordion__content-container {
     animation: none;
   }
   
-  spectrum-accordion .spectrum-accordion__trigger spectrum-chip {
+  spectrum-accordion.spectrum-accordion--chip .spectrum-accordion__trigger spectrum-chip {
     transition: none;
     
     &:hover,
     &:active {
       transform: none;
     }
+  }
+  
+  spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-content {
+    transition: none;
+    
+    &--expanded {
+      animation: none;
+    }
+  }
+  
+  spectrum-accordion.spectrum-accordion--standard .spectrum-accordion__section-icon {
+    transition: none;
   }
 }

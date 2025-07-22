@@ -1,0 +1,170 @@
+// ==============================================
+// Spectrum Badge Component Styles
+// ==============================================
+// BEM naming convention: spectrum-badge (block), __element (element), --modifier (modifier)
+// Responsive design using CSS custom properties
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: inline-block;
+  
+  // Spectrum design tokens
+  --badge-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --badge-font-weight: var(--spectrum-sys-font-weight-medium, 500);
+  --badge-border-radius: var(--spectrum-sys-border-radius, 4px);
+  --badge-border-radius-full: 50px;
+  
+  // Spacing
+  --badge-spacing-small: var(--spectrum-sys-spacing-small, 0.5em);
+  --badge-spacing: var(--spectrum-sys-spacing, 1em);
+  
+  // Colors - using Spectrum color tokens
+  --badge-primary: var(--spectrum-color-primary, #0070d2);
+  --badge-primary-text: var(--spectrum-color-on-primary, #ffffff);
+  --badge-secondary: var(--spectrum-color-surface-container, #f5f5f5);
+  --badge-secondary-text: var(--spectrum-color-on-surface, #333333);
+  --badge-success: var(--spectrum-color-positive, #22c55e);
+  --badge-success-text: var(--spectrum-color-on-positive, #ffffff);
+  --badge-warning: var(--spectrum-color-warning, #f59e0b);
+  --badge-warning-text: var(--spectrum-color-on-warning, #ffffff);
+  --badge-danger: var(--spectrum-color-negative, #ef4444);
+  --badge-danger-text: var(--spectrum-color-on-negative, #ffffff);
+  
+  // Shadows
+  --badge-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --badge-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+// Base badge styles
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--badge-font-family);
+  font-weight: var(--badge-font-weight);
+  border-radius: var(--badge-border-radius);
+  box-shadow: var(--badge-shadow);
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  
+  // Circular variant
+  &--circular {
+    border-radius: var(--badge-border-radius-full);
+    aspect-ratio: 1;
+    min-width: auto;
+  }
+  
+  // Size variations
+  &--small {
+    padding: calc(var(--badge-spacing-small) * 0.5) var(--badge-spacing-small);
+    font-size: 12px;
+    min-height: 20px;
+    min-width: 20px;
+    
+    &.badge--circular {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+    }
+  }
+  
+  &--medium {
+    padding: var(--badge-spacing-small) var(--badge-spacing);
+    font-size: 14px;
+    min-height: 28px;
+    min-width: 28px;
+    
+    &.badge--circular {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+    }
+  }
+  
+  &--large {
+    padding: var(--badge-spacing) calc(var(--badge-spacing) * 1.5);
+    font-size: 16px;
+    min-height: 36px;
+    min-width: 36px;
+    
+    &.badge--circular {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+    }
+  }
+  
+  // Color variants
+  &--primary {
+    background-color: var(--badge-primary);
+    color: var(--badge-primary-text);
+  }
+  
+  &--secondary {
+    background-color: var(--badge-secondary);
+    color: var(--badge-secondary-text);
+    border: 1px solid var(--spectrum-color-outline, #e0e0e0);
+  }
+  
+  &--success {
+    background-color: var(--badge-success);
+    color: var(--badge-success-text);
+  }
+  
+  &--warning {
+    background-color: var(--badge-warning);
+    color: var(--badge-warning-text);
+  }
+  
+  &--danger {
+    background-color: var(--badge-danger);
+    color: var(--badge-danger-text);
+  }
+}
+
+// Text content
+.badge__text {
+  line-height: 1;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+// Hover effects (optional - can be enabled via CSS classes)
+.badge:hover {
+  box-shadow: var(--badge-shadow-hover);
+  transform: translateY(-1px);
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  :host {
+    --badge-secondary: var(--spectrum-color-surface-container, #2a2a2a);
+    --badge-secondary-text: var(--spectrum-color-on-surface, #ffffff);
+  }
+}
+
+// High contrast support
+@media (prefers-contrast: high) {
+  .badge {
+    border: 2px solid currentColor;
+    
+    &--secondary {
+      border-width: 2px;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .badge {
+    transition: none;
+  }
+  
+  .badge:hover {
+    transform: none;
+  }
+}

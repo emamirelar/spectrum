@@ -1,0 +1,114 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Spectrum/Components/SpectrumCollapsibleList/Dependencies" />
+
+# 🔗 SpectrumCollapsibleList Dependencies
+
+This document shows the dependency relationships for the spectrum-collapsible-list component and how it integrates with other components in the Spectrum system.
+
+---
+
+## 📋 Component Usage Overview
+
+**spectrum-collapsible-list** is a Level 2 composed component with 1 internal dependency. The collapsible-list component provides...
+
+### Dependencies
+- **spectrum-context-menu** (internal dependency)
+
+### Components Using spectrum-collapsible-list
+- **spectrum-rail**
+
+---
+
+## 🔍 Visual Dependencies
+
+<mermaid-diagram chart="graph TD
+    SPECTRUMCONTEXTMENU[spectrum-context-menu] --> |Used by| SC[spectrum-collapsible-list]
+    SC[spectrum-collapsible-list] --> |Used by| SPECTRUMRAIL[spectrum-rail]
+    
+    classDef foundation fill:#e1f5fe
+    classDef dependent fill:#f3e5f5
+    classDef application fill:#fff3e0
+    
+    class SC foundation
+    class SPECTRUMCONTEXTMENU dependent
+    class SPECTRUMRAIL application" />
+
+---
+
+## 🏗️ Architecture Integration
+
+### SpectrumCollapsibleList Integration Pattern
+The spectrum-collapsible-list component follows a composed integration pattern with multiple internal dependencies:
+
+```typescript
+// Integration pattern example
+import { Component, h, Prop } from '@stencil/core';
+
+@Component({
+  tag: 'example-component'
+})
+export class ExampleComponent {
+  @Prop() items?: CollapsibleListItem[];
+  @Prop() filter?: string;
+  @Prop() contextActions?: ContextMenuAction[];
+
+  render() {
+    return (
+      <div class="example-component">
+        <spectrum-collapsible-list
+          items={this.items}
+          filter={this.filter}
+        >
+          Component Content
+        </spectrum-collapsible-list>
+      </div>
+    );
+  }
+}
+```
+
+---
+
+## 🔄 Event Flow
+
+### Standard Component Events
+1. **childAction**: Component interaction event
+1. **expandAction**: Component interaction event
+1. **contractAction**: Component interaction event
+1. **contextAction**: Component interaction event
+1. **itemRenamed**: Component interaction event
+
+---
+
+## 🚀 Integration Benefits
+
+### Consistency
+- Uniform component behavior across applications
+- Consistent styling and interaction patterns
+- Standardized accessibility features
+
+### Maintainability  
+- Composed architecture allows for modular updates
+- Centralized component logic
+- Simplified testing and debugging
+
+### Performance
+- Optimized component implementation
+- Efficient dependency management
+- Consistent memory usage patterns
+
+---
+
+## 🔧 Development Considerations
+
+### When Modifying spectrum-collapsible-list
+1. **Impact Assessment** - Changes may affect internal dependencies
+2. **Breaking Change Analysis** - Property or event signature changes require coordination
+3. **Comprehensive Testing** - Test all integration scenarios  
+4. **Performance Testing** - Verify no performance regressions
+5. **Documentation Updates** - Update component and integration documentation
+
+---
+
+**Integration Documentation** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Architecture Guidelines](../../../ARCHITECTURE.md)

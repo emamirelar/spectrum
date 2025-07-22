@@ -18,9 +18,14 @@ export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccor
   'horizontalScroll',
   'disabled',
   'variant',
+  'chipVariant',
   'outline',
+  'expandMode',
+  'sections',
   'accordionId',
   'debug',
+  'accordionToggle'
+], [
   'accordionToggle'
 ], [
   'accordionToggle'
@@ -97,6 +102,15 @@ export const SpectrumAvatar = /*@__PURE__*/ defineContainer<JSX.SpectrumAvatar>(
   'avatarAction'
 ], [
   'avatarAction'
+]);
+
+
+export const SpectrumBadge = /*@__PURE__*/ defineContainer<JSX.SpectrumBadge>('spectrum-badge', undefined, [
+  'variant',
+  'size',
+  'text',
+  'circular',
+  'debug'
 ]);
 
 
@@ -215,6 +229,13 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
   'loading',
   'sound',
   'debug',
+  'background',
+  'explorationSelected',
+  'action',
+  'explore',
+  'sourceClick',
+  'titleChanged'
+], [
   'explorationSelected',
   'action',
   'explore',
@@ -302,19 +323,26 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
   'selectedImages',
   'scrollDirection',
   'previewMode',
-  'frostBackground',
+  'background',
+  'frostControlBar',
   'debug',
+  'galleryTitle',
+  'primaryActionText',
+  'primaryActionIcon',
+  'primaryActionValue',
   'imageSelected',
   'imageDeselect',
   'imageAdded',
   'imageDeleted',
-  'imagePreview'
+  'imagePreview',
+  'primaryAction'
 ], [
   'imageSelected',
   'imageDeselect',
   'imageAdded',
   'imageDeleted',
-  'imagePreview'
+  'imagePreview',
+  'primaryAction'
 ]);
 
 
@@ -332,10 +360,17 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
 
 export const SpectrumPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumPanel>('spectrum-panel', undefined, [
   'frost',
+  'background',
   'debug',
   'size',
   'width',
-  'height'
+  'height',
+  'noPadding',
+  'panelTitle',
+  'titleEditable',
+  'titleChanged'
+], [
+  'titleChanged'
 ]);
 
 
@@ -349,15 +384,19 @@ export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spe
   'addLabel',
   'addIcon',
   'collapsedOffset',
+  'moreContextActions',
+  'debug',
   'expandedChange',
   'searchChange',
   'railAction',
-  'addAction'
+  'addAction',
+  'moreContextAction'
 ], [
   'expandedChange',
   'searchChange',
   'railAction',
-  'addAction'
+  'addAction',
+  'moreContextAction'
 ]);
 
 
@@ -509,7 +548,8 @@ export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallp
   'debug',
   'preloadColors',
   'signalReady',
-  'backgroundposition',
-  'backgroundsize'
+  'applyToRoot',
+  'backgroundPosition',
+  'backgroundSize'
 ]);
 
