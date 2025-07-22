@@ -55,8 +55,10 @@ const config: StorybookConfig = {
             manualChunks: (id) => {
               // Bundle node_modules separately to avoid dynamic import issues
               if (id.includes('node_modules')) {
+                // Don't separate Mermaid into its own chunk for GitHub Pages compatibility
+                // Instead, bundle it with the main vendor chunk to avoid initialization issues
                 if (id.includes('mermaid')) {
-                  return 'mermaid';
+                  return 'vendor';
                 }
                 if (id.includes('lit')) {
                   return 'lit';
@@ -78,7 +80,8 @@ const config: StorybookConfig = {
         'global': 'globalThis',
       },
       optimizeDeps: {
-        include: ['react', 'react-dom', 'react/jsx-runtime'],
+        include: ['react', 'react-dom', 'react/jsx-runtime', 'mermaid'],
+        force: true,
       },
     });
   },
