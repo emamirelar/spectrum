@@ -2,168 +2,121 @@ import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import { action } from 'storybook/actions';
 
-// Import organized examples
-import {
-  ContextMenuBasic,
-  ContextMenuStandard,
-  ContextMenuExtended,
-  PositionExamples,
-  InteractiveDemo,
-  EmptyMenuDemo
-} from './Examples/BasicExamples';
+/**
+ * ## SpectrumContextMenu Component
+ * 
+ * The `spectrum-context-menu` component provides a dynamic contextual actions menu that can be programmatically positioned and displayed with custom action lists. It's designed for integration with other components to provide context-sensitive user actions.
+ * 
+ * ### Key Features
+ * - **Dynamic Action Lists**: Display custom actions with icons and labels
+ * - **Intelligent Positioning**: Automatic positioning with 'left', 'right', 'top', 'bottom' options
+ * - **Programmatic Control**: Show/hide via JavaScript methods with coordinate positioning
+ * - **Event Integration**: Emits actionClick and menuClose events with action attributes
+ * - **Contextual Targeting**: Associates actions with specific target keys for multi-component integration
+ * - **Enhanced Positioning**: Supports 'bottom' alignment to prevent viewport clipping
+ * 
+ * ### Usage Guidelines
+ * - **Use for**: Context-sensitive actions, right-click menus, dropdown action lists, toolbar overflow menus
+ * - **Avoid when**: Simple dropdowns, primary navigation, always-visible action buttons
+ * 
+ * ### Integration Pattern
+ * Used by `spectrum-collapsible-list` and `spectrum-rail` for providing contextual actions on list items and navigation elements.
+ * 
+ * ### Event System (Component Events Rule Compliant)
+ * All events follow the Component Events Rule with consistent action attributes:
+ * - **actionClick**: `{ action: string, targetKey: string }` - Emitted when user clicks a menu action
+ * - **menuClose**: `{ action: string }` - Emitted when menu is closed or hidden
+ */
 
-import {
-  FileManagerActions,
-  ContentCreationActions,
-  TextEditorActions,
-  DataTableActions,
-  MediaGalleryActions,
-  DashboardWidgetActions,
-  AllVariantsShowcase
-} from './Examples/VariantExamples';
+// Component interfaces for TypeScript support
+export interface ContextMenuAction {
+  label: string;
+  icon: string;
+  action: string;
+  id: string;
+  ripple?: boolean;
+}
 
-import {
-  PositioningDemo,
-  RippleEffectsDemo,
-  CustomEventHandling,
-  DynamicActionLists,
-  AccessibilityFeatures,
-  PerformanceTest,
-  AllFeaturesShowcase
-} from './Examples/FeatureExamples';
+interface SpectrumContextMenuElement extends HTMLElement {
+  position: 'left' | 'right' | 'top' | 'bottom';
+  show(actions: ContextMenuAction[], x: number, y: number, targetKey: string): Promise<void>;
+  hide(): Promise<void>;
+  isMenuOpen(): Promise<boolean>;
+  positionAtCoordinates(x: number, y: number): Promise<boolean>;
+}
 
-import {
-  FileSystemManager,
-  EmailApplication,
-  CodeEditorInterface,
-  EcommerceProductGrid,
-  SocialMediaFeed,
-  DashboardAnalytics,
-  AllUsageExamples
-} from './Examples/UsageExamples';
-
+// Story arguments interface
 interface SpectrumContextMenuArgs {
-  position: 'auto' | 'top' | 'bottom';
-  ripple: boolean;
-  actions: Array<{
-    id: string;
-    label: string;
-    icon: string;
-    separator?: boolean;
-    destructive?: boolean;
-  }>;
+  position: 'left' | 'right' | 'top' | 'bottom';
+  sampleActions: ContextMenuAction[];
 }
 
 const meta: Meta<SpectrumContextMenuArgs> = {
   title: 'Spectrum/Components/SpectrumContextMenu',
-  component: 'spectrum-context-menu',
   tags: ['autodocs'],
   parameters: {
-    layout: 'padded',
     docs: {
       description: {
         component: `
-# Spectrum Context Menu
+The \`spectrum-context-menu\` component provides dynamic contextual actions with intelligent positioning. It's designed for programmatic control and integration with other components.
 
-A flexible context menu component for displaying contextual actions and options. Provides intelligent positioning, rich interaction patterns, and comprehensive accessibility support.
-
-## Key Features
-
-- **Smart Positioning**: Auto-adjusts to viewport boundaries with 'auto', 'top', and 'bottom' positioning
-- **Rich Actions**: Support for icons, separators, and destructive action styling  
-- **Ripple Effects**: Optional visual feedback with configurable ripple animations
-- **Event System**: Comprehensive event handling with detailed action information
-- **Accessibility**: Full keyboard navigation and screen reader support
-- **Performance**: Optimized rendering for large action lists and frequent updates
-
-## Integration
-
-This component is used by:
-- **spectrum-collapsible-list**: Context actions for list items and hierarchy management
-- **spectrum-rail**: "More" button context menu with navigation actions
-
-## Mermaid Dependency Diagram
-
-\`\`\`mermaid
-graph TD;
-  spectrum-collapsible-list --> spectrum-context-menu
-  spectrum-rail --> spectrum-context-menu
-  
-  style spectrum-context-menu fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
-  style spectrum-collapsible-list fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-  style spectrum-rail fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-
-  classDef features fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-  
-  menu-positioning[Smart Positioning<br/>Auto • Top • Bottom<br/>Viewport Aware]
-  menu-actions[Action Types<br/>Standard • Destructive<br/>Separators • Icons]
-  menu-interactions[Interactions<br/>Click • Keyboard<br/>Ripple Effects]
-  
-  spectrum-context-menu --> menu-positioning
-  spectrum-context-menu --> menu-actions  
-  spectrum-context-menu --> menu-interactions
-  
-  class menu-positioning features
-  class menu-actions features
-  class menu-interactions features
-\`\`\`
-
-## Positioning System
-
-### Auto Positioning (Recommended)
-Automatically chooses the best position based on available viewport space.
-
-### Manual Positioning  
-- **Top**: Forces menu to appear above the trigger
-- **Bottom**: Forces menu to appear below the trigger
-
-## Action Structure
-
-Actions support comprehensive metadata for flexible menu construction:
-
+### ContextMenuAction Interface
 \`\`\`typescript
 interface ContextMenuAction {
-  id: string;           // Unique action identifier
-  label: string;        // Display text
-  icon: string;         // Material Design icon name
-  separator?: boolean;  // Renders as visual separator
-  destructive?: boolean;// Applies destructive styling (red)
+  label: string;    // Display text
+  icon: string;     // Material Symbols icon name
+  action: string;   // Action identifier
+  id: string;       // Unique identifier
+  ripple?: boolean; // Optional ripple effect
 }
 \`\`\`
 
-## Use Cases
+### Methods
+- \`show(actions, x, y, targetKey)\` - Display menu with actions at coordinates
+- \`hide()\` - Close the menu
+- \`isMenuOpen()\` - Check if menu is currently open
+- \`positionAtCoordinates(x, y)\` - Position menu at specific coordinates
 
-- **File Management**: Right-click context menus for files and folders
-- **Content Creation**: Text editing and formatting actions
-- **Data Tables**: Row-level operations and bulk actions
-- **Media Libraries**: Asset management and manipulation
-- **Dashboard Widgets**: Configuration and management options
-- **Code Editors**: Development tools and refactoring actions
+### Event System
+- \`actionClick\`: Emitted when action is selected with action and targetKey
+- \`menuClose\`: Emitted when menu is closed with close action
+
+### Basic Usage
+Use JavaScript to programmatically show the context menu:
+
+\`\`\`javascript
+const contextMenu = document.querySelector('spectrum-context-menu');
+const actions = [
+  { id: 'edit', action: 'edit', label: 'Edit', icon: 'edit' },
+  { id: 'delete', action: 'delete', label: 'Delete', icon: 'delete' }
+];
+contextMenu.show(actions, 100, 200, 'item-1');
+\`\`\`
         `
       }
     }
   },
+  args: {
+    position: 'right',
+    sampleActions: [
+      { id: 'edit', action: 'edit', label: 'Edit', icon: 'edit' },
+      { id: 'copy', action: 'copy', label: 'Copy', icon: 'content_copy' },
+      { id: 'delete', action: 'delete', label: 'Delete', icon: 'delete' }
+    ]
+  },
   argTypes: {
     position: {
-      control: { type: 'select' },
-      options: ['auto', 'top', 'bottom'],
-      description: 'Menu positioning relative to trigger element',
+      control: 'select',
+      options: ['left', 'right', 'top', 'bottom'],
+      description: 'Preferred positioning relative to trigger point',
       table: {
-        type: { summary: "'auto' | 'top' | 'bottom'" },
-        defaultValue: { summary: 'auto' }
+        type: { summary: "'left' | 'right' | 'top' | 'bottom'" },
+        defaultValue: { summary: 'right' }
       }
     },
-    ripple: {
-      control: 'boolean',
-      description: 'Whether to show ripple effect on action click',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    },
-    actions: {
+    sampleActions: {
       control: 'object',
-      description: 'Array of menu actions with icons and metadata',
+      description: 'Sample actions for demonstration (not a real prop)',
       table: {
         type: { summary: 'ContextMenuAction[]' },
         defaultValue: { summary: '[]' }
@@ -175,221 +128,656 @@ interface ContextMenuAction {
 export default meta;
 type Story = StoryObj<SpectrumContextMenuArgs>;
 
-// ==============================================
-// Playground Story
-// ==============================================
-
-export const SpectrumPlayground: Story = {
-  args: {
-    position: 'auto',
-    ripple: false,
-    actions: [
-      { id: 'edit', label: 'Edit Item', icon: 'edit' },
-      { id: 'copy', label: 'Copy', icon: 'content_copy' },
-      { id: 'share', label: 'Share', icon: 'share' },
-      { id: 'separator1', label: '', icon: '', separator: true },
-      { id: 'archive', label: 'Archive', icon: 'archive' },
-      { id: 'delete', label: 'Delete', icon: 'delete', destructive: true }
-    ]
-  },
-  render: (args) => html`
-    <div style="display: flex; align-items: center; justify-content: center; min-height: 200px;">
-      <div style="position: relative;">
+// Interactive render function with demo trigger
+const renderContextMenuDemo = (args: SpectrumContextMenuArgs) => html`
+  <div style="padding: 4rem; display: flex; flex-direction: column; align-items: center; gap: 2rem; min-height: 400px; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h3 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">Context Menu Demo</h3>
+      <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant);">Right-click the buttons below to see the context menu in action</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; width: 100%; max-width: 600px;">
+      <div style="text-align: center;">
         <button 
-          style="padding: 1rem 2rem; border: 1px solid var(--spectrum-color-outline); border-radius: 8px; background: var(--spectrum-color-surface); cursor: pointer; font-size: 1rem;"
-          @click=${(e: Event) => {
-            const menu = (e.target as Element).nextElementSibling as any;
-            menu.show();
+          id="demo-button-1"
+          style="padding: 1rem 2rem; background: var(--spectrum-sys-color-primary); color: var(--spectrum-sys-color-on-primary); border: none; border-radius: 8px; cursor: pointer; min-width: 150px;"
+          @contextmenu=${(e: MouseEvent) => {
+            e.preventDefault();
+            const menu = (e.target as HTMLElement)?.closest('div')?.querySelector('spectrum-context-menu') as SpectrumContextMenuElement;
+            if (menu) {
+              menu.show(args.sampleActions, e.clientX, e.clientY, 'demo-item-1');
+            }
           }}
         >
-          Click for Context Menu
+          Right-click me
         </button>
-        <spectrum-context-menu
-          .position=${args.position}
-          .ripple=${args.ripple}
-          .actions=${args.actions}
-          @contextMenuAction=${(e: CustomEvent) => action('Context Menu Action')(e.detail)}
-        ></spectrum-context-menu>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">Basic Actions</p>
+      </div>
+      
+      <div style="text-align: center;">
+        <button 
+          id="demo-button-2"
+          style="padding: 1rem 2rem; background: var(--spectrum-sys-color-secondary); color: var(--spectrum-sys-color-on-secondary); border: none; border-radius: 8px; cursor: pointer; min-width: 150px;"
+          @contextmenu=${(e: MouseEvent) => {
+            e.preventDefault();
+            const menu = (e.target as HTMLElement)?.closest('div')?.querySelector('spectrum-context-menu') as SpectrumContextMenuElement;
+            const advancedActions = [
+              { id: 'share', action: 'share', label: 'Share', icon: 'share' },
+              { id: 'download', action: 'download', label: 'Download', icon: 'download' },
+              { id: 'info', action: 'info', label: 'Get Info', icon: 'info' },
+              { id: 'archive', action: 'archive', label: 'Archive', icon: 'archive' }
+            ];
+            if (menu) {
+              menu.show(advancedActions, e.clientX, e.clientY, 'demo-item-2');
+            }
+          }}
+        >
+          Right-click me
+        </button>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">Extended Actions</p>
       </div>
     </div>
-  `,
+    
+    <spectrum-context-menu
+      .position=${args.position}
+      @actionClick=${(e: CustomEvent) => {
+        action('actionClick')(e.detail);
+        console.log('Action clicked:', e.detail);
+      }}
+      @menuClose=${(e: CustomEvent) => {
+        action('menuClose')(e.detail);
+        console.log('Menu closed:', e.detail);
+      }}
+    ></spectrum-context-menu>
+  </div>
+`;
+
+// =================================================================
+// INTERACTIVE PLAYGROUND
+// =================================================================
+
+/**
+ * Interactive playground to test the context menu with different positions and actions.
+ * Right-click the demo buttons to see the context menu in action.
+ */
+export const Playground: Story = {
+  render: renderContextMenuDemo,
   parameters: {
     docs: {
       description: {
-        story: 'Interactive playground for testing context menu configurations. Experiment with different positions, ripple effects, and action lists to see how they work together.'
+        story: `
+Use the controls panel to change the menu position, then right-click the demo buttons to see how the context menu appears in different positions. 
+The Actions panel will show all emitted events with their action attributes and target keys.
+
+### Testing Tips
+- Try different position values to see how the menu adapts
+- Right-click near screen edges to see intelligent positioning
+- Check the Actions panel for event details
+- Modify the sample actions to test different configurations
+        `
       }
     }
   }
 };
 
-// ==============================================
-// Basic Examples
-// ==============================================
+// =================================================================
+// POSITIONING EXAMPLES
+// =================================================================
 
-export const SpectrumBasicExamples: Story = {
+/**
+ * Demonstrates all four positioning options for the context menu.
+ */
+export const PositioningOptions: Story = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 3rem;">
-      
-      <div>
-        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Core Context Menu Types</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
-          
-          <div>
-            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Basic Actions</h4>
-            ${ContextMenuBasic.render(ContextMenuBasic.args)}
-          </div>
-          
-          <div>
-            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Standard Actions</h4>
-            ${ContextMenuStandard.render(ContextMenuStandard.args)}
-          </div>
-          
-          <div>
-            <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Extended Actions</h4>
-            ${ContextMenuExtended.render(ContextMenuExtended.args)}
-          </div>
-          
-        </div>
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h3 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">Context Menu Positioning</h3>
+        <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant);">Right-click each button to see different positioning behaviors</p>
       </div>
       
-      <div>
-        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Position Examples</h3>
-        ${PositionExamples.render()}
-      </div>
-      
-      <div>
-        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">Interactive Features</h3>
-        ${InteractiveDemo.render(InteractiveDemo.args)}
-      </div>
-      
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Basic context menu configurations demonstrating core functionality, positioning options, and interaction patterns. These examples show the foundation of context menu usage.'
-      }
-    }
-  }
-};
-
-// ==============================================
-// Variant Showcase
-// ==============================================
-
-export const SpectrumAllVariants: Story = {
-  render: AllVariantsShowcase.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comprehensive showcase of context menu variants for different application domains including file management, content creation, data tables, media galleries, and dashboard widgets.'
-      }
-    }
-  }
-};
-
-// ==============================================
-// Feature Demonstrations
-// ==============================================
-
-export const SpectrumFeatureDemonstrations: Story = {
-  render: AllFeaturesShowcase.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Advanced context menu features including smart positioning, ripple effects, custom event handling, dynamic action lists, accessibility features, and performance optimizations.'
-      }
-    }
-  }
-};
-
-// ==============================================
-// Real-World Usage Examples
-// ==============================================
-
-export const SpectrumUsageExamples: Story = {
-  render: AllUsageExamples.render,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Real-world usage patterns showing context menus in file systems, email applications, code editors, e-commerce platforms, social media, and analytics dashboards.'
-      }
-    }
-  }
-};
-
-export const SpectrumAccessibilityExamples: Story = {
-  render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 2rem;">
-      
-      <div style="padding: 1rem; background: var(--spectrum-color-surface-variant); border-radius: 8px;">
-        <h3 style="margin-bottom: 1rem; color: var(--spectrum-color-on-surface);">♿ Accessibility Features</h3>
-        <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8; color: var(--spectrum-color-on-surface-variant);">
-          <li><strong>Keyboard Navigation:</strong> Tab to trigger, Enter/Space to open, arrow keys to navigate</li>
-          <li><strong>Screen Reader Support:</strong> Proper ARIA labels, roles, and state announcements</li>
-          <li><strong>Focus Management:</strong> Visible focus indicators and logical focus flow</li>
-          <li><strong>High Contrast:</strong> Enhanced visibility in high contrast mode</li>
-          <li><strong>Reduced Motion:</strong> Respects user's motion preferences for animations</li>
-          <li><strong>Touch Accessibility:</strong> Appropriate touch targets for mobile devices</li>
-        </ul>
-      </div>
-      
-      <div>
-        <h4 style="margin-bottom: 0.5rem; color: var(--spectrum-color-on-surface-variant);">Accessible Context Menu</h4>
-        <div style="position: relative; display: inline-block;">
-          <button 
-            style="padding: 1rem; border: 1px solid var(--spectrum-color-outline); border-radius: 8px; background: var(--spectrum-color-surface); cursor: pointer;"
-            aria-label="Document options menu"
-            aria-describedby="menu-help-text"
-            @click=${(e: Event) => {
-              const menu = (e.target as Element).nextElementSibling as any;
-              menu.show();
-            }}
-            @keydown=${(e: KeyboardEvent) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 800px; margin: 0 auto;">
+        ${['left', 'right', 'top', 'bottom'].map(position => html`
+          <div style="text-align: center; padding: 1rem; border: 1px solid var(--spectrum-sys-color-outline); border-radius: 8px;">
+            <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface); text-transform: capitalize;">${position} Position</h4>
+            <button 
+              style="padding: 1rem 2rem; background: var(--spectrum-sys-color-primary); color: var(--spectrum-sys-color-on-primary); border: none; border-radius: 8px; cursor: pointer;"
+              @contextmenu=${(e: MouseEvent) => {
                 e.preventDefault();
-                const menu = (e.target as Element).nextElementSibling as any;
-                menu.show();
-              }
-            }}
-          >
-            📄 Document Options
-          </button>
-          <spectrum-context-menu
-            position="bottom"
-            .actions=${[
-              { id: 'open', label: 'Open Document', icon: 'open_in_new' },
-              { id: 'edit', label: 'Edit Document', icon: 'edit' },
-              { id: 'print', label: 'Print Document', icon: 'print' },
-              { id: 'separator1', label: '', icon: '', separator: true },
-              { id: 'share', label: 'Share with Others', icon: 'share' },
-              { id: 'export', label: 'Export as PDF', icon: 'picture_as_pdf' },
-              { id: 'separator2', label: '', icon: '', separator: true },
-              { id: 'properties', label: 'Document Properties', icon: 'info' },
-              { id: 'separator3', label: '', icon: '', separator: true },
-              { id: 'delete', label: 'Delete Document', icon: 'delete', destructive: true }
-            ]}
-            @contextMenuAction=${(e: CustomEvent) => action('Accessible Action')(e.detail)}
-          ></spectrum-context-menu>
-          <div id="menu-help-text" style="display: none;">
-            Context menu with document operations. Use arrow keys to navigate menu items when open.
+                const menu = document.getElementById(`menu-${position}`) as SpectrumContextMenuElement;
+                const actions = [
+                  { id: 'action1', action: 'edit', label: 'Edit Item', icon: 'edit' },
+                  { id: 'action2', action: 'duplicate', label: 'Duplicate', icon: 'content_copy' },
+                  { id: 'action3', action: 'delete', label: 'Delete', icon: 'delete' }
+                ];
+                menu.show(actions, e.clientX, e.clientY, `target-${position}`);
+              }}
+            >
+              Right-click (${position})
+            </button>
+            <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">Menu appears ${position}</p>
+            
+            <spectrum-context-menu
+              id="menu-${position}"
+              .position=${position as any}
+              @actionClick=${(e: CustomEvent) => action('actionClick')(`[${position}] ${JSON.stringify(e.detail)}`)}
+              @menuClose=${(e: CustomEvent) => action('menuClose')(`[${position}] ${JSON.stringify(e.detail)}`)}
+            ></spectrum-context-menu>
           </div>
-        </div>
-        <p style="margin-top: 1rem; color: var(--spectrum-color-on-surface-variant); font-size: 0.9rem;">
-          ℹ️ This menu demonstrates full keyboard accessibility with proper ARIA labeling and focus management.
-        </p>
+        `)}
       </div>
-      
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: 'Accessibility features and best practices for context menu components, including keyboard navigation, screen reader support, and inclusive design considerations.'
+        story: `
+Test all four positioning options to see how the context menu adapts its position relative to the trigger point:
+
+- **Left**: Menu appears to the left of the trigger point
+- **Right**: Menu appears to the right of the trigger point (default)
+- **Top**: Menu appears above the trigger point
+- **Bottom**: Menu appears below the trigger point
+
+The menu includes intelligent positioning to prevent viewport clipping at screen edges.
+        `
       }
     }
   }
 };
 
-// Legacy alias for backward compatibility
-export const Default = SpectrumPlayground;
+// =================================================================
+// ACTION TYPES EXAMPLES
+// =================================================================
+
+/**
+ * Demonstrates different types of actions commonly used in context menus.
+ */
+export const ActionTypes: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h3 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">Context Menu Action Types</h3>
+        <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant);">Right-click each item to see different action configurations</p>
+      </div>
+      
+      <div style="display: grid; gap: 1.5rem; max-width: 600px; margin: 0 auto;">
+        <div style="padding: 1.5rem; border: 1px solid var(--spectrum-sys-color-outline); border-radius: 8px; cursor: context-menu;"
+             @contextmenu=${(e: MouseEvent) => {
+               e.preventDefault();
+               const menu = document.getElementById('file-menu') as SpectrumContextMenuElement;
+               const fileActions = [
+                 { id: 'open', action: 'open', label: 'Open', icon: 'folder_open' },
+                 { id: 'edit', action: 'edit', label: 'Edit', icon: 'edit' },
+                 { id: 'rename', action: 'rename', label: 'Rename', icon: 'drive_file_rename_outline' },
+                 { id: 'duplicate', action: 'duplicate', label: 'Duplicate', icon: 'content_copy' },
+                 { id: 'move', action: 'move', label: 'Move to...', icon: 'drive_file_move' },
+                 { id: 'delete', action: 'delete', label: 'Delete', icon: 'delete' }
+               ];
+               menu.show(fileActions, e.clientX, e.clientY, 'file-item');
+             }}>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <span class="material-symbols-outlined" style="color: var(--spectrum-sys-color-primary);">description</span>
+            <div>
+              <h4 style="margin: 0; color: var(--spectrum-sys-color-on-surface);">Document.pdf</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">File Management Actions</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 1px solid var(--spectrum-sys-color-outline); border-radius: 8px; cursor: context-menu;"
+             @contextmenu=${(e: MouseEvent) => {
+               e.preventDefault();
+               const menu = document.getElementById('user-menu') as SpectrumContextMenuElement;
+               const userActions = [
+                 { id: 'profile', action: 'view-profile', label: 'View Profile', icon: 'person' },
+                 { id: 'message', action: 'send-message', label: 'Send Message', icon: 'message' },
+                 { id: 'call', action: 'start-call', label: 'Start Call', icon: 'call' },
+                 { id: 'block', action: 'block-user', label: 'Block User', icon: 'block' }
+               ];
+               menu.show(userActions, e.clientX, e.clientY, 'user-john');
+             }}>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <span class="material-symbols-outlined" style="color: var(--spectrum-sys-color-secondary);">account_circle</span>
+            <div>
+              <h4 style="margin: 0; color: var(--spectrum-sys-color-on-surface);">John Smith</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">User Management Actions</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="padding: 1.5rem; border: 1px solid var(--spectrum-sys-color-outline); border-radius: 8px; cursor: context-menu;"
+             @contextmenu=${(e: MouseEvent) => {
+               e.preventDefault();
+               const menu = document.getElementById('data-menu') as SpectrumContextMenuElement;
+               const dataActions = [
+                 { id: 'export', action: 'export-data', label: 'Export Data', icon: 'file_download' },
+                 { id: 'share', action: 'share-link', label: 'Share Link', icon: 'share' },
+                 { id: 'favorite', action: 'add-favorite', label: 'Add to Favorites', icon: 'star' },
+                 { id: 'bookmark', action: 'bookmark', label: 'Bookmark', icon: 'bookmark' },
+                 { id: 'print', action: 'print', label: 'Print', icon: 'print' }
+               ];
+               menu.show(dataActions, e.clientX, e.clientY, 'data-table');
+             }}>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <span class="material-symbols-outlined" style="color: var(--spectrum-sys-color-tertiary);">table_chart</span>
+            <div>
+              <h4 style="margin: 0; color: var(--spectrum-sys-color-on-surface);">Sales Report Q4</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">Data & Sharing Actions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <spectrum-context-menu id="file-menu" @actionClick=${(e: CustomEvent) => action('actionClick')(`[File] ${JSON.stringify(e.detail)}`)} @menuClose=${(e: CustomEvent) => action('menuClose')(e.detail)}></spectrum-context-menu>
+      <spectrum-context-menu id="user-menu" @actionClick=${(e: CustomEvent) => action('actionClick')(`[User] ${JSON.stringify(e.detail)}`)} @menuClose=${(e: CustomEvent) => action('menuClose')(e.detail)}></spectrum-context-menu>
+      <spectrum-context-menu id="data-menu" @actionClick=${(e: CustomEvent) => action('actionClick')(`[Data] ${JSON.stringify(e.detail)}`)} @menuClose=${(e: CustomEvent) => action('menuClose')(e.detail)}></spectrum-context-menu>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Examples of different action types commonly used in context menus across various use cases:
+
+### File Management
+Right-click the document to see file operations like open, edit, rename, duplicate, move, and delete.
+
+### User Management  
+Right-click the user profile to see social actions like view profile, send message, start call, and block user.
+
+### Data & Sharing
+Right-click the data table to see export, sharing, and utility actions like export data, share link, add to favorites, bookmark, and print.
+
+Each context demonstrates different icon usage and action groupings appropriate for the content type.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// INTEGRATION EXAMPLES
+// =================================================================
+
+/**
+ * Shows how context menus integrate with lists and navigation components.
+ */
+export const IntegrationExamples: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h3 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">Component Integration Examples</h3>
+        <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant);">How context menus work with lists and navigation</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 0 auto;">
+        <!-- File Explorer Simulation -->
+        <div style="border: 1px solid var(--spectrum-sys-color-outline); border-radius: 8px; overflow: hidden;">
+          <div style="padding: 1rem; background: var(--spectrum-sys-color-primary-container); color: var(--spectrum-sys-color-on-primary-container);">
+            <h4 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+              <span class="material-symbols-outlined">folder</span>
+              File Explorer
+            </h4>
+          </div>
+          <div style="padding: 0;">
+            ${[
+              { name: 'Documents', icon: 'folder', type: 'folder' },
+              { name: 'presentation.pptx', icon: 'slideshow', type: 'file' },
+              { name: 'report.pdf', icon: 'picture_as_pdf', type: 'file' },
+              { name: 'image.jpg', icon: 'image', type: 'file' }
+            ].map((item, index) => html`
+              <div 
+                style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--spectrum-sys-color-outline-variant); cursor: context-menu; display: flex; align-items: center; gap: 0.75rem; transition: background-color 0.2s;"
+                @mouseover=${(e: Event) => (e.target as HTMLElement).style.backgroundColor = 'var(--spectrum-sys-color-surface-hover)'}
+                @mouseout=${(e: Event) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
+                @contextmenu=${(e: MouseEvent) => {
+                  e.preventDefault();
+                  const menu = document.getElementById('file-explorer-menu') as SpectrumContextMenuElement;
+                  const actions = item.type === 'folder' ? [
+                    { id: 'open', action: 'open-folder', label: 'Open', icon: 'folder_open' },
+                    { id: 'rename', action: 'rename', label: 'Rename', icon: 'edit' },
+                    { id: 'delete', action: 'delete', label: 'Delete', icon: 'delete' }
+                  ] : [
+                    { id: 'open', action: 'open-file', label: 'Open', icon: 'open_in_new' },
+                    { id: 'download', action: 'download', label: 'Download', icon: 'download' },
+                    { id: 'share', action: 'share', label: 'Share', icon: 'share' },
+                    { id: 'rename', action: 'rename', label: 'Rename', icon: 'edit' },
+                    { id: 'delete', action: 'delete', label: 'Delete', icon: 'delete' }
+                  ];
+                  menu.show(actions, e.clientX, e.clientY, `file-${index}`);
+                }}
+              >
+                <span class="material-symbols-outlined" style="color: var(--spectrum-sys-color-primary);">${item.icon}</span>
+                <span style="color: var(--spectrum-sys-color-on-surface);">${item.name}</span>
+              </div>
+            `)}
+          </div>
+        </div>
+        
+        <!-- Navigation Menu Simulation -->
+        <div style="border: 1px solid var(--spectrum-sys-color-outline); border-radius: 8px; overflow: hidden;">
+          <div style="padding: 1rem; background: var(--spectrum-sys-color-secondary-container); color: var(--spectrum-sys-color-on-secondary-container);">
+            <h4 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+              <span class="material-symbols-outlined">menu</span>
+              Navigation Menu
+            </h4>
+          </div>
+          <div style="padding: 0;">
+            ${[
+              { name: 'Dashboard', icon: 'dashboard', badge: null },
+              { name: 'Projects', icon: 'work', badge: '3' },
+              { name: 'Messages', icon: 'mail', badge: '12' },
+              { name: 'Settings', icon: 'settings', badge: null }
+            ].map((item, index) => html`
+              <div 
+                style="padding: 1rem; border-bottom: 1px solid var(--spectrum-sys-color-outline-variant); cursor: context-menu; display: flex; align-items: center; gap: 0.75rem; justify-content: space-between; transition: background-color 0.2s;"
+                @mouseover=${(e: Event) => (e.target as HTMLElement).style.backgroundColor = 'var(--spectrum-sys-color-surface-hover)'}
+                @mouseout=${(e: Event) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
+                @contextmenu=${(e: MouseEvent) => {
+                  e.preventDefault();
+                  const menu = document.getElementById('nav-menu') as SpectrumContextMenuElement;
+                  const actions = [
+                    { id: 'open', action: 'open-tab', label: 'Open in New Tab', icon: 'open_in_new' },
+                    { id: 'pin', action: 'pin', label: 'Pin to Top', icon: 'push_pin' },
+                    { id: 'hide', action: 'hide', label: 'Hide from Menu', icon: 'visibility_off' },
+                    { id: 'settings', action: 'configure', label: 'Configure', icon: 'tune' }
+                  ];
+                  menu.show(actions, e.clientX, e.clientY, `nav-${index}`);
+                }}
+              >
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <span class="material-symbols-outlined" style="color: var(--spectrum-sys-color-secondary);">${item.icon}</span>
+                  <span style="color: var(--spectrum-sys-color-on-surface);">${item.name}</span>
+                </div>
+                ${item.badge ? html`
+                  <span style="background: var(--spectrum-sys-color-error); color: var(--spectrum-sys-color-on-error); padding: 0.125rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 500;">
+                    ${item.badge}
+                  </span>
+                ` : ''}
+              </div>
+            `)}
+          </div>
+        </div>
+      </div>
+      
+      <spectrum-context-menu id="file-explorer-menu" position="right" @actionClick=${(e: CustomEvent) => action('actionClick')(`[Explorer] ${JSON.stringify(e.detail)}`)} @menuClose=${(e: CustomEvent) => action('menuClose')(e.detail)}></spectrum-context-menu>
+      <spectrum-context-menu id="nav-menu" position="right" @actionClick=${(e: CustomEvent) => action('actionClick')(`[Navigation] ${JSON.stringify(e.detail)}`)} @menuClose=${(e: CustomEvent) => action('menuClose')(e.detail)}></spectrum-context-menu>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Real-world integration examples showing how context menus work with different types of content:
+
+### File Explorer Integration
+Right-click files and folders to see contextual actions. Folders show different actions than files, demonstrating dynamic action lists based on content type.
+
+### Navigation Menu Integration
+Right-click navigation items to see menu management actions like opening in new tab, pinning, hiding, and configuration.
+
+### Integration Features
+- **Dynamic Actions**: Different actions based on item type
+- **Target Identification**: Each item has a unique target key
+- **Event Propagation**: Actions include both action type and target information
+- **Visual Feedback**: Hover states and proper cursor indicators
+
+This demonstrates the pattern used by \`spectrum-collapsible-list\` and \`spectrum-rail\` components.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// PROGRAMMATIC CONTROL
+// =================================================================
+
+/**
+ * Demonstrates programmatic control of the context menu via JavaScript.
+ */
+export const ProgrammaticControl: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h3 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">Programmatic Control</h3>
+        <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant);">Control the context menu via JavaScript methods</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; max-width: 800px; margin: 0 auto 2rem auto;">
+        <button 
+          style="padding: 1rem; background: var(--spectrum-sys-color-primary); color: var(--spectrum-sys-color-on-primary); border: none; border-radius: 8px; cursor: pointer;"
+          @click=${() => {
+            const menu = document.getElementById('programmatic-menu') as SpectrumContextMenuElement;
+            const actions = [
+              { id: 'action1', action: 'quick-action', label: 'Quick Action', icon: 'flash_on' },
+              { id: 'action2', action: 'settings', label: 'Settings', icon: 'settings' }
+            ];
+            // Show at center of button
+            const rect = (event?.target as HTMLElement)?.getBoundingClientRect();
+            if (rect) {
+              menu.show(actions, rect.left + rect.width / 2, rect.top + rect.height / 2, 'programmatic-trigger');
+            }
+          }}
+        >
+          Show Menu (Center)
+        </button>
+        
+        <button 
+          style="padding: 1rem; background: var(--spectrum-sys-color-secondary); color: var(--spectrum-sys-color-on-secondary); border: none; border-radius: 8px; cursor: pointer;"
+          @click=${(e: MouseEvent) => {
+            const menu = document.getElementById('programmatic-menu') as SpectrumContextMenuElement;
+            const actions = [
+              { id: 'action1', action: 'edit', label: 'Edit Item', icon: 'edit' },
+              { id: 'action2', action: 'copy', label: 'Copy Link', icon: 'link' },
+              { id: 'action3', action: 'delete', label: 'Delete', icon: 'delete' }
+            ];
+            // Show at mouse position
+            menu.show(actions, e.clientX, e.clientY, 'mouse-trigger');
+          }}
+        >
+          Show at Mouse
+        </button>
+        
+        <button 
+          style="padding: 1rem; background: var(--spectrum-sys-color-tertiary); color: var(--spectrum-sys-color-on-tertiary); border: none; border-radius: 8px; cursor: pointer;"
+          @click=${async () => {
+            const menu = document.getElementById('programmatic-menu') as SpectrumContextMenuElement;
+            const isOpen = await menu.isMenuOpen();
+            if (isOpen) {
+              await menu.hide();
+            } else {
+              const actions = [
+                { id: 'action1', action: 'toggle-action', label: 'Toggle Action', icon: 'toggle_on' }
+              ];
+              menu.show(actions, 300, 200, 'toggle-trigger');
+            }
+          }}
+        >
+          Toggle Menu
+        </button>
+        
+        <button 
+          style="padding: 1rem; background: var(--spectrum-sys-color-error); color: var(--spectrum-sys-color-on-error); border: none; border-radius: 8px; cursor: pointer;"
+          @click=${async () => {
+            const menu = document.getElementById('programmatic-menu') as SpectrumContextMenuElement;
+            await menu.hide();
+          }}
+        >
+          Hide Menu
+        </button>
+      </div>
+      
+      <div style="background: var(--spectrum-sys-color-surface); padding: 1.5rem; border-radius: 8px; font-family: monospace; font-size: 0.875rem; border: 1px solid var(--spectrum-sys-color-outline);">
+        <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface); font-family: inherit;">Code Examples:</h4>
+        <div style="color: var(--spectrum-sys-color-on-surface-variant);">
+          <div style="margin-bottom: 0.5rem;"><strong>Show Menu:</strong> menu.show(actions, x, y, targetKey)</div>
+          <div style="margin-bottom: 0.5rem;"><strong>Hide Menu:</strong> menu.hide()</div>
+          <div style="margin-bottom: 0.5rem;"><strong>Check Status:</strong> await menu.isMenuOpen()</div>
+          <div><strong>Position:</strong> menu.positionAtCoordinates(x, y)</div>
+        </div>
+      </div>
+      
+      <spectrum-context-menu 
+        id="programmatic-menu"
+        @actionClick=${(e: CustomEvent) => action('actionClick')(`[Programmatic] ${JSON.stringify(e.detail)}`)}
+        @menuClose=${(e: CustomEvent) => action('menuClose')(e.detail)}
+      ></spectrum-context-menu>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Demonstrates programmatic control of the context menu using its JavaScript API:
+
+### Available Methods
+- \`show(actions, x, y, targetKey)\` - Display menu with actions at specific coordinates
+- \`hide()\` - Close the menu programmatically
+- \`isMenuOpen()\` - Check if the menu is currently open (returns Promise<boolean>)
+- \`positionAtCoordinates(x, y)\` - Reposition an open menu
+
+### Usage Patterns
+- **Event-based Positioning**: Show menu at mouse event coordinates
+- **Element-based Positioning**: Show menu relative to specific UI elements
+- **Toggle Behavior**: Check state before showing/hiding
+- **Programmatic Cleanup**: Hide menu when changing context
+
+All methods return Promises for reliable async control in complex UI interactions.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// ACCESSIBILITY EXAMPLE
+// =================================================================
+
+/**
+ * Demonstrates accessibility features and keyboard navigation for the context menu.
+ */
+export const AccessibilityExample: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h3 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">Accessibility Features</h3>
+        <p style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant);">Context menu with full keyboard and screen reader support</p>
+      </div>
+      
+      <div style="display: grid; gap: 1.5rem; max-width: 600px; margin: 0 auto;">
+        <div style="background: var(--spectrum-sys-color-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--spectrum-sys-color-outline);">
+          <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">Keyboard Navigation Test</h4>
+          <p style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface-variant);">Use Tab to focus, Enter/Space to activate, or right-click for context menu</p>
+          
+          <div style="display: grid; gap: 0.5rem;">
+            ${[
+              { id: 'accessible-item-1', label: 'Project Alpha', description: 'Development project' },
+              { id: 'accessible-item-2', label: 'Project Beta', description: 'Research initiative' },
+              { id: 'accessible-item-3', label: 'Project Gamma', description: 'Marketing campaign' }
+            ].map((item, index) => html`
+              <div 
+                tabindex="0"
+                role="button"
+                aria-label="Project ${item.label} - ${item.description}. Press Enter for options or right-click for context menu"
+                style="padding: 1rem; border: 1px solid var(--spectrum-sys-color-outline); border-radius: 6px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;"
+                @focus=${(e: Event) => {
+                  (e.target as HTMLElement).style.outline = '2px solid var(--spectrum-sys-color-primary)';
+                  (e.target as HTMLElement).style.backgroundColor = 'var(--spectrum-sys-color-primary-container)';
+                }}
+                @blur=${(e: Event) => {
+                  (e.target as HTMLElement).style.outline = 'none';
+                  (e.target as HTMLElement).style.backgroundColor = 'transparent';
+                }}
+                @keydown=${(e: KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const menu = document.getElementById('accessible-menu') as SpectrumContextMenuElement;
+                    const rect = (e.target as HTMLElement).getBoundingClientRect();
+                    const actions = [
+                      { id: 'view', action: 'view-project', label: 'View Project', icon: 'visibility' },
+                      { id: 'edit', action: 'edit-project', label: 'Edit Project', icon: 'edit' },
+                      { id: 'share', action: 'share-project', label: 'Share Project', icon: 'share' },
+                      { id: 'archive', action: 'archive-project', label: 'Archive Project', icon: 'archive' }
+                    ];
+                    menu.show(actions, rect.left + rect.width / 2, rect.bottom + 5, item.id);
+                  }
+                }}
+                @contextmenu=${(e: MouseEvent) => {
+                  e.preventDefault();
+                  const menu = document.getElementById('accessible-menu') as SpectrumContextMenuElement;
+                  const actions = [
+                    { id: 'view', action: 'view-project', label: 'View Project', icon: 'visibility' },
+                    { id: 'edit', action: 'edit-project', label: 'Edit Project', icon: 'edit' },
+                    { id: 'share', action: 'share-project', label: 'Share Project', icon: 'share' },
+                    { id: 'archive', action: 'archive-project', label: 'Archive Project', icon: 'archive' }
+                  ];
+                  menu.show(actions, e.clientX, e.clientY, item.id);
+                }}
+              >
+                <div>
+                  <div style="font-weight: 500; color: var(--spectrum-sys-color-on-surface);">${item.label}</div>
+                  <div style="font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">${item.description}</div>
+                </div>
+                <span class="material-symbols-outlined" style="color: var(--spectrum-sys-color-on-surface-variant); font-size: 1.25rem;">more_vert</span>
+              </div>
+            `)}
+          </div>
+        </div>
+        
+        <div style="background: var(--spectrum-sys-color-primary-container); color: var(--spectrum-sys-color-on-primary-container); padding: 1.5rem; border-radius: 8px;">
+          <h4 style="margin: 0 0 1rem 0;">Accessibility Features</h4>
+          <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.6;">
+            <li><strong>Keyboard Navigation:</strong> Tab to focus items, Enter/Space to activate</li>
+            <li><strong>Screen Reader Support:</strong> Proper ARIA labels and role attributes</li>
+            <li><strong>Focus Management:</strong> Clear focus indicators and logical tab order</li>
+            <li><strong>High Contrast:</strong> Respects system high contrast preferences</li>
+            <li><strong>Reduced Motion:</strong> Respects user motion preferences</li>
+            <li><strong>Context Keys:</strong> Menu key and Shift+F10 support</li>
+          </ul>
+        </div>
+      </div>
+      
+      <spectrum-context-menu 
+        id="accessible-menu"
+        @actionClick=${(e: CustomEvent) => action('actionClick')(`[Accessible] ${JSON.stringify(e.detail)}`)}
+        @menuClose=${(e: CustomEvent) => action('menuClose')(e.detail)}
+      ></spectrum-context-menu>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Comprehensive accessibility example demonstrating all accessibility features:
+
+### Keyboard Support
+- **Tab Navigation**: Use Tab to move between focusable items
+- **Activation**: Press Enter or Space to show context menu
+- **Context Menu Key**: Menu key or Shift+F10 also triggers context menu
+- **Escape**: Close menu with Escape key
+
+### Screen Reader Support
+- **ARIA Labels**: Descriptive labels for all interactive elements
+- **Role Attributes**: Proper semantic roles for buttons and menus
+- **State Announcements**: Menu open/close states announced
+- **Action Descriptions**: Clear action descriptions in menu items
+
+### Visual Accessibility
+- **Focus Indicators**: High-contrast focus outlines
+- **High Contrast Mode**: Enhanced visibility in high contrast
+- **Color Independence**: Information not conveyed by color alone
+- **Text Scaling**: Supports browser text zoom up to 200%
+
+### Motor Accessibility
+- **Large Click Targets**: Minimum 44px touch targets
+- **Hover Tolerance**: Generous hover areas for imprecise pointing
+- **Reduced Motion**: Respects prefers-reduced-motion settings
+- **Multiple Activation Methods**: Both click and keyboard activation
+
+Test with keyboard navigation and screen readers to experience full accessibility.
+        `
+      }
+    }
+  }
+};

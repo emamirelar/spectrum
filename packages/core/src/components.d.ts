@@ -876,6 +876,7 @@ export namespace Components {
          */
         "images": ImageConfig[];
         /**
+          * Enable preview mode for image viewing.  When true: Hides control bar and selection UI for clean viewing experience. When false: Shows control bar, selection indicators, and management features. CRITICAL: Set to false when you need control bars and batch operations.
           * @default false
          */
         "previewMode": boolean;
@@ -2993,6 +2994,7 @@ declare namespace LocalJSX {
         "onImageSelected"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
         "onPrimaryAction"?: (event: SpectrumImageGalleryCustomEvent<{ action: string; selectedImages: ImageConfig[]; selectedIds: string[]; count: number }>) => void;
         /**
+          * Enable preview mode for image viewing.  When true: Hides control bar and selection UI for clean viewing experience. When false: Shows control bar, selection indicators, and management features. CRITICAL: Set to false when you need control bars and batch operations.
           * @default false
          */
         "previewMode"?: boolean;

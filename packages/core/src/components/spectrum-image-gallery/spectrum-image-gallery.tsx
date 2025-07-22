@@ -40,7 +40,15 @@ export class SpectrumImageGallery {
   @Prop() selectionMode: SelectionMode = 'single';
   @Prop() selectedImages: string[] = [];
   @Prop() scrollDirection: ScrollDirection = 'vertical';
+  
+  /**
+   * Enable preview mode for image viewing. 
+   * When true: Hides control bar and selection UI for clean viewing experience.
+   * When false: Shows control bar, selection indicators, and management features.
+   * CRITICAL: Set to false when you need control bars and batch operations.
+   */
   @Prop() previewMode: boolean = false;
+  
   @Prop() background: BackgroundLevel = 'opaque';
   @Prop() frostControlBar: FrostLevel = 'no';
   @Prop() debug: boolean = false;

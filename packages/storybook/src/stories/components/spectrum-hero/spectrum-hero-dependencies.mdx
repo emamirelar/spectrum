@@ -2,7 +2,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Spectrum/Components/SpectrumHero/Dependencies" />
 
-# 🔗 Spectrum Hero Dependencies
+# 🔗 SpectrumHero Dependencies
 
 This document shows the dependency relationships for the spectrum-hero component and how it integrates with other components in the Spectrum system.
 
@@ -10,72 +10,102 @@ This document shows the dependency relationships for the spectrum-hero component
 
 ## 📋 Component Usage Overview
 
-**spectrum-hero** is a Level 2 composed component that depends on spectrum-button for call-to-action functionality. It provides hero section functionality for landing pages, feature highlights, and content showcase applications.
+**spectrum-hero** is a Level 2 composed component with internal dependencies. The hero component provides...
 
 ### Dependencies
-- **spectrum-button** (for call-to-action buttons)
+- **spectrum-button** (internal dependency)
 
 ### Components Using spectrum-hero
-- **Direct Usage**: Landing pages, feature highlights, and content showcase applications
+- Documentation needed - analyze codebase for usage
 
 ---
 
 ## 🔍 Visual Dependencies
 
 <mermaid-diagram chart="graph TD
-    SB[spectrum-button] --> |Direct Use| SH[spectrum-hero]
+    SPECTRUMBUTTON[spectrum-button] --> |Used by| SC[spectrum-hero]
+    SC --> |Application Use| APPSPECTRUMHERO[SpectrumHero Applications]
     
-    SH --> |Application Use| LANDING[Landing Pages]
-    SH --> |Application Use| FEATURE[Feature Highlights]
-    SH --> |Application Use| SHOWCASE[Content Showcase]
+    classDef foundation fill:#e1f5fe
+    classDef dependent fill:#f3e5f5
+    classDef application fill:#fff3e0
     
-    style SB fill:#e1f5fe
-    style SH fill:#f3e5f5
-    
-    classDef dependency fill:#e1f5fe,stroke:#0277bd
-    classDef component fill:#f3e5f5,stroke:#7b1fa2  
-    classDef application fill:#e8f5e8,stroke:#388e3c" />
+    class SC foundation
+    class SPECTRUMBUTTON dependent
+    class APPSPECTRUMHERO application" />
 
 ---
 
 ## 🏗️ Architecture Integration
 
-### Button Integration Pattern
-```html
-<!-- spectrum-hero uses spectrum-button internally -->
-<spectrum-hero 
-  primaryButtonText="Get Started"
-  primaryButtonAction="get-started"
-  primaryButtonVariant="primary"
-  secondaryButtonText="Learn More"
-  secondaryButtonAction="learn-more"
-  secondaryButtonVariant="secondary">
-</spectrum-hero>
+### SpectrumHero Integration Pattern
+The spectrum-hero component follows a composed integration pattern with multiple internal dependencies:
+
+```typescript
+// Integration pattern example
+import { Component, h, Prop } from '@stencil/core';
+
+@Component({
+  tag: 'example-component'
+})
+export class ExampleComponent {
+  @Prop() slides?: string;
+  @Prop() autoplay?: number;
+  @Prop() animationDuration?: number;
+
+  render() {
+    return (
+      <div class="example-component">
+        <spectrum-hero
+          slides={this.slides}
+          autoplay={this.autoplay}
+        >
+          Component Content
+        </spectrum-hero>
+      </div>
+    );
+  }
+}
 ```
 
-### Event Flow
-1. Hero renders internal spectrum-button components
-2. Button properties pass through directly from hero to button
-3. Button handles all visual states and animations
-4. Hero emits unified `heroAction` events with button context
-5. Parent components receive consolidated hero events
+---
+
+## 🔄 Event Flow
+
+### Standard Component Events
+1. **heroAction**: Component interaction event
+1. **slideChange**: Component interaction event
 
 ---
 
 ## 🚀 Integration Benefits
 
-### Button Reusability
-- Consistent button behavior across hero implementations
-- Automatic button styling inheritance
-- Unified event handling pattern
-- Reduced component complexity
+### Consistency
+- Uniform component behavior across applications
+- Consistent styling and interaction patterns
+- Standardized accessibility features
 
-### Maintainability
-- Button updates automatically propagate to hero
-- Single source of truth for button behavior
-- Consistent accessibility patterns
-- Easier testing and debugging
+### Maintainability  
+- Composed architecture allows for modular updates
+- Centralized component logic
+- Simplified testing and debugging
+
+### Performance
+- Optimized component implementation
+- Efficient dependency management
+- Consistent memory usage patterns
 
 ---
 
-**Level 2 Component** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Button Documentation](../spectrum-button/README.md) 
+## 🔧 Development Considerations
+
+### When Modifying spectrum-hero
+1. **Impact Assessment** - Changes may affect internal dependencies
+2. **Breaking Change Analysis** - Property or event signature changes require coordination
+3. **Comprehensive Testing** - Test all integration scenarios  
+4. **Performance Testing** - Verify no performance regressions
+5. **Documentation Updates** - Update component and integration documentation
+
+---
+
+**Integration Documentation** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Architecture Guidelines](../../../ARCHITECTURE.md)

@@ -1,8 +1,3 @@
----
-description:
-globs:
-alwaysApply: false
----
 # Spectrum Component Library Changelog Maintenance Rule
 
 ## Overview
@@ -20,12 +15,21 @@ The UNOPS Spectrum Design System maintains a comprehensive changelog to track al
 - Pre-release versions: `MAJOR.MINOR.PATCH-alpha.N` or `MAJOR.MINOR.PATCH-beta.N`
 - Current version tracked in: `packages/core/package.json`
 
+### Date Format Requirements
+- **Format**: `dd/mmm/yy` (e.g., `22/Jul/25`, `03/Dec/24`)
+- **Source**: Always use the actual file modification date or current date
+- **Commands to get correct date**:
+  - Current date: `date +'%d/%b/%y'`
+  - File modification date: `stat -f "%Sm" -t "%d/%b/%y" filename`
+- **Never use placeholder dates** - always use real, current dates
+- **Examples**: `22/Jul/25`, `03/Dec/24`, `15/Jan/25`
+
 ## Changelog Structure and Content
 
 ### Required Sections for Each Release
 Each release entry must include:
 
-1. **Version Header**: `## [Version] - YYYY-MM-DD`
+1. **Version Header**: `## [Version] - dd/mmm/yy`
 2. **Release Type**: `### 🚀 Major Release` | `### ✨ Minor Release` | `### 🔧 Patch Release` | `### 🧪 Pre-release`
 3. **Change Categories** (when applicable):
    - `### 🆕 Added` - New features, components, or functionality
@@ -44,7 +48,7 @@ Each release entry must include:
 
 ### Example Entry Format
 ```markdown
-## [0.0.1-alpha.17] - 2024-01-15
+## [0.0.1-alpha.17] - 22/Jul/25
 
 ### 🧪 Pre-release
 
@@ -73,6 +77,32 @@ Each release entry must include:
 - Updated @material/material-color-utilities to v0.3.0
 ```
 
+## Date Management Rules
+
+### Automatic Date Detection
+When creating or updating changelog entries:
+
+1. **Use Current Date**: Run `date +'%d/%b/%y'` to get today's date in correct format
+2. **Verify File Changes**: Check file modification times with `stat -f "%Sm" -t "%d/%b/%y" packages/storybook/src/stories/changelog.mdx`
+3. **Never Use Placeholder Dates**: Always use actual dates, never estimated or placeholder dates
+4. **Format Consistency**: Always use the exact dd/mmm/yy format (01/Jan/25, not 1/January/2025)
+
+### Date Format Examples
+- **Correct**: `22/Jul/25`, `03/Dec/24`, `15/Jan/25`, `01/Feb/26`
+- **Incorrect**: `2025-07-22`, `July 22, 2025`, `22-Jul-2025`, `22/July/25`
+
+### Date Validation Commands
+```bash
+# Get current date in correct format
+date +'%d/%b/%y'
+
+# Get file modification date
+stat -f "%Sm" -t "%d/%b/%y" packages/storybook/src/stories/changelog.mdx
+
+# Validate date format (should match dd/mmm/yy pattern)
+echo "22/Jul/25" | grep -E '^[0-3][0-9]/[A-Z][a-z][a-z]/[0-9][0-9]$'
+```
+
 ## Maintenance Rules and Responsibilities
 
 ### When to Update the Changelog
@@ -88,14 +118,15 @@ Each release entry must include:
 - **Impact**: Who is affected and how
 - **Migration**: For breaking changes, provide upgrade instructions
 - **Version**: Accurate version number from package.json
+- **Date**: Actual date in dd/mmm/yy format using current date commands
 
 ### Changelog Validation Checklist
 Before publishing a release, verify:
 - [ ] All changes since last release are documented
 - [ ] Version number matches package.json
+- [ ] Date format is correct (dd/mmm/yy) and uses actual current date
 - [ ] Breaking changes are clearly marked and explained
 - [ ] Component dependency map is updated if needed
-- [ ] Date format is consistent (YYYY-MM-DD)
 - [ ] Links to issues/PRs are working
 - [ ] Grammar and spelling are correct
 - [ ] Storybook renders the changelog correctly
@@ -104,19 +135,21 @@ Before publishing a release, verify:
 
 ### Component Development
 When creating or modifying components:
-1. Update the changelog entry for the current unreleased version
-2. Use component generator: `npm run generate <component-name>` (in packages/core)
-3. Create corresponding storybook story
-4. Update component dependency map if needed
-5. Document the change in changelog before committing
+1. Get current date: `date +'%d/%b/%y'`
+2. Update the changelog entry for the current unreleased version with correct date
+3. Use component generator: `npm run generate <component-name>` (in packages/core)
+4. Create corresponding storybook story
+5. Update component dependency map if needed
+6. Document the change in changelog before committing
 
 ### Release Process
-1. Finalize changelog for the release version
+1. Finalize changelog for the release version with correct date format
 2. Update version in packages/core/package.json
 3. Ensure changelog version matches package.json version
-4. Commit changelog and version updates together
-5. Create release tag matching the version
-6. Update storybook deployment with new changelog
+4. Verify date format is dd/mmm/yy and uses current date
+5. Commit changelog and version updates together
+6. Create release tag matching the version
+7. Update storybook deployment with new changelog
 
 ### Storybook Integration
 - Changelog appears in Storybook navigation under "Documentation/Changelog"

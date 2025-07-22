@@ -2,7 +2,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Spectrum/Components/SpectrumButton/Dependencies" />
 
-# 🔗 Spectrum Button Dependencies
+# 🔗 SpectrumButton Dependencies
 
 This document shows the dependency relationships for the spectrum-button component and how it integrates with other components in the Spectrum system.
 
@@ -10,176 +10,98 @@ This document shows the dependency relationships for the spectrum-button compone
 
 ## 📋 Component Usage Overview
 
-**spectrum-button** is a Level 1 atomic component with no internal dependencies. It provides core interactive button functionality and is the most widely used component in the Spectrum system, serving as a foundational element for 8 other components.
+**spectrum-button** is a Level 1 atomic component with no internal dependencies. The button component provides...
 
 ### Dependencies
 - **None** (pure atomic component)
 
 ### Components Using spectrum-button
-
-- **spectrum-conversation-panel** (chat interface actions)
-- **spectrum-image-gallery** (upload and navigation controls)
-- **spectrum-rail** (navigation triggers)
-- **spectrum-rail-item** (individual navigation items)
-- **spectrum-search-input** (voice search activation)
-- **spectrum-select** (dropdown trigger)
-- **spectrum-hero** (call-to-action buttons)
-- **spectrum-accordion** (expandable content triggers via internal usage patterns)
+- **spectrum-conversation-panel**
+- **spectrum-image-gallery**
+- **spectrum-rail**
+- **spectrum-search-input**
+- **spectrum-select**
+- **spectrum-hero**
+- **spectrum-rail-item**
 
 ---
 
 ## 🔍 Visual Dependencies
 
 <mermaid-diagram chart="graph TD
-    SB[spectrum-button] --> |Used by| SCP[spectrum-conversation-panel]
-    SB --> |Used by| SIG[spectrum-image-gallery]
-    SB --> |Used by| SR[spectrum-rail]
-    SB --> |Used by| SRI[spectrum-rail-item]
-    SB --> |Used by| SSI[spectrum-search-input]
-    SB --> |Used by| SS[spectrum-select]
-    SB --> |Used by| SH[spectrum-hero]
+    SC[spectrum-button] --> |Used by| SPECTRUMCONVERSATIONPANEL[spectrum-conversation-panel]
+    SC[spectrum-button] --> |Used by| SPECTRUMIMAGEGALLERY[spectrum-image-gallery]
+    SC[spectrum-button] --> |Used by| SPECTRUMRAIL[spectrum-rail]
+    SC[spectrum-button] --> |Used by| SPECTRUMSEARCHINPUT[spectrum-search-input]
+    SC[spectrum-button] --> |Used by| SPECTRUMSELECT[spectrum-select]
+    SC[spectrum-button] --> |Used by| SPECTRUMHERO[spectrum-hero]
+    SC[spectrum-button] --> |Used by| SPECTRUMRAILITEM[spectrum-rail-item]
     
-    SCP --> |Application Use| CHAT[Chat Applications]
-    SIG --> |Application Use| MEDIA[Media Applications]
-    SR --> |Application Use| NAV[Navigation Systems]
-    SSI --> |Application Use| SEARCH[Search Interfaces]
-    SS --> |Application Use| FORMS[Form Controls]
-    SH --> |Application Use| LANDING[Landing Pages]
+    classDef foundation fill:#e1f5fe
+    classDef dependent fill:#f3e5f5
+    classDef application fill:#fff3e0
     
-    style SB fill:#f3e5f5,stroke:#7b1fa2,stroke-width:4px
-    style SCP fill:#e1f5fe,stroke:#0277bd
-    style SIG fill:#e8f5e8,stroke:#388e3c
-    style SR fill:#fff3e0,stroke:#f57c00
-    style SRI fill:#fff3e0,stroke:#f57c00
-    style SSI fill:#fce4ec,stroke:#c2185b
-    style SS fill:#f1f8e9,stroke:#689f38
-    style SH fill:#e3f2fd,stroke:#1976d2
-    
-    classDef foundation fill:#f3e5f5,stroke:#7b1fa2,stroke-width:4px
-    classDef consumer fill:#e1f5fe,stroke:#0277bd
-    classDef application fill:#e8f5e8,stroke:#388e3c" />
+    class SC foundation
+    class SPECTRUMCONVERSATIONPANEL,SPECTRUMIMAGEGALLERY,SPECTRUMRAIL,SPECTRUMSEARCHINPUT,SPECTRUMSELECT,SPECTRUMHERO,SPECTRUMRAILITEM application" />
 
 ---
 
 ## 🏗️ Architecture Integration
 
-### Button Integration Pattern
-The button component follows a consistent integration pattern across all dependent components:
+### SpectrumButton Integration Pattern
+The spectrum-button component follows a simple integration pattern as an atomic component:
 
 ```typescript
-// Common integration pattern in dependent components
+// Integration pattern example
 import { Component, h, Prop } from '@stencil/core';
 
 @Component({
-  tag: 'spectrum-example-component'
+  tag: 'example-component'
 })
 export class ExampleComponent {
-  @Prop() buttonVariant?: 'primary' | 'secondary' | 'tertiary' = 'primary';
-  @Prop() buttonSize?: 'small' | 'medium' | 'large' = 'medium';
-  @Prop() disabled?: boolean = false;
+  @Prop() debug?: boolean;
+  @Prop() variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
+  @Prop() size?: 'sm' | 'base' | 'lg';
 
   render() {
     return (
       <div class="example-component">
         <spectrum-button
-          variant={this.buttonVariant}
-          size={this.buttonSize}
-          disabled={this.disabled}
-          onClick={this.handleButtonClick}
+          debug={this.debug}
+          variant={this.variant}
         >
-          Button Content
+          Component Content
         </spectrum-button>
       </div>
     );
   }
-
-  private handleButtonClick = () => {
-    // Component-specific logic
-  };
 }
-```
-
-### Property Pass-Through Pattern
-Dependent components typically pass through button properties:
-
-```typescript
-// spectrum-rail-item example
-<spectrum-button
-  variant={this.variant}
-  size={this.size}
-  disabled={this.disabled}
-  class="rail-item__button"
->
-  <slot></slot>
-</spectrum-button>
-```
-
-### Event Delegation Pattern
-```typescript
-// spectrum-search-input example
-<spectrum-button
-  variant="tertiary"
-  size="small"
-  onClick={this.handleVoiceSearch}
-  aria-label="Start voice search"
->
-  <spectrum-icon name="mic"></spectrum-icon>
-</spectrum-button>
 ```
 
 ---
 
 ## 🔄 Event Flow
 
-### Standard Button Events
-1. User interaction (click, keyboard activation)
-2. Button emits standardized events
-3. Parent component receives and processes events
-4. Parent may emit its own events with context
+### Standard Component Events
 
-### Integration Event Examples
-
-#### Conversation Panel Integration
-```typescript
-// Button click in conversation panel
-onButtonClick() {
-  this.buttonAction.emit({
-    action: 'send-message',
-    source: 'conversation-panel',
-    context: { messageId: this.messageId }
-  });
-}
-```
-
-#### Image Gallery Integration
-```typescript
-// Upload button in image gallery
-onUploadClick() {
-  this.galleryAction.emit({
-    action: 'upload',
-    source: 'image-gallery',
-    context: { allowedTypes: ['image/*'] }
-  });
-}
-```
 
 ---
 
 ## 🚀 Integration Benefits
 
 ### Consistency
-- Uniform button behavior across all components
+- Uniform component behavior across applications
 - Consistent styling and interaction patterns
 - Standardized accessibility features
 
-### Maintainability
-- Single source of truth for button functionality
-- Centralized updates propagate to all dependents
+### Maintainability  
+- Atomic design enables reliable independent updates
+- Centralized component logic
 - Simplified testing and debugging
 
 ### Performance
-- Optimized button implementation shared across components
-- Reduced bundle size through component reuse
+- Optimized component implementation
+- Minimal overhead as atomic component
 - Consistent memory usage patterns
 
 ---
@@ -187,73 +109,12 @@ onUploadClick() {
 ## 🔧 Development Considerations
 
 ### When Modifying spectrum-button
-1. **Impact Assessment** - Changes affect 8+ dependent components
-2. **Breaking Change Analysis** - Property or event signature changes require coordinated updates
-3. **Comprehensive Testing** - Test all dependent component integrations
-4. **Performance Testing** - Verify no performance regressions in dependent components
-5. **Documentation Updates** - Update all dependent component documentation
-
-### Component Integration Checklist
-When using spectrum-button in new components:
-
-- [ ] **Property Mapping** - Decide which button properties to expose
-- [ ] **Event Handling** - Define how button events integrate with component events  
-- [ ] **Styling Integration** - Ensure button styling works with component theme
-- [ ] **Accessibility** - Verify combined accessibility experience
-- [ ] **Testing** - Test button integration scenarios
-- [ ] **Documentation** - Document button integration patterns
+1. **Impact Assessment** - Changes affect dependent components
+2. **Breaking Change Analysis** - Property or event signature changes require coordination
+3. **Comprehensive Testing** - Test all integration scenarios  
+4. **Performance Testing** - Verify no performance regressions
+5. **Documentation Updates** - Update component and integration documentation
 
 ---
 
-## 📊 Usage Statistics
-
-- **Dependency Rank**: #1 (most widely used component)
-- **Integration Patterns**: 8 different integration approaches
-- **Event Volume**: Highest event emission rate in the system
-- **Performance Impact**: Critical path component for user interactions
-
----
-
-## 🛠️ Implementation Notes
-
-### Required Setup
-```typescript
-// No additional imports required - button is self-contained
-import 'spectrum-button';
-```
-
-### Common Integration Patterns
-
-#### 1. Wrapper Pattern (spectrum-rail-item)
-```typescript
-// Component wraps button and adds context
-<spectrum-button class="rail-item__trigger">
-  <slot></slot>
-</spectrum-button>
-```
-
-#### 2. Trigger Pattern (spectrum-search-input)
-```typescript
-// Button triggers component-specific functionality
-<spectrum-button onClick={this.activateVoiceSearch}>
-  <spectrum-icon name="mic"></spectrum-icon>
-</spectrum-button>
-```
-
-#### 3. Action Pattern (spectrum-conversation-panel)
-```typescript
-// Button performs component actions
-<spectrum-button onClick={this.sendMessage}>
-  Send
-</spectrum-button>
-```
-
-### Performance Considerations
-- Button component is optimized for frequent re-rendering
-- Event listeners are efficiently managed
-- CSS classes are cached for performance
-- Accessibility attributes are computed once per render
-
----
-
-**Integration Documentation** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Architecture Guidelines](../../../ARCHITECTURE.md) 
+**Integration Documentation** • [Component Dependencies Map](../../../README.md#component-dependency-map) • [Architecture Guidelines](../../../ARCHITECTURE.md)

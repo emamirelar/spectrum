@@ -3,91 +3,55 @@ import { html } from 'lit';
 import { action } from 'storybook/actions';
 
 /**
- * ## Spectrum Button Component
+ * ## SpectrumButton Component
  * 
- * A comprehensive, interactive button component that serves as the foundation for user interactions throughout
- * the Spectrum component system. The button provides extensive customization options, accessibility features,
- * and modern interaction capabilities including sound effects, haptic feedback, and visual animations.
+ * A versatile button component with multiple variants, sizes, and states supporting icons, text, and various interactive states.
+
+**Variants**: Primary, Secondary, Success, Warning, Danger, Ghost, Outline, FAB
+
+**Dependencies**: Used by 7+ components including conversation-panel, hero, image-gallery, rail, search-input, and select
+
+**Accessibility**: Built-in keyboard navigation, screen reader support, and proper focus management.
  * 
  * ### Key Features
- * - **8 Visual Variants**: Primary, Secondary, Success, Warning, Danger, Ghost, Outline, FAB with semantic styling
- * - **3 Size Options**: Small (sm), Base (base), Large (lg) for different interface contexts
- * - **Interactive States**: Hover, Active, Focus, Disabled with smooth transitions and visual feedback
- * - **Accessibility**: Full keyboard navigation, ARIA support, screen reader compatibility, and focus management
- * - **Sound Effects**: Optional audio feedback with customizable sound files for enhanced UX
- * - **Haptic Feedback**: Tactile response on supported devices for improved interaction feel
- * - **Icon Support**: Material Design icons with flexible positioning (left, right, or icon-only)
- * - **Event System**: Component Events Rule compliant with structured action attributes
+ * - **Multiple Variants**: Eight distinct button styles for different semantic contexts and UI patterns
+ * - **Size Options**: Small, base, and large sizes for various interface density requirements
+ * - **Icon Support**: Left icon, right icon, or icon-only configurations with Material Design icons
+ * - **Interactive States**: Hover, active, disabled states with smooth animations and transitions
+ * - **Haptic Feedback**: Optional haptic feedback for enhanced mobile user experience
+ * - **Sound Effects**: Optional audio feedback for interactive experiences
+ * - **Flexible API**: Comprehensive property set enabling fine-grained control over appearance and behavior
  * 
  * ### Usage Guidelines
- * - Use **Primary** for main actions, call-to-action buttons, and primary workflows
- * - Use **Secondary** for secondary actions, cancel buttons, and alternative options
- * - Use **Success** for confirmation actions, save operations, and positive outcomes
- * - Use **Warning** for caution actions, potentially destructive operations with confirmation
- * - Use **Danger** for destructive actions, delete operations, and critical warnings
- * - Use **Small** size for compact interfaces, table actions, and inline controls
- * - Use **Large** for prominent actions, hero sections, and primary page actions
- * - Enable **sound** and **haptic** feedback for enhanced user experience in appropriate contexts
- * - Provide **meaningful action values** that describe the specific operation being performed
+ * - **Use for**: Primary actions, form submissions, navigation triggers, interactive elements
+ * - **Avoid when**: Displaying static content, non-interactive elements, or complex data structures
  * 
  * ### Event System (Component Events Rule Compliant)
- * All button events follow the Component Events Rule with consistent action attributes:
- * - **buttonAction**: Primary button interaction - `{ action: string, label: string }`
- * 
- * ### Component Dependencies
- * 
- * ```mermaid
- * graph TD;
- *   spectrum-conversation-panel --> spectrum-button
- *   spectrum-image-gallery --> spectrum-button
- *   spectrum-rail --> spectrum-button
- *   spectrum-rail-item --> spectrum-button
- *   spectrum-search-input --> spectrum-button
- *   spectrum-select --> spectrum-button
- *   spectrum-hero --> spectrum-button
- *   spectrum-accordion --> spectrum-button
- *   style spectrum-button fill:#f9f,stroke:#333,stroke-width:4px
- *   style spectrum-conversation-panel fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
- *   style spectrum-image-gallery fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
- *   style spectrum-rail fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
- *   style spectrum-search-input fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
- *   style spectrum-select fill:#fce4ec,stroke:#c2185b,stroke-width:2px
- *   style spectrum-hero fill:#e0f2f1,stroke:#00695c,stroke-width:2px
- * ```
- * 
- * The button component is used extensively throughout the Spectrum ecosystem as the primary interactive element.
- * It provides consistent interaction patterns and visual feedback across all higher-level components.
- * 
- * ### Integration Patterns
- * - **Component Integration**: Used within complex components for user interactions and form submissions
- * - **Layout Systems**: Integrated with spacing and alignment utilities for consistent positioning
- * - **Event Propagation**: Events bubble up through component hierarchies for centralized handling
- * - **Theme Integration**: Responds to theme changes and supports dark/light mode variations
+ * All events follow the Component Events Rule with consistent action attributes:
+ * - **buttonAction**: Primary interaction event with action and label context
  */
 
 // Component interfaces for TypeScript support
-interface ButtonActionPayload {
-  action?: string;
-  label: string;
-}
-
 interface SpectrumButtonElement extends HTMLElement {
+  debug: boolean;
+  variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
+  size: 'sm' | 'base' | 'lg';
+  outline: boolean;
+  iconOnly: boolean;
+  disabled: boolean;
+  ripple: boolean;
+  action: string;
+  customStyle: any;
+  minimalAnimation: boolean;
+  showButtonText: boolean;
   buttonText: string;
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
-  size?: 'sm' | 'base' | 'lg';
-  leftIcon?: string;
-  showLeftIcon?: boolean;
-  rightIcon?: string;
-  showRightIcon?: boolean;
-  iconOnly?: boolean;
-  disabled?: boolean;
-  outline?: boolean;
-  sound?: boolean;
-  haptic?: boolean;
-  action?: string;
-  debug?: boolean;
-  ripple?: boolean;
-  showButtonText?: boolean;
+  showLeftIcon: boolean;
+  leftIcon: string;
+  showRightIcon: boolean;
+  rightIcon: string;
+  sound: boolean;
+  haptic: boolean;
+  state: 'default' | 'hover' | 'active' | 'disabled';
 }
 
 // Story arguments interface
@@ -100,111 +64,71 @@ const meta: Meta<SpectrumButtonArgs> = {
     docs: {
       description: {
         component: `
-The Spectrum Button component provides comprehensive interactive button functionality with extensive customization 
-options, accessibility features, and modern interaction capabilities. It follows the Component Events Rule with 
-well-structured events that include action attributes for all interactions.
+A versatile button component with multiple variants, sizes, and states supporting icons, text, and various interactive states.
 
 ### Event System
-All events include action attributes:
-- buttonAction: Primary button interaction with action context
+- buttonAction: Primary interaction event with action and label context
 
 ### Basic Usage
-Use .buttonText property for button text and listen for buttonAction events with action attributes.
+Use standard property binding syntax for all component properties. The button component requires either \`buttonText\` or icon configuration.
+
+### Integration Notes
+This button component is used throughout the Spectrum Design System by conversation-panel, hero, image-gallery, rail, search-input, and select components.
         `
       }
     }
   },
   args: {
-    buttonText: 'Click me',
+    debug: false,
     variant: 'primary',
     size: 'base',
-    leftIcon: 'star',
-    showLeftIcon: false,
-    rightIcon: 'arrow_forward',
-    showRightIcon: false,
+    outline: false,
     iconOnly: false,
     disabled: false,
-    outline: false,
+    ripple: true,
+    action: 'click',
+    customStyle: '',
+    minimalAnimation: false,
+    showButtonText: true,
+    buttonText: 'Click Me',
+    showLeftIcon: false,
+    leftIcon: 'favorite',
+    showRightIcon: false,
+    rightIcon: 'arrow_forward',
     sound: false,
     haptic: false,
-    action: 'button-click',
-    debug: false,
-    ripple: false,
-    showButtonText: true
+    state: 'default',
   },
   argTypes: {
-    buttonText: {
-      control: 'text',
-      description: 'The text content displayed on the button',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Button'" }
-      }
-    },
-    variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost', 'outline', 'fab'],
-      description: 'Visual style variant that determines the button appearance and semantic meaning',
-      table: {
-        type: { 
-          summary: "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab'",
-          detail: `
-            - primary: Main action buttons with prominent styling
-            - secondary: Alternative actions with subtle styling  
-            - success: Confirmation actions with green styling
-            - warning: Caution actions with orange/yellow styling
-            - danger: Destructive actions with red styling
-            - ghost: Transparent background variant
-            - outline: Outlined button variant
-            - fab: Floating action button variant
-          `
-        },
-        defaultValue: { summary: "'primary'" }
-      }
-    },
-    size: {
-      control: 'select',
-      options: ['sm', 'base', 'lg'],
-      description: 'Button size affecting padding, font size, and overall dimensions',
-      table: {
-        type: { 
-          summary: "'sm' | 'base' | 'lg'",
-          detail: `
-            - sm: Compact size for dense interfaces and inline actions
-            - base: Standard size for most common use cases
-            - lg: Prominent size for important actions
-          `
-        },
-        defaultValue: { summary: "'base'" }
-      }
-    },
-    leftIcon: {
-      control: 'text',
-      description: 'Material Design icon name for left icon position',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "''" }
-      }
-    },
-    showLeftIcon: {
+    debug: {
       control: 'boolean',
-      description: 'Whether to show the left icon',
+      description: 'Whether to enable debug logging',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
       }
     },
-    rightIcon: {
-      control: 'text',
-      description: 'Material Design icon name for right icon position',
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost', 'outline', 'fab'],
+      description: 'The button variant/style',
       table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "''" }
+        type: { summary: 'ButtonVariant' },
+        defaultValue: { summary: 'primary' }
       }
     },
-    showRightIcon: {
+    size: {
+      control: 'select',
+      options: ['sm', 'base', 'lg'],
+      description: 'The button size',
+      table: {
+        type: { summary: 'ButtonSize' },
+        defaultValue: { summary: 'base' }
+      }
+    },
+    outline: {
       control: 'boolean',
-      description: 'Whether to show the right icon',
+      description: 'Whether to show button outline',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -212,7 +136,7 @@ Use .buttonText property for button text and listen for buttonAction events with
     },
     iconOnly: {
       control: 'boolean',
-      description: 'Whether the button should display only an icon without text',
+      description: 'Whether to show only the icon (no text)',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -220,47 +144,7 @@ Use .buttonText property for button text and listen for buttonAction events with
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the button is disabled and non-interactive',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    },
-    outline: {
-      control: 'boolean',
-      description: 'Whether to use outline styling',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    },
-    sound: {
-      control: 'boolean',
-      description: 'Whether to enable sound feedback on interaction',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    },
-    haptic: {
-      control: 'boolean',
-      description: 'Whether to enable haptic feedback on interaction',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    },
-    action: {
-      control: 'text',
-      description: 'Action identifier emitted with events for tracking user interactions',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "''" }
-      }
-    },
-    debug: {
-      control: 'boolean',
-      description: 'Enable debug mode for development purposes',
+      description: 'Whether the button is disabled',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -268,7 +152,23 @@ Use .buttonText property for button text and listen for buttonAction events with
     },
     ripple: {
       control: 'boolean',
-      description: 'Whether to enable ripple animation effect',
+      description: 'Whether to show ripple effect on click',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    action: {
+      control: 'text',
+      description: 'Action identifier for event handling',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' }
+      }
+    },
+    minimalAnimation: {
+      control: 'boolean',
+      description: 'Whether to use minimal animations',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
@@ -276,10 +176,75 @@ Use .buttonText property for button text and listen for buttonAction events with
     },
     showButtonText: {
       control: 'boolean',
-      description: 'Whether to show the button text',
+      description: 'Whether to show button text',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' }
+      }
+    },
+    buttonText: {
+      control: 'text',
+      description: 'The button text content',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' }
+      }
+    },
+    showLeftIcon: {
+      control: 'boolean',
+      description: 'Whether to show left icon',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    leftIcon: {
+      control: 'text',
+      description: 'Material Design icon name for left position',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' }
+      }
+    },
+    showRightIcon: {
+      control: 'boolean',
+      description: 'Whether to show right icon',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    rightIcon: {
+      control: 'text',
+      description: 'Material Design icon name for right position',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' }
+      }
+    },
+    sound: {
+      control: 'boolean',
+      description: 'Whether to enable sound effects',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    haptic: {
+      control: 'boolean',
+      description: 'Whether to enable haptic feedback',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    state: {
+      control: 'select',
+      options: ['default', 'hover', 'active', 'disabled'],
+      description: 'The button visual state',
+      table: {
+        type: { summary: 'ButtonState' },
+        defaultValue: { summary: 'default' }
       }
     }
   }
@@ -288,28 +253,32 @@ Use .buttonText property for button text and listen for buttonAction events with
 export default meta;
 type Story = StoryObj<SpectrumButtonArgs>;
 
-// Interactive render function for playground
-const renderButton = (args: SpectrumButtonArgs) => html`
+// Interactive render function
+const renderSpectrumButton = (args: SpectrumButtonArgs) => html`
   <div style="padding: 2rem; display: flex; justify-content: center; align-items: center; min-height: 200px; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
     <spectrum-button
-      .buttonText=${args.buttonText}
+      .debug=${args.debug}
       .variant=${args.variant}
       .size=${args.size}
-      .leftIcon=${args.leftIcon}
-      .showLeftIcon=${args.showLeftIcon}
-      .rightIcon=${args.rightIcon}
-      .showRightIcon=${args.showRightIcon}
+      .outline=${args.outline}
       .iconOnly=${args.iconOnly}
       .disabled=${args.disabled}
-      .outline=${args.outline}
+      .ripple=${args.ripple}
+      .action=${args.action}
+      .customStyle=${args.customStyle}
+      .minimalAnimation=${args.minimalAnimation}
+      .showButtonText=${args.showButtonText}
+      .buttonText=${args.buttonText}
+      .showLeftIcon=${args.showLeftIcon}
+      .leftIcon=${args.leftIcon}
+      .showRightIcon=${args.showRightIcon}
+      .rightIcon=${args.rightIcon}
       .sound=${args.sound}
       .haptic=${args.haptic}
-      .action=${args.action}
-      .debug=${args.debug}
-      .ripple=${args.ripple}
-      .showButtonText=${args.showButtonText}
-      @buttonAction=${(e: CustomEvent<ButtonActionPayload>) => action('buttonAction')(e.detail)}
-    ></spectrum-button>
+      .state=${args.state}
+      @buttonAction=${action('buttonAction')}
+    >
+    </spectrum-button>
   </div>
 `;
 
@@ -318,27 +287,16 @@ const renderButton = (args: SpectrumButtonArgs) => html`
 // =================================================================
 
 /**
- * Interactive playground to test all button properties and event handling.
- * Use the controls panel to experiment with different configurations and see how events work.
- * 
- * **Event Testing**: Click the button to see buttonAction events. All events include action attributes 
- * following the Component Events Rule.
+ * Interactive playground to test all component properties and event handling.
  */
 export const Playground: Story = {
-  render: renderButton,
+  render: renderSpectrumButton,
   parameters: {
     docs: {
       description: {
         story: `
-Use the controls panel below to experiment with all button properties and see how events work in real-time.
-The Actions panel will show all emitted events with their action attributes.
-
-**Try these interactions:**
-- Click the button to trigger buttonAction events with custom action values
-- Change variants to see different visual styles and semantic meanings
-- Test different sizes for various interface contexts
-- Enable sound/haptic feedback to test multimedia interactions
-- Try icon configurations for different button styles
+Use the controls panel below to experiment with all component properties and see how events work in real-time.
+The Actions panel will show all emitted buttonAction events with their action attributes.
         `
       }
     }
@@ -346,455 +304,46 @@ The Actions panel will show all emitted events with their action attributes.
 };
 
 // =================================================================
-// BASIC EXAMPLES
+// VARIANT EXAMPLES
 // =================================================================
 
 /**
- * Basic button variants showing the core visual styles.
- * Demonstrates the primary, secondary, and semantic button types.
+ * Button variants showing different semantic styles and use cases.
  */
-export const BasicVariants: Story = {
+export const Variants: Story = {
   render: () => html`
-    <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
-      <spectrum-button 
-        .buttonText=${"Primary"} 
-        .variant=${"primary"} 
-        .action=${"primary-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Secondary"} 
-        .variant=${"secondary"} 
-        .action=${"secondary-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Success"} 
-        .variant=${"success"} 
-        .action=${"success-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Warning"} 
-        .variant=${"warning"} 
-        .action=${"warning-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Danger"} 
-        .variant=${"danger"} 
-        .action=${"danger-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-The core button variants with semantic styling for different action types. Each variant has its own visual
-styling and semantic meaning for consistent user interface patterns.
-
-**Event Structure:**
-- \`buttonAction\`: \`{ action: "primary-action", label: "Primary" }\`
-- Each variant emits events with its specific action and styling context
-        `
-      },
-      source: {
-        code: `<spectrum-button
-  buttonText="Primary"
-  variant="primary"
-  action="primary-action"
-  @buttonAction=\${(e) => console.log('Primary clicked:', e.detail)}>
-</spectrum-button>`
-      }
-    }
-  }
-};
-
-/**
- * Button size variations for different interface contexts.
- * Shows how buttons scale for different use cases and layouts.
- */
-export const SizeVariations: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; align-items: center; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
-      <spectrum-button 
-        .buttonText=${"Small Button"} 
-        .size=${"sm"}
-        .variant=${"primary"}
-        .action=${"small-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Base Button"} 
-        .size=${"base"}
-        .variant=${"primary"}
-        .action=${"base-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Large Button"} 
-        .size=${"lg"}
-        .variant=${"primary"}
-        .action=${"large-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Three distinct button sizes to accommodate different interface requirements and visual hierarchies.
-Size affects padding, font size, and overall button dimensions.
-
-**Use Cases:**
-- **Small (sm)**: Compact interfaces, table actions, inline controls
-- **Base**: Default size for most common use cases  
-- **Large (lg)**: Prominent actions, hero sections, primary CTAs
-        `
-      }
-    }
-  }
-};
-
-/**
- * Different button states including disabled and loading states.
- * Shows visual feedback for various interaction states.
- */
-export const ButtonStates: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
-      <spectrum-button 
-        .buttonText=${"Normal"} 
-        .variant=${"primary"}
-        .action=${"normal-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Disabled"} 
-        .disabled=${true}
-        .action=${"disabled-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Outlined"} 
-        .outline=${true}
-        .variant=${"primary"}
-        .action=${"outlined-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Various button states for different interaction scenarios. States provide visual feedback about the 
-button's current condition and availability.
-
-**States Available:**
-- **Normal**: Default interactive state
-- **Disabled**: Non-interactive state with visual indication
-- **Outlined**: Alternative styling with border emphasis
-        `
-      }
-    }
-  }
-};
-
-/**
- * Buttons with icons in different positions and configurations.
- * Demonstrates icon integration and positioning options.
- */
-export const WithIcons: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
-      <spectrum-button 
-        .buttonText=${"Save"} 
-        .leftIcon=${"save"}
-        .showLeftIcon=${true}
-        .variant=${"primary"}
-        .action=${"save-action"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Next"} 
-        .rightIcon=${"arrow_forward"}
-        .showRightIcon=${true}
-        .variant=${"secondary"}
-        .action=${"next-step"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .leftIcon=${"settings"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .variant=${"secondary"}
-        .action=${"open-settings"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .leftIcon=${"delete"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .variant=${"danger"}
-        .action=${"delete-item"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Icon integration with Material Design icons for enhanced visual communication. Icons can be positioned
-on the left, right, or used as icon-only buttons.
-
-**Icon Options:**
-- **Left Icon**: Icon positioned before text content
-- **Right Icon**: Icon positioned after text content  
-- **Icon Only**: Button displays only the icon without text
-        `
-      }
-    }
-  }
-};
-
-/**
- * Interactive buttons with sound and haptic feedback.
- * Demonstrates multimedia interaction capabilities.
- */
-export const WithFeedback: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; padding: 2rem; flex-direction: column; align-items: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
-      <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-        <spectrum-button 
-          .buttonText=${"Sound Feedback"} 
-          .sound=${true}
-          .variant=${"success"}
-          .action=${"sound-test"}
-          @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-        </spectrum-button>
-        <spectrum-button 
-          .buttonText=${"Haptic Feedback"} 
-          .haptic=${true}
-          .variant=${"success"}
-          .action=${"haptic-test"}
-          @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-        </spectrum-button>
-        <spectrum-button 
-          .buttonText=${"Both Feedbacks"} 
-          .sound=${true}
-          .haptic=${true}
-          .variant=${"primary"}
-          .action=${"both-feedback"}
-          @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-        </spectrum-button>
+    <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px; align-items: center;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="primary" button-text="Primary" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Main actions</small>
       </div>
-      <p style="text-align: center; color: var(--spectrum-sys-color-on-surface-variant); font-size: 0.875rem; margin: 1rem 0 0 0; max-width: 500px;">
-        <strong>Enhanced User Experience:</strong><br>
-        Sound and haptic feedback provide additional sensory confirmation of user interactions,
-        improving accessibility and user confidence in their actions.
-      </p>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Enhanced interaction experience with audio and tactile feedback. These features improve accessibility
-and provide confirmation of user actions across different sensory channels.
-
-**Feedback Types:**
-- **Sound**: Audio feedback on button interaction
-- **Haptic**: Tactile vibration feedback on supported devices
-- **Combined**: Both audio and haptic feedback for maximum confirmation
-        `
-      }
-    }
-  }
-};
-
-/**
- * Outlined button styling variations.
- * Shows outlined styling option across different variants.
- */
-export const OutlinedVariants: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
-      <spectrum-button 
-        .buttonText=${"Primary Outlined"} 
-        .variant=${"primary"}
-        .outline=${true}
-        .action=${"primary-outlined"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Success Outlined"} 
-        .variant=${"success"}
-        .outline=${true}
-        .action=${"success-outlined"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Warning Outlined"} 
-        .variant=${"warning"}
-        .outline=${true}
-        .action=${"warning-outlined"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .buttonText=${"Danger Outlined"} 
-        .variant=${"danger"}
-        .outline=${true}
-        .action=${"danger-outlined"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Outlined button styling provides a subtle alternative to filled buttons. Useful for secondary actions
-or when you need visual hierarchy without heavy visual weight.
-
-**Benefits:**
-- Less visual prominence than filled buttons
-- Maintains semantic color coding
-- Better for secondary action hierarchies
-        `
-      }
-    }
-  }
-};
-
-/**
- * Toolbar button configurations for application toolbars and action bars.
- */
-export const ToolbarExample: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 0.5rem; padding: 1rem; background: var(--spectrum-sys-color-surface); border: 1px solid var(--spectrum-sys-color-outline); border-radius: 8px; align-items: center;">
-      <spectrum-button 
-        .leftIcon=${"save"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .size=${"sm"}
-        .variant=${"secondary"}
-        .action=${"save"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .leftIcon=${"undo"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .size=${"sm"}
-        .variant=${"secondary"}
-        .action=${"undo"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .leftIcon=${"redo"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .size=${"sm"}
-        .variant=${"secondary"}
-        .action=${"redo"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <div style="width: 1px; height: 24px; background: var(--spectrum-sys-color-outline); margin: 0 0.5rem;"></div>
-      <spectrum-button 
-        .leftIcon=${"format_bold"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .size=${"sm"}
-        .variant=${"secondary"}
-        .action=${"bold"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .leftIcon=${"format_italic"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .size=${"sm"}
-        .variant=${"secondary"}
-        .action=${"italic"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <spectrum-button 
-        .leftIcon=${"format_underlined"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .size=${"sm"}
-        .variant=${"secondary"}
-        .action=${"underline"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <div style="width: 1px; height: 24px; background: var(--spectrum-sys-color-outline); margin: 0 0.5rem;"></div>
-      <spectrum-button 
-        .leftIcon=${"more_vert"}
-        .showLeftIcon=${true}
-        .iconOnly=${true}
-        .size=${"sm"}
-        .variant=${"secondary"}
-        .action=${"more-options"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Compact icon-only buttons designed for application toolbars and action bars. Grouped with visual 
-separators for logical organization of related actions.
-
-**Toolbar Design Principles:**
-- Small, consistent sizing for dense interfaces
-- Icon-only format to maximize space efficiency
-- Visual grouping with separators for related actions
-- Secondary variant for subtle, non-intrusive styling
-        `
-      }
-    }
-  }
-};
-
-/**
- * Call-to-action button example with enhanced styling.
- */
-export const CallToActionExample: Story = {
-  render: () => html`
-    <div style="display: flex; gap: 2rem; padding: 3rem; flex-direction: column; align-items: center; background: linear-gradient(135deg, var(--spectrum-sys-color-primary-container), var(--spectrum-sys-color-secondary-container)); border-radius: 12px;">
-      <spectrum-button 
-        .buttonText=${"Get Started Today"} 
-        .leftIcon=${"rocket_launch"}
-        .showLeftIcon=${true}
-        .variant=${"primary"}
-        .size=${"lg"}
-        .action=${"get-started"}
-        @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-      </spectrum-button>
-      <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-        <spectrum-button 
-          .buttonText=${"Learn More"} 
-          .variant=${"secondary"}
-          .size=${"lg"}
-          .outline=${true}
-          .action=${"learn-more"}
-          @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-        </spectrum-button>
-        <spectrum-button 
-          .buttonText=${"Contact Sales"} 
-          .leftIcon=${"phone"}
-          .showLeftIcon=${true}
-          .variant=${"success"}
-          .size=${"lg"}
-          .action=${"contact-sales"}
-          @buttonAction=${(e: CustomEvent) => action('buttonAction')(e.detail)}>
-        </spectrum-button>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="secondary" button-text="Secondary" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Alternative actions</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="success" button-text="Success" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Positive actions</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="warning" button-text="Warning" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Caution required</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="danger" button-text="Danger" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Destructive actions</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="ghost" button-text="Ghost" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Subtle actions</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="outline" button-text="Outline" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Secondary emphasis</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="fab" button-text="FAB" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Floating action</small>
       </div>
     </div>
   `,
@@ -802,16 +351,299 @@ export const CallToActionExample: Story = {
     docs: {
       description: {
         story: `
-Hero section call-to-action configuration with primary action emphasis and supporting secondary actions.
-Designed for landing pages and conversion-focused interfaces.
-
-**CTA Best Practices:**
-- Primary action uses largest size and prominent styling
-- Secondary actions use outlined or alternative variants
-- Clear visual hierarchy guides user attention
-- Descriptive action values for analytics tracking
+Different button variants serve specific semantic purposes in the interface:
+- **Primary**: Main actions, form submissions, primary navigation
+- **Secondary**: Alternative actions, secondary navigation
+- **Success**: Positive actions, confirmations, completed states
+- **Warning**: Actions requiring caution, potentially risky operations
+- **Danger**: Destructive actions, deletions, critical operations
+- **Ghost**: Subtle actions, minimal visual impact, secondary functionality
+- **Outline**: Secondary emphasis, alternative to ghost for better visibility
+- **FAB**: Floating action buttons, primary actions in mobile interfaces
         `
       }
     }
   }
-}; 
+};
+
+// =================================================================
+// SIZE EXAMPLES
+// =================================================================
+
+/**
+ * Button sizes for different contexts and interface density.
+ */
+export const Sizes: Story = {
+  render: () => html`
+    <div style="display: flex; gap: 2rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px; align-items: center;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="primary" size="sm" button-text="Small" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Compact interfaces</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="primary" size="base" button-text="Base" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Standard size</small>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+        <spectrum-button variant="primary" size="lg" button-text="Large" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <small>Prominent actions</small>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Button sizes accommodate different interface contexts and accessibility requirements:
+- **Small**: Compact interfaces, toolbars, dense layouts, secondary actions
+- **Base**: Standard size for most interfaces, optimal balance of visibility and space
+- **Large**: Prominent actions, accessibility considerations, mobile-first interfaces
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// ICON EXAMPLES
+// =================================================================
+
+/**
+ * Button icon configurations including left icons, right icons, and icon-only buttons.
+ */
+export const IconButtons: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      
+      <!-- Icon Positions -->
+      <div style="margin-bottom: 2rem;">
+        <h3 style="color: var(--spectrum-sys-color-on-surface-variant); margin-top: 0; margin-bottom: 1rem;">Icon Positions</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Save" show-button-text="true" show-left-icon="true" left-icon="save" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Left icon</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Next" show-button-text="true" show-right-icon="true" right-icon="arrow_forward" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Right icon</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Download" show-button-text="true" show-left-icon="true" left-icon="download" show-right-icon="true" right-icon="expand_more" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Both icons</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Icon-Only Buttons -->
+      <div style="margin-bottom: 2rem;">
+        <h3 style="color: var(--spectrum-sys-color-on-surface-variant); margin-top: 0; margin-bottom: 1rem;">Icon-Only Buttons</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" icon-only="true" show-left-icon="true" left-icon="favorite" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Like</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="secondary" icon-only="true" show-left-icon="true" left-icon="share" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Share</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="outline" icon-only="true" show-left-icon="true" left-icon="edit" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Edit</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="danger" icon-only="true" show-left-icon="true" left-icon="delete" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Delete</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAB Examples -->
+      <div>
+        <h3 style="color: var(--spectrum-sys-color-on-surface-variant); margin-top: 0; margin-bottom: 1rem;">Floating Action Buttons</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="fab" size="base" icon-only="true" show-left-icon="true" left-icon="add" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Add item</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="fab" size="lg" icon-only="true" show-left-icon="true" left-icon="chat" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Start chat</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Icon configurations enhance button functionality and visual communication:
+
+**Icon Positions**: Left icons indicate action type, right icons suggest direction or expansion
+**Icon-Only**: Compact buttons for toolbars and tight spaces, require clear iconography
+**FAB Buttons**: Floating action buttons for primary actions, common in mobile interfaces
+
+Use Material Design icon names for consistent iconography across the design system.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// REAL-WORLD EXAMPLES
+// =================================================================
+
+/**
+ * Real-world usage scenarios showing buttons in practical interface contexts.
+ */
+export const UsageScenarios: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      
+      <!-- Form Actions -->
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+        <h3 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Form Actions</h3>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; align-items: center;">
+          <spectrum-button variant="ghost" button-text="Cancel" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="secondary" button-text="Save Draft" show-button-text="true" show-left-icon="true" left-icon="save" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="primary" button-text="Submit" show-button-text="true" show-right-icon="true" right-icon="send" @buttonAction=${action('buttonAction')}></spectrum-button>
+        </div>
+      </div>
+
+      <!-- Data Actions -->
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+        <h3 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Data Management</h3>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+          <spectrum-button variant="primary" size="sm" button-text="Create New" show-button-text="true" show-left-icon="true" left-icon="add" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="outline" size="sm" button-text="Import" show-button-text="true" show-left-icon="true" left-icon="upload" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="outline" size="sm" button-text="Export" show-button-text="true" show-left-icon="true" left-icon="download" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="ghost" size="sm" icon-only="true" show-left-icon="true" left-icon="refresh" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="ghost" size="sm" icon-only="true" show-left-icon="true" left-icon="filter_list" @buttonAction=${action('buttonAction')}></spectrum-button>
+        </div>
+      </div>
+
+      <!-- Navigation Actions -->
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+        <h3 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Navigation</h3>
+        <div style="display: flex; gap: 1rem; justify-content: space-between; align-items: center;">
+          <spectrum-button variant="outline" button-text="Previous" show-button-text="true" show-left-icon="true" left-icon="arrow_back" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <div style="display: flex; gap: 0.5rem;">
+            <spectrum-button variant="ghost" size="sm" button-text="1" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <spectrum-button variant="primary" size="sm" button-text="2" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <spectrum-button variant="ghost" size="sm" button-text="3" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+          </div>
+          <spectrum-button variant="outline" button-text="Next" show-button-text="true" show-right-icon="true" right-icon="arrow_forward" @buttonAction=${action('buttonAction')}></spectrum-button>
+        </div>
+      </div>
+
+      <!-- Alert Actions -->
+      <div style="padding: 1rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+        <h3 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Alert Dialog</h3>
+        <p style="color: var(--spectrum-sys-color-on-surface); margin-bottom: 1rem;">
+          Are you sure you want to delete this item? This action cannot be undone.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; align-items: center;">
+          <spectrum-button variant="ghost" button-text="Cancel" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="danger" button-text="Delete" show-button-text="true" show-left-icon="true" left-icon="delete" @buttonAction=${action('buttonAction')}></spectrum-button>
+        </div>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Real-world usage scenarios demonstrate button patterns in common interface contexts:
+
+**Form Actions**: Primary-secondary-tertiary hierarchy with clear action progression
+**Data Management**: Grouped actions with consistent iconography and appropriate emphasis
+**Navigation**: Directional buttons with icons indicating movement and state
+**Alert Dialogs**: High-contrast actions with clear destructive vs. safe choices
+
+These patterns follow Material Design principles and provide consistent user experiences across applications.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// ACCESSIBILITY EXAMPLE
+// =================================================================
+
+/**
+ * Accessibility-focused examples showing proper focus management and interactive states.
+ */
+export const AccessibilityExample: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <h3 style="color: var(--spectrum-sys-color-on-surface-variant); margin-top: 0;">Accessibility Features</h3>
+      
+      <!-- Interactive States -->
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+        <h4 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Interactive States</h4>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" state="default" button-text="Default" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Default state</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" state="hover" button-text="Hover" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Hover state</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" state="active" button-text="Active" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small>Active state</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" disabled="true" button-text="Disabled" show-button-text="true"></spectrum-button>
+            <small>Disabled state</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- High Contrast Support -->
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+        <h4 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">High Contrast Support</h4>
+        <p style="color: var(--spectrum-sys-color-on-surface); margin-bottom: 1rem;">
+          Buttons maintain proper contrast ratios and clear visual hierarchy in all themes.
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          <spectrum-button variant="primary" outline="true" button-text="High Contrast" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="outline" button-text="Clear Borders" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="success" outline="true" button-text="Semantic Color" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        </div>
+      </div>
+
+      <!-- Keyboard Navigation -->
+      <div style="padding: 1rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+        <h4 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Keyboard Navigation</h4>
+        <p style="color: var(--spectrum-sys-color-on-surface); margin-bottom: 1rem;">
+          Use Tab to navigate, Enter or Space to activate. Focus indicators are clearly visible.
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          <spectrum-button variant="primary" button-text="Tab Order 1" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="secondary" button-text="Tab Order 2" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+          <spectrum-button variant="outline" button-text="Tab Order 3" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        </div>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Accessibility features built into the button component:
+
+**Interactive States**: Clear visual feedback for all interaction states (default, hover, active, disabled)
+**High Contrast**: Maintains proper contrast ratios with outline variants and semantic colors
+**Keyboard Navigation**: Full keyboard support with visible focus indicators and proper tab order
+**Screen Reader**: Semantic button elements with proper labeling and state communication
+
+The button component follows WCAG guidelines for interactive elements and color contrast requirements.
+        `
+      }
+    }
+  }
+};

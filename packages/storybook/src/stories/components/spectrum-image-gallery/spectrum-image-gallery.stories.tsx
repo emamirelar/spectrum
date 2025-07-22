@@ -2,143 +2,306 @@ import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import { action } from 'storybook/actions';
 
-// @ts-ignore because VSCode does not understand imports within Lerna monorepos
-import type { SpectrumImageGallery, ImageConfig, SelectionMode, ScrollDirection, FrostLevel, BackgroundLevel } from '../../../../../core/src/components/spectrum-image-gallery/spectrum-image-gallery';
+/**
+ * ## SpectrumImageGallery Component
+ * 
+ * The image gallery component provides a flexible and feature-rich interface for managing, displaying, and interacting with image collections. Perfect for media libraries, product catalogs, portfolio displays, and content management systems.
+ * 
+ * ### Key Features
+ * - **Multi-Source Upload**: Support for file uploads and URL-based image addition
+ * - **Flexible Selection**: Single, multiple, or no selection modes with visual feedback
+ * - **Interactive Management**: Built-in delete, preview, and organize capabilities
+ * - **Responsive Layout**: Vertical and horizontal scrolling with adaptive thumbnails
+ * - **Rich Styling**: Background effects and frost overlays for enhanced visual appeal
+ * - **Action Integration**: Customizable primary actions with event-driven architecture
+ * 
+ * ### Usage Guidelines
+ * - Use for: Media libraries, product galleries, portfolio displays, image selectors
+ * - Perfect for: Content management, e-commerce, creative workflows, document systems
+ * - Avoid when: Simple static image display, complex editing interfaces, video-focused content
+ * 
+ * ### Event System (Component Events Rule Compliant)
+ * All events follow the Component Events Rule with consistent action attributes:
+ * - **imageSelected**: Emitted when images are selected with image details
+ * - **imageDeselect**: Emitted when images are deselected with image details  
+ * - **imageAdded**: Emitted when new images are added with source information
+ * - **imageDeleted**: Emitted when images are deleted with deletion summary
+ * - **imagePreview**: Emitted when images are previewed with image details
+ * - **primaryAction**: Emitted when primary action is triggered with selection context
+ */
 
-interface SpectrumImageGalleryArgs {
+// Image configuration interface
+interface ImageConfig {
+  id: string;
+  url: string;
+  alt?: string;
+  title?: string;
+  metadata?: Record<string, any>;
+}
+
+// Component interfaces for TypeScript support
+interface SpectrumImageGalleryElement extends HTMLElement {
   images: ImageConfig[];
   allowUpload: boolean;
   allowUrlInput: boolean;
   allowDelete: boolean;
-  selectionMode: SelectionMode;
+  selectionMode: 'single' | 'multi' | 'none';
   selectedImages: string[];
-  scrollDirection: ScrollDirection;
+  scrollDirection: 'vertical' | 'horizontal';
   previewMode: boolean;
-  background: BackgroundLevel;
-  frostControlBar: FrostLevel;
-  isLoading: boolean;
+  background: 'opaque' | 'transparent' | 'partial-frost' | 'full-frost';
+  frostControlBar: 'no' | 'partial' | 'full';
   debug: boolean;
+  galleryTitle: string;
   primaryActionText: string;
   primaryActionIcon: string;
   primaryActionValue: string;
-  galleryTitle?: string;
 }
 
-// Beautiful Unsplash images for demo
-const unsplashImages: ImageConfig[] = [
+// Story arguments interface
+interface SpectrumImageGalleryArgs extends SpectrumImageGalleryElement {}
+
+// Sample image collections for stories
+const sampleImages: ImageConfig[] = [
   {
-    id: 'nature-1',
-    url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop',
-    alt: 'Mountain landscape with morning mist',
-    title: 'Misty Mountains',
-    metadata: { photographer: 'John Westrock', category: 'nature' },
+    id: 'img-1',
+    url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop',
+    alt: 'Mountain landscape with lake reflection',
+    title: 'Serene Mountain Vista',
+    metadata: { category: 'landscape', location: 'Swiss Alps', photographer: 'John Smith' }
   },
   {
-    id: 'architecture-1',
-    url: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=400&h=500&fit=crop',
-    alt: 'Modern glass building architecture',
-    title: 'Glass Architecture',
-    metadata: { photographer: 'John Schnobrich', category: 'architecture' },
+    id: 'img-2', 
+    url: 'https://images.unsplash.com/photo-1497436072909-f5e4e52c46ca?q=80&w=2060&auto=format&fit=crop',
+    alt: 'Desert landscape with sand dunes',
+    title: 'Golden Sand Dunes',
+    metadata: { category: 'landscape', location: 'Sahara Desert', photographer: 'Maria Garcia' }
   },
   {
-    id: 'nature-2',
-    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=700&fit=crop',
-    alt: 'Ocean waves on sandy beach',
-    title: 'Ocean Waves',
-    metadata: { photographer: 'Sean Oulashin', category: 'nature' },
+    id: 'img-3',
+    url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop',
+    alt: 'Dense forest with sunlight filtering through trees',
+    title: 'Enchanted Forest Path',
+    metadata: { category: 'nature', location: 'Pacific Northwest', photographer: 'Alex Chen' }
   },
   {
-    id: 'urban-1',
-    url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&h=300&fit=crop',
-    alt: 'City skyline at sunset',
-    title: 'Urban Sunset',
-    metadata: { photographer: 'Cody Board', category: 'urban' },
+    id: 'img-4',
+    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=2070&auto=format&fit=crop',
+    alt: 'Ocean waves crashing on rocky shore',
+    title: 'Coastal Storm Waves',
+    metadata: { category: 'seascape', location: 'Big Sur California', photographer: 'Emma Wilson' }
   },
   {
-    id: 'nature-3',
-    url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=550&fit=crop',
-    alt: 'Forest path through trees',
-    title: 'Forest Path',
-    metadata: { photographer: 'Luke Stackpoole', category: 'nature' },
+    id: 'img-5',
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop',
+    alt: 'Tropical beach with palm trees and turquoise water',
+    title: 'Paradise Beach',
+    metadata: { category: 'tropical', location: 'Maldives', photographer: 'David Kim' }
   },
   {
-    id: 'abstract-1',
-    url: 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=400&h=400&fit=crop',
-    alt: 'Abstract geometric patterns',
-    title: 'Geometric Abstract',
-    metadata: { photographer: 'Hal Gatewood', category: 'abstract' },
-  },
-  {
-    id: 'architecture-2',
-    url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=650&fit=crop',
-    alt: 'Desert canyon landscape',
-    title: 'Canyon Views',
-    metadata: { photographer: 'David Marcu', category: 'nature' },
-  },
-  {
-    id: 'urban-2',
-    url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=350&fit=crop',
-    alt: 'City street with buildings',
-    title: 'Urban Street',
-    metadata: { photographer: 'Pedro Lastra', category: 'urban' },
-  },
-  {
-    id: 'nature-4',
-    url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=800&fit=crop',
-    alt: 'Tall mountain peaks',
-    title: 'Mountain Peaks',
-    metadata: { photographer: 'John Westrock', category: 'nature' },
-  },
-  {
-    id: 'minimal-1',
-    url: 'https://images.unsplash.com/photo-1554050857-c84a8abdb5e2?w=400&h=280&fit=crop',
-    alt: 'Minimalist composition',
-    title: 'Minimal Design',
-    metadata: { photographer: 'Alex Shut', category: 'minimal' },
-  },
-  {
-    id: 'nature-5',
-    url: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=600&fit=crop',
-    alt: 'Serene lake reflection',
-    title: 'Lake Reflection',
-    metadata: { photographer: 'Simon Berger', category: 'nature' },
-  },
-  {
-    id: 'architecture-3',
-    url: 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=400&h=450&fit=crop',
-    alt: 'Modern architectural details',
-    title: 'Modern Lines',
-    metadata: { photographer: 'Jason Blackeye', category: 'architecture' },
-  },
-  {
-    id: 'nature-4k',
-    url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=3840&h=2160&fit=crop&q=80',
-    alt: 'High resolution mountain landscape with morning mist - 4K',
-    title: 'Misty Mountains (4K)',
-    metadata: { photographer: 'John Westrock', category: 'nature', resolution: '4K' },
-  },
-  {
-    id: 'architecture-4k',
-    url: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=3840&h=2160&fit=crop&q=80',
-    alt: 'High resolution modern glass building architecture - 4K',
-    title: 'Glass Architecture (4K)',
-    metadata: { photographer: 'John Schnobrich', category: 'architecture', resolution: '4K' },
-  },
-  {
-    id: 'urban-4k',
-    url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=3840&h=2160&fit=crop&q=80',
-    alt: 'High resolution city skyline at sunset - 4K',
-    title: 'Urban Sunset (4K)',
-    metadata: { photographer: 'Cody Board', category: 'urban', resolution: '4K' },
-  },
+    id: 'img-6',
+    url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=2074&auto=format&fit=crop',
+    alt: 'Star-filled night sky over mountain silhouettes',
+    title: 'Starry Night Mountains',
+    metadata: { category: 'astronomy', location: 'Yosemite National Park', photographer: 'Sarah Johnson' }
+  }
 ];
 
-const meta: Meta<SpectrumImageGallery> = {
-  title: 'Spectrum/Components/SpectrumImageGallery',
-  component: 'spectrum-image-gallery',
+const portfolioImages: ImageConfig[] = [
+  {
+    id: 'port-1',
+    url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+    alt: 'Modern office workspace with natural lighting',
+    title: 'Corporate Workspace Design',
+    metadata: { project: 'TechCorp HQ', client: 'TechCorp Inc', year: '2024' }
+  },
+  {
+    id: 'port-2',
+    url: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=2126&auto=format&fit=crop',
+    alt: 'Minimalist bedroom with large windows',
+    title: 'Minimalist Bedroom Suite',
+    metadata: { project: 'Urban Loft', client: 'Private Residence', year: '2024' }
+  },
+  {
+    id: 'port-3',
+    url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2058&auto=format&fit=crop',
+    alt: 'Modern kitchen with island and pendant lighting',
+    title: 'Contemporary Kitchen Design',
+    metadata: { project: 'Suburban Home', client: 'Johnson Family', year: '2023' }
+  },
+  {
+    id: 'port-4',
+    url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop',
+    alt: 'Spacious living room with modern furniture',
+    title: 'Open Concept Living Space',
+    metadata: { project: 'Downtown Condo', client: 'Urban Living LLC', year: '2023' }
+  }
+];
+
+const productImages: ImageConfig[] = [
+  {
+    id: 'prod-1',
+    url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop',
+    alt: 'Smart watch with black band on white background',
+    title: 'ProWatch Series X',
+    metadata: { sku: 'PW-001', price: '$299', category: 'Electronics' }
+  },
+  {
+    id: 'prod-2',
+    url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop',
+    alt: 'Wireless headphones in sleek black design',
+    title: 'AudioMax Pro Headphones',
+    metadata: { sku: 'AM-002', price: '$199', category: 'Audio' }
+  },
+  {
+    id: 'prod-3',
+    url: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?q=80&w=2070&auto=format&fit=crop',
+    alt: 'Smartphone with edge-to-edge display',
+    title: 'Galaxy Phone Ultra',
+    metadata: { sku: 'GP-003', price: '$899', category: 'Mobile' }
+  },
+  {
+    id: 'prod-4',
+    url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop',
+    alt: 'High-end running shoes with modern design',
+    title: 'RunMax Elite Sneakers',
+    metadata: { sku: 'RM-004', price: '$149', category: 'Footwear' }
+  }
+];
+
+// Mixed aspect ratio images for masonry demonstration
+const masonryImages: ImageConfig[] = [
+  {
+    id: 'masonry-1',
+    url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&h=1200&auto=format&fit=crop',
+    alt: 'Tall mountain landscape - portrait orientation',
+    title: 'Mountain Peak Vista',
+    metadata: { aspectRatio: 'portrait', category: 'landscape' }
+  },
+  {
+    id: 'masonry-2',
+    url: 'https://images.unsplash.com/photo-1497436072909-f5e4e52c46ca?q=80&w=1200&h=600&auto=format&fit=crop',
+    alt: 'Wide desert panorama - landscape orientation',
+    title: 'Desert Panorama',
+    metadata: { aspectRatio: 'landscape', category: 'desert' }
+  },
+  {
+    id: 'masonry-3',
+    url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800&h=800&auto=format&fit=crop',
+    alt: 'Square forest composition',
+    title: 'Forest Symmetry',
+    metadata: { aspectRatio: 'square', category: 'nature' }
+  },
+  {
+    id: 'masonry-4',
+    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=600&h=1000&auto=format&fit=crop',
+    alt: 'Tall ocean waves - portrait orientation',
+    title: 'Crashing Waves',
+    metadata: { aspectRatio: 'portrait', category: 'ocean' }
+  },
+  {
+    id: 'masonry-5',
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1400&h=700&auto=format&fit=crop',
+    alt: 'Extra wide beach panorama',
+    title: 'Tropical Paradise',
+    metadata: { aspectRatio: 'wide', category: 'tropical' }
+  },
+  {
+    id: 'masonry-6',
+    url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=900&h=900&auto=format&fit=crop',
+    alt: 'Square night sky composition',
+    title: 'Starry Night',
+    metadata: { aspectRatio: 'square', category: 'astronomy' }
+  },
+  {
+    id: 'masonry-7',
+    url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=700&h=1200&auto=format&fit=crop',
+    alt: 'Tall waterfall - portrait orientation',
+    title: 'Cascading Falls',
+    metadata: { aspectRatio: 'portrait', category: 'waterfall' }
+  },
+  {
+    id: 'masonry-8',
+    url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1300&h=650&auto=format&fit=crop',
+    alt: 'Wide mountain range panorama',
+    title: 'Alpine Range',
+    metadata: { aspectRatio: 'landscape', category: 'mountains' }
+  }
+];
+
+const meta: Meta<SpectrumImageGalleryArgs> = {
+  title: 'Spectrum/Components/SpectrumImageGallery', // [[memory:3543783]]
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+The \`spectrum-image-gallery\` component provides a comprehensive solution for managing and displaying image collections with upload, selection, and organization capabilities.
+
+### Data Structures
+
+#### ImageConfig Interface
+\`\`\`typescript
+interface ImageConfig {
+  id: string;                    // Unique identifier
+  url: string;                   // Image source URL  
+  alt?: string;                  // Accessibility description
+  title?: string;                // Display title
+  metadata?: Record<string, any>; // Additional data (tags, categories, etc.)
+}
+\`\`\`
+
+### Selection Modes
+- **single**: Only one image can be selected at a time
+- **multi**: Multiple images can be selected simultaneously
+- **none**: Selection is disabled (display-only mode)
+
+### Scroll Directions
+- **vertical**: Traditional grid layout with vertical scrolling
+- **horizontal**: Horizontal carousel-style layout with side scrolling
+
+### Background Options
+- **opaque**: Solid background (default)
+- **transparent**: No background for overlay scenarios
+- **partial-frost**: Subtle frost effect for depth
+- **full-frost**: Full frost background for emphasis
+
+### Upload Methods
+- **File Upload**: Direct file selection from device
+- **URL Input**: Add images by providing URLs
+- **Combined**: Both methods available simultaneously
+
+### Preview Mode Behavior
+- **previewMode: false** (default): Shows control bar, selection UI, and management features
+- **previewMode: true**: Hides control bar and selection UI for pure image viewing experience
+- **Critical**: Set previewMode to false when you need control bar, selection, and batch operations
+
+### Primary Actions
+Configure custom action buttons that appear when images are selected:
+- Custom text and icons via Material Design icons
+- Event-driven with selected image context
+- Flexible positioning and styling
+- **Only visible when previewMode is false**
+
+### Event Handling
+All events provide comprehensive context including selected images, metadata, and action details for seamless integration with your application logic.
+
+### Basic Usage
+\`\`\`
+<spectrum-image-gallery
+  .images=\${imageArray}
+  selection-mode="multi"
+  allow-upload="true"
+  primary-action-text="Process Selected"
+  primary-action-icon="check_circle">
+</spectrum-image-gallery>
+\`\`\`
+        `
+      }
+    }
+  },
   args: {
-    images: [],
+    images: sampleImages,
     allowUpload: true,
     allowUrlInput: true,
     allowDelete: true,
@@ -148,731 +311,694 @@ const meta: Meta<SpectrumImageGallery> = {
     previewMode: false,
     background: 'opaque',
     frostControlBar: 'no',
-    isLoading: false,
     debug: false,
-    primaryActionText: '',
-    primaryActionIcon: '',
-    primaryActionValue: '',
-    galleryTitle: '',
+    galleryTitle: 'Image Gallery',
+    primaryActionText: 'Process Images',
+    primaryActionIcon: 'check_circle',
+    primaryActionValue: 'process'
   },
   argTypes: {
     images: {
-      control: 'object',
-      description: 'Array of image configurations to display in the gallery',
+      control: { type: 'object' },
+      description: 'Array of ImageConfig objects containing image data and metadata',
       table: {
         type: { summary: 'ImageConfig[]' },
-        defaultValue: { summary: '[]' },
-      },
+        defaultValue: { summary: '[]' }
+      }
     },
     allowUpload: {
       control: 'boolean',
-      description: 'Enable file upload functionality',
+      description: 'Enable file upload functionality for adding new images',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'true' },
-      },
+        defaultValue: { summary: 'true' }
+      }
     },
     allowUrlInput: {
       control: 'boolean',
-      description: 'Enable URL input functionality',
+      description: 'Enable URL input functionality for adding images from web',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'true' },
-      },
+        defaultValue: { summary: 'true' }
+      }
     },
     allowDelete: {
       control: 'boolean',
-      description: 'Enable image deletion functionality',
+      description: 'Enable delete functionality for removing images',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'true' },
-      },
+        defaultValue: { summary: 'true' }
+      }
     },
     selectionMode: {
       control: 'select',
-      options: ['none', 'single', 'multi'],
-      description: 'Image selection behavior',
+      options: ['single', 'multi', 'none'],
+      description: 'Image selection behavior mode',
       table: {
-        type: { summary: 'SelectionMode' },
-        defaultValue: { summary: 'single' },
-      },
+        type: { summary: "'single' | 'multi' | 'none'" },
+        defaultValue: { summary: 'single' }
+      }
     },
     selectedImages: {
-      control: 'object',
-      description: 'Array of selected image IDs',
+      control: { type: 'object' },
+      description: 'Array of currently selected image IDs',
       table: {
         type: { summary: 'string[]' },
-        defaultValue: { summary: '[]' },
-      },
+        defaultValue: { summary: '[]' }
+      }
     },
     scrollDirection: {
       control: 'select',
       options: ['vertical', 'horizontal'],
-      description: 'Gallery scroll direction and layout',
+      description: 'Gallery scroll direction and layout orientation',
       table: {
-        type: { summary: 'ScrollDirection' },
-        defaultValue: { summary: 'vertical' },
-      },
+        type: { summary: "'vertical' | 'horizontal'" },
+        defaultValue: { summary: 'vertical' }
+      }
     },
     previewMode: {
       control: 'boolean',
-      description: 'Enable preview mode - images open in modal instead of selection',
+      description: 'Enable full-size image preview on click. IMPORTANT: When true, hides control bar and selection UI for pure viewing experience.',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
+        defaultValue: { summary: 'false' }
+      }
     },
     background: {
       control: 'select',
-      options: ['opaque', 'partial-frost', 'full-frost', 'transparent'],
-      description: 'Background style for the gallery',
+      options: ['opaque', 'transparent', 'partial-frost', 'full-frost'],
+      description: 'Background styling for the gallery container',
       table: {
-        type: { summary: 'BackgroundLevel' },
-        defaultValue: { summary: 'opaque' },
-      },
+        type: { summary: "'opaque' | 'transparent' | 'partial-frost' | 'full-frost'" },
+        defaultValue: { summary: 'opaque' }
+      }
     },
     frostControlBar: {
       control: 'select',
       options: ['no', 'partial', 'full'],
-      description: 'Frost effect level for the control bar',
+      description: 'Frost effect level for control bar overlay',
       table: {
-        type: { summary: 'FrostLevel' },
-        defaultValue: { summary: 'no' },
-      },
-    },
-    isLoading: {
-      control: 'boolean',
-      description: 'Loading state indicator',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
+        type: { summary: "'no' | 'partial' | 'full'" },
+        defaultValue: { summary: 'no' }
+      }
     },
     debug: {
       control: 'boolean',
-      description: 'Debug mode indicator',
+      description: 'Enable debug mode with console logging',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
-    primaryActionText: {
-      control: 'text',
-      description: 'Text for the primary action button (shown when images are selected)',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
-    primaryActionIcon: {
-      control: 'text',
-      description: 'Icon for the primary action button (Material Icons name)',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
-    primaryActionValue: {
-      control: 'text',
-      description: 'Value emitted when primary action is triggered (defaults to primaryActionText)',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
+        defaultValue: { summary: 'false' }
+      }
     },
     galleryTitle: {
       control: 'text',
-      description: 'Title to display at the top of the gallery (non-editable)',
+      description: 'Optional title displayed at the top of the gallery',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
+        defaultValue: { summary: 'undefined' }
+      }
     },
-  },
-  parameters: {
-    docs: {
-      description: {
-        component: `
-          A responsive image gallery component with masonry layout, upload capabilities, and selection features.
-          
-          ## Gallery Title
-          The gallery supports an optional **non-editable title** that appears at the top of the gallery:
-          
-          - **Display only**: Gallery titles are read-only and cannot be edited by users
-          - **Optional**: Use the \`galleryTitle\` prop to add a title, or leave empty for no title
-          - **Theming**: Titles use the same styling as other panel titles in the design system
-          - **Accessibility**: Proper heading structure and screen reader support
-          
-          ## Usage Examples
-          \`\`\`html
-          <!-- Gallery with title -->
-          <spectrum-image-gallery
-            galleryTitle="My Photo Collection"
-            .images=[\{...\}]
-          />
-          
-          <!-- Gallery without title -->
-          <spectrum-image-gallery
-            .images=[\{...\}]
-          />
-          \`\`\`
-          
-          ## Features
-          - **Masonry Layout**: Automatically arranges images in a responsive grid
-          - **Upload Support**: Drag & drop or click to upload images
-          - **URL Input**: Add images by URL
-          - **Selection Modes**: Single, multi, or no selection
-          - **Preview Mode**: Full-screen image previews with navigation
-          - **Background Effects**: Frost effects and transparency options
-          - **Primary Actions**: Configurable action buttons for selected images
-        `,
-      },
+    primaryActionText: {
+      control: 'text',
+      description: 'Text for primary action button (shown when images selected)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' }
+      }
     },
-  },
-} satisfies Meta<SpectrumImageGallery>;
+    primaryActionIcon: {
+      control: 'text',
+      description: 'Material Design icon for primary action button',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' }
+      }
+    },
+    primaryActionValue: {
+      control: 'text',
+      description: 'Value identifier for primary action events',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' }
+      }
+    }
+  }
+};
 
 export default meta;
+type Story = StoryObj<SpectrumImageGalleryArgs>;
 
-const renderGallery = (args: SpectrumImageGalleryArgs) => html`
-  <div style="height: 500px; width: 100%;">
-    <spectrum-image-gallery
-      .images=${args.images}
-      .allowUpload=${args.allowUpload}
-      .allowUrlInput=${args.allowUrlInput}
-      .allowDelete=${args.allowDelete}
-      .selectionMode=${args.selectionMode}
-      .selectedImages=${args.selectedImages}
-      .scrollDirection=${args.scrollDirection}
-      .previewMode=${args.previewMode}
-      .background=${args.background}
-      .frostControlBar=${args.frostControlBar}
-      .debug=${args.debug}
-      .primaryActionText=${args.primaryActionText}
-      .primaryActionIcon=${args.primaryActionIcon}
-      .primaryActionValue=${args.primaryActionValue}
-      .galleryTitle=${args.galleryTitle}
-      @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
-      @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
-      @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
-      @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
-      @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
-      @primaryAction=${(e: CustomEvent) => action('primaryAction')(e.detail)}
-    ></spectrum-image-gallery>
-  </div>
-`;
+// Interactive render function
+const renderImageGallery = (args: SpectrumImageGalleryArgs) => {
+  return html`
+    <div style="width: 100%; height: 600px; padding: 1rem; box-sizing: border-box;">
+      <spectrum-image-gallery
+        .images=${args.images}
+        allow-upload=${args.allowUpload}
+        allow-url-input=${args.allowUrlInput}
+        allow-delete=${args.allowDelete}
+        selection-mode=${args.selectionMode}
+        .selectedImages=${args.selectedImages}
+        scroll-direction=${args.scrollDirection}
+        preview-mode=${args.previewMode}
+        background=${args.background}
+        frost-control-bar=${args.frostControlBar}
+        debug=${args.debug}
+        gallery-title=${args.galleryTitle}
+        primary-action-text=${args.primaryActionText}
+        primary-action-icon=${args.primaryActionIcon}
+        primary-action-value=${args.primaryActionValue}
+        @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+        @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+        @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+        @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
+        @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
+        @primaryAction=${(e: CustomEvent) => action('primaryAction')(e.detail)}
+      ></spectrum-image-gallery>
+    </div>
+  `;
+};
 
-export const Docs: StoryObj<SpectrumImageGalleryArgs> = {
+// =================================================================
+// STORIES
+// =================================================================
+
+/**
+ * Interactive playground for exploring all image gallery features and configurations.
+ * Adjust the controls to see how different settings affect gallery behavior and appearance.
+ */
+export const Playground: Story = {
+  render: renderImageGallery
+};
+
+/**
+ * Basic image gallery with landscape photos, single selection mode, and upload capabilities.
+ * Perfect for simple image selection and viewing scenarios.
+ */
+export const BasicGallery: Story = {
   args: {
-    images: [
-      ...unsplashImages.slice(0, 2),
-      ...unsplashImages.filter(img => img.id.includes('4k')).slice(0, 1),
-      ...unsplashImages.slice(2, 6),
-    ],
+    images: sampleImages,
+    allowUpload: true,
+    allowUrlInput: true,
+    allowDelete: false,
+    selectionMode: 'single',
+    scrollDirection: 'vertical',
+    galleryTitle: 'Nature Photography Collection',
+    primaryActionText: 'Set as Featured',
+    primaryActionIcon: 'star',
+    primaryActionValue: 'feature'
+  },
+  render: renderImageGallery
+};
+
+/**
+ * Portfolio gallery showcasing interior design work with multiple selection for batch operations.
+ * Demonstrates professional use case with metadata and bulk actions.
+ */
+export const PortfolioGallery: Story = {
+  args: {
+    images: portfolioImages,
+    allowUpload: true,
+    allowUrlInput: false,
+    allowDelete: true,
     selectionMode: 'multi',
+    scrollDirection: 'vertical',
+    previewMode: true,
+    galleryTitle: 'Interior Design Portfolio',
+    primaryActionText: 'Create Portfolio',
+    primaryActionIcon: 'collections',
+    primaryActionValue: 'create-portfolio',
+    background: 'partial-frost',
+    frostControlBar: 'partial'
+  },
+  render: renderImageGallery
+};
+
+/**
+ * E-commerce product gallery with horizontal scrolling and enhanced selection feedback.
+ * Optimized for product catalog browsing and selection workflows.
+ */
+export const ProductCatalog: Story = {
+  args: {
+    images: productImages,
+    allowUpload: false,
+    allowUrlInput: false,
+    allowDelete: false,
+    selectionMode: 'single',
+    scrollDirection: 'horizontal',
+    previewMode: true,
+    galleryTitle: 'Featured Products',
+    primaryActionText: 'Add to Cart',
+    primaryActionIcon: 'shopping_cart',
+    primaryActionValue: 'add-to-cart',
+    background: 'opaque'
+  },
+  render: renderImageGallery
+};
+
+/**
+ * Content management interface with full upload capabilities and multi-selection for bulk operations.
+ * Ideal for admin panels and content management systems.
+ */
+export const ContentManager: Story = {
+  args: {
+    images: [...sampleImages, ...portfolioImages].slice(0, 8),
     allowUpload: true,
     allowUrlInput: true,
     allowDelete: true,
-    previewMode: false,
+    selectionMode: 'multi',
+    scrollDirection: 'vertical',
+    previewMode: true,
+    galleryTitle: 'Media Library',
+    primaryActionText: 'Publish Selected',
+    primaryActionIcon: 'publish',
+    primaryActionValue: 'publish',
     background: 'opaque',
-    frostControlBar: 'no',
-    primaryActionText: 'Export',
-    primaryActionIcon: 'file_download',
-    primaryActionValue: 'export-selected',
-    galleryTitle: 'Image Gallery with Title',
-    debug: false,
+    frostControlBar: 'full',
+    debug: true
   },
-  render: renderGallery,
+  render: renderImageGallery
+};
+
+/**
+ * Display-only gallery with no interaction capabilities for pure presentation scenarios.
+ * Perfect for showcasing content without editing functionality.
+ */
+export const DisplayOnly: Story = {
+  args: {
+    images: sampleImages.slice(0, 4),
+    allowUpload: false,
+    allowUrlInput: false,
+    allowDelete: false,
+    selectionMode: 'none',
+    scrollDirection: 'vertical',
+    previewMode: true,
+    galleryTitle: 'Landscape Showcase',
+    primaryActionText: '',
+    primaryActionIcon: '',
+    primaryActionValue: '',
+    background: 'full-frost'
+  },
+  render: renderImageGallery
+};
+
+/**
+ * Empty gallery state showing upload interface and onboarding experience.
+ * Demonstrates the initial state when no images are present.
+ */
+export const EmptyState: Story = {
+  args: {
+    images: [],
+    allowUpload: true,
+    allowUrlInput: true,
+    allowDelete: false,
+    selectionMode: 'multi',
+    scrollDirection: 'vertical',
+    galleryTitle: 'My Photo Collection',
+    primaryActionText: 'Organize Photos',
+    primaryActionIcon: 'photo_library',
+    primaryActionValue: 'organize',
+    background: 'opaque'
+  },
+  render: renderImageGallery
+};
+
+/**
+ * Masonry layout gallery demonstrating mixed aspect ratios and dynamic grid arrangements.
+ * Shows how the gallery handles portrait, landscape, square, and wide images naturally.
+ */
+export const MasonryLayout: Story = {
+  args: {
+    images: masonryImages,
+    allowUpload: true,
+    allowUrlInput: true,
+    allowDelete: true,
+    selectionMode: 'multi',
+    scrollDirection: 'vertical',
+    previewMode: false, // Allow control bar to show for multi-selection
+    galleryTitle: 'Mixed Media Collection',
+    primaryActionText: 'Create Collage',
+    primaryActionIcon: 'grid_view',
+    primaryActionValue: 'create-collage',
+    background: 'opaque',
+    frostControlBar: 'partial'
+  },
+  render: renderImageGallery,
   parameters: {
     docs: {
       description: {
         story: `
-# Spectrum Image Gallery Documentation
+Masonry layout demonstration with varied aspect ratios:
+- **Portrait**: Tall vertical images (2:3 ratio)
+- **Landscape**: Wide horizontal images (2:1 ratio) 
+- **Square**: Even dimensions (1:1 ratio)
+- **Wide**: Extra wide panoramas (2:1+ ratio)
 
-A comprehensive image gallery component with selection, preview, upload, and management capabilities.
-
-## Features
-
-### Core Functionality
-- **Masonry Layout**: Responsive CSS Grid with container queries
-- **Image Upload**: File upload with drag & drop support
-- **URL Input**: Add images directly from URLs with validation
-- **Selection Modes**: Single, multi, or no selection
-- **Preview Mode**: Full-screen image preview with navigation
-- **Delete Operations**: Remove selected images with confirmation
-- **Primary Actions**: Custom actions on selected images
-
-### Visual Options
-- **Background Styles**: Opaque, partial-frost, full-frost, or transparent
-- **Control Bar Styling**: Independent frost effects for action bar
-- **Scroll Directions**: Vertical masonry or horizontal scrolling
-- **Responsive Design**: Mobile-first with container queries
-
-## Basic Usage
-
-\`\`\`tsx
-import { SpectrumImageGallery } from '@unops-itg-npm/cpit-spectrum';
-
-// Basic gallery
-<spectrum-image-gallery
-  .images={imageArray}
-  selectionMode="multi"
-  allowUpload={true}
-  allowDelete={true}
-/>
-
-// Preview-only mode
-<spectrum-image-gallery
-  .images={imageArray}
-  previewMode={true}
-  background="transparent"
-/>
-\`\`\`
-
-## Props Reference
-
-### Image Management
-- \`images\`: Array of ImageConfig objects with id, url, alt, title, metadata
-- \`allowUpload\`: Enable file upload functionality (default: true)
-- \`allowUrlInput\`: Enable URL input functionality (default: true)
-- \`allowDelete\`: Enable image deletion (default: true)
-
-### Selection & Interaction
-- \`selectionMode\`: 'single' | 'multi' | 'none' (default: 'single')
-- \`selectedImages\`: Array of selected image IDs
-- \`previewMode\`: Click to preview instead of select (default: false)
-
-### Layout & Appearance
-- \`scrollDirection\`: 'vertical' | 'horizontal' (default: 'vertical')
-- \`background\`: 'opaque' | 'partial-frost' | 'full-frost' | 'transparent' (default: 'opaque')
-- \`frostControlBar\`: 'no' | 'partial' | 'full' (default: 'no')
-
-### Primary Actions
-- \`primaryActionText\`: Text for primary action button
-- \`primaryActionIcon\`: Material icon name for primary action
-- \`primaryActionValue\`: Custom value emitted with primary action
-
-### Development
-- \`debug\`: Enable console logging for debugging (default: false)
-
-## Events
-
-\`\`\`tsx
-<spectrum-image-gallery
-  @imageSelected={(e) => console.log('Selected:', e.detail)}
-  @imageDeselect={(e) => console.log('Deselected:', e.detail)}
-  @imageAdded={(e) => console.log('Added:', e.detail)}
-  @imageDeleted={(e) => console.log('Deleted:', e.detail)}
-  @imagePreview={(e) => console.log('Previewing:', e.detail)}
-  @primaryAction={(e) => console.log('Primary action:', e.detail)}
-/>
-\`\`\`
-
-## Image Configuration
-
-\`\`\`tsx
-interface ImageConfig {
-  id: string;              // Unique identifier
-  url: string;             // Image URL (data URLs supported)
-  alt?: string;            // Alt text for accessibility
-  title?: string;          // Display title
-  metadata?: any;          // Custom metadata object
-}
-\`\`\`
-
-## Background Styles
-
-- **Opaque**: Standard solid background with border and shadow
-- **Partial**: 33% frost effect with blur for subtle transparency
-- **Full**: 66% frost effect with heavy blur for glass appearance
-- **Transparent**: No background, border, or shadow (overlay use)
-
-## Best Practices
-
-1. **Performance**: For large galleries, consider lazy loading and pagination
-2. **Accessibility**: Always provide alt text for images
-3. **Mobile**: Test on various screen sizes - component is fully responsive
-4. **Events**: Handle all events for proper state management
-5. **4K Images**: Component handles high-resolution images gracefully
-6. **Primary Actions**: Use for bulk operations like export, share, or organize
-
-## Preview Mode Features
-
-- Full-screen modal with keyboard navigation (arrow keys, escape)
-- Secondary spectrum buttons for close, previous, next
-- Image counter (X of Y) when multiple images
-- Preserves aspect ratio with viewport-fit sizing
-- Touch-friendly navigation on mobile devices
-        `,
-      },
-    },
-  },
+The gallery automatically arranges images in a natural masonry layout that adapts to different screen sizes while preserving image proportions.
+        `
+      }
+    }
+  }
 };
 
-const renderFullscreenGallery = (args: SpectrumImageGalleryArgs, backgroundImage: string) => html`
-  <div style="
-    height: 100vh; 
-    width: 100vw; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-image: url('${backgroundImage}');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 32px;
-    box-sizing: border-box;
-  ">
-    <div style="
-      width: 100%;
-      max-width: 1200px;
-      height: 80vh;
-      max-height: 800px;
-    ">
-    <spectrum-image-gallery
-      .images=${args.images}
-      .allowUpload=${args.allowUpload}
-      .allowUrlInput=${args.allowUrlInput}
-      .allowDelete=${args.allowDelete}
-      .selectionMode=${args.selectionMode}
-      .selectedImages=${args.selectedImages}
-      .scrollDirection=${args.scrollDirection}
-      .previewMode=${args.previewMode}
-        .background=${args.background}
-        .frostControlBar=${args.frostControlBar}
-      .debug=${args.debug}
-        .primaryActionText=${args.primaryActionText}
-        .primaryActionIcon=${args.primaryActionIcon}
-        .primaryActionValue=${args.primaryActionValue}
-        .galleryTitle=${args.galleryTitle}
-      @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
-      @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
-      @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
-      @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
-      @imagePreview=${(e: CustomEvent) => action('imagePreview')(e.detail)}
+/**
+ * Control bar demonstration with frost effects and interactive selection feedback.
+ * Shows the control bar overlay with different frost levels and selection states.
+ */
+export const ControlBarDemo: Story = {
+  args: {
+    images: portfolioImages,
+    allowUpload: true,
+    allowUrlInput: false,
+    allowDelete: true,
+    selectionMode: 'multi',
+    selectedImages: ['port-1', 'port-3'], // Pre-select some images to show control bar
+    scrollDirection: 'vertical',
+    previewMode: false, // CRITICAL: Must be false to show control bar
+    galleryTitle: 'Design Portfolio - Control Bar Demo',
+    primaryActionText: 'Export Selected',
+    primaryActionIcon: 'file_download',
+    primaryActionValue: 'export',
+    background: 'partial-frost',
+    frostControlBar: 'full',
+    debug: true
+  },
+  render: (args) => html`
+    <div style="width: 100%; height: 600px; padding: 1rem; box-sizing: border-box; background: #f0f0f0; border-radius: 8px;">
+      <h3 style="margin-bottom: 1rem; color: #333;">Control Bar Should Be Visible (2 images pre-selected)</h3>
+      <spectrum-image-gallery
+        .images=${args.images}
+        allow-upload=${args.allowUpload}
+        allow-url-input=${args.allowUrlInput}
+        allow-delete=${args.allowDelete}
+        selection-mode=${args.selectionMode}
+        .selectedImages=${args.selectedImages}
+        scroll-direction=${args.scrollDirection}
+        preview-mode=${args.previewMode}
+        background=${args.background}
+        frost-control-bar=${args.frostControlBar}
+        gallery-title=${args.galleryTitle}
+        primary-action-text=${args.primaryActionText}
+        primary-action-icon=${args.primaryActionIcon}
+        primary-action-value=${args.primaryActionValue}
+        debug=${args.debug}
+        @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+        @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+        @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+        @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
         @primaryAction=${(e: CustomEvent) => action('primaryAction')(e.detail)}
-    ></spectrum-image-gallery>
+      ></spectrum-image-gallery>
     </div>
-  </div>
-`;
-
-export const Default: StoryObj<SpectrumImageGalleryArgs> = {
-  render: renderGallery,
+  `,
   parameters: {
     docs: {
       description: {
-        story: 'Default empty gallery showing the clean initial state with upload and URL input options available.',
-      },
-    },
-  },
+        story: `
+Control bar demonstration with full frost overlay:
+- **Pre-selected Images**: 2 images are pre-selected to show control bar
+- **Full Frost Bar**: Maximum overlay effect for visual emphasis
+- **Multi-selection**: Click to add/remove images from selection
+- **Export Action**: Primary action button appears when images selected
+- **Debug Mode**: Enabled to help troubleshoot selection issues
+- **Visual Indicators**: Selected images should have visual feedback
+
+The control bar appears when images are selected and provides batch operation controls.
+        `
+      }
+    }
+  }
 };
 
-export const WithTitle: StoryObj<SpectrumImageGalleryArgs> = {
+/**
+ * Horizontal carousel gallery with generous height for comfortable browsing.
+ * Optimized for product displays and image selection workflows.
+ */
+export const HorizontalCarousel: Story = {
   args: {
-    images: unsplashImages.slice(0, 6),
-    galleryTitle: 'My Gallery Title',
-    selectionMode: 'multi',
-  },
-  render: renderGallery,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Gallery with a non-editable title displayed at the top. Gallery titles are read-only and provide context for the image collection.',
-      },
-    },
-  },
-};
-
-export const WithImages: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages,
-    galleryTitle: 'Unsplash Image Collection',
-  },
-  render: renderGallery,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Gallery populated with beautiful Unsplash images demonstrating the masonry layout with varied image dimensions, including 4K high-resolution images.',
-      },
-    },
-  },
-};
-
-export const HighResolution4K: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: [
-      ...unsplashImages.slice(0, 3),
-      ...unsplashImages.filter(img => img.id.includes('4k')),
-      ...unsplashImages.slice(3, 6),
-    ],
+    images: productImages,
+    allowUpload: false,
+    allowUrlInput: false,
+    allowDelete: false,
     selectionMode: 'single',
-    previewMode: true,
-  },
-  render: renderGallery,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Gallery featuring 4K high-resolution images (3840x2160) mixed with standard images. Enable preview mode to see how the component handles large images with navigation controls.',
-      },
-    },
-  },
-};
-
-export const SingleSelect: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 8),
-    selectionMode: 'single',
-    selectedImages: ['nature-1'],
-  },
-  render: renderGallery,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Gallery with single-selection mode enabled. Only one image can be selected at a time.',
-      },
-    },
-  },
-};
-
-export const MultiSelect: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 8),
-    selectionMode: 'multi',
-    selectedImages: ['nature-1', 'architecture-1', 'nature-3'],
-    galleryTitle: 'Multi-Selection Gallery',
-  },
-  render: renderGallery,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Gallery with multi-selection enabled and some images pre-selected.',
-      },
-    },
-  },
-};
-
-export const FrostBackgroundPartial: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 12),
-    selectionMode: 'multi',
-    background: 'partial-frost',
-  },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Gallery with partial frost background effect (45% white tint) on a mountain landscape. The gallery has a noticeable white tint that allows the background to show through.',
-      },
-    },
-  },
-};
-
-export const FrostBackgroundFull: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 12),
-    selectionMode: 'multi',
-    background: 'full-frost',
-  },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Gallery with full frost background effect (blur + subtle tint) on a mountain landscape. The gallery has a beautiful frosted glass appearance with backdrop blur.',
-      },
-    },
-  },
-};
-
-export const FrostControlBarPartial: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 15),
-    selectionMode: 'multi',
-    frostControlBar: 'partial',
-  },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Gallery with partial frost control bar effect (45% white tint) on a forest landscape. Only the control bar has a noticeable white tint while the gallery content remains clear.',
-      },
-    },
-  },
-};
-
-export const FrostControlBarFull: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 15),
-    selectionMode: 'multi',
-    frostControlBar: 'full',
-  },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Gallery with full frost control bar effect (blur + subtle tint) on a forest landscape. Only the control bar has the enhanced frost effect with blur and translucency.',
-      },
-    },
-  },
-};
-
-export const MatchingFrostLevels: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 12),
-    selectionMode: 'multi',
-    background: 'full-frost',
-    frostControlBar: 'full',
-  },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Gallery with matching frost levels for both background and control bar. Notice how the control bar has square edges when both frost settings match, creating a seamless appearance.',
-      },
-    },
-  },
-};
-
-export const DifferentFrostLevels: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 12),
-    selectionMode: 'multi',
-    background: 'partial-frost',
-    frostControlBar: 'full',
-  },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Gallery with different frost levels for background (partial-frost) and control bar (full). The control bar has rounded edges when frost settings differ, creating visual separation.',
-      },
-    },
-  },
-};
-
-export const HorizontalLayout: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 15),
-    selectionMode: 'multi',
     scrollDirection: 'horizontal',
-    frostControlBar: 'full',
+    previewMode: false, // Allow control bar to show when image selected
+    galleryTitle: 'Product Gallery',
+    primaryActionText: 'Add to Cart',
+    primaryActionIcon: 'shopping_cart',
+    primaryActionValue: 'add-to-cart',
+    background: 'opaque',
+    frostControlBar: 'partial'
   },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Horizontal image gallery with frost control bar effect. The right-side control bar has the enhanced frost effect while the horizontal scrolling gallery content remains clear.',
-      },
-    },
-  },
-};
-
-export const PrimaryActionTextOnly: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 10),
-    selectionMode: 'multi',
-    selectedImages: ['nature-1', 'architecture-1'],
-    primaryActionText: 'Download',
-    primaryActionValue: 'download-selected',
-  },
-  render: renderGallery,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Gallery with primary action button (text only) that appears when images are selected. The primary action button appears before the delete button.',
-      },
-    },
-  },
-};
-
-export const PrimaryActionWithIcon: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 10),
-    selectionMode: 'multi',
-    selectedImages: ['nature-1', 'architecture-1', 'nature-3'],
-    primaryActionText: 'Share',
-    primaryActionIcon: 'share',
-    primaryActionValue: 'share-images',
-    galleryTitle: 'Shareable Image Gallery',
-  },
-  render: renderGallery,
+  render: (args) => html`
+    <div style="width: 100%; height: 500px; padding: 2rem; box-sizing: border-box; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px;">
+      <spectrum-image-gallery
+        .images=${args.images}
+        allow-upload=${args.allowUpload}
+        allow-url-input=${args.allowUrlInput}
+        allow-delete=${args.allowDelete}
+        selection-mode=${args.selectionMode}
+        .selectedImages=${args.selectedImages}
+        scroll-direction=${args.scrollDirection}
+        preview-mode=${args.previewMode}
+        background=${args.background}
+        frost-control-bar=${args.frostControlBar}
+        gallery-title=${args.galleryTitle}
+        primary-action-text=${args.primaryActionText}
+        primary-action-icon=${args.primaryActionIcon}
+        primary-action-value=${args.primaryActionValue}
+        @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+        @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+        @primaryAction=${(e: CustomEvent) => action('primaryAction')(e.detail)}
+      ></spectrum-image-gallery>
+    </div>
+  `,
   parameters: {
     docs: {
       description: {
-        story: 'Gallery with primary action button including both text and icon. The share icon appears alongside the text when images are selected.',
-      },
-    },
-  },
+        story: `
+Horizontal carousel with generous height (500px) for comfortable product browsing:
+- **Increased Height**: 500px with 2rem padding for spacious layout
+- **Product Focus**: Single selection perfect for shopping scenarios
+- **Preview Mode**: Click images for full-size viewing
+- **Custom Background**: Gradient background with rounded corners
+- **Generous Spacing**: Proper proportions for product display
+
+Perfect for product galleries, media carousels, and selection interfaces.
+        `
+      }
+    }
+  }
 };
 
-export const PrimaryActionBulkOperations: StoryObj<SpectrumImageGalleryArgs> = {
+/**
+ * Simple control bar demonstration to clearly show selection and control functionality.
+ * Focuses on making the control bar and selection states highly visible.
+ */
+export const SimpleControlBar: Story = {
   args: {
-    images: unsplashImages.slice(0, 8),
+    images: productImages,
+    allowUpload: false,
+    allowUrlInput: false,
+    allowDelete: true,
     selectionMode: 'multi',
-    selectedImages: ['nature-1', 'architecture-1', 'nature-3', 'urban-1'],
-    primaryActionText: 'Add to Album',
-    primaryActionIcon: 'photo_library',
-    primaryActionValue: 'add-to-album',
-    galleryTitle: 'Photo Album Manager',
+    selectedImages: ['prod-1', 'prod-2'], // Pre-select first two products
+    scrollDirection: 'vertical',
+    previewMode: false,
+    galleryTitle: 'Select Products for Cart',
+    primaryActionText: 'Add to Cart',
+    primaryActionIcon: 'shopping_cart',
+    primaryActionValue: 'add-to-cart',
+    background: 'opaque',
+    frostControlBar: 'partial',
+    debug: true
   },
-  render: renderGallery,
+  render: (args) => html`
+    <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 2rem; background: white; border: 2px solid #ddd; border-radius: 8px;">
+      <h3 style="margin-bottom: 1rem; color: #333; text-align: center;">Control Bar Demo - 2 Products Pre-selected</h3>
+      <p style="margin-bottom: 2rem; color: #666; text-align: center;">The control bar should appear at the bottom with "Add to Cart" button</p>
+      <spectrum-image-gallery
+        .images=${args.images}
+        allow-upload=${args.allowUpload}
+        allow-url-input=${args.allowUrlInput}
+        allow-delete=${args.allowDelete}
+        selection-mode=${args.selectionMode}
+        .selectedImages=${args.selectedImages}
+        scroll-direction=${args.scrollDirection}
+        preview-mode=${args.previewMode}
+        background=${args.background}
+        frost-control-bar=${args.frostControlBar}
+        gallery-title=${args.galleryTitle}
+        primary-action-text=${args.primaryActionText}
+        primary-action-icon=${args.primaryActionIcon}
+        primary-action-value=${args.primaryActionValue}
+        debug=${args.debug}
+        @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+        @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+        @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
+        @primaryAction=${(e: CustomEvent) => action('primaryAction')(e.detail)}
+      ></spectrum-image-gallery>
+    </div>
+  `,
   parameters: {
     docs: {
       description: {
-        story: 'Gallery configured for bulk operations with primary action for adding selected images to an album. Shows how primary action can be used for organizational features.',
-      },
-    },
-  },
+        story: `
+Simple control bar demonstration with clear visibility:
+- **Pre-selected Products**: Watch and headphones are pre-selected
+- **Visible Control Bar**: Should appear at bottom with "Add to Cart" button
+- **Clean Background**: White background for maximum contrast
+- **Debug Mode**: Console logging enabled to trace selection
+- **Multi-selection**: Click any product to add/remove from selection
+- **Partial Frost**: Subtle frost effect on control bar
+
+This story specifically focuses on demonstrating the control bar functionality.
+        `
+      }
+    }
+  }
 };
 
-export const PrimaryActionWorkflow: StoryObj<SpectrumImageGalleryArgs> = {
+/**
+ * Preview mode comparison showing the critical difference between preview and management modes.
+ * Demonstrates when control bars are visible vs hidden.
+ */
+export const PreviewModeComparison: Story = {
+  render: () => html`
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem;">
+      <div style="border: 2px solid #ddd; border-radius: 8px; padding: 1rem; background: white;">
+        <h3 style="margin-bottom: 1rem; color: #333; text-align: center;">Management Mode (previewMode: false)</h3>
+        <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem; text-align: center;">✅ Control bar visible when images selected</p>
+        <spectrum-image-gallery
+          .images=${productImages}
+          allow-upload="false"
+          allow-url-input="false"
+          allow-delete="true"
+          selection-mode="multi"
+          .selectedImages=${['prod-1', 'prod-2']}
+          scroll-direction="vertical"
+          preview-mode="false"
+          gallery-title="Management Mode"
+          primary-action-text="Add to Cart"
+          primary-action-icon="shopping_cart"
+          primary-action-value="add-to-cart"
+          background="opaque"
+          frost-control-bar="partial"
+          @imageSelected=${(e: CustomEvent) => action('management-imageSelected')(e.detail)}
+          @primaryAction=${(e: CustomEvent) => action('management-primaryAction')(e.detail)}
+        ></spectrum-image-gallery>
+      </div>
+      
+      <div style="border: 2px solid #ddd; border-radius: 8px; padding: 1rem; background: white;">
+        <h3 style="margin-bottom: 1rem; color: #333; text-align: center;">Preview Mode (previewMode: true)</h3>
+        <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem; text-align: center;">❌ Control bar hidden for viewing</p>
+        <spectrum-image-gallery
+          .images=${productImages}
+          allow-upload="false"
+          allow-url-input="false"
+          allow-delete="true"
+          selection-mode="multi"
+          .selectedImages=${['prod-1', 'prod-2']}
+          scroll-direction="vertical"
+          preview-mode="true"
+          gallery-title="Preview Mode"
+          primary-action-text="Add to Cart"
+          primary-action-icon="shopping_cart"
+          primary-action-value="add-to-cart"
+          background="opaque"
+          frost-control-bar="partial"
+          @imageSelected=${(e: CustomEvent) => action('preview-imageSelected')(e.detail)}
+          @primaryAction=${(e: CustomEvent) => action('preview-primaryAction')(e.detail)}
+        ></spectrum-image-gallery>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Critical behavior demonstration:
+
+**Left (Management Mode - previewMode: false):**
+- ✅ Control bar visible at bottom with "Add to Cart" button
+- ✅ Selection indicators visible on images
+- ✅ Management features enabled
+
+**Right (Preview Mode - previewMode: true):**
+- ❌ Control bar hidden for clean viewing
+- ❌ Selection UI minimized
+- ✅ Click images for full-size preview
+
+Both galleries have the same selectedImages array, but only the left shows the control bar.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Frosted control interface demonstrating advanced frost effects and overlay controls.
+ * Shows maximum visual impact with full frost backgrounds and control elements.
+ */
+export const FrostedInterface: Story = {
   args: {
-    images: unsplashImages.slice(0, 12),
+    images: sampleImages.slice(0, 6),
+    allowUpload: true,
+    allowUrlInput: true,
+    allowDelete: true,
     selectionMode: 'multi',
-    selectedImages: ['nature-1', 'architecture-1'],
-    primaryActionText: 'Process',
+    selectedImages: ['img-1', 'img-3', 'img-5'], // Pre-select for control bar visibility
+    scrollDirection: 'vertical',
+    previewMode: false, // CRITICAL: Must be false to show control bar
+    galleryTitle: 'Frosted Glass Interface',
+    primaryActionText: 'Process Selection',
     primaryActionIcon: 'auto_fix_high',
-    primaryActionValue: 'process-images',
+    primaryActionValue: 'process',
+    background: 'full-frost',
+    frostControlBar: 'full',
+    debug: true
   },
-  render: renderGallery,
+  render: (args) => html`
+    <div style="width: 100%; height: 700px; padding: 1rem; box-sizing: border-box; background: url('https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?q=80&w=2070&auto=format&fit=crop') center/cover; border-radius: 12px;">
+      <h3 style="margin-bottom: 1rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7); text-align: center;">3 Images Pre-selected - Control Bar Should Be Visible</h3>
+      <spectrum-image-gallery
+        .images=${args.images}
+        allow-upload=${args.allowUpload}
+        allow-url-input=${args.allowUrlInput}
+        allow-delete=${args.allowDelete}
+        selection-mode=${args.selectionMode}
+        .selectedImages=${args.selectedImages}
+        scroll-direction=${args.scrollDirection}
+        preview-mode=${args.previewMode}
+        background=${args.background}
+        frost-control-bar=${args.frostControlBar}
+        gallery-title=${args.galleryTitle}
+        primary-action-text=${args.primaryActionText}
+        primary-action-icon=${args.primaryActionIcon}
+        primary-action-value=${args.primaryActionValue}
+        debug=${args.debug}
+        @imageSelected=${(e: CustomEvent) => action('imageSelected')(e.detail)}
+        @imageDeselect=${(e: CustomEvent) => action('imageDeselect')(e.detail)}
+        @imageAdded=${(e: CustomEvent) => action('imageAdded')(e.detail)}
+        @imageDeleted=${(e: CustomEvent) => action('imageDeleted')(e.detail)}
+        @primaryAction=${(e: CustomEvent) => action('primaryAction')(e.detail)}
+      ></spectrum-image-gallery>
+    </div>
+  `,
   parameters: {
     docs: {
       description: {
-        story: 'Gallery with primary action for image processing workflow. Demonstrates how the primary action can trigger complex operations on selected images.',
-      },
-    },
-  },
-};
+        story: `
+Frosted glass interface with maximum visual effects:
+- **Full Frost Background**: Complete frosted glass effect over scenic background
+- **Full Frost Control Bar**: Maximum overlay effect for controls
+- **3 Pre-selected Images**: Mountain, waves, and stars are pre-selected
+- **Scenic Background**: Beautiful landscape background to show frost transparency
+- **Debug Mode**: Console logging to help troubleshoot selection
+- **Height Increased**: 700px for better visibility
 
-export const TitleWithPartialFrostAndOpaqueControls: StoryObj<SpectrumImageGalleryArgs> = {
-  args: {
-    images: unsplashImages.slice(0, 15),
-    galleryTitle: 'Mountain Photography Collection',
-    selectionMode: 'multi',
-    background: 'partial-frost',
-    frostControlBar: 'no',
-    selectedImages: ['nature-1', 'nature-3'],
-    primaryActionText: 'Export',
-    primaryActionIcon: 'download',
-    primaryActionValue: 'export-selected',
-  },
-  render: (args: SpectrumImageGalleryArgs) => renderFullscreenGallery(args, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'),
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'Complete gallery example with title, partial frost effect on the wallpaper background, and fully opaque control bar. The background has a subtle frost effect while the control bar remains completely solid for clear visibility and interaction. Perfect for showcasing collections over beautiful backgrounds.',
-      },
-    },
-  },
+Demonstrates the gallery's advanced visual styling capabilities for premium interfaces.
+        `
+      }
+    }
+  }
 };
-
- 
