@@ -13,6 +13,7 @@ import { type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type Sp
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumAppLayout as SpectrumAppLayoutElement, defineCustomElement as defineSpectrumAppLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-app-layout.js";
 import { SpectrumApplicationLayout as SpectrumApplicationLayoutElement, defineCustomElement as defineSpectrumApplicationLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-application-layout.js";
+import { SpectrumAvatar as SpectrumAvatarElement, defineCustomElement as defineSpectrumAvatar } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-avatar.js";
 import { SpectrumBadge as SpectrumBadgeElement, defineCustomElement as defineSpectrumBadge } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-badge.js";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
@@ -85,6 +86,17 @@ export const SpectrumApplicationLayout: StencilReactComponent<SpectrumApplicatio
     react: React,
     events: {} as SpectrumApplicationLayoutEvents,
     defineCustomElement: defineSpectrumApplicationLayout
+});
+
+type SpectrumAvatarEvents = { onAvatarAction: EventName<CustomEvent<{ action?: string; label?: string; id?: string }>> };
+
+export const SpectrumAvatar: StencilReactComponent<SpectrumAvatarElement, SpectrumAvatarEvents> = /*@__PURE__*/ createComponent<SpectrumAvatarElement, SpectrumAvatarEvents>({
+    tagName: 'spectrum-avatar',
+    elementClass: SpectrumAvatarElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onAvatarAction: 'avatarAction' } as SpectrumAvatarEvents,
+    defineCustomElement: defineSpectrumAvatar
 });
 
 type SpectrumBadgeEvents = NonNullable<unknown>;

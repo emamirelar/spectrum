@@ -1,0 +1,353 @@
+// ==============================================
+// Spectrum Avatar Component Styles
+// ==============================================
+// BEM naming convention: spectrum-avatar (block), __element (element), --modifier (modifier)
+// Responsive design using CSS custom properties
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+:host {
+  display: inline-block;
+  
+  // Ensure status indicators are not clipped
+  overflow: visible;
+  
+  // Core avatar properties
+  --avatar-background: var(--spectrum-sys-color-surface, #f5f5f5);
+  --avatar-color: var(--spectrum-sys-color-on-surface, #333333);
+  --avatar-border: var(--spectrum-sys-border, 1px solid transparent);
+  --avatar-border-radius: 50%;
+  --avatar-border-radius-rounded: var(--spectrum-sys-border-radius, 4px);
+  --avatar-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --avatar-font-weight: var(--spectrum-sys-font-weight-medium, 500);
+  --avatar-transition: all 0.2s ease-in-out;
+  
+  // Size variations using Spectrum spacing tokens
+  --avatar-size-xs: calc(var(--spectrum-sys-spacing, 1rem) * 1.5);    // 1.5rem
+  --avatar-size-sm: calc(var(--spectrum-sys-spacing, 1rem) * 2);      // 2rem  
+  --avatar-size-base: calc(var(--spectrum-sys-spacing, 1rem) * 2.5);  // 2.5rem
+  --avatar-size-lg: calc(var(--spectrum-sys-spacing, 1rem) * 3);      // 3rem
+  --avatar-size-xl: calc(var(--spectrum-sys-spacing, 1rem) * 4);      // 4rem
+  
+  // Font size variations using Spectrum typography tokens
+  --avatar-font-size-xs: calc(var(--spectrum-sys-font-size-small, 14px) * 0.714);   // ~10px
+  --avatar-font-size-sm: calc(var(--spectrum-sys-font-size-small, 14px) * 0.857);   // ~12px
+  --avatar-font-size-base: var(--spectrum-sys-font-size-small, 14px);               // 14px
+  --avatar-font-size-lg: var(--spectrum-sys-font-size, 16px);                       // 16px
+  --avatar-font-size-xl: calc(var(--spectrum-sys-font-size, 16px) * 1.25);          // 20px
+  
+  // Icon size variations using Spectrum icon size as base
+  --avatar-icon-size-xs: calc(var(--spectrum-sys-icon-font-size, 20px) * 0.7);      // ~14px
+  --avatar-icon-size-sm: calc(var(--spectrum-sys-icon-font-size, 20px) * 0.8);      // ~16px
+  --avatar-icon-size-base: var(--spectrum-sys-icon-font-size, 20px);                // 20px
+  --avatar-icon-size-lg: calc(var(--spectrum-sys-icon-font-size, 20px) * 1.2);      // ~24px
+  --avatar-icon-size-xl: calc(var(--spectrum-sys-icon-font-size, 20px) * 1.6);      // ~32px
+  
+  // Status indicator properties using Spectrum spacing tokens
+  --avatar-status-size: calc(var(--spectrum-sys-spacing-small, 0.5rem) * 1.5);        // 0.75rem
+  --avatar-status-border: 2px solid var(--spectrum-sys-color-surface, #ffffff);
+  --avatar-status-position-offset: calc(var(--avatar-status-size) * -0.2); // Subtle overlap - 20% extends beyond avatar boundary
+  
+  // Status colors
+  --avatar-status-online: var(--spectrum-sys-color-success, #2e844a);
+  --avatar-status-offline: var(--spectrum-sys-color-outline, #757575);
+  --avatar-status-busy: var(--spectrum-sys-color-danger, #ba0517);
+  --avatar-status-away: var(--spectrum-sys-color-warning, #ff9900);
+  
+  // Interactive states
+  --avatar-hover-scale: 1.05;
+  --avatar-active-scale: 0.95;
+  --avatar-focus-outline: 2px solid var(--spectrum-sys-color-primary, #0070d2);
+  --avatar-focus-outline-offset: calc(var(--spectrum-sys-spacing-small, 0.5rem) * 0.5); // 2px equivalent
+  --avatar-hover-shadow: 0 calc(var(--spectrum-sys-spacing-small, 0.5rem) * 0.5) calc(var(--spectrum-sys-spacing-small, 0.5rem) * 2) rgba(0, 0, 0, 0.15);
+  --avatar-active-shadow: 0 calc(var(--spectrum-sys-spacing-small, 0.5rem) * 0.25) calc(var(--spectrum-sys-spacing-small, 0.5rem) * 1) rgba(0, 0, 0, 0.1);
+  
+  // Variant colors
+  --avatar-outlined-border: var(--spectrum-sys-color-outline, #e0e0e0);
+  --avatar-filled-background: var(--spectrum-sys-color-primary-container, #e3f2fd);
+  --avatar-filled-color: var(--spectrum-sys-color-on-primary-container, #0d47a1);
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--avatar-size-base);
+  height: var(--avatar-size-base);
+  background-color: var(--avatar-background);
+  color: var(--avatar-color);
+  border: var(--avatar-border);
+  border-radius: var(--avatar-border-radius);
+  font-family: var(--avatar-font-family);
+  font-weight: var(--avatar-font-weight);
+  font-size: var(--avatar-font-size-base);
+  line-height: 1;
+  overflow: hidden;
+  transition: var(--avatar-transition);
+  user-select: none;
+  outline: none;
+  
+  // Ensure status indicator is not clipped when it extends beyond boundary
+  &--has-status {
+    overflow: visible;
+  }
+  
+  // Remove button styling when clickable
+  &--clickable {
+    background: var(--avatar-background);
+    border: var(--avatar-border);
+    padding: 0;
+    cursor: pointer;
+    
+    &:focus-visible {
+      outline: var(--avatar-focus-outline);
+      outline-offset: var(--avatar-focus-outline-offset);
+    }
+    
+    &:hover:not(.spectrum-avatar--disabled) {
+      transform: scale(var(--avatar-hover-scale));
+      box-shadow: var(--avatar-hover-shadow);
+    }
+    
+    &:active:not(.spectrum-avatar--disabled) {
+      transform: scale(var(--avatar-active-scale));
+      box-shadow: var(--avatar-active-shadow);
+    }
+  }
+  
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+  
+  // ==============================================
+  // Size Variations
+  // ==============================================
+  &--xs {
+    width: var(--avatar-size-xs);
+    height: var(--avatar-size-xs);
+    font-size: var(--avatar-font-size-xs);
+    
+    .spectrum-avatar__status {
+      width: calc(var(--avatar-status-size) * 0.75);
+      height: calc(var(--avatar-status-size) * 0.75);
+    }
+  }
+  
+  &--sm {
+    width: var(--avatar-size-sm);
+    height: var(--avatar-size-sm);
+    font-size: var(--avatar-font-size-sm);
+    
+    .spectrum-avatar__status {
+      width: calc(var(--avatar-status-size) * 0.875);
+      height: calc(var(--avatar-status-size) * 0.875);
+    }
+  }
+  
+  &--base {
+    width: var(--avatar-size-base);
+    height: var(--avatar-size-base);
+    font-size: var(--avatar-font-size-base);
+  }
+  
+  &--lg {
+    width: var(--avatar-size-lg);
+    height: var(--avatar-size-lg);
+    font-size: var(--avatar-font-size-lg);
+    
+    .spectrum-avatar__status {
+      width: calc(var(--avatar-status-size) * 1.25);
+      height: calc(var(--avatar-status-size) * 1.25);
+    }
+  }
+  
+  &--xl {
+    width: var(--avatar-size-xl);
+    height: var(--avatar-size-xl);
+    font-size: var(--avatar-font-size-xl);
+    
+    .spectrum-avatar__status {
+      width: calc(var(--avatar-status-size) * 1.5);
+      height: calc(var(--avatar-status-size) * 1.5);
+    }
+  }
+  
+  // ==============================================
+  // Shape Variations
+  // ==============================================
+  &--circle {
+    border-radius: var(--avatar-border-radius);
+  }
+  
+  &--square {
+    border-radius: 0;
+  }
+  
+  &--rounded {
+    border-radius: var(--avatar-border-radius-rounded);
+  }
+  
+  // ==============================================
+  // Variant Styles
+  // ==============================================
+  &--outlined {
+    border: 1px solid var(--avatar-outlined-border);
+    background-color: transparent;
+  }
+  
+  &--filled {
+    background-color: var(--avatar-filled-background);
+    color: var(--avatar-filled-color);
+  }
+  
+  // ==============================================
+  // Element Styles
+  // ==============================================
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+  
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .material-symbols-outlined {
+      font-size: var(--avatar-icon-size-base);
+      line-height: 1;
+    }
+    
+    &--fallback {
+      opacity: 0.6;
+    }
+  }
+  
+  &__initials {
+    font-weight: var(--avatar-font-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+  
+  // Colored initials styling
+  &--initials-colored {
+    // Ensure the background color set by JavaScript is applied
+    // The colors are set dynamically via inline styles for consistency
+    
+    .spectrum-avatar__initials {
+      // Ensure text is centered and visible
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      
+      // Ensure good contrast and readability
+      text-shadow: none;
+      font-weight: var(--spectrum-sys-font-weight-medium, 500);
+    }
+  }
+  
+  &__status {
+    position: absolute;
+    bottom: var(--avatar-status-position-offset);
+    right: var(--avatar-status-position-offset);
+    width: var(--avatar-status-size);
+    height: var(--avatar-status-size);
+    border: var(--avatar-status-border);
+    border-radius: 50%;
+    z-index: 10; // High z-index to ensure it's always on top and visible
+    
+    &--online {
+      background-color: var(--avatar-status-online);
+    }
+    
+    &--offline {
+      background-color: var(--avatar-status-offline);
+    }
+    
+    &--busy {
+      background-color: var(--avatar-status-busy);
+    }
+    
+    &--away {
+      background-color: var(--avatar-status-away);
+    }
+  }
+}
+
+// ==============================================
+// Icon Size Adjustments per Avatar Size
+// ==============================================
+.spectrum-avatar--xs .spectrum-avatar__icon .material-symbols-outlined {
+  font-size: var(--avatar-icon-size-xs);
+}
+
+.spectrum-avatar--sm .spectrum-avatar__icon .material-symbols-outlined {
+  font-size: var(--avatar-icon-size-sm);
+}
+
+.spectrum-avatar--base .spectrum-avatar__icon .material-symbols-outlined {
+  font-size: var(--avatar-icon-size-base);
+}
+
+.spectrum-avatar--lg .spectrum-avatar__icon .material-symbols-outlined {
+  font-size: var(--avatar-icon-size-lg);
+}
+
+.spectrum-avatar--xl .spectrum-avatar__icon .material-symbols-outlined {
+  font-size: var(--avatar-icon-size-xl);
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (max-width: 768px) {
+  :host {
+    // Slightly smaller avatars on mobile for better touch targets using Spectrum spacing
+    --avatar-size-xs: calc(var(--spectrum-sys-spacing, 1rem) * 1.25);   // 1.25rem
+    --avatar-size-sm: calc(var(--spectrum-sys-spacing, 1rem) * 1.75);   // 1.75rem
+    --avatar-size-base: calc(var(--spectrum-sys-spacing, 1rem) * 2.25); // 2.25rem
+    --avatar-size-lg: calc(var(--spectrum-sys-spacing, 1rem) * 2.75);   // 2.75rem
+    --avatar-size-xl: calc(var(--spectrum-sys-spacing, 1rem) * 3.5);    // 3.5rem
+  }
+}
+
+// ==============================================
+// Accessibility Enhancements
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-avatar {
+    --avatar-transition: none;
+    
+    &--clickable:hover:not(.spectrum-avatar--disabled) {
+      transform: none;
+    }
+    
+    &--clickable:active:not(.spectrum-avatar--disabled) {
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-avatar {
+    --avatar-border: 1px solid;
+    --avatar-outlined-border: 2px solid;
+    
+    &__status {
+      --avatar-status-border: 2px solid;
+    }
+  }
+}

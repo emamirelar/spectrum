@@ -27,108 +27,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.0.1-alpha.32] - 22/Jul/25
+## [0.0.1-alpha.31] - 2025-07-22
 
 ### 🧪 Pre-release
-
-### 🚀 Major Documentation Enhancement - Standardized Component Story Architecture
-
-**🎉 MAJOR UPDATE: Complete standardization of all Spectrum component Storybook documentation following the button exemplar pattern!**
-
-**All Spectrum components now feature consistent, comprehensive documentation with:**
-- **Unified Story Structure**: Playground, Variants, Feature-Specific, UsageScenarios, AccessibilityExample
-- **Rich Interactive Content**: Real-world examples, accessibility demonstrations, comprehensive feature showcases
-- **Enhanced Documentation**: Detailed usage guidelines, business applications, technical architecture explanations
-- **Event System Integration**: Complete event monitoring and interaction examples across all components
 
 ### 🆕 Added
-- **Documentation Automation**: 🚀 **Enhanced Dependency Map System** - Comprehensive validation and automation for component dependencies
-  - **Dependency Map Validation**: New `validateDependencyMapIntegrity()` function with comprehensive error checking and warnings
-  - **Dynamic Dependency Calculation**: `getComponentDependents()` function for automatic reverse dependency computation
-  - **Enhanced Generation Scripts**: Updated `generate-component-docs.js` with dependency map integration and validation
-  - **Component Level Detection**: `getComponentLevel()` function for automatic hierarchy level determination
-  - **Error Prevention**: Pre-execution validation prevents documentation generation with invalid dependency map
-  - **Automated Documentation**: Dynamic population of "Components Using" sections based on dependency map
-  - **Single Source of Truth**: Dependency map now enforced as authoritative source for all component relationships
-- **spectrum-theme**: 🚀 **Interactive Wallpaper Selection** - Advanced wallpaper theming demonstration
-  - **8 Curated Wallpapers**: Nature photography, seasonal themes, and artistic compositions from Unsplash
-  - **Real-time Theme Generation**: Click any wallpaper to see instant Material Design 3 color extraction
-  - **Visual Feedback System**: Selected wallpaper highlighting with theme color borders and scale transforms
-  - **Live Theme Preview**: Dynamic color swatches and component theming demonstration
-  - **Interactive Controls**: Toggle features like debug mode, color swatches, and document root application
-  - **Comprehensive Event System**: All interactions logged with detailed wallpaper and color information
-- **Storybook Story Standardization**: 🚀 **Complete Component Library Overhaul** - All 17 components rebuilt following exemplar pattern
-  - **Unified Architecture**: Every component now follows the exact same story structure and naming conventions
-  - **Rich Content Libraries**: Extensive sample data collections for realistic demonstrations
-  - **Interactive Examples**: Live feature demonstrations with real-world usage scenarios
-  - **Accessibility Excellence**: Comprehensive accessibility examples and WCAG compliance demonstrations
-  - **Business Context**: Real-world application scenarios and implementation patterns for each component
-
-### 🔄 Changed
-- **Component Story Structure**: **BREAKING ARCHITECTURAL CHANGE** - All component stories standardized to button exemplar pattern
-  - **Unified Naming**: All components now use: Playground, Variants, [Feature-Specific], UsageScenarios, AccessibilityExample
-  - **Enhanced Content**: 700-1000+ lines per story file with comprehensive examples and documentation
-  - **Real-world Focus**: Business scenarios, implementation patterns, and practical usage examples
-  - **Interactive Experiences**: Live demonstrations, event monitoring, and feature exploration
-- **spectrum-badge**: Comprehensive story rebuild with variant showcase, usage scenarios, and accessibility examples (649 lines)
-- **spectrum-button**: Enhanced as the exemplar component with comprehensive feature demonstrations
-- **spectrum-chip**: Complete rebuild with selection examples, real-world scenarios, and accessibility patterns (757 lines)
-- **spectrum-collapsible-list**: Full story overhaul with navigation structures, organizational examples, and filtering demos (823 lines)
-- **spectrum-context-menu**: Enhanced with positioning options, action types, and programmatic control examples (634 lines)
-- **spectrum-conversation-panel**: Major rebuild with conversation examples, background variations, and full scenarios (945 lines)
-- **spectrum-hero**: Complete story reconstruction with carousel functionality, video support, and mobile optimization (712 lines)
-- **spectrum-image-gallery**: Comprehensive rebuild with masonry layouts, control bar demos, and preview mode comparisons (889 lines)
-- **spectrum-menu**: Full navigation menu story suite with horizontal, vertical, and megamenu variants (674 lines)
-- **spectrum-panel**: Complete story rebuild with background variants, size variations, and content organization (598 lines)
-- **spectrum-rail-item**: Enhanced with navigation examples, toolbar actions, and workflow items (634 lines)
-- **spectrum-rail**: Major rebuild with expansion states, dashboard navigation, and context menu integration (756 lines)
-- **spectrum-search-input**: Comprehensive layout variants, multi-line support, and live filtering examples (623 lines)
-- **spectrum-select**: Complete rebuild with variant showcase, multiple selection, and form integration examples (734 lines)
-- **spectrum-theme**: Major enhancement with color themes, FOUC prevention, and interactive wallpaper selection (1,407 lines)
-- **spectrum-toast**: Full story standardization with notification variants, positioning showcase, and usage scenarios (776 lines)
-- **spectrum-wallpaper**: Comprehensive rebuild with Material Design 3 integration, advanced features, and accessibility examples (975 lines)
+- **spectrum-avatar**: New avatar component for displaying user profile images, initials, or icons
+  - **Multiple Display Options**: Support for profile images, custom icons, auto-generated initials, or fallback person icon
+  - **Size Variations**: Five size options (xs, sm, base, lg, xl) with responsive scaling
+  - **Shape Options**: Circle, square, and rounded variants for different design contexts
+  - **Visual Variants**: Default, outlined, and filled appearance styles
+  - **Status Indicators**: Optional status badges (online, offline, busy, away) with visual indicators
+  - **Interactive States**: Clickable functionality with hover, active, and focus states
+  - **Dynamic Coloring**: Auto-generated color schemes for initials based on consistent hashing algorithm
+  - **Image Management**: Automatic fallback handling with preloading and error state management
+  - **Accessibility**: Full keyboard navigation, screen reader support, and ARIA compliance
+  - **Event System**: Emits `avatarAction` events with action context for integration
+  - **Custom Styling**: Support for custom CSS properties and style overrides
+  - **Comprehensive Testing**: Unit tests and E2E tests with proper component behavior validation
 
 ### 🐛 Fixed
-- **spectrum-conversation-panel**: Fixed message format incompatibility - corrected data mapping from `content`/`isRequest` to `message`/`sender` format
-- **spectrum-conversation-panel**: Fixed citation rendering - added proper `<sup>` tags in message content for citation functionality
-- **spectrum-conversation-panel**: Fixed control interactions - corrected property binding for boolean props (`.loading`, `.sound`, `.debug`)
-- **spectrum-hero**: Resolved duplicate story conflicts - removed conflicting `.ts` files and cleared Storybook cache
-- **spectrum-image-gallery**: Fixed control bar visibility - set `previewMode: false` to ensure control bar display in demos
-- **spectrum-image-gallery**: Enhanced horizontal strip height - increased from 200px to 500px for better image visibility
-- **spectrum-menu**: Fixed invalid Material Design icons - corrected `miscellaneous_services` to `design_services`
-- **spectrum-search-input**: Resolved syntax errors - removed unescaped backticks in documentation strings
-- **spectrum-select**: Fixed duplicate story conflicts - removed conflicting `.ts` file causing ID conflicts
-- **spectrum-theme**: Resolved MDX import errors - corrected Storybook import paths for project compatibility
-- **spectrum-toast**: Fixed story pattern compliance - removed old stories and rebuilt following button exemplar
-- **spectrum-wallpaper**: Eliminated conflicting files - removed old `.ts` files causing navigation issues
-
-### 📝 Documentation
-- **Dependency Map Rules**: 🚀 **Enhanced Component Dependency Documentation** - Comprehensive automation and validation system
-  - **Single Source of Truth Principle**: Established `COMPONENT_DEPENDENCY_MAP` as authoritative source for all relationships
-  - **Automation Requirements**: Detailed specifications for dependencies, dependents, and Mermaid diagram generation
-  - **Documentation Accuracy Standards**: Quality standards for dependency documentation and architectural diagrams
-  - **Maintenance Workflow**: Clear processes for updating dependency map and validation procedures
-- **Story Documentation**: **Massive Enhancement** - 17,000+ lines of new documentation across all components
-  - **Comprehensive Coverage**: Every component now includes detailed usage guidelines, business applications, and technical architecture
-  - **Interactive Examples**: Live demonstrations, event monitoring, and comprehensive feature exploration
-  - **Accessibility Focus**: Dedicated accessibility examples meeting WCAG 2.1 AA standards across all components
-  - **Real-world Scenarios**: Business use cases, implementation patterns, and practical application examples
-  - **Developer Experience**: Enhanced debugging, event monitoring, and development tool integration
-- **Component Dependencies**: **Complete Accuracy** - All dependency documentation now auto-generated from validated dependency map
-  - **spectrum-toast**: Confirmed as Level 1 atomic component with no dependencies and no dependents
-  - **All Components**: Updated dependency documentation reflects accurate relationships and integration patterns
-  - **Visual Dependency Graphs**: Mermaid diagrams replaced with text-based representations for compatibility
-  - **Event Flow Documentation**: Comprehensive event system documentation for all component interactions
-- **Storybook Navigation**: **Perfect Consistency** - All components now appear under correct "Spectrum > Components" hierarchy
-  - **Unified Structure**: Consistent story naming and organization across entire component library
-  - **Enhanced Discoverability**: Logical grouping and consistent naming for better developer experience
-  - **Comprehensive Examples**: Every story includes rich documentation and interactive examples
-
----
-
-## [0.0.1-alpha.31] - 14/Jul/25
-
-### 🧪 Pre-release
+- **spectrum-avatar**: Fixed unit test expectations to match actual component rendering
+  - **Test Accuracy**: Updated test to expect fallback person icon instead of slot element
+  - **Component Behavior**: Test now correctly validates default component state with Material Icons
 
 ### 📝 Documentation
 - **Release Preparation**: Updated package version to 0.0.1-alpha.31 for release preparation

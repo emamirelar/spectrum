@@ -80,6 +80,29 @@ export const SpectrumApplicationLayout = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumAvatar = /*@__PURE__*/ defineContainer<JSX.SpectrumAvatar>('spectrum-avatar', undefined, [
+  'debug',
+  'src',
+  'alt',
+  'initials',
+  'icon',
+  'label',
+  'avatarId',
+  'size',
+  'shape',
+  'variant',
+  'status',
+  'showStatus',
+  'clickable',
+  'disabled',
+  'action',
+  'customStyle',
+  'avatarAction'
+], [
+  'avatarAction'
+]);
+
+
 export const SpectrumBadge = /*@__PURE__*/ defineContainer<JSX.SpectrumBadge>('spectrum-badge', undefined, [
   'variant',
   'size',
