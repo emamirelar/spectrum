@@ -27,9 +27,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.0.1-alpha.31] - 2025-01-25
+## [0.0.1-alpha.31] - 2025-07-22
 
 ### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-avatar**: New avatar component for displaying user profile images, initials, or icons
+  - **Multiple Display Options**: Support for profile images, custom icons, auto-generated initials, or fallback person icon
+  - **Size Variations**: Five size options (xs, sm, base, lg, xl) with responsive scaling
+  - **Shape Options**: Circle, square, and rounded variants for different design contexts
+  - **Visual Variants**: Default, outlined, and filled appearance styles
+  - **Status Indicators**: Optional status badges (online, offline, busy, away) with visual indicators
+  - **Interactive States**: Clickable functionality with hover, active, and focus states
+  - **Dynamic Coloring**: Auto-generated color schemes for initials based on consistent hashing algorithm
+  - **Image Management**: Automatic fallback handling with preloading and error state management
+  - **Accessibility**: Full keyboard navigation, screen reader support, and ARIA compliance
+  - **Event System**: Emits `avatarAction` events with action context for integration
+  - **Custom Styling**: Support for custom CSS properties and style overrides
+  - **Comprehensive Testing**: Unit tests and E2E tests with proper component behavior validation
+
+### 🐛 Fixed
+- **spectrum-avatar**: Fixed unit test expectations to match actual component rendering
+  - **Test Accuracy**: Updated test to expect fallback person icon instead of slot element
+  - **Component Behavior**: Test now correctly validates default component state with Material Icons
 
 ### 📝 Documentation
 - **Release Preparation**: Updated package version to 0.0.1-alpha.31 for release preparation

@@ -17,6 +17,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Purpose: Provides Material Design 3 color system, theming, and FOUC prevention
 
 ### Atomic Components (No Internal Dependencies)
+- **spectrum-avatar**: User profile avatar component
+  - Dependencies: None (pure component)
+  - Used by: User interfaces, profile displays, and identity visualization
+  - Purpose: Display user profile images, initials, or icons with status indicators and interactive states
+
 - **spectrum-button**: Interactive button component
   - Dependencies: None (pure component)
   - Used by: spectrum-conversation-panel, spectrum-image-gallery, spectrum-rail, spectrum-rail-item, spectrum-search-input, spectrum-select
@@ -160,6 +165,7 @@ Level 0 (Foundation):
 └── spectrum-theme
 
 Level 1 (Atomic):
+├── spectrum-avatar
 ├── spectrum-button
 ├── spectrum-chip
 ├── spectrum-toast

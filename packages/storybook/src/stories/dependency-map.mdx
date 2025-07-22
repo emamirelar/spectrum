@@ -20,6 +20,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - **Purpose**: Provides Material Design 3 color system, theming, and FOUC prevention
 
 ### Atomic Components (No Internal Dependencies)
+- **spectrum-avatar**: ✨ **NEW** User profile avatar component
+  - **Dependencies**: None (pure component)
+  - **Used by**: User interfaces, profile displays, and identity visualization
+  - **Purpose**: Display user profile images, initials, or icons with status indicators and interactive states
+
 - **spectrum-button**: Interactive button component
   - **Dependencies**: None (pure component)
   - **Used by**: spectrum-conversation-panel, spectrum-image-gallery, spectrum-rail, spectrum-rail-item, spectrum-search-input, spectrum-select
@@ -30,7 +35,7 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - **Used by**: spectrum-accordion, spectrum-conversation-panel
   - **Purpose**: Display tags, selections, or actionable items
 
-- **spectrum-toast**: ✨ **NEW** Notification component for user feedback
+- **spectrum-toast**: Notification component for user feedback
   - **Dependencies**: None (pure component)
   - **Used by**: Standalone notifications and user feedback systems
   - **Purpose**: Display temporary notifications, alerts, and user feedback messages
@@ -160,9 +165,10 @@ Level 0 (Foundation):
 └── spectrum-theme
 
 Level 1 (Atomic):
+├── spectrum-avatar ✨ NEW
 ├── spectrum-button
 ├── spectrum-chip
-├── spectrum-toast ✨ NEW
+├── spectrum-toast
 ├── spectrum-context-menu
 ├── spectrum-wallpaper
 ├── spectrum-carousel
@@ -236,6 +242,15 @@ Level 3 (Complex):
 
 ## 📈 Recent Updates
 
+### ✨ spectrum-avatar Component (v0.0.1-alpha.31) - 2025-07-22
+- **New Component**: Added to Level 1 (Atomic) - no internal dependencies
+- **Avatar System**: Comprehensive avatar component for user profile display and identification
+- **Multiple Display Options**: Support for profile images, custom icons, auto-generated initials, or fallback person icon
+- **Size & Shape Variations**: Five size options with circle, square, and rounded shape variants
+- **Status Indicators**: Optional status badges with online, offline, busy, and away states
+- **Interactive Features**: Clickable functionality with full event system and accessibility support
+- **Dynamic Styling**: Auto-generated color schemes and comprehensive theming support
+
 ### 🚧 Layout Components (v0.0.1-alpha.25) - **WORK IN PROGRESS**
 **⚠️ WARNING: These components are NOT ready for production use.**
 - **Status**: All layout components are experimental and unstable
@@ -298,6 +313,8 @@ When implementing or modifying components, you **MUST**:
 <mermaid-diagram chart="graph TD
     ST[spectrum-theme] --> |CSS Variables| ALL[All Components]
     
+    SAVA[spectrum-avatar]
+    
     SB[spectrum-button] --> |Direct Use| SR[spectrum-rail]
     SB --> |Direct Use| SSI[spectrum-search-input] 
     SB --> |Direct Use| SRI[spectrum-rail-item]
@@ -324,10 +341,10 @@ When implementing or modifying components, you **MUST**:
     classDef new fill:#ffebee,stroke:#f44336,stroke-width:2px
     
     class ST foundation
-    class SB,SC,SCTX,SW,SCAR,SM,STT atomic
+    class SAVA,SB,SC,SCTX,SW,SCAR,SM,STT atomic
     class SA,SSI,SRI,SCL,SS,SIG,SH composed
     class SR,SCP complex
-    class STT new"></mermaid-diagram>
+    class SAVA new"></mermaid-diagram>
 
 ---
 
