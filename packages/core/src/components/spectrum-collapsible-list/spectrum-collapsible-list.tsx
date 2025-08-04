@@ -141,7 +141,8 @@ export class SpectrumCollapsibleList {
    * Get a unique key for a node based on its path
    */
   private getNodeKey(item: CollapsibleListItem, parentKey: string) {
-    return parentKey ? `${parentKey} > ${item.label}` : item.label;
+    const label = item.label || 'untitled';
+    return parentKey ? `${parentKey} > ${label}` : label;
   }
 
   /**
@@ -375,14 +376,14 @@ export class SpectrumCollapsibleList {
           .filter(child => child !== null) as CollapsibleListItem[];
         
         // Only return parent if it has matching children or its label matches
-        if (filteredChildren.length > 0 || item.label.toLowerCase().includes(lowerFilter)) {
+        if (filteredChildren.length > 0 || (item.label || '').toLowerCase().includes(lowerFilter)) {
           return {
             ...item,
             children: filteredChildren
           };
         }
         // Return parent with empty children if it matches the filter
-        else if (item.label.toLowerCase().includes(lowerFilter)) {
+        else if ((item.label || '').toLowerCase().includes(lowerFilter)) {
           return {
             ...item,
             children: []
@@ -393,7 +394,7 @@ export class SpectrumCollapsibleList {
       }
       
       // For leaf items, only include if label matches filter
-      return item.label.toLowerCase().includes(lowerFilter) ? item : null;
+      return (item.label || '').toLowerCase().includes(lowerFilter) ? item : null;
     }).filter(Boolean) as CollapsibleListItem[];
   }
 
@@ -407,7 +408,7 @@ export class SpectrumCollapsibleList {
       const key = this.getNodeKey(item, parentKey);
       const isParent = Array.isArray(item.children);
       const isExpanded = this.expandedMap[key] ?? !!item.expanded;
-      const contextIconId = `context-icon-${key.replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`;
+      const contextIconId = `context-icon-${(key || 'unknown').replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`;
       // Determine context actions for this branch
       const currentContextActions = item.contextActions || parentContextActions || this.contextActions;
 
@@ -423,13 +424,13 @@ export class SpectrumCollapsibleList {
                 id={`edit-input-${item.id}`}
                 class="spectrum-collapsible-list__edit-input"
                 type="text"
-                value={item.label}
+                value={item.label || ''}
                 onKeyDown={(e) => this.handleEditKeyDown(e, (e.target as HTMLInputElement).value)}
                 onBlur={(e) => this.handleEditBlur(e)}
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
-              <span class="spectrum-collapsible-list__label">{item.label}</span>
+              <span class="spectrum-collapsible-list__label">{item.label || 'Untitled'}</span>
             )}
             {isParent && (
               <>

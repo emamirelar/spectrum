@@ -1,0 +1,226 @@
+// ==============================================
+// Spectrum Dialog Component Styles
+// ==============================================
+// BEM naming convention: spectrum-dialog (block), __element (element), --modifier (modifier)
+// HTML dialog element with proper viewport positioning
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+:host {
+  display: contents;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  
+  // Dialog dimensions handled by spectrum-panel
+  
+  // Colors and theming (background handled by spectrum-panel)
+  --dialog-color: var(--spectrum-sys-color-on-surface, #000000);
+  --dialog-border-radius: var(--spectrum-sys-shape-corner-large, 0.75rem);
+  --dialog-shadow: var(--spectrum-sys-elevation-level-4, 0 8px 32px rgba(0, 0, 0, 0.24));
+  
+  // Backdrop
+  --dialog-backdrop-color: rgba(0, 0, 0, 0.6);
+  --dialog-backdrop-blur: blur(4px);
+  
+  // Spacing
+  --dialog-padding: var(--spectrum-sys-spacing, 1rem);
+  --dialog-gap: var(--spectrum-sys-spacing-small, 0.5rem);
+  
+  // Animation
+  --dialog-animation-duration: 0.3s;
+  --dialog-animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// ==============================================
+// Base Dialog Styles
+// ==============================================
+.spectrum-dialog {
+  // Essential positioning - break out of all containers
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  
+  // Reset browser defaults
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  outline: none;
+  
+  // No sizing - let spectrum-panel handle it
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 2rem);
+  
+  // Animation initial state
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+  transition: 
+    opacity var(--dialog-animation-duration) var(--dialog-animation-timing),
+    transform var(--dialog-animation-duration) var(--dialog-animation-timing);
+  
+  // Hide when not open
+  &:not([open]) {
+    display: none;
+  }
+  
+  // Show when open
+  &[open] {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
+  // Size variants removed - spectrum-panel handles sizing
+}
+
+// ==============================================
+// Backdrop Styles
+// ==============================================
+.spectrum-dialog::backdrop {
+  background-color: var(--dialog-backdrop-color);
+  backdrop-filter: var(--dialog-backdrop-blur);
+  opacity: 0;
+  transition: opacity var(--dialog-animation-duration) var(--dialog-animation-timing);
+}
+
+.spectrum-dialog[open]::backdrop {
+  opacity: 1;
+}
+
+// ==============================================
+// Panel Container (handled by spectrum-panel)
+// ==============================================
+
+// ==============================================
+// Header Styles
+// ==============================================
+.spectrum-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--dialog-padding);
+  border-bottom: 1px solid var(--spectrum-sys-color-outline, #e0e0e0);
+  flex-shrink: 0;
+}
+
+.spectrum-dialog__title {
+  font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  font-size: var(--spectrum-sys-typescale-headline-small-size, 1.5rem);
+  font-weight: var(--spectrum-sys-typescale-headline-small-weight, 500);
+  line-height: var(--spectrum-sys-typescale-headline-small-line-height, 1.4);
+  color: var(--dialog-color);
+  margin: 0;
+  flex: 1;
+}
+
+.spectrum-dialog__close-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  background-color: transparent;
+  color: var(--spectrum-sys-color-on-surface-variant, #666666);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--dialog-animation-duration) var(--dialog-animation-timing);
+  
+  &:hover {
+    background-color: var(--spectrum-sys-color-surface-variant, #f5f5f5);
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--spectrum-sys-color-primary, #1976d2);
+    outline-offset: 2px;
+  }
+  
+  .material-symbols-outlined {
+    font-size: 1.25rem;
+  }
+}
+
+// ==============================================
+// Content Styles
+// ==============================================
+.spectrum-dialog__content {
+  flex: 1;
+  padding: var(--dialog-padding);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: transparent;
+  color: var(--dialog-color);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  min-width: 0; // Allow content to shrink below intrinsic width
+}
+
+// ==============================================
+// Control Bar Styles
+// ==============================================
+.spectrum-dialog__control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--dialog-gap);
+  padding: var(--dialog-padding);
+  border-top: 1px solid var(--spectrum-sys-color-outline, #e0e0e0);
+  flex-shrink: 0;
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (max-width: 768px) {
+  :host {
+    --dialog-size-small: 280px;
+    --dialog-size-medium: calc(100vw - 2rem);
+    --dialog-size-large: calc(100vw - 2rem);
+    --dialog-size-full: calc(100vw - 1rem);
+  }
+  
+  .spectrum-dialog {
+    max-width: calc(100vw - 1rem);
+    max-height: calc(100vh - 1rem);
+  }
+  
+  .spectrum-dialog__control-bar {
+    flex-direction: column;
+    align-items: stretch;
+    
+    spectrum-button {
+      width: 100%;
+    }
+  }
+}
+
+// ==============================================
+// Accessibility and Reduced Motion
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-dialog {
+    --dialog-animation-duration: 0.01ms;
+    --dialog-backdrop-blur: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-dialog__header {
+    border-bottom-width: 2px;
+  }
+  
+  .spectrum-dialog__control-bar {
+    border-top-width: 2px;
+  }
+  
+  .spectrum-dialog__close-button {
+    border: 1px solid currentColor;
+  }
+}

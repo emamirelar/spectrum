@@ -6,6 +6,9 @@
 // CSS custom properties for theming integration
 // ==============================================
 
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
 :host {
   display: inline-block;
   
@@ -36,8 +39,10 @@
   --badge-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-// Base badge styles
-.badge {
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -51,21 +56,25 @@
   overflow: hidden;
   box-sizing: border-box;
   
-  // Circular variant
+  // ==============================================
+  // Shape Variations
+  // ==============================================
   &--circular {
     border-radius: var(--badge-border-radius-full);
     aspect-ratio: 1;
     min-width: auto;
   }
   
-  // Size variations
+  // ==============================================
+  // Size Variations
+  // ==============================================
   &--small {
     padding: calc(var(--badge-spacing-small) * 0.5) var(--badge-spacing-small);
     font-size: 12px;
     min-height: 20px;
     min-width: 20px;
     
-    &.badge--circular {
+    &.spectrum-badge--circular {
       width: 20px;
       height: 20px;
       padding: 0;
@@ -78,7 +87,7 @@
     min-height: 28px;
     min-width: 28px;
     
-    &.badge--circular {
+    &.spectrum-badge--circular {
       width: 28px;
       height: 28px;
       padding: 0;
@@ -91,14 +100,16 @@
     min-height: 36px;
     min-width: 36px;
     
-    &.badge--circular {
+    &.spectrum-badge--circular {
       width: 36px;
       height: 36px;
       padding: 0;
     }
   }
   
-  // Color variants
+  // ==============================================
+  // Variant Styles
+  // ==============================================
   &--primary {
     background-color: var(--badge-primary);
     color: var(--badge-primary-text);
@@ -126,20 +137,26 @@
   }
 }
 
-// Text content
-.badge__text {
+// ==============================================
+// Element Styles
+// ==============================================
+.spectrum-badge__text {
   line-height: 1;
   font-size: inherit;
   font-weight: inherit;
 }
 
-// Hover effects (optional - can be enabled via CSS classes)
-.badge:hover {
+// ==============================================
+// Interactive States (Optional)
+// ==============================================
+.spectrum-badge:hover {
   box-shadow: var(--badge-shadow-hover);
   transform: translateY(-1px);
 }
 
-// Dark theme support
+// ==============================================
+// Responsive Design
+// ==============================================
 @media (prefers-color-scheme: dark) {
   :host {
     --badge-secondary: var(--spectrum-color-surface-container, #2a2a2a);
@@ -147,9 +164,11 @@
   }
 }
 
-// High contrast support
+// ==============================================
+// Accessibility Enhancements
+// ==============================================
 @media (prefers-contrast: high) {
-  .badge {
+  .spectrum-badge {
     border: 2px solid currentColor;
     
     &--secondary {
@@ -158,13 +177,12 @@
   }
 }
 
-// Reduced motion support
 @media (prefers-reduced-motion: reduce) {
-  .badge {
+  .spectrum-badge {
     transition: none;
   }
   
-  .badge:hover {
+  .spectrum-badge:hover {
     transform: none;
   }
 }

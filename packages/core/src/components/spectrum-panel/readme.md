@@ -32,12 +32,14 @@
 ### Used by
 
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
+ - [spectrum-dialog](../spectrum-dialog)
  - [spectrum-image-gallery](../spectrum-image-gallery)
 
 ### Graph
 ```mermaid
 graph TD;
   spectrum-conversation-panel --> spectrum-panel
+  spectrum-dialog --> spectrum-panel
   spectrum-image-gallery --> spectrum-panel
   style spectrum-panel fill:#f9f,stroke:#333,stroke-width:4px
 ```

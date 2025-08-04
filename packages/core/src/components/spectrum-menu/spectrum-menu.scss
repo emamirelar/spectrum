@@ -108,7 +108,7 @@
   gap: var(--menu-spacing-small);
   padding: var(--menu-spacing-small) var(--menu-spacing);
   text-decoration: none;
-  color: inherit;
+  color: var(--menu-color);
   border-radius: var(--menu-border-radius);
   transition: var(--menu-transition);
   cursor: pointer;

@@ -52,16 +52,16 @@ export class SpectrumBadge {
     });
 
     const badgeClasses = {
-      'badge': true,
-      [`badge--${this.variant}`]: true,
-      [`badge--${this.size}`]: true,
-      'badge--circular': this.circular
+      'spectrum-badge': true,
+      [`spectrum-badge--${this.variant}`]: true,
+      [`spectrum-badge--${this.size}`]: true,
+      'spectrum-badge--circular': this.circular
     };
 
     return (
       <Host>
         <div class={badgeClasses}>
-          {this.text && <span class="badge__text">{this.text}</span>}
+          {this.text && <span class="spectrum-badge__text">{this.text}</span>}
           <slot></slot>
         </div>
       </Host>

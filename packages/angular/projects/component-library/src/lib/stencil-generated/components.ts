@@ -344,6 +344,39 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
 
 @ProxyCmp({
+  inputs: ['background', 'buttons', 'closeOnEscape', 'closeOnOutsideClick', 'debug', 'dialogId', 'dialogTitle', 'height', 'noPadding', 'open', 'showCloseButton', 'size', 'width'],
+  methods: ['show', 'hide', 'toggle']
+})
+@Component({
+  selector: 'spectrum-dialog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['background', 'buttons', 'closeOnEscape', 'closeOnOutsideClick', 'debug', 'dialogId', 'dialogTitle', 'height', 'noPadding', 'open', 'showCloseButton', 'size', 'width'],
+})
+export class SpectrumDialog {
+  protected el: HTMLSpectrumDialogElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['dialogAction', 'dialogClose']);
+  }
+}
+
+
+export declare interface SpectrumDialog extends Components.SpectrumDialog {
+  /**
+   * Event emitted when dialog actions occur
+   */
+  dialogAction: EventEmitter<CustomEvent<{action: string; dialogId?: string; buttonId?: string}>>;
+  /**
+   * Event emitted when dialog is closed
+   */
+  dialogClose: EventEmitter<CustomEvent<{action: string; dialogId?: string}>>;
+}
+
+
+@ProxyCmp({
   inputs: ['align', 'alignContent', 'breakpoint', 'columnGap', 'debug', 'direction', 'fullHeight', 'fullWidth', 'gap', 'inline', 'justify', 'mobileDirection', 'responsive', 'rowGap', 'wrap']
 })
 @Component({
@@ -388,14 +421,14 @@ export declare interface SpectrumGrid extends Components.SpectrumGrid {}
 
 
 @ProxyCmp({
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides']
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides']
 })
 @Component({
   selector: 'spectrum-hero',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides'],
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides'],
 })
 export class SpectrumHero {
   protected el: HTMLSpectrumHeroElement;
@@ -420,14 +453,14 @@ export declare interface SpectrumHero extends Components.SpectrumHero {
 
 
 @ProxyCmp({
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode']
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'imagesJson', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({
   selector: 'spectrum-image-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode'],
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'imagesJson', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
   protected el: HTMLSpectrumImageGalleryElement;
@@ -460,7 +493,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -468,7 +501,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLSpectrumMenuElement;

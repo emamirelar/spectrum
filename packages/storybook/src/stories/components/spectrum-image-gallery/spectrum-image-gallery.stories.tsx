@@ -42,6 +42,7 @@ interface ImageConfig {
 // Component interfaces for TypeScript support
 interface SpectrumImageGalleryElement extends HTMLElement {
   images: ImageConfig[];
+  imagesJson: string;
   allowUpload: boolean;
   allowUrlInput: boolean;
   allowDelete: boolean;
@@ -302,6 +303,7 @@ All events provide comprehensive context including selected images, metadata, an
   },
   args: {
     images: sampleImages,
+    imagesJson: '',
     allowUpload: true,
     allowUrlInput: true,
     allowDelete: true,
@@ -324,6 +326,14 @@ All events provide comprehensive context including selected images, metadata, an
       table: {
         type: { summary: 'ImageConfig[]' },
         defaultValue: { summary: '[]' }
+      }
+    },
+    imagesJson: {
+      control: { type: 'text' },
+      description: 'JSON string representation of images array for HTML attribute usage. Useful for server-side templates (e.g., Twig) that need to pass image data as strings. Takes precedence over images prop if provided.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '""' }
       }
     },
     allowUpload: {
@@ -997,6 +1007,434 @@ Frosted glass interface with maximum visual effects:
 - **Height Increased**: 700px for better visibility
 
 Demonstrates the gallery's advanced visual styling capabilities for premium interfaces.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * JSON Sample Gallery demonstrating the exact JSON structure from documentation.
+ * Uses the comprehensive sample JSON with metadata, photographer credits, and rich image information.
+ */
+export const JSONSampleGallery: Story = {
+  args: {
+    // Using the exact JSON sample structure from documentation
+    images: [
+      {
+        id: "img-001",
+        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+        alt: "Beautiful mountain landscape with lake reflection",
+        title: "Mountain Lake at Sunrise",
+        metadata: {
+          photographer: "Jane Smith",
+          location: "Banff National Park, Canada",
+          category: "landscape",
+          tags: ["mountains", "lake", "sunrise", "nature"],
+          uploadDate: "2024-01-15T10:30:00Z",
+          fileSize: "2.4MB",
+          dimensions: "1920x1080",
+          camera: "Canon EOS R5"
+        }
+      },
+      {
+        id: "img-002", 
+        url: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=600&fit=crop",
+        alt: "City skyline at night with illuminated buildings",
+        title: "Downtown Cityscape",
+        metadata: {
+          photographer: "Mike Johnson",
+          location: "New York City, USA",
+          category: "urban",
+          tags: ["city", "night", "lights", "skyline"],
+          uploadDate: "2024-01-20T14:45:00Z",
+          fileSize: "1.8MB",
+          dimensions: "1600x900"
+        }
+      },
+      {
+        id: "img-003",
+        url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop", 
+        alt: "Dense forest with sunlight filtering through trees",
+        title: "Forest Path",
+        metadata: {
+          photographer: "Sarah Wilson",
+          location: "Pacific Northwest, USA",
+          category: "nature",
+          tags: ["forest", "trees", "sunlight", "path"],
+          uploadDate: "2024-01-25T09:15:00Z",
+          fileSize: "3.1MB",
+          dimensions: "2048x1365",
+          season: "summer"
+        }
+      },
+      {
+        id: "img-004",
+        url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
+        alt: "Ocean waves crashing on rocky coastline",
+        title: "Coastal Waves",
+        metadata: {
+          photographer: "Alex Chen", 
+          location: "Big Sur, California",
+          category: "seascape",
+          tags: ["ocean", "waves", "rocks", "coast"],
+          uploadDate: "2024-02-01T16:20:00Z",
+          fileSize: "2.7MB",
+          dimensions: "1800x1200",
+          weather: "partly cloudy"
+        }
+      },
+      {
+        id: "img-005",
+        url: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&h=600&fit=crop",
+        alt: "Desert landscape with sand dunes",
+        title: "Sahara Dunes",
+        metadata: {
+          photographer: "Omar Hassan",
+          location: "Sahara Desert, Morocco", 
+          category: "desert",
+          tags: ["desert", "sand", "dunes", "arid"],
+          uploadDate: "2024-02-05T11:30:00Z",
+          fileSize: "2.2MB",
+          dimensions: "1920x1280",
+          temperature: "42°C"
+        }
+      }
+    ],
+    allowUpload: true,
+    allowUrlInput: true,
+    allowDelete: true,
+    selectionMode: 'multi',
+    selectedImages: [],
+    scrollDirection: 'vertical',
+    previewMode: false,
+    galleryTitle: 'JSON Sample Gallery',
+    primaryActionText: 'Export Selection',
+    primaryActionIcon: 'file_download',
+    primaryActionValue: 'export',
+    background: 'opaque',
+    frostControlBar: 'partial',
+    debug: false
+  },
+  render: renderImageGallery,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### JSON Sample Implementation
+
+This story demonstrates the **exact JSON structure** provided in the documentation:
+
+\`\`\`json
+[
+  {
+    "id": "img-001",
+    "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+    "alt": "Beautiful mountain landscape with lake reflection",
+    "title": "Mountain Lake at Sunrise",
+    "metadata": {
+      "photographer": "Jane Smith",
+      "location": "Banff National Park, Canada",
+      "category": "landscape",
+      "tags": ["mountains", "lake", "sunrise", "nature"],
+      "uploadDate": "2024-01-15T10:30:00Z",
+      "fileSize": "2.4MB",
+      "dimensions": "1920x1080",
+      "camera": "Canon EOS R5"
+    }
+  }
+  // ... additional images
+]
+\`\`\`
+
+### Key Features Demonstrated:
+- **Rich Metadata**: Each image includes photographer, location, category, tags
+- **Technical Details**: File size, dimensions, camera info, weather conditions
+- **Unique IDs**: Sequential numbering (img-001, img-002, etc.)
+- **Comprehensive Alt Text**: Detailed accessibility descriptions
+- **Mixed Categories**: Landscape, urban, nature, seascape, desert themes
+- **Flexible Metadata**: Custom fields like season, weather, temperature
+
+### Usage Pattern:
+\`\`\`typescript
+const imageData = [ /* JSON array */ ];
+document.getElementById('gallery').images = imageData;
+\`\`\`
+
+Perfect for understanding how to structure your own JSON data for the image gallery component.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * JSON String Attribute demonstration showing how to use the imagesJson prop for HTML templates.
+ * Perfect for server-side rendering with Twig, PHP, or other template engines.
+ */
+export const JSONStringAttribute: Story = {
+  render: () => {
+    // Sample JSON string - this is what you'd generate server-side
+    const jsonString = JSON.stringify([
+      {
+        id: "json-001",
+        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+        alt: "Beautiful mountain landscape with lake reflection",
+        title: "Mountain Lake at Sunrise",
+        metadata: {
+          photographer: "Jane Smith",
+          location: "Banff National Park, Canada",
+          category: "landscape"
+        }
+      },
+      {
+        id: "json-002", 
+        url: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=600&fit=crop",
+        alt: "City skyline at night with illuminated buildings",
+        title: "Downtown Cityscape",
+        metadata: {
+          photographer: "Mike Johnson",
+          location: "New York City, USA",
+          category: "urban"
+        }
+      },
+      {
+        id: "json-003",
+        url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop", 
+        alt: "Dense forest with sunlight filtering through trees",
+        title: "Forest Path",
+        metadata: {
+          photographer: "Sarah Wilson",
+          location: "Pacific Northwest, USA",
+          category: "nature"
+        }
+      }
+    ]);
+
+    return html`
+      <div style="width: 100%; height: 600px; padding: 1rem; box-sizing: border-box;">
+        <h3 style="margin-bottom: 1rem; color: #333;">JSON String Attribute Demo</h3>
+        <p style="margin-bottom: 1rem; color: #666;">Using imagesJson prop to pass JSON string instead of JavaScript array</p>
+        
+        <!-- Using imagesJson prop with JSON string -->
+        <spectrum-image-gallery
+          images-json=${jsonString}
+          selection-mode="multi"
+          allow-upload="true"
+          allow-delete="true"
+          gallery-title="Gallery from JSON String"
+          primary-action-text="Process Selected"
+          primary-action-icon="check_circle"
+          primary-action-value="process"
+          debug="true"
+          @imageSelected=${(e: CustomEvent) => action('json-imageSelected')(e.detail)}
+          @imageDeselect=${(e: CustomEvent) => action('json-imageDeselect')(e.detail)}
+          @imageAdded=${(e: CustomEvent) => action('json-imageAdded')(e.detail)}
+          @imageDeleted=${(e: CustomEvent) => action('json-imageDeleted')(e.detail)}
+          @primaryAction=${(e: CustomEvent) => action('json-primaryAction')(e.detail)}
+        ></spectrum-image-gallery>
+        
+        <div style="margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 4px;">
+          <h4 style="margin: 0 0 0.5rem 0; color: #333;">JSON String Used:</h4>
+          <pre style="margin: 0; font-size: 0.8rem; overflow-x: auto; background: white; padding: 0.5rem; border-radius: 2px;">
+${JSON.stringify(JSON.parse(jsonString), null, 2)}
+          </pre>
+        </div>
+      </div>
+    `;
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### JSON String Attribute Usage
+
+This story demonstrates the **imagesJson** prop that accepts JSON strings instead of JavaScript arrays. Perfect for server-side templates!
+
+#### HTML Template Usage (Twig, PHP, etc.):
+\`\`\`html
+<!-- Server-side template generates JSON string -->
+<spectrum-image-gallery 
+  images-json='[{"id":"img-1","url":"...","title":"..."}]'
+  selection-mode="multi"
+  gallery-title="My Gallery">
+</spectrum-image-gallery>
+\`\`\`
+
+#### Twig Template Example:
+\`\`\`twig
+{% set imageData = [
+  {
+    id: "img-1",
+    url: "https://example.com/image1.jpg",
+    title: "Sample Image",
+    metadata: { category: "sample" }
+  }
+] %}
+
+<spectrum-image-gallery 
+  images-json="{{ imageData|json_encode }}"
+  selection-mode="multi">
+</spectrum-image-gallery>
+\`\`\`
+
+#### PHP Template Example:
+\`\`\`php
+<?php
+$imageData = [
+  [
+    'id' => 'img-1',
+    'url' => 'https://example.com/image1.jpg',
+    'title' => 'Sample Image',
+    'metadata' => ['category' => 'sample']
+  ]
+];
+?>
+
+<spectrum-image-gallery 
+  images-json="<?= htmlspecialchars(json_encode($imageData)) ?>"
+  selection-mode="multi">
+</spectrum-image-gallery>
+\`\`\`
+
+#### Key Features:
+- **JSON String Input**: Pass image data as JSON string via \`images-json\` attribute
+- **Automatic Parsing**: Component automatically parses JSON and converts to array
+- **Error Handling**: Graceful fallback if JSON parsing fails
+- **Debug Support**: Enable debug mode to see JSON parsing logs
+- **Priority**: imagesJson takes precedence over images prop if both are provided
+- **Template Friendly**: Perfect for server-side rendering scenarios
+
+#### Debug Console Output:
+With debug mode enabled, you should see:
+\`\`\`
+[spectrum-image-gallery] Images loaded from JSON string: 3
+\`\`\`
+
+This approach is ideal for CMS systems, server-side frameworks, and any scenario where you need to generate image galleries dynamically from backend data.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Multiline JSON Support demonstration using the user's exact HTML structure.
+ * Component now handles multiline JSON strings automatically by cleaning whitespace.
+ */
+export const MultilineJSONSupport: Story = {
+  render: () => html`
+    <div style="width: 100%; height: 600px; padding: 1rem; box-sizing: border-box;">
+      <h3 style="margin-bottom: 1rem; color: #333;">Multiline JSON Support (Your Exact HTML)</h3>
+      <p style="margin-bottom: 1rem; color: #666;">The component now automatically handles multiline JSON formatting from HTML attributes</p>
+      
+      <!-- Using your exact HTML structure with multiline JSON -->
+      <spectrum-image-gallery 
+        images-json='[
+            {
+                "id": "img-1",
+                "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+                "alt": "Mountain landscape",
+                "title": "Beautiful Mountains"
+            },
+            {
+                "id": "img-2",
+                "url": "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=600&fit=crop",
+                "alt": "City skyline",
+                "title": "Night City"
+            }
+        ]'
+        selection-mode="multi"
+        allow-upload="true"
+        gallery-title="My Gallery"
+        debug="true">
+      </spectrum-image-gallery>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #e6ffe6; border-radius: 4px; border: 2px solid #4caf50;">
+        <h4 style="margin: 0 0 0.5rem 0; color: #333;">✅ Your Exact HTML (now works in both Storybook AND raw HTML):</h4>
+        <pre style="margin: 0; font-size: 0.8rem; overflow-x: auto; background: white; padding: 0.5rem; border-radius: 2px; white-space: pre-wrap;">
+&lt;spectrum-image-gallery 
+    images-json='[
+        {
+            "id": "img-1",
+            "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+            "alt": "Mountain landscape",
+            "title": "Beautiful Mountains"
+        },
+        {
+            "id": "img-2",
+            "url": "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=600&fit=crop",
+            "alt": "City skyline",
+            "title": "Night City"
+        }
+    ]'
+    selection-mode="multi"
+    allow-upload="true"
+    gallery-title="My Gallery"
+    debug="true"&gt;
+&lt;/spectrum-image-gallery&gt;
+        </pre>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### Multiline JSON Support ✅
+
+The component now automatically handles **your exact HTML structure** with multiline JSON formatting!
+
+#### How It Works:
+The component includes a \`cleanMultilineJson()\` method that:
+1. **Tries parsing the JSON as-is** first (for performance)
+2. **If parsing fails**, automatically cleans up:
+   - Line breaks (\`\\n\`, \`\\r\`, \`\\r\\n\`)
+   - Extra whitespace between JSON tokens
+   - Leading/trailing whitespace
+3. **Preserves string content** while removing structural whitespace
+4. **Logs the cleaning process** when debug mode is enabled
+
+#### Your Original HTML Now Works:
+\`\`\`html
+<spectrum-image-gallery 
+    images-json='[
+        {
+            "id": "img-1",
+            "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+            "alt": "Mountain landscape",
+            "title": "Beautiful Mountains"
+        },
+        {
+            "id": "img-2",
+            "url": "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=600&fit=crop",
+            "alt": "City skyline", 
+            "title": "Night City"
+        }
+    ]'
+    selection-mode="multi"
+    allow-upload="true"
+    gallery-title="My Gallery"
+    debug="true">
+</spectrum-image-gallery>
+\`\`\`
+
+#### Debug Console Output:
+With debug mode enabled, you'll see:
+\`\`\`
+[spectrum-image-gallery] Cleaning multiline JSON string...
+[spectrum-image-gallery] Original JSON length: 450
+[spectrum-image-gallery] Cleaned JSON length: 280
+[spectrum-image-gallery] Images loaded from JSON string: 2
+\`\`\`
+
+#### Backward Compatibility:
+- ✅ **Single-line JSON**: Still works as before
+- ✅ **Multiline JSON**: Now automatically cleaned and parsed
+- ✅ **JavaScript arrays**: Still work via the \`images\` property
+- ✅ **Empty strings**: Handled gracefully
+
+No need to change your existing HTML - just use your multiline format as intended!
         `
       }
     }

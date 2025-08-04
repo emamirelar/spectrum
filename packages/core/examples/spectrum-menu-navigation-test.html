@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spectrum Menu - Direct Navigation Test</title>
+    <script type="module" src="../loader/index.esm.js"></script>
+    <link rel="stylesheet" href="../dist/cpit-spectrum/cpit-spectrum.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #0070d2;
+            padding-bottom: 10px;
+        }
+        .test-description {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #0070d2;
+            margin-bottom: 20px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-area {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fafafa;
+        }
+        .event-log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        .event-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            background: white;
+            border-radius: 3px;
+        }
+        .feature-highlight {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spectrum Menu - Direct Navigation Feature Test</h1>
+
+    <div class="feature-highlight">
+        <strong>New Feature: directNavigation</strong><br>
+        The spectrum-menu component now supports automatic browser navigation with the <code>directNavigation</code> attribute.
+        When set to <code>true</code>, clicking menu items will navigate directly to their href URLs in the current tab.
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Default Behavior (directNavigation = false)</h2>
+        <div class="test-description">
+            This menu only emits events when items are clicked. No direct navigation occurs.
+        </div>
+        
+        <h3>Code:</h3>
+        <pre>&lt;spectrum-menu 
+    orientation="horizontal"
+    directNavigation="false"
+    items='[
+        {"label": "Google", "href": "https://www.google.com", "icon": "search"},
+        {"label": "GitHub", "href": "https://www.github.com", "icon": "code"},
+        {"label": "Stack Overflow", "href": "https://stackoverflow.com", "icon": "help"}
+    ]'&gt;
+&lt;/spectrum-menu&gt;</pre>
+
+        <div class="demo-area">
+            <h4>Demo:</h4>
+            <spectrum-menu 
+                orientation="horizontal"
+                directNavigation="false"
+                items='[
+                    {"label": "Google", "href": "https://www.google.com", "icon": "search"},
+                    {"label": "GitHub", "href": "https://www.github.com", "icon": "code"},
+                    {"label": "Stack Overflow", "href": "https://stackoverflow.com", "icon": "help"}
+                ]'>
+            </spectrum-menu>
+            
+            <div class="event-log" id="eventLog1">
+                <strong>Event Log:</strong> (Click menu items to see events)
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Direct Navigation Enabled (directNavigation = true)</h2>
+        <div class="warning">
+            <strong>⚠️ Warning:</strong> Clicking these menu items will navigate away from this page to the actual URLs!
+        </div>
+        <div class="test-description">
+            This menu will navigate directly to the href URLs when items are clicked. Events are still emitted before navigation.
+        </div>
+        
+        <h3>Code:</h3>
+        <pre>&lt;spectrum-menu 
+    orientation="horizontal"
+    directNavigation="true"
+    items='[
+        {"label": "Example.com", "href": "https://www.example.com", "icon": "public"},
+        {"label": "W3C", "href": "https://www.w3.org", "icon": "language"},
+        {"label": "MDN", "href": "https://developer.mozilla.org", "icon": "school"}
+    ]'&gt;
+&lt;/spectrum-menu&gt;</pre>
+
+        <div class="demo-area">
+            <h4>Demo:</h4>
+            <spectrum-menu 
+                orientation="horizontal"
+                directNavigation="true"
+                items='[
+                    {"label": "Example.com", "href": "https://www.example.com", "icon": "public"},
+                    {"label": "W3C", "href": "https://www.w3.org", "icon": "language"},
+                    {"label": "MDN", "href": "https://developer.mozilla.org", "icon": "school"}
+                ]'>
+            </spectrum-menu>
+            
+            <div class="event-log" id="eventLog2">
+                <strong>Event Log:</strong> (Events will show briefly before navigation)
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Mixed Navigation (Some items with href, some without)</h2>
+        <div class="test-description">
+            This menu demonstrates mixed behavior: items with href will navigate (if directNavigation is true), 
+            items without href will only emit events and update active state.
+        </div>
+        
+        <div class="demo-area">
+            <h4>Demo:</h4>
+            <spectrum-menu 
+                orientation="horizontal"
+                directNavigation="true"
+                items='[
+                    {"label": "Navigate to Google", "href": "https://www.google.com", "icon": "search"},
+                    {"label": "Just an Action", "icon": "settings"},
+                    {"label": "Another Action", "icon": "info"},
+                    {"label": "Navigate to GitHub", "href": "https://www.github.com", "icon": "code"}
+                ]'>
+            </spectrum-menu>
+            
+            <div class="event-log" id="eventLog3">
+                <strong>Event Log:</strong> (Notice difference between items with and without href)
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Programmatic Control</h2>
+        <div class="test-description">
+            This demonstrates how to toggle the directNavigation feature programmatically.
+        </div>
+        
+        <div class="demo-area">
+            <h4>Demo:</h4>
+            <button onclick="toggleNavigation()" id="toggleButton">Enable Direct Navigation</button>
+            
+            <spectrum-menu 
+                id="programmableMenu"
+                orientation="horizontal"
+                directNavigation="false"
+                items='[
+                    {"label": "Test Link 1", "href": "https://www.example.com", "icon": "link"},
+                    {"label": "Test Link 2", "href": "https://www.w3.org", "icon": "link"}
+                ]'>
+            </spectrum-menu>
+            
+            <div class="event-log" id="eventLog4">
+                <strong>Event Log:</strong> (Toggle navigation mode and test behavior)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Event logging functionality
+        function logEvent(logId, message) {
+            const log = document.getElementById(logId);
+            const entry = document.createElement('div');
+            entry.className = 'event-entry';
+            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Add event listeners to all menus
+        document.querySelectorAll('spectrum-menu').forEach((menu, index) => {
+            const logId = `eventLog${index + 1}`;
+            
+            menu.addEventListener('itemClick', (event) => {
+                const { label, href } = event.detail;
+                const directNav = menu.getAttribute('directNavigation') === 'true';
+                
+                if (href && directNav) {
+                    logEvent(logId, `🌐 NAVIGATION: Clicking "${label}" - will navigate to: ${href}`);
+                } else if (href) {
+                    logEvent(logId, `📧 EVENT: Clicked "${label}" with href: ${href} (navigation disabled)`);
+                } else {
+                    logEvent(logId, `🎯 ACTION: Clicked "${label}" (no href - only event emitted)`);
+                }
+            });
+        });
+
+        // Programmable menu control
+        let navigationEnabled = false;
+        function toggleNavigation() {
+            const menu = document.getElementById('programmableMenu');
+            const button = document.getElementById('toggleButton');
+            
+            navigationEnabled = !navigationEnabled;
+            menu.setAttribute('directNavigation', navigationEnabled.toString());
+            button.textContent = navigationEnabled ? 'Disable Direct Navigation' : 'Enable Direct Navigation';
+            
+            logEvent('eventLog4', `⚙️ SETTING: Direct navigation ${navigationEnabled ? 'ENABLED' : 'DISABLED'}`);
+        }
+
+        // Initial log messages
+        setTimeout(() => {
+            logEvent('eventLog1', '✨ Ready: Click menu items to see events (no navigation)');
+            logEvent('eventLog2', '⚠️ Ready: Click menu items to navigate away from this page');
+            logEvent('eventLog3', '🔀 Ready: Mixed behavior - some items navigate, some don\'t');
+            logEvent('eventLog4', '🎮 Ready: Use the button to toggle navigation mode');
+        }, 1000);
+    </script>
+</body>
+</html> 

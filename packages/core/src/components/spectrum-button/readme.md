@@ -48,6 +48,7 @@ Supports icons, text, and various interactive states.
 ### Used by
 
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
+ - [spectrum-dialog](../spectrum-dialog)
  - [spectrum-hero](../spectrum-hero)
  - [spectrum-image-gallery](../spectrum-image-gallery)
  - [spectrum-rail](../spectrum-rail)
@@ -59,6 +60,7 @@ Supports icons, text, and various interactive states.
 ```mermaid
 graph TD;
   spectrum-conversation-panel --> spectrum-button
+  spectrum-dialog --> spectrum-button
   spectrum-hero --> spectrum-button
   spectrum-image-gallery --> spectrum-button
   spectrum-rail --> spectrum-button

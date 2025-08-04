@@ -11,6 +11,7 @@ import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spec
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+import { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
@@ -20,6 +21,7 @@ export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spec
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+export { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
@@ -699,6 +701,86 @@ export namespace Components {
         "sources": string;
     }
     /**
+     * Spectrum Dialog Component
+     * A modal dialog component using the HTML dialog element with background shade.
+     * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+     */
+    interface SpectrumDialog {
+        /**
+          * Background level for the dialog panel
+          * @default 'opaque'
+         */
+        "background": 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
+        /**
+          * Array of buttons for the control bar
+          * @default []
+         */
+        "buttons": DialogButton[];
+        /**
+          * Whether pressing Escape should close the dialog
+          * @default true
+         */
+        "closeOnEscape": boolean;
+        /**
+          * Whether clicking outside the dialog should close it
+          * @default true
+         */
+        "closeOnOutsideClick": boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Optional dialog identifier for event handling
+         */
+        "dialogId"?: string;
+        /**
+          * Optional title for the dialog
+         */
+        "dialogTitle"?: string;
+        /**
+          * Custom height for the dialog
+         */
+        "height"?: string;
+        /**
+          * Hide the dialog
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Whether to remove padding from the content area
+          * @default false
+         */
+        "noPadding": boolean;
+        /**
+          * Whether the dialog is open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Show the dialog
+         */
+        "show": () => Promise<void>;
+        /**
+          * Whether to show the close button
+          * @default true
+         */
+        "showCloseButton": boolean;
+        /**
+          * Size of the dialog
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Toggle dialog visibility
+         */
+        "toggle": () => Promise<void>;
+        /**
+          * Custom width for the dialog
+         */
+        "width"?: string;
+    }
+    /**
      * Spectrum Flex Component
      * An advanced flexbox layout component with comprehensive flex properties,
      * responsive behavior, and fine-grained control over flex container and items.
@@ -896,10 +978,25 @@ export namespace Components {
          */
         "keyboardNavigation": boolean;
         /**
+          * Custom CSS styles for the overlay container (CSS style string)
+          * @default ''
+         */
+        "overlayStyle": string;
+        /**
           * Pause autoplay on hover
           * @default true
          */
         "pauseOnHover": boolean;
+        /**
+          * Enable rounded corners using Spectrum design tokens
+          * @default false
+         */
+        "rounded": boolean;
+        /**
+          * Add gradient shade overlay between media and content
+          * @default true
+         */
+        "shaded": boolean;
         /**
           * Show navigation arrows
           * @default true
@@ -947,6 +1044,11 @@ export namespace Components {
          */
         "images": ImageConfig[];
         /**
+          * JSON string representation of images array for HTML attribute usage. Useful for server-side templates (e.g., Twig) that need to pass image data as strings. Will be parsed and converted to images array automatically.
+          * @default ''
+         */
+        "imagesJson": string;
+        /**
           * Enable preview mode for image viewing.  When true: Hides control bar and selection UI for clean viewing experience. When false: Shows control bar, selection indicators, and management features. CRITICAL: Set to false when you need control bars and batch operations.
           * @default false
          */
@@ -979,10 +1081,15 @@ export namespace Components {
     interface SpectrumMenu {
         "close": () => Promise<void>;
         /**
-          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+          * Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted
+          * @default false
+         */
+        "directNavigation": boolean;
+        /**
+          * The menu items configuration Can be provided as a JSON string or array of objects icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
           * @default []
          */
-        "items": Array<{
+        "items": string | Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
@@ -1013,6 +1120,10 @@ export namespace Components {
           * @default 'Menu'
          */
         "mobileMenuTitle": string;
+        /**
+          * Navigation color for the menu text When provided, this will override the default theme color
+         */
+        "navigationColor": string;
         /**
           * The orientation of the menu
           * @default 'horizontal'
@@ -1655,6 +1766,10 @@ export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> 
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
 }
+export interface SpectrumDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumDialogElement;
+}
 export interface SpectrumHeroCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumHeroElement;
@@ -1897,6 +2012,29 @@ declare global {
     var HTMLSpectrumConversationPanelElement: {
         prototype: HTMLSpectrumConversationPanelElement;
         new (): HTMLSpectrumConversationPanelElement;
+    };
+    interface HTMLSpectrumDialogElementEventMap {
+        "dialogAction": {action: string; dialogId?: string; buttonId?: string};
+        "dialogClose": {action: string; dialogId?: string};
+    }
+    /**
+     * Spectrum Dialog Component
+     * A modal dialog component using the HTML dialog element with background shade.
+     * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+     */
+    interface HTMLSpectrumDialogElement extends Components.SpectrumDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumDialogElementEventMap>(type: K, listener: (this: HTMLSpectrumDialogElement, ev: SpectrumDialogCustomEvent<HTMLSpectrumDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumDialogElementEventMap>(type: K, listener: (this: HTMLSpectrumDialogElement, ev: SpectrumDialogCustomEvent<HTMLSpectrumDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumDialogElement: {
+        prototype: HTMLSpectrumDialogElement;
+        new (): HTMLSpectrumDialogElement;
     };
     /**
      * Spectrum Flex Component
@@ -2171,6 +2309,7 @@ declare global {
         "spectrum-container": HTMLSpectrumContainerElement;
         "spectrum-context-menu": HTMLSpectrumContextMenuElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
+        "spectrum-dialog": HTMLSpectrumDialogElement;
         "spectrum-flex": HTMLSpectrumFlexElement;
         "spectrum-grid": HTMLSpectrumGridElement;
         "spectrum-hero": HTMLSpectrumHeroElement;
@@ -2902,6 +3041,82 @@ declare namespace LocalJSX {
         "sources"?: string;
     }
     /**
+     * Spectrum Dialog Component
+     * A modal dialog component using the HTML dialog element with background shade.
+     * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+     */
+    interface SpectrumDialog {
+        /**
+          * Background level for the dialog panel
+          * @default 'opaque'
+         */
+        "background"?: 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
+        /**
+          * Array of buttons for the control bar
+          * @default []
+         */
+        "buttons"?: DialogButton[];
+        /**
+          * Whether pressing Escape should close the dialog
+          * @default true
+         */
+        "closeOnEscape"?: boolean;
+        /**
+          * Whether clicking outside the dialog should close it
+          * @default true
+         */
+        "closeOnOutsideClick"?: boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Optional dialog identifier for event handling
+         */
+        "dialogId"?: string;
+        /**
+          * Optional title for the dialog
+         */
+        "dialogTitle"?: string;
+        /**
+          * Custom height for the dialog
+         */
+        "height"?: string;
+        /**
+          * Whether to remove padding from the content area
+          * @default false
+         */
+        "noPadding"?: boolean;
+        /**
+          * Event emitted when dialog actions occur
+         */
+        "onDialogAction"?: (event: SpectrumDialogCustomEvent<{action: string; dialogId?: string; buttonId?: string}>) => void;
+        /**
+          * Event emitted when dialog is closed
+         */
+        "onDialogClose"?: (event: SpectrumDialogCustomEvent<{action: string; dialogId?: string}>) => void;
+        /**
+          * Whether the dialog is open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Whether to show the close button
+          * @default true
+         */
+        "showCloseButton"?: boolean;
+        /**
+          * Size of the dialog
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Custom width for the dialog
+         */
+        "width"?: string;
+    }
+    /**
      * Spectrum Flex Component
      * An advanced flexbox layout component with comprehensive flex properties,
      * responsive behavior, and fine-grained control over flex container and items.
@@ -3107,10 +3322,25 @@ declare namespace LocalJSX {
          */
         "onSlideChange"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; totalSlides: number }>) => void;
         /**
+          * Custom CSS styles for the overlay container (CSS style string)
+          * @default ''
+         */
+        "overlayStyle"?: string;
+        /**
           * Pause autoplay on hover
           * @default true
          */
         "pauseOnHover"?: boolean;
+        /**
+          * Enable rounded corners using Spectrum design tokens
+          * @default false
+         */
+        "rounded"?: boolean;
+        /**
+          * Add gradient shade overlay between media and content
+          * @default true
+         */
+        "shaded"?: boolean;
         /**
           * Show navigation arrows
           * @default true
@@ -3157,6 +3387,11 @@ declare namespace LocalJSX {
           * @default []
          */
         "images"?: ImageConfig[];
+        /**
+          * JSON string representation of images array for HTML attribute usage. Useful for server-side templates (e.g., Twig) that need to pass image data as strings. Will be parsed and converted to images array automatically.
+          * @default ''
+         */
+        "imagesJson"?: string;
         "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
         "onImageDeleted"?: (event: SpectrumImageGalleryCustomEvent<ImageDeletedEvent>) => void;
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
@@ -3195,10 +3430,15 @@ declare namespace LocalJSX {
     }
     interface SpectrumMenu {
         /**
-          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+          * Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted
+          * @default false
+         */
+        "directNavigation"?: boolean;
+        /**
+          * The menu items configuration Can be provided as a JSON string or array of objects icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
           * @default []
          */
-        "items"?: Array<{
+        "items"?: string | Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
@@ -3229,6 +3469,10 @@ declare namespace LocalJSX {
           * @default 'Menu'
          */
         "mobileMenuTitle"?: string;
+        /**
+          * Navigation color for the menu text When provided, this will override the default theme color
+         */
+        "navigationColor"?: string;
         /**
           * Event emitted when a menu item is clicked
          */
@@ -3883,6 +4127,7 @@ declare namespace LocalJSX {
         "spectrum-container": SpectrumContainer;
         "spectrum-context-menu": SpectrumContextMenu;
         "spectrum-conversation-panel": SpectrumConversationPanel;
+        "spectrum-dialog": SpectrumDialog;
         "spectrum-flex": SpectrumFlex;
         "spectrum-grid": SpectrumGrid;
         "spectrum-hero": SpectrumHero;
@@ -3951,6 +4196,12 @@ declare module "@stencil/core" {
              */
             "spectrum-context-menu": LocalJSX.SpectrumContextMenu & JSXBase.HTMLAttributes<HTMLSpectrumContextMenuElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
+            /**
+             * Spectrum Dialog Component
+             * A modal dialog component using the HTML dialog element with background shade.
+             * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+             */
+            "spectrum-dialog": LocalJSX.SpectrumDialog & JSXBase.HTMLAttributes<HTMLSpectrumDialogElement>;
             /**
              * Spectrum Flex Component
              * An advanced flexbox layout component with comprehensive flex properties,

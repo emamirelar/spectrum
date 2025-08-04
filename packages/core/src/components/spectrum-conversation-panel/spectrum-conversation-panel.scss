@@ -1,9 +1,19 @@
-/* Root variables and custom properties for spectrum-conversation-panel */
-spectrum-conversation-panel {
+// ==============================================
+// Spectrum Conversation Panel Component Styles
+// ==============================================
+// BEM naming convention: spectrum-conversation-panel (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+:host {
   display: block;
   height: 100%;
   
-  /* Core conversation panel properties */
+  // Core conversation panel properties
   --conversation-panel-background: var(--spectrum-color-background, #f6f6f6);
   --conversation-panel-surface: var(--spectrum-color-surface, #f6f6f6);
   --conversation-panel-on-surface: var(--spectrum-color-on-surface, #333333);
@@ -12,13 +22,13 @@ spectrum-conversation-panel {
   --conversation-panel-outline-variant: var(--spectrum-color-outline-variant, #c2c7cf);
   --conversation-panel-shadow: var(--spectrum-color-shadow, #000000);
   
-  /* Brand colors */
+  // Brand colors
   --conversation-panel-primary: var(--spectrum-color-primary, #0070d2);
   --conversation-panel-on-primary: var(--spectrum-color-on-primary, #ffffff);
   --conversation-panel-primary-container: var(--spectrum-color-primary-container, #d0e4ff);
   --conversation-panel-on-primary-container: var(--spectrum-color-on-primary-container, #001c3a);
   
-  /* Typography */
+  // Typography
   --conversation-panel-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
   --conversation-panel-font-size: var(--spectrum-sys-font-size, 16px);
   --conversation-panel-font-size-small: var(--spectrum-sys-font-size-small, 14px);
@@ -27,31 +37,31 @@ spectrum-conversation-panel {
   --conversation-panel-font-weight-regular: var(--spectrum-sys-font-weight-regular, 400);
   --conversation-panel-font-weight-medium: var(--spectrum-sys-font-weight-medium, 500);
   
-  /* Spacing */
+  // Spacing
   --conversation-panel-spacing: var(--spectrum-sys-spacing, 1em);
   --conversation-panel-spacing-small: var(--spectrum-sys-spacing-small, 0.5em);
   --conversation-panel-spacing-large: var(--spectrum-sys-spacing-large, 2em);
   
-  /* Border radius */
+  // Border radius
   --conversation-panel-border-radius: var(--spectrum-sys-border-radius, 4px);
   --conversation-panel-border-radius-large: calc(var(--conversation-panel-border-radius) * 4);
   --conversation-panel-border-radius-x-large: calc(var(--conversation-panel-border-radius) * 12);
   
-  /* Interactive states */
+  // Interactive states
   --conversation-panel-surface-hover: var(--spectrum-color-surface-hover, rgba(0, 0, 0, 0.03));
   --conversation-panel-surface-active: var(--spectrum-color-surface-active, rgba(0, 0, 0, 0.1));
   
-  /* Animation */
+  // Animation
   --conversation-panel-transition-duration: var(--spectrum-sys-animation-duration, 300ms);
   --conversation-panel-transition-timing: var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
   --conversation-panel-transition: all var(--conversation-panel-transition-duration) var(--conversation-panel-transition-timing);
   
-  /* Icon properties */
+  // Icon properties
   --conversation-panel-icon-font-family: var(--spectrum-sys-icon-font-family, 'Material Symbols Outlined');
   --conversation-panel-icon-font-size: var(--spectrum-sys-icon-font-size, 20px);
   --conversation-panel-icon-font-weight: var(--spectrum-sys-icon-font-weight, 400);
   
-  /* Component specific dimensions */
+  // Component specific dimensions
   --conversation-panel-button-min-size: 48px;
   --conversation-panel-button-small-size: 24px;
   --conversation-panel-message-max-width: 66%;
@@ -60,7 +70,9 @@ spectrum-conversation-panel {
   --conversation-panel-loader-size: 48px;
 }
 
-/* Base Styles */
+// ==============================================
+// Base Component Styles
+// ==============================================
 spectrum-conversation-panel body {
   margin: 0;
   padding: 0;
@@ -90,7 +102,9 @@ spectrum-conversation-panel .conversation-panel {
   margin: 0;
 }
 
-/* Material Icons */
+// ==============================================
+// Material Icons Configuration
+// ==============================================
 spectrum-conversation-panel .material-symbols-outlined {
   font-variation-settings: 
     "FILL" var(--spectrum-sys-icon-fill, 0), 
@@ -102,12 +116,10 @@ spectrum-conversation-panel .material-symbols-outlined {
 }
 
 
-/* Background Effects - four-level system matching image gallery */
-
-/* Panel and Message Styles */
-/* Panel styling now handled by spectrum-panel component */
-
-/* Remove duplicate panel styles - now handled by spectrum-panel */
+// ==============================================
+// Panel and Message Styles
+// ==============================================
+// Panel styling now handled by spectrum-panel component
 
 spectrum-conversation-panel .conversation-title {
   // Remove padding since spectrum-panel now handles container padding
@@ -179,10 +191,9 @@ spectrum-conversation-panel .response .message {
   }
 }
 
-/* Accordion Styles - Now handled by spectrum-accordion component */
-/* These styles have been moved to spectrum-accordion component */
-
-/* Content Card Styles */
+// ==============================================
+// Content Card Styles
+// ==============================================
 spectrum-conversation-panel .content-card {
   flex: 0 0 var(--conversation-panel-card-width);
   scroll-snap-align: start;
@@ -254,7 +265,9 @@ spectrum-conversation-panel .content-card {
   }
 }
 
-/* Source Card Styles - BEM naming convention for spectrum-conversation-panel component */
+// ==============================================
+// Source Card Styles - BEM naming convention
+// ==============================================
 spectrum-conversation-panel .spectrum-conversation-panel__source {
   flex: 0 0 var(--conversation-panel-card-width);
   scroll-snap-align: start;
@@ -315,7 +328,9 @@ spectrum-conversation-panel .spectrum-conversation-panel__source-url {
   opacity: 0.8;
 }
 
-/* Exploration Styles */
+// ==============================================
+// Exploration Styles
+// ==============================================
 spectrum-conversation-panel .explorations-container {
   display: flex;
   flex-direction: column;
@@ -415,7 +430,9 @@ spectrum-conversation-panel .loader {
   }
 }
 
-/* Source Chip Overlay Styles */
+// ==============================================
+// Source Chip Overlay Styles
+// ==============================================
 spectrum-conversation-panel .source-hover-overlay {
   pointer-events: auto;
   z-index: 1000;
@@ -627,7 +644,9 @@ spectrum-conversation-panel .source-hover-overlay {
   }
 }
 
-/* Mobile Source Card Styles */
+// ==============================================
+// Mobile Source Card Styles
+// ==============================================
 spectrum-conversation-panel .mobile-source-overlay {
   position: fixed;
   top: 0;
@@ -715,7 +734,9 @@ spectrum-conversation-panel .view-source-button {
   }
 }
 
-/* Message content styles for inline source chips */
+// ==============================================
+// Message Content Styles for Inline Source Chips
+// ==============================================
 spectrum-conversation-panel .message-content {
   display: flex;
   flex-direction: column;
@@ -732,7 +753,7 @@ spectrum-conversation-panel .message-content {
   }
 }
 
-/* Message content with inline chips */
+// Message content with inline chips
 spectrum-conversation-panel .message-content-with-chips {
   display: block;
   
@@ -787,7 +808,9 @@ spectrum-conversation-panel .message-content-with-chips {
   }
 }
 
-/* Responsive Design */
+// ==============================================
+// Responsive Design
+// ==============================================
 @media (max-width: 768px) {
   spectrum-conversation-panel .source-hover-overlay {
     display: none; /* Hide hover overlay on mobile */
@@ -798,7 +821,7 @@ spectrum-conversation-panel .message-content-with-chips {
   }
 }
 
-/* High-specificity override for citation chip spacing */
+// High-specificity override for citation chip spacing
 spectrum-conversation-panel spectrum-chip[size="extra-small"] {
   margin: 0 4px 0 6px !important;
   vertical-align: baseline !important;

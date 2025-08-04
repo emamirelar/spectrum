@@ -1,3 +1,14 @@
+// ==============================================
+// Spectrum Context Menu Component Styles
+// ==============================================
+// BEM naming convention: spectrum-context-menu (block), __element (element), --modifier (modifier)
+// Responsive design using CSS custom properties
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
 :host {
   display: block;
   position: relative;
@@ -22,7 +33,9 @@
   --menu-transition: all var(--menu-animation-duration) var(--menu-animation-timing);
 }
 
-// Main context menu container
+// ==============================================
+// Base Component Styles
+// ==============================================
 .spectrum-context-menu {
   position: fixed;
   top: 0;
@@ -42,7 +55,9 @@
   font-family: var(--menu-font-family);
   font-size: var(--menu-font-size);
   
-  // Menu list
+  // ==============================================
+  // List Styles
+  // ==============================================
   &__list {
     list-style: none;
     margin: 0;
@@ -52,7 +67,9 @@
     gap: 2px;
   }
   
-  // Menu items
+  // ==============================================
+  // Item Styles
+  // ==============================================
   &__item {
     display: flex;
     align-items: center;
@@ -65,19 +82,20 @@
     border-radius: calc(var(--menu-border-radius) - 2px);
     transition: var(--menu-transition);
     
-    // Hover and focus styles
+    // Interactive states
     &:hover, &:focus-visible {
       background-color: var(--menu-item-hover-bg);
       outline: none;
     }
     
-    // Active (pressed) styles
     &:active {
       background-color: var(--menu-item-active-bg);
     }
   }
   
-  // Icons in menu items
+  // ==============================================
+  // Element Styles
+  // ==============================================
   &__icon {
     display: flex;
     align-items: center;
@@ -103,7 +121,6 @@
     }
   }
   
-  // Text label
   &__label {
     flex: 1;
     overflow: hidden;
@@ -111,7 +128,6 @@
     white-space: nowrap;
   }
   
-  // Ripple effect
   &__ripple {
     position: absolute;
     border-radius: 50%;
@@ -126,7 +142,9 @@
   }
 }
 
-// Appear animation
+// ==============================================
+// Animation Keyframes
+// ==============================================
 @keyframes menu-appear {
   from {
     opacity: 0;
@@ -138,7 +156,6 @@
   }
 }
 
-// Ripple animation
 @keyframes ripple {
   to {
     transform: scale(4);
@@ -146,7 +163,9 @@
   }
 }
 
-// Responsive adjustments
+// ==============================================
+// Responsive Design
+// ==============================================
 @media (max-width: 600px) {
   .spectrum-context-menu {
     min-width: 140px;

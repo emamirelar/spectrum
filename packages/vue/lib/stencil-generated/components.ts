@@ -242,6 +242,28 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumDialog = /*@__PURE__*/ defineContainer<JSX.SpectrumDialog>('spectrum-dialog', undefined, [
+  'debug',
+  'open',
+  'dialogId',
+  'dialogTitle',
+  'showCloseButton',
+  'closeOnOutsideClick',
+  'closeOnEscape',
+  'buttons',
+  'background',
+  'size',
+  'width',
+  'height',
+  'noPadding',
+  'dialogAction',
+  'dialogClose'
+], [
+  'dialogAction',
+  'dialogClose'
+]);
+
+
 export const SpectrumFlex = /*@__PURE__*/ defineContainer<JSX.SpectrumFlex>('spectrum-flex', undefined, [
   'direction',
   'wrap',
@@ -298,6 +320,9 @@ export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spe
   'height',
   'keyboardNavigation',
   'debug',
+  'rounded',
+  'shaded',
+  'overlayStyle',
   'heroAction',
   'slideChange'
 ], [
@@ -308,6 +333,7 @@ export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spe
 
 export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumImageGallery>('spectrum-image-gallery', undefined, [
   'images',
+  'imagesJson',
   'allowUpload',
   'allowUrlInput',
   'allowDelete',
@@ -344,6 +370,8 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'items',
   'mobileBreakpoint',
   'mobileMenuTitle',
+  'directNavigation',
+  'navigationColor',
   'itemClick'
 ], [
   'itemClick'

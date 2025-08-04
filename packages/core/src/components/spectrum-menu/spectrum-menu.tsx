@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State, Watch } from '@stencil/core';
 
 @Component({
   tag: 'spectrum-menu',
@@ -20,10 +20,11 @@ export class SpectrumMenu {
 
   /**
    * The menu items configuration
+   * Can be provided as a JSON string or array of objects
    * icon: Material icon name (e.g. 'home', 'info', 'shopping_cart')
    * For megamenu variant, children can have additional properties like description and columns
    */
-  @Prop() items: Array<{
+  @Prop() items: string | Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
@@ -56,6 +57,19 @@ export class SpectrumMenu {
   @Prop() mobileMenuTitle: string = 'Menu';
 
   /**
+   * Whether to enable direct browser navigation when menu items are clicked
+   * When true, clicking a menu item will navigate to its href in the current tab
+   * When false, only the itemClick event will be emitted
+   */
+  @Prop() directNavigation: boolean = false;
+
+  /**
+   * Navigation color for the menu text
+   * When provided, this will override the default theme color
+   */
+  @Prop() navigationColor: string;
+
+  /**
    * Whether the menu is currently in mobile view
    */
   @State() isMobile: boolean = false;
@@ -71,12 +85,42 @@ export class SpectrumMenu {
   @State() activeItem: string | null = null;
 
   /**
+   * Parsed menu items (internal state)
+   */
+  @State() parsedItems: Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
    * Event emitted when a menu item is clicked
    */
   @Event() itemClick: EventEmitter<{
     label: string;
     href?: string;
   }>;
+
+  @Watch('items')
+  itemsChanged(newValue: string | Array<any>) {
+    this.parseItems(newValue);
+  }
 
   @Listen('resize', { target: 'window' })
   handleResize() {
@@ -92,6 +136,7 @@ export class SpectrumMenu {
 
   componentWillLoad() {
     this.checkMobileView();
+    this.parseItems(this.items);
   }
 
   componentDidLoad() {
@@ -104,8 +149,16 @@ export class SpectrumMenu {
 
   private handleItemClick(item: { label: string; href?: string }) {
     if (item.href) {
+      // Emit the event for custom handling
       this.itemClick.emit(item);
+      
+      // Navigate directly if directNavigation is enabled
+      if (this.directNavigation) {
+        window.location.href = item.href;
+        return; // Return early since we're navigating away
+      }
     }
+    
     this.activeItem = item.label;
     if (this.isMobile) {
       this.isMobileMenuOpen = false;
@@ -119,6 +172,19 @@ export class SpectrumMenu {
   @Method()
   async close() {
     this.isMobileMenuOpen = false;
+  }
+
+  private parseItems(items: string | Array<any>) {
+    if (typeof items === 'string') {
+      try {
+        this.parsedItems = JSON.parse(items);
+      } catch (e) {
+        console.error('Failed to parse items JSON:', e);
+        this.parsedItems = [];
+      }
+    } else {
+      this.parsedItems = items;
+    }
   }
 
   renderIcon(icon?: string) {
@@ -305,6 +371,10 @@ export class SpectrumMenu {
   }
 
   render() {
+    const hostStyle = this.navigationColor ? {
+      '--menu-color': this.navigationColor
+    } : {};
+
     return (
       <Host
         class={{
@@ -314,6 +384,7 @@ export class SpectrumMenu {
           'spectrum-menu--vertical': this.orientation === 'vertical' && !this.isMobile,
           'spectrum-menu--megamenu': this.variant === 'megamenu',
         }}
+        style={hostStyle}
       >
         {this.isMobile ? (
           <div class="spectrum-menu__mobile">
@@ -345,7 +416,7 @@ export class SpectrumMenu {
                 </div>
                 <nav class="spectrum-menu__mobile-nav" role="navigation">
                   <ul class="spectrum-menu__mobile-list" role="menu">
-                    {this.items.map((item) => this.renderMenuItem(item))}
+                    {this.parsedItems.map((item) => this.renderMenuItem(item))}
                   </ul>
                 </nav>
               </div>
@@ -354,7 +425,7 @@ export class SpectrumMenu {
         ) : (
           <nav class="spectrum-menu__nav" role="navigation">
             <ul class="spectrum-menu__list" role="menubar">
-              {this.items.map((item) => this.renderMenuItem(item))}
+              {this.parsedItems.map((item) => this.renderMenuItem(item))}
             </ul>
           </nav>
         )}

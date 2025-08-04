@@ -22,6 +22,7 @@ import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustom
 import { SpectrumContainer as SpectrumContainerElement, defineCustomElement as defineSpectrumContainer } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-container.js";
 import { SpectrumContextMenu as SpectrumContextMenuElement, defineCustomElement as defineSpectrumContextMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-context-menu.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-conversation-panel.js";
+import { SpectrumDialog as SpectrumDialogElement, defineCustomElement as defineSpectrumDialog } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-dialog.js";
 import { SpectrumFlex as SpectrumFlexElement, defineCustomElement as defineSpectrumFlex } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-flex.js";
 import { SpectrumGrid as SpectrumGridElement, defineCustomElement as defineSpectrumGrid } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-grid.js";
 import { SpectrumHero as SpectrumHeroElement, defineCustomElement as defineSpectrumHero } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-hero.js";
@@ -215,6 +216,23 @@ export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversati
         onTitleChanged: 'titleChanged'
     } as SpectrumConversationPanelEvents,
     defineCustomElement: defineSpectrumConversationPanel
+});
+
+type SpectrumDialogEvents = {
+    onDialogAction: EventName<CustomEvent<{ action: string; dialogId?: string; buttonId?: string }>>,
+    onDialogClose: EventName<CustomEvent<{ action: string; dialogId?: string }>>
+};
+
+export const SpectrumDialog: StencilReactComponent<SpectrumDialogElement, SpectrumDialogEvents> = /*@__PURE__*/ createComponent<SpectrumDialogElement, SpectrumDialogEvents>({
+    tagName: 'spectrum-dialog',
+    elementClass: SpectrumDialogElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {
+        onDialogAction: 'dialogAction',
+        onDialogClose: 'dialogClose'
+    } as SpectrumDialogEvents,
+    defineCustomElement: defineSpectrumDialog
 });
 
 type SpectrumFlexEvents = NonNullable<unknown>;

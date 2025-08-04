@@ -9,6 +9,7 @@
  */
 
 export { format } from './utils/utils';
+export { getSpectrumVersion, getSpectrumInfo, logSpectrumVersion, SPECTRUM_VERSION } from './utils/version';
 export type * from './components.d.ts';
 
 // Export components
@@ -23,6 +24,8 @@ export { SpectrumSelect } from './components/spectrum-select/spectrum-select';
 export { SpectrumAccordion } from './components/spectrum-accordion/spectrum-accordion';
 export { SpectrumHero } from './components/spectrum-hero/spectrum-hero';
 export { SpectrumBadge } from './components/spectrum-badge/spectrum-badge';
+export { SpectrumMenu } from './components/spectrum-menu/spectrum-menu';
+export { SpectrumDialog } from './components/spectrum-dialog/spectrum-dialog';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';

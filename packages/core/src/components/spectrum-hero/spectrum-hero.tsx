@@ -75,6 +75,21 @@ export class SpectrumHero {
    */
   @Prop() debug: boolean = false;
 
+  /**
+   * Enable rounded corners using Spectrum design tokens
+   */
+  @Prop() rounded: boolean = false;
+
+  /**
+   * Add gradient shade overlay between media and content
+   */
+  @Prop() shaded: boolean = true;
+
+  /**
+   * Custom CSS styles for the overlay container (CSS style string)
+   */
+  @Prop() overlayStyle: string = '';
+
   // ============== Component State ==============
   @State() currentSlide: number = 0;
   @State() isPlaying: boolean = false;
@@ -115,6 +130,7 @@ export class SpectrumHero {
   componentDidLoad() {
     this.setupAutoplay();
     this.setupKeyboardNavigation();
+    this.updateShadeColors();
   }
 
   disconnectedCallback() {
@@ -175,6 +191,14 @@ export class SpectrumHero {
     }
   }
 
+  private resetAutoplayTimer() {
+    if (this.autoplay > 0 && this.parsedSlides.length > 1) {
+      this.clearAutoplay();
+      this.setupAutoplay();
+      this.log('Autoplay timer reset due to user interaction');
+    }
+  }
+
   private setupKeyboardNavigation() {
     if (this.keyboardNavigation) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -187,11 +211,11 @@ export class SpectrumHero {
     switch (event.key) {
       case 'ArrowLeft':
         event.preventDefault();
-        this.previousSlide();
+        this.previousSlide(true);
         break;
       case 'ArrowRight':
         event.preventDefault();
-        this.nextSlide();
+        this.nextSlide(true);
         break;
       case ' ':
       case 'Enter':
@@ -201,17 +225,17 @@ export class SpectrumHero {
     }
   };
 
-  private nextSlide() {
+  private nextSlide(isUserInitiated: boolean = false) {
     const nextIndex = (this.currentSlide + 1) % this.parsedSlides.length;
-    this.goToSlide(nextIndex);
+    this.goToSlide(nextIndex, isUserInitiated);
   }
 
-  private previousSlide() {
+  private previousSlide(isUserInitiated: boolean = false) {
     const prevIndex = this.currentSlide === 0 ? this.parsedSlides.length - 1 : this.currentSlide - 1;
-    this.goToSlide(prevIndex);
+    this.goToSlide(prevIndex, isUserInitiated);
   }
 
-  private goToSlide(index: number) {
+  private goToSlide(index: number, isUserInitiated: boolean = false) {
     if (index >= 0 && index < this.parsedSlides.length) {
       this.currentSlide = index;
       this.slideChange.emit({
@@ -219,7 +243,13 @@ export class SpectrumHero {
         slideIndex: this.currentSlide,
         totalSlides: this.parsedSlides.length
       });
-      this.log(`Moved to slide ${index}`);
+      
+      // Reset autoplay timer when user navigates manually
+      if (isUserInitiated) {
+        this.resetAutoplayTimer();
+      }
+      
+      this.log(`Moved to slide ${index}`, { userInitiated: isUserInitiated });
     }
   }
 
@@ -260,9 +290,9 @@ export class SpectrumHero {
 
     if (Math.abs(swipeDistance) > swipeThreshold) {
       if (swipeDistance > 0) {
-        this.nextSlide();
+        this.nextSlide(true);
       } else {
-        this.previousSlide();
+        this.previousSlide(true);
       }
     }
   }
@@ -277,6 +307,71 @@ export class SpectrumHero {
   };
 
   // ============== Render Methods ==============
+  private renderShade() {
+    if (!this.shaded) return null;
+
+    // Parse the spectrum color and set RGB custom properties
+    this.updateShadeColors();
+
+    return (
+      <div class="spectrum-hero__shade" />
+    );
+  }
+
+  private updateShadeColors() {
+    try {
+      const computedStyle = getComputedStyle(this.el);
+      const hexColor = computedStyle.getPropertyValue('--spectrum-color-on-primary-container').trim();
+      
+      if (hexColor) {
+        const rgb = this.hexToRgb(hexColor);
+        if (rgb) {
+          this.el.style.setProperty('--hero-shade-r', rgb.r.toString());
+          this.el.style.setProperty('--hero-shade-g', rgb.g.toString());
+          this.el.style.setProperty('--hero-shade-b', rgb.b.toString());
+        }
+      }
+    } catch (error) {
+      // Fallback colors are already set in CSS - no action needed
+    }
+  }
+
+  private hexToRgb(hex: string): {r: number, g: number, b: number} | null {
+    // Remove # if present
+    hex = hex.replace('#', '');
+    
+    // Handle 3-digit hex
+    if (hex.length === 3) {
+      hex = hex.split('').map(char => char + char).join('');
+    }
+    
+    // Parse 6-digit hex
+    const result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  private parseOverlayStyle(): { [key: string]: string } {
+    if (!this.overlayStyle) return {};
+    
+    const styles: { [key: string]: string } = {};
+    const declarations = this.overlayStyle.split(';').filter(d => d.trim());
+    
+    declarations.forEach(declaration => {
+      const [property, value] = declaration.split(':').map(s => s.trim());
+      if (property && value) {
+        // Convert kebab-case to camelCase for JSX
+        const camelProperty = property.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+        styles[camelProperty] = value;
+      }
+    });
+    
+    return styles;
+  }
+
   private renderSlide(slide: HeroSlide, index: number) {
     const isActive = index === this.currentSlide;
     const overlayClasses = [
@@ -321,8 +416,13 @@ export class SpectrumHero {
           />
         )}
         
+        {this.renderShade()}
+        
         {(slide.title || slide.subtitle || slide.buttonText) && (
-          <div class={overlayClasses}>
+          <div 
+            class={overlayClasses}
+            style={this.parseOverlayStyle()}
+          >
             <div class="spectrum-hero__content">
               {slide.title && (
                 <h1 class="spectrum-hero__title">{slide.title}</h1>
@@ -355,7 +455,7 @@ export class SpectrumHero {
         {this.parsedSlides.map((_, index) => (
           <button
             class={`spectrum-hero__dot ${index === this.currentSlide ? 'spectrum-hero__dot--active' : ''}`}
-            onClick={() => this.goToSlide(index)}
+            onClick={() => this.goToSlide(index, true)}
             role="tab"
             aria-selected={index === this.currentSlide}
             aria-label={`Go to slide ${index + 1}`}
@@ -372,14 +472,14 @@ export class SpectrumHero {
       <div class="spectrum-hero__arrows">
         <button
           class="spectrum-hero__arrow spectrum-hero__arrow--prev"
-          onClick={() => this.previousSlide()}
+          onClick={() => this.previousSlide(true)}
           aria-label="Previous slide"
         >
           ‹
         </button>
         <button
           class="spectrum-hero__arrow spectrum-hero__arrow--next"
-          onClick={() => this.nextSlide()}
+          onClick={() => this.nextSlide(true)}
           aria-label="Next slide"
         >
           ›
@@ -389,10 +489,15 @@ export class SpectrumHero {
   }
 
   render() {
+    const heroClasses = [
+      'spectrum-hero',
+      this.rounded ? 'spectrum-hero--rounded' : ''
+    ].filter(Boolean).join(' ');
+
     return (
       <Host>
         <div
-          class="spectrum-hero"
+          class={heroClasses}
           style={{ '--hero-height': this.height }}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}

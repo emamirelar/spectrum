@@ -1,7 +1,14 @@
-// BEM styles for spectrum-collapsible-list
-// Uses theme variables and responsive flex/grid
-// Lozenge hover, scrollable children, Material Icons
+// ==============================================
+// Spectrum Collapsible List Component Styles
+// ==============================================
+// BEM naming convention: spectrum-collapsible-list (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
 
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
 :host {
   display: block;
   height: 100%;
@@ -28,6 +35,9 @@
   --collapsible-list-focus-ring: var(--spectrum-color-primary-container, rgba(0, 102, 204, 0.2));
 }
 
+// ==============================================
+// Base Component Styles
+// ==============================================
 .spectrum-collapsible-list {
   height: 100%;
   background: var(--collapsible-list-bg);
@@ -40,6 +50,9 @@
   min-width: 0;
 }
 
+// ==============================================
+// List Container Styles
+// ==============================================
 .spectrum-collapsible-list__list {
   list-style: none;
   margin: 0;
@@ -53,6 +66,9 @@
   overflow-y: auto;
 }
 
+// ==============================================
+// Item Styles
+// ==============================================
 .spectrum-collapsible-list__item {
   display: flex;
   flex-direction: column;
@@ -71,6 +87,9 @@
   font-weight: 600;
 }
 
+// ==============================================
+// Row and Interactive Styles
+// ==============================================
 .spectrum-collapsible-list__row {
   display: flex;
   align-items: center;
@@ -87,6 +106,9 @@
   border-radius: 999px;
 }
 
+// ==============================================
+// Element Styles
+// ==============================================
 .spectrum-collapsible-list__icon {
   font-family: var(--collapsible-list-icon-font);
   font-size: var(--collapsible-list-icon-size);
@@ -112,6 +134,18 @@
   white-space: nowrap;
 }
 
+.spectrum-collapsible-list__child-count {
+  margin-left: 0.75em;
+  color: var(--collapsible-list-muted-text);
+  font-size: 0.95em;
+  font-weight: 500;
+  min-width: 1.5em;
+  text-align: right;
+}
+
+// ==============================================
+// Form Elements
+// ==============================================
 .spectrum-collapsible-list__edit-input {
   flex: 1;
   min-width: 0;
@@ -132,15 +166,9 @@
   box-shadow: 0 0 0 3px var(--collapsible-list-focus-ring);
 }
 
-.spectrum-collapsible-list__child-count {
-  margin-left: 0.75em;
-  color: var(--collapsible-list-muted-text);
-  font-size: 0.95em;
-  font-weight: 500;
-  min-width: 1.5em;
-  text-align: right;
-}
-
+// ==============================================
+// Context Menu Integration
+// ==============================================
 .spectrum-collapsible-list__context-icon {
   margin-left: 0.75em;
   cursor: pointer;
@@ -158,6 +186,9 @@
   color: var(--collapsible-list-hover-text);
 }
 
+// ==============================================
+// Children Container
+// ==============================================
 .spectrum-collapsible-list__children {
   display: flex;
   flex-direction: column;
@@ -167,7 +198,9 @@
   font-weight: 400;
 }
 
-// Debug mode styles
+// ==============================================
+// Development Mode Debugging
+// ==============================================
 :host-context(.development-mode) {
   .spectrum-collapsible-list__context-icon {
     position: relative;
@@ -186,7 +219,10 @@
   }
 }
 
-// Documentation:
+// ==============================================
+// Component Documentation
+// ==============================================
+// BEM Class Reference:
 // .spectrum-collapsible-list__item: List item (parent or child)
 // .spectrum-collapsible-list__item--parent: Parent node
 // .spectrum-collapsible-list__item--expanded: Expanded parent

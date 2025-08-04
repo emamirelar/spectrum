@@ -1,0 +1,373 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumDialog/Use Cases" />
+
+# Spectrum Dialog Use Cases
+
+The `spectrum-dialog` component is versatile and supports many different use cases across various application contexts.
+
+## 1. Confirmation Dialogs
+
+**Purpose**: Get explicit user confirmation before performing destructive or important actions.
+
+**When to Use**:
+- Deleting items or data
+- Discarding unsaved changes
+- Confirming financial transactions
+- Logging out of applications
+
+**Key Features**:
+- Clear action description
+- Prominent destructive action button
+- Secondary cancel option
+- Prevent accidental clicks outside dialog
+
+```html
+<spectrum-dialog 
+  title="Delete Item"
+  close-on-outside-click="false"
+>
+  <div slot="content">
+    <p>This action cannot be undone. Are you sure you want to delete this item?</p>
+  </div>
+</spectrum-dialog>
+
+<script>
+  dialog.buttons = [
+    { id: 'cancel', label: 'Cancel', variant: 'secondary' },
+    { id: 'delete', label: 'Delete', variant: 'danger', action: 'confirm-delete' }
+  ];
+</script>
+```
+
+---
+
+## 2. Form Dialogs
+
+**Purpose**: Collect user input in a focused interface without navigating away from the current page.
+
+**When to Use**:
+- Quick data entry forms
+- Contact or feedback forms
+- User profile editing
+- Settings configuration
+- Search filters
+
+**Key Features**:
+- Larger size for form content
+- Save and cancel actions
+- Form validation integration
+- Proper focus management
+
+```html
+<spectrum-dialog 
+  title="Add New Contact"
+  size="large"
+>
+  <div slot="content">
+    <form>
+      <label>Name: <input type="text" required></label>
+      <label>Email: <input type="email" required></label>
+      <label>Message: <textarea rows="4"></textarea></label>
+    </form>
+  </div>
+</spectrum-dialog>
+
+<script>
+  dialog.buttons = [
+    { id: 'cancel', label: 'Cancel', variant: 'secondary' },
+    { id: 'save', label: 'Save Contact', variant: 'primary' }
+  ];
+</script>
+```
+
+---
+
+## 3. Information Display
+
+**Purpose**: Show detailed information, help content, or explanatory text without leaving the current context.
+
+**When to Use**:
+- Help and documentation
+- Terms of service or privacy policies
+- Detailed product information
+- Error explanations
+- Feature announcements
+
+**Key Features**:
+- Scrollable content area
+- Read-only content
+- Simple close action
+- Responsive text layout
+
+```html
+<spectrum-dialog 
+  title="Privacy Policy"
+  size="large"
+>
+  <div slot="content">
+    <h3>Data Collection</h3>
+    <p>We collect information you provide directly to us...</p>
+    
+    <h3>How We Use Your Information</h3>
+    <p>We use the information we collect to...</p>
+    
+    <!-- More content -->
+  </div>
+</spectrum-dialog>
+
+<script>
+  dialog.buttons = [
+    { id: 'close', label: 'Close', variant: 'primary' }
+  ];
+</script>
+```
+
+---
+
+## 4. Media Galleries
+
+**Purpose**: Display images, videos, or other media content in a focused, immersive view.
+
+**When to Use**:
+- Image lightboxes
+- Video players
+- Document previews
+- Portfolio galleries
+- Product photo viewing
+
+**Key Features**:
+- Full or large size
+- No padding for edge-to-edge content
+- Transparent or minimal background
+- Navigation controls
+
+```html
+<spectrum-dialog 
+  title="Image Gallery"
+  size="full"
+  background="transparent"
+  no-padding="true"
+>
+  <div slot="content">
+    <spectrum-image-gallery></spectrum-image-gallery>
+  </div>
+</spectrum-dialog>
+```
+
+---
+
+## 5. Loading and Progress
+
+**Purpose**: Show loading states, progress indicators, or processing status.
+
+**When to Use**:
+- File uploads
+- Data processing
+- API requests
+- Background tasks
+- Installation progress
+
+**Key Features**:
+- Prevent closing during processing
+- Progress indicators
+- Status messages
+- No control bar (or minimal controls)
+
+```html
+<spectrum-dialog 
+  title="Uploading Files..."
+  close-on-outside-click="false"
+  close-on-escape="false"
+  show-close-button="false"
+>
+  <div slot="content">
+    <div class="progress-container">
+      <progress value="75" max="100">75%</progress>
+      <p>Uploading 3 of 4 files...</p>
+    </div>
+  </div>
+</spectrum-dialog>
+```
+
+---
+
+## 6. Settings and Configuration
+
+**Purpose**: Provide focused interfaces for changing application or user settings.
+
+**When to Use**:
+- User preferences
+- Application configuration
+- Account settings
+- Feature toggles
+- Theme selection
+
+**Key Features**:
+- Organized form layout
+- Apply and cancel actions
+- Immediate preview when possible
+- Grouped settings sections
+
+```html
+<spectrum-dialog 
+  title="Display Settings"
+  size="medium"
+>
+  <div slot="content">
+    <div class="settings-group">
+      <h4>Theme</h4>
+      <label><input type="radio" name="theme" value="light"> Light</label>
+      <label><input type="radio" name="theme" value="dark"> Dark</label>
+      <label><input type="radio" name="theme" value="auto"> Auto</label>
+    </div>
+    
+    <div class="settings-group">
+      <h4>Notifications</h4>
+      <label><input type="checkbox"> Email notifications</label>
+      <label><input type="checkbox"> Push notifications</label>
+    </div>
+  </div>
+</spectrum-dialog>
+
+<script>
+  dialog.buttons = [
+    { id: 'cancel', label: 'Cancel', variant: 'secondary' },
+    { id: 'apply', label: 'Apply Changes', variant: 'primary' }
+  ];
+</script>
+```
+
+---
+
+## 7. Error and Alert Messages
+
+**Purpose**: Display important error messages, warnings, or alerts that require user attention.
+
+**When to Use**:
+- Critical error messages
+- System alerts
+- Warning notifications
+- Success confirmations
+- Status updates
+
+**Key Features**:
+- Clear, concise messaging
+- Appropriate visual styling
+- Action buttons for next steps
+- Prevent dismissal for critical errors
+
+```html
+<spectrum-dialog 
+  title="Connection Error"
+  close-on-outside-click="false"
+>
+  <div slot="content">
+    <div class="error-message">
+      <span class="error-icon">⚠️</span>
+      <p>Unable to connect to the server. Please check your internet connection and try again.</p>
+    </div>
+  </div>
+</spectrum-dialog>
+
+<script>
+  dialog.buttons = [
+    { id: 'retry', label: 'Try Again', variant: 'primary' },
+    { id: 'offline', label: 'Work Offline', variant: 'secondary' }
+  ];
+</script>
+```
+
+---
+
+## 8. Quick Actions
+
+**Purpose**: Provide shortcuts for common actions without full page navigation.
+
+**When to Use**:
+- Quick data entry
+- Bulk operations
+- Workflow shortcuts
+- Tool panels
+- Command palettes
+
+**Key Features**:
+- Small to medium size
+- Action-focused buttons
+- Fast interaction patterns
+- Keyboard shortcuts
+
+```html
+<spectrum-dialog 
+  title="Quick Add"
+  size="small"
+>
+  <div slot="content">
+    <input type="text" placeholder="Enter item name..." autofocus>
+    <select>
+      <option>Category 1</option>
+      <option>Category 2</option>
+    </select>
+  </div>
+</spectrum-dialog>
+
+<script>
+  dialog.buttons = [
+    { id: 'add', label: 'Add Item', variant: 'primary' }
+  ];
+</script>
+```
+
+---
+
+## Best Practices by Use Case
+
+### Confirmation Dialogs
+- Use clear, non-technical language
+- Make destructive actions visually distinct
+- Disable outside click to prevent accidental dismissal
+- Include consequences in the description
+
+### Form Dialogs
+- Use appropriate form validation
+- Provide clear field labels
+- Consider progressive disclosure for complex forms
+- Handle form submission properly
+
+### Information Display
+- Structure content with proper headings
+- Enable scrolling for long content
+- Provide search functionality when needed
+- Use readable typography
+
+### Media Galleries
+- Optimize for touch and gesture interactions
+- Provide keyboard navigation
+- Consider performance for large media sets
+- Include download or sharing options
+
+### Loading States
+- Show meaningful progress information
+- Provide cancel options when possible
+- Handle error states gracefully
+- Avoid modal fatigue with appropriate timing
+
+### Settings Dialogs
+- Group related settings logically
+- Provide immediate feedback for changes
+- Include reset or default options
+- Validate settings before applying
+
+### Error Messages
+- Use clear, actionable language
+- Provide specific error details
+- Offer concrete next steps
+- Consider error recovery options
+
+### Quick Actions
+- Optimize for speed and efficiency
+- Support keyboard shortcuts
+- Minimize required fields
+- Provide smart defaults
+
+Each use case benefits from thoughtful consideration of user context, interaction patterns, and accessibility requirements. 

@@ -42,6 +42,8 @@ interface SpectrumMenuElement extends HTMLElement {
   items: MenuItem[];
   mobileBreakpoint: number;
   mobileMenuTitle: string;
+  directNavigation: boolean;
+  navigationColor: string;
 }
 
 // Story arguments interface
@@ -262,14 +264,33 @@ Supports all Material Design icons. Include the font in your project:
 - **Focus management**: Clear focus indicators and trapping
 - **Mobile accessibility**: Touch-friendly with proper sizing
 
-### Basic Usage
+### Navigation Modes
+
+#### Event-Only Navigation (Default)
+\`\`\`html
+<spectrum-menu .items=\${menuItems}></spectrum-menu>
 \`\`\`
+- Only emits \`itemClick\` events when menu items are clicked
+- Perfect for SPAs with client-side routing (React Router, Vue Router, etc.)
+- Allows custom navigation logic, analytics, and conditional navigation
+
+#### Direct Navigation
+\`\`\`html
+<spectrum-menu .items=\${menuItems} direct-navigation="true"></spectrum-menu>
+\`\`\`
+- Clicking menu items navigates directly to their \`href\` URLs in the same tab
+- Still emits \`itemClick\` events for analytics/logging
+- Perfect for traditional websites and external links
+
+### Basic Usage
+\`\`\`html
 <spectrum-menu
   orientation="horizontal"
   variant="default"
   .items=\${menuItems}
   mobile-breakpoint="768"
-  mobile-menu-title="Navigation">
+  mobile-menu-title="Navigation"
+  direct-navigation="false">
 </spectrum-menu>
 \`\`\`
         `
@@ -281,7 +302,9 @@ Supports all Material Design icons. Include the font in your project:
     variant: 'default',
     items: basicNavItems,
     mobileBreakpoint: 768,
-    mobileMenuTitle: 'Navigation'
+    mobileMenuTitle: 'Navigation',
+    directNavigation: false,
+    navigationColor: undefined
   },
   argTypes: {
     orientation: {
@@ -325,6 +348,22 @@ Supports all Material Design icons. Include the font in your project:
         type: { summary: 'string' },
         defaultValue: { summary: 'Menu' }
       }
+    },
+    directNavigation: {
+      control: 'boolean',
+      description: 'Enable direct browser navigation when menu items are clicked. When true, clicking navigates to href in same tab. When false, only emits itemClick event.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    navigationColor: {
+      control: 'color',
+      description: 'Override the default menu text color. Accepts any valid CSS color value (hex, rgb, hsl, css variables).',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' }
+      }
     }
   }
 };
@@ -342,6 +381,8 @@ const renderMenu = (args: SpectrumMenuArgs) => {
         .items=${args.items}
         mobile-breakpoint=${args.mobileBreakpoint}
         mobile-menu-title=${args.mobileMenuTitle}
+        ?direct-navigation=${args.directNavigation}
+        navigation-color=${args.navigationColor}
         @itemClick=${(e: CustomEvent) => action('itemClick')(e.detail)}
       ></spectrum-menu>
     </div>
@@ -615,6 +656,193 @@ Minimal navigation for simple websites:
 - **Lightweight**: Perfect for portfolios, landing pages, small business sites
 
 Ideal for simple websites that don't need complex navigation structures.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Navigation behavior demonstration showing the difference between event-based and direct navigation modes.
+ * Toggle the directNavigation control to switch between modes.
+ */
+export const NavigationModes: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'default',
+    items: [
+      { label: 'Storybook Home', href: 'https://storybook.js.org/', icon: 'home' },
+      { label: 'GitHub', href: 'https://github.com/', icon: 'code' },
+      { label: 'Google', href: 'https://google.com/', icon: 'search' }
+    ],
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Navigation',
+    directNavigation: false
+  },
+  render: (args) => html`
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: var(--spectrum-sys-color-surface);">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-container); border-radius: 6px;">
+        <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">🔗 Navigation Mode: ${args.directNavigation ? 'Direct Navigation' : 'Event Only'}</h3>
+        <div style="color: var(--spectrum-sys-color-on-surface-variant);">
+          ${args.directNavigation ? html`
+            <p style="margin: 0;"><strong>Direct Navigation Enabled:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Clicking menu items will navigate to their URLs in the same tab</li>
+              <li>The itemClick event is still emitted for logging/analytics</li>
+              <li>Perfect for traditional website navigation</li>
+            </ul>
+          ` : html`
+            <p style="margin: 0;"><strong>Event Only Mode (Default):</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>Clicking menu items only emits itemClick events</li>
+              <li>No automatic navigation - you handle the events</li>
+              <li>Perfect for SPAs and custom navigation logic</li>
+              <li>Check the Actions panel below to see the events</li>
+            </ul>
+          `}
+        </div>
+      </div>
+      
+      <spectrum-menu
+        orientation=${args.orientation}
+        variant=${args.variant}
+        .items=${args.items}
+        mobile-breakpoint=${args.mobileBreakpoint}
+        mobile-menu-title=${args.mobileMenuTitle}
+        ?direct-navigation=${args.directNavigation}
+        @itemClick=${(e: CustomEvent) => action('navigation-itemClick')(e.detail)}
+      ></spectrum-menu>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface-variant);">💡 Try This:</h4>
+        <ol style="margin: 0; padding-left: 1.5rem; color: var(--spectrum-sys-color-on-surface-variant);">
+          <li>Toggle the <strong>directNavigation</strong> control in the Controls panel above</li>
+          <li>Click the menu items to see the different behaviors</li>
+          <li>When directNavigation is false, watch the Actions panel for events</li>
+          <li>When directNavigation is true, clicking will navigate to the actual URLs</li>
+        </ol>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Navigation behavior modes demonstration:
+
+### Event Only Mode (Default: directNavigation = false)
+- **Event-driven**: Only emits \`itemClick\` events when menu items are clicked
+- **No automatic navigation**: You handle the events to implement custom navigation logic
+- **SPA-friendly**: Perfect for single-page applications using client-side routing
+- **Custom handling**: Allows for analytics, confirmation dialogs, or conditional navigation
+
+### Direct Navigation Mode (directNavigation = true)
+- **Automatic navigation**: Clicking menu items navigates directly to their \`href\` URLs
+- **Traditional behavior**: Works like standard HTML links in the same tab
+- **Event still emitted**: The \`itemClick\` event is still fired for analytics/logging
+- **Simple setup**: No custom event handling required for basic navigation
+
+### Use Cases
+- **Event Only**: React Router, Vue Router, Angular Router, analytics tracking, conditional navigation
+- **Direct Navigation**: Traditional websites, documentation sites, external links, simple brochure sites
+
+Toggle the \`directNavigation\` control to experience both modes!
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Navigation color customization demonstration showing how to override the default menu text color.
+ * Use the navigationColor prop to apply custom branding colors to menu text.
+ */
+export const NavigationColor: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'default',
+    items: [
+      { label: 'Home', href: '/', icon: 'home' },
+      { label: 'Products', href: '/products', icon: 'inventory_2' },
+      { label: 'Services', href: '/services', icon: 'design_services' },
+      { label: 'About', href: '/about', icon: 'info' },
+      { label: 'Contact', href: '/contact', icon: 'contact_mail' }
+    ],
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Navigation',
+    directNavigation: false,
+    navigationColor: '#ff6600'
+  },
+  render: (args) => html`
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: var(--spectrum-sys-color-surface);">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-container); border-radius: 6px;">
+        <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">🎨 Custom Navigation Color</h3>
+        <div style="color: var(--spectrum-sys-color-on-surface-variant);">
+          <p style="margin: 0 0 1rem 0;"><strong>Current Navigation Color:</strong> <span style="background: ${args.navigationColor || 'transparent'}; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-family: monospace;">${args.navigationColor || 'None'}</span></p>
+          <p style="margin: 0;"><strong>Usage:</strong> The navigationColor prop allows you to customize the menu text color for branding purposes while maintaining all other theme properties.</p>
+        </div>
+      </div>
+      
+      <spectrum-menu
+        orientation=${args.orientation}
+        variant=${args.variant}
+        .items=${args.items}
+        mobile-breakpoint=${args.mobileBreakpoint}
+        mobile-menu-title=${args.mobileMenuTitle}
+        ?direct-navigation=${args.directNavigation}
+        navigation-color=${args.navigationColor}
+        @itemClick=${(e: CustomEvent) => action('navigation-color-itemClick')(e.detail)}
+      ></spectrum-menu>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface-variant);">💡 Color Examples:</h4>
+        <div style="margin: 0; color: var(--spectrum-sys-color-on-surface-variant);">
+          <p style="margin: 0 0 0.5rem 0;">Try these color values in the Controls panel:</p>
+          <ul style="margin: 0; padding-left: 1.5rem; font-family: monospace;">
+            <li><strong>#ff6600</strong> - Orange (current)</li>
+            <li><strong>#2563eb</strong> - Blue</li>
+            <li><strong>#dc2626</strong> - Red</li>
+            <li><strong>#059669</strong> - Green</li>
+            <li><strong>#7c3aed</strong> - Purple</li>
+            <li><strong>var(--spectrum-sys-color-primary)</strong> - Theme primary</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### Navigation Color Feature
+
+The \`navigationColor\` prop allows you to customize the menu text color while preserving all other theme properties and behaviors.
+
+**Key Features:**
+- **Custom Branding**: Apply your brand colors to menu text
+- **CSS Variable Override**: Uses CSS custom properties for efficient styling
+- **Theme Preservation**: Only overrides text color, maintains all other theme properties
+- **Consistent Application**: Affects all menu text including icons and labels
+
+**Usage Examples:**
+\`\`\`html
+<!-- Hex color -->
+<spectrum-menu navigation-color="#ff6600" items="..."></spectrum-menu>
+
+<!-- RGB color -->
+<spectrum-menu navigation-color="rgb(255, 102, 0)" items="..."></spectrum-menu>
+
+<!-- CSS variable -->
+<spectrum-menu navigation-color="var(--brand-primary)" items="..."></spectrum-menu>
+\`\`\`
+
+**When to Use:**
+- Corporate branding requirements
+- Design system color compliance
+- Themed menu variations
+- Brand color consistency across components
+
+The navigation color feature works in all orientations, variants, and responsive states while maintaining accessibility and usability.
         `
       }
     }

@@ -14,6 +14,7 @@ export const DIRECTIVES = [
   d.SpectrumContainer,
   d.SpectrumContextMenu,
   d.SpectrumConversationPanel,
+  d.SpectrumDialog,
   d.SpectrumFlex,
   d.SpectrumGrid,
   d.SpectrumHero,

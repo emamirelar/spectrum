@@ -308,6 +308,15 @@ export class SpectrumChip {
       classes.push('spectrum-chip--disabled');
     }
 
+    // Add icon presence classes for padding adjustments
+    if (this.leadingIcon) {
+      classes.push('spectrum-chip--has-leading-icon');
+    }
+    
+    if (this.showTrailingIcon) {
+      classes.push('spectrum-chip--has-trailing-icon');
+    }
+
     this.log('Generated classes', { classes });
     return classes.join(' ');
   }

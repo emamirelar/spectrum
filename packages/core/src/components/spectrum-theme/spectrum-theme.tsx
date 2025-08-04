@@ -5,6 +5,7 @@ import {
   hexFromArgb,
 } from '@material/material-color-utilities';
 import { FontLoader } from '../../utils/font-loading';
+import { getSpectrumVersion, getSpectrumInfo } from '../../utils/version';
 
 @Component({
   tag: 'spectrum-theme',
@@ -13,6 +14,14 @@ import { FontLoader } from '../../utils/font-loading';
 })
 export class SpectrumTheme {
   @Element() el!: HTMLElement;
+
+  /**
+   * Get the version of the Spectrum component library
+   * @returns {string} The semantic version string
+   */
+  static getVersion(): string {
+    return getSpectrumVersion();
+  }
 
   /**
    * The primary color to generate the theme from
@@ -87,6 +96,29 @@ export class SpectrumTheme {
   private debugWarn(message: string, ...args: any[]) {
     if (this.debug) {
       console.warn(`[spectrum-theme] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Log version information when debug mode is enabled
+   */
+  private logVersionInfo() {
+    if (this.debug) {
+      const info = getSpectrumInfo();
+      console.group(`🎨 Spectrum Theme v${info.version}`);
+      console.log(`📦 Package: ${info.name}`);
+      console.log(`🏗️ Build Date: ${info.buildDate}`);
+      console.log(`🧩 Components: ${info.components}`);
+      console.log(`🔧 Theme Config:`, this.themeConfig);
+      console.log(`🎯 Mode: ${this.dark ? 'Dark' : 'Light'}`);
+      console.log(`🎨 Color: ${this.color}`);
+      console.groupEnd();
+      
+      // Also emit version info as a custom event
+      this.el.dispatchEvent(new CustomEvent('spectrumversion', {
+        detail: info,
+        bubbles: true
+      }));
     }
   }
   
@@ -209,6 +241,7 @@ export class SpectrumTheme {
   componentDidLoad() {
     if (this.debug) {
       this.debugWarn('ComponentDidLoad - hideContentUntilReady:', this.hideContentUntilReady, 'autoLoadFonts:', this.autoLoadFonts, 'waitForWallpaper:', this.waitForWallpaper, 'fontsReady:', this.fontsReady);
+      this.logVersionInfo();
     }
     
     // Initialize theme loading state ONLY if content hiding is enabled
@@ -667,6 +700,7 @@ export class SpectrumTheme {
         <slot></slot>
         {this.renderSwatches()}
         {this.autoLoadFonts && this.renderFontLoadingIndicator()}
+        {this.debug && this.renderVersionIndicator()}
       </Host>
     );
   }
@@ -700,5 +734,53 @@ export class SpectrumTheme {
         Loading fonts...
       </div>
     );
+  }
+
+  private renderVersionIndicator() {
+    const version = getSpectrumVersion();
+    const isReady = this.fontsReady && (!this.waitForWallpaper || this.wallpaperReady);
+    
+    return (
+      <div class="version-indicator" style={{ 
+        position: 'fixed', 
+        bottom: '10px', 
+        right: '10px', 
+        padding: '8px 12px', 
+        backgroundColor: isReady ? 'rgba(76, 175, 80, 0.9)' : 'rgba(255, 193, 7, 0.9)', 
+        color: 'white', 
+        fontSize: '11px', 
+        borderRadius: '4px', 
+        zIndex: '9999',
+        fontFamily: 'monospace',
+        cursor: 'pointer',
+        userSelect: 'none',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+        transition: 'all 0.2s ease'
+      }}
+      onClick={() => this.copyVersionToClipboard()}
+      title="Click to copy version info to clipboard">
+        <span class="material-symbols-outlined" style={{ fontSize: '14px', marginRight: '4px', verticalAlign: 'middle' }}>
+          {isReady ? 'check_circle' : 'schedule'}
+        </span>
+        <span style={{ verticalAlign: 'middle' }}>
+          Spectrum v{version} {isReady ? '✓' : '⏳'}
+        </span>
+      </div>
+    );
+  }
+
+  private copyVersionToClipboard() {
+    const info = getSpectrumInfo();
+    const versionText = `Spectrum Components v${info.version}\nPackage: ${info.name}\nBuild: ${info.buildDate}`;
+    
+    navigator.clipboard.writeText(versionText).then(() => {
+      if (this.debug) {
+        console.log('📋 Version info copied to clipboard');
+      }
+    }).catch(() => {
+      if (this.debug) {
+        console.warn('📋 Failed to copy version info to clipboard');
+      }
+    });
   }
 } 

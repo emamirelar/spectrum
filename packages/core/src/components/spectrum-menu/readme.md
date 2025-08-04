@@ -103,13 +103,53 @@ A responsive and accessible menu component that can be displayed horizontally or
 ></spectrum-menu>
 ```
 
+### Direct Navigation
+```html
+<!-- Default behavior: Only emits events when items are clicked -->
+<spectrum-menu
+  orientation="horizontal"
+  directNavigation="false"
+  items='[
+    {
+      "label": "Home",
+      "href": "/home",
+      "icon": "home"
+    },
+    {
+      "label": "About",
+      "href": "/about",
+      "icon": "info"
+    }
+  ]'
+></spectrum-menu>
+
+<!-- Direct navigation enabled: Automatically navigates to href URLs -->
+<spectrum-menu
+  orientation="horizontal"
+  directNavigation="true"
+  items='[
+    {
+      "label": "Google",
+      "href": "https://www.google.com",
+      "icon": "search"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://www.github.com",
+      "icon": "code"
+    }
+  ]'
+></spectrum-menu>
+```
+
 ## Properties
 
 | Property | Attribute | Description | Type | Default |
 |----------|-----------|-------------|------|---------|
 | `orientation` | `orientation` | The orientation of the menu | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `items` | `items` | The menu items configuration. Use the `icon` property for a Material icon name (e.g. "home", "info"). | `Array<{ label: string; href?: string; icon?: string; disabled?: boolean; children?: Array<{ label: string; href?: string; icon?: string; disabled?: boolean; }>; }>` | `[]` |
+| `items` | `items` | The menu items configuration. Can be provided as a JSON string or array of objects. Use the `icon` property for a Material icon name (e.g. "home", "info"). | `string \| Array<{ label: string; href?: string; icon?: string; disabled?: boolean; children?: Array<{ label: string; href?: string; icon?: string; disabled?: boolean; }>; }>` | `[]` |
 | `mobileBreakpoint` | `mobile-breakpoint` | The breakpoint at which the menu switches to mobile view | `number` | `768` |
+| `directNavigation` | `direct-navigation` | Whether to enable direct browser navigation when menu items are clicked. When true, clicking a menu item will navigate to its href in the current tab. When false, only the itemClick event will be emitted. | `boolean` | `false` |
 
 ## Events
 
@@ -165,13 +205,15 @@ The menu component follows WAI-ARIA best practices:
 
 ## Properties
 
-| Property           | Attribute           | Description                                                                                                                                                                             | Type                                                                                                                                                                                                                                                                                                             | Default        |
-| ------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `items`            | `items`             | The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns | `{ label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; }[]; }[]; }[]` | `[]`           |
-| `mobileBreakpoint` | `mobile-breakpoint` | The breakpoint at which the menu switches to mobile view                                                                                                                                | `number`                                                                                                                                                                                                                                                                                                         | `768`          |
-| `mobileMenuTitle`  | `mobile-menu-title` | The title displayed in the mobile menu header                                                                                                                                           | `string`                                                                                                                                                                                                                                                                                                         | `'Menu'`       |
-| `orientation`      | `orientation`       | The orientation of the menu                                                                                                                                                             | `"horizontal" \| "vertical"`                                                                                                                                                                                                                                                                                     | `'horizontal'` |
-| `variant`          | `variant`           | The variant of the menu                                                                                                                                                                 | `"default" \| "megamenu"`                                                                                                                                                                                                                                                                                        | `'default'`    |
+| Property           | Attribute           | Description                                                                                                                                                                                                                                  | Type                                                                                                                                                                                                                                                                                                                       | Default        |
+| ------------------ | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `directNavigation` | `direct-navigation` | Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted                                    | `boolean`                                                                                                                                                                                                                                                                                                                  | `false`        |
+| `items`            | `items`             | The menu items configuration Can be provided as a JSON string or array of objects icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns | `string \| { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; }[]; }[]; }[]` | `[]`           |
+| `mobileBreakpoint` | `mobile-breakpoint` | The breakpoint at which the menu switches to mobile view                                                                                                                                                                                     | `number`                                                                                                                                                                                                                                                                                                                   | `768`          |
+| `mobileMenuTitle`  | `mobile-menu-title` | The title displayed in the mobile menu header                                                                                                                                                                                                | `string`                                                                                                                                                                                                                                                                                                                   | `'Menu'`       |
+| `navigationColor`  | `navigation-color`  | Navigation color for the menu text When provided, this will override the default theme color                                                                                                                                                 | `string`                                                                                                                                                                                                                                                                                                                   | `undefined`    |
+| `orientation`      | `orientation`       | The orientation of the menu                                                                                                                                                                                                                  | `"horizontal" \| "vertical"`                                                                                                                                                                                                                                                                                               | `'horizontal'` |
+| `variant`          | `variant`           | The variant of the menu                                                                                                                                                                                                                      | `"default" \| "megamenu"`                                                                                                                                                                                                                                                                                                  | `'default'`    |
 
 
 ## Events

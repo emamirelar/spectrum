@@ -1,6 +1,17 @@
-// Root variables and custom properties
+// ==============================================
+// Spectrum Chip Component Styles
+// ==============================================
+// BEM naming convention: spectrum-chip (block), __element (element), --modifier (modifier)
+// Responsive design using CSS custom properties
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
 :host {
   display: inline-block;
+  
   // Core chip properties
   --chip-background: var(--spectrum-color-primary, #0070d2);
   --chip-color: var(--spectrum-color-on-primary, #ffffff);
@@ -39,7 +50,9 @@
   --chip-icon-size: 1.25em;
 }
 
-// Base chip styles
+// ==============================================
+// Base Component Styles
+// ==============================================
 .spectrum-chip {
   display: inline-flex;
   align-items: center;
@@ -80,7 +93,7 @@
     background-color: var(--chip-background-active);
   }
 
-  // Hover and active states
+  // Interactive states
   &:hover {
     transform: var(--chip-hover-transform);
     box-shadow: var(--chip-hover-shadow);
@@ -91,28 +104,9 @@
     box-shadow: var(--chip-active-shadow);
   }
 
-  // Ripple effect
-  &__ripple {
-    position: absolute;
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple var(--chip-ripple-animation-duration) linear;
-    background-color: var(--chip-ripple-color);
-    pointer-events: none;
-    width: var(--chip-ripple-size);
-    height: var(--chip-ripple-size);
-    margin-left: calc(var(--chip-ripple-size) / -2);
-    margin-top: calc(var(--chip-ripple-size) / -2);
-  }
-
-  @keyframes ripple {
-    to {
-      transform: scale(4);
-      opacity: 0;
-    }
-  }
-
-  // Variant styles
+  // ==============================================
+  // Variant Styles
+  // ==============================================
   &--primary {
     background-color: var(--chip-background);
     color: var(--chip-color);
@@ -163,66 +157,9 @@
     color: var(--spectrum-color-on-surface-variant);
   }
 
-  // State styles
-  &--disabled {
-    opacity: var(--chip-disabled-opacity);
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  // Focus styles
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    box-shadow: 0 0 0 var(--chip-focus-outline-width) var(--chip-focus-background),
-                0 0 0 calc(var(--chip-focus-outline-width) + var(--chip-focus-outline-offset)) var(--chip-focus-outline);
-  }
-
-  // Label styles
-  &__label {
-    line-height: 1;
-    font-size: var(--chip-font-size);
-    position: relative;
-    z-index: 1;
-  }
-
-  // Icon styles
-  &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--chip-icon-size);
-    line-height: 1;
-    width: var(--chip-icon-size);
-    height: var(--chip-icon-size);
-    position: relative;
-    z-index: 1;
-
-    .material-symbols-outlined {
-      font-family: var(--spectrum-sys-icon-font-family);
-      font-weight: var(--spectrum-sys-icon-font-weight);
-      font-size: inherit;
-      line-height: inherit;
-      font-variation-settings:
-        'FILL' var(--spectrum-sys-icon-fill),
-        'wght' var(--spectrum-sys-icon-weight),
-        'GRAD' var(--spectrum-sys-icon-grade),
-        'opsz' var(--spectrum-sys-icon-optical-size);
-    }
-
-    &--trailing {
-      padding: calc(var(--chip-spacing-small) / 2);
-      border-radius: 50%;
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.12);
-      }
-    }
-  }
-
-  // Size variants
+  // ==============================================
+  // Size Variations
+  // ==============================================
   &--extra-small {
     --chip-font-size: var(--spectrum-sys-typescale-body-xs-size, 10px);
     --chip-min-height: 1rem;
@@ -249,5 +186,140 @@
     --chip-padding: var(--spectrum-sys-spacing, 1rem);
     --chip-gap: var(--spectrum-sys-spacing-small, 0.5rem);
     --chip-icon-size: 1.5em;
+  }
+
+  // ==============================================
+  // State Styles
+  // ==============================================
+  &--disabled {
+    opacity: var(--chip-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // ==============================================
+  // Icon Padding Adjustments
+  // ==============================================
+  &--has-leading-icon {
+    padding-left: calc(var(--chip-padding) - 3px); // Reduce left padding by 3px to compensate for icon's internal spacing
+  }
+
+  &--has-trailing-icon {
+    padding-right: calc(var(--chip-padding) - 3px); // Reduce right padding by 3px to compensate for icon's internal spacing
+  }
+
+  // ==============================================
+  // Element Styles
+  // ==============================================
+  &__label {
+    line-height: 1;
+    font-size: var(--chip-font-size);
+    position: relative;
+    z-index: 1;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--chip-icon-size);
+    line-height: 1;
+    width: var(--chip-icon-size);
+    height: var(--chip-icon-size);
+    position: relative;
+    z-index: 1;
+
+    .material-symbols-outlined {
+      font-family: var(--spectrum-sys-icon-font-family);
+      font-weight: var(--spectrum-sys-icon-font-weight);
+      font-size: inherit;
+      line-height: inherit;
+      font-variation-settings:
+        'FILL' var(--spectrum-sys-icon-fill),
+        'wght' var(--spectrum-sys-icon-weight),
+        'GRAD' var(--spectrum-sys-icon-grade),
+        'opsz' var(--spectrum-sys-icon-optical-size);
+    }
+
+
+
+    &--trailing {
+      border-radius: 50%;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
+  &__ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple var(--chip-ripple-animation-duration) linear;
+    background-color: var(--chip-ripple-color);
+    pointer-events: none;
+    width: var(--chip-ripple-size);
+    height: var(--chip-ripple-size);
+    margin-left: calc(var(--chip-ripple-size) / -2);
+    margin-top: calc(var(--chip-ripple-size) / -2);
+  }
+}
+
+// ==============================================
+// Focus Management
+// ==============================================
+.spectrum-chip {
+  // Focus styles
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 var(--chip-focus-outline-width) var(--chip-focus-background),
+                0 0 0 calc(var(--chip-focus-outline-width) + var(--chip-focus-outline-offset)) var(--chip-focus-outline);
+  }
+}
+
+// ==============================================
+// Animation Keyframes
+// ==============================================
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+// ==============================================
+// Accessibility Enhancements
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-chip {
+    --chip-transition: none;
+    --chip-hover-transform: none;
+    --chip-active-transform: none;
+    
+    &:hover {
+      transform: none;
+    }
+    
+    &:active {
+      transform: none;
+    }
+    
+    &__ripple {
+      animation: none;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-chip {
+    border: 1px solid;
+    
+    &--outline {
+      border-width: 2px;
+    }
   }
 } 

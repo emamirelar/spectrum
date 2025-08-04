@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spectrum Menu - Your Original Code + Direct Navigation</title>
+    <script type="module" src="../loader/index.esm.js"></script>
+    <link rel="stylesheet" href="../dist/cpit-spectrum/cpit-spectrum.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .demo-section h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #0070d2;
+            padding-bottom: 10px;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .highlight {
+            background: #48bb78;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .warning {
+            background: #fed7d7;
+            border-left: 4px solid #e53e3e;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #742a2a;
+        }
+        .success {
+            background: #c6f6d5;
+            border-left: 4px solid #38a169;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #22543d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Success! Your Original Code Now Works</h1>
+            <p>Plus the new directNavigation feature for automatic browser navigation</p>
+        </div>
+
+        <div class="demo-section">
+            <h3>✅ Your Original Code (Now Fixed)</h3>
+            <p>This is exactly what you wanted to work - and it does now!</p>
+            
+            <div class="code-block">
+&lt;spectrum-menu 
+    orientation="horizontal"
+    items='[
+        {"label": "Home", "href": "/home", "icon": "home"},
+        {"label": "About", "href": "/about", "icon": "info"},
+        {"label": "Services", "href": "/services", "icon": "business"},
+        {"label": "Contact", "href": "/contact", "icon": "mail"}
+    ]'&gt;
+&lt;/spectrum-menu&gt;
+            </div>
+
+            <p><strong>Demo:</strong></p>
+            <spectrum-menu 
+                orientation="horizontal"
+                items='[
+                    {"label": "Home", "href": "/home", "icon": "home"},
+                    {"label": "About", "href": "/about", "icon": "info"},
+                    {"label": "Services", "href": "/services", "icon": "business"},
+                    {"label": "Contact", "href": "/contact", "icon": "mail"}
+                ]'>
+            </spectrum-menu>
+        </div>
+
+        <div class="demo-section">
+            <h3>🚀 New Feature: Direct Navigation</h3>
+            <p>Add <span class="highlight">directNavigation="true"</span> to enable automatic browser navigation:</p>
+            
+            <div class="code-block">
+&lt;spectrum-menu 
+    orientation="horizontal"
+    <span class="highlight">directNavigation="true"</span>
+    items='[
+        {"label": "Google", "href": "https://www.google.com", "icon": "search"},
+        {"label": "GitHub", "href": "https://www.github.com", "icon": "code"},
+        {"label": "MDN Docs", "href": "https://developer.mozilla.org", "icon": "school"}
+    ]'&gt;
+&lt;/spectrum-menu&gt;
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Warning:</strong> The menu below will navigate away from this page when clicked!
+            </div>
+
+            <p><strong>Demo:</strong></p>
+            <spectrum-menu 
+                orientation="horizontal"
+                directNavigation="true"
+                items='[
+                    {"label": "Google", "href": "https://www.google.com", "icon": "search"},
+                    {"label": "GitHub", "href": "https://www.github.com", "icon": "code"},
+                    {"label": "MDN Docs", "href": "https://developer.mozilla.org", "icon": "school"}
+                ]'>
+            </spectrum-menu>
+        </div>
+
+        <div class="demo-section">
+            <h3>📋 What Was Fixed & Added</h3>
+            
+            <div class="success">
+                <h4>✅ JSON String Parsing (Your Original Issue)</h4>
+                <ul>
+                    <li>The <code>items</code> prop now accepts both JSON strings and JavaScript arrays</li>
+                    <li>Your HTML attribute usage now works perfectly</li>
+                    <li>Backwards compatible with programmatic usage</li>
+                </ul>
+            </div>
+
+            <div class="success">
+                <h4>🆕 Direct Navigation Feature</h4>
+                <ul>
+                    <li>New <code>directNavigation</code> boolean prop</li>
+                    <li>When <code>true</code>: clicking items navigates to their href in current tab</li>
+                    <li>When <code>false</code> (default): only emits events, no navigation</li>
+                    <li>Events are still emitted in both modes for custom handling</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>🛠️ Using in Your Project</h3>
+            <p>Install the updated package in your project:</p>
+            
+            <div class="code-block">
+# Install the local package
+npm install /path/to/unops-itg-npm-cpit-spectrum-0.0.1-alpha.32.tgz
+
+# Or if you copied it to your project:
+npm install ./unops-itg-npm-cpit-spectrum-0.0.1-alpha.32.tgz
+            </div>
+
+            <p>Then use it in your application:</p>
+            
+            <div class="code-block">
+// Import and initialize
+import { defineCustomElements } from '@unops-itg-npm/cpit-spectrum/loader';
+defineCustomElements();
+
+// Your original code now works!
+&lt;spectrum-menu 
+    orientation="horizontal"
+    directNavigation="true"  // Add this for navigation
+    items='[
+        {"label": "Home", "href": "/home", "icon": "home"},
+        {"label": "About", "href": "/about", "icon": "info"}
+    ]'&gt;
+&lt;/spectrum-menu&gt;
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add event listeners to demonstrate that events still work
+        document.querySelectorAll('spectrum-menu').forEach(menu => {
+            menu.addEventListener('itemClick', (event) => {
+                console.log('Menu item clicked:', event.detail);
+            });
+        });
+    </script>
+</body>
+</html> 

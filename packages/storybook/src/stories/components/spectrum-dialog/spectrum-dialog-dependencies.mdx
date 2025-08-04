@@ -1,0 +1,178 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumDialog/Dependencies" />
+
+# Spectrum Dialog Dependencies
+
+The `spectrum-dialog` component is a **Composed Component** that depends on other Spectrum components to provide its full functionality.
+
+## Direct Dependencies
+
+### spectrum-panel
+- **Purpose**: Provides the visual container and styling for the dialog content
+- **Integration**: Used as the main container within the dialog element
+- **Properties Passed**: `background`, `size`, `width`, `height`, `noPadding`
+
+```html
+<spectrum-panel
+  background="opaque"
+  size="medium"
+  class="spectrum-dialog__panel"
+>
+  <!-- Dialog content -->
+</spectrum-panel>
+```
+
+### spectrum-button  
+- **Purpose**: Renders buttons in the control bar
+- **Integration**: Dynamically created for each button in the `buttons` array
+- **Properties Passed**: `variant`, `disabled`, `buttonText`
+
+```html
+<spectrum-button
+  variant="primary"
+  button-text="OK"
+  disabled="false"
+></spectrum-button>
+```
+
+## Component Hierarchy
+
+```
+spectrum-dialog (Level 2 - Composed Component)
+├── spectrum-panel (Level 1 - Atomic Component)
+└── spectrum-button (Level 1 - Atomic Component)
+```
+
+## Dependency Flow
+
+1. **spectrum-dialog** creates the modal structure using HTML `<dialog>` element
+2. **spectrum-panel** provides the visual styling and container functionality
+3. **spectrum-button** components are generated for the control bar based on the `buttons` prop
+
+## Usage Patterns
+
+### Panel Integration
+The dialog leverages spectrum-panel's background effects and sizing capabilities:
+
+```typescript
+// Dialog passes props to panel
+<spectrum-panel
+  background={this.background}     // 'opaque' | 'partial-frost' | 'full-frost' | 'transparent'
+  size={this.size}                 // 'small' | 'medium' | 'large' | 'full' | 'auto'
+  width={this.width}               // Custom width override
+  height={this.height}             // Custom height override
+  noPadding={this.noPadding}       // Remove default padding
+/>
+```
+
+### Button Integration
+Control bar buttons are dynamically created from the `buttons` array:
+
+```typescript
+// Button configuration interface
+interface DialogButton {
+  id: string;
+  label: string;
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline';
+  disabled?: boolean;
+  action?: string;
+}
+
+// Dialog creates spectrum-button elements
+{this.buttons.map(button => (
+  <spectrum-button
+    key={button.id}
+    variant={button.variant || 'secondary'}
+    disabled={button.disabled || false}
+    buttonText={button.label}
+    onClick={() => this.handleButtonClick(button)}
+  />
+))}
+```
+
+## Event Integration
+
+### Button Events
+Dialog listens to spectrum-button click events and emits dialog-level events:
+
+```typescript
+private handleButtonClick = (button: DialogButton) => {
+  this.dialogAction.emit({
+    action: button.action || 'buttonClick',
+    dialogId: this.dialogId,
+    buttonId: button.id
+  });
+};
+```
+
+### Panel Events
+Currently, spectrum-dialog does not listen to panel events, but the panel provides the visual foundation.
+
+## CSS Integration
+
+### Panel Styling
+The dialog applies specific CSS classes to integrate with the panel:
+
+```scss
+.spectrum-dialog__panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: var(--dialog-content-max-height);
+  border-radius: var(--dialog-border-radius);
+  box-shadow: var(--dialog-shadow);
+  overflow: hidden;
+}
+```
+
+### Button Styling
+Control bar buttons inherit spectrum-button styling with dialog-specific layout:
+
+```scss
+.spectrum-dialog__control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--dialog-control-bar-gap);
+  
+  spectrum-button {
+    // Inherits all spectrum-button styles
+  }
+}
+```
+
+## Impact Analysis
+
+### Changes to spectrum-panel
+If spectrum-panel API changes, spectrum-dialog may need updates to:
+- Background effect properties
+- Size and dimension handling
+- Padding control
+- Event signatures
+
+### Changes to spectrum-button
+If spectrum-button API changes, spectrum-dialog may need updates to:
+- Button variant types
+- Event handling patterns
+- Styling integration
+- Accessibility features
+
+## Testing Dependencies
+
+When testing spectrum-dialog:
+1. Ensure spectrum-panel is loaded and functioning
+2. Verify spectrum-button components render correctly
+3. Test button click event propagation
+4. Validate panel background effects work as expected
+5. Check responsive behavior across all dependencies
+
+## Migration Considerations
+
+When updating spectrum-dialog:
+1. **Check Dependency Compatibility**: Ensure all dependencies support required features
+2. **Coordinate Updates**: Update spectrum-panel and spectrum-button first if needed
+3. **Test Integration Points**: Verify all property passing and event handling
+4. **Update Documentation**: Reflect any changes in dependency relationships
+
+This dependency structure allows spectrum-dialog to focus on modal behavior while leveraging proven components for visual presentation and user interaction. 
