@@ -578,6 +578,8 @@ export const SpectrumToast = /*@__PURE__*/ defineContainer<JSX.SpectrumToast>('s
   'showCloseButton',
   'actionLabel',
   'actionValue',
+  'minWidth',
+  'maxWidth',
   'toastAction',
   'toastDismiss'
 ], [

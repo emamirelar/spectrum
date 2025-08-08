@@ -687,6 +687,8 @@ export class SpectrumCookieCompliance {
             dismissible={false}
             toastTitle={this.getTranslations().toastTitle}
             message={this.message}
+            maxWidth="640px"
+            minWidth="400px"
           >
             <div class="spectrum-cookie-compliance__actions">
               <spectrum-button 

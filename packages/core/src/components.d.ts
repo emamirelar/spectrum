@@ -1727,7 +1727,7 @@ export namespace Components {
     /**
      * Spectrum Toast Component
      * A notification component that displays messages at screen edges.
-     * Supports various variants, positioning, and auto-dismiss functionality.
+     * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
      */
     interface SpectrumToast {
         /**
@@ -1763,7 +1763,15 @@ export namespace Components {
         /**
           * @default ''
          */
+        "maxWidth": string;
+        /**
+          * @default ''
+         */
         "message": string;
+        /**
+          * @default ''
+         */
+        "minWidth": string;
         /**
           * @default false
          */
@@ -2400,7 +2408,7 @@ declare global {
     /**
      * Spectrum Toast Component
      * A notification component that displays messages at screen edges.
-     * Supports various variants, positioning, and auto-dismiss functionality.
+     * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
      */
     interface HTMLSpectrumToastElement extends Components.SpectrumToast, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumToastElementEventMap>(type: K, listener: (this: HTMLSpectrumToastElement, ev: SpectrumToastCustomEvent<HTMLSpectrumToastElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4222,7 +4230,7 @@ declare namespace LocalJSX {
     /**
      * Spectrum Toast Component
      * A notification component that displays messages at screen edges.
-     * Supports various variants, positioning, and auto-dismiss functionality.
+     * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
      */
     interface SpectrumToast {
         /**
@@ -4256,7 +4264,15 @@ declare namespace LocalJSX {
         /**
           * @default ''
          */
+        "maxWidth"?: string;
+        /**
+          * @default ''
+         */
         "message"?: string;
+        /**
+          * @default ''
+         */
+        "minWidth"?: string;
         "onToastAction"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
         "onToastDismiss"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
         /**
@@ -4485,7 +4501,7 @@ declare module "@stencil/core" {
             /**
              * Spectrum Toast Component
              * A notification component that displays messages at screen edges.
-             * Supports various variants, positioning, and auto-dismiss functionality.
+             * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
              */
             "spectrum-toast": LocalJSX.SpectrumToast & JSXBase.HTMLAttributes<HTMLSpectrumToastElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;

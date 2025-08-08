@@ -9,7 +9,7 @@
 
 Spectrum Toast Component
 A notification component that displays messages at screen edges.
-Supports various variants, positioning, and auto-dismiss functionality.
+Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
 
 ## Properties
 
@@ -22,7 +22,9 @@ Supports various variants, positioning, and auto-dismiss functionality.
 | `dismissible`     | `dismissible`       |             | `boolean`                                                                                                | `true`      |
 | `duration`        | `duration`          |             | `number`                                                                                                 | `4000`      |
 | `icon`            | `icon`              |             | `string`                                                                                                 | `''`        |
+| `maxWidth`        | `max-width`         |             | `string`                                                                                                 | `''`        |
 | `message`         | `message`           |             | `string`                                                                                                 | `''`        |
+| `minWidth`        | `min-width`         |             | `string`                                                                                                 | `''`        |
 | `persistent`      | `persistent`        |             | `boolean`                                                                                                | `false`     |
 | `position`        | `position`          |             | `"bottom" \| "bottom-left" \| "bottom-right" \| "left" \| "right" \| "top" \| "top-left" \| "top-right"` | `'top'`     |
 | `showCloseButton` | `show-close-button` |             | `boolean`                                                                                                | `true`      |

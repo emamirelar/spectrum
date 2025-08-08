@@ -25,8 +25,33 @@ import { action } from 'storybook/actions';
 
  */
 
-// Import the translation interface
-import type { CookieTranslations } from '@spectrum/core';
+// Type definition for translations (duplicated here to avoid import issues)
+interface CookieTranslations {
+  toastTitle?: string;
+  acceptAll?: string;
+  rejectAll?: string;
+  customize?: string;
+  dialog?: {
+    title?: string;
+    description?: string;
+    savePreferences?: string;
+  };
+  categories?: {
+    necessary?: { label?: string; description?: string; };
+    analytics?: { label?: string; description?: string; };
+    marketing?: { label?: string; description?: string; };
+    preferences?: { label?: string; description?: string; };
+  };
+  policyLinks?: {
+    learnMore?: string;
+    privacyPolicy?: string;
+    cookiePolicy?: string;
+  };
+  accessibility?: {
+    cookiesEnabled?: string;
+    cookiesDisabled?: string;
+  };
+}
 
 // Component interfaces for TypeScript support
 interface SpectrumCookieComplianceElement extends HTMLElement {
@@ -682,6 +707,144 @@ import frenchTranslations from './translations/fr.json';
 \`\`\`
 
 **Perfect for global applications! 🌍✨**
+        `
+      }
+    }
+  }
+};
+
+// Alternative layout solutions story
+export const TranslationLayoutSolutions: Story = {
+  render: renderSpectrumCookieCompliance,
+  args: {
+    message: 'Nous utilisons des cookies pour améliorer significativement votre expérience utilisateur, analyser en détail le trafic du site et personnaliser le contenu selon vos préférences.',
+    position: 'bottom',
+    showDetails: true,
+    showCookieStatus: false,
+    showOnFirstVisit: true,
+    cookieName: 'spectrum_cookie_consent_layout_demo',
+    cookieExpireDays: 365,
+    gtmContainerId: 'GTM-LAYOUT',
+    autoLoadGTM: false,
+    privacyPolicyUrl: 'https://example.com/politique-de-confidentialite',
+    cookiePolicyUrl: 'https://example.com/politique-des-cookies',
+    consentVersion: '1.0.0',
+    debug: false,
+    // Very long translations to test layout
+    translations: {
+      toastTitle: 'Consentement aux Cookies et Confidentialité',
+      acceptAll: 'Tout Accepter et Continuer',
+      rejectAll: 'Tout Refuser Catégoriquement',
+      customize: 'Personnaliser en Détail',
+      dialog: {
+        title: 'Préférences Détaillées des Cookies',
+        description: 'Choisissez précisément quels types de cookies vous souhaitez autoriser pour personnaliser votre expérience. Vous pouvez modifier ces paramètres à tout moment selon vos préférences.',
+        savePreferences: 'Enregistrer Mes Préférences'
+      },
+      categories: {
+        necessary: {
+          label: 'Cookies Strictement Nécessaires',
+          description: 'Ces cookies sont absolument essentiels au bon fonctionnement du site Web et ne peuvent pas être désactivés.'
+        },
+        analytics: {
+          label: 'Cookies d\'Analyse et Statistiques',
+          description: 'Ces cookies nous aident à comprendre en détail comment les visiteurs interagissent avec notre site Web.'
+        },
+        marketing: {
+          label: 'Cookies Marketing et Publicité',
+          description: 'Ces cookies sont utilisés pour diffuser des publicités personnalisées et des campagnes marketing ciblées.'
+        },
+        preferences: {
+          label: 'Cookies de Préférences Utilisateur',
+          description: 'Ces cookies mémorisent vos choix personnels et vos préférences de navigation.'
+        }
+      },
+      policyLinks: {
+        learnMore: 'Pour En Savoir Plus :',
+        privacyPolicy: 'Politique de Confidentialité Complète',
+        cookiePolicy: 'Politique Détaillée des Cookies'
+      },
+      accessibility: {
+        cookiesEnabled: 'Cookies activés - cliquez pour gérer vos préférences détaillées',
+        cookiesDisabled: 'Cookies désactivés - cliquez pour gérer vos préférences détaillées'
+      }
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+**🔧 Layout Solutions for Long Translations**
+
+This story demonstrates how the component handles **very long translations** with multiple layout improvement strategies.
+
+### ✅ **Implemented Solutions**:
+
+#### **1. Enhanced Toast Component** ⭐ *(Clean Architecture)*
+- **Added**: \`maxWidth\` and \`minWidth\` props to \`spectrum-toast\`
+- **Before**: Fixed \`max-width: 480px\` 
+- **After**: Configurable \`max-width: 640px\` + \`min-width: 400px\`
+- **Result**: 33% more space for button text without CSS hacks
+
+#### **2. Cookie Compliance Integration**
+- **Toast Usage**: \`<spectrum-toast maxWidth="640px" minWidth="400px">\`
+- **Proper API**: Uses component props instead of CSS overrides
+- **Maintainable**: Changes isolated to toast component
+
+#### **3. Clean Component Architecture**
+- **No CSS Overrides**: No \`!important\` or specificity battles
+- **Reusable**: Other components can also use custom toast sizing
+- **Type Safe**: Full TypeScript support for new props
+
+### 🎯 **Alternative Solutions Available**:
+
+#### **Option A: Shorter Button Text** 
+\`\`\`typescript
+translations: {
+  acceptAll: 'Accepter',     // Instead of 'Tout Accepter et Continuer'
+  rejectAll: 'Refuser',      // Instead of 'Tout Refuser Catégoriquement'  
+  customize: 'Options'       // Instead of 'Personnaliser en Détail'
+}
+\`\`\`
+
+#### **Option B: Vertical Button Layout**
+Force vertical stacking with CSS:
+\`\`\`css
+.spectrum-cookie-compliance__actions {
+  flex-direction: column !important;
+}
+\`\`\`
+
+#### **Option C: Icon + Text Buttons**
+\`\`\`typescript
+<spectrum-button 
+  leftIcon="check"
+  buttonText="Accepter"
+  showLeftIcon={true}
+  showButtonText={true}
+/>
+\`\`\`
+
+#### **Option D: Toast Component Enhancement** ⭐ *(Implemented)*
+Enhanced the \`spectrum-toast\` component itself:
+\`\`\`typescript
+// New toast props for custom sizing
+<spectrum-toast 
+  maxWidth="640px"    // Custom max width
+  minWidth="400px"    // Custom min width
+  // ... other props
+/>
+\`\`\`
+
+#### **Option E: Modal for Detailed Options**
+Use the existing dialog approach (already implemented) for detailed options instead of cramming everything in the toast.
+
+### 📱 **Responsive Behavior**:
+- **Desktop (>640px)**: Horizontal layout, wider toast
+- **Tablet (480-640px)**: Horizontal with wrapping  
+- **Mobile (<480px)**: Vertical stacking, full-width buttons
+
+**Try resizing your browser to see the responsive behavior! 📱💻**
         `
       }
     }

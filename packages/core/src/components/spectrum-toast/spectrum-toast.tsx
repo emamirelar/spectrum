@@ -3,7 +3,7 @@ import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Method, 
 /**
  * Spectrum Toast Component
  * A notification component that displays messages at screen edges.
- * Supports various variants, positioning, and auto-dismiss functionality.
+ * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
  */
 @Component({
   tag: 'spectrum-toast',
@@ -36,6 +36,10 @@ export class SpectrumToast {
   @Prop() showCloseButton: boolean = true;
   @Prop() actionLabel: string = '';
   @Prop() actionValue: string = '';
+  
+  // Toast Sizing
+  @Prop() minWidth: string = '';
+  @Prop() maxWidth: string = '';
 
   // Toast State
   @State() isVisible: boolean = false;
@@ -234,8 +238,19 @@ export class SpectrumToast {
       [`spectrum-toast--${this.position}`]: true,
     };
 
+    // Dynamic width styling using override variables
+    const dynamicStyles: { [key: string]: string } = {};
+    if (this.minWidth) {
+      dynamicStyles['--toast-min-width-override'] = this.minWidth;
+    }
+    if (this.maxWidth) {
+      dynamicStyles['--toast-max-width-override'] = this.maxWidth;
+    }
+
+
+
     return (
-      <Host class={hostClasses}>
+      <Host class={hostClasses} style={dynamicStyles}>
         <div
           class={toastClasses}
           onMouseEnter={this.handleMouseEnter}

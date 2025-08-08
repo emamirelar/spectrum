@@ -805,7 +805,7 @@ export declare interface SpectrumTheme extends Components.SpectrumTheme {}
 
 
 @ProxyCmp({
-  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'message', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
+  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'maxWidth', 'message', 'minWidth', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
   methods: ['show', 'hide', 'dismiss']
 })
 @Component({
@@ -813,7 +813,7 @@ export declare interface SpectrumTheme extends Components.SpectrumTheme {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'message', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
+  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'maxWidth', 'message', 'minWidth', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
 })
 export class SpectrumToast {
   protected el: HTMLSpectrumToastElement;
