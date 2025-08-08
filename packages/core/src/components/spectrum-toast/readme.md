@@ -73,6 +73,24 @@ Type: `Promise<void>`
 
 
 
+## Dependencies
+
+### Used by
+
+ - [spectrum-cookie-compliance](../spectrum-cookie-compliance)
+
+### Depends on
+
+- [spectrum-button](../spectrum-button)
+
+### Graph
+```mermaid
+graph TD;
+  spectrum-toast --> spectrum-button
+  spectrum-cookie-compliance --> spectrum-toast
+  style spectrum-toast fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

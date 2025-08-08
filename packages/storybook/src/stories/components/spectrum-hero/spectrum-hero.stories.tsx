@@ -56,6 +56,10 @@ interface SpectrumHeroElement extends HTMLElement {
   rounded: boolean;
   shaded: boolean;
   overlayStyle: string;
+  overlayPosition: 'left' | 'center' | 'right';
+  overlayVertical: 'top' | 'center' | 'bottom';
+  srcset: string;
+  sizes: string;
 }
 
 // Story arguments interface
@@ -85,6 +89,8 @@ interface HeroSlide {
   buttonAction?: string;             // Action identifier for events
   overlayPosition?: 'left' | 'center' | 'right';    // Horizontal positioning
   overlayVertical?: 'top' | 'center' | 'bottom';    // Vertical positioning
+  srcset?: string;                   // Responsive image sources with width descriptors
+  sizes?: string;                    // Image sizes for different viewport conditions
 }
 \`\`\`
 
@@ -94,17 +100,31 @@ interface HeroSlide {
 
 ### Media Support
 - **Images**: Any web-compatible image format (JPEG, PNG, WebP, SVG)
+- **Responsive Images**: Full srcset and sizes support for optimized delivery
 - **Videos**: MP4, WebM with optional poster images for loading states
+
+### Responsive Image Features
+- **srcset**: Multiple image sources with width/density descriptors
+- **sizes**: Media queries defining image display sizes
+- **Performance**: Automatic selection of optimal image for device/viewport
+- **Bandwidth**: Reduced data usage on mobile devices
+- **Quality**: High-resolution images on retina displays
 
 ### Carousel Features
 - **Autoplay**: Configurable timing with pause-on-hover support
 - **Navigation**: Dots and arrows with keyboard accessibility
 - **Transitions**: Smooth animations with customizable duration
 
+### Interactive Controls
+- **Overlay Position**: Use the controls panel to change horizontal (left, center, right) and vertical (top, center, bottom) positioning
+- **Responsive Images**: Configure srcset and sizes for optimized image delivery across devices
+- **Live Preview**: All changes update in real-time as you adjust the controls
+- **All Stories**: Controls work across all story variants for easy experimentation
+
 ### Basic Usage
 \`\`\`
 <spectrum-hero
-  slides='[{"type":"image","src":"image.jpg","title":"Welcome","buttonText":"Get Started"}]'
+  slides='[{"type":"image","src":"image.jpg","srcset":"image-480w.jpg 480w, image-800w.jpg 800w, image-1200w.jpg 1200w","sizes":"(max-width: 600px) 100vw, 50vw","title":"Welcome","buttonText":"Get Started"}]'
   autoplay="5000"
   height="70vh"
   overlay-style="padding: 2rem 3rem; background: rgba(0,0,0,0.1);"
@@ -140,7 +160,11 @@ interface HeroSlide {
     debug: false,
     rounded: false,
     shaded: true,
-    overlayStyle: ''
+    overlayStyle: '',
+    overlayPosition: 'left',
+    overlayVertical: 'center',
+    srcset: '',
+    sizes: ''
   },
   argTypes: {
     slides: {
@@ -238,6 +262,40 @@ interface HeroSlide {
         type: { summary: 'string' },
         defaultValue: { summary: "''" }
       }
+    },
+    overlayPosition: {
+      control: { type: 'select' },
+      options: ['left', 'center', 'right'],
+      description: 'Horizontal positioning of overlay content',
+      table: {
+        type: { summary: "'left' | 'center' | 'right'" },
+        defaultValue: { summary: "'left'" }
+      }
+    },
+    overlayVertical: {
+      control: { type: 'select' },
+      options: ['top', 'center', 'bottom'],
+      description: 'Vertical positioning of overlay content',
+      table: {
+        type: { summary: "'top' | 'center' | 'bottom'" },
+        defaultValue: { summary: "'center'" }
+      }
+    },
+    srcset: {
+      control: 'text',
+      description: 'Responsive image sources for different screen densities (e.g., "image-320w.jpg 320w, image-640w.jpg 640w, image-1200w.jpg 1200w")',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" }
+      }
+    },
+    sizes: {
+      control: 'text',
+      description: 'Image sizes for different viewport conditions (e.g., "(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw")',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" }
+      }
     }
   }
 };
@@ -247,6 +305,26 @@ type Story = StoryObj<SpectrumHeroArgs>;
 
 // Interactive render function
 const renderHero = (args: SpectrumHeroArgs) => {
+  // Parse slides and update overlay positions and responsive images dynamically
+  let parsedSlides: HeroSlide[] = [];
+  try {
+    parsedSlides = JSON.parse(args.slides);
+    // Update all slides with the current settings
+    parsedSlides = parsedSlides.map(slide => ({
+      ...slide,
+      overlayPosition: args.overlayPosition,
+      overlayVertical: args.overlayVertical,
+      // Only add srcset and sizes if they're provided
+      ...(args.srcset && { srcset: args.srcset }),
+      ...(args.sizes && { sizes: args.sizes })
+    }));
+  } catch (error) {
+    console.warn('Error parsing slides:', error);
+    parsedSlides = [];
+  }
+
+  const dynamicSlides = JSON.stringify(parsedSlides);
+
   return html`
     <spectrum-theme 
       theme="light" 
@@ -254,7 +332,7 @@ const renderHero = (args: SpectrumHeroArgs) => {
     >
       <div style="width: 100%; min-height: 400px;">
         <spectrum-hero
-          slides=${args.slides}
+          slides=${dynamicSlides}
           autoplay=${args.autoplay}
           animation-duration=${args.animationDuration}
           pause-on-hover=${args.pauseOnHover}
@@ -1130,6 +1208,198 @@ This carousel demonstrates how different overlay styles affect the overall feel 
 - Width controls for content area management
 
 The autoplay cycle lets you compare how different overlay styles affect the same content layout.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Full viewport hero demonstrating complete screen takeover for maximum impact.
+ * Perfect for landing pages and immersive brand experiences.
+ */
+export const FullViewport: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop&ixlib=rb-4.0.3',
+        alt: 'Immersive full-screen workspace',
+        title: 'Immersive Experience',
+        subtitle: 'Full viewport height creates maximum visual impact and complete user engagement',
+        buttonText: 'Enter Experience',
+        buttonAction: 'enter-full-experience',
+        overlayPosition: 'center',
+        overlayVertical: 'center'
+      }
+    ]),
+    height: '100vh',
+    autoplay: 0,
+    showDots: false,
+    showArrows: false,
+    rounded: false,
+    shaded: true,
+    overlayStyle: 'padding: 4rem; text-align: center;'
+  },
+  render: (args: SpectrumHeroArgs) => {
+    return html`
+      <spectrum-theme 
+        theme="light" 
+        color="#1976d2"
+      >
+        <div style="width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; z-index: 999;">
+          <spectrum-hero
+            slides=${args.slides}
+            autoplay=${args.autoplay}
+            animation-duration=${args.animationDuration}
+            pause-on-hover=${args.pauseOnHover}
+            show-dots=${args.showDots}
+            show-arrows=${args.showArrows}
+            height=${args.height}
+            keyboard-navigation=${args.keyboardNavigation}
+            debug=${args.debug}
+            rounded=${args.rounded}
+            shaded=${args.shaded}
+            overlay-style=${args.overlayStyle}
+            @heroAction=${(e: CustomEvent) => action('heroAction')(e.detail)}
+            @slideChange=${(e: CustomEvent) => action('slideChange')(e.detail)}
+          ></spectrum-hero>
+        </div>
+      </spectrum-theme>
+    `;
+  },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: `
+This story demonstrates a true full viewport hero experience:
+
+### **Full Viewport Features**
+- **100vh height**: Occupies the complete browser viewport height
+- **Full-screen positioning**: Uses \`position: fixed\` and \`100vw\` width for complete screen takeover
+- **Maximum impact**: Creates an immersive, distraction-free experience
+- **Center-focused**: Overlay content is centered both horizontally and vertically
+
+### **Design Characteristics**
+- **No navigation controls**: Clean, minimal interface without dots or arrows
+- **Generous padding**: \`padding: 4rem\` with center text alignment for balanced composition
+- **Shade overlay**: Maintains text readability across any background image
+- **Fixed positioning**: Ensures consistent viewport coverage regardless of container
+
+### **Ideal Use Cases**
+- **Landing page heroes**: First impression with maximum visual impact
+- **Brand storytelling**: Immersive narrative experiences
+- **Product launches**: Dramatic reveals and announcements
+- **Portfolio showcases**: Full-screen artistic presentations
+- **App splash screens**: Loading or welcome experiences
+
+### **Implementation Notes**
+- Uses Storybook's \`layout: 'fullscreen'\` parameter for proper viewport display
+- \`position: fixed\` with \`z-index: 999\` ensures proper layering
+- \`100vw\` width handles any container constraints
+- Responsive typography and spacing adapt to all screen sizes
+
+Perfect for when you need the hero to be the primary focus with no competing elements.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Responsive images hero demonstrating srcset and sizes for optimized image delivery.
+ * Shows how the component automatically selects the best image for each device and viewport.
+ */
+export const ResponsiveImages: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3',
+        alt: 'Responsive workspace image optimized for all devices',
+        title: 'Responsive Performance',
+        subtitle: 'Optimized images automatically adapt to your device and connection speed',
+        buttonText: 'Experience Speed',
+        buttonAction: 'experience-responsive',
+        overlayPosition: 'center',
+        overlayVertical: 'center'
+      }
+    ]),
+    height: '80vh',
+    autoplay: 0,
+    showDots: false,
+    showArrows: false,
+    rounded: true,
+    shaded: true,
+    overlayStyle: 'padding: 3rem; text-align: center;',
+    srcset: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=480&auto=format&fit=crop&ixlib=rb-4.0.3 480w, https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3 800w, https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3 1200w, https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3 1920w',
+    sizes: '(max-width: 480px) 100vw, (max-width: 800px) 100vw, (max-width: 1200px) 100vw, 1920px'
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates responsive image optimization with srcset and sizes:
+
+### **Responsive Image Configuration**
+
+#### **srcset Breakpoints**
+- **480w**: Mobile portrait - Small, fast-loading image for mobile devices
+- **800w**: Tablet/mobile landscape - Medium resolution for tablets and small laptops  
+- **1200w**: Desktop - High resolution for standard desktop screens
+- **1920w**: Large desktop/retina - Ultra-high resolution for large monitors and retina displays
+
+#### **sizes Media Queries**
+- **(max-width: 480px) 100vw**: Mobile devices use full viewport width
+- **(max-width: 800px) 100vw**: Tablets use full viewport width
+- **(max-width: 1200px) 100vw**: Small desktops use full viewport width
+- **1920px**: Large screens cap at 1920px maximum width
+
+### **Performance Benefits**
+
+#### **Bandwidth Optimization**
+- **Mobile users**: Automatically receive 480w image (~50KB instead of ~500KB)
+- **Tablet users**: Get 800w image optimized for their screen size
+- **Desktop users**: Receive full 1200w+ image for crisp display
+- **Retina displays**: Automatically select 2x resolution when needed
+
+#### **Loading Performance**
+- **Faster initial load**: Browsers request only the optimal image size
+- **Reduced data usage**: Significant bandwidth savings on mobile connections
+- **Better user experience**: Faster page loads improve engagement
+- **SEO benefits**: Core Web Vitals improvements from optimized images
+
+### **Implementation Best Practices**
+
+#### **Image Widths**
+- Choose breakpoints that match your design's key viewport sizes
+- Include at least 3-4 sizes: mobile (320-480w), tablet (768-800w), desktop (1200w), large (1920w+)
+- Consider 2x versions for retina displays (add density descriptors like \`2x\`)
+
+#### **Sizes Attribute**
+- Match your CSS layout: if hero takes 50% width on desktop, use \`50vw\`
+- Include viewport-specific rules for responsive designs  
+- End with a fallback size (no media query) for the largest screens
+
+#### **Format Optimization**
+- Use modern formats (WebP, AVIF) when supported
+- Provide JPEG fallbacks for broader compatibility
+- Consider different compression levels for different breakpoints
+
+### **Browser Support**
+- **srcset**: Supported in all modern browsers (97%+ global support)
+- **sizes**: Full support across all major browsers
+- **Graceful degradation**: Falls back to \`src\` attribute in older browsers
+
+### **Testing Responsive Images**
+- **Browser DevTools**: Network tab shows which image size was loaded
+- **Device simulation**: Test different viewport sizes to verify correct image selection  
+- **Connection throttling**: Verify performance on slower connections
+- **Real devices**: Test on actual mobile devices for accurate performance assessment
+
+Use the controls panel to experiment with different srcset and sizes configurations!
         `
       }
     }

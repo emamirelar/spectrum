@@ -75,15 +75,39 @@ Use standard property binding syntax for all component properties.
     }
   },
   args: {
-    items: '[{"id":"1","label":"Parent Item 1","expanded":false,"children":[{"id":"1-1","label":"Child Item 1"},{"id":"1-2","label":"Child Item 2"}]},{"id":"2","label":"Parent Item 2","expanded":true,"children":[{"id":"2-1","label":"Child Item 3"},{"id":"2-2","label":"Child Item 4"}]}]',
+    items: [
+      {
+        "id": "1",
+        "label": "Parent Item 1",
+        "icon": "folder",
+        "expanded": false,
+        "children": [
+          {"id": "1-1", "label": "Child Item 1", "icon": "description", "action": "open"},
+          {"id": "1-2", "label": "Child Item 2", "icon": "description", "action": "open"}
+        ]
+      },
+      {
+        "id": "2", 
+        "label": "Parent Item 2",
+        "icon": "folder",
+        "expanded": true,
+        "children": [
+          {"id": "2-1", "label": "Child Item 3", "icon": "description", "action": "open"},
+          {"id": "2-2", "label": "Child Item 4", "icon": "description", "action": "open"}
+        ]
+      }
+    ],
     filter: '',
-    contextActions: '[{"id":"rename","action":"rename","label":"Rename","icon":"edit"},{"id":"delete","action":"delete","label":"Delete","icon":"delete"}]',
+    contextActions: [
+      {"id": "rename", "action": "rename", "label": "Rename", "icon": "edit"},
+      {"id": "delete", "action": "delete", "label": "Delete", "icon": "delete"}
+    ],
     mutuallyExclusive: false,
     debug: false,
   },
   argTypes: {
     items: {
-      control: 'text',
+      control: 'object',
       description: 'The items property',
       table: {
         type: { summary: 'CollapsibleListItem[]' },
@@ -99,7 +123,7 @@ Use standard property binding syntax for all component properties.
       }
     },
     contextActions: {
-      control: 'text',
+      control: 'object',
       description: 'The contextActions property',
       table: {
         type: { summary: 'ContextMenuAction[]' },
@@ -143,10 +167,6 @@ const renderSpectrumCollapsibleList = (args: SpectrumCollapsibleListArgs) => htm
       @contextAction=${(e: CustomEvent) => action('contextAction')(e.detail)}
       @itemRenamed=${(e: CustomEvent) => action('itemRenamed')(e.detail)}
     >
-      <!-- Add meaningful slot content here -->
-      <div>
-        <p>Component content goes here</p>
-      </div>
     </spectrum-collapsible-list>
   </div>
 `;
@@ -182,8 +202,32 @@ The Actions panel will show all emitted events with their action attributes.
 export const BasicExample: Story = {
   render: renderSpectrumCollapsibleList,
   args: {
-    items: '[{"id":"1","label":"Parent Item 1","expanded":false,"children":[{"id":"1-1","label":"Child Item 1"},{"id":"1-2","label":"Child Item 2"}]},{"id":"2","label":"Parent Item 2","expanded":true,"children":[{"id":"2-1","label":"Child Item 3"},{"id":"2-2","label":"Child Item 4"}]}]',
-    contextActions: '[{"id":"rename","action":"rename","label":"Rename","icon":"edit"},{"id":"delete","action":"delete","label":"Delete","icon":"delete"}]',
+    items: [
+      {
+        "id": "1",
+        "label": "Parent Item 1", 
+        "icon": "folder",
+        "expanded": false,
+        "children": [
+          {"id": "1-1", "label": "Child Item 1", "icon": "description", "action": "open"},
+          {"id": "1-2", "label": "Child Item 2", "icon": "description", "action": "open"}
+        ]
+      },
+      {
+        "id": "2",
+        "label": "Parent Item 2",
+        "icon": "folder", 
+        "expanded": true,
+        "children": [
+          {"id": "2-1", "label": "Child Item 3", "icon": "description", "action": "open"},
+          {"id": "2-2", "label": "Child Item 4", "icon": "description", "action": "open"}
+        ]
+      }
+    ],
+    contextActions: [
+      {"id": "rename", "action": "rename", "label": "Rename", "icon": "edit"},
+      {"id": "delete", "action": "delete", "label": "Delete", "icon": "delete"}
+    ],
   },
   parameters: {
     docs: {
@@ -201,16 +245,98 @@ Basic spectrum-collapsible-list configuration for common use cases.
  */
 export const Variants: Story = {
   render: () => html`
-    <div style="display: flex; gap: 1rem; padding: 2rem; flex-wrap: wrap; justify-content: center; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
-      <!-- Add variant examples -->
-      <spectrum-collapsible-list></spectrum-collapsible-list>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+      <!-- Basic List -->
+      <div style="background: var(--spectrum-sys-color-surface); padding: 1rem; border-radius: 8px;">
+        <h3 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Basic List</h3>
+        <spectrum-collapsible-list
+          .items=${[
+            {id: "1", label: "Documents", icon: "folder", expanded: false, children: [
+              {id: "1-1", label: "Report.pdf", icon: "description", action: "open"},
+              {id: "1-2", label: "Notes.txt", icon: "description", action: "open"}
+            ]},
+            {id: "2", label: "Images", icon: "folder", expanded: false, children: [
+              {id: "2-1", label: "Photo1.jpg", icon: "image", action: "open"},
+              {id: "2-2", label: "Photo2.jpg", icon: "image", action: "open"}
+            ]}
+          ]}
+          .contextActions=${[
+            {id: "rename", action: "rename", label: "Rename", icon: "edit"},
+            {id: "delete", action: "delete", label: "Delete", icon: "delete"}
+          ]}
+          @childAction=${(e: CustomEvent) => action('childAction')(e.detail)}
+          @expandAction=${(e: CustomEvent) => action('expandAction')(e.detail)}
+          @contractAction=${(e: CustomEvent) => action('contractAction')(e.detail)}
+          @contextAction=${(e: CustomEvent) => action('contextAction')(e.detail)}
+        ></spectrum-collapsible-list>
+      </div>
+
+      <!-- With Filter -->
+      <div style="background: var(--spectrum-sys-color-surface); padding: 1rem; border-radius: 8px;">
+        <h3 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Filtered List</h3>
+        <spectrum-collapsible-list
+          .items=${[
+            {id: "1", label: "Projects", icon: "work", expanded: true, children: [
+              {id: "1-1", label: "Website", icon: "web", action: "open"},
+              {id: "1-2", label: "Mobile App", icon: "phone_android", action: "open"},
+              {id: "1-3", label: "Desktop App", icon: "desktop_windows", action: "open"}
+            ]},
+            {id: "2", label: "Archive", icon: "archive", expanded: false, children: [
+              {id: "2-1", label: "Old Website", icon: "web", action: "open"},
+              {id: "2-2", label: "Legacy App", icon: "apps", action: "open"}
+            ]}
+          ]}
+          .filter=${"App"}
+          .contextActions=${[
+            {id: "open", action: "open", label: "Open", icon: "open_in_new"},
+            {id: "archive", action: "archive", label: "Archive", icon: "archive"}
+          ]}
+          @childAction=${(e: CustomEvent) => action('childAction')(e.detail)}
+          @expandAction=${(e: CustomEvent) => action('expandAction')(e.detail)}
+          @contractAction=${(e: CustomEvent) => action('contractAction')(e.detail)}
+          @contextAction=${(e: CustomEvent) => action('contextAction')(e.detail)}
+        ></spectrum-collapsible-list>
+      </div>
+
+      <!-- Mutually Exclusive -->
+      <div style="background: var(--spectrum-sys-color-surface); padding: 1rem; border-radius: 8px;">
+        <h3 style="margin-top: 0; color: var(--spectrum-sys-color-on-surface);">Mutually Exclusive</h3>
+        <spectrum-collapsible-list
+          .items=${[
+            {id: "1", label: "Settings", icon: "settings", expanded: false, children: [
+              {id: "1-1", label: "General", icon: "tune", action: "configure"},
+              {id: "1-2", label: "Privacy", icon: "security", action: "configure"}
+            ]},
+            {id: "2", label: "Advanced", icon: "engineering", expanded: false, children: [
+              {id: "2-1", label: "Developer", icon: "code", action: "configure"},
+              {id: "2-2", label: "Debug", icon: "bug_report", action: "configure"}
+            ]},
+            {id: "3", label: "Help", icon: "help", expanded: false, children: [
+              {id: "3-1", label: "FAQ", icon: "quiz", action: "view"},
+              {id: "3-2", label: "Support", icon: "support", action: "contact"}
+            ]}
+          ]}
+          .mutuallyExclusive=${true}
+          .contextActions=${[
+            {id: "configure", action: "configure", label: "Configure", icon: "settings"},
+            {id: "reset", action: "reset", label: "Reset", icon: "refresh"}
+          ]}
+          @childAction=${(e: CustomEvent) => action('childAction')(e.detail)}
+          @expandAction=${(e: CustomEvent) => action('expandAction')(e.detail)}
+          @contractAction=${(e: CustomEvent) => action('contractAction')(e.detail)}
+          @contextAction=${(e: CustomEvent) => action('contextAction')(e.detail)}
+        ></spectrum-collapsible-list>
+      </div>
     </div>
   `,
   parameters: {
     docs: {
       description: {
         story: `
-Different spectrum-collapsible-list variants and configurations.
+Different spectrum-collapsible-list variants and configurations:
+- **Basic List**: Standard collapsible list with context actions
+- **Filtered List**: Shows filtering functionality with search term "App"
+- **Mutually Exclusive**: Only one parent can be expanded at a time
         `
       }
     }

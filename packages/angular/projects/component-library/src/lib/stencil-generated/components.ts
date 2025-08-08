@@ -344,6 +344,41 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
 
 @ProxyCmp({
+  inputs: ['autoLoadGTM', 'consentVersion', 'cookieExpireDays', 'cookieName', 'cookiePolicyUrl', 'debug', 'gtmContainerId', 'message', 'position', 'privacyPolicyUrl', 'showCookieStatus', 'showDetails', 'showOnFirstVisit', 'translations'],
+  methods: ['getStoredConsent', 'updateConsent', 'showConsent', 'hideConsent', 'resetConsent']
+})
+@Component({
+  selector: 'spectrum-cookie-compliance',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['autoLoadGTM', 'consentVersion', 'cookieExpireDays', 'cookieName', 'cookiePolicyUrl', 'debug', 'gtmContainerId', 'message', 'position', 'privacyPolicyUrl', 'showCookieStatus', 'showDetails', 'showOnFirstVisit', 'translations'],
+})
+export class SpectrumCookieCompliance {
+  protected el: HTMLSpectrumCookieComplianceElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['consentUpdated', 'consentDismissed']);
+  }
+}
+
+
+import type { CookieConsent as ISpectrumCookieComplianceCookieConsent } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumCookieCompliance extends Components.SpectrumCookieCompliance {
+  /**
+   * Event emitted when consent is given or updated
+   */
+  consentUpdated: EventEmitter<CustomEvent<ISpectrumCookieComplianceCookieConsent>>;
+  /**
+   * Event emitted when consent banner is dismissed
+   */
+  consentDismissed: EventEmitter<CustomEvent<void>>;
+}
+
+
+@ProxyCmp({
   inputs: ['background', 'buttons', 'closeOnEscape', 'closeOnOutsideClick', 'debug', 'dialogId', 'dialogTitle', 'height', 'noPadding', 'open', 'showCloseButton', 'size', 'width'],
   methods: ['show', 'hide', 'toggle']
 })
@@ -493,7 +528,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -501,7 +536,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLSpectrumMenuElement;

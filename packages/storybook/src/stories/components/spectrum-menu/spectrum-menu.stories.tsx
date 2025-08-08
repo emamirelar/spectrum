@@ -44,6 +44,7 @@ interface SpectrumMenuElement extends HTMLElement {
   mobileMenuTitle: string;
   directNavigation: boolean;
   navigationColor: string;
+  mobileIconColor: string;
 }
 
 // Story arguments interface
@@ -253,9 +254,10 @@ interface MenuItem {
 - **Touch-friendly**: Optimized for mobile interaction
 
 ### Material Icons
-Supports all Material Design icons. Include the font in your project:
+Supports all Material Design icons via Material Symbols Outlined. The font is automatically loaded by Spectrum components:
 \`\`\`html
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!-- Automatically loaded by spectrum-theme or font-loading.ts -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 \`\`\`
 
 ### Accessibility Features
@@ -304,7 +306,8 @@ Supports all Material Design icons. Include the font in your project:
     mobileBreakpoint: 768,
     mobileMenuTitle: 'Navigation',
     directNavigation: false,
-    navigationColor: undefined
+    navigationColor: undefined,
+    mobileIconColor: '#000000'
   },
   argTypes: {
     orientation: {
@@ -359,10 +362,18 @@ Supports all Material Design icons. Include the font in your project:
     },
     navigationColor: {
       control: 'color',
-      description: 'Override the default menu text color. Accepts any valid CSS color value (hex, rgb, hsl, css variables).',
+      description: 'Override the default menu text color for main navigation items only. Does not affect submenu or megamenu items which remain default color for proper contrast on backgrounds.',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'undefined' }
+      }
+    },
+    mobileIconColor: {
+      control: 'color',
+      description: 'Color for mobile menu icons (hamburger, close, and menu item icons). Defaults to black.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '#000000' }
       }
     }
   }
@@ -383,6 +394,7 @@ const renderMenu = (args: SpectrumMenuArgs) => {
         mobile-menu-title=${args.mobileMenuTitle}
         ?direct-navigation=${args.directNavigation}
         navigation-color=${args.navigationColor}
+        mobile-icon-color=${args.mobileIconColor}
         @itemClick=${(e: CustomEvent) => action('itemClick')(e.detail)}
       ></spectrum-menu>
     </div>

@@ -27,7 +27,7 @@ initializeSpectrum();
 
 const preview: Preview = {
   parameters: {
-    viewMode: 'docs',
+    viewMode: 'story', // Change default to story for faster loading
     controls: {
       matchers: {
         color: /(background|color)$/i,

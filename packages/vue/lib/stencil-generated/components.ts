@@ -242,6 +242,29 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumCookieCompliance = /*@__PURE__*/ defineContainer<JSX.SpectrumCookieCompliance>('spectrum-cookie-compliance', undefined, [
+  'message',
+  'position',
+  'showDetails',
+  'showOnFirstVisit',
+  'cookieName',
+  'cookieExpireDays',
+  'gtmContainerId',
+  'autoLoadGTM',
+  'privacyPolicyUrl',
+  'cookiePolicyUrl',
+  'consentVersion',
+  'debug',
+  'translations',
+  'showCookieStatus',
+  'consentUpdated',
+  'consentDismissed'
+], [
+  'consentUpdated',
+  'consentDismissed'
+]);
+
+
 export const SpectrumDialog = /*@__PURE__*/ defineContainer<JSX.SpectrumDialog>('spectrum-dialog', undefined, [
   'debug',
   'open',
@@ -372,6 +395,7 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'mobileMenuTitle',
   'directNavigation',
   'navigationColor',
+  'mobileIconColor',
   'itemClick'
 ], [
   'itemClick'

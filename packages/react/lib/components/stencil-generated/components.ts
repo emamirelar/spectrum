@@ -9,7 +9,7 @@
 
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
-import { type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
+import { type CookieConsent, type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type SpectrumCookieComplianceCustomEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumAppLayout as SpectrumAppLayoutElement, defineCustomElement as defineSpectrumAppLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-app-layout.js";
 import { SpectrumApplicationLayout as SpectrumApplicationLayoutElement, defineCustomElement as defineSpectrumApplicationLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-application-layout.js";
@@ -22,6 +22,7 @@ import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustom
 import { SpectrumContainer as SpectrumContainerElement, defineCustomElement as defineSpectrumContainer } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-container.js";
 import { SpectrumContextMenu as SpectrumContextMenuElement, defineCustomElement as defineSpectrumContextMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-context-menu.js";
 import { SpectrumConversationPanel as SpectrumConversationPanelElement, defineCustomElement as defineSpectrumConversationPanel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-conversation-panel.js";
+import { SpectrumCookieCompliance as SpectrumCookieComplianceElement, defineCustomElement as defineSpectrumCookieCompliance } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-cookie-compliance.js";
 import { SpectrumDialog as SpectrumDialogElement, defineCustomElement as defineSpectrumDialog } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-dialog.js";
 import { SpectrumFlex as SpectrumFlexElement, defineCustomElement as defineSpectrumFlex } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-flex.js";
 import { SpectrumGrid as SpectrumGridElement, defineCustomElement as defineSpectrumGrid } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-grid.js";
@@ -216,6 +217,23 @@ export const SpectrumConversationPanel: StencilReactComponent<SpectrumConversati
         onTitleChanged: 'titleChanged'
     } as SpectrumConversationPanelEvents,
     defineCustomElement: defineSpectrumConversationPanel
+});
+
+type SpectrumCookieComplianceEvents = {
+    onConsentUpdated: EventName<SpectrumCookieComplianceCustomEvent<CookieConsent>>,
+    onConsentDismissed: EventName<CustomEvent<void>>
+};
+
+export const SpectrumCookieCompliance: StencilReactComponent<SpectrumCookieComplianceElement, SpectrumCookieComplianceEvents> = /*@__PURE__*/ createComponent<SpectrumCookieComplianceElement, SpectrumCookieComplianceEvents>({
+    tagName: 'spectrum-cookie-compliance',
+    elementClass: SpectrumCookieComplianceElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {
+        onConsentUpdated: 'consentUpdated',
+        onConsentDismissed: 'consentDismissed'
+    } as SpectrumCookieComplianceEvents,
+    defineCustomElement: defineSpectrumCookieCompliance
 });
 
 type SpectrumDialogEvents = {

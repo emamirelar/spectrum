@@ -73,6 +73,10 @@ Type: `Promise<void>`
 
 ## Dependencies
 
+### Used by
+
+ - [spectrum-cookie-compliance](../spectrum-cookie-compliance)
+
 ### Depends on
 
 - [spectrum-button](../spectrum-button)
@@ -83,6 +87,7 @@ Type: `Promise<void>`
 graph TD;
   spectrum-dialog --> spectrum-button
   spectrum-dialog --> spectrum-panel
+  spectrum-cookie-compliance --> spectrum-dialog
   style spectrum-dialog fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

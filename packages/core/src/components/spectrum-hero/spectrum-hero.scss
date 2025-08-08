@@ -38,8 +38,9 @@
   --hero-spacing-x-large: var(--spectrum-sys-spacing-x-large, 3rem);
   --hero-spacing-xx-large: var(--spectrum-sys-spacing-xx-large, 4rem);
   
-  // Navigation dots
+  // Navigation dots - ensuring 24px minimum touch target for accessibility
   --hero-dot-size: var(--spectrum-sys-spacing-small, 0.5rem);
+  --hero-dot-touch-target: 24px; // WCAG 2.2 AA compliance (2.5.8)
 
   // Shade overlay
   --hero-shade-overlay-color: color-mix(in srgb, var(--spectrum-sys-color-on-primary-container) 40%, transparent 60%);
@@ -355,32 +356,53 @@
 }
 
 .spectrum-hero__dot {
-  width: var(--hero-dot-size);
-  aspect-ratio: 1/1;
+  // Ensure minimum 24px touch target for accessibility
+  min-width: var(--hero-dot-touch-target);
+  min-height: var(--hero-dot-touch-target);
   border: none;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: transparent;
   cursor: pointer;
   transition: all var(--hero-animation-duration) var(--hero-animation-easing);
   flex-shrink: 0;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  // Visual dot using pseudo-element
+  &::before {
+    content: '';
+    width: var(--hero-dot-size);
+    height: var(--hero-dot-size);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+    transition: all var(--hero-animation-duration) var(--hero-animation-easing);
+    display: block;
+  }
   
   // Active state
-  &--active {
+  &--active::before {
     background-color: white;
     transform: scale(1.2);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   }
   
   // Hover and focus states
-  &:hover,
-  &:focus-visible {
+  &:hover::before,
+  &:focus-visible::before {
     background-color: rgba(255, 255, 255, 0.9);
   }
   
   &:focus-visible {
     outline: 2px solid var(--spectrum-sys-color-primary);
     outline-offset: 2px;
+  }
+  
+  // Ensure active state is maintained
+  &--active:hover::before,
+  &--active:focus-visible::before {
+    background-color: white;
   }
 }
 
@@ -509,6 +531,8 @@
   }
   
   .spectrum-hero__dot {
+    // Maintain minimum 24px touch target even on mobile for accessibility
+    // Visual size can be smaller but touch target stays accessible
     --hero-dot-size: calc(var(--spectrum-sys-spacing-small, 0.5rem) * 0.75);
   }
 }

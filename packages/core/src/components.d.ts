@@ -11,6 +11,7 @@ import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spec
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+import { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
 import { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
@@ -21,6 +22,7 @@ export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spec
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+export { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
 export { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
@@ -700,6 +702,99 @@ export namespace Components {
          */
         "sources": string;
     }
+    interface SpectrumCookieCompliance {
+        /**
+          * Automatically load GTM script when consent is granted
+          * @default false
+         */
+        "autoLoadGTM": boolean;
+        /**
+          * Consent version for tracking updates
+          * @default '1.0.0'
+         */
+        "consentVersion": string;
+        /**
+          * Number of days before cookie expires
+          * @default 365
+         */
+        "cookieExpireDays": number;
+        /**
+          * Cookie name for storing consent preferences
+          * @default 'spectrum_cookie_consent'
+         */
+        "cookieName": string;
+        /**
+          * URL to cookie policy page
+          * @default '/cookie-policy'
+         */
+        "cookiePolicyUrl": string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Get stored consent from cookies
+         */
+        "getStoredConsent": () => Promise<CookieConsent | null>;
+        /**
+          * Google Tag Manager container ID
+          * @default ''
+         */
+        "gtmContainerId": string;
+        /**
+          * Hide the consent banner
+         */
+        "hideConsent": () => Promise<void>;
+        /**
+          * Custom message to display in the consent banner
+          * @default 'We use cookies to enhance your experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies.'
+         */
+        "message": string;
+        /**
+          * Position of the consent banner
+          * @default 'bottom'
+         */
+        "position": 'top' | 'bottom' | 'center';
+        /**
+          * URL to privacy policy page
+          * @default '/privacy-policy'
+         */
+        "privacyPolicyUrl": string;
+        /**
+          * Reset all consent preferences
+         */
+        "resetConsent": () => Promise<void>;
+        /**
+          * Show the consent banner
+         */
+        "showConsent": () => Promise<void>;
+        /**
+          * Whether to show the cookie status indicator (sticky icon)
+          * @default false
+         */
+        "showCookieStatus": boolean;
+        /**
+          * Whether to show detailed cookie options
+          * @default false
+         */
+        "showDetails": boolean;
+        /**
+          * Whether to show the banner on first visit
+          * @default true
+         */
+        "showOnFirstVisit": boolean;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   toastTitle: 'Consentement aux Cookies',   acceptAll: 'Tout Accepter',   rejectAll: 'Tout Refuser',   customize: 'Personnaliser',   dialog: {     title: 'Préférences des Cookies',     description: 'Choisissez quels types de cookies vous souhaitez autoriser.',     savePreferences: 'Enregistrer les Préférences'   },   categories: {     necessary: {       label: 'Cookies Nécessaires',       description: 'Essentiels au bon fonctionnement du site Web.'     }   } }; ```
+          * @default {}
+         */
+        "translations": CookieTranslations;
+        /**
+          * Update consent preferences
+         */
+        "updateConsent": (consent: Partial<CookieConsent>) => Promise<void>;
+    }
     /**
      * Spectrum Dialog Component
      * A modal dialog component using the HTML dialog element with background shade.
@@ -950,6 +1045,8 @@ export namespace Components {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
+     * Features responsive image support through srcset and sizes attributes
+     * for optimal image delivery across different devices and screen sizes.
      */
     interface SpectrumHero {
         /**
@@ -1115,6 +1212,11 @@ export namespace Components {
           * @default 768
          */
         "mobileBreakpoint": number;
+        /**
+          * Color for mobile menu icons (hamburger, close, and menu item icons) When provided, this will override the default icon color
+          * @default '#000000'
+         */
+        "mobileIconColor": string;
         /**
           * The title displayed in the mobile menu header
           * @default 'Menu'
@@ -1766,6 +1868,10 @@ export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> 
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
 }
+export interface SpectrumCookieComplianceCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumCookieComplianceElement;
+}
 export interface SpectrumDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumDialogElement;
@@ -2013,6 +2119,24 @@ declare global {
         prototype: HTMLSpectrumConversationPanelElement;
         new (): HTMLSpectrumConversationPanelElement;
     };
+    interface HTMLSpectrumCookieComplianceElementEventMap {
+        "consentUpdated": CookieConsent;
+        "consentDismissed": void;
+    }
+    interface HTMLSpectrumCookieComplianceElement extends Components.SpectrumCookieCompliance, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumCookieComplianceElementEventMap>(type: K, listener: (this: HTMLSpectrumCookieComplianceElement, ev: SpectrumCookieComplianceCustomEvent<HTMLSpectrumCookieComplianceElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumCookieComplianceElementEventMap>(type: K, listener: (this: HTMLSpectrumCookieComplianceElement, ev: SpectrumCookieComplianceCustomEvent<HTMLSpectrumCookieComplianceElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumCookieComplianceElement: {
+        prototype: HTMLSpectrumCookieComplianceElement;
+        new (): HTMLSpectrumCookieComplianceElement;
+    };
     interface HTMLSpectrumDialogElementEventMap {
         "dialogAction": {action: string; dialogId?: string; buttonId?: string};
         "dialogClose": {action: string; dialogId?: string};
@@ -2066,6 +2190,8 @@ declare global {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
+     * Features responsive image support through srcset and sizes attributes
+     * for optimal image delivery across different devices and screen sizes.
      */
     interface HTMLSpectrumHeroElement extends Components.SpectrumHero, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumHeroElementEventMap>(type: K, listener: (this: HTMLSpectrumHeroElement, ev: SpectrumHeroCustomEvent<HTMLSpectrumHeroElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2309,6 +2435,7 @@ declare global {
         "spectrum-container": HTMLSpectrumContainerElement;
         "spectrum-context-menu": HTMLSpectrumContextMenuElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
+        "spectrum-cookie-compliance": HTMLSpectrumCookieComplianceElement;
         "spectrum-dialog": HTMLSpectrumDialogElement;
         "spectrum-flex": HTMLSpectrumFlexElement;
         "spectrum-grid": HTMLSpectrumGridElement;
@@ -3040,6 +3167,87 @@ declare namespace LocalJSX {
          */
         "sources"?: string;
     }
+    interface SpectrumCookieCompliance {
+        /**
+          * Automatically load GTM script when consent is granted
+          * @default false
+         */
+        "autoLoadGTM"?: boolean;
+        /**
+          * Consent version for tracking updates
+          * @default '1.0.0'
+         */
+        "consentVersion"?: string;
+        /**
+          * Number of days before cookie expires
+          * @default 365
+         */
+        "cookieExpireDays"?: number;
+        /**
+          * Cookie name for storing consent preferences
+          * @default 'spectrum_cookie_consent'
+         */
+        "cookieName"?: string;
+        /**
+          * URL to cookie policy page
+          * @default '/cookie-policy'
+         */
+        "cookiePolicyUrl"?: string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Google Tag Manager container ID
+          * @default ''
+         */
+        "gtmContainerId"?: string;
+        /**
+          * Custom message to display in the consent banner
+          * @default 'We use cookies to enhance your experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies.'
+         */
+        "message"?: string;
+        /**
+          * Event emitted when consent banner is dismissed
+         */
+        "onConsentDismissed"?: (event: SpectrumCookieComplianceCustomEvent<void>) => void;
+        /**
+          * Event emitted when consent is given or updated
+         */
+        "onConsentUpdated"?: (event: SpectrumCookieComplianceCustomEvent<CookieConsent>) => void;
+        /**
+          * Position of the consent banner
+          * @default 'bottom'
+         */
+        "position"?: 'top' | 'bottom' | 'center';
+        /**
+          * URL to privacy policy page
+          * @default '/privacy-policy'
+         */
+        "privacyPolicyUrl"?: string;
+        /**
+          * Whether to show the cookie status indicator (sticky icon)
+          * @default false
+         */
+        "showCookieStatus"?: boolean;
+        /**
+          * Whether to show detailed cookie options
+          * @default false
+         */
+        "showDetails"?: boolean;
+        /**
+          * Whether to show the banner on first visit
+          * @default true
+         */
+        "showOnFirstVisit"?: boolean;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   toastTitle: 'Consentement aux Cookies',   acceptAll: 'Tout Accepter',   rejectAll: 'Tout Refuser',   customize: 'Personnaliser',   dialog: {     title: 'Préférences des Cookies',     description: 'Choisissez quels types de cookies vous souhaitez autoriser.',     savePreferences: 'Enregistrer les Préférences'   },   categories: {     necessary: {       label: 'Cookies Nécessaires',       description: 'Essentiels au bon fonctionnement du site Web.'     }   } }; ```
+          * @default {}
+         */
+        "translations"?: CookieTranslations;
+    }
     /**
      * Spectrum Dialog Component
      * A modal dialog component using the HTML dialog element with background shade.
@@ -3286,6 +3494,8 @@ declare namespace LocalJSX {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
+     * Features responsive image support through srcset and sizes attributes
+     * for optimal image delivery across different devices and screen sizes.
      */
     interface SpectrumHero {
         /**
@@ -3464,6 +3674,11 @@ declare namespace LocalJSX {
           * @default 768
          */
         "mobileBreakpoint"?: number;
+        /**
+          * Color for mobile menu icons (hamburger, close, and menu item icons) When provided, this will override the default icon color
+          * @default '#000000'
+         */
+        "mobileIconColor"?: string;
         /**
           * The title displayed in the mobile menu header
           * @default 'Menu'
@@ -4127,6 +4342,7 @@ declare namespace LocalJSX {
         "spectrum-container": SpectrumContainer;
         "spectrum-context-menu": SpectrumContextMenu;
         "spectrum-conversation-panel": SpectrumConversationPanel;
+        "spectrum-cookie-compliance": SpectrumCookieCompliance;
         "spectrum-dialog": SpectrumDialog;
         "spectrum-flex": SpectrumFlex;
         "spectrum-grid": SpectrumGrid;
@@ -4196,6 +4412,7 @@ declare module "@stencil/core" {
              */
             "spectrum-context-menu": LocalJSX.SpectrumContextMenu & JSXBase.HTMLAttributes<HTMLSpectrumContextMenuElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
+            "spectrum-cookie-compliance": LocalJSX.SpectrumCookieCompliance & JSXBase.HTMLAttributes<HTMLSpectrumCookieComplianceElement>;
             /**
              * Spectrum Dialog Component
              * A modal dialog component using the HTML dialog element with background shade.
@@ -4218,6 +4435,8 @@ declare module "@stencil/core" {
              * Spectrum Hero Component
              * A hero section component that supports both images and video backgrounds,
              * with carousel functionality, text overlays, and call-to-action buttons.
+             * Features responsive image support through srcset and sizes attributes
+             * for optimal image delivery across different devices and screen sizes.
              */
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;

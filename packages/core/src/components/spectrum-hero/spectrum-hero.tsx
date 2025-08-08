@@ -11,12 +11,26 @@ export interface HeroSlide {
   buttonAction?: string;
   overlayPosition?: 'left' | 'center' | 'right';
   overlayVertical?: 'top' | 'center' | 'bottom';
+  // Responsive image support
+  srcset?: string; // Responsive image sources (e.g., "image-320w.jpg 320w, image-640w.jpg 640w")
+  sizes?: string; // Image sizes for different viewport conditions (e.g., "(max-width: 600px) 100vw, 50vw")
+  // Video caption support for accessibility compliance (WCAG 2.1 AA - 1.2.2)
+  captions?: Array<{
+    src: string; // Path to WebVTT caption file
+    srclang: string; // Language code (e.g., 'en', 'fr', 'es')
+    label: string; // Human-readable label (e.g., 'English', 'Français')
+    default?: boolean; // Whether this track should be enabled by default
+    kind?: 'subtitles' | 'captions' | 'descriptions'; // Track type (defaults to 'captions')
+  }>;
 }
 
 /**
  * Spectrum Hero Component
  * A hero section component that supports both images and video backgrounds,
  * with carousel functionality, text overlays, and call-to-action buttons.
+ * 
+ * Features responsive image support through srcset and sizes attributes
+ * for optimal image delivery across different devices and screen sizes.
  */
 @Component({
   tag: 'spectrum-hero',
@@ -121,6 +135,10 @@ export class SpectrumHero {
   private autoplayInterval: NodeJS.Timeout | null = null;
   private touchStartX: number = 0;
   private touchEndX: number = 0;
+  private intersectionObserver: IntersectionObserver | null = null;
+  private preloadedResources: Set<string> = new Set();
+  private preloadLinks: HTMLLinkElement[] = [];
+  private videoElements: Map<number, HTMLVideoElement> = new Map();
 
   // ============== Lifecycle Methods ==============
   componentWillLoad() {
@@ -131,16 +149,26 @@ export class SpectrumHero {
     this.setupAutoplay();
     this.setupKeyboardNavigation();
     this.updateShadeColors();
+    this.setupIntersectionObserver();
+    this.addResourceHints();
   }
 
   disconnectedCallback() {
     this.clearAutoplay();
+    this.cleanupIntersectionObserver();
+    this.cleanupPreloadLinks();
+    this.cleanupVideoElements();
+    if (this.keyboardNavigation) {
+      document.removeEventListener('keydown', this.handleKeydown);
+    }
   }
 
   // ============== Watchers ==============
   @Watch('slides')
   slidesChanged() {
     this.updateSlides();
+    this.addResourceHints();
+    this.preloadAdjacentSlides();
   }
 
   @Watch('autoplay')
@@ -157,8 +185,14 @@ export class SpectrumHero {
 
   private updateSlides() {
     try {
+      const previousSlides = this.parsedSlides;
       this.parsedSlides = JSON.parse(this.slides);
       this.log('Slides updated', this.parsedSlides);
+      
+      // Clean up video elements if slides have changed significantly
+      if (previousSlides.length !== this.parsedSlides.length) {
+        this.cleanupVideoElements();
+      }
       
       // Reset current slide if it's out of bounds
       if (this.currentSlide >= this.parsedSlides.length) {
@@ -237,7 +271,12 @@ export class SpectrumHero {
 
   private goToSlide(index: number, isUserInitiated: boolean = false) {
     if (index >= 0 && index < this.parsedSlides.length) {
+      const previousSlide = this.currentSlide;
       this.currentSlide = index;
+      
+      // Manage video playback for slide changes
+      this.handleVideoPlaybackOnSlideChange(previousSlide, index);
+      
       this.slideChange.emit({
         action: 'slide-change',
         slideIndex: this.currentSlide,
@@ -248,6 +287,9 @@ export class SpectrumHero {
       if (isUserInitiated) {
         this.resetAutoplayTimer();
       }
+      
+      // Preload adjacent slides when slide changes
+      this.preloadAdjacentSlides();
       
       this.log(`Moved to slide ${index}`, { userInitiated: isUserInitiated });
     }
@@ -305,6 +347,267 @@ export class SpectrumHero {
     });
     this.log('Hero action clicked', { action: slide.buttonAction, index, title: slide.title });
   };
+
+  // ============== Preloading Methods ==============
+  
+  private setupIntersectionObserver() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.preloadAdjacentSlides();
+          this.log('Hero came into viewport, preloading adjacent slides');
+          // Only observe once - we don't need to keep checking
+          this.intersectionObserver?.unobserve(this.el);
+        }
+      });
+    }, {
+      rootMargin: '50px' // Start preloading when hero is 50px away from viewport
+    });
+    
+    this.intersectionObserver.observe(this.el);
+  }
+
+  private cleanupIntersectionObserver() {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
+  }
+
+  private cleanupPreloadLinks() {
+    this.preloadLinks.forEach(link => {
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
+    });
+    this.preloadLinks = [];
+  }
+
+  private addResourceHints() {
+    if (this.parsedSlides.length === 0) return;
+    
+    // Preload the first slide with high priority
+    const firstSlide = this.parsedSlides[0];
+    this.addPreloadLink(firstSlide, 'high');
+    
+    // Preload second slide with lower priority if it exists
+    if (this.parsedSlides.length > 1) {
+      const secondSlide = this.parsedSlides[1];
+      this.addPreloadLink(secondSlide, 'auto');
+    }
+    
+    this.log('Added resource hints for critical slides');
+  }
+
+  private addPreloadLink(slide: HeroSlide, fetchPriority: 'high' | 'auto' | 'low' = 'auto') {
+    if (this.preloadedResources.has(slide.src)) return;
+    
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.href = slide.src;
+    
+    if (slide.type === 'video') {
+      link.as = 'video';
+      // For videos, also preload poster if available
+      if (slide.poster && !this.preloadedResources.has(slide.poster)) {
+        const posterLink = document.createElement('link');
+        posterLink.rel = 'preload';
+        posterLink.href = slide.poster;
+        posterLink.as = 'image';
+        posterLink.setAttribute('fetchpriority', fetchPriority);
+        document.head.appendChild(posterLink);
+        this.preloadLinks.push(posterLink);
+        this.preloadedResources.add(slide.poster);
+      }
+    } else {
+      link.as = 'image';
+      // Add responsive image hints if available
+      if (slide.srcset) {
+        link.setAttribute('imagesrcset', slide.srcset);
+      }
+      if (slide.sizes) {
+        link.setAttribute('imagesizes', slide.sizes);
+      }
+    }
+    
+    link.setAttribute('fetchpriority', fetchPriority);
+    document.head.appendChild(link);
+    this.preloadLinks.push(link);
+    this.preloadedResources.add(slide.src);
+  }
+
+  private preloadAdjacentSlides() {
+    if (this.parsedSlides.length <= 1) return;
+    
+    const nextIndex = (this.currentSlide + 1) % this.parsedSlides.length;
+    const prevIndex = this.currentSlide === 0 ? this.parsedSlides.length - 1 : this.currentSlide - 1;
+    
+    // Preload next slide (higher priority since autoplay goes forward)
+    const nextSlide = this.parsedSlides[nextIndex];
+    if (nextSlide.type === 'image') {
+      this.preloadImage(nextSlide.src, nextSlide.srcset);
+    } else if (nextSlide.type === 'video') {
+      this.preloadVideo(nextSlide.src);
+    }
+    
+    // Preload previous slide (lower priority)
+    const prevSlide = this.parsedSlides[prevIndex];
+    if (prevSlide.type === 'image') {
+      this.preloadImage(prevSlide.src, prevSlide.srcset);
+    } else if (prevSlide.type === 'video') {
+      this.preloadVideo(prevSlide.src);
+    }
+    
+    this.log('Preloaded adjacent slides', { nextIndex, prevIndex });
+  }
+
+  private preloadImage(src: string, srcset?: string): Promise<void> {
+    if (this.preloadedResources.has(src)) {
+      return Promise.resolve();
+    }
+    
+    return new Promise<void>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        this.preloadedResources.add(src);
+        this.log('Image preloaded successfully', src);
+        resolve();
+      };
+      img.onerror = () => {
+        this.log('Image preload failed', src);
+        reject();
+      };
+      
+      if (srcset) {
+        img.srcset = srcset;
+      }
+      img.src = src;
+    });
+  }
+
+  private preloadVideo(src: string): Promise<void> {
+    if (this.preloadedResources.has(src)) {
+      return Promise.resolve();
+    }
+    
+    return new Promise<void>((resolve, reject) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.muted = true; // Required for autoplay
+      
+      video.onloadedmetadata = () => {
+        this.preloadedResources.add(src);
+        this.log('Video metadata preloaded successfully', src);
+        resolve();
+      };
+      video.onerror = () => {
+        this.log('Video preload failed', src);
+        reject();
+      };
+      
+      video.src = src;
+    });
+  }
+
+  private getVideoPreloadStrategy(slideIndex: number): 'none' | 'metadata' | 'auto' {
+    if (slideIndex === this.currentSlide) return 'auto';
+    
+    // Check if this is an adjacent slide
+    const nextIndex = (this.currentSlide + 1) % this.parsedSlides.length;
+    const prevIndex = this.currentSlide === 0 ? this.parsedSlides.length - 1 : this.currentSlide - 1;
+    
+    const isAdjacent = slideIndex === nextIndex || slideIndex === prevIndex;
+    return isAdjacent ? 'metadata' : 'none';
+  }
+
+  private isAdjacentSlide(slideIndex: number): boolean {
+    if (this.parsedSlides.length <= 1) return false;
+    
+    const nextIndex = (this.currentSlide + 1) % this.parsedSlides.length;
+    const prevIndex = this.currentSlide === 0 ? this.parsedSlides.length - 1 : this.currentSlide - 1;
+    
+    return slideIndex === nextIndex || slideIndex === prevIndex;
+  }
+
+  // ============== Video Management Methods ==============
+  
+  private handleVideoPlaybackOnSlideChange(previousSlideIndex: number, currentSlideIndex: number) {
+    // Pause and reset video from previous slide if it was a video
+    if (previousSlideIndex !== currentSlideIndex) {
+      const previousSlide = this.parsedSlides[previousSlideIndex];
+      if (previousSlide?.type === 'video') {
+        this.pauseAndResetVideo(previousSlideIndex);
+      }
+    }
+    
+    // Play video on current slide if it's a video
+    const currentSlide = this.parsedSlides[currentSlideIndex];
+    if (currentSlide?.type === 'video') {
+      // Use a small delay to ensure the video element is rendered
+      setTimeout(() => {
+        this.playVideo(currentSlideIndex);
+      }, 100);
+    }
+  }
+
+  private pauseAndResetVideo(slideIndex: number) {
+    const videoElement = this.videoElements.get(slideIndex);
+    if (videoElement) {
+      try {
+        videoElement.pause();
+        videoElement.currentTime = 0;
+        this.log(`Video paused and reset for slide ${slideIndex}`);
+      } catch (error) {
+        this.log(`Error pausing/resetting video for slide ${slideIndex}`, error);
+      }
+    }
+  }
+
+  private playVideo(slideIndex: number) {
+    const videoElement = this.videoElements.get(slideIndex);
+    if (videoElement) {
+      try {
+        const playPromise = videoElement.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              this.log(`Video started playing for slide ${slideIndex}`);
+            })
+            .catch(error => {
+              this.log(`Video play failed for slide ${slideIndex}`, error);
+            });
+        }
+      } catch (error) {
+        this.log(`Error playing video for slide ${slideIndex}`, error);
+      }
+    }
+  }
+
+  private registerVideoElement(slideIndex: number, videoElement: HTMLVideoElement) {
+    this.videoElements.set(slideIndex, videoElement);
+    this.log(`Video element registered for slide ${slideIndex}`);
+  }
+
+  private unregisterVideoElement(slideIndex: number) {
+    this.videoElements.delete(slideIndex);
+    this.log(`Video element unregistered for slide ${slideIndex}`);
+  }
+
+  private cleanupVideoElements() {
+    // Pause and reset all videos before cleanup
+    this.videoElements.forEach((videoElement, slideIndex) => {
+      try {
+        videoElement.pause();
+        videoElement.currentTime = 0;
+      } catch (error) {
+        this.log(`Error cleaning up video for slide ${slideIndex}`, error);
+      }
+    });
+    this.videoElements.clear();
+    this.log('All video elements cleaned up');
+  }
 
   // ============== Render Methods ==============
   private renderShade() {
@@ -374,6 +677,7 @@ export class SpectrumHero {
 
   private renderSlide(slide: HeroSlide, index: number) {
     const isActive = index === this.currentSlide;
+    const isAdjacent = this.isAdjacentSlide(index);
     const overlayClasses = [
       'spectrum-hero__overlay',
       `spectrum-hero__overlay--${slide.overlayPosition || 'left'}`,
@@ -401,18 +705,51 @@ export class SpectrumHero {
             class="spectrum-hero__media"
             src={slide.src}
             poster={slide.poster}
-            autoplay
+            preload={this.getVideoPreloadStrategy(index)}
             muted
             loop
             playsInline
             aria-label={slide.alt || 'Hero video'}
-          />
+            ref={(videoEl) => {
+              if (videoEl) {
+                this.registerVideoElement(index, videoEl);
+                // If this is the active slide, start playing
+                if (isActive) {
+                  setTimeout(() => this.playVideo(index), 100);
+                }
+              } else {
+                // Video element is being unmounted
+                this.unregisterVideoElement(index);
+              }
+            }}
+            onLoadedData={() => {
+              // Ensure video is ready before playing if it's the active slide
+              if (isActive) {
+                this.playVideo(index);
+              }
+            }}
+          >
+            {slide.captions?.map((caption) => (
+              <track
+                kind={caption.kind || 'captions'}
+                src={caption.src}
+                srclang={caption.srclang}
+                label={caption.label}
+                default={caption.default}
+              />
+            ))}
+          </video>
         ) : (
           <img
             class="spectrum-hero__media"
             src={slide.src}
+            srcset={slide.srcset}
+            sizes={slide.sizes}
             alt={slide.alt || 'Hero image'}
-            loading={index === 0 ? 'eager' : 'lazy'}
+            loading={index === 0 ? 'eager' : isAdjacent ? 'eager' : 'lazy'}
+            {...(index === 0 ? { 'fetchpriority': 'high' } : 
+                isAdjacent ? { 'fetchpriority': 'auto' } : 
+                { 'fetchpriority': 'low' })}
           />
         )}
         

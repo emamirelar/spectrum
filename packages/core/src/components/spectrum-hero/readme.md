@@ -11,6 +11,9 @@ Spectrum Hero Component
 A hero section component that supports both images and video backgrounds,
 with carousel functionality, text overlays, and call-to-action buttons.
 
+Features responsive image support through srcset and sizes attributes
+for optimal image delivery across different devices and screen sizes.
+
 ## Properties
 
 | Property             | Attribute             | Description                                                                             | Type      | Default   |

@@ -15,8 +15,6 @@ const config: StorybookConfig = {
   stories: [
     "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../src/stories/components/**/*.mdx",
-    "../src/stories/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
     getAbsolutePath("@storybook/addon-links"),
@@ -49,7 +47,8 @@ const config: StorybookConfig = {
         },
       },
       build: {
-        chunkSizeWarningLimit: 1000,
+        chunkSizeWarningLimit: 2000,
+        sourcemap: false, // Disable sourcemaps for faster builds
         rollupOptions: {
           output: {
             manualChunks: (id) => {
@@ -81,13 +80,26 @@ const config: StorybookConfig = {
       },
       optimizeDeps: {
         include: ['react', 'react-dom', 'react/jsx-runtime', 'mermaid'],
-        force: true,
+        force: false,
+      },
+      server: {
+        fs: {
+          allow: ['../..'],
+        },
+        watch: {
+          ignored: ['**/node_modules/**', '**/dist/**', '**/www/**', '**/storybook-static/**'],
+        },
       },
     });
   },
   // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
   typescript: {
-    check: true, // type-check stories during Storybook build
+    check: false, // Disable type-checking for faster dev builds
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+    },
   }
 };
 

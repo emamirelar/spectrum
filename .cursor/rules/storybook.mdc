@@ -34,6 +34,70 @@ Components need storybook stories that demonstrate their functionality and varia
 - Stories should be grouped in alphabetical order
 - If there is deeper structure in Core, this should be reflected in Storybook with nested folders
 
+## Automated Story Generation (RECOMMENDED)
+
+### Helper Scripts for Efficient Documentation
+**Always use the provided helper scripts instead of manually creating stories to ensure consistency and completeness.**
+
+#### Documentation Generator Script
+```bash
+# Single component generation
+node scripts/generate-component-docs.js spectrum-component-name
+
+# Batch processing (efficient for multiple components)
+node scripts/generate-component-docs.js --batch spectrum-component1,spectrum-component2,spectrum-component3
+
+# Generate documentation for all components
+node scripts/generate-component-docs.js --all
+```
+
+#### What the Generator Creates
+The script automatically generates a complete documentation ecosystem:
+- ✅ **`component-name.stories.tsx`** - Complete Storybook stories with TypeScript support
+- ✅ **`README.md`** - Comprehensive API documentation
+- ✅ **`component-name-dependencies.mdx`** - Dependency relationships with Mermaid diagrams
+- ✅ **`component-name-use-cases.mdx`** - Real-world business applications
+
+#### Prerequisites for Generator
+Before using the helper scripts:
+1. **Add component to dependency map** in `scripts/generate-component-docs.js`:
+```javascript
+const COMPONENT_DEPENDENCY_MAP = {
+  // ... existing components
+  'spectrum-new-component': ['spectrum-button', 'spectrum-panel'], // Add your component
+};
+```
+
+2. **Ensure component exists** in `packages/core/src/components/spectrum-[component-name]/`
+
+#### Benefits of Using Helper Scripts
+- **Consistency**: All components follow the same documentation pattern
+- **Completeness**: No missing files or incomplete documentation
+- **Accuracy**: Dependencies are automatically calculated from the dependency map
+- **Efficiency**: 10+ hours of manual work reduced to ~10 minutes
+- **TypeScript Support**: Proper type interfaces generated automatically
+- **Mermaid Diagrams**: Dependency relationships visualized automatically
+
+#### Component Analysis Script
+```bash
+# Analyze all components and get optimization recommendations
+node scripts/analyze-all-components.js
+```
+
+Provides:
+- Documentation coverage report
+- Priority recommendations based on complexity
+- Batch processing commands optimized for time
+- Detailed analysis report
+
+#### When to Use Manual Creation
+Only create stories manually when:
+- The component is experimental or not ready for the dependency map
+- You need to customize the generated stories extensively
+- The helper scripts don't support your specific use case
+
+**Always prefer the automated approach for consistency and efficiency.**
+
 ## Story Requirements
 
 ### Core Story Structure

@@ -15,10 +15,11 @@ A responsive and accessible menu component that can be displayed horizontally or
 
 ## Usage
 
-> **Note:** You must include the [Material Icons font](https://fonts.googleapis.com/icon?family=Material+Icons) in your app or Storybook for icons to display:
+> **Note:** Material Icons are automatically loaded via Material Symbols Outlined font by Spectrum components. No manual font loading required when using spectrum-theme or the font-loading utility:
 >
 > ```html
-> <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+> <!-- Automatically loaded by Spectrum -->
+> <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 > ```
 
 ### Default Menu
@@ -196,7 +197,7 @@ The menu component follows WAI-ARIA best practices:
 
 ## Dependencies
 
-- [Material Icons font](https://fonts.googleapis.com/icon?family=Material+Icons) - for icon rendering
+- [Material Symbols Outlined font](https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined) - for icon rendering (automatically loaded)
 
 
 
@@ -210,6 +211,7 @@ The menu component follows WAI-ARIA best practices:
 | `directNavigation` | `direct-navigation` | Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted                                    | `boolean`                                                                                                                                                                                                                                                                                                                  | `false`        |
 | `items`            | `items`             | The menu items configuration Can be provided as a JSON string or array of objects icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns | `string \| { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; }[]; }[]; }[]` | `[]`           |
 | `mobileBreakpoint` | `mobile-breakpoint` | The breakpoint at which the menu switches to mobile view                                                                                                                                                                                     | `number`                                                                                                                                                                                                                                                                                                                   | `768`          |
+| `mobileIconColor`  | `mobile-icon-color` | Color for mobile menu icons (hamburger, close, and menu item icons) When provided, this will override the default icon color                                                                                                                 | `string`                                                                                                                                                                                                                                                                                                                   | `'#000000'`    |
 | `mobileMenuTitle`  | `mobile-menu-title` | The title displayed in the mobile menu header                                                                                                                                                                                                | `string`                                                                                                                                                                                                                                                                                                                   | `'Menu'`       |
 | `navigationColor`  | `navigation-color`  | Navigation color for the menu text When provided, this will override the default theme color                                                                                                                                                 | `string`                                                                                                                                                                                                                                                                                                                   | `undefined`    |
 | `orientation`      | `orientation`       | The orientation of the menu                                                                                                                                                                                                                  | `"horizontal" \| "vertical"`                                                                                                                                                                                                                                                                                               | `'horizontal'` |

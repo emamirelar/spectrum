@@ -262,25 +262,30 @@ export class SpectrumToast {
             
             {this.showCloseButton && this.dismissible && (
               <div class="spectrum-toast__close-wrapper">
-                <button
-                  class="spectrum-toast__close-button"
+                <spectrum-button
+                  variant="ghost"
+                  size="sm"
+                  iconOnly={true}
+                  leftIcon="close"
                   onClick={this.handleCloseClick}
                   aria-label="Close notification"
                 >
-                  <span class="material-symbols-outlined">close</span>
-                </button>
+                </spectrum-button>
               </div>
             )}
           </div>
           
           {this.actionLabel && (
             <div class="spectrum-toast__action-wrapper">
-              <button
-                class="spectrum-toast__action-button"
+              <spectrum-button
+                variant="outline"
+                size="sm"
+                buttonText={this.actionLabel}
+                showButtonText={true}
                 onClick={this.handleActionClick}
               >
                 {this.actionLabel}
-              </button>
+              </spectrum-button>
             </div>
           )}
         </div>
