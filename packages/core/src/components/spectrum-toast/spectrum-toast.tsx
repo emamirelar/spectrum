@@ -38,7 +38,14 @@ export class SpectrumToast {
   @Prop() actionValue: string = '';
   
   // Toast Sizing
+  /**
+   * Custom minimum width for the toast (e.g., '400px', '20rem')
+   */
   @Prop() minWidth: string = '';
+  
+  /**
+   * Custom maximum width for the toast (e.g., '640px', '30rem')
+   */
   @Prop() maxWidth: string = '';
 
   // Toast State

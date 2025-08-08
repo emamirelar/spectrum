@@ -1761,6 +1761,7 @@ export namespace Components {
          */
         "icon": string;
         /**
+          * Custom maximum width for the toast (e.g., '640px', '30rem')
           * @default ''
          */
         "maxWidth": string;
@@ -1769,6 +1770,7 @@ export namespace Components {
          */
         "message": string;
         /**
+          * Custom minimum width for the toast (e.g., '400px', '20rem')
           * @default ''
          */
         "minWidth": string;
@@ -4262,6 +4264,7 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
+          * Custom maximum width for the toast (e.g., '640px', '30rem')
           * @default ''
          */
         "maxWidth"?: string;
@@ -4270,6 +4273,7 @@ declare namespace LocalJSX {
          */
         "message"?: string;
         /**
+          * Custom minimum width for the toast (e.g., '400px', '20rem')
           * @default ''
          */
         "minWidth"?: string;

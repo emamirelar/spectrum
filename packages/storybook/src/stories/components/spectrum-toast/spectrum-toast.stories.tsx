@@ -10,6 +10,7 @@ import { action } from 'storybook/actions';
  * ### Key Features
  * - **Multiple Variants**: Six distinct notification styles for different semantic contexts and urgency levels
  * - **Flexible Positioning**: Eight screen positions including corners, edges, and centered placements
+ * - **Custom Sizing**: Configurable width constraints via minWidth and maxWidth props
  * - **Smart Behavior**: Auto-dismiss, persistence, and manual dismissal options with configurable timing
  * - **Rich Content**: Structured content with titles, messages, icons, and action buttons
  * - **Accessibility**: Built-in screen reader support, keyboard navigation, and WCAG compliance
@@ -41,6 +42,8 @@ interface SpectrumToastArgs {
   showCloseButton: boolean;
   actionLabel: string;
   actionValue: string;
+  minWidth: string;
+  maxWidth: string;
   debug: boolean;
 }
 
@@ -77,6 +80,8 @@ Use standard property binding syntax for all component properties.
     showCloseButton: true,
     actionLabel: '',
     actionValue: '',
+    minWidth: '',
+    maxWidth: '',
     debug: false
   },
   argTypes: {
@@ -138,6 +143,14 @@ Use standard property binding syntax for all component properties.
       control: 'text',
       description: 'Value emitted when action button is clicked',
     },
+    minWidth: {
+      control: 'text',
+      description: 'Custom minimum width for the toast (e.g., "400px", "20rem")',
+    },
+    maxWidth: {
+      control: 'text',
+      description: 'Custom maximum width for the toast (e.g., "640px", "30rem")',
+    },
     debug: {
       control: 'boolean',
       description: 'Enable debug logging for development and troubleshooting',
@@ -166,6 +179,8 @@ const renderToast = (args: SpectrumToastArgs) => html`
       .showCloseButton=${args.showCloseButton}
       action-label=${args.actionLabel}
       action-value=${args.actionValue}
+      min-width=${args.minWidth}
+      max-width=${args.maxWidth}
       .debug=${args.debug}
       @toastAction=${(e: CustomEvent) => action('toastAction')(e.detail)}
       @toastDismiss=${(e: CustomEvent) => action('toastDismiss')(e.detail)}
@@ -770,6 +785,83 @@ Comprehensive accessibility features ensuring the toast component works for all 
 - Semantic markup for assistive technologies
 
 This component meets WCAG 2.1 AA standards and provides an inclusive experience.
+        `
+      }
+    }
+  }
+};
+
+// Custom width demonstration story
+export const CustomWidth: Story = {
+  render: renderToast,
+  args: {
+    toastTitle: 'Custom Width Toast',
+    message: 'This toast demonstrates custom width functionality. Try changing the minWidth and maxWidth controls below to see the width changes in real-time!',
+    variant: 'primary',
+    position: 'top',
+    visible: true,
+    autoClose: false,
+    minWidth: '400px',
+    maxWidth: '640px',
+    showIcon: true,
+    showCloseButton: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+**🔧 Custom Width Functionality**
+
+This story demonstrates the new \`minWidth\` and \`maxWidth\` props that allow you to customize toast dimensions.
+
+### ✅ **New Props Available**:
+
+#### **\`minWidth\`**: 
+- **Type**: \`string\`
+- **Default**: \`''\` (uses default 320px)
+- **Example**: \`"400px"\`, \`"20rem"\`, \`"50vw"\`
+- **Purpose**: Sets minimum width constraint
+
+#### **\`maxWidth\`**:
+- **Type**: \`string\`  
+- **Default**: \`''\` (uses default 480px)
+- **Example**: \`"640px"\`, \`"30rem"\`, \`"80vw"\`
+- **Purpose**: Sets maximum width constraint
+
+### 🎯 **Use Cases**:
+
+#### **Wider Toasts for Long Content**:
+\`\`\`typescript
+<spectrum-toast 
+  maxWidth="640px"
+  message="Very long message that needs more space..."
+/>
+\`\`\`
+
+#### **Narrower Toasts for Mobile**:
+\`\`\`typescript
+<spectrum-toast 
+  maxWidth="300px"
+  minWidth="250px"
+  message="Compact notification"
+/>
+\`\`\`
+
+#### **Responsive Width**:
+\`\`\`typescript
+<spectrum-toast 
+  maxWidth="min(640px, 80vw)"
+  minWidth="300px"
+/>
+\`\`\`
+
+### 🔧 **Implementation Details**:
+- Uses CSS custom properties for clean override
+- Maintains existing responsive behavior
+- Supports all CSS units (px, rem, %, vw, etc.)
+- Falls back to defaults when not specified
+
+**Try the controls below to see the width changes in real-time!** 📏✨
         `
       }
     }

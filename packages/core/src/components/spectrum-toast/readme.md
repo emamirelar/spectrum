@@ -13,25 +13,25 @@ Supports various variants, positioning, auto-dismiss functionality, and custom s
 
 ## Properties
 
-| Property          | Attribute           | Description | Type                                                                                                     | Default     |
-| ----------------- | ------------------- | ----------- | -------------------------------------------------------------------------------------------------------- | ----------- |
-| `actionLabel`     | `action-label`      |             | `string`                                                                                                 | `''`        |
-| `actionValue`     | `action-value`      |             | `string`                                                                                                 | `''`        |
-| `autoClose`       | `auto-close`        |             | `boolean`                                                                                                | `true`      |
-| `debug`           | `debug`             |             | `boolean`                                                                                                | `false`     |
-| `dismissible`     | `dismissible`       |             | `boolean`                                                                                                | `true`      |
-| `duration`        | `duration`          |             | `number`                                                                                                 | `4000`      |
-| `icon`            | `icon`              |             | `string`                                                                                                 | `''`        |
-| `maxWidth`        | `max-width`         |             | `string`                                                                                                 | `''`        |
-| `message`         | `message`           |             | `string`                                                                                                 | `''`        |
-| `minWidth`        | `min-width`         |             | `string`                                                                                                 | `''`        |
-| `persistent`      | `persistent`        |             | `boolean`                                                                                                | `false`     |
-| `position`        | `position`          |             | `"bottom" \| "bottom-left" \| "bottom-right" \| "left" \| "right" \| "top" \| "top-left" \| "top-right"` | `'top'`     |
-| `showCloseButton` | `show-close-button` |             | `boolean`                                                                                                | `true`      |
-| `showIcon`        | `show-icon`         |             | `boolean`                                                                                                | `true`      |
-| `toastTitle`      | `toast-title`       |             | `string`                                                                                                 | `''`        |
-| `variant`         | `variant`           |             | `"danger" \| "ghost" \| "primary" \| "secondary" \| "success" \| "warning"`                              | `'primary'` |
-| `visible`         | `visible`           |             | `boolean`                                                                                                | `false`     |
+| Property          | Attribute           | Description                                                 | Type                                                                                                     | Default     |
+| ----------------- | ------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------- |
+| `actionLabel`     | `action-label`      |                                                             | `string`                                                                                                 | `''`        |
+| `actionValue`     | `action-value`      |                                                             | `string`                                                                                                 | `''`        |
+| `autoClose`       | `auto-close`        |                                                             | `boolean`                                                                                                | `true`      |
+| `debug`           | `debug`             |                                                             | `boolean`                                                                                                | `false`     |
+| `dismissible`     | `dismissible`       |                                                             | `boolean`                                                                                                | `true`      |
+| `duration`        | `duration`          |                                                             | `number`                                                                                                 | `4000`      |
+| `icon`            | `icon`              |                                                             | `string`                                                                                                 | `''`        |
+| `maxWidth`        | `max-width`         | Custom maximum width for the toast (e.g., '640px', '30rem') | `string`                                                                                                 | `''`        |
+| `message`         | `message`           |                                                             | `string`                                                                                                 | `''`        |
+| `minWidth`        | `min-width`         | Custom minimum width for the toast (e.g., '400px', '20rem') | `string`                                                                                                 | `''`        |
+| `persistent`      | `persistent`        |                                                             | `boolean`                                                                                                | `false`     |
+| `position`        | `position`          |                                                             | `"bottom" \| "bottom-left" \| "bottom-right" \| "left" \| "right" \| "top" \| "top-left" \| "top-right"` | `'top'`     |
+| `showCloseButton` | `show-close-button` |                                                             | `boolean`                                                                                                | `true`      |
+| `showIcon`        | `show-icon`         |                                                             | `boolean`                                                                                                | `true`      |
+| `toastTitle`      | `toast-title`       |                                                             | `string`                                                                                                 | `''`        |
+| `variant`         | `variant`           |                                                             | `"danger" \| "ghost" \| "primary" \| "secondary" \| "success" \| "warning"`                              | `'primary'` |
+| `visible`         | `visible`           |                                                             | `boolean`                                                                                                | `false`     |
 
 
 ## Events
