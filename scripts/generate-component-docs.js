@@ -364,6 +364,7 @@ const COMPONENT_DEPENDENCY_MAP = {
   'spectrum-rail-item': ['spectrum-button'],
   'spectrum-button': [],
   'spectrum-cookie-compliance': ['spectrum-button', 'spectrum-toast', 'spectrum-dialog'],
+  'spectrum-search-results': ['spectrum-button'],
   
   // Layout Components
   'spectrum-app-layout': [],

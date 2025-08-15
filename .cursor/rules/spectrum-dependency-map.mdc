@@ -66,6 +66,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Coordinates with: spectrum-theme (via events for color coordination)
   - Purpose: Dynamic background with color extraction and theme coordination
 
+- **spectrum-search-results**: Search results display component with pagination
+  - Dependencies: spectrum-button
+  - Used by: Search interfaces, result displays, and data presentation applications
+  - Purpose: Display search results with pagination, loading states, and interaction events
+
 ### Composed Components (With Internal Dependencies)
 - **spectrum-accordion**: Expandable content container
   - Dependencies: spectrum-chip
@@ -205,6 +210,7 @@ Level 2 (Composed):
 ├── spectrum-rail-item (depends on: spectrum-button)
 ├── spectrum-collapsible-list (depends on: spectrum-context-menu)
 ├── spectrum-select (depends on: spectrum-button)
+├── spectrum-search-results (depends on: spectrum-button)
 ├── spectrum-image-gallery (depends on: spectrum-button, spectrum-badge, spectrum-panel)
 ├── spectrum-hero (depends on: spectrum-button)
 └── spectrum-cookie-compliance (depends on: spectrum-button, spectrum-toast, spectrum-dialog)

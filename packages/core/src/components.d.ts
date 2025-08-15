@@ -15,6 +15,7 @@ import { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-
 import { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
+import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 export { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
@@ -26,6 +27,7 @@ export { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-
 export { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
+export { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export namespace Components {
     interface SpectrumAccordion {
@@ -1425,6 +1427,88 @@ export namespace Components {
         "searchIconPosition": 'left' | 'right';
         "setFocus": () => Promise<void>;
     }
+    interface SpectrumSearchResults {
+        /**
+          * Search results data containing results array and pagination info
+          * @default { results: [], pagination: { currentPage: 1, totalPages: 1, totalResults: 0, resultsPerPage: 10 } }
+         */
+        "data": SearchResultsData | string;
+        /**
+          * Empty state message
+          * @default 'No results found'
+         */
+        "emptyMessage": string;
+        /**
+          * Enable URL synchronization for pagination state
+          * @default false
+         */
+        "enableUrlSync": boolean;
+        /**
+          * Get current pagination state including URL parameters
+         */
+        "getPaginationState": () => Promise<{ currentPage: number; totalPages: number; totalResults: number; resultsPerPage: number; urlParams: { page: number; size: number; }; }>;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * Maximum number of page buttons to show in pagination
+          * @default 5
+         */
+        "maxPageButtons": number;
+        /**
+          * Navigate to a specific page programmatically
+          * @param page - The page number to navigate to
+          * @param updateUrl - Whether to update the URL (default: respects enableUrlSync setting)
+         */
+        "navigateToPage": (page: number, updateUrl?: boolean) => Promise<void>;
+        /**
+          * URL parameter name for page number (default: 'page')
+          * @default 'page'
+         */
+        "pageParam": string;
+        /**
+          * Custom result template slot name
+         */
+        "resultTemplate"?: string;
+        /**
+          * Number of results to display per page
+          * @default 10
+         */
+        "resultsPerPage": number;
+        /**
+          * Show result metadata
+          * @default true
+         */
+        "showMetadata": boolean;
+        /**
+          * Show pagination controls
+          * @default true
+         */
+        "showPagination": boolean;
+        /**
+          * Show result scores if available
+          * @default false
+         */
+        "showScores": boolean;
+        /**
+          * Show result thumbnails if available
+          * @default true
+         */
+        "showThumbnails": boolean;
+        /**
+          * URL parameter name for results per page (default: 'size')
+          * @default 'size'
+         */
+        "sizeParam": string;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   resultSingular: 'résultat',   resultPlural: 'résultats',   queryPrefix: 'pour',   pagination: {     showingText: 'Affichage',     ofText: 'de',     resultsText: 'résultats',     firstButton: 'Premier',     previousButton: 'Précédent',     nextButton: 'Suivant',     lastButton: 'Dernier'   },   loading: 'Chargement des résultats...',   emptyMessage: 'Aucun résultat trouvé' }; ```
+          * @default {}
+         */
+        "translations": SearchResultsTranslations;
+    }
     /**
      * Spectrum Select Component
      * A comprehensive select component with advanced features including search, loading states,
@@ -1910,6 +1994,10 @@ export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSearchInputElement;
 }
+export interface SpectrumSearchResultsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumSearchResultsElement;
+}
 export interface SpectrumSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSelectElement;
@@ -2343,6 +2431,24 @@ declare global {
         prototype: HTMLSpectrumSearchInputElement;
         new (): HTMLSpectrumSearchInputElement;
     };
+    interface HTMLSpectrumSearchResultsElementEventMap {
+        "resultAction": SearchResultActionPayload;
+        "paginationAction": PaginationActionPayload;
+    }
+    interface HTMLSpectrumSearchResultsElement extends Components.SpectrumSearchResults, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumSearchResultsElementEventMap>(type: K, listener: (this: HTMLSpectrumSearchResultsElement, ev: SpectrumSearchResultsCustomEvent<HTMLSpectrumSearchResultsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumSearchResultsElementEventMap>(type: K, listener: (this: HTMLSpectrumSearchResultsElement, ev: SpectrumSearchResultsCustomEvent<HTMLSpectrumSearchResultsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumSearchResultsElement: {
+        prototype: HTMLSpectrumSearchResultsElement;
+        new (): HTMLSpectrumSearchResultsElement;
+    };
     interface HTMLSpectrumSelectElementEventMap {
         "selectChange": { 
     value: string; 
@@ -2457,6 +2563,7 @@ declare global {
         "spectrum-rail-alternative": HTMLSpectrumRailAlternativeElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
+        "spectrum-search-results": HTMLSpectrumSearchResultsElement;
         "spectrum-select": HTMLSpectrumSelectElement;
         "spectrum-sidebar": HTMLSpectrumSidebarElement;
         "spectrum-stack": HTMLSpectrumStackElement;
@@ -3920,6 +4027,86 @@ declare namespace LocalJSX {
          */
         "searchIconPosition"?: 'left' | 'right';
     }
+    interface SpectrumSearchResults {
+        /**
+          * Search results data containing results array and pagination info
+          * @default { results: [], pagination: { currentPage: 1, totalPages: 1, totalResults: 0, resultsPerPage: 10 } }
+         */
+        "data"?: SearchResultsData | string;
+        /**
+          * Empty state message
+          * @default 'No results found'
+         */
+        "emptyMessage"?: string;
+        /**
+          * Enable URL synchronization for pagination state
+          * @default false
+         */
+        "enableUrlSync"?: boolean;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Maximum number of page buttons to show in pagination
+          * @default 5
+         */
+        "maxPageButtons"?: number;
+        /**
+          * Emitted when pagination controls are used
+         */
+        "onPaginationAction"?: (event: SpectrumSearchResultsCustomEvent<PaginationActionPayload>) => void;
+        /**
+          * Emitted when a search result is clicked or interacted with
+         */
+        "onResultAction"?: (event: SpectrumSearchResultsCustomEvent<SearchResultActionPayload>) => void;
+        /**
+          * URL parameter name for page number (default: 'page')
+          * @default 'page'
+         */
+        "pageParam"?: string;
+        /**
+          * Custom result template slot name
+         */
+        "resultTemplate"?: string;
+        /**
+          * Number of results to display per page
+          * @default 10
+         */
+        "resultsPerPage"?: number;
+        /**
+          * Show result metadata
+          * @default true
+         */
+        "showMetadata"?: boolean;
+        /**
+          * Show pagination controls
+          * @default true
+         */
+        "showPagination"?: boolean;
+        /**
+          * Show result scores if available
+          * @default false
+         */
+        "showScores"?: boolean;
+        /**
+          * Show result thumbnails if available
+          * @default true
+         */
+        "showThumbnails"?: boolean;
+        /**
+          * URL parameter name for results per page (default: 'size')
+          * @default 'size'
+         */
+        "sizeParam"?: string;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   resultSingular: 'résultat',   resultPlural: 'résultats',   queryPrefix: 'pour',   pagination: {     showingText: 'Affichage',     ofText: 'de',     resultsText: 'résultats',     firstButton: 'Premier',     previousButton: 'Précédent',     nextButton: 'Suivant',     lastButton: 'Dernier'   },   loading: 'Chargement des résultats...',   emptyMessage: 'Aucun résultat trouvé' }; ```
+          * @default {}
+         */
+        "translations"?: SearchResultsTranslations;
+    }
     /**
      * Spectrum Select Component
      * A comprehensive select component with advanced features including search, loading states,
@@ -4374,6 +4561,7 @@ declare namespace LocalJSX {
         "spectrum-rail-alternative": SpectrumRailAlternative;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
+        "spectrum-search-results": SpectrumSearchResults;
         "spectrum-select": SpectrumSelect;
         "spectrum-sidebar": SpectrumSidebar;
         "spectrum-stack": SpectrumStack;
@@ -4482,6 +4670,7 @@ declare module "@stencil/core" {
              */
             "spectrum-rail-item": LocalJSX.SpectrumRailItem & JSXBase.HTMLAttributes<HTMLSpectrumRailItemElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
+            "spectrum-search-results": LocalJSX.SpectrumSearchResults & JSXBase.HTMLAttributes<HTMLSpectrumSearchResultsElement>;
             /**
              * Spectrum Select Component
              * A comprehensive select component with advanced features including search, loading states,

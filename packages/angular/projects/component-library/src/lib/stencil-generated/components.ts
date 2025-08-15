@@ -705,6 +705,42 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
 
 
 @ProxyCmp({
+  inputs: ['data', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
+  methods: ['navigateToPage', 'getPaginationState']
+})
+@Component({
+  selector: 'spectrum-search-results',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['data', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
+})
+export class SpectrumSearchResults {
+  protected el: HTMLSpectrumSearchResultsElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['resultAction', 'paginationAction']);
+  }
+}
+
+
+import type { SearchResultActionPayload as ISpectrumSearchResultsSearchResultActionPayload } from '@unops-itg-npm/cpit-spectrum';
+import type { PaginationActionPayload as ISpectrumSearchResultsPaginationActionPayload } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumSearchResults extends Components.SpectrumSearchResults {
+  /**
+   * Emitted when a search result is clicked or interacted with
+   */
+  resultAction: EventEmitter<CustomEvent<ISpectrumSearchResultsSearchResultActionPayload>>;
+  /**
+   * Emitted when pagination controls are used
+   */
+  paginationAction: EventEmitter<CustomEvent<ISpectrumSearchResultsPaginationActionPayload>>;
+}
+
+
+@ProxyCmp({
   inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'errorText', 'invalid', 'itemHeight', 'loading', 'loadingText', 'maxHeight', 'mobileFullscreen', 'multiple', 'noResultsText', 'options', 'placeholder', 'required', 'searchPlaceholder', 'searchTitle', 'searchable', 'selectAllText', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'showSelectAll', 'size', 'state', 'touchOptimized', 'variant', 'virtualScrolling']
 })
 @Component({

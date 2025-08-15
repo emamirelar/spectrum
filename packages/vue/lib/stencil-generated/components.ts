@@ -471,6 +471,29 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
 ]);
 
 
+export const SpectrumSearchResults = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchResults>('spectrum-search-results', undefined, [
+  'data',
+  'resultsPerPage',
+  'showThumbnails',
+  'showMetadata',
+  'showScores',
+  'showPagination',
+  'maxPageButtons',
+  'loading',
+  'emptyMessage',
+  'resultTemplate',
+  'enableUrlSync',
+  'pageParam',
+  'sizeParam',
+  'translations',
+  'resultAction',
+  'paginationAction'
+], [
+  'resultAction',
+  'paginationAction'
+]);
+
+
 export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>('spectrum-select', undefined, [
   'debug',
   'variant',

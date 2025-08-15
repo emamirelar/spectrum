@@ -436,6 +436,8 @@ export class SpectrumMenu {
       if (submenu) {
         const rect = linkElement.getBoundingClientRect();
         const spacing = 8; // 8px gap between menu item and submenu
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
         
         if (this.variant === 'megamenu') {
           // Megamenu positioning - full width below the menu bar
@@ -443,38 +445,101 @@ export class SpectrumMenu {
           submenu.style.left = '0px';
           submenu.style.width = '100vw';
         } else if (this.orientation === 'vertical') {
-          // Position submenu to the right of the menu item
-          submenu.style.top = `${rect.top}px`;
+          // Reset positioning to get accurate measurements
+          submenu.style.position = 'fixed';
+          submenu.style.visibility = 'hidden';
+          submenu.style.opacity = '1';
           submenu.style.left = `${rect.right + spacing}px`;
+          submenu.style.top = `${rect.top}px`;
           
-          // Ensure submenu doesn't go off-screen on the right
+          // Force a reflow to get accurate dimensions
+          submenu.offsetHeight;
           const submenuRect = submenu.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
           
-          if (rect.right + spacing + submenuRect.width > viewportWidth) {
-            // Position to the left of the menu item if it would overflow
-            submenu.style.left = `${rect.left - submenuRect.width - spacing}px`;
+          // Calculate optimal horizontal position
+          let left = rect.right + spacing;
+          
+          // Check if submenu would overflow on the right
+          if (left + submenuRect.width > viewportWidth - spacing) {
+            // Try positioning to the left of the menu item
+            const leftPosition = rect.left - submenuRect.width - spacing;
+            if (leftPosition >= spacing) {
+              left = leftPosition;
+            } else {
+              // If both sides don't fit, position as far right as possible with some margin
+              left = Math.max(spacing, viewportWidth - submenuRect.width - spacing);
+            }
           }
+          
+          // Calculate optimal vertical position
+          let top = rect.top;
+          
+          // Check if submenu would overflow on the bottom
+          if (top + submenuRect.height > viewportHeight - spacing) {
+            // Try aligning bottom of submenu with bottom of viewport
+            const topPosition = viewportHeight - submenuRect.height - spacing;
+            if (topPosition >= spacing) {
+              top = topPosition;
+            } else {
+              // If submenu is taller than viewport, align to top with some margin
+              top = spacing;
+            }
+          }
+          
+          // Apply final positioning
+          submenu.style.left = `${left}px`;
+          submenu.style.top = `${top}px`;
+          submenu.style.visibility = 'visible';
+          submenu.style.opacity = '0'; // Will be shown by CSS hover
+          
         } else {
           // Horizontal menu - position submenu below the menu item
-          submenu.style.top = `${rect.bottom + spacing}px`;
+          // Reset positioning to get accurate measurements
+          submenu.style.position = 'fixed';
+          submenu.style.visibility = 'hidden';
+          submenu.style.opacity = '1';
           submenu.style.left = `${rect.left}px`;
+          submenu.style.top = `${rect.bottom + spacing}px`;
           
-          // Ensure submenu doesn't go off-screen on the right
+          // Force a reflow to get accurate dimensions
+          submenu.offsetHeight;
           const submenuRect = submenu.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
           
-          if (rect.left + submenuRect.width > viewportWidth) {
-            // Align to the right edge if it would overflow
-            submenu.style.left = `${viewportWidth - submenuRect.width - spacing}px`;
+          // Calculate optimal horizontal position
+          let left = rect.left;
+          
+          // Check if submenu would overflow on the right
+          if (left + submenuRect.width > viewportWidth - spacing) {
+            // Try aligning right edge of submenu with right edge of menu item
+            const rightAlignedLeft = rect.right - submenuRect.width;
+            if (rightAlignedLeft >= spacing) {
+              left = rightAlignedLeft;
+            } else {
+              // If submenu is wider than available space, position as far right as possible
+              left = Math.max(spacing, viewportWidth - submenuRect.width - spacing);
+            }
           }
           
-          // Ensure submenu doesn't go off-screen on the bottom
-          const viewportHeight = window.innerHeight;
-          if (rect.bottom + spacing + submenuRect.height > viewportHeight) {
-            // Position above the menu item if it would overflow
-            submenu.style.top = `${rect.top - submenuRect.height - spacing}px`;
+          // Calculate optimal vertical position
+          let top = rect.bottom + spacing;
+          
+          // Check if submenu would overflow on the bottom
+          if (top + submenuRect.height > viewportHeight - spacing) {
+            // Try positioning above the menu item
+            const topPosition = rect.top - submenuRect.height - spacing;
+            if (topPosition >= spacing) {
+              top = topPosition;
+            } else {
+              // If submenu doesn't fit above or below, position as high as possible
+              top = Math.max(spacing, viewportHeight - submenuRect.height - spacing);
+            }
           }
+          
+          // Apply final positioning
+          submenu.style.left = `${left}px`;
+          submenu.style.top = `${top}px`;
+          submenu.style.visibility = 'visible';
+          submenu.style.opacity = '0'; // Will be shown by CSS hover
         }
       }
     }

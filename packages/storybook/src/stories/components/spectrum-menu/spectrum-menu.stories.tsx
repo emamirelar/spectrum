@@ -766,6 +766,143 @@ Toggle the \`directNavigation\` control to experience both modes!
 };
 
 /**
+ * Edge clipping prevention demonstration showing intelligent submenu positioning.
+ * Tests how menus with subitems on the rightmost position handle screen edge constraints.
+ */
+export const EdgeClippingPrevention: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'default',
+    items: [
+      { label: 'Home', href: '/', icon: 'home' },
+      { label: 'About', href: '/about', icon: 'info' },
+      { label: 'Services', href: '/services', icon: 'design_services' },
+      { 
+        label: 'Resources & Support',
+        href: '/support',
+        icon: 'help_center',
+        children: [
+          { label: 'Documentation', href: '/docs', icon: 'description' },
+          { label: 'API Reference', href: '/api', icon: 'integration_instructions' },
+          { label: 'Video Tutorials', href: '/tutorials', icon: 'play_circle' },
+          { label: 'Community Forum', href: '/forum', icon: 'forum' },
+          { label: 'Technical Support', href: '/tech-support', icon: 'support_agent' },
+          { label: 'Contact Specialists', href: '/specialists', icon: 'engineering' }
+        ]
+      }
+    ],
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Navigation',
+    directNavigation: false
+  },
+  render: (args) => html`
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: var(--spectrum-sys-color-surface);">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-container); border-radius: 6px;">
+        <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">🎯 Edge Clipping Prevention Test</h3>
+        <div style="color: var(--spectrum-sys-color-on-surface-variant);">
+          <p style="margin: 0 0 1rem 0;"><strong>Test Instructions:</strong></p>
+          <ol style="margin: 0; padding-left: 1.5rem;">
+            <li>Hover over the <strong>"Resources & Support"</strong> menu item (rightmost)</li>
+            <li>Notice how the submenu intelligently positions itself to avoid screen edge clipping</li>
+            <li>Try resizing your browser window to different widths and test again</li>
+            <li>The submenu should automatically adjust its position to remain fully visible</li>
+          </ol>
+        </div>
+      </div>
+      
+      <!-- Container positioned to the right to force edge clipping scenarios -->
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+        <spectrum-menu
+          orientation=${args.orientation}
+          variant=${args.variant}
+          .items=${args.items}
+          mobile-breakpoint=${args.mobileBreakpoint}
+          mobile-menu-title=${args.mobileMenuTitle}
+          ?direct-navigation=${args.directNavigation}
+          @itemClick=${(e: CustomEvent) => action('edge-clipping-itemClick')(e.detail)}
+        ></spectrum-menu>
+      </div>
+      
+      <!-- Vertical menu test positioned at bottom-right -->
+      <div style="margin-top: 3rem; border-top: 1px solid var(--spectrum-sys-color-outline); padding-top: 2rem;">
+        <h4 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">🔽 Vertical Menu Edge Test</h4>
+        <div style="display: flex; justify-content: flex-end; align-items: flex-end; height: 300px;">
+          <spectrum-menu
+            orientation="vertical"
+            variant="default"
+            .items=${[
+              { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
+              { label: 'Reports', href: '/reports', icon: 'assessment' },
+              { 
+                label: 'Advanced Settings',
+                href: '/settings',
+                icon: 'settings',
+                children: [
+                  { label: 'User Management', href: '/settings/users', icon: 'group' },
+                  { label: 'Security Configuration', href: '/settings/security', icon: 'security' },
+                  { label: 'API Key Management', href: '/settings/api-keys', icon: 'vpn_key' },
+                  { label: 'Integration Settings', href: '/settings/integrations', icon: 'hub' },
+                  { label: 'Backup & Recovery', href: '/settings/backup', icon: 'backup' }
+                ]
+              }
+            ]}
+            mobile-breakpoint=${args.mobileBreakpoint}
+            mobile-menu-title="Settings Menu"
+            @itemClick=${(e: CustomEvent) => action('vertical-edge-clipping-itemClick')(e.detail)}
+          ></spectrum-menu>
+        </div>
+      </div>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface-variant);">✨ Smart Positioning Features:</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; color: var(--spectrum-sys-color-on-surface-variant);">
+          <li><strong>Horizontal Menus</strong>: Auto right-align when submenu would overflow right edge</li>
+          <li><strong>Vertical Menus</strong>: Auto left-align when submenu would overflow right edge</li>
+          <li><strong>Viewport Awareness</strong>: Considers both horizontal and vertical boundaries</li>
+          <li><strong>Graceful Fallbacks</strong>: Multiple positioning strategies for extreme cases</li>
+          <li><strong>8px Safe Margins</strong>: Maintains consistent spacing from screen edges</li>
+        </ul>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### Edge Clipping Prevention
+
+This story demonstrates the intelligent submenu positioning system that prevents edge clipping:
+
+**Test Scenarios:**
+1. **Horizontal Menu (Top)**: Right-aligned menu with submenu on rightmost item
+2. **Vertical Menu (Bottom)**: Bottom-right positioned menu with subitems
+
+**Smart Positioning Logic:**
+- **Primary Strategy**: Position submenu in preferred location (right/below)
+- **Overflow Detection**: Check if submenu would clip screen edges
+- **Automatic Adjustment**: Reposition to prevent clipping (left-align, above, etc.)
+- **Extreme Cases**: Handle very wide submenus with optimal viewport positioning
+
+**How to Test:**
+1. Hover over menu items with subitems (especially rightmost ones)
+2. Resize browser window to different widths
+3. Notice how submenus automatically adjust positioning
+4. Try both horizontal and vertical menu orientations
+
+**Technical Implementation:**
+- Uses accurate DOM measurements with temporary positioning
+- Multiple fallback positioning strategies
+- Maintains 8px safe margins from all screen edges
+- Preserves smooth hover animations while preventing layout shifts
+
+The enhanced positioning ensures submenus are always fully visible and accessible regardless of screen size or menu position.
+        `
+      }
+    }
+  }
+};
+
+/**
  * Navigation color customization demonstration showing how to override the default menu text color.
  * Use the navigationColor prop to apply custom branding colors to menu text.
  */

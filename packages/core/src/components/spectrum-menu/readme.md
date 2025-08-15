@@ -12,6 +12,33 @@ A responsive and accessible menu component that can be displayed horizontally or
 - Nested submenus with descriptions (megamenu variant)
 - Disabled state support
 - Customizable styling through CSS variables
+- **Intelligent edge clipping prevention** for submenus (see below)
+
+## Smart Positioning & Edge Clipping Prevention
+
+The spectrum-menu component includes enhanced positioning logic to prevent submenus from being clipped by screen edges:
+
+### Horizontal Menus
+- **Primary positioning**: Submenus appear below menu items, left-aligned
+- **Right edge detection**: When a submenu would overflow the right edge, it automatically right-aligns with the menu item
+- **Extreme cases**: For very wide submenus, positions as far right as possible with safe margins
+- **Vertical overflow**: If submenus would extend below the viewport, they appear above the menu item instead
+
+### Vertical Menus  
+- **Primary positioning**: Submenus appear to the right of menu items, top-aligned
+- **Right edge detection**: When a submenu would overflow the right edge, it automatically appears to the left of the menu item
+- **Extreme cases**: For very wide submenus, positions optimally within viewport bounds
+- **Vertical overflow**: Smart vertical positioning to keep submenus within viewport height
+
+### Megamenu Variant
+- **Full-width positioning**: Always uses full viewport width below the menu bar
+- **No clipping**: Megamenus are designed to never clip as they use controlled full-width layout
+
+### Technical Implementation
+- Uses accurate DOM measurements with temporary positioning for precise calculations
+- Multiple fallback strategies ensure submenus always remain accessible
+- Maintains consistent 8px spacing margins from screen edges
+- Preserves smooth hover transitions while preventing layout shifts
 
 ## Usage
 

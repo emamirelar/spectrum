@@ -1,0 +1,394 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as SpectrumSearchResultsStories from './spectrum-search-results.stories';
+
+<Meta title="Spectrum/Components/SpectrumSearchResults/UseCases" />
+
+# Spectrum Search Results - Use Cases
+
+The `spectrum-search-results` component is designed to handle various search result display scenarios across different types of applications.
+
+## Search Engine Results
+
+Display web search results with URLs, descriptions, and metadata. Perfect for building search engine interfaces or site-wide search functionality.
+
+```html
+<spectrum-search-results 
+  .data=${webSearchData}
+  showThumbnails="true"
+  showMetadata="true">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- URL display for navigation
+- Description snippets
+- Search execution time
+- Pagination for large result sets
+
+## Document Library Search
+
+Search through document collections with rich metadata, thumbnails, and relevance scoring.
+
+```html
+<spectrum-search-results 
+  .data=${documentData}
+  showScores="true"
+  showMetadata="true"
+  showThumbnails="true">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- Document thumbnails/previews
+- Author and category metadata
+- Relevance scores
+- Timestamp information
+
+## Product Catalog Search
+
+Display product search results in e-commerce or catalog applications.
+
+```html
+<spectrum-search-results 
+  .data=${productData}
+  showThumbnails="true"
+  showMetadata="false"
+  showPagination="true">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- Product images as thumbnails
+- Price and availability in metadata
+- Category-based filtering
+- Large result set pagination
+
+## Knowledge Base Search
+
+Search through help articles, FAQs, and documentation.
+
+```html
+<spectrum-search-results 
+  .data=${knowledgeBaseData}
+  showThumbnails="false"
+  showMetadata="true"
+  showScores="true">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- Article categories
+- Author information
+- Relevance scoring
+- Tag-based metadata
+
+## File System Search
+
+Display file search results with type information and thumbnails.
+
+```html
+<spectrum-search-results 
+  .data=${fileSystemData}
+  showThumbnails="true"
+  showMetadata="true"
+  emptyMessage="No files found matching your criteria">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- File type icons/thumbnails
+- File size and modification date
+- Path information
+- Custom empty states
+
+## News and Article Search
+
+Search through news articles and blog posts with publication dates and sources.
+
+```html
+<spectrum-search-results 
+  .data=${newsData}
+  showThumbnails="true"
+  showMetadata="true"
+  showScores="false">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- Article thumbnails
+- Publication date and source
+- Category tags
+- Author information
+
+## API Documentation Search
+
+Search through API endpoints and documentation with code examples.
+
+```html
+<spectrum-search-results 
+  .data=${apiDocsData}
+  showThumbnails="false"
+  showMetadata="true"
+  showScores="true">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- Endpoint URLs
+- HTTP method information
+- API version metadata
+- Usage examples
+
+## User and Contact Search
+
+Search through user directories or contact lists.
+
+```html
+<spectrum-search-results 
+  .data=${userSearchData}
+  showThumbnails="true"
+  showMetadata="true"
+  showPagination="false">
+</spectrum-search-results>
+```
+
+**Key Features:**
+- Profile pictures as thumbnails
+- Department and role metadata
+- Contact information
+- Small result sets without pagination
+
+## Configuration Examples
+
+### High-Volume Search Results
+
+For applications with thousands of results:
+
+```javascript
+const highVolumeConfig = {
+  resultsPerPage: 20,
+  maxPageButtons: 7,
+  showPagination: true,
+  showScores: true
+};
+```
+
+### Mobile-Optimized Search
+
+For mobile applications:
+
+```javascript
+const mobileConfig = {
+  resultsPerPage: 5,
+  maxPageButtons: 3,
+  showThumbnails: true,
+  showMetadata: false
+};
+```
+
+### Minimal Search Interface
+
+For simple search implementations:
+
+```javascript
+const minimalConfig = {
+  showThumbnails: false,
+  showMetadata: false,
+  showScores: false,
+  showPagination: false
+};
+```
+
+## Integration Patterns
+
+### With Search Input
+
+```html
+<div class="search-interface">
+  <spectrum-search-input 
+    @searchSubmit=${handleSearch}>
+  </spectrum-search-input>
+  
+  <spectrum-search-results 
+    .data=${searchResults}
+    .loading=${searchInProgress}
+    enable-url-sync="true"
+    page-param="page"
+    size-param="per_page"
+    @resultAction=${handleResultClick}
+    @paginationAction=${handlePageChange}>
+  </spectrum-search-results>
+</div>
+```
+
+### URL Synchronization Integration
+
+```javascript
+// Complete search interface with URL synchronization
+class SearchInterface {
+  constructor() {
+    this.searchInput = document.querySelector('spectrum-search-input');
+    this.searchResults = document.querySelector('spectrum-search-results');
+    this.currentQuery = '';
+    
+    // Enable URL sync
+    this.searchResults.enableUrlSync = true;
+    this.searchResults.pageParam = 'page';
+    this.searchResults.sizeParam = 'size';
+    
+    this.setupEventListeners();
+    this.initializeFromUrl();
+  }
+  
+  setupEventListeners() {
+    // Handle search submissions
+    this.searchInput.addEventListener('searchSubmit', (e) => {
+      this.performSearch(e.detail.query, 1);
+    });
+    
+    // Handle pagination changes
+    this.searchResults.addEventListener('paginationAction', (e) => {
+      this.performSearch(this.currentQuery, e.detail.targetPage);
+    });
+  }
+  
+  async initializeFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q') || '';
+    const page = parseInt(urlParams.get('page') || '1', 10);
+    
+    if (query) {
+      this.searchInput.value = query;
+      await this.performSearch(query, page);
+    }
+  }
+  
+  async performSearch(query, page = 1) {
+    this.currentQuery = query;
+    this.searchResults.loading = true;
+    
+    try {
+      const results = await this.fetchResults(query, page);
+      this.searchResults.data = results;
+      
+      // Update query parameter in URL
+      const url = new URL(window.location);
+      if (query) {
+        url.searchParams.set('q', query);
+      } else {
+        url.searchParams.delete('q');
+      }
+      window.history.replaceState(null, '', url);
+      
+    } catch (error) {
+      console.error('Search failed:', error);
+      this.searchResults.data = { results: [], pagination: {...} };
+    } finally {
+      this.searchResults.loading = false;
+    }
+  }
+}
+```
+
+### With Filters
+
+```html
+<div class="filtered-search">
+  <div class="filters">
+    <!-- Filter components -->
+  </div>
+  
+  <spectrum-search-results 
+    .data=${filteredResults}
+    showMetadata="true">
+  </spectrum-search-results>
+</div>
+```
+
+### With Loading States
+
+```javascript
+// Handle search lifecycle
+async function performSearch(query, page = 1) {
+  searchResults.loading = true;
+  
+  try {
+    const results = await searchAPI(query, page);
+    searchResults.data = results;
+  } catch (error) {
+    searchResults.data = { results: [], pagination: {...} };
+  } finally {
+    searchResults.loading = false;
+  }
+}
+```
+
+## Data Transformation Examples
+
+### From REST API
+
+```javascript
+function transformAPIResponse(apiResponse) {
+  return {
+    results: apiResponse.items.map(item => ({
+      id: item.id,
+      title: item.title,
+      description: item.summary,
+      url: item.href,
+      thumbnail: item.image_url,
+      timestamp: item.created_at,
+      metadata: {
+        category: item.category,
+        author: item.author,
+        tags: item.tags
+      }
+    })),
+    pagination: {
+      currentPage: apiResponse.page,
+      totalPages: apiResponse.total_pages,
+      totalResults: apiResponse.total_count,
+      resultsPerPage: apiResponse.per_page
+    },
+    query: apiResponse.query,
+    executionTime: apiResponse.duration_ms
+  };
+}
+```
+
+### From GraphQL
+
+```javascript
+function transformGraphQLResponse(gqlResponse) {
+  const { searchResults, pageInfo } = gqlResponse.data.search;
+  
+  return {
+    results: searchResults.edges.map(edge => ({
+      id: edge.node.id,
+      title: edge.node.title,
+      description: edge.node.excerpt,
+      url: edge.node.url,
+      score: edge.score,
+      metadata: edge.node.metadata
+    })),
+    pagination: {
+      currentPage: pageInfo.currentPage,
+      totalPages: pageInfo.totalPages,
+      totalResults: pageInfo.totalCount,
+      resultsPerPage: pageInfo.pageSize
+    }
+  };
+}
+```
+
+## Best Practices
+
+1. **Performance**: Use pagination for large result sets (>100 items)
+2. **Accessibility**: Always provide meaningful empty state messages
+3. **Loading States**: Show loading indicators during search operations
+4. **Error Handling**: Handle API failures gracefully with appropriate messaging
+5. **Responsive Design**: Configure appropriately for mobile vs desktop
+6. **Event Handling**: Always handle result and pagination events
+7. **Data Validation**: Validate data structure before passing to component
+8. **Theming**: Use CSS custom properties for consistent styling
+
+<Canvas of={SpectrumSearchResultsStories.UseCases} />
