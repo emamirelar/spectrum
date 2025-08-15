@@ -3,7 +3,7 @@ import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Method, 
 /**
  * Spectrum Toast Component
  * A notification component that displays messages at screen edges.
- * Supports various variants, positioning, and auto-dismiss functionality.
+ * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
  */
 @Component({
   tag: 'spectrum-toast',
@@ -36,6 +36,17 @@ export class SpectrumToast {
   @Prop() showCloseButton: boolean = true;
   @Prop() actionLabel: string = '';
   @Prop() actionValue: string = '';
+  
+  // Toast Sizing
+  /**
+   * Custom minimum width for the toast (e.g., '400px', '20rem')
+   */
+  @Prop() minWidth: string = '';
+  
+  /**
+   * Custom maximum width for the toast (e.g., '640px', '30rem')
+   */
+  @Prop() maxWidth: string = '';
 
   // Toast State
   @State() isVisible: boolean = false;
@@ -234,8 +245,19 @@ export class SpectrumToast {
       [`spectrum-toast--${this.position}`]: true,
     };
 
+    // Dynamic width styling using override variables
+    const dynamicStyles: { [key: string]: string } = {};
+    if (this.minWidth) {
+      dynamicStyles['--toast-min-width-override'] = this.minWidth;
+    }
+    if (this.maxWidth) {
+      dynamicStyles['--toast-max-width-override'] = this.maxWidth;
+    }
+
+
+
     return (
-      <Host class={hostClasses}>
+      <Host class={hostClasses} style={dynamicStyles}>
         <div
           class={toastClasses}
           onMouseEnter={this.handleMouseEnter}
@@ -262,25 +284,30 @@ export class SpectrumToast {
             
             {this.showCloseButton && this.dismissible && (
               <div class="spectrum-toast__close-wrapper">
-                <button
-                  class="spectrum-toast__close-button"
+                <spectrum-button
+                  variant="ghost"
+                  size="sm"
+                  iconOnly={true}
+                  leftIcon="close"
                   onClick={this.handleCloseClick}
                   aria-label="Close notification"
                 >
-                  <span class="material-symbols-outlined">close</span>
-                </button>
+                </spectrum-button>
               </div>
             )}
           </div>
           
           {this.actionLabel && (
             <div class="spectrum-toast__action-wrapper">
-              <button
-                class="spectrum-toast__action-button"
+              <spectrum-button
+                variant="outline"
+                size="sm"
+                buttonText={this.actionLabel}
+                showButtonText={true}
                 onClick={this.handleActionClick}
               >
                 {this.actionLabel}
-              </button>
+              </spectrum-button>
             </div>
           )}
         </div>

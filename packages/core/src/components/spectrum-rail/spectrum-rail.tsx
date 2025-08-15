@@ -386,8 +386,8 @@ export class SpectrumRail {
       <Host>
         <div 
           class={{ 
-            'rail': true,
-            'rail--expanded': this.expanded
+            'spectrum-rail': true,
+            'spectrum-rail--expanded': this.expanded
           }}
           style={{
             '--rail-expanded-width': `${this.expandedWidth}px`,
@@ -395,7 +395,7 @@ export class SpectrumRail {
           }}
         >
           {/* Menu Section */}
-          <div class="rail-section menu">
+          <div class="spectrum-rail__section menu">
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"
@@ -429,7 +429,7 @@ export class SpectrumRail {
           </div>
 
           {/* Search Section */}
-          <div class="rail-section search">
+          <div class="spectrum-rail__section search">
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"
@@ -459,7 +459,7 @@ export class SpectrumRail {
 
           {/* Add Section */}
           {this.showAddButton && (
-            <div class="rail-section add">
+            <div class="spectrum-rail__section add">
               {!this.expanded ? (
                 <spectrum-button
                   variant="fab"
@@ -488,7 +488,7 @@ export class SpectrumRail {
           )}
 
           {/* Items Section */}
-          <div class="rail-section items">
+          <div class="spectrum-rail__section items">
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"
@@ -502,14 +502,14 @@ export class SpectrumRail {
                 state="active"
               />
             ) : (
-              <div class="rail-items-container">
+              <div class="spectrum-rail__items-container">
                 <slot name="items"></slot>
               </div>
             )}
           </div>
 
           {/* More Section */}
-          <div class="rail-section more">
+          <div class="spectrum-rail__section more">
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"

@@ -344,6 +344,74 @@ export declare interface SpectrumConversationPanel extends Components.SpectrumCo
 
 
 @ProxyCmp({
+  inputs: ['autoLoadGTM', 'consentVersion', 'cookieExpireDays', 'cookieName', 'cookiePolicyUrl', 'debug', 'gtmContainerId', 'message', 'position', 'privacyPolicyUrl', 'showCookieStatus', 'showDetails', 'showOnFirstVisit', 'translations'],
+  methods: ['getStoredConsent', 'updateConsent', 'showConsent', 'hideConsent', 'resetConsent']
+})
+@Component({
+  selector: 'spectrum-cookie-compliance',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['autoLoadGTM', 'consentVersion', 'cookieExpireDays', 'cookieName', 'cookiePolicyUrl', 'debug', 'gtmContainerId', 'message', 'position', 'privacyPolicyUrl', 'showCookieStatus', 'showDetails', 'showOnFirstVisit', 'translations'],
+})
+export class SpectrumCookieCompliance {
+  protected el: HTMLSpectrumCookieComplianceElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['consentUpdated', 'consentDismissed']);
+  }
+}
+
+
+import type { CookieConsent as ISpectrumCookieComplianceCookieConsent } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumCookieCompliance extends Components.SpectrumCookieCompliance {
+  /**
+   * Event emitted when consent is given or updated
+   */
+  consentUpdated: EventEmitter<CustomEvent<ISpectrumCookieComplianceCookieConsent>>;
+  /**
+   * Event emitted when consent banner is dismissed
+   */
+  consentDismissed: EventEmitter<CustomEvent<void>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['background', 'buttons', 'closeOnEscape', 'closeOnOutsideClick', 'debug', 'dialogId', 'dialogTitle', 'height', 'noPadding', 'open', 'showCloseButton', 'size', 'width'],
+  methods: ['show', 'hide', 'toggle']
+})
+@Component({
+  selector: 'spectrum-dialog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['background', 'buttons', 'closeOnEscape', 'closeOnOutsideClick', 'debug', 'dialogId', 'dialogTitle', 'height', 'noPadding', 'open', 'showCloseButton', 'size', 'width'],
+})
+export class SpectrumDialog {
+  protected el: HTMLSpectrumDialogElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['dialogAction', 'dialogClose']);
+  }
+}
+
+
+export declare interface SpectrumDialog extends Components.SpectrumDialog {
+  /**
+   * Event emitted when dialog actions occur
+   */
+  dialogAction: EventEmitter<CustomEvent<{action: string; dialogId?: string; buttonId?: string}>>;
+  /**
+   * Event emitted when dialog is closed
+   */
+  dialogClose: EventEmitter<CustomEvent<{action: string; dialogId?: string}>>;
+}
+
+
+@ProxyCmp({
   inputs: ['align', 'alignContent', 'breakpoint', 'columnGap', 'debug', 'direction', 'fullHeight', 'fullWidth', 'gap', 'inline', 'justify', 'mobileDirection', 'responsive', 'rowGap', 'wrap']
 })
 @Component({
@@ -388,14 +456,14 @@ export declare interface SpectrumGrid extends Components.SpectrumGrid {}
 
 
 @ProxyCmp({
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides']
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides']
 })
 @Component({
   selector: 'spectrum-hero',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'pauseOnHover', 'showArrows', 'showDots', 'slides'],
+  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides'],
 })
 export class SpectrumHero {
   protected el: HTMLSpectrumHeroElement;
@@ -420,14 +488,14 @@ export declare interface SpectrumHero extends Components.SpectrumHero {
 
 
 @ProxyCmp({
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode']
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'imagesJson', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode']
 })
 @Component({
   selector: 'spectrum-image-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode'],
+  inputs: ['allowDelete', 'allowUpload', 'allowUrlInput', 'background', 'debug', 'frostControlBar', 'galleryTitle', 'images', 'imagesJson', 'previewMode', 'primaryActionIcon', 'primaryActionText', 'primaryActionValue', 'scrollDirection', 'selectedImages', 'selectionMode'],
 })
 export class SpectrumImageGallery {
   protected el: HTMLSpectrumImageGalleryElement;
@@ -460,7 +528,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -468,7 +536,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['items', 'mobileBreakpoint', 'mobileMenuTitle', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLSpectrumMenuElement;
@@ -637,6 +705,42 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
 
 
 @ProxyCmp({
+  inputs: ['data', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
+  methods: ['navigateToPage', 'getPaginationState']
+})
+@Component({
+  selector: 'spectrum-search-results',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['data', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
+})
+export class SpectrumSearchResults {
+  protected el: HTMLSpectrumSearchResultsElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['resultAction', 'paginationAction']);
+  }
+}
+
+
+import type { SearchResultActionPayload as ISpectrumSearchResultsSearchResultActionPayload } from '@unops-itg-npm/cpit-spectrum';
+import type { PaginationActionPayload as ISpectrumSearchResultsPaginationActionPayload } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumSearchResults extends Components.SpectrumSearchResults {
+  /**
+   * Emitted when a search result is clicked or interacted with
+   */
+  resultAction: EventEmitter<CustomEvent<ISpectrumSearchResultsSearchResultActionPayload>>;
+  /**
+   * Emitted when pagination controls are used
+   */
+  paginationAction: EventEmitter<CustomEvent<ISpectrumSearchResultsPaginationActionPayload>>;
+}
+
+
+@ProxyCmp({
   inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'errorText', 'invalid', 'itemHeight', 'loading', 'loadingText', 'maxHeight', 'mobileFullscreen', 'multiple', 'noResultsText', 'options', 'placeholder', 'required', 'searchPlaceholder', 'searchTitle', 'searchable', 'selectAllText', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'showSelectAll', 'size', 'state', 'touchOptimized', 'variant', 'virtualScrolling']
 })
 @Component({
@@ -737,7 +841,7 @@ export declare interface SpectrumTheme extends Components.SpectrumTheme {}
 
 
 @ProxyCmp({
-  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'message', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
+  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'maxWidth', 'message', 'minWidth', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
   methods: ['show', 'hide', 'dismiss']
 })
 @Component({
@@ -745,7 +849,7 @@ export declare interface SpectrumTheme extends Components.SpectrumTheme {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'message', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
+  inputs: ['actionLabel', 'actionValue', 'autoClose', 'debug', 'dismissible', 'duration', 'icon', 'maxWidth', 'message', 'minWidth', 'persistent', 'position', 'showCloseButton', 'showIcon', 'toastTitle', 'variant', 'visible'],
 })
 export class SpectrumToast {
   protected el: HTMLSpectrumToastElement;

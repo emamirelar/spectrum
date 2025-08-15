@@ -1,5 +1,6 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Watch } from '@stencil/core';
 import { BackgroundLevel } from '../spectrum-panel/spectrum-panel';
+import { getSpectrumVersion } from '../../utils/version';
 
 export interface ImageConfig {
   id: string;
@@ -32,8 +33,28 @@ export type FrostLevel = 'no' | 'partial' | 'full';
 export class SpectrumImageGallery {
   @Element() el: HTMLElement;
 
+  /**
+   * Get the version of the Spectrum component library
+   * @returns {string} The semantic version string
+   */
+  static getVersion(): string {
+    return getSpectrumVersion();
+  }
+
   // Configuration Properties
   @Prop() images: ImageConfig[] = [];
+  
+  /**
+   * JSON string representation of images array for HTML attribute usage.
+   * Useful for server-side templates (e.g., Twig) that need to pass image data as strings.
+   * Will be parsed and converted to images array automatically.
+   */
+  @Prop({ 
+    attribute: 'images-json',
+    reflect: true,
+    mutable: true 
+  }) imagesJson: string = '';
+  
   @Prop() allowUpload: boolean = true;
   @Prop() allowUrlInput: boolean = true;
   @Prop() allowDelete: boolean = true;
@@ -108,8 +129,63 @@ export class SpectrumImageGallery {
     }
   }
 
+  /**
+   * Clean multiline JSON strings to handle formatting from HTML attributes.
+   * Removes extra whitespace and line breaks while preserving string content.
+   */
+  private cleanMultilineJson(jsonString: string): string {
+    try {
+      // First, try parsing as-is in case it's already valid
+      JSON.parse(jsonString);
+      return jsonString;
+    } catch {
+      // If parsing fails, clean up whitespace and try again
+      this.debugLog('Cleaning multiline JSON string...');
+      
+      // Replace line breaks and multiple spaces with single spaces,
+      // but be careful not to affect strings
+      let cleaned = jsonString
+        .replace(/\r\n/g, ' ')      // Replace CRLF with space
+        .replace(/\n/g, ' ')        // Replace LF with space
+        .replace(/\r/g, ' ')        // Replace CR with space
+        .replace(/\s+/g, ' ')       // Replace multiple spaces with single space
+        .trim();                    // Remove leading/trailing whitespace
+      
+      this.debugLog('Original JSON length:', jsonString.length);
+      this.debugLog('Cleaned JSON length:', cleaned.length);
+      this.debugLog('Cleaned JSON preview:', cleaned.substring(0, 100) + '...');
+      
+      return cleaned;
+    }
+  }
+
   componentWillLoad() {
-    this.allImages = [...this.images];
+    // Handle both images array prop and imagesJson string prop
+    // Priority: imagesJson takes precedence if provided, otherwise use images array
+    if (this.imagesJson && this.imagesJson.trim()) {
+      try {
+        // Clean up multiline JSON strings - remove extra whitespace between tokens
+        const cleanedJson = this.cleanMultilineJson(this.imagesJson);
+        const parsedImages = JSON.parse(cleanedJson);
+        if (Array.isArray(parsedImages)) {
+          this.allImages = [...parsedImages];
+          this.debugLog(`Images loaded from JSON string in componentWillLoad: ${parsedImages.length}`);
+        } else {
+          this.debugError('JSON string does not contain an array, falling back to images prop:', this.imagesJson);
+          this.allImages = [...this.images];
+        }
+      } catch (error) {
+        this.debugError('Failed to parse images JSON string, falling back to images prop:', error, this.imagesJson);
+        this.allImages = [...this.images];
+      }
+    } else {
+      // Use the images array prop as fallback
+      this.allImages = [...this.images];
+      if (this.images.length > 0) {
+        this.debugLog(`Images loaded from images prop: ${this.images.length}`);
+      }
+    }
+    
     this.internalSelectedImages = [...this.selectedImages];
   }
 
@@ -136,9 +212,42 @@ export class SpectrumImageGallery {
 
   @Watch('images')
   onImagesChange() {
-    this.allImages = [...this.images];
-    // Recalculate masonry layout when images change
-    setTimeout(() => this.recalculateMasonryLayout(), 100);
+    // Only update from images prop if no JSON string is provided
+    // This prevents conflicts when both props might be present
+    if (!this.imagesJson || !this.imagesJson.trim()) {
+      this.allImages = [...this.images];
+      this.debugLog(`Images updated from images prop: ${this.images.length}`);
+      // Recalculate masonry layout when images change
+      setTimeout(() => this.recalculateMasonryLayout(), 100);
+    } else {
+      this.debugLog('Images prop change ignored - using imagesJson instead');
+    }
+  }
+
+  @Watch('imagesJson')
+  onImagesJsonChange() {
+    if (this.imagesJson && this.imagesJson.trim()) {
+      try {
+        // Clean up multiline JSON strings - remove extra whitespace between tokens
+        // but preserve whitespace within string values
+        const cleanedJson = this.cleanMultilineJson(this.imagesJson);
+        const parsedImages = JSON.parse(cleanedJson);
+        if (Array.isArray(parsedImages)) {
+          this.allImages = [...parsedImages];
+          this.debugLog(`Images loaded from JSON string: ${parsedImages.length}`);
+          // Recalculate masonry layout when images change
+          setTimeout(() => this.recalculateMasonryLayout(), 100);
+        } else {
+          this.debugError('JSON string does not contain an array:', this.imagesJson);
+        }
+      } catch (error) {
+        this.debugError('Failed to parse images JSON string:', error, this.imagesJson);
+      }
+    } else if (this.imagesJson === '') {
+      // Clear images if JSON string is explicitly empty
+      this.allImages = [];
+      this.debugLog('Images cleared due to empty JSON string');
+    }
   }
 
   /**

@@ -242,6 +242,51 @@ export const SpectrumConversationPanel = /*@__PURE__*/ defineContainer<JSX.Spect
 ]);
 
 
+export const SpectrumCookieCompliance = /*@__PURE__*/ defineContainer<JSX.SpectrumCookieCompliance>('spectrum-cookie-compliance', undefined, [
+  'message',
+  'position',
+  'showDetails',
+  'showOnFirstVisit',
+  'cookieName',
+  'cookieExpireDays',
+  'gtmContainerId',
+  'autoLoadGTM',
+  'privacyPolicyUrl',
+  'cookiePolicyUrl',
+  'consentVersion',
+  'debug',
+  'translations',
+  'showCookieStatus',
+  'consentUpdated',
+  'consentDismissed'
+], [
+  'consentUpdated',
+  'consentDismissed'
+]);
+
+
+export const SpectrumDialog = /*@__PURE__*/ defineContainer<JSX.SpectrumDialog>('spectrum-dialog', undefined, [
+  'debug',
+  'open',
+  'dialogId',
+  'dialogTitle',
+  'showCloseButton',
+  'closeOnOutsideClick',
+  'closeOnEscape',
+  'buttons',
+  'background',
+  'size',
+  'width',
+  'height',
+  'noPadding',
+  'dialogAction',
+  'dialogClose'
+], [
+  'dialogAction',
+  'dialogClose'
+]);
+
+
 export const SpectrumFlex = /*@__PURE__*/ defineContainer<JSX.SpectrumFlex>('spectrum-flex', undefined, [
   'direction',
   'wrap',
@@ -298,6 +343,9 @@ export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spe
   'height',
   'keyboardNavigation',
   'debug',
+  'rounded',
+  'shaded',
+  'overlayStyle',
   'heroAction',
   'slideChange'
 ], [
@@ -308,6 +356,7 @@ export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spe
 
 export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumImageGallery>('spectrum-image-gallery', undefined, [
   'images',
+  'imagesJson',
   'allowUpload',
   'allowUrlInput',
   'allowDelete',
@@ -344,6 +393,9 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'items',
   'mobileBreakpoint',
   'mobileMenuTitle',
+  'directNavigation',
+  'navigationColor',
+  'mobileIconColor',
   'itemClick'
 ], [
   'itemClick'
@@ -416,6 +468,29 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
 ], [
   'searchSubmit',
   'searchInput'
+]);
+
+
+export const SpectrumSearchResults = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchResults>('spectrum-search-results', undefined, [
+  'data',
+  'resultsPerPage',
+  'showThumbnails',
+  'showMetadata',
+  'showScores',
+  'showPagination',
+  'maxPageButtons',
+  'loading',
+  'emptyMessage',
+  'resultTemplate',
+  'enableUrlSync',
+  'pageParam',
+  'sizeParam',
+  'translations',
+  'resultAction',
+  'paginationAction'
+], [
+  'resultAction',
+  'paginationAction'
 ]);
 
 
@@ -526,6 +601,8 @@ export const SpectrumToast = /*@__PURE__*/ defineContainer<JSX.SpectrumToast>('s
   'showCloseButton',
   'actionLabel',
   'actionValue',
+  'minWidth',
+  'maxWidth',
   'toastAction',
   'toastDismiss'
 ], [

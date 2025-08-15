@@ -11,6 +11,9 @@ Spectrum Hero Component
 A hero section component that supports both images and video backgrounds,
 with carousel functionality, text overlays, and call-to-action buttons.
 
+Features responsive image support through srcset and sizes attributes
+for optimal image delivery across different devices and screen sizes.
+
 ## Properties
 
 | Property             | Attribute             | Description                                                                             | Type      | Default   |
@@ -20,7 +23,10 @@ with carousel functionality, text overlays, and call-to-action buttons.
 | `debug`              | `debug`               | Debug mode                                                                              | `boolean` | `false`   |
 | `height`             | `height`              | Hero height (CSS value)                                                                 | `string`  | `'100vh'` |
 | `keyboardNavigation` | `keyboard-navigation` | Enable keyboard navigation                                                              | `boolean` | `true`    |
+| `overlayStyle`       | `overlay-style`       | Custom CSS styles for the overlay container (CSS style string)                          | `string`  | `''`      |
 | `pauseOnHover`       | `pause-on-hover`      | Pause autoplay on hover                                                                 | `boolean` | `true`    |
+| `rounded`            | `rounded`             | Enable rounded corners using Spectrum design tokens                                     | `boolean` | `false`   |
+| `shaded`             | `shaded`              | Add gradient shade overlay between media and content                                    | `boolean` | `true`    |
 | `showArrows`         | `show-arrows`         | Show navigation arrows                                                                  | `boolean` | `true`    |
 | `showDots`           | `show-dots`           | Show navigation dots                                                                    | `boolean` | `true`    |
 | `slides`             | `slides`              | Hero slides as JSON string Array of HeroSlide objects containing content for each slide | `string`  | `'[]'`    |

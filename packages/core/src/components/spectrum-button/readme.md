@@ -48,23 +48,31 @@ Supports icons, text, and various interactive states.
 ### Used by
 
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
+ - [spectrum-cookie-compliance](../spectrum-cookie-compliance)
+ - [spectrum-dialog](../spectrum-dialog)
  - [spectrum-hero](../spectrum-hero)
  - [spectrum-image-gallery](../spectrum-image-gallery)
  - [spectrum-rail](../spectrum-rail)
  - [spectrum-rail-item](../spectrum-rail-item)
  - [spectrum-search-input](../spectrum-search-input)
+ - [spectrum-search-results](../spectrum-search-results)
  - [spectrum-select](../spectrum-select)
+ - [spectrum-toast](../spectrum-toast)
 
 ### Graph
 ```mermaid
 graph TD;
   spectrum-conversation-panel --> spectrum-button
+  spectrum-cookie-compliance --> spectrum-button
+  spectrum-dialog --> spectrum-button
   spectrum-hero --> spectrum-button
   spectrum-image-gallery --> spectrum-button
   spectrum-rail --> spectrum-button
   spectrum-rail-item --> spectrum-button
   spectrum-search-input --> spectrum-button
+  spectrum-search-results --> spectrum-button
   spectrum-select --> spectrum-button
+  spectrum-toast --> spectrum-button
   style spectrum-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

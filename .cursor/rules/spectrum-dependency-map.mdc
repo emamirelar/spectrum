@@ -24,7 +24,7 @@ This map shows the relationships between Spectrum components. Keep this updated 
 
 - **spectrum-button**: Interactive button component
   - Dependencies: None (pure component)
-  - Used by: spectrum-conversation-panel, spectrum-image-gallery, spectrum-rail, spectrum-rail-item, spectrum-search-input, spectrum-select
+  - Used by: spectrum-conversation-panel, spectrum-image-gallery, spectrum-rail, spectrum-rail-item, spectrum-search-input, spectrum-select, spectrum-cookie-compliance, spectrum-dialog
   - Purpose: Primary interactive element
 
 - **spectrum-chip**: Small interactive element for tags/selections
@@ -38,13 +38,18 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Purpose: Display status, counts, notifications, and selection indicators
 
 - **spectrum-toast**: Notification component for user feedback
-  - Dependencies: None (pure component)
-  - Used by: Standalone notifications and user feedback systems
+  - Dependencies: spectrum-button
+  - Used by: spectrum-cookie-compliance, standalone notifications and user feedback systems
   - Purpose: Display temporary notifications, alerts, and user feedback messages
+
+- **spectrum-dialog**: Modal dialog component
+  - Dependencies: spectrum-button
+  - Used by: spectrum-cookie-compliance, modal applications, settings panels
+  - Purpose: Display modal dialogs with configurable content and actions
 
 - **spectrum-panel**: Versatile container component with optional frost effects
   - Dependencies: None (pure component)
-  - Used by: spectrum-conversation-panel, spectrum-image-gallery
+  - Used by: spectrum-conversation-panel, spectrum-image-gallery, spectrum-cookie-compliance
   - Purpose: Flexible content container with background effects and customizable sizing
 
 ### Utility Components
@@ -60,6 +65,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: Standalone background theming
   - Coordinates with: spectrum-theme (via events for color coordination)
   - Purpose: Dynamic background with color extraction and theme coordination
+
+- **spectrum-search-results**: Search results display component with pagination
+  - Dependencies: spectrum-button
+  - Used by: Search interfaces, result displays, and data presentation applications
+  - Purpose: Display search results with pagination, loading states, and interaction events
 
 ### Composed Components (With Internal Dependencies)
 - **spectrum-accordion**: Expandable content container
@@ -96,6 +106,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Dependencies: spectrum-button
   - Used by: Landing pages, feature highlights, and content showcase applications
   - Purpose: Hero sections with image/video backgrounds, text overlays, and call-to-action buttons
+
+- **spectrum-cookie-compliance**: GDPR-compliant cookie consent component
+  - Dependencies: spectrum-button, spectrum-toast, spectrum-dialog
+  - Used by: Privacy and compliance applications, GDPR implementations
+  - Purpose: Cookie consent management with Google Tag Manager integration, granular user preferences, and persistent status indicator
 
 ### Complex Components (Multiple Internal Dependencies)
 - **spectrum-rail**: Main navigation rail
@@ -195,8 +210,10 @@ Level 2 (Composed):
 ├── spectrum-rail-item (depends on: spectrum-button)
 ├── spectrum-collapsible-list (depends on: spectrum-context-menu)
 ├── spectrum-select (depends on: spectrum-button)
+├── spectrum-search-results (depends on: spectrum-button)
 ├── spectrum-image-gallery (depends on: spectrum-button, spectrum-badge, spectrum-panel)
-└── spectrum-hero (depends on: spectrum-button)
+├── spectrum-hero (depends on: spectrum-button)
+└── spectrum-cookie-compliance (depends on: spectrum-button, spectrum-toast, spectrum-dialog)
 
 Level 3 (Complex):
 ├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item, spectrum-context-menu)

@@ -352,7 +352,7 @@ const COMPONENT_DEPENDENCY_MAP = {
   'spectrum-search-input': ['spectrum-button'],
   'spectrum-select': ['spectrum-button'],
   'spectrum-theme': [],
-  'spectrum-toast': [],
+  'spectrum-toast': ['spectrum-button'],
   'spectrum-wallpaper': [],
   'spectrum-menu': [],
   'spectrum-accordion': ['spectrum-chip'],
@@ -363,6 +363,8 @@ const COMPONENT_DEPENDENCY_MAP = {
   'spectrum-collapsible-list': ['spectrum-context-menu'],
   'spectrum-rail-item': ['spectrum-button'],
   'spectrum-button': [],
+  'spectrum-cookie-compliance': ['spectrum-button', 'spectrum-toast', 'spectrum-dialog'],
+  'spectrum-search-results': ['spectrum-button'],
   
   // Layout Components
   'spectrum-app-layout': [],

@@ -1,0 +1,253 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/addon-docs/blocks';
+import * as SpectrumSearchResultsStories from './spectrum-search-results.stories';
+
+<Meta of={SpectrumSearchResultsStories} />
+
+# Spectrum Search Results
+
+The `spectrum-search-results` component is a comprehensive solution for displaying search results with built-in pagination support. It handles JSON data structures and provides rich interaction capabilities through events.
+
+## Features
+
+- **Flexible Data Structure**: Accepts JSON data with results and pagination info
+- **Rich Result Display**: Shows titles, descriptions, URLs, thumbnails, and metadata
+- **Pagination Support**: Built-in pagination with customizable controls
+- **Loading States**: Handles loading and empty states gracefully
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Responsive Design**: Adapts to mobile and desktop layouts
+- **Event-driven**: Emits events for result clicks and pagination actions
+
+## Basic Usage
+
+<Canvas of={SpectrumSearchResultsStories.Default} />
+
+## Variants
+
+### With Pagination and Scores
+
+Display search results with pagination controls and relevance scores.
+
+<Canvas of={SpectrumSearchResultsStories.WithPagination} />
+
+### Loading State
+
+Show a loading spinner while search results are being fetched.
+
+<Canvas of={SpectrumSearchResultsStories.LoadingState} />
+
+### Empty State
+
+Handle cases where no results are found.
+
+<Canvas of={SpectrumSearchResultsStories.EmptyState} />
+
+### Single Result
+
+Display a single search result without pagination.
+
+<Canvas of={SpectrumSearchResultsStories.SingleResult} />
+
+### Without Thumbnails
+
+Display results in a text-only format.
+
+<Canvas of={SpectrumSearchResultsStories.WithoutThumbnails} />
+
+### Minimal Display
+
+Show only essential information (title and description).
+
+<Canvas of={SpectrumSearchResultsStories.MinimalDisplay} />
+
+### Custom Pagination
+
+Customize the number of page buttons shown in pagination.
+
+<Canvas of={SpectrumSearchResultsStories.CustomPageButtons} />
+
+### URL Synchronization
+
+Enable URL synchronization to support deep linking and shareable pagination states.
+
+<Canvas of={SpectrumSearchResultsStories.WithUrlSync} />
+
+## Interactive Example
+
+<Canvas of={SpectrumSearchResultsStories.InteractiveExample} />
+
+## Data Structure
+
+The component expects a data structure that includes both results and pagination information:
+
+```typescript
+interface SearchResultsData {
+  results: SearchResult[];
+  pagination: PaginationOptions;
+  query?: string;
+  executionTime?: number;
+}
+
+interface SearchResult {
+  id: string;
+  title: string;
+  description?: string;
+  url?: string;
+  metadata?: Record<string, any>;
+  thumbnail?: string;
+  timestamp?: string;
+  score?: number;
+}
+
+interface PaginationOptions {
+  currentPage: number;
+  totalPages: number;
+  totalResults: number;
+  resultsPerPage: number;
+  showFirstLast?: boolean;
+  showPrevNext?: boolean;
+  maxPageButtons?: number;
+}
+```
+
+## Events
+
+The component emits two main events:
+
+### resultAction
+Emitted when a user interacts with a search result.
+
+```typescript
+interface SearchResultActionPayload {
+  action: 'click' | 'navigate' | 'select';
+  result: SearchResult;
+  index: number;
+}
+```
+
+### paginationAction
+Emitted when pagination controls are used.
+
+```typescript
+interface PaginationActionPayload {
+  action: 'page-change' | 'next' | 'previous' | 'first' | 'last';
+  currentPage: number;
+  targetPage: number;
+  totalPages: number;
+}
+```
+
+## Example Usage
+
+### Basic Setup
+
+```javascript
+// Listen to events
+document.querySelector('spectrum-search-results')
+  .addEventListener('resultAction', (e) => {
+    console.log('Result clicked:', e.detail.result.title);
+    // Handle result click, e.g., navigate to URL
+  });
+
+document.querySelector('spectrum-search-results')
+  .addEventListener('paginationAction', (e) => {
+    console.log('Page changed to:', e.detail.targetPage);
+    // Fetch new results for the target page
+  });
+
+// Update data
+const searchResults = {
+  results: [...], // Your search results
+  pagination: {
+    currentPage: 1,
+    totalPages: 10,
+    totalResults: 100,
+    resultsPerPage: 10
+  }
+};
+
+document.querySelector('spectrum-search-results').data = searchResults;
+```
+
+### URL Synchronization
+
+```javascript
+// Enable URL sync for deep linking
+const component = document.querySelector('spectrum-search-results');
+component.enableUrlSync = true;
+component.pageParam = 'page';     // URL will use ?page=N
+component.sizeParam = 'per_page'; // URL will use ?per_page=N
+
+// Programmatically navigate to a page
+await component.navigateToPage(3);
+
+// Get current pagination state including URL params
+const state = await component.getPaginationState();
+console.log('Current page:', state.currentPage);
+console.log('URL params:', state.urlParams);
+
+// Listen for pagination changes and update search results
+component.addEventListener('paginationAction', async (e) => {
+  const { targetPage } = e.detail;
+  
+  // Fetch new data for the target page
+  const newData = await fetchSearchResults(query, targetPage);
+  
+  // Update component data (URL is already updated automatically)
+  component.data = newData;
+});
+```
+
+### Deep Linking Support
+
+```html
+<!-- Component will automatically read page from URL on load -->
+<spectrum-search-results 
+  enable-url-sync="true"
+  page-param="page"
+  size-param="size">
+</spectrum-search-results>
+```
+
+URLs like `?page=5&size=20&other=value` will:
+- Set current page to 5
+- Set results per page to 20
+- Preserve other query parameters
+- Allow bookmarking and sharing of specific pages
+
+## Styling
+
+The component uses CSS custom properties for theming:
+
+```css
+spectrum-search-results {
+  --search-results-title-color: #1976d2;
+  --search-results-background: #ffffff;
+  --search-results-spacing: 1rem;
+  --search-results-border-radius: 0.5rem;
+}
+```
+
+## Accessibility
+
+- Full keyboard navigation support
+- ARIA labels and semantic HTML
+- Focus management for pagination
+- Screen reader announcements
+- High contrast mode support
+- Reduced motion preferences respected
+
+## Props
+
+<Controls />
+
+## Use Cases
+
+Common use cases for the search results component include:
+
+- **Search Engines**: Display web search results with URLs and descriptions
+- **Document Libraries**: Show document search results with metadata
+- **Product Catalogs**: Display product search results with images
+- **Knowledge Bases**: Show article search results with categories
+- **File Systems**: Display file search results with thumbnails
+
+<Canvas of={SpectrumSearchResultsStories.UseCases} />

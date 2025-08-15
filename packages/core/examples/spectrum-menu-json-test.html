@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spectrum Menu JSON Test</title>
+    <script type="module" src="../loader/index.esm.js"></script>
+    <link rel="stylesheet" href="../dist/cpit-spectrum/cpit-spectrum.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #0070d2;
+            padding-bottom: 10px;
+        }
+        .test-description {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #0070d2;
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spectrum Menu - JSON String Test</h1>
+
+    <div class="test-section">
+        <h2>Test 1: JSON String Items (Your Original Issue)</h2>
+        <div class="test-description">
+            This test demonstrates that the menu now correctly parses JSON strings passed as the items attribute.
+        </div>
+        
+        <h3>Code:</h3>
+        <pre>&lt;spectrum-menu 
+    orientation="horizontal"
+    items='[
+        {"label": "Home", "href": "/home", "icon": "home"},
+        {"label": "About", "href": "/about", "icon": "info"},
+        {"label": "Services", "href": "/services", "icon": "business"},
+        {"label": "Contact", "href": "/contact", "icon": "mail"}
+    ]'&gt;
+&lt;/spectrum-menu&gt;</pre>
+
+        <h3>Result:</h3>
+        <spectrum-menu 
+            orientation="horizontal"
+            items='[
+                {"label": "Home", "href": "/home", "icon": "home"},
+                {"label": "About", "href": "/about", "icon": "info"},
+                {"label": "Services", "href": "/services", "icon": "business"},
+                {"label": "Contact", "href": "/contact", "icon": "mail"}
+            ]'>
+        </spectrum-menu>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: JSON String with Nested Items</h2>
+        <div class="test-description">
+            This test shows that complex nested menu structures also work with JSON strings.
+        </div>
+        
+        <h3>Result:</h3>
+        <spectrum-menu 
+            orientation="horizontal"
+            items='[
+                {"label": "Home", "href": "/home", "icon": "home"},
+                {
+                    "label": "Products", 
+                    "icon": "inventory_2",
+                    "children": [
+                        {"label": "Software", "href": "/products/software", "icon": "computer"},
+                        {"label": "Hardware", "href": "/products/hardware", "icon": "memory"},
+                        {"label": "Services", "href": "/products/services", "icon": "handyman"}
+                    ]
+                },
+                {"label": "About", "href": "/about", "icon": "info"},
+                {"label": "Contact", "href": "/contact", "icon": "mail"}
+            ]'>
+        </spectrum-menu>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Programmatic Usage (Still Works)</h2>
+        <div class="test-description">
+            This test confirms that programmatic usage with JavaScript arrays still works as expected.
+        </div>
+        
+        <h3>Result:</h3>
+        <spectrum-menu id="programmatic-menu" orientation="horizontal"></spectrum-menu>
+    </div>
+
+    <script>
+        // Test programmatic usage
+        const programmaticMenu = document.getElementById('programmatic-menu');
+        programmaticMenu.items = [
+            { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
+            { label: "Reports", href: "/reports", icon: "analytics" },
+            { label: "Settings", href: "/settings", icon: "settings" }
+        ];
+
+        // Add event listeners to demonstrate functionality
+        document.querySelectorAll('spectrum-menu').forEach(menu => {
+            menu.addEventListener('itemClick', (event) => {
+                console.log('Menu item clicked:', event.detail);
+                alert(`Clicked: ${event.detail.label} (${event.detail.href || 'no href'})`);
+            });
+        });
+    </script>
+</body>
+</html> 

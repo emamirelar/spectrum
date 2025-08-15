@@ -21,9 +21,9 @@
   // Animation properties
   --toast-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  // Size constraints using spectrum sizing
-  --toast-min-width: 320px;
-  --toast-max-width: 480px;
+  // Size constraints using spectrum sizing (with fallbacks)
+  --toast-min-width: var(--toast-min-width-override, 320px);
+  --toast-max-width: var(--toast-max-width-override, 480px);
   --toast-min-height: 56px;
   
   // Icon properties using spectrum sizing

@@ -8,14 +8,18 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook.run": "storybook dev -p 6006",
-    "storybook": "concurrently \"(cd ../core/ && npm start)\" \"npm run storybook.run\"",
-    "build-storybook": "storybook build",
-    "build-storybook-gh": "BASE_PATH=/cpit-spectrum/ storybook build --output-dir storybook-static",
-    "build-storybook-ci": "BASE_PATH=/stencil-storybook-boilerplate/ storybook build",
+    "storybook": "npm run storybook.run",
+    "storybook.dev": "concurrently \"(cd ../core/ && npm start)\" \"npm run storybook.run\"",
+    "storybook.fast": "node .storybook/performance-mode.js enable && npm run storybook.run",
+    "storybook.restore": "node .storybook/performance-mode.js disable",
+    "build-storybook": "npm run storybook.restore && storybook build",
+    "build-storybook-gh": "npm run storybook.restore && BASE_PATH=/cpit-spectrum/ storybook build --output-dir storybook-static",
+    "build-storybook-ci": "npm run storybook.restore && BASE_PATH=/stencil-storybook-boilerplate/ storybook build",
     "preview-storybook": "npx http-server storybook-static",
     "update": "npx npm-check-updates -u",
     "test-storybook": "test-storybook",
-    "deploy-storybook": "storybook-to-ghpages"
+    "deploy-storybook": "npm run storybook.restore && storybook-to-ghpages",
+    "deploy-storybook-fast": "npm run deploy-storybook && npm run storybook.fast"
   },
   "dependencies": {
     "@unops-itg-npm/cpit-spectrum": "*",

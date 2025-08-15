@@ -1,0 +1,568 @@
+// ==============================================
+// Spectrum Cookie Compliance Component Styles
+// ==============================================
+// BEM naming convention: spectrum-cookie-compliance (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: block;
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  
+  // Core component properties
+  --cookie-compliance-background: var(--spectrum-sys-color-surface, #ffffff);
+  --cookie-compliance-color: var(--spectrum-sys-color-on-surface, #000000);
+  --cookie-compliance-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --cookie-compliance-padding: var(--spectrum-sys-spacing, 1rem);
+  --cookie-compliance-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --cookie-compliance-shadow: var(--spectrum-sys-elevation-surface-overlay, 0 8px 32px rgba(0, 0, 0, 0.15));
+  
+  // Spacing using proper Spectrum tokens
+  --cookie-compliance-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --cookie-compliance-spacing: var(--spectrum-sys-spacing, 1rem);
+  --cookie-compliance-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  --cookie-compliance-spacing-x-large: var(--spectrum-sys-spacing-x-large, 3rem);
+  
+  // Typography
+  --cookie-compliance-title-size: var(--spectrum-sys-typescale-title-medium-size, 1.25rem);
+  --cookie-compliance-body-size: var(--spectrum-sys-typescale-body-medium-size, 1rem);
+  --cookie-compliance-caption-size: var(--spectrum-sys-typescale-caption-medium-size, 0.875rem);
+  
+  // Animation and transitions
+  --cookie-compliance-transition: all 0.3s ease-in-out;
+  --cookie-compliance-backdrop-filter: blur(8px);
+  
+  // Interactive states
+  --cookie-compliance-link-color: var(--spectrum-sys-color-primary, #0066cc);
+  --cookie-compliance-link-hover-color: var(--spectrum-sys-color-primary-hover, #0052a3);
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+
+// Toast container and action styles
+.spectrum-cookie-compliance__toast-container {
+  // Ensure proper z-index and positioning
+  z-index: 9999;
+}
+
+.spectrum-cookie-compliance__actions {
+  display: flex;
+  gap: var(--spectrum-sys-spacing, 1rem);
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spectrum-sys-spacing-large, 1.5rem);
+  flex-wrap: wrap;
+  
+  spectrum-button {
+    flex-shrink: 0;
+    min-width: auto !important;
+    width: auto !important;
+    height: auto !important;
+    
+    // Ensure button content is visible
+    .spectrum-button {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    
+    // Ensure text content is visible
+    .spectrum-button__text {
+      opacity: 1 !important;
+      visibility: visible !important;
+      color: inherit !important;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--cookie-compliance-spacing-small);
+    align-items: stretch;
+    
+    spectrum-button {
+      width: 100%;
+    }
+  }
+}
+
+.spectrum-cookie-compliance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 90vw;
+  pointer-events: auto;
+  animation: slideIn 0.3s ease-out;
+  
+  // Position modifiers
+  &--top {
+    top: var(--cookie-compliance-spacing);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  &--bottom {
+    bottom: var(--cookie-compliance-spacing);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  &--center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: var(--cookie-compliance-backdrop-filter);
+      z-index: -1;
+    }
+  }
+  
+  // ==============================================
+  // Content Styles
+  // ==============================================
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cookie-compliance-spacing);
+    max-width: 600px;
+    
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  
+  &__message {
+    flex: 1;
+    
+    p {
+      margin: 0;
+      font-size: var(--cookie-compliance-body-size);
+      line-height: 1.5;
+      color: var(--cookie-compliance-color);
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cookie-compliance-spacing-small);
+    
+    @media (min-width: 480px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+  
+  &__links {
+    display: flex;
+    gap: var(--cookie-compliance-spacing);
+    margin-top: var(--cookie-compliance-spacing-small);
+    
+    a {
+      color: var(--cookie-compliance-link-color);
+      text-decoration: none;
+      font-size: var(--cookie-compliance-caption-size);
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: var(--cookie-compliance-link-hover-color);
+        text-decoration: underline;
+      }
+      
+      &:focus-visible {
+        outline: 2px solid var(--spectrum-sys-color-primary);
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+    }
+  }
+  
+  // ==============================================
+  // Detailed Options Styles
+  // ==============================================
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cookie-compliance-spacing);
+    min-width: 400px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    
+    @media (max-width: 480px) {
+      min-width: auto;
+      max-width: 90vw;
+    }
+  }
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--cookie-compliance-spacing-small);
+    border-bottom: 1px solid var(--spectrum-sys-color-outline, #e0e0e0);
+    
+    h3 {
+      margin: 0;
+      font-size: var(--cookie-compliance-title-size);
+      font-weight: 600;
+      color: var(--cookie-compliance-color);
+    }
+  }
+  
+  &__option {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cookie-compliance-spacing-small);
+    padding: var(--cookie-compliance-spacing);
+    border: 1px solid var(--spectrum-sys-color-outline, #e0e0e0);
+    border-radius: var(--spectrum-sys-shape-corner-small, 0.25rem);
+    background-color: var(--spectrum-sys-color-surface-variant, #f5f5f5);
+    
+    &:hover {
+      background-color: var(--spectrum-sys-color-surface-variant-hover, #eeeeee);
+    }
+  }
+  
+  &__option-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    h4 {
+      margin: 0;
+      font-size: var(--cookie-compliance-body-size);
+      font-weight: 500;
+      color: var(--cookie-compliance-color);
+    }
+    
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--spectrum-sys-color-primary, #0066cc);
+      
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      
+      &:focus-visible {
+        outline: 2px solid var(--spectrum-sys-color-primary);
+        outline-offset: 2px;
+      }
+    }
+  }
+  
+  &__option p {
+    margin: 0;
+    font-size: var(--cookie-compliance-caption-size);
+    line-height: 1.4;
+    color: var(--spectrum-sys-color-on-surface-variant, #666666);
+  }
+  
+  &__detailed-actions {
+    display: flex;
+    gap: var(--cookie-compliance-spacing-small);
+    justify-content: flex-end;
+    padding-top: var(--cookie-compliance-spacing);
+    border-top: 1px solid var(--spectrum-sys-color-outline, #e0e0e0);
+    
+    @media (max-width: 480px) {
+      flex-direction: column;
+    }
+  }
+}
+
+// ==============================================
+// Animation Keyframes
+// ==============================================
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.spectrum-cookie-compliance--top {
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}
+
+.spectrum-cookie-compliance--center {
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (max-width: 768px) {
+  .spectrum-cookie-compliance {
+    max-width: 95vw;
+    
+    &__content {
+      padding: var(--cookie-compliance-spacing-small);
+    }
+    
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    &__links {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .spectrum-cookie-compliance {
+    &--bottom,
+    &--top {
+      left: var(--cookie-compliance-spacing-small);
+      right: var(--cookie-compliance-spacing-small);
+      transform: none;
+      max-width: none;
+    }
+    
+    &__message p {
+      font-size: var(--cookie-compliance-caption-size);
+    }
+  }
+}
+
+// ==============================================
+// High Contrast Mode Support
+// ==============================================
+@media (prefers-contrast: high) {
+  .spectrum-cookie-compliance {
+    &__option {
+      border-width: 2px;
+    }
+    
+    &__links a {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ==============================================
+// Reduced Motion Support
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-cookie-compliance {
+    animation: none;
+    
+    &__option {
+      transition: none;
+    }
+    
+    &__links a {
+      transition: none;
+    }
+  }
+}
+
+// ==============================================
+// Dialog Content Fixes
+// ==============================================
+
+// Ensure dialog content is interactive and properly sized
+spectrum-dialog {
+  pointer-events: auto !important;
+  
+  // Fix dialog content interactivity
+  div[slot="content"] {
+    pointer-events: auto !important;
+    user-select: auto !important;
+    
+    // Ensure form elements are interactive
+    input, label, strong, p {
+      pointer-events: auto !important;
+      user-select: auto !important;
+    }
+    
+    // Checkbox styling
+    input[type="checkbox"] {
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      margin: 0;
+      
+      &:disabled {
+        cursor: not-allowed !important;
+      }
+    }
+    
+    // Form layout improvements
+    form {
+      pointer-events: auto !important;
+      
+      > div {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: var(--cookie-compliance-spacing) !important;
+        
+        > div {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          margin-bottom: var(--cookie-compliance-spacing-small) !important;
+        }
+      }
+    }
+  }
+
+  // ==============================================
+  // Policy Links Section
+  // ==============================================
+  
+  // Policy links styling within dialog content
+  a {
+    color: var(--spectrum-sys-color-primary, #0066cc) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease-in-out !important;
+    
+    // Ensure Material icons are properly styled
+    .material-symbols-outlined {
+      color: inherit !important;
+      vertical-align: middle !important;
+      line-height: 1 !important;
+    }
+    
+    &:hover {
+      text-decoration: underline !important;
+      color: var(--spectrum-sys-color-primary-hover, #0052a3) !important;
+      
+      // Icons follow the link color on hover
+      .material-symbols-outlined {
+        color: inherit !important;
+      }
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--spectrum-sys-color-primary, #0066cc) !important;
+      outline-offset: 2px !important;
+      border-radius: 4px !important;
+    }
+    
+    &:active {
+      color: var(--spectrum-sys-color-primary-active, #004080) !important;
+      
+      // Icons follow the link color on active
+      .material-symbols-outlined {
+        color: inherit !important;
+      }
+    }
+  }
+}
+
+// ==============================================
+// Cookie Status Indicator (Sticky Icon)
+// ==============================================
+
+.spectrum-cookie-compliance__status-indicator {
+  position: fixed !important;
+  bottom: 1rem !important; // Standard Spectrum spacing (16px)
+  right: 1rem !important; // Standard Spectrum spacing (16px)
+  z-index: 9998 !important; // Slightly lower than modal content
+  pointer-events: auto !important;
+  
+  // Ensure the button is properly styled and visible
+  spectrum-button {
+    background-color: var(--spectrum-sys-color-surface-variant, #ffffff) !important;
+    border: 1px solid var(--spectrum-sys-color-outline, #e0e0e0) !important;
+    border-radius: 50% !important;
+    box-shadow: var(--spectrum-sys-elevation-surface-overlay, 0 4px 12px rgba(0, 0, 0, 0.15)) !important;
+    width: 48px !important;
+    height: 48px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease-in-out !important;
+    
+    // Ensure icon is visible and properly colored
+    .spectrum-button__icon {
+      color: var(--spectrum-sys-color-on-surface, #333333) !important;
+      font-size: 20px !important;
+    }
+    
+    // Hover state
+    &:hover {
+      background-color: var(--spectrum-sys-color-surface-hover, #f5f5f5) !important;
+      transform: scale(1.05) !important;
+      box-shadow: var(--spectrum-sys-elevation-surface-overlay, 0 6px 16px rgba(0, 0, 0, 0.2)) !important;
+    }
+    
+    // Active state
+    &:active {
+      transform: scale(0.98) !important;
+    }
+    
+    // Focus state for accessibility
+    &:focus-visible {
+      outline: 2px solid var(--spectrum-sys-color-primary, #0066cc) !important;
+      outline-offset: 2px !important;
+    }
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    bottom: var(--cookie-compliance-spacing);
+    right: var(--cookie-compliance-spacing);
+    
+    spectrum-button {
+      width: 44px !important;
+      height: 44px !important;
+      
+      .spectrum-button__icon {
+        font-size: 18px !important;
+      }
+    }
+  }
+}
+
+// ==============================================
+// Modal Content Container
+// ==============================================
+
+.spectrum-cookie-compliance__modal-content {
+  pointer-events: auto;
+}

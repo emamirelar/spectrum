@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State, Watch } from '@stencil/core';
 
 @Component({
   tag: 'spectrum-menu',
@@ -20,10 +20,11 @@ export class SpectrumMenu {
 
   /**
    * The menu items configuration
+   * Can be provided as a JSON string or array of objects
    * icon: Material icon name (e.g. 'home', 'info', 'shopping_cart')
    * For megamenu variant, children can have additional properties like description and columns
    */
-  @Prop() items: Array<{
+  @Prop() items: string | Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
@@ -56,6 +57,25 @@ export class SpectrumMenu {
   @Prop() mobileMenuTitle: string = 'Menu';
 
   /**
+   * Whether to enable direct browser navigation when menu items are clicked
+   * When true, clicking a menu item will navigate to its href in the current tab
+   * When false, only the itemClick event will be emitted
+   */
+  @Prop() directNavigation: boolean = false;
+
+  /**
+   * Navigation color for the menu text
+   * When provided, this will override the default theme color
+   */
+  @Prop() navigationColor: string;
+
+  /**
+   * Color for mobile menu icons (hamburger, close, and menu item icons)
+   * When provided, this will override the default icon color
+   */
+  @Prop() mobileIconColor: string = '#000000';
+
+  /**
    * Whether the menu is currently in mobile view
    */
   @State() isMobile: boolean = false;
@@ -71,12 +91,42 @@ export class SpectrumMenu {
   @State() activeItem: string | null = null;
 
   /**
+   * Parsed menu items (internal state)
+   */
+  @State() parsedItems: Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
    * Event emitted when a menu item is clicked
    */
   @Event() itemClick: EventEmitter<{
     label: string;
     href?: string;
   }>;
+
+  @Watch('items')
+  itemsChanged(newValue: string | Array<any>) {
+    this.parseItems(newValue);
+  }
 
   @Listen('resize', { target: 'window' })
   handleResize() {
@@ -90,8 +140,85 @@ export class SpectrumMenu {
     }
   }
 
+  @Listen('keydown')
+  handleKeyDown(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    
+    // Only handle keyboard navigation for menuitem elements
+    if (!target.getAttribute('role')?.includes('menuitem')) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'Escape':
+        // Close mobile menu or submenu
+        if (this.isMobileMenuOpen) {
+          this.isMobileMenuOpen = false;
+          // Focus the mobile toggle button
+          const toggleButton = this.el.shadowRoot?.querySelector('.spectrum-menu__mobile-toggle') as HTMLButtonElement;
+          toggleButton?.focus();
+        }
+        break;
+      
+      case 'Enter':
+      case ' ':
+        // Activate the current menu item
+        event.preventDefault();
+        target.click();
+        break;
+      
+      case 'ArrowDown':
+      case 'ArrowUp':
+        // Navigate within menu
+        this.navigateMenu(event, target);
+        break;
+      
+      case 'ArrowRight':
+        // Open submenu if available
+        if (target.getAttribute('aria-haspopup') === 'true') {
+          // Trigger mouse enter to show submenu
+          target.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+        }
+        break;
+      
+      case 'ArrowLeft':
+        // Close submenu and return to parent
+        if (target.closest('.spectrum-menu__submenu')) {
+          const parentItem = target.closest('.spectrum-menu__item')?.parentElement?.closest('.spectrum-menu__item');
+          if (parentItem) {
+            (parentItem as HTMLElement).focus();
+          }
+        }
+        break;
+    }
+  }
+
+  private navigateMenu(event: KeyboardEvent, currentElement: HTMLElement) {
+    event.preventDefault();
+    
+    // Find all menuitem elements in the current menu level
+    const menuContainer = currentElement.closest('[role="menu"], [role="menubar"]');
+    if (!menuContainer) return;
+    
+    const menuItems = Array.from(menuContainer.children).filter(
+      child => child.getAttribute('role') === 'menuitem' && !child.hasAttribute('aria-disabled')
+    ) as HTMLElement[];
+    
+    const currentIndex = menuItems.indexOf(currentElement);
+    let nextIndex: number;
+    
+    if (event.key === 'ArrowDown') {
+      nextIndex = currentIndex + 1 >= menuItems.length ? 0 : currentIndex + 1;
+    } else {
+      nextIndex = currentIndex - 1 < 0 ? menuItems.length - 1 : currentIndex - 1;
+    }
+    
+    menuItems[nextIndex]?.focus();
+  }
+
   componentWillLoad() {
     this.checkMobileView();
+    this.parseItems(this.items);
   }
 
   componentDidLoad() {
@@ -104,8 +231,16 @@ export class SpectrumMenu {
 
   private handleItemClick(item: { label: string; href?: string }) {
     if (item.href) {
+      // Emit the event for custom handling
       this.itemClick.emit(item);
+      
+      // Navigate directly if directNavigation is enabled
+      if (this.directNavigation) {
+        window.location.href = item.href;
+        return; // Return early since we're navigating away
+      }
     }
+    
     this.activeItem = item.label;
     if (this.isMobile) {
       this.isMobileMenuOpen = false;
@@ -119,6 +254,19 @@ export class SpectrumMenu {
   @Method()
   async close() {
     this.isMobileMenuOpen = false;
+  }
+
+  private parseItems(items: string | Array<any>) {
+    if (typeof items === 'string') {
+      try {
+        this.parsedItems = JSON.parse(items);
+      } catch (e) {
+        console.error('Failed to parse items JSON:', e);
+        this.parsedItems = [];
+      }
+    } else {
+      this.parsedItems = items;
+    }
   }
 
   renderIcon(icon?: string) {
@@ -141,57 +289,79 @@ export class SpectrumMenu {
           <div class="spectrum-menu__megamenu-column">
             {column.map((item) => (
               <div class="spectrum-menu__megamenu-section">
-                <a
+                <div
                   class={{
                     'spectrum-menu__megamenu-item': true,
                     'spectrum-menu__megamenu-item--disabled': item.disabled,
                   }}
-                  href={item.href || '#'}
+                  role="menuitem"
+                  tabindex={item.disabled ? -1 : 0}
+                  aria-disabled={item.disabled ? 'true' : 'false'}
                   onClick={(e) => {
                     e.preventDefault();
                     if (!item.disabled) {
                       this.handleItemClick(item);
                     }
                   }}
-                  role="menuitem"
-                  tabindex={item.disabled ? -1 : 0}
-                  aria-disabled={item.disabled ? 'true' : 'false'}
                 >
-                  <div class="spectrum-menu__megamenu-item-header">
-                    {this.renderIcon(item.icon)}
-                    <span class="spectrum-menu__megamenu-item-label">{item.label}</span>
-                  </div>
-                  {item.description && (
-                    <p class="spectrum-menu__megamenu-item-description">{item.description}</p>
-                  )}
-                </a>
+                  <a
+                    class="spectrum-menu__megamenu-item-link"
+                    href={item.href || '#'}
+                    tabindex={-1} // Remove from tab order since parent div handles focus
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (!item.disabled) {
+                        this.handleItemClick(item);
+                      }
+                    }}
+                  >
+                    <div class="spectrum-menu__megamenu-item-header">
+                      {this.renderIcon(item.icon)}
+                      <span class="spectrum-menu__megamenu-item-label">{item.label}</span>
+                    </div>
+                    {item.description && (
+                      <p class="spectrum-menu__megamenu-item-description">{item.description}</p>
+                    )}
+                  </a>
+                </div>
                 {item.children && item.children.length > 0 && (
-                  <div class="spectrum-menu__megamenu-subitems">
+                  <div class="spectrum-menu__megamenu-subitems" role="group" aria-label={`${item.label} subitems`}>
                     {item.children.map((subitem) => (
-                      <a
+                      <div
                         class={{
                           'spectrum-menu__megamenu-subitem': true,
                           'spectrum-menu__megamenu-subitem--disabled': subitem.disabled,
                         }}
-                        href={subitem.href || '#'}
+                        role="menuitem"
+                        tabindex={subitem.disabled ? -1 : 0}
+                        aria-disabled={subitem.disabled ? 'true' : 'false'}
                         onClick={(e) => {
                           e.preventDefault();
                           if (!subitem.disabled) {
                             this.handleItemClick(subitem);
                           }
                         }}
-                        role="menuitem"
-                        tabindex={subitem.disabled ? -1 : 0}
-                        aria-disabled={subitem.disabled ? 'true' : 'false'}
                       >
-                        {this.renderIcon(subitem.icon)}
-                        <div class="spectrum-menu__megamenu-subitem-content">
-                          <span class="spectrum-menu__megamenu-subitem-label">{subitem.label}</span>
-                          {subitem.description && (
-                            <span class="spectrum-menu__megamenu-subitem-description">{subitem.description}</span>
-                          )}
-                        </div>
-                      </a>
+                        <a
+                          class="spectrum-menu__megamenu-subitem-link"
+                          href={subitem.href || '#'}
+                          tabindex={-1} // Remove from tab order since parent div handles focus
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (!subitem.disabled) {
+                              this.handleItemClick(subitem);
+                            }
+                          }}
+                        >
+                          {this.renderIcon(subitem.icon)}
+                          <div class="spectrum-menu__megamenu-subitem-content">
+                            <span class="spectrum-menu__megamenu-subitem-label">{subitem.label}</span>
+                            {subitem.description && (
+                              <span class="spectrum-menu__megamenu-subitem-description">{subitem.description}</span>
+                            )}
+                          </div>
+                        </a>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -205,16 +375,30 @@ export class SpectrumMenu {
 
   renderMenuItem(item: any, isSubmenu = false) {
     const itemClass = isSubmenu ? 'spectrum-menu__submenu-item' : 'spectrum-menu__item';
-    const linkClass = `${itemClass}-link`;
     
     return (
-      <li class={itemClass}>
+      <div
+        class={{
+          [itemClass]: true,
+          [`${itemClass}--active`]: this.activeItem === item.label,
+          [`${itemClass}--disabled`]: item.disabled,
+        }}
+        role="menuitem"
+        tabindex={item.disabled ? -1 : 0}
+        aria-disabled={item.disabled ? 'true' : 'false'}
+        onClick={(e) => {
+          e.preventDefault();
+          if (!item.disabled) {
+            this.handleItemClick(item);
+          }
+        }}
+        onMouseEnter={(e) => this.handleItemMouseEnter(e, item)}
+        onMouseLeave={(e) => this.handleItemMouseLeave(e)}
+        aria-haspopup={item.children && item.children.length > 0 ? 'true' : 'false'}
+        aria-expanded={item.children && item.children.length > 0 ? 'false' : undefined}
+      >
         <a
-          class={{
-            [linkClass]: true,
-            [`${linkClass}--active`]: this.activeItem === item.label,
-            [`${linkClass}--disabled`]: item.disabled,
-          }}
+          class="spectrum-menu__item-link"
           href={item.href || '#'}
           onClick={(e) => {
             e.preventDefault();
@@ -222,29 +406,25 @@ export class SpectrumMenu {
               this.handleItemClick(item);
             }
           }}
-          onMouseEnter={(e) => this.handleItemMouseEnter(e, item)}
-          onMouseLeave={(e) => this.handleItemMouseLeave(e)}
-          role="menuitem"
-          tabindex={item.disabled ? -1 : 0}
-          aria-disabled={item.disabled ? 'true' : 'false'}
+          tabindex={-1} // Remove from tab order since parent div handles focus
         >
           {this.renderIcon(item.icon)}
           <span class="spectrum-menu__label">{item.label}</span>
         </a>
         {!isSubmenu && item.children && item.children.length > 0 && (
           this.variant === 'megamenu' ? (
-            <div class="spectrum-menu__megamenu" role="menu">
+            <div class="spectrum-menu__megamenu" role="menu" aria-label={`${item.label} submenu`}>
               <div class="spectrum-menu__megamenu-content">
                 {this.renderMegamenuContent(item.children)}
               </div>
             </div>
           ) : (
-            <ul class="spectrum-menu__submenu" role="menu">
+            <div class="spectrum-menu__submenu" role="menu" aria-label={`${item.label} submenu`}>
               {item.children.map((child) => this.renderMenuItem(child, true))}
-            </ul>
+            </div>
           )
         )}
-      </li>
+      </div>
     );
   }
 
@@ -256,6 +436,8 @@ export class SpectrumMenu {
       if (submenu) {
         const rect = linkElement.getBoundingClientRect();
         const spacing = 8; // 8px gap between menu item and submenu
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
         
         if (this.variant === 'megamenu') {
           // Megamenu positioning - full width below the menu bar
@@ -263,38 +445,101 @@ export class SpectrumMenu {
           submenu.style.left = '0px';
           submenu.style.width = '100vw';
         } else if (this.orientation === 'vertical') {
-          // Position submenu to the right of the menu item
-          submenu.style.top = `${rect.top}px`;
+          // Reset positioning to get accurate measurements
+          submenu.style.position = 'fixed';
+          submenu.style.visibility = 'hidden';
+          submenu.style.opacity = '1';
           submenu.style.left = `${rect.right + spacing}px`;
+          submenu.style.top = `${rect.top}px`;
           
-          // Ensure submenu doesn't go off-screen on the right
+          // Force a reflow to get accurate dimensions
+          submenu.offsetHeight;
           const submenuRect = submenu.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
           
-          if (rect.right + spacing + submenuRect.width > viewportWidth) {
-            // Position to the left of the menu item if it would overflow
-            submenu.style.left = `${rect.left - submenuRect.width - spacing}px`;
+          // Calculate optimal horizontal position
+          let left = rect.right + spacing;
+          
+          // Check if submenu would overflow on the right
+          if (left + submenuRect.width > viewportWidth - spacing) {
+            // Try positioning to the left of the menu item
+            const leftPosition = rect.left - submenuRect.width - spacing;
+            if (leftPosition >= spacing) {
+              left = leftPosition;
+            } else {
+              // If both sides don't fit, position as far right as possible with some margin
+              left = Math.max(spacing, viewportWidth - submenuRect.width - spacing);
+            }
           }
+          
+          // Calculate optimal vertical position
+          let top = rect.top;
+          
+          // Check if submenu would overflow on the bottom
+          if (top + submenuRect.height > viewportHeight - spacing) {
+            // Try aligning bottom of submenu with bottom of viewport
+            const topPosition = viewportHeight - submenuRect.height - spacing;
+            if (topPosition >= spacing) {
+              top = topPosition;
+            } else {
+              // If submenu is taller than viewport, align to top with some margin
+              top = spacing;
+            }
+          }
+          
+          // Apply final positioning
+          submenu.style.left = `${left}px`;
+          submenu.style.top = `${top}px`;
+          submenu.style.visibility = 'visible';
+          submenu.style.opacity = '0'; // Will be shown by CSS hover
+          
         } else {
           // Horizontal menu - position submenu below the menu item
-          submenu.style.top = `${rect.bottom + spacing}px`;
+          // Reset positioning to get accurate measurements
+          submenu.style.position = 'fixed';
+          submenu.style.visibility = 'hidden';
+          submenu.style.opacity = '1';
           submenu.style.left = `${rect.left}px`;
+          submenu.style.top = `${rect.bottom + spacing}px`;
           
-          // Ensure submenu doesn't go off-screen on the right
+          // Force a reflow to get accurate dimensions
+          submenu.offsetHeight;
           const submenuRect = submenu.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
           
-          if (rect.left + submenuRect.width > viewportWidth) {
-            // Align to the right edge if it would overflow
-            submenu.style.left = `${viewportWidth - submenuRect.width - spacing}px`;
+          // Calculate optimal horizontal position
+          let left = rect.left;
+          
+          // Check if submenu would overflow on the right
+          if (left + submenuRect.width > viewportWidth - spacing) {
+            // Try aligning right edge of submenu with right edge of menu item
+            const rightAlignedLeft = rect.right - submenuRect.width;
+            if (rightAlignedLeft >= spacing) {
+              left = rightAlignedLeft;
+            } else {
+              // If submenu is wider than available space, position as far right as possible
+              left = Math.max(spacing, viewportWidth - submenuRect.width - spacing);
+            }
           }
           
-          // Ensure submenu doesn't go off-screen on the bottom
-          const viewportHeight = window.innerHeight;
-          if (rect.bottom + spacing + submenuRect.height > viewportHeight) {
-            // Position above the menu item if it would overflow
-            submenu.style.top = `${rect.top - submenuRect.height - spacing}px`;
+          // Calculate optimal vertical position
+          let top = rect.bottom + spacing;
+          
+          // Check if submenu would overflow on the bottom
+          if (top + submenuRect.height > viewportHeight - spacing) {
+            // Try positioning above the menu item
+            const topPosition = rect.top - submenuRect.height - spacing;
+            if (topPosition >= spacing) {
+              top = topPosition;
+            } else {
+              // If submenu doesn't fit above or below, position as high as possible
+              top = Math.max(spacing, viewportHeight - submenuRect.height - spacing);
+            }
           }
+          
+          // Apply final positioning
+          submenu.style.left = `${left}px`;
+          submenu.style.top = `${top}px`;
+          submenu.style.visibility = 'visible';
+          submenu.style.opacity = '0'; // Will be shown by CSS hover
         }
       }
     }
@@ -305,6 +550,11 @@ export class SpectrumMenu {
   }
 
   render() {
+    const hostStyle = {
+      ...(this.navigationColor && { '--menu-color': this.navigationColor }),
+      ...(this.mobileIconColor && { '--mobile-icon-color': this.mobileIconColor })
+    };
+
     return (
       <Host
         class={{
@@ -314,6 +564,7 @@ export class SpectrumMenu {
           'spectrum-menu--vertical': this.orientation === 'vertical' && !this.isMobile,
           'spectrum-menu--megamenu': this.variant === 'megamenu',
         }}
+        style={hostStyle}
       >
         {this.isMobile ? (
           <div class="spectrum-menu__mobile">
@@ -343,19 +594,19 @@ export class SpectrumMenu {
                     <span class="material-symbols-outlined">close</span>
                   </button>
                 </div>
-                <nav class="spectrum-menu__mobile-nav" role="navigation">
-                  <ul class="spectrum-menu__mobile-list" role="menu">
-                    {this.items.map((item) => this.renderMenuItem(item))}
-                  </ul>
+                <nav class="spectrum-menu__mobile-nav" role="navigation" aria-label={this.mobileMenuTitle}>
+                  <div class="spectrum-menu__mobile-list" role="menu" aria-label={this.mobileMenuTitle}>
+                    {this.parsedItems.map((item) => this.renderMenuItem(item))}
+                  </div>
                 </nav>
               </div>
             )}
           </div>
         ) : (
-          <nav class="spectrum-menu__nav" role="navigation">
-            <ul class="spectrum-menu__list" role="menubar">
-              {this.items.map((item) => this.renderMenuItem(item))}
-            </ul>
+          <nav class="spectrum-menu__nav" role="navigation" aria-label="Main navigation">
+            <div class="spectrum-menu__list" role="menubar" aria-label="Main navigation">
+              {this.parsedItems.map((item) => this.renderMenuItem(item))}
+            </div>
           </nav>
         )}
       </Host>

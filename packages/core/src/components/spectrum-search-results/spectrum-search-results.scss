@@ -1,0 +1,428 @@
+// ==============================================
+// Spectrum Search Results Component Styles
+// ==============================================
+// BEM naming convention: spectrum-search-results (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: block;
+  
+  // ==============================================
+  // Root Variables and Custom Properties
+  // ==============================================
+  
+  // Core component properties
+  --search-results-background: var(--spectrum-sys-color-surface, #ffffff);
+  --search-results-color: var(--spectrum-sys-color-on-surface, #000000);
+  --search-results-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --search-results-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  
+  // Spacing using proper Spectrum tokens
+  --search-results-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --search-results-spacing: var(--spectrum-sys-spacing, 1rem);
+  --search-results-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  --search-results-spacing-x-large: var(--spectrum-sys-spacing-x-large, 3rem);
+  
+  // Item styling
+  --search-results-item-background: var(--spectrum-sys-color-surface, #ffffff);
+  --search-results-item-border: 1px solid var(--spectrum-sys-color-outline, #e0e0e0);
+  --search-results-item-hover-background: var(--spectrum-sys-color-surface-hover, #f5f5f5);
+  --search-results-item-active-background: var(--spectrum-sys-color-surface-active, #e8e8e8);
+  --search-results-item-padding: var(--search-results-spacing);
+  --search-results-item-gap: var(--search-results-spacing);
+  
+  // Typography
+  --search-results-title-size: var(--spectrum-sys-typescale-headline-small-size, 1.25rem);
+  --search-results-title-weight: var(--spectrum-sys-typescale-headline-small-weight, 600);
+  --search-results-title-color: var(--spectrum-sys-color-primary, #1976d2);
+  --search-results-description-size: var(--spectrum-sys-typescale-body-medium-size, 1rem);
+  --search-results-description-color: var(--spectrum-sys-color-on-surface-variant, #666666);
+  --search-results-url-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);
+  --search-results-url-color: var(--spectrum-sys-color-tertiary, #689f38);
+  --search-results-meta-size: var(--spectrum-sys-typescale-label-small-size, 0.75rem);
+  --search-results-meta-color: var(--spectrum-sys-color-outline, #999999);
+  
+  // Thumbnail
+  --search-results-thumbnail-size: 80px;
+  --search-results-thumbnail-radius: var(--spectrum-sys-shape-corner-small, 0.25rem);
+  
+  // Pagination
+  // Button styles now handled by spectrum-button component
+  
+  // Loading and states
+  --search-results-loading-spinner-size: 2rem;
+  --search-results-loading-spinner-color: var(--spectrum-sys-color-primary, #1976d2);
+  --search-results-empty-color: var(--spectrum-sys-color-on-surface-variant, #666666);
+  
+  // Animation and transitions
+  --search-results-transition: all 0.2s ease-in-out;
+  --search-results-transition-duration: 0.2s;
+  --search-results-transition-timing: ease-in-out;
+  
+  // Shadow
+  --search-results-item-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --search-results-item-hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+
+.spectrum-search-results {
+  font-family: var(--search-results-font-family);
+  color: var(--search-results-color);
+  background-color: var(--search-results-background);
+  
+  // ==============================================
+  // Summary Section
+  // ==============================================
+  
+  &__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--search-results-spacing-small);
+    margin-bottom: var(--search-results-spacing);
+    padding-bottom: var(--search-results-spacing-small);
+    border-bottom: 1px solid var(--spectrum-sys-color-outline);
+    font-size: var(--search-results-meta-size);
+    color: var(--search-results-meta-color);
+  }
+  
+  &__count {
+    font-weight: 600;
+    color: var(--search-results-color);
+  }
+  
+  &__query {
+    font-style: italic;
+  }
+  
+  &__timing {
+    opacity: 0.8;
+  }
+  
+  // ==============================================
+  // Results List
+  // ==============================================
+  
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--search-results-spacing);
+  }
+  
+  &__item {
+    background-color: var(--search-results-item-background);
+    border: var(--search-results-item-border);
+    border-radius: var(--search-results-border-radius);
+    box-shadow: var(--search-results-item-shadow);
+    transition: var(--search-results-transition);
+    overflow: hidden;
+    
+    &:hover {
+      background-color: var(--search-results-item-hover-background);
+      box-shadow: var(--search-results-item-hover-shadow);
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      background-color: var(--search-results-item-active-background);
+      transform: translateY(0);
+    }
+  }
+  
+  &__item-content {
+    display: flex;
+    padding: var(--search-results-item-padding);
+    gap: var(--search-results-item-gap);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    
+    // Focus styles for accessibility
+    &:focus-visible {
+      outline: 2px solid var(--spectrum-sys-color-primary);
+      outline-offset: 2px;
+    }
+  }
+  
+  // ==============================================
+  // Thumbnail
+  // ==============================================
+  
+  &__thumbnail {
+    flex-shrink: 0;
+    width: var(--search-results-thumbnail-size);
+    height: var(--search-results-thumbnail-size);
+    border-radius: var(--search-results-thumbnail-radius);
+    overflow: hidden;
+    background-color: var(--spectrum-sys-color-surface-variant);
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+  
+  // ==============================================
+  // Result Details
+  // ==============================================
+  
+  &__details {
+    flex: 1;
+    min-width: 0; // Prevent flex item from growing beyond container
+    display: flex;
+    flex-direction: column;
+    gap: var(--search-results-spacing-small);
+  }
+  
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--search-results-spacing-small);
+  }
+  
+  &__title {
+    margin: 0;
+    font-size: var(--search-results-title-size);
+    font-weight: var(--search-results-title-weight);
+    color: var(--search-results-title-color);
+    line-height: 1.3;
+    
+    // Ensure long titles wrap properly
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  &__score {
+    flex-shrink: 0;
+    font-size: var(--search-results-meta-size);
+    color: var(--search-results-meta-color);
+    padding: 0.25rem 0.5rem;
+    background-color: var(--spectrum-sys-color-surface-variant);
+    border-radius: var(--spectrum-sys-shape-corner-small);
+  }
+  
+  &__description {
+    margin: 0;
+    font-size: var(--search-results-description-size);
+    color: var(--search-results-description-color);
+    line-height: 1.5;
+    
+    // Multi-line text overflow handling
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  &__url {
+    font-size: var(--search-results-url-size);
+    color: var(--search-results-url-color);
+    text-decoration: none;
+    word-break: break-all;
+  }
+  
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--search-results-spacing);
+    font-size: var(--search-results-meta-size);
+    color: var(--search-results-meta-color);
+  }
+  
+  &__timestamp {
+    opacity: 0.8;
+  }
+  
+  &__metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--search-results-spacing-small);
+  }
+  
+  &__metadata-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    
+    strong {
+      font-weight: 600;
+    }
+  }
+  
+  // ==============================================
+  // Pagination Styles
+  // ==============================================
+  
+  &__pagination {
+    display: flex;
+    flex-direction: column;
+    gap: var(--search-results-spacing);
+    margin-top: var(--search-results-spacing-large);
+    padding-top: var(--search-results-spacing);
+    border-top: 1px solid var(--spectrum-sys-color-outline);
+    
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  
+  &__pagination-info {
+    font-size: var(--search-results-meta-size);
+    color: var(--search-results-meta-color);
+    
+    @media (min-width: 768px) {
+      order: 1;
+    }
+  }
+  
+  &__pagination-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--search-results-spacing-small);
+    justify-content: center;
+    
+    @media (min-width: 768px) {
+      order: 2;
+      justify-content: flex-end;
+    }
+  }
+  
+  // Pagination button styles removed - now using spectrum-button component
+  
+  // ==============================================
+  // Loading State Styles
+  // ==============================================
+  
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--search-results-spacing-x-large);
+    text-align: center;
+    color: var(--search-results-meta-color);
+    
+    p {
+      margin: var(--search-results-spacing) 0 0 0;
+      font-size: var(--search-results-description-size);
+    }
+  }
+  
+  &__loading-spinner {
+    width: var(--search-results-loading-spinner-size);
+    height: var(--search-results-loading-spinner-size);
+    border: 2px solid var(--spectrum-sys-color-surface-variant);
+    border-top-color: var(--search-results-loading-spinner-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  // ==============================================
+  // Empty State Styles
+  // ==============================================
+  
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--search-results-spacing-x-large);
+    text-align: center;
+    color: var(--search-results-empty-color);
+    
+    p {
+      margin: 0;
+      font-size: var(--search-results-description-size);
+    }
+  }
+}
+
+// ==============================================
+// Animations
+// ==============================================
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
+@media (max-width: 767px) {
+  .spectrum-search-results {
+    &__item-content {
+      flex-direction: column;
+      gap: var(--search-results-spacing-small);
+    }
+    
+    &__thumbnail {
+      align-self: center;
+    }
+    
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    &__pagination-controls {
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .spectrum-search-results {
+    &__item {
+      margin: 0 calc(-1 * var(--search-results-spacing-small));
+      border-left: none;
+      border-right: none;
+      border-radius: 0;
+    }
+    
+    // Pagination button responsive styles removed - handled by spectrum-button
+  }
+}
+
+// ==============================================
+// Accessibility and Reduced Motion
+// ==============================================
+
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-search-results {
+    --search-results-transition-duration: 0.01ms;
+    
+    &__item:hover {
+      transform: none;
+    }
+    
+    // Pagination button hover styles removed - handled by spectrum-button
+    
+    &__loading-spinner {
+      animation: none;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .spectrum-search-results {
+    &__item {
+      border-width: 2px;
+    }
+    
+    // Pagination button high contrast styles removed - handled by spectrum-button
+  }
+}

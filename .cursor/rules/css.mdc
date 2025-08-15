@@ -461,7 +461,7 @@ Always declare component-level CSS custom properties in `:host` using Spectrum d
 
 ### Don'ts ❌
 - Don't use hardcoded values (use design tokens)
-- Don't use `!important` unless absolutely necessary
+- Don't use `!important` unless explicitly agreed upon by the user
 - Don't nest selectors more than 3 levels deep
 - Don't use overly specific selectors
 - Don't forget responsive design

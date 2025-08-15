@@ -11,8 +11,11 @@ import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spec
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+import { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
+import { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
+import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 export { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
@@ -20,8 +23,11 @@ export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spec
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+export { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
+export { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
+export { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export namespace Components {
     interface SpectrumAccordion {
@@ -698,6 +704,179 @@ export namespace Components {
          */
         "sources": string;
     }
+    interface SpectrumCookieCompliance {
+        /**
+          * Automatically load GTM script when consent is granted
+          * @default false
+         */
+        "autoLoadGTM": boolean;
+        /**
+          * Consent version for tracking updates
+          * @default '1.0.0'
+         */
+        "consentVersion": string;
+        /**
+          * Number of days before cookie expires
+          * @default 365
+         */
+        "cookieExpireDays": number;
+        /**
+          * Cookie name for storing consent preferences
+          * @default 'spectrum_cookie_consent'
+         */
+        "cookieName": string;
+        /**
+          * URL to cookie policy page
+          * @default '/cookie-policy'
+         */
+        "cookiePolicyUrl": string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Get stored consent from cookies
+         */
+        "getStoredConsent": () => Promise<CookieConsent | null>;
+        /**
+          * Google Tag Manager container ID
+          * @default ''
+         */
+        "gtmContainerId": string;
+        /**
+          * Hide the consent banner
+         */
+        "hideConsent": () => Promise<void>;
+        /**
+          * Custom message to display in the consent banner
+          * @default 'We use cookies to enhance your experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies.'
+         */
+        "message": string;
+        /**
+          * Position of the consent banner
+          * @default 'bottom'
+         */
+        "position": 'top' | 'bottom' | 'center';
+        /**
+          * URL to privacy policy page
+          * @default '/privacy-policy'
+         */
+        "privacyPolicyUrl": string;
+        /**
+          * Reset all consent preferences
+         */
+        "resetConsent": () => Promise<void>;
+        /**
+          * Show the consent banner
+         */
+        "showConsent": () => Promise<void>;
+        /**
+          * Whether to show the cookie status indicator (sticky icon)
+          * @default false
+         */
+        "showCookieStatus": boolean;
+        /**
+          * Whether to show detailed cookie options
+          * @default false
+         */
+        "showDetails": boolean;
+        /**
+          * Whether to show the banner on first visit
+          * @default true
+         */
+        "showOnFirstVisit": boolean;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   toastTitle: 'Consentement aux Cookies',   acceptAll: 'Tout Accepter',   rejectAll: 'Tout Refuser',   customize: 'Personnaliser',   dialog: {     title: 'Préférences des Cookies',     description: 'Choisissez quels types de cookies vous souhaitez autoriser.',     savePreferences: 'Enregistrer les Préférences'   },   categories: {     necessary: {       label: 'Cookies Nécessaires',       description: 'Essentiels au bon fonctionnement du site Web.'     }   } }; ```
+          * @default {}
+         */
+        "translations": CookieTranslations;
+        /**
+          * Update consent preferences
+         */
+        "updateConsent": (consent: Partial<CookieConsent>) => Promise<void>;
+    }
+    /**
+     * Spectrum Dialog Component
+     * A modal dialog component using the HTML dialog element with background shade.
+     * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+     */
+    interface SpectrumDialog {
+        /**
+          * Background level for the dialog panel
+          * @default 'opaque'
+         */
+        "background": 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
+        /**
+          * Array of buttons for the control bar
+          * @default []
+         */
+        "buttons": DialogButton[];
+        /**
+          * Whether pressing Escape should close the dialog
+          * @default true
+         */
+        "closeOnEscape": boolean;
+        /**
+          * Whether clicking outside the dialog should close it
+          * @default true
+         */
+        "closeOnOutsideClick": boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Optional dialog identifier for event handling
+         */
+        "dialogId"?: string;
+        /**
+          * Optional title for the dialog
+         */
+        "dialogTitle"?: string;
+        /**
+          * Custom height for the dialog
+         */
+        "height"?: string;
+        /**
+          * Hide the dialog
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Whether to remove padding from the content area
+          * @default false
+         */
+        "noPadding": boolean;
+        /**
+          * Whether the dialog is open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Show the dialog
+         */
+        "show": () => Promise<void>;
+        /**
+          * Whether to show the close button
+          * @default true
+         */
+        "showCloseButton": boolean;
+        /**
+          * Size of the dialog
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Toggle dialog visibility
+         */
+        "toggle": () => Promise<void>;
+        /**
+          * Custom width for the dialog
+         */
+        "width"?: string;
+    }
     /**
      * Spectrum Flex Component
      * An advanced flexbox layout component with comprehensive flex properties,
@@ -868,6 +1047,8 @@ export namespace Components {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
+     * Features responsive image support through srcset and sizes attributes
+     * for optimal image delivery across different devices and screen sizes.
      */
     interface SpectrumHero {
         /**
@@ -896,10 +1077,25 @@ export namespace Components {
          */
         "keyboardNavigation": boolean;
         /**
+          * Custom CSS styles for the overlay container (CSS style string)
+          * @default ''
+         */
+        "overlayStyle": string;
+        /**
           * Pause autoplay on hover
           * @default true
          */
         "pauseOnHover": boolean;
+        /**
+          * Enable rounded corners using Spectrum design tokens
+          * @default false
+         */
+        "rounded": boolean;
+        /**
+          * Add gradient shade overlay between media and content
+          * @default true
+         */
+        "shaded": boolean;
         /**
           * Show navigation arrows
           * @default true
@@ -947,6 +1143,11 @@ export namespace Components {
          */
         "images": ImageConfig[];
         /**
+          * JSON string representation of images array for HTML attribute usage. Useful for server-side templates (e.g., Twig) that need to pass image data as strings. Will be parsed and converted to images array automatically.
+          * @default ''
+         */
+        "imagesJson": string;
+        /**
           * Enable preview mode for image viewing.  When true: Hides control bar and selection UI for clean viewing experience. When false: Shows control bar, selection indicators, and management features. CRITICAL: Set to false when you need control bars and batch operations.
           * @default false
          */
@@ -979,10 +1180,15 @@ export namespace Components {
     interface SpectrumMenu {
         "close": () => Promise<void>;
         /**
-          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+          * Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted
+          * @default false
+         */
+        "directNavigation": boolean;
+        /**
+          * The menu items configuration Can be provided as a JSON string or array of objects icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
           * @default []
          */
-        "items": Array<{
+        "items": string | Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
@@ -1009,10 +1215,19 @@ export namespace Components {
          */
         "mobileBreakpoint": number;
         /**
+          * Color for mobile menu icons (hamburger, close, and menu item icons) When provided, this will override the default icon color
+          * @default '#000000'
+         */
+        "mobileIconColor": string;
+        /**
           * The title displayed in the mobile menu header
           * @default 'Menu'
          */
         "mobileMenuTitle": string;
+        /**
+          * Navigation color for the menu text When provided, this will override the default theme color
+         */
+        "navigationColor": string;
         /**
           * The orientation of the menu
           * @default 'horizontal'
@@ -1211,6 +1426,88 @@ export namespace Components {
          */
         "searchIconPosition": 'left' | 'right';
         "setFocus": () => Promise<void>;
+    }
+    interface SpectrumSearchResults {
+        /**
+          * Search results data containing results array and pagination info
+          * @default { results: [], pagination: { currentPage: 1, totalPages: 1, totalResults: 0, resultsPerPage: 10 } }
+         */
+        "data": SearchResultsData | string;
+        /**
+          * Empty state message
+          * @default 'No results found'
+         */
+        "emptyMessage": string;
+        /**
+          * Enable URL synchronization for pagination state
+          * @default false
+         */
+        "enableUrlSync": boolean;
+        /**
+          * Get current pagination state including URL parameters
+         */
+        "getPaginationState": () => Promise<{ currentPage: number; totalPages: number; totalResults: number; resultsPerPage: number; urlParams: { page: number; size: number; }; }>;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * Maximum number of page buttons to show in pagination
+          * @default 5
+         */
+        "maxPageButtons": number;
+        /**
+          * Navigate to a specific page programmatically
+          * @param page - The page number to navigate to
+          * @param updateUrl - Whether to update the URL (default: respects enableUrlSync setting)
+         */
+        "navigateToPage": (page: number, updateUrl?: boolean) => Promise<void>;
+        /**
+          * URL parameter name for page number (default: 'page')
+          * @default 'page'
+         */
+        "pageParam": string;
+        /**
+          * Custom result template slot name
+         */
+        "resultTemplate"?: string;
+        /**
+          * Number of results to display per page
+          * @default 10
+         */
+        "resultsPerPage": number;
+        /**
+          * Show result metadata
+          * @default true
+         */
+        "showMetadata": boolean;
+        /**
+          * Show pagination controls
+          * @default true
+         */
+        "showPagination": boolean;
+        /**
+          * Show result scores if available
+          * @default false
+         */
+        "showScores": boolean;
+        /**
+          * Show result thumbnails if available
+          * @default true
+         */
+        "showThumbnails": boolean;
+        /**
+          * URL parameter name for results per page (default: 'size')
+          * @default 'size'
+         */
+        "sizeParam": string;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   resultSingular: 'résultat',   resultPlural: 'résultats',   queryPrefix: 'pour',   pagination: {     showingText: 'Affichage',     ofText: 'de',     resultsText: 'résultats',     firstButton: 'Premier',     previousButton: 'Précédent',     nextButton: 'Suivant',     lastButton: 'Dernier'   },   loading: 'Chargement des résultats...',   emptyMessage: 'Aucun résultat trouvé' }; ```
+          * @default {}
+         */
+        "translations": SearchResultsTranslations;
     }
     /**
      * Spectrum Select Component
@@ -1514,7 +1811,7 @@ export namespace Components {
     /**
      * Spectrum Toast Component
      * A notification component that displays messages at screen edges.
-     * Supports various variants, positioning, and auto-dismiss functionality.
+     * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
      */
     interface SpectrumToast {
         /**
@@ -1548,9 +1845,19 @@ export namespace Components {
          */
         "icon": string;
         /**
+          * Custom maximum width for the toast (e.g., '640px', '30rem')
+          * @default ''
+         */
+        "maxWidth": string;
+        /**
           * @default ''
          */
         "message": string;
+        /**
+          * Custom minimum width for the toast (e.g., '400px', '20rem')
+          * @default ''
+         */
+        "minWidth": string;
         /**
           * @default false
          */
@@ -1655,6 +1962,14 @@ export interface SpectrumConversationPanelCustomEvent<T> extends CustomEvent<T> 
     detail: T;
     target: HTMLSpectrumConversationPanelElement;
 }
+export interface SpectrumCookieComplianceCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumCookieComplianceElement;
+}
+export interface SpectrumDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumDialogElement;
+}
 export interface SpectrumHeroCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumHeroElement;
@@ -1678,6 +1993,10 @@ export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumSearchInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSearchInputElement;
+}
+export interface SpectrumSearchResultsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumSearchResultsElement;
 }
 export interface SpectrumSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1898,6 +2217,47 @@ declare global {
         prototype: HTMLSpectrumConversationPanelElement;
         new (): HTMLSpectrumConversationPanelElement;
     };
+    interface HTMLSpectrumCookieComplianceElementEventMap {
+        "consentUpdated": CookieConsent;
+        "consentDismissed": void;
+    }
+    interface HTMLSpectrumCookieComplianceElement extends Components.SpectrumCookieCompliance, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumCookieComplianceElementEventMap>(type: K, listener: (this: HTMLSpectrumCookieComplianceElement, ev: SpectrumCookieComplianceCustomEvent<HTMLSpectrumCookieComplianceElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumCookieComplianceElementEventMap>(type: K, listener: (this: HTMLSpectrumCookieComplianceElement, ev: SpectrumCookieComplianceCustomEvent<HTMLSpectrumCookieComplianceElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumCookieComplianceElement: {
+        prototype: HTMLSpectrumCookieComplianceElement;
+        new (): HTMLSpectrumCookieComplianceElement;
+    };
+    interface HTMLSpectrumDialogElementEventMap {
+        "dialogAction": {action: string; dialogId?: string; buttonId?: string};
+        "dialogClose": {action: string; dialogId?: string};
+    }
+    /**
+     * Spectrum Dialog Component
+     * A modal dialog component using the HTML dialog element with background shade.
+     * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+     */
+    interface HTMLSpectrumDialogElement extends Components.SpectrumDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumDialogElementEventMap>(type: K, listener: (this: HTMLSpectrumDialogElement, ev: SpectrumDialogCustomEvent<HTMLSpectrumDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumDialogElementEventMap>(type: K, listener: (this: HTMLSpectrumDialogElement, ev: SpectrumDialogCustomEvent<HTMLSpectrumDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumDialogElement: {
+        prototype: HTMLSpectrumDialogElement;
+        new (): HTMLSpectrumDialogElement;
+    };
     /**
      * Spectrum Flex Component
      * An advanced flexbox layout component with comprehensive flex properties,
@@ -1928,6 +2288,8 @@ declare global {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
+     * Features responsive image support through srcset and sizes attributes
+     * for optimal image delivery across different devices and screen sizes.
      */
     interface HTMLSpectrumHeroElement extends Components.SpectrumHero, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumHeroElementEventMap>(type: K, listener: (this: HTMLSpectrumHeroElement, ev: SpectrumHeroCustomEvent<HTMLSpectrumHeroElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2069,6 +2431,24 @@ declare global {
         prototype: HTMLSpectrumSearchInputElement;
         new (): HTMLSpectrumSearchInputElement;
     };
+    interface HTMLSpectrumSearchResultsElementEventMap {
+        "resultAction": SearchResultActionPayload;
+        "paginationAction": PaginationActionPayload;
+    }
+    interface HTMLSpectrumSearchResultsElement extends Components.SpectrumSearchResults, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumSearchResultsElementEventMap>(type: K, listener: (this: HTMLSpectrumSearchResultsElement, ev: SpectrumSearchResultsCustomEvent<HTMLSpectrumSearchResultsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumSearchResultsElementEventMap>(type: K, listener: (this: HTMLSpectrumSearchResultsElement, ev: SpectrumSearchResultsCustomEvent<HTMLSpectrumSearchResultsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumSearchResultsElement: {
+        prototype: HTMLSpectrumSearchResultsElement;
+        new (): HTMLSpectrumSearchResultsElement;
+    };
     interface HTMLSpectrumSelectElementEventMap {
         "selectChange": { 
     value: string; 
@@ -2136,7 +2516,7 @@ declare global {
     /**
      * Spectrum Toast Component
      * A notification component that displays messages at screen edges.
-     * Supports various variants, positioning, and auto-dismiss functionality.
+     * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
      */
     interface HTMLSpectrumToastElement extends Components.SpectrumToast, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumToastElementEventMap>(type: K, listener: (this: HTMLSpectrumToastElement, ev: SpectrumToastCustomEvent<HTMLSpectrumToastElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2171,6 +2551,8 @@ declare global {
         "spectrum-container": HTMLSpectrumContainerElement;
         "spectrum-context-menu": HTMLSpectrumContextMenuElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
+        "spectrum-cookie-compliance": HTMLSpectrumCookieComplianceElement;
+        "spectrum-dialog": HTMLSpectrumDialogElement;
         "spectrum-flex": HTMLSpectrumFlexElement;
         "spectrum-grid": HTMLSpectrumGridElement;
         "spectrum-hero": HTMLSpectrumHeroElement;
@@ -2181,6 +2563,7 @@ declare global {
         "spectrum-rail-alternative": HTMLSpectrumRailAlternativeElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
+        "spectrum-search-results": HTMLSpectrumSearchResultsElement;
         "spectrum-select": HTMLSpectrumSelectElement;
         "spectrum-sidebar": HTMLSpectrumSidebarElement;
         "spectrum-stack": HTMLSpectrumStackElement;
@@ -2901,6 +3284,163 @@ declare namespace LocalJSX {
          */
         "sources"?: string;
     }
+    interface SpectrumCookieCompliance {
+        /**
+          * Automatically load GTM script when consent is granted
+          * @default false
+         */
+        "autoLoadGTM"?: boolean;
+        /**
+          * Consent version for tracking updates
+          * @default '1.0.0'
+         */
+        "consentVersion"?: string;
+        /**
+          * Number of days before cookie expires
+          * @default 365
+         */
+        "cookieExpireDays"?: number;
+        /**
+          * Cookie name for storing consent preferences
+          * @default 'spectrum_cookie_consent'
+         */
+        "cookieName"?: string;
+        /**
+          * URL to cookie policy page
+          * @default '/cookie-policy'
+         */
+        "cookiePolicyUrl"?: string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Google Tag Manager container ID
+          * @default ''
+         */
+        "gtmContainerId"?: string;
+        /**
+          * Custom message to display in the consent banner
+          * @default 'We use cookies to enhance your experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies.'
+         */
+        "message"?: string;
+        /**
+          * Event emitted when consent banner is dismissed
+         */
+        "onConsentDismissed"?: (event: SpectrumCookieComplianceCustomEvent<void>) => void;
+        /**
+          * Event emitted when consent is given or updated
+         */
+        "onConsentUpdated"?: (event: SpectrumCookieComplianceCustomEvent<CookieConsent>) => void;
+        /**
+          * Position of the consent banner
+          * @default 'bottom'
+         */
+        "position"?: 'top' | 'bottom' | 'center';
+        /**
+          * URL to privacy policy page
+          * @default '/privacy-policy'
+         */
+        "privacyPolicyUrl"?: string;
+        /**
+          * Whether to show the cookie status indicator (sticky icon)
+          * @default false
+         */
+        "showCookieStatus"?: boolean;
+        /**
+          * Whether to show detailed cookie options
+          * @default false
+         */
+        "showDetails"?: boolean;
+        /**
+          * Whether to show the banner on first visit
+          * @default true
+         */
+        "showOnFirstVisit"?: boolean;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   toastTitle: 'Consentement aux Cookies',   acceptAll: 'Tout Accepter',   rejectAll: 'Tout Refuser',   customize: 'Personnaliser',   dialog: {     title: 'Préférences des Cookies',     description: 'Choisissez quels types de cookies vous souhaitez autoriser.',     savePreferences: 'Enregistrer les Préférences'   },   categories: {     necessary: {       label: 'Cookies Nécessaires',       description: 'Essentiels au bon fonctionnement du site Web.'     }   } }; ```
+          * @default {}
+         */
+        "translations"?: CookieTranslations;
+    }
+    /**
+     * Spectrum Dialog Component
+     * A modal dialog component using the HTML dialog element with background shade.
+     * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+     */
+    interface SpectrumDialog {
+        /**
+          * Background level for the dialog panel
+          * @default 'opaque'
+         */
+        "background"?: 'opaque' | 'partial-frost' | 'full-frost' | 'transparent';
+        /**
+          * Array of buttons for the control bar
+          * @default []
+         */
+        "buttons"?: DialogButton[];
+        /**
+          * Whether pressing Escape should close the dialog
+          * @default true
+         */
+        "closeOnEscape"?: boolean;
+        /**
+          * Whether clicking outside the dialog should close it
+          * @default true
+         */
+        "closeOnOutsideClick"?: boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Optional dialog identifier for event handling
+         */
+        "dialogId"?: string;
+        /**
+          * Optional title for the dialog
+         */
+        "dialogTitle"?: string;
+        /**
+          * Custom height for the dialog
+         */
+        "height"?: string;
+        /**
+          * Whether to remove padding from the content area
+          * @default false
+         */
+        "noPadding"?: boolean;
+        /**
+          * Event emitted when dialog actions occur
+         */
+        "onDialogAction"?: (event: SpectrumDialogCustomEvent<{action: string; dialogId?: string; buttonId?: string}>) => void;
+        /**
+          * Event emitted when dialog is closed
+         */
+        "onDialogClose"?: (event: SpectrumDialogCustomEvent<{action: string; dialogId?: string}>) => void;
+        /**
+          * Whether the dialog is open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Whether to show the close button
+          * @default true
+         */
+        "showCloseButton"?: boolean;
+        /**
+          * Size of the dialog
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large' | 'full' | 'auto';
+        /**
+          * Custom width for the dialog
+         */
+        "width"?: string;
+    }
     /**
      * Spectrum Flex Component
      * An advanced flexbox layout component with comprehensive flex properties,
@@ -3071,6 +3611,8 @@ declare namespace LocalJSX {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
+     * Features responsive image support through srcset and sizes attributes
+     * for optimal image delivery across different devices and screen sizes.
      */
     interface SpectrumHero {
         /**
@@ -3107,10 +3649,25 @@ declare namespace LocalJSX {
          */
         "onSlideChange"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; totalSlides: number }>) => void;
         /**
+          * Custom CSS styles for the overlay container (CSS style string)
+          * @default ''
+         */
+        "overlayStyle"?: string;
+        /**
           * Pause autoplay on hover
           * @default true
          */
         "pauseOnHover"?: boolean;
+        /**
+          * Enable rounded corners using Spectrum design tokens
+          * @default false
+         */
+        "rounded"?: boolean;
+        /**
+          * Add gradient shade overlay between media and content
+          * @default true
+         */
+        "shaded"?: boolean;
         /**
           * Show navigation arrows
           * @default true
@@ -3157,6 +3714,11 @@ declare namespace LocalJSX {
           * @default []
          */
         "images"?: ImageConfig[];
+        /**
+          * JSON string representation of images array for HTML attribute usage. Useful for server-side templates (e.g., Twig) that need to pass image data as strings. Will be parsed and converted to images array automatically.
+          * @default ''
+         */
+        "imagesJson"?: string;
         "onImageAdded"?: (event: SpectrumImageGalleryCustomEvent<ImageAddedEvent>) => void;
         "onImageDeleted"?: (event: SpectrumImageGalleryCustomEvent<ImageDeletedEvent>) => void;
         "onImageDeselect"?: (event: SpectrumImageGalleryCustomEvent<ImageConfig>) => void;
@@ -3195,10 +3757,15 @@ declare namespace LocalJSX {
     }
     interface SpectrumMenu {
         /**
-          * The menu items configuration icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
+          * Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted
+          * @default false
+         */
+        "directNavigation"?: boolean;
+        /**
+          * The menu items configuration Can be provided as a JSON string or array of objects icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns
           * @default []
          */
-        "items"?: Array<{
+        "items"?: string | Array<{
     label: string;
     href?: string;
     icon?: string; // Material icon name
@@ -3225,10 +3792,19 @@ declare namespace LocalJSX {
          */
         "mobileBreakpoint"?: number;
         /**
+          * Color for mobile menu icons (hamburger, close, and menu item icons) When provided, this will override the default icon color
+          * @default '#000000'
+         */
+        "mobileIconColor"?: string;
+        /**
           * The title displayed in the mobile menu header
           * @default 'Menu'
          */
         "mobileMenuTitle"?: string;
+        /**
+          * Navigation color for the menu text When provided, this will override the default theme color
+         */
+        "navigationColor"?: string;
         /**
           * Event emitted when a menu item is clicked
          */
@@ -3450,6 +4026,86 @@ declare namespace LocalJSX {
           * @default 'right'
          */
         "searchIconPosition"?: 'left' | 'right';
+    }
+    interface SpectrumSearchResults {
+        /**
+          * Search results data containing results array and pagination info
+          * @default { results: [], pagination: { currentPage: 1, totalPages: 1, totalResults: 0, resultsPerPage: 10 } }
+         */
+        "data"?: SearchResultsData | string;
+        /**
+          * Empty state message
+          * @default 'No results found'
+         */
+        "emptyMessage"?: string;
+        /**
+          * Enable URL synchronization for pagination state
+          * @default false
+         */
+        "enableUrlSync"?: boolean;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Maximum number of page buttons to show in pagination
+          * @default 5
+         */
+        "maxPageButtons"?: number;
+        /**
+          * Emitted when pagination controls are used
+         */
+        "onPaginationAction"?: (event: SpectrumSearchResultsCustomEvent<PaginationActionPayload>) => void;
+        /**
+          * Emitted when a search result is clicked or interacted with
+         */
+        "onResultAction"?: (event: SpectrumSearchResultsCustomEvent<SearchResultActionPayload>) => void;
+        /**
+          * URL parameter name for page number (default: 'page')
+          * @default 'page'
+         */
+        "pageParam"?: string;
+        /**
+          * Custom result template slot name
+         */
+        "resultTemplate"?: string;
+        /**
+          * Number of results to display per page
+          * @default 10
+         */
+        "resultsPerPage"?: number;
+        /**
+          * Show result metadata
+          * @default true
+         */
+        "showMetadata"?: boolean;
+        /**
+          * Show pagination controls
+          * @default true
+         */
+        "showPagination"?: boolean;
+        /**
+          * Show result scores if available
+          * @default false
+         */
+        "showScores"?: boolean;
+        /**
+          * Show result thumbnails if available
+          * @default true
+         */
+        "showThumbnails"?: boolean;
+        /**
+          * URL parameter name for results per page (default: 'size')
+          * @default 'size'
+         */
+        "sizeParam"?: string;
+        /**
+          * Translation object for customizing all user-facing text. Provide only the strings you want to override - missing values will use English defaults.
+          * @example ```typescript // French translation const frenchTranslations = {   resultSingular: 'résultat',   resultPlural: 'résultats',   queryPrefix: 'pour',   pagination: {     showingText: 'Affichage',     ofText: 'de',     resultsText: 'résultats',     firstButton: 'Premier',     previousButton: 'Précédent',     nextButton: 'Suivant',     lastButton: 'Dernier'   },   loading: 'Chargement des résultats...',   emptyMessage: 'Aucun résultat trouvé' }; ```
+          * @default {}
+         */
+        "translations"?: SearchResultsTranslations;
     }
     /**
      * Spectrum Select Component
@@ -3763,7 +4419,7 @@ declare namespace LocalJSX {
     /**
      * Spectrum Toast Component
      * A notification component that displays messages at screen edges.
-     * Supports various variants, positioning, and auto-dismiss functionality.
+     * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
      */
     interface SpectrumToast {
         /**
@@ -3795,9 +4451,19 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
+          * Custom maximum width for the toast (e.g., '640px', '30rem')
+          * @default ''
+         */
+        "maxWidth"?: string;
+        /**
           * @default ''
          */
         "message"?: string;
+        /**
+          * Custom minimum width for the toast (e.g., '400px', '20rem')
+          * @default ''
+         */
+        "minWidth"?: string;
         "onToastAction"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
         "onToastDismiss"?: (event: SpectrumToastCustomEvent<{ action: string; toast: any }>) => void;
         /**
@@ -3883,6 +4549,8 @@ declare namespace LocalJSX {
         "spectrum-container": SpectrumContainer;
         "spectrum-context-menu": SpectrumContextMenu;
         "spectrum-conversation-panel": SpectrumConversationPanel;
+        "spectrum-cookie-compliance": SpectrumCookieCompliance;
+        "spectrum-dialog": SpectrumDialog;
         "spectrum-flex": SpectrumFlex;
         "spectrum-grid": SpectrumGrid;
         "spectrum-hero": SpectrumHero;
@@ -3893,6 +4561,7 @@ declare namespace LocalJSX {
         "spectrum-rail-alternative": SpectrumRailAlternative;
         "spectrum-rail-item": SpectrumRailItem;
         "spectrum-search-input": SpectrumSearchInput;
+        "spectrum-search-results": SpectrumSearchResults;
         "spectrum-select": SpectrumSelect;
         "spectrum-sidebar": SpectrumSidebar;
         "spectrum-stack": SpectrumStack;
@@ -3951,6 +4620,13 @@ declare module "@stencil/core" {
              */
             "spectrum-context-menu": LocalJSX.SpectrumContextMenu & JSXBase.HTMLAttributes<HTMLSpectrumContextMenuElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
+            "spectrum-cookie-compliance": LocalJSX.SpectrumCookieCompliance & JSXBase.HTMLAttributes<HTMLSpectrumCookieComplianceElement>;
+            /**
+             * Spectrum Dialog Component
+             * A modal dialog component using the HTML dialog element with background shade.
+             * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
+             */
+            "spectrum-dialog": LocalJSX.SpectrumDialog & JSXBase.HTMLAttributes<HTMLSpectrumDialogElement>;
             /**
              * Spectrum Flex Component
              * An advanced flexbox layout component with comprehensive flex properties,
@@ -3967,6 +4643,8 @@ declare module "@stencil/core" {
              * Spectrum Hero Component
              * A hero section component that supports both images and video backgrounds,
              * with carousel functionality, text overlays, and call-to-action buttons.
+             * Features responsive image support through srcset and sizes attributes
+             * for optimal image delivery across different devices and screen sizes.
              */
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
@@ -3992,6 +4670,7 @@ declare module "@stencil/core" {
              */
             "spectrum-rail-item": LocalJSX.SpectrumRailItem & JSXBase.HTMLAttributes<HTMLSpectrumRailItemElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
+            "spectrum-search-results": LocalJSX.SpectrumSearchResults & JSXBase.HTMLAttributes<HTMLSpectrumSearchResultsElement>;
             /**
              * Spectrum Select Component
              * A comprehensive select component with advanced features including search, loading states,
@@ -4015,7 +4694,7 @@ declare module "@stencil/core" {
             /**
              * Spectrum Toast Component
              * A notification component that displays messages at screen edges.
-             * Supports various variants, positioning, and auto-dismiss functionality.
+             * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
              */
             "spectrum-toast": LocalJSX.SpectrumToast & JSXBase.HTMLAttributes<HTMLSpectrumToastElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;

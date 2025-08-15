@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-07-16T14:18:30.750Z",
+  "timestamp": "2025-07-31T09:36:41.805Z",
   "summary": {
-    "totalComponents": 27,
-    "documented": 27,
+    "totalComponents": 29,
+    "documented": 29,
     "partiallyDocumented": 0,
     "undocumented": 0,
     "documentationCoverage": "100.0"
@@ -681,6 +681,189 @@
       }
     },
     {
+      "name": "spectrum-avatar",
+      "tag": "spectrum-avatar",
+      "shadow": true,
+      "scoped": false,
+      "props": [
+        {
+          "name": "debug",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "debug",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "src",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "alt",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "initials",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "initials",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "icon",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "label",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "avatarId",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "avatarId",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'xs' | 'sm' | 'base' | 'lg' | 'xl'",
+          "defaultValue": "'base'",
+          "attribute": "size",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "shape",
+          "type": "'circle' | 'square' | 'rounded'",
+          "defaultValue": "'circle'",
+          "attribute": "shape",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'outlined' | 'filled'",
+          "defaultValue": "'default'",
+          "attribute": "variant",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "status",
+          "type": "'none' | 'online' | 'offline' | 'busy' | 'away'",
+          "defaultValue": "'none'",
+          "attribute": "status",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "showStatus",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "showStatus",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "clickable",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "clickable",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "disabled",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "action",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "customStyle",
+          "type": "{ [key: string]: string }",
+          "defaultValue": "{}",
+          "attribute": "customStyle",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        }
+      ],
+      "events": [],
+      "methods": [],
+      "slots": [],
+      "cssProperties": [
+        "--avatar-background",
+        "--avatar-color",
+        "--fallback",
+        "--clickable",
+        "--disabled",
+        "--hover",
+        "--active",
+        "--has-status",
+        "--has-image",
+        "--has-icon",
+        "--has-initials",
+        "--initials-colored"
+      ],
+      "documentation": {
+        "hasStories": true,
+        "hasReadme": true,
+        "hasDependencies": true,
+        "hasUseCases": true,
+        "completeness": 1
+      },
+      "analysis": {
+        "complexity": 16,
+        "hasDefaultProps": true,
+        "hasEvents": false,
+        "hasMethods": false,
+        "hasSlots": false
+      }
+    },
+    {
       "name": "spectrum-badge",
       "tag": "spectrum-badge",
       "shadow": true,
@@ -1101,6 +1284,8 @@
       "cssProperties": [
         "--outline",
         "--disabled",
+        "--has-leading-icon",
+        "--has-trailing-icon",
         "--leading",
         "--trailing"
       ],
@@ -1693,6 +1878,167 @@
       }
     },
     {
+      "name": "spectrum-dialog",
+      "tag": "spectrum-dialog",
+      "shadow": true,
+      "scoped": false,
+      "props": [
+        {
+          "name": "debug",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "debug",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "open",
+          "reflect": false,
+          "mutable": true,
+          "description": ""
+        },
+        {
+          "name": "dialogId?",
+          "type": "string",
+          "attribute": "dialogId?",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "dialogTitle?",
+          "type": "string",
+          "attribute": "dialogTitle?",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "showCloseButton",
+          "type": "boolean",
+          "defaultValue": "true",
+          "attribute": "showCloseButton",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "closeOnOutsideClick",
+          "type": "boolean",
+          "defaultValue": "true",
+          "attribute": "closeOnOutsideClick",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "closeOnEscape",
+          "type": "boolean",
+          "defaultValue": "true",
+          "attribute": "closeOnEscape",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "buttons",
+          "type": "DialogButton[]",
+          "defaultValue": "[]",
+          "attribute": "buttons",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "background",
+          "type": "'opaque' | 'partial-frost' | 'full-frost' | 'transparent'",
+          "defaultValue": "'opaque'",
+          "attribute": "background",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large' | 'full' | 'auto'",
+          "defaultValue": "'medium'",
+          "attribute": "size",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "width?",
+          "type": "string",
+          "attribute": "width?",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "height?",
+          "type": "string",
+          "attribute": "height?",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "noPadding",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "noPadding",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        }
+      ],
+      "events": [
+        {
+          "name": "dialogAction",
+          "property": "dialogAction",
+          "payload": "{action: string; dialogId?: string; buttonId?: string}",
+          "composed": true,
+          "cancelable": true,
+          "bubbles": true
+        },
+        {
+          "name": "dialogClose",
+          "property": "dialogClose",
+          "payload": "{action: string; dialogId?: string}",
+          "composed": true,
+          "cancelable": true,
+          "bubbles": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Default slot content"
+        }
+      ],
+      "cssProperties": [],
+      "documentation": {
+        "hasStories": true,
+        "hasReadme": true,
+        "hasDependencies": true,
+        "hasUseCases": true,
+        "completeness": 1
+      },
+      "analysis": {
+        "complexity": 15,
+        "hasDefaultProps": true,
+        "hasEvents": true,
+        "hasMethods": false,
+        "hasSlots": true
+      }
+    },
+    {
       "name": "spectrum-flex",
       "tag": "spectrum-flex",
       "shadow": true,
@@ -2230,6 +2576,33 @@
           "reflect": false,
           "mutable": false,
           "description": ""
+        },
+        {
+          "name": "rounded",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "rounded",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "shaded",
+          "type": "boolean",
+          "defaultValue": "true",
+          "attribute": "shaded",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "overlayStyle",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "overlayStyle",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
         }
       ],
       "events": [
@@ -2253,9 +2626,14 @@
       "methods": [],
       "slots": [],
       "cssProperties": [
+        "--spectrum-color-on-primary-container",
+        "--hero-shade-r",
+        "--hero-shade-g",
+        "--hero-shade-b",
         "--active",
         "--prev",
         "--next",
+        "--rounded",
         "--hero-height"
       ],
       "documentation": {
@@ -2266,7 +2644,7 @@
         "completeness": 1
       },
       "analysis": {
-        "complexity": 11,
+        "complexity": 14,
         "hasDefaultProps": true,
         "hasEvents": true,
         "hasMethods": false,
@@ -2286,6 +2664,15 @@
           "attribute": "images",
           "reflect": false,
           "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "imagesJson",
+          "type": "string",
+          "defaultValue": "''",
+          "attribute": "images-json",
+          "reflect": true,
+          "mutable": true,
           "description": ""
         },
         {
@@ -2436,7 +2823,7 @@
         "completeness": 1
       },
       "analysis": {
-        "complexity": 15,
+        "complexity": 16,
         "hasDefaultProps": true,
         "hasEvents": false,
         "hasMethods": false,
@@ -2469,7 +2856,7 @@
         },
         {
           "name": "items",
-          "type": "Array<{\n    label: string",
+          "type": "string | Array<{\n    label: string",
           "attribute": "items",
           "reflect": false,
           "mutable": false,
@@ -2489,6 +2876,15 @@
           "type": "string",
           "defaultValue": "'Menu'",
           "attribute": "mobileMenuTitle",
+          "reflect": false,
+          "mutable": false,
+          "description": ""
+        },
+        {
+          "name": "directNavigation",
+          "type": "boolean",
+          "defaultValue": "false",
+          "attribute": "directNavigation",
           "reflect": false,
           "mutable": false,
           "description": ""
@@ -2513,7 +2909,7 @@
         "completeness": 1
       },
       "analysis": {
-        "complexity": 5,
+        "complexity": 6,
         "hasDefaultProps": true,
         "hasEvents": false,
         "hasMethods": false,

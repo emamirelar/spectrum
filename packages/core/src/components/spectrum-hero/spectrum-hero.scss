@@ -38,21 +38,25 @@
   --hero-spacing-x-large: var(--spectrum-sys-spacing-x-large, 3rem);
   --hero-spacing-xx-large: var(--spectrum-sys-spacing-xx-large, 4rem);
   
-  // Navigation dots
+  // Navigation dots - ensuring 24px minimum touch target for accessibility
   --hero-dot-size: var(--spectrum-sys-spacing-small, 0.5rem);
+  --hero-dot-touch-target: 24px; // WCAG 2.2 AA compliance (2.5.8)
+
+  // Shade overlay
+  --hero-shade-overlay-color: color-mix(in srgb, var(--spectrum-sys-color-on-primary-container) 40%, transparent 60%);
+  --hero-shade-overlay-color-2: color-mix(in srgb, var(--spectrum-sys-color-on-primary-container) 5%, transparent 95%);
 }
 
 // ==============================================
 // Main Container - CLEAN VERSION
 // ==============================================
 .spectrum-hero {
-  position: relative !important;
-  width: 100% !important;
-  height: var(--hero-height) !important;
-  overflow: hidden !important;
-  border-radius: var(--spectrum-sys-shape-corner-large, 1rem) !important;
-  background-color: var(--spectrum-sys-color-surface) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  position: relative;
+  width: 100%;
+  height: var(--hero-height);
+  overflow: hidden;
+  background-color: var(--spectrum-sys-color-surface);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   
   // Focus management for accessibility
   outline: none;
@@ -60,6 +64,11 @@
   &:focus-visible {
     outline: 2px solid var(--spectrum-sys-color-primary);
     outline-offset: 2px;
+  }
+  
+  // Rounded corners modifier
+  &--rounded {
+    border-radius: var(--spectrum-sys-shape-corner-large, 1rem);
   }
 }
 
@@ -72,6 +81,10 @@
   height: 100%;
   display: flex;
   overflow: hidden;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 auto;
 }
 
 // ==============================================
@@ -83,7 +96,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   
   // Slide transition using transform
   transform: translateX(100%);
@@ -91,17 +104,17 @@
   
   // Active slide state
   &--active {
-    transform: translateX(0) !important;
+    transform: translateX(0);
   }
   
   // Previous slide (slide out to left)
   &--prev {
-    transform: translateX(-100%) !important;
+    transform: translateX(-100%);
   }
   
   // Next slide (slide in from right)
   &--next {
-    transform: translateX(100%) !important;
+    transform: translateX(100%);
   }
 }
 
@@ -131,23 +144,62 @@
 }
 
 // ==============================================
+// Shade Overlay Layer
+// ==============================================
+.spectrum-hero__shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  
+    // Fallback gradient for browsers without CSS custom properties
+  // background: linear-gradient(
+  //   to bottom,
+  //   rgba(0, 0, 0, 0) 0%,
+  //   rgba(0, 0, 0, 0.5) 100%
+  // );
+
+  // Dynamic gradient using RGB values set by JavaScript
+  // background: linear-gradient(
+  //   to bottom,
+  //   var(--hero-shade-overlay-color),
+  //   var(--hero-shade-overlay-color-2)
+  // );
+
+  background: linear-gradient(
+    180deg,
+    var(--hero-shade-overlay-color) 0%,
+    var(--hero-shade-overlay-color-2) 66%,
+    );
+
+  // background: linear-gradient(
+  //   to bottom,
+  //   rgba(var(--hero-shade-r, 0), var(--hero-shade-g, 25), var(--hero-shade-b, 51), 0),
+  //   rgba(var(--hero-shade-r, 0), var(--hero-shade-g, 28), var(--hero-shade-b, 57), 0.5)
+  // );
+}
+
+// ==============================================
 // Content Overlay - NO BACKGROUND
 // ==============================================
 .spectrum-hero__overlay {
-  position: relative !important;
-  z-index: 2 !important;
-  padding: var(--hero-spacing-x-large) !important;
-  margin: var(--hero-spacing-large) !important;
-  max-width: 600px !important;
+  position: relative;
+  z-index: 2;
+  padding: var(--hero-spacing-x-large);
+  margin: var(--hero-spacing-large);
+  max-width: 60rem;
   
   // NO background - just text with shadows
-  background: none !important;
-  backdrop-filter: none !important;
-  border-radius: 0 !important;
+  background: none;
+  backdrop-filter: none;
+  border-radius: 0;
   
   // Horizontal positioning modifiers
   &--left {
-    align-self: center;
+    align-self: flex-start;
     justify-self: flex-start;
     text-align: left;
   }
@@ -155,7 +207,7 @@
   &--center {
     align-self: center;
     justify-self: center;
-    text-align: center;
+    text-align: left; // Keep text left-aligned for readability
     margin-left: auto;
     margin-right: auto;
   }
@@ -191,32 +243,24 @@
 }
 
 .spectrum-hero__title {
-  margin: 0 !important;
-  font-size: var(--hero-title-size) !important;
-  font-weight: 700 !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.02em !important;
+  margin: 0;
+  font-size: var(--hero-title-size);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   
   // Pure white text with strong shadows for readability
-  color: white !important;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.9),
-    0 4px 8px rgba(0, 0, 0, 0.7),
-    0 8px 16px rgba(0, 0, 0, 0.5) !important;
+  color: white;
 }
 
 .spectrum-hero__subtitle {
-  margin: 0 !important;
-  font-size: var(--hero-subtitle-size) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
+  margin: 0;
+  font-size: var(--hero-subtitle-size);
+  font-weight: 400;
+  line-height: 1.5;
   
   // Pure white text with shadows
-  color: white !important;
-  text-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.8),
-    0 2px 6px rgba(0, 0, 0, 0.6),
-    0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  color: white;
 }
 
 .spectrum-hero__button {
@@ -227,9 +271,9 @@
     align-self: flex-start;
   }
   
-  // Center alignment
+  // Center positioning (container is centered, but button remains left-aligned)
   .spectrum-hero__overlay--center & {
-    align-self: center;
+    align-self: flex-start; // Keep button left-aligned for consistency
   }
   
   // Right alignment
@@ -255,31 +299,31 @@
 }
 
 .spectrum-hero__arrow {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 48px !important;
-  height: 48px !important;
-  border: none !important;
-  border-radius: 50% !important;
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  color: rgba(0, 0, 0, 0.8) !important;
-  cursor: pointer !important;
-  pointer-events: auto !important;
-  backdrop-filter: blur(8px) !important;
-  transition: all var(--hero-animation-duration) var(--hero-animation-easing) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-  font-size: 20px !important;
-  font-weight: bold !important;
-  line-height: 1 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  transition: all var(--hero-animation-duration) var(--hero-animation-easing);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
   
   // Hover and focus states
   &:hover,
   &:focus-visible {
-    background-color: white !important;
-    color: black !important;
-    transform: scale(1.05) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    background-color: white;
+    color: black;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
   
   &:focus-visible {
@@ -289,7 +333,7 @@
   
   // Active state
   &:active {
-    transform: scale(0.95) !important;
+    transform: scale(0.95);
   }
 }
 
@@ -297,47 +341,68 @@
 // Navigation Dots - LIFTED WITH SPECTRUM SPACING
 // ==============================================
 .spectrum-hero__dots {
-  position: absolute !important;
-  bottom: var(--hero-spacing-large) !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  z-index: 3 !important;
-  display: flex !important;
-  gap: var(--hero-spacing-small) !important;
-  padding: var(--hero-spacing-small) var(--hero-spacing) !important;
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  border-radius: var(--spectrum-sys-shape-corner-full, 2rem) !important;
-  backdrop-filter: blur(8px) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  position: absolute;
+  bottom: var(--hero-spacing-large);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: var(--hero-spacing-small);
+  padding: var(--hero-spacing-small) var(--hero-spacing);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: var(--spectrum-sys-shape-corner-full, 2rem);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .spectrum-hero__dot {
-  width: var(--hero-dot-size);
-  aspect-ratio: 1/1;
+  // Ensure minimum 24px touch target for accessibility
+  min-width: var(--hero-dot-touch-target);
+  min-height: var(--hero-dot-touch-target);
   border: none;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: transparent;
   cursor: pointer;
   transition: all var(--hero-animation-duration) var(--hero-animation-easing);
   flex-shrink: 0;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  // Visual dot using pseudo-element
+  &::before {
+    content: '';
+    width: var(--hero-dot-size);
+    height: var(--hero-dot-size);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+    transition: all var(--hero-animation-duration) var(--hero-animation-easing);
+    display: block;
+  }
   
   // Active state
-  &--active {
-    background-color: white !important;
-    transform: scale(1.2) !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+  &--active::before {
+    background-color: white;
+    transform: scale(1.2);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   }
   
   // Hover and focus states
-  &:hover,
-  &:focus-visible {
-    background-color: rgba(255, 255, 255, 0.9) !important;
+  &:hover::before,
+  &:focus-visible::before {
+    background-color: rgba(255, 255, 255, 0.9);
   }
   
   &:focus-visible {
     outline: 2px solid var(--spectrum-sys-color-primary);
     outline-offset: 2px;
+  }
+  
+  // Ensure active state is maintained
+  &--active:hover::before,
+  &--active:focus-visible::before {
+    background-color: white;
   }
 }
 
@@ -422,8 +487,8 @@
     --hero-subtitle-size: var(--spectrum-sys-typescale-body-large-size, 1rem);
   }
   
-  .spectrum-hero {
-    border-radius: 0; // Remove border radius on very small screens
+  .spectrum-hero--rounded {
+    border-radius: var(--spectrum-sys-shape-corner-small, 0.5rem); // Smaller radius on very small screens
   }
   
   .spectrum-hero__overlay {
@@ -466,6 +531,8 @@
   }
   
   .spectrum-hero__dot {
+    // Maintain minimum 24px touch target even on mobile for accessibility
+    // Visual size can be smaller but touch target stays accessible
     --hero-dot-size: calc(var(--spectrum-sys-spacing-small, 0.5rem) * 0.75);
   }
 }
@@ -523,8 +590,8 @@
   }
   
   .spectrum-hero__slide {
-    opacity: 1 !important;
-    visibility: visible !important;
+    opacity: 1;
+    visibility: visible;
   }
   
   .spectrum-hero__media {
