@@ -774,20 +774,76 @@ export const EdgeClippingPrevention: Story = {
     orientation: 'horizontal',
     variant: 'default',
     items: [
-      { label: 'Home', href: '/', icon: 'home' },
-      { label: 'About', href: '/about', icon: 'info' },
-      { label: 'Services', href: '/services', icon: 'design_services' },
       { 
-        label: 'Resources & Support',
-        href: '/support',
-        icon: 'help_center',
+        label: 'Home', 
+        href: '/', 
+        icon: 'home',
+        children: [
+          { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
+          { label: 'Recent Activity', href: '/recent', icon: 'history' },
+          { label: 'Quick Actions', href: '/quick-actions', icon: 'flash_on' },
+          { label: 'Favorites', href: '/favorites', icon: 'favorite' }
+        ]
+      },
+      { 
+        label: 'About', 
+        href: '/about', 
+        icon: 'info',
+        children: [
+          { label: 'Our Story', href: '/about/story', icon: 'auto_stories' },
+          { label: 'Team Members', href: '/about/team', icon: 'group' },
+          { label: 'Mission & Vision', href: '/about/mission', icon: 'flag' },
+          { label: 'Company Values', href: '/about/values', icon: 'star' },
+          { label: 'Awards & Recognition', href: '/about/awards', icon: 'emoji_events' }
+        ]
+      },
+      { 
+        label: 'Services', 
+        href: '/services', 
+        icon: 'design_services',
+        children: [
+          { label: 'Web Development', href: '/services/web', icon: 'web' },
+          { label: 'Mobile Apps', href: '/services/mobile', icon: 'phone_android' },
+          { label: 'UI/UX Design', href: '/services/design', icon: 'palette' },
+          { label: 'Digital Marketing', href: '/services/marketing', icon: 'campaign' },
+          { label: 'SEO Optimization', href: '/services/seo', icon: 'search' },
+          { label: 'Consulting', href: '/services/consulting', icon: 'psychology' }
+        ]
+      },
+      { 
+        label: 'Portfolio', 
+        href: '/portfolio', 
+        icon: 'work',
+        children: [
+          { label: 'Web Projects', href: '/portfolio/web', icon: 'language' },
+          { label: 'Mobile Apps', href: '/portfolio/mobile', icon: 'smartphone' },
+          { label: 'E-commerce Sites', href: '/portfolio/ecommerce', icon: 'shopping_cart' },
+          { label: 'Corporate Identity', href: '/portfolio/branding', icon: 'business' },
+          { label: 'Case Studies', href: '/portfolio/case-studies', icon: 'assignment' },
+          { label: 'Client Testimonials', href: '/portfolio/testimonials', icon: 'reviews' },
+          { label: 'Awards Won', href: '/portfolio/awards', icon: 'military_tech' }
+        ]
+      },
+      { 
+        label: '',
+        href: '/more',
+        icon: 'more_horiz',
         children: [
           { label: 'Documentation', href: '/docs', icon: 'description' },
           { label: 'API Reference', href: '/api', icon: 'integration_instructions' },
           { label: 'Video Tutorials', href: '/tutorials', icon: 'play_circle' },
           { label: 'Community Forum', href: '/forum', icon: 'forum' },
+          { label: 'Knowledge Base', href: '/knowledge', icon: 'school' },
+          { label: 'FAQ & Troubleshooting', href: '/faq', icon: 'help' },
           { label: 'Technical Support', href: '/tech-support', icon: 'support_agent' },
-          { label: 'Contact Specialists', href: '/specialists', icon: 'engineering' }
+          { label: 'Contact Specialists', href: '/specialists', icon: 'engineering' },
+          { label: 'Live Chat Support', href: '/chat', icon: 'chat' },
+          { label: 'Submit Feedback', href: '/feedback', icon: 'feedback' },
+          { label: 'Report Bug', href: '/bug-report', icon: 'bug_report' },
+          { label: 'Feature Requests', href: '/feature-request', icon: 'lightbulb' },
+          { label: 'Training Resources', href: '/training', icon: 'quiz' },
+          { label: 'Certification Program', href: '/certification', icon: 'verified' },
+          { label: 'Download Center', href: '/downloads', icon: 'download' }
         ]
       }
     ],
@@ -802,7 +858,7 @@ export const EdgeClippingPrevention: Story = {
         <div style="color: var(--spectrum-sys-color-on-surface-variant);">
           <p style="margin: 0 0 1rem 0;"><strong>Test Instructions:</strong></p>
           <ol style="margin: 0; padding-left: 1.5rem;">
-            <li>Hover over the <strong>"Resources & Support"</strong> menu item (rightmost)</li>
+            <li>Hover over the <strong>icon-only menu item</strong> (rightmost with three dots)</li>
             <li>Notice how the submenu intelligently positions itself to avoid screen edge clipping</li>
             <li>Try resizing your browser window to different widths and test again</li>
             <li>The submenu should automatically adjust its position to remain fully visible</li>
@@ -810,8 +866,8 @@ export const EdgeClippingPrevention: Story = {
         </div>
       </div>
       
-      <!-- Container positioned to the right to force edge clipping scenarios -->
-      <div style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+      <!-- Full width menu container -->
+      <div style="width: 100%; margin-bottom: 2rem;">
         <spectrum-menu
           orientation=${args.orientation}
           variant=${args.variant}

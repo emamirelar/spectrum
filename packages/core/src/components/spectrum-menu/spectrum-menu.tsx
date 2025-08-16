@@ -430,27 +430,32 @@ export class SpectrumMenu {
 
   private handleItemMouseEnter(event: MouseEvent, item: any) {
     if (item.children && item.children.length > 0) {
-      const linkElement = event.target as HTMLElement;
-      const submenu = linkElement.parentElement?.querySelector('.spectrum-menu__submenu, .spectrum-menu__megamenu') as HTMLElement;
+      const menuItemElement = event.currentTarget as HTMLElement;
+      const submenu = menuItemElement.querySelector('.spectrum-menu__submenu, .spectrum-menu__megamenu') as HTMLElement;
       
       if (submenu) {
-        const rect = linkElement.getBoundingClientRect();
+        // Get the bounds of the actual menu item element
+        const rect = menuItemElement.getBoundingClientRect();
         const spacing = 8; // 8px gap between menu item and submenu
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         
         if (this.variant === 'megamenu') {
           // Megamenu positioning - full width below the menu bar
+          submenu.style.position = 'fixed';
           submenu.style.top = `${rect.bottom + spacing}px`;
           submenu.style.left = '0px';
           submenu.style.width = '100vw';
+          // Let CSS hover control visibility
+          submenu.style.removeProperty('visibility');
+          submenu.style.removeProperty('opacity');
         } else if (this.orientation === 'vertical') {
-          // Reset positioning to get accurate measurements
+          // Temporarily position submenu off-screen to get accurate measurements
           submenu.style.position = 'fixed';
-          submenu.style.visibility = 'hidden';
+          submenu.style.left = '-9999px';
+          submenu.style.top = '-9999px';
+          submenu.style.visibility = 'visible';
           submenu.style.opacity = '1';
-          submenu.style.left = `${rect.right + spacing}px`;
-          submenu.style.top = `${rect.top}px`;
           
           // Force a reflow to get accurate dimensions
           submenu.offsetHeight;
@@ -486,20 +491,20 @@ export class SpectrumMenu {
             }
           }
           
-          // Apply final positioning
+          // Apply final positioning and let CSS hover control visibility
           submenu.style.left = `${left}px`;
           submenu.style.top = `${top}px`;
-          submenu.style.visibility = 'visible';
-          submenu.style.opacity = '0'; // Will be shown by CSS hover
+          submenu.style.removeProperty('visibility');
+          submenu.style.removeProperty('opacity');
           
         } else {
           // Horizontal menu - position submenu below the menu item
-          // Reset positioning to get accurate measurements
+          // Temporarily position submenu off-screen to get accurate measurements
           submenu.style.position = 'fixed';
-          submenu.style.visibility = 'hidden';
+          submenu.style.left = '-9999px';
+          submenu.style.top = '-9999px';
+          submenu.style.visibility = 'visible';
           submenu.style.opacity = '1';
-          submenu.style.left = `${rect.left}px`;
-          submenu.style.top = `${rect.bottom + spacing}px`;
           
           // Force a reflow to get accurate dimensions
           submenu.offsetHeight;
@@ -535,11 +540,11 @@ export class SpectrumMenu {
             }
           }
           
-          // Apply final positioning
+          // Apply final positioning and let CSS hover control visibility
           submenu.style.left = `${left}px`;
           submenu.style.top = `${top}px`;
-          submenu.style.visibility = 'visible';
-          submenu.style.opacity = '0'; // Will be shown by CSS hover
+          submenu.style.removeProperty('visibility');
+          submenu.style.removeProperty('opacity');
         }
       }
     }

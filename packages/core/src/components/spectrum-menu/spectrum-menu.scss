@@ -188,7 +188,7 @@
   box-shadow: var(--menu-shadow);
   opacity: 0;
   visibility: hidden;
-  transition: var(--menu-transition);
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10000; // High z-index to float above other content
   box-sizing: border-box;
   overflow: hidden; // Clip highlights to rounded container bounds
@@ -695,7 +695,7 @@
   box-shadow: var(--menu-shadow);
   opacity: 0;
   visibility: hidden;
-  transition: var(--menu-transition);
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10000;
   box-sizing: border-box;
   overflow: hidden;
