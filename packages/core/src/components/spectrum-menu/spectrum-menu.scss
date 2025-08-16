@@ -95,6 +95,43 @@
 }
 
 // ==============================================
+// New Layout Styles (Left/Logo/Right)
+// ==============================================
+.spectrum-menu__layout {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: var(--menu-spacing);
+}
+
+.spectrum-menu__section {
+  display: flex;
+  align-items: center;
+  gap: var(--menu-spacing-small);
+  
+  &--left {
+    flex-shrink: 0;
+    justify-content: flex-start;
+  }
+  
+  &--logo {
+    flex: 1;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    min-width: 0; // Allow shrinking if needed
+  }
+  
+  &--right {
+    flex-shrink: 0;
+    justify-content: flex-end;
+  }
+}
+
+// ==============================================
 // Menu Items
 // ==============================================
 .spectrum-menu__item {
@@ -441,6 +478,26 @@
   }
 }
 
+.spectrum-menu__mobile-header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--menu-spacing);
+  flex: 1;
+}
+
+.spectrum-menu__mobile-header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  
+  img {
+    height: 32px;
+    width: auto;
+    max-width: 48px;
+  }
+}
+
 .spectrum-menu__mobile-title {
   margin: 0;
   font-size: var(--spectrum-sys-typescale-headline-small-size, 1.5rem); // More reasonable size
@@ -508,6 +565,28 @@
   display: flex;
   flex-direction: column;
   gap: var(--menu-spacing-small); // More consistent spacing
+}
+
+// ==============================================
+// Mobile New Layout Styles
+// ==============================================
+.spectrum-menu__mobile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--menu-spacing-large);
+}
+
+
+
+.spectrum-menu__mobile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--menu-spacing-small);
+  
+  .spectrum-menu__mobile-list {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 // Mobile menu items with refined visual hierarchy

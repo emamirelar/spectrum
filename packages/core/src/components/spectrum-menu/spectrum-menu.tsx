@@ -47,6 +47,58 @@ export class SpectrumMenu {
   }> = [];
 
   /**
+   * The left navigation items configuration
+   * Used for horizontal layout with separate left and right sections
+   */
+  @Prop() leftItems: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
+   * The right navigation items configuration
+   * Used for horizontal layout with separate left and right sections
+   */
+  @Prop() rightItems: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
    * The breakpoint at which the menu switches to mobile view
    */
   @Prop() mobileBreakpoint: number = 768;
@@ -116,6 +168,56 @@ export class SpectrumMenu {
   }> = [];
 
   /**
+   * Parsed left menu items (internal state)
+   */
+  @State() parsedLeftItems: Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
+   * Parsed right menu items (internal state)
+   */
+  @State() parsedRightItems: Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
    * Event emitted when a menu item is clicked
    */
   @Event() itemClick: EventEmitter<{
@@ -126,6 +228,16 @@ export class SpectrumMenu {
   @Watch('items')
   itemsChanged(newValue: string | Array<any>) {
     this.parseItems(newValue);
+  }
+
+  @Watch('leftItems')
+  leftItemsChanged(newValue: string | Array<any>) {
+    this.parseLeftItems(newValue);
+  }
+
+  @Watch('rightItems')
+  rightItemsChanged(newValue: string | Array<any>) {
+    this.parseRightItems(newValue);
   }
 
   @Listen('resize', { target: 'window' })
@@ -219,6 +331,8 @@ export class SpectrumMenu {
   componentWillLoad() {
     this.checkMobileView();
     this.parseItems(this.items);
+    this.parseLeftItems(this.leftItems);
+    this.parseRightItems(this.rightItems);
   }
 
   componentDidLoad() {
@@ -266,6 +380,32 @@ export class SpectrumMenu {
       }
     } else {
       this.parsedItems = items;
+    }
+  }
+
+  private parseLeftItems(items: string | Array<any>) {
+    if (typeof items === 'string') {
+      try {
+        this.parsedLeftItems = JSON.parse(items);
+      } catch (e) {
+        console.error('Failed to parse leftItems JSON:', e);
+        this.parsedLeftItems = [];
+      }
+    } else {
+      this.parsedLeftItems = items;
+    }
+  }
+
+  private parseRightItems(items: string | Array<any>) {
+    if (typeof items === 'string') {
+      try {
+        this.parsedRightItems = JSON.parse(items);
+      } catch (e) {
+        console.error('Failed to parse rightItems JSON:', e);
+        this.parsedRightItems = [];
+      }
+    } else {
+      this.parsedRightItems = items;
     }
   }
 
@@ -554,6 +694,13 @@ export class SpectrumMenu {
     // Reset positioning is handled by CSS
   }
 
+  /**
+   * Check if we should use the new layout with separate left/right items and logo
+   */
+  private useNewLayout(): boolean {
+    return this.parsedLeftItems.length > 0 || this.parsedRightItems.length > 0;
+  }
+
   render() {
     const hostStyle = {
       ...(this.navigationColor && { '--menu-color': this.navigationColor }),
@@ -589,7 +736,14 @@ export class SpectrumMenu {
             {this.isMobileMenuOpen && (
               <div class="spectrum-menu__mobile-overlay">
                 <div class="spectrum-menu__mobile-header">
-                  <h2 class="spectrum-menu__mobile-title">{this.mobileMenuTitle}</h2>
+                  <div class="spectrum-menu__mobile-header-content">
+                    {this.useNewLayout() && (
+                      <div class="spectrum-menu__mobile-header-logo">
+                        <slot name="logo"></slot>
+                      </div>
+                    )}
+                    <h2 class="spectrum-menu__mobile-title">{this.mobileMenuTitle}</h2>
+                  </div>
                   <button
                     class="spectrum-menu__mobile-close"
                     onClick={() => this.toggleMobileMenu()}
@@ -600,18 +754,63 @@ export class SpectrumMenu {
                   </button>
                 </div>
                 <nav class="spectrum-menu__mobile-nav" role="navigation" aria-label={this.mobileMenuTitle}>
-                  <div class="spectrum-menu__mobile-list" role="menu" aria-label={this.mobileMenuTitle}>
-                    {this.parsedItems.map((item) => this.renderMenuItem(item))}
-                  </div>
+                  {this.useNewLayout() ? (
+                    <div class="spectrum-menu__mobile-layout">
+                      {/* Left items in mobile */}
+                      {this.parsedLeftItems.length > 0 && (
+                        <div class="spectrum-menu__mobile-section">
+                          <div class="spectrum-menu__mobile-list" role="menu" aria-label="Left navigation">
+                            {this.parsedLeftItems.map((item) => this.renderMenuItem(item))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Right items in mobile */}
+                      {this.parsedRightItems.length > 0 && (
+                        <div class="spectrum-menu__mobile-section">
+                          <div class="spectrum-menu__mobile-list" role="menu" aria-label="Right navigation">
+                            {this.parsedRightItems.map((item) => this.renderMenuItem(item))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div class="spectrum-menu__mobile-list" role="menu" aria-label={this.mobileMenuTitle}>
+                      {this.parsedItems.map((item) => this.renderMenuItem(item))}
+                    </div>
+                  )}
                 </nav>
               </div>
             )}
           </div>
         ) : (
           <nav class="spectrum-menu__nav" role="navigation" aria-label="Main navigation">
-            <div class="spectrum-menu__list" role="menubar" aria-label="Main navigation">
-              {this.parsedItems.map((item) => this.renderMenuItem(item))}
-            </div>
+            {this.useNewLayout() ? (
+              <div class="spectrum-menu__layout" role="menubar" aria-label="Main navigation">
+                {/* Left navigation items */}
+                {this.parsedLeftItems.length > 0 && (
+                  <div class="spectrum-menu__section spectrum-menu__section--left">
+                    {this.parsedLeftItems.map((item) => this.renderMenuItem(item))}
+                  </div>
+                )}
+                
+                {/* Logo section */}
+                <div class="spectrum-menu__section spectrum-menu__section--logo">
+                  <slot name="logo"></slot>
+                </div>
+                
+                {/* Right navigation items */}
+                {this.parsedRightItems.length > 0 && (
+                  <div class="spectrum-menu__section spectrum-menu__section--right">
+                    {this.parsedRightItems.map((item) => this.renderMenuItem(item))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div class="spectrum-menu__list" role="menubar" aria-label="Main navigation">
+                {this.parsedItems.map((item) => this.renderMenuItem(item))}
+              </div>
+            )}
           </nav>
         )}
       </Host>

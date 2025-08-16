@@ -40,6 +40,8 @@ interface SpectrumMenuElement extends HTMLElement {
   orientation: 'horizontal' | 'vertical';
   variant: 'default' | 'megamenu';
   items: MenuItem[];
+  leftItems: MenuItem[];
+  rightItems: MenuItem[];
   mobileBreakpoint: number;
   mobileMenuTitle: string;
   directNavigation: boolean;
@@ -303,6 +305,8 @@ Supports all Material Design icons via Material Symbols Outlined. The font is au
     orientation: 'horizontal',
     variant: 'default',
     items: basicNavItems,
+    leftItems: [],
+    rightItems: [],
     mobileBreakpoint: 768,
     mobileMenuTitle: 'Navigation',
     directNavigation: false,
@@ -331,6 +335,22 @@ Supports all Material Design icons via Material Symbols Outlined. The font is au
     items: {
       control: { type: 'object' },
       description: 'Menu items array with hierarchical structure and metadata',
+      table: {
+        type: { summary: 'MenuItem[]' },
+        defaultValue: { summary: '[]' }
+      }
+    },
+    leftItems: {
+      control: { type: 'object' },
+      description: 'Left navigation items for the new layout with separate sections',
+      table: {
+        type: { summary: 'MenuItem[]' },
+        defaultValue: { summary: '[]' }
+      }
+    },
+    rightItems: {
+      control: { type: 'object' },
+      description: 'Right navigation items for the new layout with separate sections',
       table: {
         type: { summary: 'MenuItem[]' },
         defaultValue: { summary: '[]' }
@@ -390,13 +410,25 @@ const renderMenu = (args: SpectrumMenuArgs) => {
         orientation=${args.orientation}
         variant=${args.variant}
         .items=${args.items}
+        .leftItems=${args.leftItems}
+        .rightItems=${args.rightItems}
         mobile-breakpoint=${args.mobileBreakpoint}
         mobile-menu-title=${args.mobileMenuTitle}
         ?direct-navigation=${args.directNavigation}
         navigation-color=${args.navigationColor}
         mobile-icon-color=${args.mobileIconColor}
         @itemClick=${(e: CustomEvent) => action('itemClick')(e.detail)}
-      ></spectrum-menu>
+      >
+        ${args.leftItems && args.leftItems.length > 0 || args.rightItems && args.rightItems.length > 0 ? html`
+          <div slot="logo" style="display: flex; align-items: center; justify-content: center; padding: 0 2rem;">
+            <img 
+              src="./spectrum-logo.svg" 
+              alt="Spectrum Logo" 
+              style="height: 32px; width: auto; max-width: 150px;"
+            />
+          </div>
+        ` : ''}
+      </spectrum-menu>
     </div>
   `;
 };
@@ -1048,6 +1080,161 @@ The \`navigationColor\` prop allows you to customize the menu text color while p
 - Brand color consistency across components
 
 The navigation color feature works in all orientations, variants, and responsive states while maintaining accessibility and usability.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * New navigation layout demonstration with separate left navigation items, centered logo, and right navigation items.
+ * Perfect for branded headers with distinct navigation sections and prominent logo placement.
+ */
+export const NavigationWithLogo: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'default',
+    items: [], // Empty regular items since we're using left/right
+    leftItems: [
+      { label: 'Home', href: '/', icon: 'home' },
+      { label: 'About', href: '/about', icon: 'info' },
+      { 
+        label: 'Services', 
+        href: '/services', 
+        icon: 'design_services',
+        children: [
+          { label: 'Web Development', href: '/services/web', icon: 'web' },
+          { label: 'Mobile Apps', href: '/services/mobile', icon: 'phone_android' },
+          { label: 'UI/UX Design', href: '/services/design', icon: 'palette' }
+        ]
+      }
+    ],
+    rightItems: [
+      { label: 'Login', href: '/login', icon: 'login' },
+      { label: 'Contact', href: '/contact', icon: 'contact_mail' },
+      { 
+        label: 'Account', 
+        href: '/account', 
+        icon: 'account_circle',
+        children: [
+          { label: 'Profile', href: '/profile', icon: 'person' },
+          { label: 'Settings', href: '/settings', icon: 'settings' },
+          { label: 'Logout', href: '/logout', icon: 'logout' }
+        ]
+      }
+    ],
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Main Navigation',
+    directNavigation: false
+  },
+  render: (args) => html`
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: var(--spectrum-sys-color-surface);">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-container); border-radius: 6px;">
+        <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">🏢 Navigation with Centered Spectrum Logo</h3>
+        <div style="color: var(--spectrum-sys-color-on-surface-variant);">
+          <p style="margin: 0 0 1rem 0;"><strong>Layout Structure:</strong></p>
+          <div style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <div style="padding: 0.25rem 0.5rem; background: var(--spectrum-sys-color-primary-container); border-radius: 4px; font-size: 0.875rem;">Left Items</div>
+            <div style="flex: 1; text-align: center; padding: 0.25rem 0.5rem; background: var(--spectrum-sys-color-secondary-container); border-radius: 4px; font-size: 0.875rem;">Spectrum Logo (Expands)</div>
+            <div style="padding: 0.25rem 0.5rem; background: var(--spectrum-sys-color-tertiary-container); border-radius: 4px; font-size: 0.875rem;">Right Items</div>
+          </div>
+          <p style="margin: 1rem 0 0 0;"><strong>Mobile Layout:</strong> Header (Logo + Title) → Left Items → Right Items (vertical stack)</p>
+        </div>
+      </div>
+      
+      <spectrum-menu
+        orientation=${args.orientation}
+        variant=${args.variant}
+        .items=${args.items}
+        .leftItems=${args.leftItems}
+        .rightItems=${args.rightItems}
+        mobile-breakpoint=${args.mobileBreakpoint}
+        mobile-menu-title=${args.mobileMenuTitle}
+        ?direct-navigation=${args.directNavigation}
+        @itemClick=${(e: CustomEvent) => action('navigation-with-logo-itemClick')(e.detail)}
+      >
+        <div slot="logo" style="display: flex; align-items: center; justify-content: center; padding: 0 2rem;">
+          <img 
+            src="./spectrum-logo.svg" 
+            alt="Spectrum Logo" 
+            style="height: 40px; width: auto; max-width: 200px;"
+          />
+        </div>
+      </spectrum-menu>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface-variant);">✨ New Layout Features:</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; color: var(--spectrum-sys-color-on-surface-variant);">
+          <li><strong>Flex Layout</strong>: Uses CSS flexbox for responsive behavior</li>
+          <li><strong>Left Navigation</strong>: Primary navigation items on the left</li>
+          <li><strong>Centered Logo</strong>: Logo slot expands to take available space</li>
+          <li><strong>Right Navigation</strong>: Secondary actions like login/account on the right</li>
+          <li><strong>Mobile Responsive</strong>: Stacks vertically with logo first on mobile</li>
+          <li><strong>Nested Menus</strong>: Both left and right items support submenus</li>
+        </ul>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### Navigation with Centered Logo Layout
+
+This story demonstrates the new flexible navigation layout with separate left and right navigation sections and a centered logo.
+
+**Layout Structure:**
+- **Left Items**: Primary navigation (Home, About, Services)
+- **Logo Section**: Centered Spectrum logo that expands to fill available space
+- **Right Items**: Secondary actions (Login, Contact, Account)
+
+**Desktop Layout (Horizontal):**
+\`\`\`
+[Left Items] ←→ [  Spectrum Logo  ] ←→ [Right Items]
+\`\`\`
+
+**Mobile Layout (Vertical):**
+\`\`\`
+Header: [Logo] Main Navigation                    [X]
+├── Left Items
+│   ├── Home
+│   ├── About
+│   └── Services
+└── Right Items
+    ├── Login
+    ├── Contact
+    └── Account
+\`\`\`
+
+**Key Features:**
+- **Flexible Logo Space**: Logo section uses \`flex: 1\` to expand and center content
+- **Separate Navigation Sections**: Distinct left and right navigation areas
+- **Responsive Design**: Automatic mobile conversion with logo-first layout
+- **Nested Menu Support**: Both left and right items support submenu hierarchies
+- **Brand Integration**: Logo slot accepts any content (text, images, components)
+
+**Usage:**
+\`\`\`html
+<spectrum-menu
+  .leftItems=\${leftNavItems}
+  .rightItems=\${rightNavItems}>
+  <div slot="logo">
+    <img src="logo.png" alt="Brand Logo" />
+  </div>
+</spectrum-menu>
+\`\`\`
+
+**Perfect For:**
+- Corporate websites with branded headers
+- E-commerce sites with distinct navigation areas
+- Applications with user account sections
+- Any site requiring prominent logo placement with organized navigation
+
+**CSS Implementation:**
+- Uses CSS flexbox for layout management
+- Logo section has \`flex: 1\` for expansion
+- Left and right sections have \`flex-shrink: 0\` to maintain size
+- Mobile layout uses vertical flex direction
         `
       }
     }
