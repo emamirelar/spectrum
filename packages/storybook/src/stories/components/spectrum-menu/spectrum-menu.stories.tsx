@@ -1171,6 +1171,7 @@ export const NavigationWithLogo: Story = {
           <li><strong>Right Navigation</strong>: Secondary actions like login/account on the right</li>
           <li><strong>Mobile Responsive</strong>: Stacks vertically with logo first on mobile</li>
           <li><strong>Nested Menus</strong>: Both left and right items support submenus</li>
+          <li><strong>Mobile Touch-Friendly</strong>: Submenus always visible on mobile (no hover required)</li>
         </ul>
       </div>
     </div>
@@ -1211,6 +1212,7 @@ Header: [Logo] Main Navigation                    [X]
 - **Separate Navigation Sections**: Distinct left and right navigation areas
 - **Responsive Design**: Automatic mobile conversion with logo-first layout
 - **Nested Menu Support**: Both left and right items support submenu hierarchies
+- **Mobile Touch-Friendly**: Submenus always visible on mobile (no hover required)
 - **Brand Integration**: Logo slot accepts any content (text, images, components)
 
 **Usage:**
