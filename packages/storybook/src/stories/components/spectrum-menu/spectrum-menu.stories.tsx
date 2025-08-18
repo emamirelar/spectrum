@@ -1128,8 +1128,8 @@ export const NavigationWithLogo: Story = {
     directNavigation: false
   },
   render: (args) => html`
-    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: var(--spectrum-sys-color-surface);">
-      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-container); border-radius: 6px;">
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh;">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.95); border-radius: 6px; backdrop-filter: blur(10px);">
         <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">🏢 Navigation with Centered Spectrum Logo</h3>
         <div style="color: var(--spectrum-sys-color-on-surface-variant);">
           <p style="margin: 0 0 1rem 0;"><strong>Layout Structure:</strong></p>
@@ -1160,11 +1160,18 @@ export const NavigationWithLogo: Story = {
             style="height: 40px; width: auto; max-width: 200px;"
           />
         </div>
+        <div slot="mobile-nav-logo" style="display: flex; align-items: center; justify-content: center;">
+          <img 
+            src="./spectrum-logo.svg" 
+            alt="Spectrum Logo" 
+            style="height: 32px; width: auto; max-width: 150px;"
+          />
+        </div>
       </spectrum-menu>
       
-      <div style="margin-top: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 6px;">
-        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface-variant);">✨ New Layout Features:</h4>
-        <ul style="margin: 0; padding-left: 1.5rem; color: var(--spectrum-sys-color-on-surface-variant);">
+      <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.95); border-radius: 6px; backdrop-filter: blur(10px);">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">✨ New Layout Features:</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; color: var(--spectrum-sys-color-on-surface);">
           <li><strong>Flex Layout</strong>: Uses CSS flexbox for responsive behavior</li>
           <li><strong>Left Navigation</strong>: Primary navigation items on the left</li>
           <li><strong>Centered Logo</strong>: Logo slot expands to take available space</li>

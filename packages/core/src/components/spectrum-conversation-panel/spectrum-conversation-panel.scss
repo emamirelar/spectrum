@@ -9,7 +9,7 @@
 // ==============================================
 // Root Variables and Custom Properties
 // ==============================================
-:host {
+spectrum-conversation-panel {
   display: block;
   height: 100%;
   
@@ -94,7 +94,7 @@ spectrum-conversation-panel .conversation-panel-host {
 spectrum-conversation-panel .conversation-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--conversation-panel-spacing);
+  gap: var(--conversation-panel-spacing-small);
   height: 100%;
   width: 100%;
   /* Remove any padding/margin since spectrum-panel handles container spacing */
@@ -175,7 +175,6 @@ spectrum-conversation-panel .message {
 
 spectrum-conversation-panel .request .message {
   border-radius: var(--conversation-panel-border-radius-large) var(--conversation-panel-border-radius-large) 0 var(--conversation-panel-border-radius-large);
-  backdrop-filter: brightness(10%);
   background: var(--conversation-panel-primary);
   color: var(--conversation-panel-on-primary);
   padding: var(--conversation-panel-spacing) calc(var(--conversation-panel-spacing) * 1.5);
@@ -386,16 +385,7 @@ spectrum-conversation-panel .conversation-panel-host {
   flex-grow: 1;
 }
 
-spectrum-conversation-panel .conversation-panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--conversation-panel-spacing-large);
-  padding: 0 var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large) var(--conversation-panel-spacing-large);
-  box-sizing: border-box;
-  overflow-y: auto;
-  flex-grow: 1;
-  height: 0; /* This forces flex to calculate height properly */
-}
+
 
 spectrum-conversation-panel .loader {
   display: inline-flex;
@@ -438,16 +428,79 @@ spectrum-conversation-panel .source-hover-overlay {
   z-index: 1000;
   
   .content-card.hover-card {
+    /* Inherit all base content-card styling */
+    flex: 0 0 var(--conversation-panel-card-width);
     max-width: var(--conversation-panel-card-width);
-    animation: fadeInUp 0.2s ease-out;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--conversation-panel-spacing);
+    padding: var(--conversation-panel-spacing);
+    background: var(--conversation-panel-surface);
+    color: var(--conversation-panel-on-surface);
+    border-radius: var(--conversation-panel-border-radius-large);
     border: 1px solid var(--conversation-panel-outline-variant);
     text-decoration: none;
+    cursor: pointer;
+    transition: var(--conversation-panel-transition);
+    
+    /* Enhanced hover card specific styling */
+    animation: fadeInUp 0.2s ease-out;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     
     /* Ensure hover effects work */
     &:hover {
       transform: translateY(-2px);
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Number badge styling */
+    .number {
+      flex: 0 0 32px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--conversation-panel-primary);
+      color: var(--conversation-panel-on-primary);
+      border-radius: 50%;
+      font-size: var(--conversation-panel-font-size);
+    }
+    
+    /* Card content styling */
+    .card-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      
+      .title {
+        font-weight: var(--conversation-panel-font-weight-medium);
+        color: var(--conversation-panel-on-surface);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .subtitle {
+        font-size: var(--conversation-panel-font-size-small);
+        color: var(--conversation-panel-on-surface-variant);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .snippet {
+        font-size: var(--conversation-panel-font-size-small);
+        color: var(--conversation-panel-on-surface-variant);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+      }
     }
   }
   
@@ -527,18 +580,29 @@ spectrum-conversation-panel .source-hover-overlay {
     }
     
     .content-card.hover-card.grouped-card {
+      /* Inherit base content-card styling but with fixed dimensions for grid */
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 10px !important;
+      background: var(--conversation-panel-surface) !important;
+      color: var(--conversation-panel-on-surface) !important;
+      border-radius: var(--conversation-panel-border-radius-large) !important;
+      border: 1px solid var(--conversation-panel-outline-variant) !important;
+      text-decoration: none !important;
+      cursor: pointer !important;
+      
       /* Fixed dimensions optimized for grid layout */
       width: 280px !important; /* Fixed width for consistent grid */
       height: 120px !important; /* Fixed height for all cards */
       margin: 0 !important; /* Force no margins */
       padding: 12px !important;
-      animation: fadeInUp 0.2s ease-out;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--conversation-panel-outline-variant);
-      text-decoration: none;
-      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out !important;
       box-sizing: border-box !important;
       position: static !important;
+      
+      /* Animation and transitions */
+      animation: fadeInUp 0.2s ease-out;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out !important;
       
       /* Hover effects for individual grouped cards - match single card behavior */
       &:hover {

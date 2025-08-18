@@ -57,7 +57,7 @@
   --menu-submenu-min-width: 200px;
   
   // Mobile icon color
-  --mobile-icon-color: #000000; // Default black
+  --mobile-icon-color: var(--spectrum-sys-color-on-surface, #1f1f1f); // Default value, can be overridden by mobileIconColor prop
 }
 
 // ==============================================
@@ -113,8 +113,9 @@
   gap: var(--menu-spacing-small);
   
   &--left {
-    flex-shrink: 0;
+    flex: 1;
     justify-content: flex-start;
+    min-width: 0; // Allow text to overflow if needed
   }
   
   &--logo {
@@ -126,8 +127,9 @@
   }
   
   &--right {
-    flex-shrink: 0;
+    flex: 1;
     justify-content: flex-end;
+    min-width: 0; // Allow text to overflow if needed
   }
 }
 
@@ -237,7 +239,7 @@
 }
 
 .spectrum-menu__submenu-item {
-  margin: 0;
+  margin: var(--menu-spacing-small) 0; // Add vertical margin using smaller spacing
   padding: 0;
 }
 
@@ -247,7 +249,7 @@
   gap: var(--menu-spacing-small);
   padding: var(--menu-spacing-small) var(--menu-spacing); // More horizontal padding for better spacing
   text-decoration: none;
-  color: var(--spectrum-sys-color-on-surface, #1f1f1f) !important; // Force default color
+  color: var(--spectrum-sys-color-on-surface, #1f1f1f); // Force default color
   border-radius: 0; // Remove border radius for edge-to-edge effect
   transition: var(--menu-transition-fast);
   cursor: pointer;
@@ -278,7 +280,7 @@
   
   // Override icon color for submenu items to use default
   .spectrum-menu__icon {
-    color: var(--spectrum-sys-color-on-surface, #1f1f1f) !important;
+    color: var(--spectrum-sys-color-on-surface, #1f1f1f);
   }
   
   // Sharp corners on highlights - container's overflow:hidden clips to rounded bounds
@@ -286,10 +288,10 @@
 
 // Force default colors for submenu items using correct DOM structure
 .spectrum-menu__submenu-item .spectrum-menu__item-link {
-  color: var(--spectrum-sys-color-on-surface, #1f1f1f) !important;
+  color: var(--spectrum-sys-color-on-surface, #1f1f1f);
   
   .spectrum-menu__icon {
-    color: var(--spectrum-sys-color-on-surface, #1f1f1f) !important;
+    color: var(--spectrum-sys-color-on-surface, #1f1f1f);
   }
 }
 
@@ -318,7 +320,6 @@
     gap: 2px;
     width: 100%;
     height: auto;
-    min-height: 100%;
   }
   
   .spectrum-menu__item {
@@ -391,12 +392,44 @@
 
 .spectrum-menu__mobile {
   position: relative;
+  background: transparent;
+}
+
+.spectrum-menu__mobile-nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 64px;
+  padding: 0 var(--menu-spacing);
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.spectrum-menu__mobile-nav-logo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0; // Allow shrinking if needed
+  
+  img {
+    height: 32px;
+    width: auto;
+    max-width: 150px; // Prevent logo from being too wide
+    object-fit: contain;
+  }
+}
+
+.spectrum-menu__mobile-nav-spacer {
+  flex: 0 0 48px; // Same width as hamburger button to balance
+  height: 48px;
 }
 
 .spectrum-menu__mobile-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 48px; // Fixed width to match spacer
   width: 48px;
   height: 48px;
   padding: 0;
@@ -427,7 +460,7 @@
 .spectrum-menu__hamburger-line {
   width: 100%;
   height: 2px;
-  background-color: var(--mobile-icon-color);
+  background-color: var(--mobile-icon-color); // Respect mobileIconColor prop for hamburger lines
   border-radius: 1px;
   transition: var(--menu-transition);
 }
@@ -460,22 +493,14 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--menu-spacing) var(--menu-spacing-large);
-  border-bottom: 1px solid var(--spectrum-sys-color-outline-variant, rgba(121, 116, 126, 0.12));
+  border-bottom: none; // Remove top border from mobile header
   background: var(--spectrum-sys-color-surface, #ffffff);
   min-height: 64px; // Slightly reduced height
   box-sizing: border-box;
   position: relative;
   
-  // Subtle top accent
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--spectrum-sys-color-primary, #6750a4);
-  }
+  // Remove top accent
+  // &::before removed to eliminate top purple line
 }
 
 .spectrum-menu__mobile-header-content {
@@ -502,7 +527,7 @@
   margin: 0;
   font-size: var(--spectrum-sys-typescale-headline-small-size, 1.5rem); // More reasonable size
   font-weight: var(--spectrum-sys-typescale-headline-small-weight, 600); // Refined weight
-  color: var(--menu-color);
+  color: var(--mobile-text-color, var(--spectrum-sys-color-on-surface, #1f1f1f)); // Use mobile-specific text color with fallback
   letter-spacing: -0.25px; // Subtle letter spacing
 }
 
@@ -518,11 +543,11 @@
   border-radius: var(--menu-border-radius);
   cursor: pointer;
   transition: var(--menu-transition);
-  color: var(--mobile-icon-color);
+  color: var(--mobile-text-color); // Use same color as text for consistency
   
   &:hover {
     background-color: var(--menu-item-hover-background);
-    color: var(--spectrum-sys-color-on-surface, #1f1f1f);
+    color: var(--mobile-text-color); // Use same color as text for consistency
   }
   
   &:focus-visible {
@@ -552,7 +577,7 @@
   }
 }
 
-.spectrum-menu__mobile-nav {
+.spectrum-menu__mobile-content {
   flex: 1;
   overflow-y: auto;
   padding: var(--menu-spacing-large); // More generous padding
@@ -591,14 +616,16 @@
 
 // Mobile menu items with refined visual hierarchy
 :host(.spectrum-menu--mobile) {
+  // Define mobile-specific text color that overrides navigationColor
+  --mobile-text-color: var(--spectrum-sys-color-on-surface, #1f1f1f);
+  
   .spectrum-menu__item {
     border-radius: var(--menu-border-radius);
     margin-bottom: var(--menu-spacing-small);
     
-    // Subtle background for items with submenus
+    // Remove background from items with submenus - it will be on the submenu container instead
     &:has(.spectrum-menu__submenu) {
-      background: var(--spectrum-sys-color-surface-container, rgba(103, 80, 164, 0.02));
-      border: 1px solid var(--spectrum-sys-color-outline-variant, rgba(121, 116, 126, 0.08));
+      border: none; // Remove border from main menu items
       padding: var(--menu-spacing-small);
       border-radius: calc(var(--menu-border-radius) + 2px);
     }
@@ -614,7 +641,8 @@
     min-height: 56px;
     position: relative;
     background: var(--spectrum-sys-color-surface, #ffffff);
-    border: 1px solid var(--spectrum-sys-color-outline-variant, rgba(121, 116, 126, 0.06));
+    color: var(--mobile-text-color); // Use mobile-specific text color
+    border: none; // Remove border from mobile menu item links
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     transition: var(--menu-transition);
     
@@ -649,7 +677,7 @@
     width: 1.25rem;
     height: 1.25rem;
     margin-right: var(--menu-spacing-small);
-    color: var(--mobile-icon-color);
+    color: var(--mobile-text-color); // Use same color as text for consistency
     opacity: 0.8; // Slightly muted
   }
   
@@ -659,35 +687,24 @@
     line-height: 1.4;
   }
   
-  // Refined submenus in mobile view - always visible, no hover needed
+    // Refined submenus in mobile view - always visible, no hover needed  
   .spectrum-menu__submenu {
-    position: static !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
     box-shadow: none;
     border: none;
-    background: none;
-    padding: var(--menu-spacing-small) 0 0 var(--menu-spacing);
+    background: var(--spectrum-sys-color-surface-container, rgba(103, 80, 164, 0.02)); // Move background to submenu container
+    padding: var(--menu-spacing-small); // Add padding on all sides
     margin-top: var(--menu-spacing-small);
+    margin-left: var(--menu-spacing); // Change left padding to margin
     z-index: auto;
-    border-radius: 0;
+    border-radius: var(--menu-border-radius); // Add border radius
     overflow: visible;
-    border-left: 2px solid var(--spectrum-sys-color-primary, #6750a4); // Thinner border
+    border-left: 2px solid var(--spectrum-sys-color-primary, #6750a4); // Add left border with primary color
     position: relative;
-    display: block !important; // Ensure submenu is always displayed
-    
-    &::before {
-      content: "";
-      position: absolute;
-      left: -2px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, 
-        var(--spectrum-sys-color-primary, #6750a4) 0%, 
-        var(--spectrum-sys-color-primary-container, rgba(103, 80, 164, 0.3)) 100%);
-    }
+    display: block; // Ensure submenu is always displayed
   }
   
   // Mobile submenu items - touch-friendly with no hover states
@@ -702,7 +719,9 @@
     font-size: var(--spectrum-sys-typescale-body-medium-size, 1rem);
     font-weight: 400; // Normal weight for hierarchy
     background: transparent;
+    color: var(--mobile-text-color); // Use mobile-specific text color
     border: 1px solid transparent;
+    border-left: none; // Remove border from submenu items
     position: relative;
     transition: var(--menu-transition);
     
@@ -738,20 +757,20 @@
       font-size: 1rem;
       width: 1rem;
       height: 1rem;
-      color: var(--mobile-icon-color);
+      color: var(--mobile-text-color); // Use same color as text for consistency
       opacity: 0.6; // More muted for hierarchy
     }
   }
   
   // Simplified spacing - no dividers to reduce visual clutter
   
-  // Override any hover-based submenu visibility for mobile
+  // Override any hover-based submenu visibility for mobile with higher specificity
   .spectrum-menu__item:hover .spectrum-menu__submenu,
   .spectrum-menu__item .spectrum-menu__submenu {
-    opacity: 1 !important;
-    visibility: visible !important;
-    position: static !important;
-    display: block !important;
+    opacity: 1;
+    visibility: visible;
+    position: static;
+    display: block;
   }
   
   // Remove hover indicator arrows since submenus are always visible
@@ -983,16 +1002,17 @@
     .spectrum-menu__item:hover .spectrum-menu__megamenu {
       transform: none;
       background-color: var(--spectrum-sys-color-surface, #ffffff);
+      color: var(--spectrum-sys-color-on-surface, #1f1f1f); // Ensure proper contrast
       border-color: var(--spectrum-sys-color-outline-variant, rgba(121, 116, 126, 0.06));
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
     
     // Ensure submenus are always visible on touch devices
     .spectrum-menu__submenu {
-      opacity: 1 !important;
-      visibility: visible !important;
-      position: static !important;
-      display: block !important;
+      opacity: 1;
+      visibility: visible;
+      position: static;
+      display: block;
     }
   }
 }
@@ -1001,19 +1021,19 @@
 @media (max-width: 768px) {
   :host(.spectrum-menu--mobile) {
     .spectrum-menu__submenu {
-      opacity: 1 !important;
-      visibility: visible !important;
-      position: static !important;
-      display: block !important;
+      opacity: 1;
+      visibility: visible;
+      position: static;
+      display: block;
     }
     
     // Remove any hover-based visibility toggles
     .spectrum-menu__item:hover .spectrum-menu__submenu,
     .spectrum-menu__item .spectrum-menu__submenu {
-      opacity: 1 !important;
-      visibility: visible !important;
-      position: static !important;
-      display: block !important;
+      opacity: 1;
+      visibility: visible;
+      position: static;
+      display: block;
     }
   }
 } 

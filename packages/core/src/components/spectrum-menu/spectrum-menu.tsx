@@ -50,7 +50,7 @@ export class SpectrumMenu {
    * The left navigation items configuration
    * Used for horizontal layout with separate left and right sections
    */
-  @Prop() leftItems: string | Array<{
+  @Prop({ attribute: 'left-items' }) leftItems: string | Array<{
     label: string;
     href?: string;
     icon?: string;
@@ -76,7 +76,7 @@ export class SpectrumMenu {
    * The right navigation items configuration
    * Used for horizontal layout with separate left and right sections
    */
-  @Prop() rightItems: string | Array<{
+  @Prop({ attribute: 'right-items' }) rightItems: string | Array<{
     label: string;
     href?: string;
     icon?: string;
@@ -126,6 +126,8 @@ export class SpectrumMenu {
    * When provided, this will override the default icon color
    */
   @Prop() mobileIconColor: string = '#000000';
+
+
 
   /**
    * Whether the menu is currently in mobile view
@@ -720,26 +722,40 @@ export class SpectrumMenu {
       >
         {this.isMobile ? (
           <div class="spectrum-menu__mobile">
-            <button
-              class="spectrum-menu__mobile-toggle"
-              onClick={() => this.toggleMobileMenu()}
-              aria-expanded={this.isMobileMenuOpen}
-              aria-label="Toggle menu"
-              type="button"
-            >
-              <span class="spectrum-menu__hamburger">
-                <span class="spectrum-menu__hamburger-line"></span>
-                <span class="spectrum-menu__hamburger-line"></span>
-                <span class="spectrum-menu__hamburger-line"></span>
-              </span>
-            </button>
+            <div class="spectrum-menu__mobile-nav">
+              <button
+                class="spectrum-menu__mobile-toggle"
+                onClick={() => this.toggleMobileMenu()}
+                aria-expanded={this.isMobileMenuOpen}
+                aria-label="Toggle menu"
+                type="button"
+              >
+                <span class="spectrum-menu__hamburger">
+                  <span class="spectrum-menu__hamburger-line"></span>
+                  <span class="spectrum-menu__hamburger-line"></span>
+                  <span class="spectrum-menu__hamburger-line"></span>
+                </span>
+              </button>
+              
+              {this.useNewLayout() && (
+                <div class="spectrum-menu__mobile-nav-logo">
+                  <slot name="mobile-nav-logo">
+                    <slot name="logo"></slot>
+                  </slot>
+                </div>
+              )}
+              
+              <div class="spectrum-menu__mobile-nav-spacer"></div>
+            </div>
             {this.isMobileMenuOpen && (
               <div class="spectrum-menu__mobile-overlay">
                 <div class="spectrum-menu__mobile-header">
                   <div class="spectrum-menu__mobile-header-content">
                     {this.useNewLayout() && (
                       <div class="spectrum-menu__mobile-header-logo">
-                        <slot name="logo"></slot>
+                        <slot name="mobile-nav-logo">
+                          <slot name="logo"></slot>
+                        </slot>
                       </div>
                     )}
                     <h2 class="spectrum-menu__mobile-title">{this.mobileMenuTitle}</h2>
@@ -753,7 +769,7 @@ export class SpectrumMenu {
                     <span class="material-symbols-outlined">close</span>
                   </button>
                 </div>
-                <nav class="spectrum-menu__mobile-nav" role="navigation" aria-label={this.mobileMenuTitle}>
+                <nav class="spectrum-menu__mobile-content" role="navigation" aria-label={this.mobileMenuTitle}>
                   {this.useNewLayout() ? (
                     <div class="spectrum-menu__mobile-layout">
                       {/* Left items in mobile */}
