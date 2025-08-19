@@ -416,7 +416,7 @@ const renderConversationPanel = (args: SpectrumConversationPanelArgs) => {
           background=${args.background}
           .loading=${args.loading}
           .sound=${args.sound}
-          .debug=${true}
+          .debug=${args.debug}
           @action=${(e: CustomEvent) => action('action')(e.detail)}
           @titleChanged=${(e: CustomEvent) => action('titleChanged')(e.detail)}
           @explorationSelected=${(e: CustomEvent) => action('explorationSelected')(e.detail)}

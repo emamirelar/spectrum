@@ -394,7 +394,7 @@ export class SpectrumConversationPanel {
 
     // Check if data exists for conditional rendering
     const hasExplorations = response.explorations && Array.isArray(response.explorations) && response.explorations.length > 0;
-    console.log('renderResponse - checking explorations', { 
+    this.debugLog('renderResponse - checking explorations', { 
       messageId, 
       hasExplorations, 
       explorations: response.explorations, 
@@ -412,7 +412,7 @@ export class SpectrumConversationPanel {
             {this.renderActions(messageId)}
           </div>
           {hasExplorations && (() => {
-            console.log('RENDERING ACCORDION!', { 
+            this.debugLog('RENDERING ACCORDION!', { 
               messageId, 
               expanded: activeAccordion === 'explorations',
               activeAccordion,
@@ -486,18 +486,16 @@ export class SpectrumConversationPanel {
    * @param messageId - the ID of the message these explorations belong to
    */
   renderExplorations(explorations: any, messageId?: string) {
-    console.log('renderExplorations CALLED!', { explorations, messageId, explorationsLength: explorations?.length });
-    this.debugLog('renderExplorations called', { explorations, messageId });
+    this.debugLog('renderExplorations called', { explorations, messageId, explorationsLength: explorations?.length });
     if (!explorations || !Array.isArray(explorations) || explorations.length === 0) {
-      console.log('NO VALID EXPLORATIONS - returning null', { explorations });
-      this.debugLog('No valid explorations provided');
+      this.debugLog('No valid explorations provided', { explorations });
       return null;
     }
     
     // Return chips directly without container div for accordion usage
-    console.log('CREATING EXPLORATION CHIPS!', { count: explorations.length, messageId });
+    this.debugLog('Creating exploration chips', { count: explorations.length, messageId });
     return explorations.map((exploration) => {
-      console.log('Creating chip for exploration:', exploration.label);
+      this.debugLog('Creating chip for exploration', exploration.label);
       return (
         <spectrum-chip
           variant="secondary"
@@ -505,7 +503,6 @@ export class SpectrumConversationPanel {
           leadingIcon="prompt_suggestion"
           sound={this.sound}
           onClick={() => {
-            console.log('EXPLORATION CLICKED!', { exploration: exploration.label, messageId, debug: this.debug });
             this.debugLog('Exploration clicked', { exploration: exploration.label, messageId });
             this.action.emit({
               action: 'explore',
@@ -521,10 +518,10 @@ export class SpectrumConversationPanel {
 
   private handleAccordionToggle = (event: CustomEvent, messageId: string, accordionType: 'explorations') => {
     const { expanded } = event.detail;
-    console.log('ACCORDION TOGGLED!', { messageId, accordionType, expanded, event: event.detail });
+    this.debugLog('Accordion toggled', { messageId, accordionType, expanded, event: event.detail });
     
     if (expanded) {
-      console.log('ACCORDION EXPANDED - setting state', { messageId, accordionType });
+      this.debugLog('Accordion expanded - setting state', { messageId, accordionType });
       this.expandedMessageId = messageId;
       this.expandedAccordionType = accordionType;
       
@@ -533,7 +530,7 @@ export class SpectrumConversationPanel {
         this.scrollToLastExploration(messageId, 0); // explorationsCount not needed for this approach
       }
     } else {
-      console.log('ACCORDION COLLAPSED - clearing state');
+      this.debugLog('Accordion collapsed - clearing state');
       this.expandedMessageId = null;
       this.expandedAccordionType = null;
     }
