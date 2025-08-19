@@ -1210,6 +1210,31 @@ export namespace Components {
     }>;
   }>;
         /**
+          * The left navigation items configuration Used for horizontal layout with separate left and right sections
+          * @default []
+         */
+        "leftItems": string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }>;
+        /**
           * The breakpoint at which the menu switches to mobile view
           * @default 768
          */
@@ -1233,6 +1258,31 @@ export namespace Components {
           * @default 'horizontal'
          */
         "orientation": 'horizontal' | 'vertical';
+        /**
+          * The right navigation items configuration Used for horizontal layout with separate left and right sections
+          * @default []
+         */
+        "rightItems": string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }>;
         /**
           * The variant of the menu
           * @default 'default'
@@ -3787,6 +3837,31 @@ declare namespace LocalJSX {
     }>;
   }>;
         /**
+          * The left navigation items configuration Used for horizontal layout with separate left and right sections
+          * @default []
+         */
+        "leftItems"?: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }>;
+        /**
           * The breakpoint at which the menu switches to mobile view
           * @default 768
          */
@@ -3817,6 +3892,31 @@ declare namespace LocalJSX {
           * @default 'horizontal'
          */
         "orientation"?: 'horizontal' | 'vertical';
+        /**
+          * The right navigation items configuration Used for horizontal layout with separate left and right sections
+          * @default []
+         */
+        "rightItems"?: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }>;
         /**
           * The variant of the menu
           * @default 'default'

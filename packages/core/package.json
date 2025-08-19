@@ -1,6 +1,6 @@
 {
   "name": "@unops-itg-npm/cpit-spectrum",
-  "version": "0.0.1-alpha.33",
+  "version": "0.0.1-alpha.34",
   "description": "Spectrum, UNOPS Design System Core Components",
   "author": "Justin Waugh <justinwa@unops.org>",
   "main": "dist/index.cjs.js",

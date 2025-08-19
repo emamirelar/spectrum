@@ -391,6 +391,8 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'orientation',
   'variant',
   'items',
+  'leftItems',
+  'rightItems',
   'mobileBreakpoint',
   'mobileMenuTitle',
   'directNavigation',

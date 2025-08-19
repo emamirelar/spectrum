@@ -47,6 +47,58 @@ export class SpectrumMenu {
   }> = [];
 
   /**
+   * The left navigation items configuration
+   * Used for horizontal layout with separate left and right sections
+   */
+  @Prop({ attribute: 'left-items' }) leftItems: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
+   * The right navigation items configuration
+   * Used for horizontal layout with separate left and right sections
+   */
+  @Prop({ attribute: 'right-items' }) rightItems: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
    * The breakpoint at which the menu switches to mobile view
    */
   @Prop() mobileBreakpoint: number = 768;
@@ -74,6 +126,8 @@ export class SpectrumMenu {
    * When provided, this will override the default icon color
    */
   @Prop() mobileIconColor: string = '#000000';
+
+
 
   /**
    * Whether the menu is currently in mobile view
@@ -116,6 +170,56 @@ export class SpectrumMenu {
   }> = [];
 
   /**
+   * Parsed left menu items (internal state)
+   */
+  @State() parsedLeftItems: Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
+   * Parsed right menu items (internal state)
+   */
+  @State() parsedRightItems: Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+    description?: string;
+    children?: Array<{
+      label: string;
+      href?: string;
+      icon?: string;
+      disabled?: boolean;
+      description?: string;
+      children?: Array<{
+        label: string;
+        href?: string;
+        icon?: string;
+        disabled?: boolean;
+        description?: string;
+      }>;
+    }>;
+  }> = [];
+
+  /**
    * Event emitted when a menu item is clicked
    */
   @Event() itemClick: EventEmitter<{
@@ -126,6 +230,16 @@ export class SpectrumMenu {
   @Watch('items')
   itemsChanged(newValue: string | Array<any>) {
     this.parseItems(newValue);
+  }
+
+  @Watch('leftItems')
+  leftItemsChanged(newValue: string | Array<any>) {
+    this.parseLeftItems(newValue);
+  }
+
+  @Watch('rightItems')
+  rightItemsChanged(newValue: string | Array<any>) {
+    this.parseRightItems(newValue);
   }
 
   @Listen('resize', { target: 'window' })
@@ -219,6 +333,8 @@ export class SpectrumMenu {
   componentWillLoad() {
     this.checkMobileView();
     this.parseItems(this.items);
+    this.parseLeftItems(this.leftItems);
+    this.parseRightItems(this.rightItems);
   }
 
   componentDidLoad() {
@@ -266,6 +382,32 @@ export class SpectrumMenu {
       }
     } else {
       this.parsedItems = items;
+    }
+  }
+
+  private parseLeftItems(items: string | Array<any>) {
+    if (typeof items === 'string') {
+      try {
+        this.parsedLeftItems = JSON.parse(items);
+      } catch (e) {
+        console.error('Failed to parse leftItems JSON:', e);
+        this.parsedLeftItems = [];
+      }
+    } else {
+      this.parsedLeftItems = items;
+    }
+  }
+
+  private parseRightItems(items: string | Array<any>) {
+    if (typeof items === 'string') {
+      try {
+        this.parsedRightItems = JSON.parse(items);
+      } catch (e) {
+        console.error('Failed to parse rightItems JSON:', e);
+        this.parsedRightItems = [];
+      }
+    } else {
+      this.parsedRightItems = items;
     }
   }
 
@@ -430,27 +572,32 @@ export class SpectrumMenu {
 
   private handleItemMouseEnter(event: MouseEvent, item: any) {
     if (item.children && item.children.length > 0) {
-      const linkElement = event.target as HTMLElement;
-      const submenu = linkElement.parentElement?.querySelector('.spectrum-menu__submenu, .spectrum-menu__megamenu') as HTMLElement;
+      const menuItemElement = event.currentTarget as HTMLElement;
+      const submenu = menuItemElement.querySelector('.spectrum-menu__submenu, .spectrum-menu__megamenu') as HTMLElement;
       
       if (submenu) {
-        const rect = linkElement.getBoundingClientRect();
+        // Get the bounds of the actual menu item element
+        const rect = menuItemElement.getBoundingClientRect();
         const spacing = 8; // 8px gap between menu item and submenu
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         
         if (this.variant === 'megamenu') {
           // Megamenu positioning - full width below the menu bar
+          submenu.style.position = 'fixed';
           submenu.style.top = `${rect.bottom + spacing}px`;
           submenu.style.left = '0px';
           submenu.style.width = '100vw';
+          // Let CSS hover control visibility
+          submenu.style.removeProperty('visibility');
+          submenu.style.removeProperty('opacity');
         } else if (this.orientation === 'vertical') {
-          // Reset positioning to get accurate measurements
+          // Temporarily position submenu off-screen to get accurate measurements
           submenu.style.position = 'fixed';
-          submenu.style.visibility = 'hidden';
+          submenu.style.left = '-9999px';
+          submenu.style.top = '-9999px';
+          submenu.style.visibility = 'visible';
           submenu.style.opacity = '1';
-          submenu.style.left = `${rect.right + spacing}px`;
-          submenu.style.top = `${rect.top}px`;
           
           // Force a reflow to get accurate dimensions
           submenu.offsetHeight;
@@ -486,20 +633,20 @@ export class SpectrumMenu {
             }
           }
           
-          // Apply final positioning
+          // Apply final positioning and let CSS hover control visibility
           submenu.style.left = `${left}px`;
           submenu.style.top = `${top}px`;
-          submenu.style.visibility = 'visible';
-          submenu.style.opacity = '0'; // Will be shown by CSS hover
+          submenu.style.removeProperty('visibility');
+          submenu.style.removeProperty('opacity');
           
         } else {
           // Horizontal menu - position submenu below the menu item
-          // Reset positioning to get accurate measurements
+          // Temporarily position submenu off-screen to get accurate measurements
           submenu.style.position = 'fixed';
-          submenu.style.visibility = 'hidden';
+          submenu.style.left = '-9999px';
+          submenu.style.top = '-9999px';
+          submenu.style.visibility = 'visible';
           submenu.style.opacity = '1';
-          submenu.style.left = `${rect.left}px`;
-          submenu.style.top = `${rect.bottom + spacing}px`;
           
           // Force a reflow to get accurate dimensions
           submenu.offsetHeight;
@@ -535,11 +682,11 @@ export class SpectrumMenu {
             }
           }
           
-          // Apply final positioning
+          // Apply final positioning and let CSS hover control visibility
           submenu.style.left = `${left}px`;
           submenu.style.top = `${top}px`;
-          submenu.style.visibility = 'visible';
-          submenu.style.opacity = '0'; // Will be shown by CSS hover
+          submenu.style.removeProperty('visibility');
+          submenu.style.removeProperty('opacity');
         }
       }
     }
@@ -547,6 +694,13 @@ export class SpectrumMenu {
 
   private handleItemMouseLeave(_event: MouseEvent) {
     // Reset positioning is handled by CSS
+  }
+
+  /**
+   * Check if we should use the new layout with separate left/right items and logo
+   */
+  private useNewLayout(): boolean {
+    return this.parsedLeftItems.length > 0 || this.parsedRightItems.length > 0;
   }
 
   render() {
@@ -568,23 +722,44 @@ export class SpectrumMenu {
       >
         {this.isMobile ? (
           <div class="spectrum-menu__mobile">
-            <button
-              class="spectrum-menu__mobile-toggle"
-              onClick={() => this.toggleMobileMenu()}
-              aria-expanded={this.isMobileMenuOpen}
-              aria-label="Toggle menu"
-              type="button"
-            >
-              <span class="spectrum-menu__hamburger">
-                <span class="spectrum-menu__hamburger-line"></span>
-                <span class="spectrum-menu__hamburger-line"></span>
-                <span class="spectrum-menu__hamburger-line"></span>
-              </span>
-            </button>
+            <div class="spectrum-menu__mobile-nav">
+              <button
+                class="spectrum-menu__mobile-toggle"
+                onClick={() => this.toggleMobileMenu()}
+                aria-expanded={this.isMobileMenuOpen}
+                aria-label="Toggle menu"
+                type="button"
+              >
+                <span class="spectrum-menu__hamburger">
+                  <span class="spectrum-menu__hamburger-line"></span>
+                  <span class="spectrum-menu__hamburger-line"></span>
+                  <span class="spectrum-menu__hamburger-line"></span>
+                </span>
+              </button>
+              
+              {this.useNewLayout() && (
+                <div class="spectrum-menu__mobile-nav-logo">
+                  <slot name="mobile-nav-logo">
+                    <slot name="logo"></slot>
+                  </slot>
+                </div>
+              )}
+              
+              <div class="spectrum-menu__mobile-nav-spacer"></div>
+            </div>
             {this.isMobileMenuOpen && (
               <div class="spectrum-menu__mobile-overlay">
                 <div class="spectrum-menu__mobile-header">
-                  <h2 class="spectrum-menu__mobile-title">{this.mobileMenuTitle}</h2>
+                  <div class="spectrum-menu__mobile-header-content">
+                    {this.useNewLayout() && (
+                      <div class="spectrum-menu__mobile-header-logo">
+                        <slot name="mobile-nav-logo">
+                          <slot name="logo"></slot>
+                        </slot>
+                      </div>
+                    )}
+                    <h2 class="spectrum-menu__mobile-title">{this.mobileMenuTitle}</h2>
+                  </div>
                   <button
                     class="spectrum-menu__mobile-close"
                     onClick={() => this.toggleMobileMenu()}
@@ -594,19 +769,64 @@ export class SpectrumMenu {
                     <span class="material-symbols-outlined">close</span>
                   </button>
                 </div>
-                <nav class="spectrum-menu__mobile-nav" role="navigation" aria-label={this.mobileMenuTitle}>
-                  <div class="spectrum-menu__mobile-list" role="menu" aria-label={this.mobileMenuTitle}>
-                    {this.parsedItems.map((item) => this.renderMenuItem(item))}
-                  </div>
+                <nav class="spectrum-menu__mobile-content" role="navigation" aria-label={this.mobileMenuTitle}>
+                  {this.useNewLayout() ? (
+                    <div class="spectrum-menu__mobile-layout">
+                      {/* Left items in mobile */}
+                      {this.parsedLeftItems.length > 0 && (
+                        <div class="spectrum-menu__mobile-section">
+                          <div class="spectrum-menu__mobile-list" role="menu" aria-label="Left navigation">
+                            {this.parsedLeftItems.map((item) => this.renderMenuItem(item))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Right items in mobile */}
+                      {this.parsedRightItems.length > 0 && (
+                        <div class="spectrum-menu__mobile-section">
+                          <div class="spectrum-menu__mobile-list" role="menu" aria-label="Right navigation">
+                            {this.parsedRightItems.map((item) => this.renderMenuItem(item))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div class="spectrum-menu__mobile-list" role="menu" aria-label={this.mobileMenuTitle}>
+                      {this.parsedItems.map((item) => this.renderMenuItem(item))}
+                    </div>
+                  )}
                 </nav>
               </div>
             )}
           </div>
         ) : (
           <nav class="spectrum-menu__nav" role="navigation" aria-label="Main navigation">
-            <div class="spectrum-menu__list" role="menubar" aria-label="Main navigation">
-              {this.parsedItems.map((item) => this.renderMenuItem(item))}
-            </div>
+            {this.useNewLayout() ? (
+              <div class="spectrum-menu__layout" role="menubar" aria-label="Main navigation">
+                {/* Left navigation items */}
+                {this.parsedLeftItems.length > 0 && (
+                  <div class="spectrum-menu__section spectrum-menu__section--left">
+                    {this.parsedLeftItems.map((item) => this.renderMenuItem(item))}
+                  </div>
+                )}
+                
+                {/* Logo section */}
+                <div class="spectrum-menu__section spectrum-menu__section--logo">
+                  <slot name="logo"></slot>
+                </div>
+                
+                {/* Right navigation items */}
+                {this.parsedRightItems.length > 0 && (
+                  <div class="spectrum-menu__section spectrum-menu__section--right">
+                    {this.parsedRightItems.map((item) => this.renderMenuItem(item))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div class="spectrum-menu__list" role="menubar" aria-label="Main navigation">
+                {this.parsedItems.map((item) => this.renderMenuItem(item))}
+              </div>
+            )}
           </nav>
         )}
       </Host>

@@ -528,7 +528,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'leftItems', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -536,7 +536,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['directNavigation', 'items', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'variant'],
+  inputs: ['directNavigation', 'items', 'leftItems', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLSpectrumMenuElement;
