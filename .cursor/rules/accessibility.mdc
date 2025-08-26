@@ -1,4 +1,519 @@
+---
+alwaysApply: true
+---
+
 # Spectrum Component Accessibility Standards Rule
+
+## Overview
+All Spectrum components MUST meet WCAG 2.1 AA accessibility standards and follow these comprehensive accessibility guidelines to ensure inclusive design and usability for all users, including those using assistive technologies.
+
+## WCAG 2.1 AA Compliance Requirements
+
+### 1. Perceivable
+**Visual Design Standards:**
+- **Color Contrast**: Minimum 4.5:1 contrast ratio for normal text, 3:1 for large text (18pt+ or 14pt+ bold)
+- **Color Independence**: Information must be conveyed through means other than color alone
+- **Text Scaling**: Components must support up to 200% zoom without horizontal scrolling
+- **Visual Focus**: All interactive elements must have visible focus indicators
+
+**Implementation:**
+```scss
+// ✅ Required contrast ratios using Spectrum design tokens
+:host {
+  --component-text-color: var(--spectrum-sys-color-on-surface); // Ensures proper contrast
+  --component-background: var(--spectrum-sys-color-surface);
+  --component-focus-outline: var(--spectrum-sys-color-primary); // High contrast focus
+}
+
+// ✅ Visible focus indicators
+.spectrum-component:focus-visible {
+  outline: 2px solid var(--component-focus-outline);
+  outline-offset: 2px;
+}
+
+// ✅ High contrast mode support
+@media (prefers-contrast: high) {
+  .spectrum-component {
+    border: 1px solid;
+    --component-focus-outline: ButtonText;
+  }
+}
+```
+
+### 2. Operable
+**Keyboard Navigation Requirements:**
+- **Tab Order**: Logical tab sequence through all interactive elements
+- **Keyboard Shortcuts**: Standard keyboard interactions (Enter, Space, Arrow keys, Escape)
+- **Focus Management**: Programmatic focus control for dynamic content
+- **No Keyboard Traps**: Users must be able to navigate away from any component
+
+**Implementation:**
+```typescript
+// ✅ Required keyboard event handling
+@Listen('keydown')
+handleKeyDown(event: KeyboardEvent) {
+  switch (event.key) {
+    case 'Enter':
+    case ' ': // Space key
+      event.preventDefault();
+      this.activate();
+      break;
+    case 'Escape':
+      this.close();
+      break;
+    case 'ArrowDown':
+    case 'ArrowUp':
+      event.preventDefault();
+      this.navigateItems(event.key);
+      break;
+  }
+}
+
+// ✅ Focus management for dynamic content
+@Method()
+async focusFirst() {
+  const firstFocusable = this.element.querySelector('[tabindex="0"], button, input, select, textarea, [href]');
+  if (firstFocusable) {
+    (firstFocusable as HTMLElement).focus();
+  }
+}
+```
+
+### 3. Understandable
+**Content and Interaction Standards:**
+- **Clear Labels**: All interactive elements must have accessible names
+- **Instructions**: Provide clear usage instructions and error messages
+- **Predictable Behavior**: Consistent interaction patterns across components
+- **Error Identification**: Clear error states and recovery instructions
+
+**Implementation:**
+```typescript
+// ✅ Required ARIA attributes and labels
+render() {
+  return (
+    <button
+      class="spectrum-button"
+      aria-label={this.ariaLabel || this.label}
+      aria-describedby={this.errorMessage ? 'error-message' : undefined}
+      aria-expanded={this.expanded}
+      aria-controls={this.controls}
+      aria-disabled={this.disabled}
+      role="button"
+    >
+      {this.label}
+      {this.errorMessage && (
+        <div id="error-message" role="alert" aria-live="assertive">
+          {this.errorMessage}
+        </div>
+      )}
+    </button>
+  );
+}
+```
+
+### 4. Robust
+**Technical Implementation Requirements:**
+- **Semantic HTML**: Use appropriate HTML elements and ARIA roles
+- **Valid Code**: Well-formed HTML that works with assistive technologies
+- **Progressive Enhancement**: Core functionality available without JavaScript
+- **Assistive Technology Support**: Compatible with screen readers, voice control, etc.
+
+## Component-Specific Accessibility Requirements
+
+### Interactive Components (Buttons, Links, Form Controls)
+**Required Properties:**
+```typescript
+// ✅ Mandatory accessibility props for interactive components
+export interface AccessibleInteractiveProps {
+  /** Accessible label for screen readers */
+  ariaLabel?: string;
+  /** ID of element that describes this component */
+  ariaDescribedBy?: string;
+  /** ID of element that labels this component */
+  ariaLabelledBy?: string;
+  /** Disabled state affects keyboard navigation and screen readers */
+  disabled?: boolean;
+  /** Loading state with appropriate announcements */
+  loading?: boolean;
+}
+```
+
+**Implementation Pattern:**
+```typescript
+@Component({
+  tag: 'spectrum-interactive-component'
+})
+export class SpectrumInteractiveComponent {
+  @Prop() ariaLabel?: string;
+  @Prop() ariaDescribedBy?: string;
+  @Prop() ariaLabelledBy?: string;
+  @Prop() disabled: boolean = false;
+  @Prop() loading: boolean = false;
+
+  // ✅ Required: Announce loading states
+  @Watch('loading')
+  onLoadingChange(newLoading: boolean) {
+    if (newLoading) {
+      this.announceToScreenReader('Loading...');
+    }
+  }
+
+  private announceToScreenReader(message: string) {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.className = 'sr-only';
+    announcement.textContent = message;
+    document.body.appendChild(announcement);
+    setTimeout(() => document.body.removeChild(announcement), 1000);
+  }
+}
+```
+
+### Navigation Components (Menus, Rails, Lists)
+**Required Features:**
+- **Arrow Key Navigation**: Up/Down/Left/Right navigation
+- **Home/End Keys**: Jump to first/last items
+- **Type-ahead Search**: Filter items by typing
+- **Escape Key**: Close expanded states
+
+### Form Components (Inputs, Selects, Checkboxes)
+**Required Features:**
+- **Labels**: Associated labels or aria-label
+- **Error States**: aria-invalid and error descriptions
+- **Required Fields**: aria-required attribute
+- **Validation**: Real-time validation announcements
+
+### Modal/Overlay Components (Dialogs, Tooltips, Popovers)
+**Required Features:**
+- **Focus Trapping**: Focus stays within modal
+- **Escape Key**: Close on Escape
+- **Focus Restoration**: Return focus to trigger element
+- **Backdrop Click**: Close on backdrop click (optional but announced)
+
+## Screen Reader Support Requirements
+
+### ARIA Attributes
+**Required ARIA Usage:**
+```typescript
+// ✅ Essential ARIA attributes for different component types
+const REQUIRED_ARIA_PATTERNS = {
+  button: ['aria-label', 'aria-expanded', 'aria-pressed'],
+  link: ['aria-label', 'aria-current'],
+  input: ['aria-label', 'aria-required', 'aria-invalid', 'aria-describedby'],
+  listbox: ['aria-label', 'aria-multiselectable', 'aria-expanded'],
+  option: ['aria-selected', 'aria-disabled'],
+  tab: ['aria-selected', 'aria-controls'],
+  tabpanel: ['aria-labelledby'],
+  dialog: ['aria-modal', 'aria-labelledby', 'aria-describedby'],
+  menu: ['aria-label', 'aria-orientation'],
+  menuitem: ['aria-disabled', 'aria-expanded'],
+  progressbar: ['aria-valuemin', 'aria-valuemax', 'aria-valuenow', 'aria-label'],
+  slider: ['aria-valuemin', 'aria-valuemax', 'aria-valuenow', 'aria-label']
+};
+```
+
+### Live Regions
+**Required Announcements:**
+```typescript
+// ✅ Status announcements for dynamic content
+@Method()
+async announceStatus(message: string, priority: 'polite' | 'assertive' = 'polite') {
+  const liveRegion = document.createElement('div');
+  liveRegion.setAttribute('aria-live', priority);
+  liveRegion.setAttribute('aria-atomic', 'true');
+  liveRegion.className = 'sr-only';
+  liveRegion.textContent = message;
+  
+  document.body.appendChild(liveRegion);
+  setTimeout(() => document.body.removeChild(liveRegion), 1000);
+}
+
+// Usage examples:
+// this.announceStatus('Loading complete');
+// this.announceStatus('Error: Please check your input', 'assertive');
+// this.announceStatus('3 items added to list');
+```
+
+## Testing Requirements
+
+### Automated Testing
+**Required Tests:**
+```typescript
+// ✅ Accessibility testing requirements
+describe('Component Accessibility Tests', () => {
+  it('should have proper ARIA attributes', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<spectrum-component></spectrum-component>');
+    
+    const component = await page.find('spectrum-component');
+    const button = await component.find('button');
+    
+    expect(await button.getAttribute('aria-label')).toBeTruthy();
+    expect(await button.getAttribute('role')).toBe('button');
+  });
+
+  it('should support keyboard navigation', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<spectrum-component></spectrum-component>');
+    
+    await page.focus('spectrum-component');
+    await page.keyboard.press('Enter');
+    
+    // Assert expected behavior
+  });
+
+  it('should meet color contrast requirements', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<spectrum-component></spectrum-component>');
+    
+    // Use axe-core or similar tool for contrast testing
+    const results = await page.evaluate(() => {
+      return new Promise((resolve) => {
+        // @ts-ignore
+        axe.run((err, results) => {
+          resolve(results);
+        });
+      });
+    });
+    
+    expect(results.violations).toHaveLength(0);
+  });
+});
+```
+
+### Manual Testing Checklist
+**Required Manual Tests:**
+- [ ] Navigate entire component using only keyboard
+- [ ] Test with screen reader (NVDA, JAWS, VoiceOver)
+- [ ] Verify at 200% zoom level
+- [ ] Test in high contrast mode
+- [ ] Verify focus indicators are visible
+- [ ] Test with voice control software
+- [ ] Validate color-only information has alternatives
+
+## CSS Accessibility Requirements
+
+### Screen Reader Only Content
+```scss
+// ✅ Required utility class for screen reader only content
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+### Focus Indicators
+```scss
+// ✅ Required focus indicator styles
+.spectrum-component {
+  &:focus-visible {
+    outline: 2px solid var(--spectrum-sys-color-primary);
+    outline-offset: 2px;
+  }
+
+  // High contrast mode support
+  @media (prefers-contrast: high) {
+    &:focus-visible {
+      outline: 2px solid ButtonText;
+    }
+  }
+}
+```
+
+### Reduced Motion Support
+```scss
+// ✅ Required motion reduction support
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-component {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+```
+
+## Documentation Requirements
+
+### Component README
+**Required Accessibility Documentation:**
+```markdown
+## Accessibility
+
+### Keyboard Navigation
+- **Tab**: Move focus to/from component
+- **Enter/Space**: Activate component
+- **Escape**: Close component (if applicable)
+
+### Screen Reader Support
+- Supports ARIA labels and descriptions
+- Announces state changes
+- Compatible with NVDA, JAWS, and VoiceOver
+
+### Focus Management
+- Visible focus indicators
+- Logical tab order
+- Focus trapping in modals
+
+### Examples
+```html
+<!-- Basic accessible usage -->
+<spectrum-component 
+  aria-label="Close dialog"
+  disabled={false}>
+</spectrum-component>
+
+<!-- With error state -->
+<spectrum-component 
+  aria-invalid="true"
+  aria-describedby="error-msg">
+</spectrum-component>
+<div id="error-msg">Please enter a valid value</div>
+```
+
+## Common Accessibility Patterns
+
+### Loading States
+```typescript
+// ✅ Accessible loading pattern
+render() {
+  return (
+    <button 
+      aria-busy={this.loading}
+      aria-label={this.loading ? 'Loading...' : this.label}
+      disabled={this.loading || this.disabled}>
+      {this.loading && <span aria-hidden="true">⏳</span>}
+      {this.label}
+    </button>
+  );
+}
+```
+
+### Error States
+```typescript
+// ✅ Accessible error pattern
+render() {
+  const errorId = `error-${this.componentId}`;
+  
+  return (
+    <div>
+      <input
+        aria-invalid={this.hasError}
+        aria-describedby={this.hasError ? errorId : undefined}
+      />
+      {this.hasError && (
+        <div id={errorId} role="alert" aria-live="assertive">
+          {this.errorMessage}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Dynamic Content
+```typescript
+// ✅ Accessible dynamic content updates
+@Watch('items')
+onItemsChange() {
+  const count = this.items.length;
+  this.announceToScreenReader(`${count} items available`);
+}
+```
+
+## Implementation Checklist
+
+### Before Component Development
+- [ ] Review WCAG 2.1 AA guidelines for component type
+- [ ] Identify required keyboard interactions
+- [ ] Plan ARIA attribute strategy
+- [ ] Design focus management approach
+
+### During Development
+- [ ] Implement semantic HTML structure
+- [ ] Add all required ARIA attributes
+- [ ] Implement keyboard navigation
+- [ ] Add screen reader announcements
+- [ ] Ensure proper focus management
+- [ ] Test with keyboard navigation
+- [ ] Validate color contrast ratios
+
+### Before Component Release
+- [ ] Run automated accessibility tests
+- [ ] Test with multiple screen readers
+- [ ] Verify keyboard navigation works completely
+- [ ] Test at 200% zoom
+- [ ] Test in high contrast mode
+- [ ] Validate with real users using assistive technology
+- [ ] Document accessibility features in README and Storybook
+
+### Accessibility Review Process
+- [ ] Peer review by accessibility-aware developer
+- [ ] Automated testing with axe-core
+- [ ] Manual testing with keyboard only
+- [ ] Screen reader testing (minimum: one desktop + one mobile)
+- [ ] User testing with people who use assistive technology
+
+## Tools and Resources
+
+### Required Development Tools
+- **axe-core**: Automated accessibility testing
+- **axe-devtools**: Browser extension for testing
+- **Screen Readers**: NVDA (free), JAWS, VoiceOver
+- **Color Contrast Analyzers**: WebAIM, Stark, Colour Contrast Analyser
+
+### Testing Commands
+```bash
+# Install accessibility testing dependencies
+npm install --save-dev @axe-core/playwright @storybook/addon-a11y
+
+# Run accessibility tests
+npm run test:a11y
+
+# Audit specific component
+npm run audit:accessibility spectrum-button
+```
+
+## Compliance Verification
+
+### WCAG 2.1 AA Success Criteria Mapping
+**Level A (Required):**
+- 1.1.1 Non-text Content
+- 1.3.1 Info and Relationships  
+- 1.3.2 Meaningful Sequence
+- 1.4.1 Use of Color
+- 2.1.1 Keyboard
+- 2.1.2 No Keyboard Trap
+- 2.4.1 Bypass Blocks
+- 2.4.2 Page Titled
+- 3.1.1 Language of Page
+- 4.1.1 Parsing
+- 4.1.2 Name, Role, Value
+
+**Level AA (Required):**
+- 1.4.3 Contrast (Minimum)
+- 1.4.4 Resize text
+- 2.4.3 Focus Order
+- 2.4.4 Link Purpose (In Context)
+- 2.4.5 Multiple Ways
+- 2.4.6 Headings and Labels
+- 2.4.7 Focus Visible
+- 3.1.2 Language of Parts
+- 3.2.1 On Focus
+- 3.2.2 On Input
+- 3.3.1 Error Identification
+- 3.3.2 Labels or Instructions
+- 4.1.3 Status Messages
+
+This comprehensive accessibility rule ensures that all Spectrum components provide an inclusive user experience and meet international accessibility standards. Compliance with these guidelines is mandatory for all component development and updates.# Spectrum Component Accessibility Standards Rule
 
 ## Overview
 All Spectrum components MUST meet WCAG 2.1 AA accessibility standards and follow these comprehensive accessibility guidelines to ensure inclusive design and usability for all users, including those using assistive technologies.

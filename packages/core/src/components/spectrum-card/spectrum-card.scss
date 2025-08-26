@@ -1,0 +1,573 @@
+// ==============================================
+// Spectrum Card Component Styles
+// ==============================================
+// BEM naming convention: spectrum-card (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+/* Root variables and custom properties for spectrum-card */
+:host {
+  display: block;
+  width: fit-content;
+  box-sizing: border-box;
+  
+  /* Size presets */
+  --card-size-small: 280px;
+  --card-size-medium: 360px;
+  --card-size-large: 480px;
+  --card-size-auto: auto;
+  
+  /* Custom dimension variables */
+  --card-custom-width: unset;
+  --card-custom-height: unset;
+  
+  /* Core card properties */
+  --card-background: var(--spectrum-color-background, #f6f6f6);
+  --card-surface: var(--spectrum-color-surface, #ffffff);
+  --card-on-surface: var(--spectrum-color-on-surface, #333333);
+  --card-on-surface-variant: var(--spectrum-color-on-surface-variant, #42474e);
+  --card-outline: var(--spectrum-color-outline, #72777f);
+  --card-outline-variant: var(--spectrum-color-outline-variant, #c2c7cf);
+  --card-shadow: var(--spectrum-color-shadow, #000000);
+  --card-primary: var(--spectrum-color-primary, #0078d4);
+  --card-on-primary: var(--spectrum-color-on-primary, #ffffff);
+  
+  /* Typography */
+  --card-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --card-font-size: var(--spectrum-sys-font-size, 16px);
+  --card-font-size-small: var(--spectrum-sys-font-size-small, 14px);
+  --card-font-size-large: var(--spectrum-sys-font-size-large, 20px);
+  --card-font-size-x-large: var(--spectrum-sys-font-size-x-large, 24px);
+  --card-font-weight-regular: var(--spectrum-sys-font-weight-regular, 400);
+  --card-font-weight-medium: var(--spectrum-sys-font-weight-medium, 500);
+  --card-font-weight-bold: var(--spectrum-sys-font-weight-bold, 700);
+  
+  /* Spacing */
+  --card-spacing: var(--spectrum-sys-spacing, 1rem);
+  --card-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --card-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  
+  /* Border radius */
+  --card-border-radius: var(--spectrum-sys-border-radius, 8px);
+  --card-border-radius-large: calc(var(--card-border-radius) * 2);
+  --card-border-radius-x-large: calc(var(--card-border-radius) * 3);
+  
+  /* Animation */
+  --card-transition-duration: var(--spectrum-sys-animation-duration, 300ms);
+  --card-transition-timing: var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  --card-transition: all var(--card-transition-duration) var(--card-transition-timing);
+  --card-transform-hover: translateY(-2px);
+  --card-transform-active: translateY(0px);
+  
+  /* Elevation and shadows */
+  --card-elevation-0: none;
+  --card-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --card-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --card-elevation-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  --card-elevation-4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  
+  /* Media properties */
+  --card-media-height: 200px;
+  --card-media-border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
+  
+  /* Header properties */
+  --card-header-padding: var(--card-spacing) var(--card-spacing) var(--card-spacing-small) var(--card-spacing);
+  --card-title-font-size: var(--card-font-size-large);
+  --card-title-font-weight: var(--card-font-weight-medium);
+  --card-title-color: var(--card-on-surface);
+  --card-subtitle-font-size: var(--card-font-size-small);
+  --card-subtitle-color: var(--card-on-surface-variant);
+  
+  /* Content properties */
+  --card-content-padding: var(--card-spacing);
+  --card-text-color: var(--card-on-surface-variant);
+  --card-text-line-height: 1.5;
+  
+  /* Footer properties */
+  --card-footer-padding: var(--card-spacing-small) var(--card-spacing) var(--card-spacing) var(--card-spacing);
+  
+  /* Ensure all child elements use border-box */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+}
+
+// ==============================================
+// Card Host Styles
+// ==============================================
+
+.card-host {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
+// ==============================================
+// Base Card Styles
+// ==============================================
+
+.spectrum-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-surface);
+  color: var(--card-on-surface);
+  border-radius: var(--card-border-radius-large);
+  overflow: hidden;
+  transition: var(--card-transition);
+  font-family: var(--card-font-family);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  
+  // Ensure anchor tags inherit card styling when used for navigation
+  &.spectrum-card {
+    color: inherit;
+    text-decoration: none;
+    
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+  
+  // ==============================================
+  // Variant Styles
+  // ==============================================
+  
+  // Default variant - subtle elevation
+  &--default {
+    border: 1px solid var(--card-outline-variant);
+    box-shadow: var(--card-elevation-1);
+  }
+  
+  // Elevated variant - higher elevation
+  &--elevated {
+    border: none;
+    box-shadow: var(--card-elevation-2);
+  }
+  
+  // Outlined variant - strong border, no shadow
+  &--outlined {
+    border: 2px solid var(--card-outline);
+    box-shadow: var(--card-elevation-0);
+  }
+  
+  // Filled variant - tinted background
+  &--filled {
+    background: var(--card-background);
+    border: 1px solid var(--card-outline-variant);
+    box-shadow: var(--card-elevation-1);
+  }
+  
+  // ==============================================
+  // Background Styles (inherited from panel)
+  // ==============================================
+  
+  &--opaque {
+    // Default styling already applied above
+  }
+  
+  &--partial-frost {
+    background: rgba(255, 255, 255, 0.33) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.225) !important;
+    box-shadow: var(--card-elevation-2) !important;
+    
+    @media (prefers-color-scheme: dark) {
+      background: rgba(0, 0, 0, 0.33) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+  }
+  
+  &--full-frost {
+    background: rgba(255, 255, 255, 0.66) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.225) !important;
+    box-shadow: var(--card-elevation-3) !important;
+    
+    @media (prefers-color-scheme: dark) {
+      background: rgba(0, 0, 0, 0.66) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+  }
+  
+  &--transparent {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  // ==============================================
+  // Size Variations
+  // ==============================================
+  
+  &--small {
+    max-width: var(--card-size-small);
+    min-width: var(--card-size-small);
+  }
+  
+  &--medium {
+    max-width: var(--card-size-medium);
+    min-width: var(--card-size-medium);
+  }
+  
+  &--large {
+    max-width: var(--card-size-large);
+    min-width: var(--card-size-large);
+  }
+  
+  &--auto {
+    max-width: none;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  // ==============================================
+  // Interactive States
+  // ==============================================
+  
+  &--clickable {
+    cursor: pointer;
+    user-select: none;
+    
+    &:focus-visible {
+      outline: 2px solid var(--card-primary);
+      outline-offset: 2px;
+    }
+  }
+  
+  &--navigation {
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    
+    &:focus-visible {
+      outline: 2px solid var(--card-primary);
+      outline-offset: 2px;
+    }
+    
+    // Ensure anchor tag inherits all card styling
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+  
+  &--hover:not(&--disabled) {
+    transform: var(--card-transform-hover);
+    
+    &.spectrum-card--default {
+      box-shadow: var(--card-elevation-2);
+    }
+    
+    &.spectrum-card--elevated {
+      box-shadow: var(--card-elevation-3);
+    }
+    
+    &.spectrum-card--outlined {
+      border-color: var(--card-primary);
+    }
+  }
+  
+  &--active:not(&--disabled) {
+    transform: var(--card-transform-active);
+    
+    &.spectrum-card--default,
+    &.spectrum-card--elevated {
+      box-shadow: var(--card-elevation-1);
+    }
+  }
+  
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  // ==============================================
+  // Layout Modifiers
+  // ==============================================
+  
+  &--no-padding {
+    .spectrum-card__content {
+      padding: 0;
+    }
+  }
+  
+  &--has-media {
+    .spectrum-card__header {
+      padding-top: var(--card-spacing);
+    }
+  }
+}
+
+// ==============================================
+// Media Styles
+// ==============================================
+
+.spectrum-card__media {
+  position: relative;
+  width: 100%;
+  height: var(--card-media-height);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.spectrum-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+// ==============================================
+// Header Styles
+// ==============================================
+
+.spectrum-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--card-spacing);
+  padding: var(--card-header-padding);
+  flex-shrink: 0;
+}
+
+.spectrum-card__header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.spectrum-card__title {
+  font-family: var(--card-font-family);
+  font-size: var(--card-title-font-size);
+  font-weight: var(--card-title-font-weight);
+  color: var(--card-title-color);
+  margin: 0 0 var(--card-spacing-small) 0;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spectrum-card__subtitle {
+  font-family: var(--card-font-family);
+  font-size: var(--card-subtitle-font-size);
+  color: var(--card-subtitle-color);
+  margin: 0;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spectrum-card__header-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--card-spacing-small);
+}
+
+// ==============================================
+// Content Styles
+// ==============================================
+
+.spectrum-card__content {
+  flex: 1;
+  padding: var(--card-content-padding);
+  overflow: hidden;
+  
+  &:first-child {
+    padding-top: var(--card-spacing-large);
+  }
+  
+  &:last-child {
+    padding-bottom: var(--card-spacing-large);
+  }
+}
+
+.spectrum-card__text {
+  font-family: var(--card-font-family);
+  font-size: var(--card-font-size);
+  color: var(--card-text-color);
+  line-height: var(--card-text-line-height);
+  margin: 0 0 var(--card-spacing) 0;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// ==============================================
+// Footer Styles
+// ==============================================
+
+.spectrum-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--card-spacing-small);
+  padding: var(--card-footer-padding);
+  border-top: 1px solid var(--card-outline-variant);
+  flex-shrink: 0;
+}
+
+// ==============================================
+// Slotted Content Styles
+// ==============================================
+
+.spectrum-card {
+  // Ensure slotted content inherits proper styling
+  ::slotted(*) {
+    color: inherit;
+    font-family: inherit;
+  }
+  
+  // Header actions
+  ::slotted([slot="header-actions"]) {
+    display: flex;
+    align-items: center;
+    gap: var(--card-spacing-small);
+  }
+  
+  // Footer actions
+  ::slotted([slot="footer-actions"]) {
+    display: flex;
+    align-items: center;
+    gap: var(--card-spacing-small);
+  }
+  
+  // Media overlay - flexible positioning
+  ::slotted([slot="media-overlay"]) {
+    position: absolute;
+    z-index: 1;
+  }
+  
+  // Full overlay elements (with background, centered content)
+  ::slotted([slot="media-overlay"][data-overlay="full"]) {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+  }
+  
+  // Positioned elements (badges, buttons) use their own positioning
+  ::slotted([slot="media-overlay"]:not([data-overlay="full"])) {
+    // No automatic positioning - element handles its own position
+  }
+  
+  // Common element spacing in content
+  ::slotted(h1),
+  ::slotted(h2),
+  ::slotted(h3),
+  ::slotted(h4),
+  ::slotted(h5),
+  ::slotted(h6) {
+    margin-top: 0;
+    margin-bottom: var(--card-spacing);
+    line-height: 1.2;
+    font-weight: var(--card-font-weight-medium);
+  }
+  
+  ::slotted(p) {
+    margin-top: 0;
+    margin-bottom: var(--card-spacing);
+    line-height: 1.5;
+  }
+  
+  ::slotted(:last-child) {
+    margin-bottom: 0;
+  }
+}
+
+// ==============================================
+// Custom Dimensions Support
+// ==============================================
+
+:host([style*="--card-custom-width"]) .spectrum-card {
+  width: var(--card-custom-width) !important;
+  max-width: var(--card-custom-width) !important;
+  min-width: var(--card-custom-width) !important;
+}
+
+:host([style*="--card-custom-height"]) .spectrum-card {
+  height: var(--card-custom-height) !important;
+  max-height: var(--card-custom-height) !important;
+  min-height: var(--card-custom-height) !important;
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
+@media (max-width: 768px) {
+  .spectrum-card {
+    &--small,
+    &--medium,
+    &--large {
+      max-width: 100%;
+      min-width: auto;
+    }
+  }
+  
+  .spectrum-card__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--card-spacing-small);
+  }
+  
+  .spectrum-card__header-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    --card-spacing: 0.75rem;
+    --card-spacing-small: 0.375rem;
+    --card-title-font-size: var(--card-font-size-large);
+  }
+  
+  .spectrum-card__media {
+    --card-media-height: 160px;
+  }
+}
+
+// ==============================================
+// Accessibility
+// ==============================================
+
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-card {
+    --card-transition-duration: 0.01ms;
+    --card-transform-hover: none;
+    --card-transform-active: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-card {
+    border-width: 2px;
+    
+    &--outlined {
+      border-width: 3px;
+    }
+  }
+}

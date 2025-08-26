@@ -399,7 +399,7 @@ export class SpectrumRail {
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"
-                size="base"
+                size="medium"
                 iconOnly={true}
                 showLeftIcon={true}
                 leftIcon="menu"
@@ -413,7 +413,7 @@ export class SpectrumRail {
                 <spectrum-button
                   class="menu-button"
                   variant="ghost"
-                  size="base"
+                  size="medium"
                   iconOnly={false}
                   showLeftIcon={true}
                   leftIcon="menu"
@@ -433,7 +433,7 @@ export class SpectrumRail {
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"
-                size="base"
+                size="medium"
                 iconOnly={true}
                 showLeftIcon={true}
                 leftIcon="search"
@@ -474,7 +474,7 @@ export class SpectrumRail {
               ) : (
                 <spectrum-button
                   variant="fab"
-                  size="base"
+                  size="medium"
                   showLeftIcon={true}
                   leftIcon={this.addIcon}
                   buttonText={this.addLabel}
@@ -492,7 +492,7 @@ export class SpectrumRail {
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"
-                size="base"
+                size="medium"
                 iconOnly={true}
                 showLeftIcon={true}
                 leftIcon={firstIconInList}
@@ -513,7 +513,7 @@ export class SpectrumRail {
             {!this.expanded ? (
               <spectrum-button
                 variant="ghost"
-                size="base"
+                size="medium"
                 iconOnly={true}
                 showLeftIcon={true}
                 leftIcon={this.moreIcon}
@@ -526,7 +526,7 @@ export class SpectrumRail {
                 <spectrum-button
                   variant="secondary"
                   outline={true}
-                  size="base"
+                  size="medium"
                   showLeftIcon={true}
                   leftIcon={this.moreIcon}
                   buttonText={this.moreLabel || 'Explore more'}

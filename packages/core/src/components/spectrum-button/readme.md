@@ -1,6 +1,15 @@
 # spectrum-button
 
+## Size Options
 
+The button component supports the following size options:
+
+- `sm` - Small size button
+- `medium` - Medium size button (recommended for new implementations)
+- `base` - Legacy medium size button (maintained for backward compatibility)
+- `lg` - Large size button
+
+**Note:** Both `medium` and `base` render the same visual size. The `medium` option is the preferred way to specify medium-sized buttons going forward, while `base` is maintained for backward compatibility with existing implementations.
 
 <!-- Auto Generated Below -->
 
@@ -21,18 +30,21 @@ Supports icons, text, and various interactive states.
 | `debug`            | `debug`             |             | `boolean`                                                                                         | `false`     |
 | `disabled`         | `disabled`          |             | `boolean`                                                                                         | `false`     |
 | `haptic`           | `haptic`            |             | `boolean`                                                                                         | `false`     |
+| `href`             | `href`              |             | `string`                                                                                          | `undefined` |
 | `iconOnly`         | `icon-only`         |             | `boolean`                                                                                         | `false`     |
 | `leftIcon`         | `left-icon`         |             | `string`                                                                                          | `''`        |
 | `minimalAnimation` | `minimal-animation` |             | `boolean`                                                                                         | `false`     |
 | `outline`          | `outline`           |             | `boolean`                                                                                         | `false`     |
+| `rel`              | `rel`               |             | `string`                                                                                          | `undefined` |
 | `rightIcon`        | `right-icon`        |             | `string`                                                                                          | `''`        |
 | `ripple`           | `ripple`            |             | `boolean`                                                                                         | `false`     |
 | `showButtonText`   | `show-button-text`  |             | `boolean`                                                                                         | `true`      |
 | `showLeftIcon`     | `show-left-icon`    |             | `boolean`                                                                                         | `false`     |
 | `showRightIcon`    | `show-right-icon`   |             | `boolean`                                                                                         | `false`     |
-| `size`             | `size`              |             | `"base" \| "lg" \| "sm"`                                                                          | `'base'`    |
+| `size`             | `size`              |             | `"base" \| "lg" \| "medium" \| "sm"`                                                              | `'base'`    |
 | `sound`            | `sound`             |             | `boolean`                                                                                         | `false`     |
 | `state`            | `state`             |             | `"active" \| "default" \| "disabled" \| "hover"`                                                  | `'default'` |
+| `target`           | `target`            |             | `string`                                                                                          | `undefined` |
 | `variant`          | `variant`           |             | `"danger" \| "fab" \| "ghost" \| "outline" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
 
 

@@ -8,6 +8,7 @@ export const DIRECTIVES = [
   d.SpectrumAvatar,
   d.SpectrumBadge,
   d.SpectrumButton,
+  d.SpectrumCard,
   d.SpectrumChip,
   d.SpectrumCluster,
   d.SpectrumCollapsibleList,

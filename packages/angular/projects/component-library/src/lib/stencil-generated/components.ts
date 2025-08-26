@@ -136,14 +136,14 @@ export declare interface SpectrumBadge extends Components.SpectrumBadge {}
 
 
 @ProxyCmp({
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'haptic', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant']
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'haptic', 'href', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rel', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'target', 'variant']
 })
 @Component({
   selector: 'spectrum-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'haptic', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'variant'],
+  inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'haptic', 'href', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rel', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'target', 'variant'],
 })
 export class SpectrumButton {
   protected el: HTMLSpectrumButtonElement;
@@ -158,6 +158,34 @@ export class SpectrumButton {
 export declare interface SpectrumButton extends Components.SpectrumButton {
 
   buttonAction: EventEmitter<CustomEvent<{ action?: string; label: string }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['action', 'background', 'cardSubtitle', 'cardTitle', 'clickable', 'debug', 'disabled', 'height', 'href', 'imageAlt', 'imageUrl', 'noPadding', 'rel', 'showFooterActions', 'showHeaderActions', 'size', 'target', 'variant', 'width']
+})
+@Component({
+  selector: 'spectrum-card',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['action', 'background', 'cardSubtitle', 'cardTitle', 'clickable', 'debug', 'disabled', 'height', 'href', 'imageAlt', 'imageUrl', 'noPadding', 'rel', 'showFooterActions', 'showHeaderActions', 'size', 'target', 'variant', 'width'],
+})
+export class SpectrumCard {
+  protected el: HTMLSpectrumCardElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['cardAction']);
+  }
+}
+
+
+export declare interface SpectrumCard extends Components.SpectrumCard {
+  /**
+   * Event emitted when card is clicked
+   */
+  cardAction: EventEmitter<CustomEvent<{action: string; cardId?: string; title?: string}>>;
 }
 
 
@@ -705,7 +733,7 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
 
 
 @ProxyCmp({
-  inputs: ['data', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
+  inputs: ['data', 'directNavigation', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
   methods: ['navigateToPage', 'getPaginationState']
 })
 @Component({
@@ -713,7 +741,7 @@ export declare interface SpectrumSearchInput extends Components.SpectrumSearchIn
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['data', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
+  inputs: ['data', 'directNavigation', 'emptyMessage', 'enableUrlSync', 'loading', 'maxPageButtons', 'pageParam', 'resultTemplate', 'resultsPerPage', 'showMetadata', 'showPagination', 'showScores', 'showThumbnails', 'sizeParam', 'translations'],
 })
 export class SpectrumSearchResults {
   protected el: HTMLSpectrumSearchResultsElement;

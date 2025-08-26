@@ -1,0 +1,271 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Spectrum/Components/SpectrumCard/Use Cases" />
+
+# 🎯 SpectrumCard Use Cases
+
+## Primary Use Cases
+
+### 1. Content Display Cards
+**Purpose**: Display articles, blog posts, news items, and other content with preview information.
+
+```html
+<spectrum-card
+  card-title="Breaking News: Tech Innovation"
+  card-subtitle="Technology • 2 hours ago"
+  card-content="Discover the latest breakthrough in artificial intelligence that's revolutionizing how we work."
+  image-url="news-image.jpg"
+  clickable
+  action="read-article">
+</spectrum-card>
+```
+
+**Key Features**: Title, subtitle, content preview, featured image, click navigation
+
+### 2. Product Catalog Cards
+**Purpose**: E-commerce product displays with images, pricing, ratings, and purchase actions.
+
+```html
+<spectrum-card
+  card-title="Wireless Bluetooth Headphones"
+  card-subtitle="Premium Audio Collection"
+  card-content="High-quality sound with noise cancellation and 30-hour battery life."
+  image-url="product-image.jpg"
+  variant="elevated"
+  show-header-actions
+  show-footer-actions>
+  
+  <div slot="header-actions">
+    <span style="font-weight: bold; color: var(--spectrum-sys-color-primary);">$299.99</span>
+    <spectrum-badge text="Sale" variant="danger"></spectrum-badge>
+  </div>
+  
+  <spectrum-button slot="footer-actions" variant="secondary" button-text="Add to Cart"></spectrum-button>
+  <spectrum-button slot="footer-actions" variant="primary" button-text="Buy Now"></spectrum-button>
+</spectrum-card>
+```
+
+**Key Features**: Product images, pricing display, action buttons, promotional badges
+
+### 3. User Profile Cards
+**Purpose**: Display user information with avatar, details, and interaction options.
+
+```html
+<spectrum-card
+  card-title="Sarah Johnson"
+  card-subtitle="Senior Software Engineer"
+  variant="outlined"
+  show-footer-actions>
+  
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <spectrum-avatar size="large" image-src="user-avatar.jpg" alt="Sarah Johnson"></spectrum-avatar>
+    <div>
+      <p>5 years experience • San Francisco, CA</p>
+      <p>React, TypeScript, Node.js</p>
+    </div>
+  </div>
+  
+  <spectrum-button slot="footer-actions" variant="secondary" button-text="Message"></spectrum-button>
+  <spectrum-button slot="footer-actions" variant="primary" button-text="Connect"></spectrum-button>
+</spectrum-card>
+```
+
+**Key Features**: User avatars, contact information, networking actions
+
+### 4. Dashboard Widget Cards
+**Purpose**: Display metrics, analytics, and quick actions in dashboard layouts.
+
+```html
+<spectrum-card
+  card-title="Monthly Sales"
+  card-subtitle="Updated 5 minutes ago"
+  variant="filled"
+  show-header-actions
+  show-footer-actions>
+  
+  <spectrum-button slot="header-actions" variant="ghost" left-icon="refresh" icon-only></spectrum-button>
+  
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+    <div style="text-align: center; padding: 1rem; background: var(--spectrum-sys-color-primary-container); border-radius: 8px;">
+      <h3 style="margin: 0; color: var(--spectrum-sys-color-on-primary-container);">$47.2K</h3>
+      <p style="margin: 0; color: var(--spectrum-sys-color-on-primary-container);">Revenue</p>
+    </div>
+    <div style="text-align: center; padding: 1rem; background: var(--spectrum-sys-color-secondary-container); border-radius: 8px;">
+      <h3 style="margin: 0; color: var(--spectrum-sys-color-on-secondary-container);">+23%</h3>
+      <p style="margin: 0; color: var(--spectrum-sys-color-on-secondary-container);">Growth</p>
+    </div>
+  </div>
+  
+  <spectrum-button slot="footer-actions" variant="primary" button-text="View Details"></spectrum-button>
+</spectrum-card>
+```
+
+**Key Features**: Data visualization, refresh actions, drill-down navigation
+
+### 5. Form Container Cards
+**Purpose**: Organize form sections and settings panels with clear boundaries.
+
+```html
+<spectrum-card
+  card-title="Account Settings"
+  card-subtitle="Manage your profile information"
+  variant="outlined"
+  show-footer-actions>
+  
+  <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div>
+      <label>Email Address</label>
+      <input type="email" value="user@example.com" style="width: 100%; padding: 0.75rem; border: 1px solid var(--spectrum-sys-color-outline); border-radius: 6px;">
+    </div>
+    <div>
+      <label>Display Name</label>
+      <input type="text" value="John Doe" style="width: 100%; padding: 0.75rem; border: 1px solid var(--spectrum-sys-color-outline); border-radius: 6px;">
+    </div>
+  </div>
+  
+  <spectrum-button slot="footer-actions" variant="secondary" button-text="Cancel"></spectrum-button>
+  <spectrum-button slot="footer-actions" variant="primary" button-text="Save Changes"></spectrum-button>
+</spectrum-card>
+```
+
+**Key Features**: Form organization, clear actions, sectioned content
+
+## Secondary Use Cases
+
+### 6. Media Gallery Cards
+**Purpose**: Display images or videos with metadata and interaction options.
+
+```html
+<spectrum-card
+  card-title="Mountain Landscape"
+  card-subtitle="Photography Collection"
+  image-url="landscape.jpg"
+  clickable
+  action="view-media"
+  show-header-actions>
+  
+  <spectrum-chip slot="header-actions" label="Nature" variant="primary"></spectrum-chip>
+  <spectrum-badge slot="media-overlay" text="4K" variant="success"></spectrum-badge>
+</spectrum-card>
+```
+
+### 7. Notification Cards
+**Purpose**: Display alerts, messages, and system notifications.
+
+```html
+<spectrum-card
+  card-title="System Update Available"
+  card-subtitle="Version 2.1.0 is ready to install"
+  variant="elevated"
+  background="partial-frost"
+  show-footer-actions>
+  
+  <p>This update includes security improvements and new features. Installation will take approximately 5 minutes.</p>
+  
+  <spectrum-button slot="footer-actions" variant="secondary" button-text="Later"></spectrum-button>
+  <spectrum-button slot="footer-actions" variant="primary" button-text="Install Now"></spectrum-button>
+</spectrum-card>
+```
+
+### 8. Feature Highlight Cards
+**Purpose**: Showcase new features, capabilities, or promotional content.
+
+```html
+<spectrum-card
+  card-title="Introducing AI Assistant"
+  card-subtitle="New Feature"
+  card-content="Get intelligent suggestions and automate your workflow with our new AI-powered assistant."
+  image-url="ai-feature.jpg"
+  variant="elevated"
+  clickable
+  action="explore-feature"
+  show-header-actions>
+  
+  <spectrum-badge slot="header-actions" text="New" variant="primary"></spectrum-badge>
+</spectrum-card>
+```
+
+## Layout Patterns
+
+### Grid Layouts
+Use cards in responsive grid systems for consistent spacing and alignment:
+
+```css
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+```
+
+### List Layouts
+Stack cards vertically for content feeds and detailed listings:
+
+```css
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px;
+}
+```
+
+### Masonry Layouts
+Use varying card heights for dynamic, Pinterest-style layouts:
+
+```css
+.card-masonry {
+  column-count: auto;
+  column-width: 300px;
+  column-gap: 1.5rem;
+}
+```
+
+## Integration Examples
+
+### With Other Spectrum Components
+- **spectrum-rail**: Navigation cards in sidebar menus
+- **spectrum-dialog**: Card content within modal dialogs
+- **spectrum-accordion**: Expandable card sections
+- **spectrum-conversation-panel**: Message cards in chat interfaces
+
+### With External Libraries
+- **Search/Filter**: Cards as search result items
+- **Pagination**: Cards in paginated content lists
+- **Drag & Drop**: Draggable cards for organization interfaces
+- **Virtual Scrolling**: Cards in large dataset presentations
+
+## Accessibility Considerations
+
+### Keyboard Navigation
+- Clickable cards are keyboard accessible with proper focus management
+- Action buttons within cards maintain tab order
+- Screen readers announce card structure and interactive elements
+
+### Screen Reader Support
+- Proper heading hierarchy with card titles
+- Descriptive alt text for card images
+- Action buttons with clear labels and purposes
+
+### Visual Accessibility
+- High contrast mode support with enhanced borders
+- Reduced motion support for animations and transitions
+- Consistent color usage following design system guidelines
+
+## Performance Best Practices
+
+### Image Optimization
+- Use appropriate image sizes for card media
+- Implement lazy loading for cards with images
+- Provide fallbacks for missing or failed image loads
+
+### Content Management
+- Keep card content concise and scannable
+- Use progressive disclosure for detailed information
+- Implement virtual scrolling for large card collections
+
+### Event Handling
+- Use event delegation for card collections
+- Debounce rapid user interactions
+- Provide visual feedback for user actions

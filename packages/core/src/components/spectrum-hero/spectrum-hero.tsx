@@ -11,6 +11,10 @@ export interface HeroSlide {
   buttonAction?: string;
   overlayPosition?: 'left' | 'center' | 'right';
   overlayVertical?: 'top' | 'center' | 'bottom';
+  // Navigation support (optional direct navigation)
+  buttonHref?: string; // URL for direct navigation when button is clicked
+  buttonTarget?: string; // Target for navigation (e.g., '_blank' for new tab)
+  buttonRel?: string; // Rel attribute for security when using target="_blank"
   // Responsive image support
   srcset?: string; // Responsive image sources (e.g., "image-320w.jpg 320w, image-640w.jpg 640w")
   sizes?: string; // Image sizes for different viewport conditions (e.g., "(max-width: 600px) 100vw, 50vw")
@@ -29,8 +33,11 @@ export interface HeroSlide {
  * A hero section component that supports both images and video backgrounds,
  * with carousel functionality, text overlays, and call-to-action buttons.
  * 
- * Features responsive image support through srcset and sizes attributes
- * for optimal image delivery across different devices and screen sizes.
+ * Features:
+ * - Responsive image support through srcset and sizes attributes for optimal delivery
+ * - Direct navigation support for call-to-action buttons via href, target, and rel attributes
+ * - Event-based interactions for custom handling alongside direct navigation
+ * - Accessibility support with keyboard navigation and screen reader compatibility
  */
 @Component({
   tag: 'spectrum-hero',
@@ -340,12 +347,19 @@ export class SpectrumHero {
   }
 
   private handleButtonClick = (slide: HeroSlide, index: number) => {
+    // Always emit the event for tracking, even when using direct navigation
     this.heroAction.emit({
       action: slide.buttonAction || 'hero-action',
       slideIndex: index,
       slideTitle: slide.title
     });
-    this.log('Hero action clicked', { action: slide.buttonAction, index, title: slide.title });
+    this.log('Hero action clicked', { 
+      action: slide.buttonAction, 
+      index, 
+      title: slide.title,
+      href: slide.buttonHref,
+      target: slide.buttonTarget
+    });
   };
 
   // ============== Preloading Methods ==============
@@ -771,9 +785,12 @@ export class SpectrumHero {
                 <spectrum-button
                   class="spectrum-hero__button"
                   variant="primary"
-                  size="lg"
+                  size="medium"
                   buttonText={slide.buttonText}
                   action={slide.buttonAction || 'hero-action'}
+                  href={slide.buttonHref}
+                  target={slide.buttonTarget}
+                  rel={slide.buttonRel}
                   onClick={() => this.handleButtonClick(slide, index)}
                 />
               )}

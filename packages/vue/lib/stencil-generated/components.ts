@@ -129,12 +129,41 @@ export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>(
   'leftIcon',
   'showRightIcon',
   'rightIcon',
+  'href',
+  'target',
+  'rel',
   'sound',
   'haptic',
   'state',
   'buttonAction'
 ], [
   'buttonAction'
+]);
+
+
+export const SpectrumCard = /*@__PURE__*/ defineContainer<JSX.SpectrumCard>('spectrum-card', undefined, [
+  'debug',
+  'variant',
+  'size',
+  'background',
+  'clickable',
+  'disabled',
+  'action',
+  'cardTitle',
+  'cardSubtitle',
+  'imageUrl',
+  'imageAlt',
+  'showHeaderActions',
+  'showFooterActions',
+  'width',
+  'height',
+  'noPadding',
+  'href',
+  'target',
+  'rel',
+  'cardAction'
+], [
+  'cardAction'
 ]);
 
 
@@ -487,6 +516,7 @@ export const SpectrumSearchResults = /*@__PURE__*/ defineContainer<JSX.SpectrumS
   'enableUrlSync',
   'pageParam',
   'sizeParam',
+  'directNavigation',
   'translations',
   'resultAction',
   'paginationAction'

@@ -11,11 +11,17 @@ import { action } from 'storybook/actions';
  * - **Multi-Media Support**: Supports both images and videos with poster frames
  * - **Carousel Functionality**: Optional autoplay with customizable timing and transitions
  * - **Text Overlays**: Flexible positioning for titles, subtitles, and call-to-action buttons
+ * - **Direct Navigation**: Optional direct navigation via href, target, and rel attributes
  * - **Custom Overlay Styling**: Full CSS control over overlay container appearance and layout
  * - **Design Enhancement**: Rounded corners and gradient shade overlay for better presentation
  * - **Responsive Design**: Adaptive layouts with configurable height and positioning
  * - **Accessibility**: Full keyboard navigation and screen reader support
  * - **Performance Optimized**: Efficient rendering with smooth animations
+ * 
+ * ### Navigation Modes
+ * - **Event-based**: Traditional event emission for custom handling (default)
+ * - **Direct navigation**: HTML anchor tags for immediate page navigation
+ * - **Mixed approach**: Combine both modes in the same hero component
  * 
  * ### Usage Guidelines
  * - Use for: Landing page headers, feature showcases, product highlights
@@ -24,7 +30,7 @@ import { action } from 'storybook/actions';
  * 
  * ### Event System (Component Events Rule Compliant)
  * All events follow the Component Events Rule with consistent action attributes:
- * - **heroAction**: Emitted when action buttons are clicked with slide context
+ * - **heroAction**: Emitted when action buttons are clicked with slide context (always fired, even with direct navigation)
  * - **slideChange**: Emitted when slides change with current slide information
  */
 
@@ -40,6 +46,10 @@ interface HeroSlide {
   buttonAction?: string;
   overlayPosition?: 'left' | 'center' | 'right';
   overlayVertical?: 'top' | 'center' | 'bottom';
+  // Navigation support (optional direct navigation)
+  buttonHref?: string; // URL for direct navigation when button is clicked
+  buttonTarget?: string; // Target for navigation (e.g., '_blank' for new tab)
+  buttonRel?: string; // Rel attribute for security when using target="_blank"
 }
 
 // Component interfaces for TypeScript support
@@ -89,6 +99,10 @@ interface HeroSlide {
   buttonAction?: string;             // Action identifier for events
   overlayPosition?: 'left' | 'center' | 'right';    // Horizontal positioning
   overlayVertical?: 'top' | 'center' | 'bottom';    // Vertical positioning
+  // Navigation support (optional direct navigation)
+  buttonHref?: string;               // URL for direct navigation when button is clicked
+  buttonTarget?: string;             // Target for navigation (e.g., '_blank' for new tab)
+  buttonRel?: string;                // Rel attribute for security when using target="_blank"
   srcset?: string;                   // Responsive image sources with width descriptors
   sizes?: string;                    // Image sizes for different viewport conditions
 }
@@ -131,6 +145,61 @@ interface HeroSlide {
   rounded="true"
   shaded="true">
 </spectrum-hero>
+\`\`\`
+
+### Navigation Examples
+
+#### Direct Navigation
+\`\`\`javascript
+const directNavSlide = {
+  type: 'image',
+  src: '/hero-image.jpg',
+  title: 'Welcome to Our Site',
+  buttonText: 'Get Started',
+  buttonHref: '/getting-started',  // Direct navigation
+  buttonTarget: '_blank',          // Open in new tab
+  buttonRel: 'noopener noreferrer' // Security for external links
+};
+\`\`\`
+
+#### Event-Based Interaction
+\`\`\`javascript
+const eventSlide = {
+  type: 'image',
+  src: '/hero-image.jpg',
+  title: 'Custom Action',
+  buttonText: 'Sign Up',
+  buttonAction: 'show-signup-modal' // Emits heroAction event
+};
+
+// Listen for events
+document.addEventListener('heroAction', (event) => {
+  if (event.detail.action === 'show-signup-modal') {
+    // Show custom modal
+  }
+});
+\`\`\`
+
+#### Mixed Approach
+\`\`\`javascript
+const mixedSlides = [
+  {
+    // Direct navigation slide
+    type: 'image',
+    src: '/slide1.jpg',
+    title: 'Visit Store',
+    buttonText: 'Shop Now',
+    buttonHref: '/store'
+  },
+  {
+    // Event-based slide
+    type: 'image',
+    src: '/slide2.jpg', 
+    title: 'Join Us',
+    buttonText: 'Sign Up',
+    buttonAction: 'show-signup'
+  }
+];
 \`\`\`
         `
       }
@@ -1400,6 +1469,246 @@ This story demonstrates responsive image optimization with srcset and sizes:
 - **Real devices**: Test on actual mobile devices for accurate performance assessment
 
 Use the controls panel to experiment with different srcset and sizes configurations!
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Direct navigation hero demonstrating HTML anchor tag functionality.
+ * Button will navigate directly to the specified URL without emitting custom events for navigation.
+ */
+export const DirectNavigation: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Direct navigation demo',
+        title: 'Direct Navigation',
+        subtitle: 'Click the button to navigate directly to an external site',
+        buttonText: 'Visit Example.com',
+        buttonHref: 'https://example.com',
+        buttonTarget: '_blank',
+        buttonRel: 'noopener noreferrer',
+        overlayPosition: 'center',
+        overlayVertical: 'center'
+      }
+    ]),
+    height: '70vh',
+    autoplay: 0,
+    showDots: false,
+    showArrows: false,
+    rounded: true,
+    shaded: true
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates direct navigation functionality:
+
+### **Direct Navigation Features**
+- **buttonHref**: \`"https://example.com"\` - Direct URL navigation
+- **buttonTarget**: \`"_blank"\` - Opens link in new tab/window
+- **buttonRel**: \`"noopener noreferrer"\` - Security attributes for external links
+- **No custom navigation logic**: Browser handles the navigation directly
+
+### **Security Considerations**
+- \`noopener\`: Prevents the new page from accessing \`window.opener\`
+- \`noreferrer\`: Prevents referrer information from being passed
+- Automatic application when \`target="_blank"\` without explicit \`rel\` attribute
+
+### **Event Behavior**
+- \`heroAction\` event is still emitted for tracking and analytics
+- Navigation happens via standard browser anchor tag behavior
+- No need for custom event listeners for navigation logic
+
+### **Use Cases**
+- External website links
+- Documentation links
+- Social media profiles
+- Download links
+- Contact pages
+
+Perfect for simple navigation scenarios where custom logic isn't needed.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Event-based hero demonstrating traditional custom event handling.
+ * Button emits custom events for complete control over user interactions.
+ */
+export const EventBased: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2326&auto=format&fit=crop',
+        alt: 'Event-based interaction demo',
+        title: 'Event-Based Interaction',
+        subtitle: 'Click the button to see custom event emission in the Actions panel',
+        buttonText: 'Trigger Custom Event',
+        buttonAction: 'custom-signup-action',
+        overlayPosition: 'left',
+        overlayVertical: 'center'
+      }
+    ]),
+    height: '70vh',
+    autoplay: 0,
+    showDots: false,
+    showArrows: false,
+    rounded: false,
+    shaded: true
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates traditional event-based interactions:
+
+### **Event-Based Features**
+- **buttonAction**: \`"custom-signup-action"\` - Custom action identifier
+- **No href attribute**: Button renders as \`<button>\` element, not \`<a>\`
+- **Full custom control**: Application handles all interaction logic
+
+### **Event Handling Pattern**
+\`\`\`javascript
+document.addEventListener('heroAction', (event) => {
+  const { action, slideIndex, slideTitle } = event.detail;
+  
+  switch(action) {
+    case 'custom-signup-action':
+      // Show signup modal
+      showSignupModal();
+      break;
+    case 'other-action':
+      // Handle other actions
+      break;
+  }
+});
+\`\`\`
+
+### **Event Payload**
+- \`action\`: "custom-signup-action" (from buttonAction)
+- \`slideIndex\`: Current slide number (0-based)
+- \`slideTitle\`: "Event-Based Interaction" (slide title)
+
+### **Use Cases**
+- Modal dialogs
+- Form submissions  
+- Custom navigation logic
+- Analytics tracking
+- Multi-step workflows
+- Conditional actions
+
+Check the Actions panel below to see the emitted event details when you click the button!
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Mixed navigation hero demonstrating both direct navigation and event-based slides in one carousel.
+ * Shows the flexibility of combining different interaction patterns within the same component.
+ */
+export const MixedNavigation: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Direct navigation slide',
+        title: 'Direct Navigation',
+        subtitle: 'This slide navigates directly to Google',
+        buttonText: 'Visit Google',
+        buttonHref: 'https://google.com',
+        buttonTarget: '_blank',
+        overlayPosition: 'left',
+        overlayVertical: 'center'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2326&auto=format&fit=crop',
+        alt: 'Event-based slide',
+        title: 'Event-Based Action',
+        subtitle: 'This slide emits a custom event',
+        buttonText: 'Show Modal',
+        buttonAction: 'show-modal-action',
+        overlayPosition: 'right',
+        overlayVertical: 'center'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=2339&auto=format&fit=crop',
+        alt: 'Internal navigation slide',
+        title: 'Internal Navigation',
+        subtitle: 'This slide navigates to an internal page',
+        buttonText: 'Go to About',
+        buttonHref: '/about',
+        buttonAction: 'internal-page-visit',
+        overlayPosition: 'center',
+        overlayVertical: 'bottom'
+      }
+    ]),
+    height: '75vh',
+    autoplay: 4000,
+    showDots: true,
+    showArrows: true,
+    pauseOnHover: true,
+    rounded: false,
+    shaded: true
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This carousel demonstrates mixing direct navigation and event-based interactions:
+
+### **Slide 1: Direct External Navigation**
+- **Pattern**: Direct navigation to external site
+- **buttonHref**: \`"https://google.com"\`
+- **buttonTarget**: \`"_blank"\` (new tab)
+- **Use case**: External links, documentation, social media
+
+### **Slide 2: Event-Based Custom Action**
+- **Pattern**: Custom event emission for application logic
+- **buttonAction**: \`"show-modal-action"\`
+- **No href**: Renders as button element
+- **Use case**: Modals, forms, custom workflows
+
+### **Slide 3: Direct Internal Navigation** 
+- **Pattern**: Direct navigation to internal page
+- **buttonHref**: \`"/about"\`
+- **buttonAction**: \`"internal-page-visit"\` (for analytics)
+- **Use case**: Internal page navigation with tracking
+
+### **Event Emission Behavior**
+All slides emit \`heroAction\` events regardless of navigation type:
+- **Direct navigation slides**: Event fired for tracking, then browser navigates
+- **Event-based slides**: Event fired for custom handling
+
+### **Implementation Benefits**
+- **Flexibility**: Choose the right pattern for each slide
+- **Performance**: Direct navigation for simple links, events for complex logic
+- **Analytics**: Track all interactions consistently
+- **Maintainability**: Clear separation of concerns
+
+### **Best Practices**
+- Use direct navigation for simple page transitions
+- Use events for modals, forms, and complex interactions
+- Always include \`buttonAction\` for analytics, even with direct navigation
+- Consider user expectations (external links in new tabs)
+
+Watch the carousel cycle through all three patterns and check the Actions panel for event details!
         `
       }
     }

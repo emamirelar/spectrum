@@ -154,6 +154,11 @@ export class SpectrumSearchResults {
    */
   @Prop() sizeParam: string = 'size';
 
+  /**
+   * Enable direct navigation - when true, clicking a result navigates directly to the URL as an HTML link
+   */
+  @Prop() directNavigation: boolean = false;
+
   // ==============================================
   // Localization Support
   // ==============================================
@@ -579,9 +584,16 @@ export class SpectrumSearchResults {
   // ==============================================
 
   private renderResult(result: SearchResult, index: number) {
+    const contentElement = this.directNavigation && result.url ? 'a' : 'div';
+    const contentProps = this.directNavigation && result.url 
+      ? { href: result.url }
+      : { onClick: () => this.handleResultClick(result, index) };
+
+    const ContentTag = contentElement as any;
+
     return (
       <div class="spectrum-search-results__item" key={result.id}>
-        <div class="spectrum-search-results__item-content" onClick={() => this.handleResultClick(result, index)}>
+        <ContentTag class="spectrum-search-results__item-content" {...contentProps}>
           {this.showThumbnails && result.thumbnail && (
             <div class="spectrum-search-results__thumbnail">
               <img src={result.thumbnail} alt="" loading="lazy" />
@@ -628,7 +640,7 @@ export class SpectrumSearchResults {
               )}
             </div>
           </div>
-        </div>
+        </ContentTag>
       </div>
     );
   }

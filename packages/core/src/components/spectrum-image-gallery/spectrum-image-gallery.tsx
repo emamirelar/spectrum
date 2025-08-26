@@ -521,7 +521,7 @@ export class SpectrumImageGallery {
             <spectrum-button
               variant="ghost"
               iconOnly={true}
-              size="base"
+              size="medium"
               leftIcon="close"
               showLeftIcon={true}
               onClick={() => this.closeUploadModal()}
@@ -545,7 +545,7 @@ export class SpectrumImageGallery {
                 <p>Drag & drop images here</p>
                 <spectrum-button
                   variant="primary"
-                  size="base"
+                  size="medium"
                   buttonText="Browse Files"
                   showButtonText={true}
                   onClick={() => this.fileInputRef?.click()}
@@ -569,7 +569,7 @@ export class SpectrumImageGallery {
             <spectrum-button
               variant="ghost"
               iconOnly={true}
-              size="base"
+              size="medium"
               leftIcon="close"
               showLeftIcon={true}
               onClick={() => this.closeUrlModal()}
@@ -590,14 +590,14 @@ export class SpectrumImageGallery {
               <div class="modal__actions">
                 <spectrum-button
                   variant="secondary"
-                  size="base"
+                  size="medium"
                   buttonText="Cancel"
                   showButtonText={true}
                   onClick={() => this.closeUrlModal()}
                 />
                 <spectrum-button
                   variant="primary"
-                  size="base"
+                  size="medium"
                   buttonText="Add Image"
                   showButtonText={true}
                   onClick={() => this.handleUrlAdd()}
@@ -721,7 +721,7 @@ export class SpectrumImageGallery {
           <spectrum-button
             variant="secondary"
             iconOnly={true}
-            size="base"
+            size="medium"
             leftIcon="close"
             showLeftIcon={true}
             onClick={() => this.closePreviewModal()}
@@ -733,7 +733,7 @@ export class SpectrumImageGallery {
             <spectrum-button
               variant="secondary"
               iconOnly={true}
-              size="base"
+              size="medium"
               leftIcon="keyboard_arrow_left"
               showLeftIcon={true}
               onClick={() => this.navigatePreview('previous')}
@@ -754,7 +754,7 @@ export class SpectrumImageGallery {
             <spectrum-button
               variant="secondary"
               iconOnly={true}
-              size="base"
+              size="medium"
               leftIcon="keyboard_arrow_right"
               showLeftIcon={true}
               onClick={() => this.navigatePreview('next')}
@@ -790,7 +790,7 @@ export class SpectrumImageGallery {
             <spectrum-button
               variant="ghost"
               iconOnly={true}
-              size="base"
+              size="medium"
               leftIcon="close"
               showLeftIcon={true}
               onClick={() => this.closeAddModal()}
@@ -817,7 +817,7 @@ export class SpectrumImageGallery {
                     <p>Drag & drop images here</p>
                     <spectrum-button
                       variant="secondary"
-                      size="base"
+                      size="medium"
                       buttonText="Browse Files"
                       showButtonText={true}
                       onClick={() => this.fileInputRef?.click()}
@@ -844,7 +844,7 @@ export class SpectrumImageGallery {
                   />
                   <spectrum-button
                     variant="secondary"
-                    size="base"
+                    size="medium"
                     buttonText="Add from URL"
                     showButtonText={true}
                     onClick={() => this.handleUrlAdd()}
@@ -916,7 +916,7 @@ export class SpectrumImageGallery {
                 this.allowDelete && this.internalSelectedImages.length > 0 && (
                   <spectrum-button
                     variant="danger"
-                    size="base"
+                    size="medium"
                     buttonText={this.internalSelectedImages.length === 1 ? 'Delete' : `Delete (${this.internalSelectedImages.length})`}
                     showButtonText={true}
                     leftIcon="delete"
@@ -930,7 +930,7 @@ export class SpectrumImageGallery {
                 this.primaryActionText && this.internalSelectedImages.length > 0 && (
                   <spectrum-button
                     variant="primary"
-                    size="base"
+                    size="medium"
                     buttonText={this.primaryActionText}
                     showButtonText={true}
                     leftIcon={this.primaryActionIcon}
@@ -944,7 +944,7 @@ export class SpectrumImageGallery {
                 (this.allowUrlInput || this.allowUpload) && this.internalSelectedImages.length === 0 && (
                   <spectrum-button
                     variant="primary"
-                    size="base"
+                    size="medium"
                     buttonText="Add"
                     showButtonText={true}
                     leftIcon="add"

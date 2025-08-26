@@ -5,9 +5,11 @@ import { action } from 'storybook/actions';
 /**
  * ## SpectrumSearchResults Component
  * 
- * The search-results component displays search results in a structured, paginated format with customizable display options.
+ * The search-results component displays search results in a structured, paginated format with customizable display options and flexible navigation modes.
  * 
  * ### Key Features
+ * - **Dual Navigation Modes**: Event-based (SPA) or direct HTML links (traditional)
+ * - **Transparent Background**: No default background - integrates seamlessly with any design
  * - **Pagination**: Full pagination support with URL synchronization
  * - **Customizable Display**: Toggle thumbnails, metadata, scores, and pagination
  * - **Internationalization**: Full translation support for all user-facing text
@@ -15,9 +17,15 @@ import { action } from 'storybook/actions';
  * - **URL Synchronization**: Deep linking support with pagination state in URL
  * - **Accessibility**: Full ARIA support and keyboard navigation
  * 
+ * ### Navigation Modes
+ * - **Event-based (directNavigation=false)**: Perfect for SPAs - emits events for custom navigation handling
+ * - **Direct links (directNavigation=true)**: Standard HTML links for traditional web navigation
+ * 
  * ### Usage Guidelines
  * - **Use for**: Displaying search results, product listings, document collections
  * - **Avoid when**: Showing single items or small lists that don't need pagination
+ * - **Choose event navigation for**: Single-page applications, custom routing, analytics tracking
+ * - **Choose direct navigation for**: Multi-page sites, SEO-friendly links, standard browser behavior
  * 
  * ### Event System (Component Events Rule Compliant)
  * All events follow the Component Events Rule with consistent action attributes:
@@ -45,6 +53,7 @@ interface SpectrumSearchResultsElement extends HTMLElement {
   pageParam: string;
   sizeParam: string;
   translations: SearchResultsTranslations;
+  directNavigation: boolean;
 }
 
 // Story arguments interface
@@ -56,7 +65,7 @@ const sampleResults = [
     id: '1',
     title: 'Advanced Web Components Development',
     description: 'Learn how to build advanced web components using StencilJS and modern web technologies.',
-    url: '/articles/advanced-web-components',
+    url: 'https://stenciljs.com/docs/introduction',
     score: 0.95,
     metadata: {
       author: 'John Doe',
@@ -70,7 +79,7 @@ const sampleResults = [
     id: '2',
     title: 'Building Responsive Design Systems',
     description: 'A comprehensive guide to creating scalable and responsive design systems for modern applications.',
-    url: '/articles/responsive-design-systems',
+    url: 'https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design',
     score: 0.87,
     metadata: {
       author: 'Jane Smith',
@@ -84,7 +93,7 @@ const sampleResults = [
     id: '3',
     title: 'TypeScript Best Practices',
     description: 'Essential TypeScript patterns and practices for large-scale application development.',
-    url: '/articles/typescript-best-practices',
+    url: 'https://www.typescriptlang.org/docs/handbook/2/basic-types.html',
     score: 0.82,
     metadata: {
       author: 'Mike Johnson',
@@ -98,7 +107,7 @@ const sampleResults = [
     id: '4',
     title: 'Performance Optimization Techniques',
     description: 'Modern techniques for optimizing web application performance and user experience.',
-    url: '/articles/performance-optimization',
+    url: 'https://web.dev/performance-scoring/',
     score: 0.78,
     metadata: {
       author: 'Sarah Wilson',
@@ -112,7 +121,7 @@ const sampleResults = [
     id: '5',
     title: 'Accessibility in Modern Web Development',
     description: 'Implementing comprehensive accessibility features in contemporary web applications.',
-    url: '/articles/accessibility-modern-web',
+    url: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility',
     score: 0.74,
     metadata: {
       author: 'David Brown',
@@ -185,6 +194,7 @@ Use standard property binding syntax for all component properties.
     pageParam: 'page',
     sizeParam: 'size',
     translations: {},
+    directNavigation: false,
   },
   argTypes: {
     data: {
@@ -299,6 +309,14 @@ Use standard property binding syntax for all component properties.
         type: { summary: 'SearchResultsTranslations' },
         defaultValue: { summary: '{}' }
       }
+    },
+    directNavigation: {
+      control: 'boolean',
+      description: 'Enable direct navigation - when true, clicking a result navigates directly to the URL as an HTML link',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
     }
   }
 };
@@ -324,6 +342,7 @@ const renderSpectrumSearchResults = (args: SpectrumSearchResultsArgs) => html`
       .pageParam=${args.pageParam}
       .sizeParam=${args.sizeParam}
       .translations=${args.translations}
+      .directNavigation=${args.directNavigation}
       @resultAction=${(e: CustomEvent) => action('resultAction')(e.detail)}
       @paginationAction=${(e: CustomEvent) => action('paginationAction')(e.detail)}
     ></spectrum-search-results>
@@ -542,6 +561,194 @@ export const WithTranslations: Story = {
         story: `
 Example showing French translations for all user-facing text. The component supports full internationalization
 with customizable text for all elements including pagination controls and status messages.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// NAVIGATION MODES
+// =================================================================
+
+/**
+ * Event-based navigation (default behavior) - clicking results emits events for custom handling.
+ */
+export const EventBasedNavigation: Story = {
+  render: (args) => html`
+    <div style="max-width: 800px; margin: 0 auto; padding: 1rem;">
+      <h3>Event-Based Navigation (Default)</h3>
+      <p>
+        <strong>directNavigation=false</strong> - Click results to emit events that can be handled by your application.
+        Watch the Actions panel below to see events being emitted.
+      </p>
+      <div style="margin-bottom: 1rem; padding: 1rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #1976d2;">
+        <strong>💡 Usage:</strong> Perfect for single-page applications where you want to handle navigation programmatically
+        (e.g., React Router, Vue Router, or custom navigation logic).
+      </div>
+      <spectrum-search-results
+        .data=${args.data}
+        ?showThumbnails=${args.showThumbnails}
+        ?showMetadata=${args.showMetadata}
+        ?showPagination=${args.showPagination}
+        .directNavigation=${args.directNavigation}
+        @resultAction=${(e: CustomEvent) => {
+          action('resultAction')(e.detail);
+          // In a real app, you might do:
+          // router.push(e.detail.result.url);
+          console.log('Navigate to:', e.detail.result.url);
+        }}
+        @paginationAction=${(e: CustomEvent) => action('paginationAction')(e.detail)}
+      ></spectrum-search-results>
+    </div>
+  `,
+  args: {
+    data: basicData,
+    showThumbnails: true,
+    showMetadata: true,
+    showPagination: true,
+    directNavigation: false
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+**Event-based navigation** is the default behavior where clicking a search result emits a \`resultAction\` event 
+with the result data. This is ideal for single-page applications where you want to handle navigation 
+programmatically through your routing system.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Direct HTML link navigation - clicking results navigates directly as HTML links.
+ */
+export const DirectLinkNavigation: Story = {
+  render: (args) => html`
+    <div style="max-width: 800px; margin: 0 auto; padding: 1rem;">
+      <h3>Direct Link Navigation</h3>
+      <p>
+        <strong>directNavigation=true</strong> - Results become actual HTML links that navigate directly to their URLs in the same tab.
+        Try right-clicking on a result to see browser context menu options like "Open in new tab".
+      </p>
+      <div style="margin-bottom: 1rem; padding: 1rem; background: #f0fff0; border-radius: 8px; border-left: 4px solid #4caf50;">
+        <strong>💡 Usage:</strong> Perfect for traditional multi-page applications or when you want standard 
+        browser navigation behavior (back button, bookmarking, right-click context menu).
+      </div>
+      <spectrum-search-results
+        .data=${args.data}
+        ?showThumbnails=${args.showThumbnails}
+        ?showMetadata=${args.showMetadata}
+        ?showPagination=${args.showPagination}
+        .directNavigation=${args.directNavigation}
+        @resultAction=${(e: CustomEvent) => action('resultAction')(e.detail)}
+        @paginationAction=${(e: CustomEvent) => action('paginationAction')(e.detail)}
+      ></spectrum-search-results>
+    </div>
+  `,
+  args: {
+    data: basicData,
+    showThumbnails: true,
+    showMetadata: true,
+    showPagination: true,
+    directNavigation: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+**Direct link navigation** transforms search results into actual HTML \`<a>\` elements that navigate directly 
+to their URLs in the same tab. This provides standard browser navigation behavior including:
+- Right-click context menu (Open in new tab, Copy link, etc.)
+- Ctrl/Cmd+Click to open in new tab
+- Standard browser back/forward navigation
+- Link previews on hover
+- Accessibility benefits of semantic links
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Side-by-side comparison of both navigation modes.
+ */
+export const NavigationComparison: Story = {
+  render: () => html`
+    <div style="max-width: 1200px; margin: 0 auto; padding: 1rem;">
+      <h3>Navigation Mode Comparison</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+        
+        <div>
+          <h4 style="color: #1976d2; margin-bottom: 1rem;">📱 Event-Based (SPA)</h4>
+          <div style="margin-bottom: 1rem; padding: 0.75rem; background: #f0f8ff; border-radius: 6px; font-size: 0.9rem;">
+            directNavigation=false
+          </div>
+          <spectrum-search-results
+            .data=${basicData}
+            ?showThumbnails=${true}
+            ?showMetadata=${true}
+            .resultsPerPage=${2}
+            .directNavigation=${false}
+            @resultAction=${(e: CustomEvent) => {
+              action('Event Navigation')(e.detail);
+              alert(`Event navigation: Would route to ${e.detail.result.url}`);
+            }}
+          ></spectrum-search-results>
+        </div>
+
+        <div>
+          <h4 style="color: #4caf50; margin-bottom: 1rem;">🔗 Direct Links (Traditional)</h4>
+          <div style="margin-bottom: 1rem; padding: 0.75rem; background: #f0fff0; border-radius: 6px; font-size: 0.9rem;">
+            directNavigation=true
+          </div>
+          <spectrum-search-results
+            .data=${basicData}
+            ?showThumbnails=${true}
+            ?showMetadata=${true}
+            .resultsPerPage=${2}
+            .directNavigation=${true}
+            @resultAction=${(e: CustomEvent) => action('Direct Navigation')(e.detail)}
+          ></spectrum-search-results>
+        </div>
+      </div>
+      
+      <div style="margin-top: 2rem; padding: 1.5rem; background: #fafafa; border-radius: 8px;">
+        <h4>When to Use Each Mode:</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <strong style="color: #1976d2;">Event-Based Navigation</strong>
+            <ul style="margin-top: 0.5rem; font-size: 0.9rem;">
+              <li>Single-page applications (React, Vue, Angular)</li>
+              <li>Custom routing logic needed</li>
+              <li>Want to track analytics before navigation</li>
+              <li>Need to perform actions before navigation</li>
+              <li>Modal or in-app navigation patterns</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="color: #4caf50;">Direct Link Navigation</strong>
+            <ul style="margin-top: 0.5rem; font-size: 0.9rem;">
+              <li>Traditional multi-page applications</li>
+              <li>SEO-friendly external links</li>
+              <li>Standard browser navigation expected</li>
+              <li>Accessibility-first approach</li>
+              <li>Documentation or content sites</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This comparison shows both navigation modes side by side. Try interacting with both versions to understand 
+the behavioral differences. The left side shows event-based navigation perfect for SPAs, while the right 
+side shows direct link navigation ideal for traditional websites.
         `
       }
     }

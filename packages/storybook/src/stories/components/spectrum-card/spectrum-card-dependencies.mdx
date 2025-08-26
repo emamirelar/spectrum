@@ -1,0 +1,97 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Spectrum/Components/SpectrumCard/Dependencies" />
+
+# 🔗 SpectrumCard Dependencies
+
+## Component Dependencies
+
+The `spectrum-card` component integrates with other Spectrum components to provide enhanced functionality:
+
+### Internal Dependencies
+
+- **spectrum-panel**: Inherits the `BackgroundLevel` type for background effect support
+- **No direct internal dependencies**: Card is designed as a foundational component
+
+### Recommended Component Integrations
+
+#### Header and Footer Actions
+- **spectrum-button**: Primary and secondary actions in header/footer slots
+- **spectrum-chip**: Tags, labels, and status indicators in headers
+- **spectrum-badge**: Status and notification indicators, especially in media overlays
+
+#### Content Enhancement
+- **spectrum-avatar**: User profile cards and personnel displays
+- **spectrum-image-gallery**: When cards need multiple images or advanced media handling
+
+### External Dependencies
+
+- **Material Symbols**: For icon support (inherited from integrated components)
+- **CSS Custom Properties**: Spectrum design token integration
+- **Web Standards**: HTML5 semantic elements and ARIA attributes
+
+## Integration Patterns
+
+### Button Integration
+```html
+<spectrum-card show-footer-actions>
+  <spectrum-button slot="footer-actions" variant="primary" button-text="Action"></spectrum-button>
+  <spectrum-button slot="footer-actions" variant="secondary" button-text="Cancel"></spectrum-button>
+</spectrum-card>
+```
+
+### Chip Integration
+```html
+<spectrum-card show-header-actions>
+  <spectrum-chip slot="header-actions" label="Featured" variant="primary"></spectrum-chip>
+  <spectrum-chip slot="header-actions" label="New" variant="secondary"></spectrum-chip>
+</spectrum-card>
+```
+
+### Badge Integration
+```html
+<spectrum-card image-url="image.jpg">
+  <spectrum-badge slot="media-overlay" text="Sale" variant="danger"></spectrum-badge>
+</spectrum-card>
+```
+
+## Usage in Component System
+
+### As Container Component
+Cards serve as versatile containers for:
+- Product displays with buttons and badges
+- User profiles with avatars and action buttons
+- Content previews with navigation chips
+- Dashboard widgets with interactive elements
+
+### Event Coordination
+Card events work seamlessly with integrated component events:
+- Card click events bubble properly
+- Header/footer action events are captured and forwarded
+- Event payloads follow consistent action-based structure
+
+## Best Practices
+
+### Component Selection
+- Use `spectrum-button` for primary actions
+- Use `spectrum-chip` for categorical information and filters  
+- Use `spectrum-badge` for status indicators and counts
+- Combine components thoughtfully to avoid visual clutter
+
+### Event Handling
+- Listen for card-level events for navigation actions
+- Handle component-specific events for detailed interactions
+- Use action identifiers to distinguish between different event sources
+
+### Styling Coordination
+- All integrated components inherit card's design tokens
+- Components automatically adapt to card's background levels
+- Consistent spacing and typography maintained across integrations
+
+## Dependency Map Position
+
+The spectrum-card component is positioned as:
+- **Level 1 (Composed)**: Depends on spectrum-panel for background types
+- **Used by**: Applications, dashboards, content management systems
+- **Integrates with**: spectrum-button, spectrum-chip, spectrum-badge, spectrum-avatar
+- **Provides foundation for**: Complex card-based layouts and interfaces
