@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Navigation Test</title>
+  <script type="module" src="../loader/index.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .test-section {
+      margin-bottom: 40px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .test-section h2 {
+      margin-top: 0;
+      color: #333;
+      border-bottom: 2px solid #007acc;
+      padding-bottom: 10px;
+    }
+    
+    .hero-container {
+      height: 400px;
+      margin: 20px 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #007acc;
+      background: white;
+    }
+    
+    .clear-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hero Navigation Test</h1>
+    
+    <div class="test-section">
+      <h2>1. Direct Navigation Hero</h2>
+      <p>This hero uses direct navigation via href attributes. The "Learn More" button will navigate directly to a new page.</p>
+      <div class="hero-container">
+        <spectrum-hero
+          id="direct-nav-hero"
+          height="400px"
+          show-arrows="true"
+          show-dots="true"
+          debug="true"
+        ></spectrum-hero>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2>2. Event-Based Hero</h2>
+      <p>This hero uses traditional event-based interactions. Check the log below to see emitted events.</p>
+      <div class="hero-container">
+        <spectrum-hero
+          id="event-hero"
+          height="400px"
+          show-arrows="true"
+          show-dots="true"
+          debug="true"
+        ></spectrum-hero>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2>3. Mixed Approach Hero</h2>
+      <p>This hero mixes both direct navigation and event-based slides in a carousel.</p>
+      <div class="hero-container">
+        <spectrum-hero
+          id="mixed-hero"
+          height="400px"
+          show-arrows="true"
+          show-dots="true"
+          autoplay="4000"
+          debug="true"
+        ></spectrum-hero>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2>Event Log</h2>
+      <button class="clear-btn" onclick="clearLog()">Clear Log</button>
+      <div class="log" id="event-log">
+        <div class="log-entry">Waiting for events...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Test data
+    const directNavSlides = [
+      {
+        type: 'image',
+        src: 'https://picsum.photos/1200/400?random=1',
+        title: 'Welcome to Our Site',
+        subtitle: 'Discover amazing content and features',
+        buttonText: 'Learn More',
+        buttonHref: 'https://example.com',
+        buttonTarget: '_blank',
+        buttonRel: 'noopener noreferrer'
+      }
+    ];
+    
+    const eventSlides = [
+      {
+        type: 'image',
+        src: 'https://picsum.photos/1200/400?random=2',
+        title: 'Custom Actions',
+        subtitle: 'Click the button to see event emission',
+        buttonText: 'Trigger Event',
+        buttonAction: 'custom-event-action'
+      }
+    ];
+    
+    const mixedSlides = [
+      {
+        type: 'image',
+        src: 'https://picsum.photos/1200/400?random=3',
+        title: 'Direct Navigation',
+        subtitle: 'This slide navigates directly',
+        buttonText: 'Visit Google',
+        buttonHref: 'https://google.com',
+        buttonTarget: '_blank'
+      },
+      {
+        type: 'image', 
+        src: 'https://picsum.photos/1200/400?random=4',
+        title: 'Event-Based',
+        subtitle: 'This slide emits an event',
+        buttonText: 'Custom Action',
+        buttonAction: 'show-modal'
+      },
+      {
+        type: 'image',
+        src: 'https://picsum.photos/1200/400?random=5', 
+        title: 'Internal Navigation',
+        subtitle: 'Navigate to internal page',
+        buttonText: 'Go to About',
+        buttonHref: '/about',
+        buttonAction: 'internal-navigation'
+      }
+    ];
+    
+    // Event logging
+    function logEvent(message, data = null) {
+      const log = document.getElementById('event-log');
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+      if (data) {
+        entry.innerHTML += `<br><small>${JSON.stringify(data, null, 2)}</small>`;
+      }
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+    
+    function clearLog() {
+      const log = document.getElementById('event-log');
+      log.innerHTML = '<div class="log-entry">Log cleared...</div>';
+    }
+    
+    // Set up heroes when components are loaded
+    customElements.whenDefined('spectrum-hero').then(() => {
+      // Direct navigation hero
+      const directNavHero = document.getElementById('direct-nav-hero');
+      directNavHero.slides = JSON.stringify(directNavSlides);
+      
+      // Event-based hero
+      const eventHero = document.getElementById('event-hero');
+      eventHero.slides = JSON.stringify(eventSlides);
+      
+      // Mixed hero
+      const mixedHero = document.getElementById('mixed-hero');
+      mixedHero.slides = JSON.stringify(mixedSlides);
+      
+      logEvent('Heroes initialized');
+    });
+    
+    // Listen for hero events
+    document.addEventListener('heroAction', (event) => {
+      logEvent('Hero Action Event', event.detail);
+    });
+    
+    document.addEventListener('slideChange', (event) => {
+      logEvent('Slide Change Event', event.detail);
+    });
+    
+    // Listen for button events (should not fire for navigation buttons)
+    document.addEventListener('buttonAction', (event) => {
+      logEvent('Button Action Event (should not fire for navigation buttons)', event.detail);
+    });
+    
+    logEvent('Test page loaded');
+  </script>
+</body>
+</html>

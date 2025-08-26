@@ -7,10 +7,11 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 import { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
+import { CardSize, CardVariant } from "./components/spectrum-card/spectrum-card";
+import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
-import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
 import { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
 import { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
@@ -19,10 +20,11 @@ import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, 
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 export { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
+export { CardSize, CardVariant } from "./components/spectrum-card/spectrum-card";
+export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
-export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
 export { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
 export { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
@@ -395,6 +397,7 @@ export namespace Components {
           * @default false
          */
         "haptic": boolean;
+        "href"?: string;
         /**
           * @default false
          */
@@ -411,6 +414,7 @@ export namespace Components {
           * @default false
          */
         "outline": boolean;
+        "rel"?: string;
         /**
           * @default ''
          */
@@ -434,7 +438,7 @@ export namespace Components {
         /**
           * @default 'base'
          */
-        "size": 'sm' | 'base' | 'lg';
+        "size": 'sm' | 'base' | 'medium' | 'lg';
         /**
           * @default false
          */
@@ -443,10 +447,104 @@ export namespace Components {
           * @default 'default'
          */
         "state": 'default' | 'hover' | 'active' | 'disabled';
+        "target"?: string;
         /**
           * @default 'primary'
          */
         "variant": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
+    }
+    /**
+     * Spectrum Card Component
+     * A versatile card component for displaying content with optional header, footer, and actions.
+     * Supports media, interactive states, and follows Material Design 3 patterns.
+     */
+    interface SpectrumCard {
+        /**
+          * Action identifier for events
+          * @default ''
+         */
+        "action": string;
+        /**
+          * Background level for the card
+          * @default 'opaque'
+         */
+        "background": BackgroundLevel;
+        /**
+          * Card subtitle
+         */
+        "cardSubtitle"?: string;
+        /**
+          * Card title
+         */
+        "cardTitle"?: string;
+        /**
+          * Whether the card is clickable
+          * @default false
+         */
+        "clickable": boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Whether the card is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Custom height for the card
+         */
+        "height"?: string;
+        /**
+          * URL for navigation when card is used as a link
+         */
+        "href"?: string;
+        /**
+          * Alt text for card image
+         */
+        "imageAlt"?: string;
+        /**
+          * Image URL for card media
+         */
+        "imageUrl"?: string;
+        /**
+          * Whether to remove default padding
+          * @default false
+         */
+        "noPadding": boolean;
+        /**
+          * Rel attribute for security when using target="_blank"
+         */
+        "rel"?: string;
+        /**
+          * Whether to show footer actions slot
+          * @default false
+         */
+        "showFooterActions": boolean;
+        /**
+          * Whether to show header actions slot
+          * @default false
+         */
+        "showHeaderActions": boolean;
+        /**
+          * Size of the card
+          * @default 'medium'
+         */
+        "size": CardSize;
+        /**
+          * Target for navigation (e.g., '_blank' for new tab)
+         */
+        "target"?: string;
+        /**
+          * Card variant/style
+          * @default 'default'
+         */
+        "variant": CardVariant;
+        /**
+          * Custom width for the card
+         */
+        "width"?: string;
     }
     /**
      * Spectrum Chip Component
@@ -1047,8 +1145,11 @@ export namespace Components {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
-     * Features responsive image support through srcset and sizes attributes
-     * for optimal image delivery across different devices and screen sizes.
+     * Features:
+     * - Responsive image support through srcset and sizes attributes for optimal delivery
+     * - Direct navigation support for call-to-action buttons via href, target, and rel attributes
+     * - Event-based interactions for custom handling alongside direct navigation
+     * - Accessibility support with keyboard navigation and screen reader compatibility
      */
     interface SpectrumHero {
         /**
@@ -1483,6 +1584,11 @@ export namespace Components {
           * @default { results: [], pagination: { currentPage: 1, totalPages: 1, totalResults: 0, resultsPerPage: 10 } }
          */
         "data": SearchResultsData | string;
+        /**
+          * Enable direct navigation - when true, clicking a result navigates directly to the URL as an HTML link
+          * @default false
+         */
+        "directNavigation": boolean;
         /**
           * Empty state message
           * @default 'No results found'
@@ -1996,6 +2102,10 @@ export interface SpectrumButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumButtonElement;
 }
+export interface SpectrumCardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumCardElement;
+}
 export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumChipElement;
@@ -2158,6 +2268,28 @@ declare global {
     var HTMLSpectrumButtonElement: {
         prototype: HTMLSpectrumButtonElement;
         new (): HTMLSpectrumButtonElement;
+    };
+    interface HTMLSpectrumCardElementEventMap {
+        "cardAction": {action: string; cardId?: string; title?: string};
+    }
+    /**
+     * Spectrum Card Component
+     * A versatile card component for displaying content with optional header, footer, and actions.
+     * Supports media, interactive states, and follows Material Design 3 patterns.
+     */
+    interface HTMLSpectrumCardElement extends Components.SpectrumCard, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumCardElementEventMap>(type: K, listener: (this: HTMLSpectrumCardElement, ev: SpectrumCardCustomEvent<HTMLSpectrumCardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumCardElementEventMap>(type: K, listener: (this: HTMLSpectrumCardElement, ev: SpectrumCardCustomEvent<HTMLSpectrumCardElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumCardElement: {
+        prototype: HTMLSpectrumCardElement;
+        new (): HTMLSpectrumCardElement;
     };
     interface HTMLSpectrumChipElementEventMap {
         "chipAction": { action?: string; label: string };
@@ -2338,8 +2470,11 @@ declare global {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
-     * Features responsive image support through srcset and sizes attributes
-     * for optimal image delivery across different devices and screen sizes.
+     * Features:
+     * - Responsive image support through srcset and sizes attributes for optimal delivery
+     * - Direct navigation support for call-to-action buttons via href, target, and rel attributes
+     * - Event-based interactions for custom handling alongside direct navigation
+     * - Accessibility support with keyboard navigation and screen reader compatibility
      */
     interface HTMLSpectrumHeroElement extends Components.SpectrumHero, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumHeroElementEventMap>(type: K, listener: (this: HTMLSpectrumHeroElement, ev: SpectrumHeroCustomEvent<HTMLSpectrumHeroElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2595,6 +2730,7 @@ declare global {
         "spectrum-avatar": HTMLSpectrumAvatarElement;
         "spectrum-badge": HTMLSpectrumBadgeElement;
         "spectrum-button": HTMLSpectrumButtonElement;
+        "spectrum-card": HTMLSpectrumCardElement;
         "spectrum-chip": HTMLSpectrumChipElement;
         "spectrum-cluster": HTMLSpectrumClusterElement;
         "spectrum-collapsible-list": HTMLSpectrumCollapsibleListElement;
@@ -3001,6 +3137,7 @@ declare namespace LocalJSX {
           * @default false
          */
         "haptic"?: boolean;
+        "href"?: string;
         /**
           * @default false
          */
@@ -3018,6 +3155,7 @@ declare namespace LocalJSX {
           * @default false
          */
         "outline"?: boolean;
+        "rel"?: string;
         /**
           * @default ''
          */
@@ -3041,7 +3179,7 @@ declare namespace LocalJSX {
         /**
           * @default 'base'
          */
-        "size"?: 'sm' | 'base' | 'lg';
+        "size"?: 'sm' | 'base' | 'medium' | 'lg';
         /**
           * @default false
          */
@@ -3050,10 +3188,108 @@ declare namespace LocalJSX {
           * @default 'default'
          */
         "state"?: 'default' | 'hover' | 'active' | 'disabled';
+        "target"?: string;
         /**
           * @default 'primary'
          */
         "variant"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
+    }
+    /**
+     * Spectrum Card Component
+     * A versatile card component for displaying content with optional header, footer, and actions.
+     * Supports media, interactive states, and follows Material Design 3 patterns.
+     */
+    interface SpectrumCard {
+        /**
+          * Action identifier for events
+          * @default ''
+         */
+        "action"?: string;
+        /**
+          * Background level for the card
+          * @default 'opaque'
+         */
+        "background"?: BackgroundLevel;
+        /**
+          * Card subtitle
+         */
+        "cardSubtitle"?: string;
+        /**
+          * Card title
+         */
+        "cardTitle"?: string;
+        /**
+          * Whether the card is clickable
+          * @default false
+         */
+        "clickable"?: boolean;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Whether the card is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Custom height for the card
+         */
+        "height"?: string;
+        /**
+          * URL for navigation when card is used as a link
+         */
+        "href"?: string;
+        /**
+          * Alt text for card image
+         */
+        "imageAlt"?: string;
+        /**
+          * Image URL for card media
+         */
+        "imageUrl"?: string;
+        /**
+          * Whether to remove default padding
+          * @default false
+         */
+        "noPadding"?: boolean;
+        /**
+          * Event emitted when card is clicked
+         */
+        "onCardAction"?: (event: SpectrumCardCustomEvent<{action: string; cardId?: string; title?: string}>) => void;
+        /**
+          * Rel attribute for security when using target="_blank"
+         */
+        "rel"?: string;
+        /**
+          * Whether to show footer actions slot
+          * @default false
+         */
+        "showFooterActions"?: boolean;
+        /**
+          * Whether to show header actions slot
+          * @default false
+         */
+        "showHeaderActions"?: boolean;
+        /**
+          * Size of the card
+          * @default 'medium'
+         */
+        "size"?: CardSize;
+        /**
+          * Target for navigation (e.g., '_blank' for new tab)
+         */
+        "target"?: string;
+        /**
+          * Card variant/style
+          * @default 'default'
+         */
+        "variant"?: CardVariant;
+        /**
+          * Custom width for the card
+         */
+        "width"?: string;
     }
     /**
      * Spectrum Chip Component
@@ -3661,8 +3897,11 @@ declare namespace LocalJSX {
      * Spectrum Hero Component
      * A hero section component that supports both images and video backgrounds,
      * with carousel functionality, text overlays, and call-to-action buttons.
-     * Features responsive image support through srcset and sizes attributes
-     * for optimal image delivery across different devices and screen sizes.
+     * Features:
+     * - Responsive image support through srcset and sizes attributes for optimal delivery
+     * - Direct navigation support for call-to-action buttons via href, target, and rel attributes
+     * - Event-based interactions for custom handling alongside direct navigation
+     * - Accessibility support with keyboard navigation and screen reader compatibility
      */
     interface SpectrumHero {
         /**
@@ -4133,6 +4372,11 @@ declare namespace LocalJSX {
           * @default { results: [], pagination: { currentPage: 1, totalPages: 1, totalResults: 0, resultsPerPage: 10 } }
          */
         "data"?: SearchResultsData | string;
+        /**
+          * Enable direct navigation - when true, clicking a result navigates directly to the URL as an HTML link
+          * @default false
+         */
+        "directNavigation"?: boolean;
         /**
           * Empty state message
           * @default 'No results found'
@@ -4643,6 +4887,7 @@ declare namespace LocalJSX {
         "spectrum-avatar": SpectrumAvatar;
         "spectrum-badge": SpectrumBadge;
         "spectrum-button": SpectrumButton;
+        "spectrum-card": SpectrumCard;
         "spectrum-chip": SpectrumChip;
         "spectrum-cluster": SpectrumCluster;
         "spectrum-collapsible-list": SpectrumCollapsibleList;
@@ -4696,6 +4941,12 @@ declare module "@stencil/core" {
              */
             "spectrum-button": LocalJSX.SpectrumButton & JSXBase.HTMLAttributes<HTMLSpectrumButtonElement>;
             /**
+             * Spectrum Card Component
+             * A versatile card component for displaying content with optional header, footer, and actions.
+             * Supports media, interactive states, and follows Material Design 3 patterns.
+             */
+            "spectrum-card": LocalJSX.SpectrumCard & JSXBase.HTMLAttributes<HTMLSpectrumCardElement>;
+            /**
              * Spectrum Chip Component
              * A versatile chip component that can be used for tags, filters, and selections.
              * Supports leading/trailing icons, selection states, and various interactive behaviors.
@@ -4743,8 +4994,11 @@ declare module "@stencil/core" {
              * Spectrum Hero Component
              * A hero section component that supports both images and video backgrounds,
              * with carousel functionality, text overlays, and call-to-action buttons.
-             * Features responsive image support through srcset and sizes attributes
-             * for optimal image delivery across different devices and screen sizes.
+             * Features:
+             * - Responsive image support through srcset and sizes attributes for optimal delivery
+             * - Direct navigation support for call-to-action buttons via href, target, and rel attributes
+             * - Event-based interactions for custom handling alongside direct navigation
+             * - Accessibility support with keyboard navigation and screen reader compatibility
              */
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;

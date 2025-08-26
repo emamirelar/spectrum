@@ -27,6 +27,7 @@ export { SpectrumBadge } from './components/spectrum-badge/spectrum-badge';
 export { SpectrumMenu } from './components/spectrum-menu/spectrum-menu';
 export { SpectrumDialog } from './components/spectrum-dialog/spectrum-dialog';
 export { SpectrumSearchResults } from './components/spectrum-search-results/spectrum-search-results';
+export { SpectrumCard } from './components/spectrum-card/spectrum-card';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';
@@ -37,3 +38,4 @@ export type { HeroSlide } from './components/spectrum-hero/spectrum-hero';
 export type { BackgroundLevel } from './components/spectrum-panel/spectrum-panel';
 export type { BadgeVariant, BadgeSize } from './components/spectrum-badge/spectrum-badge';
 export type { SearchResult, SearchResultsData, PaginationOptions, SearchResultActionPayload, PaginationActionPayload, SearchResultsTranslations } from './components/spectrum-search-results/spectrum-search-results';
+export type { CardVariant, CardSize } from './components/spectrum-card/spectrum-card';

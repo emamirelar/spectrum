@@ -16,6 +16,7 @@ import { SpectrumApplicationLayout as SpectrumApplicationLayoutElement, defineCu
 import { SpectrumAvatar as SpectrumAvatarElement, defineCustomElement as defineSpectrumAvatar } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-avatar.js";
 import { SpectrumBadge as SpectrumBadgeElement, defineCustomElement as defineSpectrumBadge } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-badge.js";
 import { SpectrumButton as SpectrumButtonElement, defineCustomElement as defineSpectrumButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-button.js";
+import { SpectrumCard as SpectrumCardElement, defineCustomElement as defineSpectrumCard } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-card.js";
 import { SpectrumChip as SpectrumChipElement, defineCustomElement as defineSpectrumChip } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-chip.js";
 import { SpectrumCluster as SpectrumClusterElement, defineCustomElement as defineSpectrumCluster } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-cluster.js";
 import { SpectrumCollapsibleList as SpectrumCollapsibleListElement, defineCustomElement as defineSpectrumCollapsibleList } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-collapsible-list.js";
@@ -122,6 +123,17 @@ export const SpectrumButton: StencilReactComponent<SpectrumButtonElement, Spectr
     react: React,
     events: { onButtonAction: 'buttonAction' } as SpectrumButtonEvents,
     defineCustomElement: defineSpectrumButton
+});
+
+type SpectrumCardEvents = { onCardAction: EventName<CustomEvent<{ action: string; cardId?: string; title?: string }>> };
+
+export const SpectrumCard: StencilReactComponent<SpectrumCardElement, SpectrumCardEvents> = /*@__PURE__*/ createComponent<SpectrumCardElement, SpectrumCardEvents>({
+    tagName: 'spectrum-card',
+    elementClass: SpectrumCardElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onCardAction: 'cardAction' } as SpectrumCardEvents,
+    defineCustomElement: defineSpectrumCard
 });
 
 type SpectrumChipEvents = { onChipAction: EventName<CustomEvent<{ action?: string; label: string }>> };

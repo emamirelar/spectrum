@@ -239,7 +239,7 @@
 }
 
 .spectrum-menu__submenu-item {
-  margin: var(--menu-spacing-small) 0; // Add vertical margin using smaller spacing
+  margin: 0; // Remove vertical margin
   padding: 0;
 }
 
@@ -260,11 +260,13 @@
   
   &:hover:not(.spectrum-menu__submenu-item-link--disabled) {
     background-color: var(--menu-item-hover-background);
+    border-radius: 0; // Ensure no rounded corners on hover
   }
   
   &.spectrum-menu__submenu-item-link--active {
     background-color: var(--menu-item-active-background);
     color: var(--menu-item-active-color);
+    border-radius: 0; // Ensure no rounded corners on active state
   }
   
   &:focus-visible {
@@ -289,9 +291,18 @@
 // Force default colors for submenu items using correct DOM structure
 .spectrum-menu__submenu-item .spectrum-menu__item-link {
   color: var(--spectrum-sys-color-on-surface, #1f1f1f);
+  border-radius: 0 !important; // Ensure no rounded corners for submenu items
   
   .spectrum-menu__icon {
     color: var(--spectrum-sys-color-on-surface, #1f1f1f);
+  }
+  
+  // Override any inherited border-radius in all states
+  &:hover,
+  &:active,
+  &:focus,
+  &.spectrum-menu__item-link--active {
+    border-radius: 0 !important;
   }
 }
 

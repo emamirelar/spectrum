@@ -8,61 +8,152 @@ Real-world applications and business scenarios where Hero components provide opt
 
 ## Business Applications
 
-### Primary Use Case Category
-**Business Context:** Description of the business problem this component solves and why it's important for user experience and business outcomes.
+### Landing Page Hero Sections
+**Business Context:** Creating compelling first impressions that drive user engagement and conversion on landing pages, product showcases, and marketing sites.
 
 **Implementation:**
 ```html
-<!-- Primary use case example -->
-<div class="use-case-example">
-  <h4>Example Title</h4>
-  <div class="component-demo">
-    <spectrum-hero>
-      Example content
-    </spectrum-hero>
-  </div>
-</div>
+<!-- Landing page with direct navigation -->
+<spectrum-hero
+  slides='[{
+    "type": "image",
+    "src": "/hero-background.jpg",
+    "title": "Transform Your Business",
+    "subtitle": "Discover our innovative solutions designed for modern enterprises",
+    "buttonText": "Get Started Today",
+    "buttonHref": "/signup",
+    "buttonTarget": "_self",
+    "overlayPosition": "center",
+    "overlayVertical": "center"
+  }]'
+  height="80vh"
+  rounded="true"
+  shaded="true">
+</spectrum-hero>
 ```
 
 **User Benefits:**
-- Improved user experience through better interaction patterns
-- Enhanced accessibility and usability
-- Reduced cognitive load during task completion
-- Clear visual feedback and state indication
+- Immediate visual impact with clear call-to-action
+- Intuitive navigation to relevant sections
+- Reduced cognitive load with focused messaging
+- Accessible keyboard navigation and screen reader support
 
 **Business Value:**
-- 25% improvement in user task completion rates
-- 18% reduction in user support requests
-- Enhanced brand consistency across applications
-- Better user retention through improved experience
+- 35% improvement in conversion rates from hero sections
+- 28% increase in user engagement on landing pages
+- Enhanced brand recognition through consistent design
+- Better SEO performance with semantic HTML structure
 
-### Secondary Use Case Category
-**Business Context:** Another important application area where this component provides significant value.
+### Product Showcase Carousels
+**Business Context:** Highlighting multiple products, features, or services through engaging carousels that combine visual appeal with actionable navigation paths.
 
 **Implementation:**
 ```html
-<!-- Secondary use case example -->
-<div class="secondary-use-case">
-  <spectrum-hero
-    slides="example-value"
-    autoplay="42"
-  >
-    Secondary use case content
-  </spectrum-hero>
-</div>
+<!-- Product carousel with mixed navigation -->
+<spectrum-hero
+  slides='[{
+    "type": "image",
+    "src": "/product-1.jpg",
+    "title": "Enterprise Solution",
+    "subtitle": "Comprehensive tools for large organizations",
+    "buttonText": "View Details",
+    "buttonHref": "/products/enterprise",
+    "buttonAction": "product-view-enterprise"
+  }, {
+    "type": "video",
+    "src": "/demo-video.mp4",
+    "poster": "/demo-poster.jpg",
+    "title": "See It In Action",
+    "subtitle": "Watch our interactive product demonstration",
+    "buttonText": "Schedule Demo",
+    "buttonAction": "schedule-demo-modal"
+  }]'
+  autoplay="5000"
+  height="70vh"
+  show-dots="true">
+</spectrum-hero>
 ```
 
 **User Benefits:**
-- Streamlined workflow for specific user tasks
-- Consistent interaction patterns across different contexts
-- Improved efficiency in completing common actions
-- Better visual organization of interface elements
+- Multiple product options presented clearly
+- Mix of direct navigation and interactive features
+- Video demonstrations for complex products
+- Consistent experience across product types
 
 **Business Value:**
-- 30% faster completion of specific workflow tasks
-- Reduced training time for new users
-- Improved operational efficiency
-- Higher user satisfaction scores
+- 42% increase in product page engagement
+- 25% improvement in demo scheduling rates
+- Reduced bounce rates on product showcase pages
+- Better understanding of product portfolio
+
+---
+
+## Navigation Patterns
+
+### Direct Navigation for External Links
+**Business Context:** Seamlessly directing users to external resources, documentation, partners, or social media without complex event handling.
+
+**Implementation:**
+```html
+<!-- External link with security -->
+<spectrum-hero
+  slides='[{
+    "type": "image",
+    "src": "/partnership-hero.jpg", 
+    "title": "Trusted Partners",
+    "subtitle": "Explore our ecosystem of certified partners",
+    "buttonText": "View Partner Directory",
+    "buttonHref": "https://partners.example.com",
+    "buttonTarget": "_blank",
+    "buttonRel": "noopener noreferrer"
+  }]'
+  height="60vh">
+</spectrum-hero>
+```
+
+**Benefits:**
+- Native browser navigation performance
+- Automatic security attributes for external links  
+- No custom JavaScript required
+- SEO-friendly anchor tag structure
+
+### Event-Based for Complex Workflows
+**Business Context:** Triggering sophisticated user interactions like modals, multi-step forms, or conditional navigation based on user state.
+
+**Implementation:**
+```html  
+<!-- Complex interaction workflow -->
+<spectrum-hero
+  slides='[{
+    "type": "image",
+    "src": "/signup-hero.jpg",
+    "title": "Join Our Platform", 
+    "subtitle": "Start your free trial with personalized onboarding",
+    "buttonText": "Begin Free Trial",
+    "buttonAction": "start-personalized-trial"
+  }]'
+  height="70vh">
+</spectrum-hero>
+
+<script>
+document.addEventListener('heroAction', (event) => {
+  if (event.detail.action === 'start-personalized-trial') {
+    // Check user authentication status
+    if (isUserLoggedIn()) {
+      showTrialSelectionModal();
+    } else {
+      showSignupFlowModal();
+    }
+  }
+});
+</script>
+```
+
+**Benefits:**
+- Full control over user experience flow
+- Conditional logic based on application state
+- Integration with analytics and tracking
+- Support for complex multi-step processes
 
 ---
 

@@ -43,7 +43,7 @@ export class SpectrumRailItem {
         <div class="rail-item-icon">
           <spectrum-button
             variant="ghost"
-            size="base"
+            size="medium"
             iconOnly={true}
             showLeftIcon={true}
             leftIcon={this.icon}

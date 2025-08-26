@@ -9,6 +9,8 @@ The `spectrum-search-results` component is a comprehensive solution for displayi
 
 ## Features
 
+- **Dual Navigation Modes**: Choose between event-based navigation (SPA) or direct HTML links (traditional)
+- **Transparent Background**: Seamless integration with any design system - no default background
 - **Flexible Data Structure**: Accepts JSON data with results and pagination info
 - **Rich Result Display**: Shows titles, descriptions, URLs, thumbnails, and metadata
 - **Pagination Support**: Built-in pagination with customizable controls
@@ -71,9 +73,31 @@ Enable URL synchronization to support deep linking and shareable pagination stat
 
 <Canvas of={SpectrumSearchResultsStories.WithUrlSync} />
 
+## Navigation Modes
+
+The component supports two distinct navigation modes to fit different application architectures.
+
+### Event-Based Navigation (Default)
+
+Perfect for single-page applications where you want to handle navigation programmatically.
+
+<Canvas of={SpectrumSearchResultsStories.EventBasedNavigation} />
+
+### Direct Link Navigation
+
+Ideal for traditional multi-page applications with standard browser navigation behavior in the same tab.
+
+<Canvas of={SpectrumSearchResultsStories.DirectLinkNavigation} />
+
+### Navigation Comparison
+
+Side-by-side comparison to understand the differences between navigation modes.
+
+<Canvas of={SpectrumSearchResultsStories.NavigationComparison} />
+
 ## Interactive Example
 
-<Canvas of={SpectrumSearchResultsStories.InteractiveExample} />
+<Canvas of={SpectrumSearchResultsStories.Playground} />
 
 ## Data Structure
 
@@ -168,6 +192,61 @@ const searchResults = {
 document.querySelector('spectrum-search-results').data = searchResults;
 ```
 
+### Navigation Modes
+
+The component supports two navigation modes controlled by the `directNavigation` property:
+
+#### Event-Based Navigation (Default)
+
+```javascript
+// Event-based navigation (default)
+const component = document.querySelector('spectrum-search-results');
+component.directNavigation = false; // Default
+
+component.addEventListener('resultAction', (e) => {
+  const { result, action } = e.detail;
+  
+  // Handle navigation with your router
+  if (action === 'click') {
+    // React Router example
+    router.push(result.url);
+    
+    // Vue Router example
+    // this.$router.push(result.url);
+    
+    // Analytics tracking
+    analytics.track('search_result_clicked', {
+      result_id: result.id,
+      result_title: result.title,
+      query: searchQuery
+    });
+  }
+});
+```
+
+#### Direct Link Navigation
+
+```javascript
+// Direct HTML link navigation
+const component = document.querySelector('spectrum-search-results');
+component.directNavigation = true;
+
+// Results become actual <a> tags that navigate directly
+// No event handling needed - browser handles navigation
+// Perfect for traditional multi-page applications
+```
+
+```html
+<!-- HTML attribute approach -->
+<spectrum-search-results 
+  direct-navigation="true"
+  .data=${searchData}>
+</spectrum-search-results>
+
+<!-- Results will render as: -->
+<!-- <a href="/articles/web-components">...</a> -->
+```
+
 ### URL Synchronization
 
 ```javascript
@@ -216,14 +295,32 @@ URLs like `?page=5&size=20&other=value` will:
 
 ## Styling
 
-The component uses CSS custom properties for theming:
+The component uses CSS custom properties for theming and has a transparent background by default:
 
 ```css
 spectrum-search-results {
   --search-results-title-color: #1976d2;
-  --search-results-background: #ffffff;
   --search-results-spacing: 1rem;
   --search-results-border-radius: 0.5rem;
+  
+  /* Component has transparent background by default */
+  /* Add your own background if needed: */
+  background-color: #ffffff; /* Optional */
+  padding: 1rem; /* Optional */
+}
+```
+
+### Background Styling
+
+The component has no default background, allowing it to integrate seamlessly with any design:
+
+```css
+/* Add background to the container if needed */
+.search-results-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 ```
 
@@ -244,10 +341,21 @@ spectrum-search-results {
 
 Common use cases for the search results component include:
 
-- **Search Engines**: Display web search results with URLs and descriptions
-- **Document Libraries**: Show document search results with metadata
-- **Product Catalogs**: Display product search results with images
-- **Knowledge Bases**: Show article search results with categories
-- **File Systems**: Display file search results with thumbnails
+### Single-Page Applications (Event Navigation)
+- **React/Vue/Angular Apps**: Custom routing with event handling
+- **Dashboard Applications**: Internal navigation with analytics tracking
+- **Admin Panels**: Modal workflows and in-app navigation
 
-<Canvas of={SpectrumSearchResultsStories.UseCases} />
+### Traditional Web Applications (Direct Navigation)
+- **Documentation Sites**: Direct links to articles and guides
+- **Content Management**: Blog posts and article listings
+- **E-commerce**: Product catalog with SEO-friendly URLs
+- **Search Engines**: Web search results with external links
+
+### General Use Cases
+- **Document Libraries**: Show document search results with metadata
+- **Knowledge Bases**: Article search results with categories and tags
+- **File Systems**: Display file search results with thumbnails
+- **API Documentation**: Search through endpoints and examples
+
+<Canvas of={SpectrumSearchResultsStories.Playground} />

@@ -20,7 +20,7 @@ export class SpectrumButton {
 
   // Button Variants and Appearance
   @Prop() variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab' = 'primary';
-  @Prop() size: 'sm' | 'base' | 'lg' = 'base';
+  @Prop() size: 'sm' | 'base' | 'medium' | 'lg' = 'base';
   @Prop() outline: boolean = false;
   @Prop() iconOnly: boolean = false;
   @Prop() disabled: boolean = false;
@@ -36,6 +36,11 @@ export class SpectrumButton {
   @Prop() leftIcon: string = '';
   @Prop() showRightIcon: boolean = false;
   @Prop() rightIcon: string = '';
+
+  // Navigation Support (optional direct navigation)
+  @Prop() href?: string; // URL for navigation when button is used as a link
+  @Prop() target?: string; // Target for navigation (e.g., '_blank' for new tab)
+  @Prop() rel?: string; // Rel attribute for security when using target="_blank"
 
   // Sound Support
   @Prop() sound: boolean = false;
@@ -267,8 +272,11 @@ export class SpectrumButton {
   };
 
   private handleClick = (event: MouseEvent) => {
+    // Don't emit events for navigation buttons - let the browser handle the navigation
+    if (this.href) return;
+
     if (this.ripple && !this.disabled) {
-      const button = this.el.shadowRoot?.querySelector('button');
+      const button = this.el.shadowRoot?.querySelector('button, a');
       if (!button) return;
 
       const rect = button.getBoundingClientRect();
@@ -355,65 +363,89 @@ export class SpectrumButton {
       currentState: this.currentState,
       isHovered: this.isHovered,
       isActive: this.isActive,
-      sound: this.sound
+      sound: this.sound,
+      href: this.href
     });
 
     const buttonClasses: { [key: string]: boolean } = {
       'spectrum-button': true,
       [`spectrum-button--${this.variant}`]: true,
-      [`spectrum-button--${this.size}`]: true,
+      [`spectrum-button--${this.size === 'medium' ? 'base' : this.size}`]: true,
       'spectrum-button--disabled': this.disabled,
       'spectrum-button--outline': this.outline,
       'spectrum-button--icon-only': this.iconOnly,
       'spectrum-button--hover': this.isHovered,
       'spectrum-button--active': this.isActive,
       'spectrum-button--minimal-animation': this.minimalAnimation,
+      'spectrum-button--navigation': !!this.href,
     };
 
-    return (
-      <Host>
-        <button
-          class={buttonClasses}
-          style={this.getButtonStyles()}
-          disabled={this.disabled}
-          onMouseEnter={this.handleMouseEnter}
-          onMouseLeave={this.handleMouseLeave}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
-          onClick={this.handleClick}
-        >
-          {this.ripple && this.ripples.map(ripple => (
-            <span
-              class="spectrum-button__ripple"
-              style={{
-                left: `${ripple.x}px`,
-                top: `${ripple.y}px`,
-              }}
-            />
-          ))}
-          {!this.iconOnly && (
-            <Fragment>
-              {this.showLeftIcon && (
-                <span class="spectrum-button__icon">
-                  <span class="material-symbols-outlined">{this.leftIcon}</span>
-                </span>
-              )}
-              {this.showButtonText && (
-                <span class="spectrum-button__text">{this.buttonText}</span>
-              )}
-              {this.showRightIcon && (
-                <span class="spectrum-button__icon">
-                  <span class="material-symbols-outlined">{this.rightIcon}</span>
-                </span>
-              )}
-            </Fragment>
-          )}
-          {this.iconOnly && this.showLeftIcon && (
+    const commonProps = {
+      class: buttonClasses,
+      style: this.getButtonStyles(),
+      onMouseEnter: this.handleMouseEnter,
+      onMouseLeave: this.handleMouseLeave,
+      onMouseDown: this.handleMouseDown,
+      onMouseUp: this.handleMouseUp,
+      onClick: this.handleClick
+    };
+
+    const buttonContent = [
+      this.ripple && this.ripples.map(ripple => (
+        <span
+          class="spectrum-button__ripple"
+          style={{
+            left: `${ripple.x}px`,
+            top: `${ripple.y}px`,
+          }}
+        />
+      )),
+      !this.iconOnly && (
+        <Fragment>
+          {this.showLeftIcon && (
             <span class="spectrum-button__icon">
               <span class="material-symbols-outlined">{this.leftIcon}</span>
             </span>
           )}
-        </button>
+          {this.showButtonText && (
+            <span class="spectrum-button__text">{this.buttonText}</span>
+          )}
+          {this.showRightIcon && (
+            <span class="spectrum-button__icon">
+              <span class="material-symbols-outlined">{this.rightIcon}</span>
+            </span>
+          )}
+        </Fragment>
+      ),
+      this.iconOnly && this.showLeftIcon && (
+        <span class="spectrum-button__icon">
+          <span class="material-symbols-outlined">{this.leftIcon}</span>
+        </span>
+      )
+    ];
+
+    return (
+      <Host>
+        {this.href ? (
+          <a
+            {...commonProps}
+            href={this.href}
+            target={this.target}
+            rel={this.target === '_blank' && !this.rel ? 'noopener noreferrer' : this.rel}
+            tabindex={this.disabled ? '-1' : '0'}
+            aria-disabled={this.disabled ? 'true' : undefined}
+          >
+            {buttonContent}
+          </a>
+        ) : (
+          <button
+            {...commonProps}
+            disabled={this.disabled}
+            type="button"
+          >
+            {buttonContent}
+          </button>
+        )}
       </Host>
     );
   }

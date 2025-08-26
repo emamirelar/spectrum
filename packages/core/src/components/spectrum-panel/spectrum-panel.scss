@@ -119,7 +119,7 @@ spectrum-panel .panel {
   align-items: stretch;
   padding: var(--panel-spacing-large);
   will-change: transform;
-  overflow: hidden;
+  overflow: hidden; /* Keep overflow hidden for panel border radius clipping */
   position: relative;
   min-height: 0;
   height: 100%;
@@ -250,7 +250,7 @@ spectrum-panel .panel__content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: hidden;
+  overflow: hidden; /* Prevent double scrollbars - let child components handle scrolling */
   min-height: 0; /* Allow content to shrink properly */
 }
 

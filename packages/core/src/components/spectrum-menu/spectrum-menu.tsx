@@ -441,6 +441,7 @@ export class SpectrumMenu {
                   aria-disabled={item.disabled ? 'true' : 'false'}
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     if (!item.disabled) {
                       this.handleItemClick(item);
                     }
@@ -452,6 +453,7 @@ export class SpectrumMenu {
                     tabindex={-1} // Remove from tab order since parent div handles focus
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       if (!item.disabled) {
                         this.handleItemClick(item);
                       }
@@ -479,6 +481,7 @@ export class SpectrumMenu {
                         aria-disabled={subitem.disabled ? 'true' : 'false'}
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           if (!subitem.disabled) {
                             this.handleItemClick(subitem);
                           }
@@ -490,6 +493,7 @@ export class SpectrumMenu {
                           tabindex={-1} // Remove from tab order since parent div handles focus
                           onClick={(e) => {
                             e.preventDefault();
+                            e.stopPropagation();
                             if (!subitem.disabled) {
                               this.handleItemClick(subitem);
                             }
@@ -530,6 +534,7 @@ export class SpectrumMenu {
         aria-disabled={item.disabled ? 'true' : 'false'}
         onClick={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           if (!item.disabled) {
             this.handleItemClick(item);
           }
@@ -544,6 +549,7 @@ export class SpectrumMenu {
           href={item.href || '#'}
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             if (!item.disabled) {
               this.handleItemClick(item);
             }

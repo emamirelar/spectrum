@@ -27,6 +27,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.1-alpha.36] - 26/Aug/25
+
+### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-card**: 🚀 **New Component** - Versatile card component for displaying structured content with interactive capabilities
+  - **Multiple Variants**: Default, elevated, outlined, and filled styles for different design contexts
+  - **Background Effects**: Opaque, partial-frost, full-frost, and transparent background options for wallpaper integration
+  - **Interactive States**: Clickable cards with hover, active, and disabled states with proper visual feedback
+  - **Navigation Support**: Direct HTML anchor tag navigation with same-tab and new-tab options
+  - **Media Content**: Image display with overlay capabilities for badges, content, and interactive elements
+  - **Header & Footer**: Optional sections with dedicated slots for actions and controls
+  - **Size Variations**: Small, medium, large, and auto sizing options with responsive behavior
+  - **Custom Dimensions**: Support for custom width and height properties with CSS custom property integration
+  - **Content Flexibility**: Configurable padding removal, slot-based content projection, and structured layout
+  - **Event System**: `cardAction` events with action attributes following Component Events Rule compliance
+  - **Security Features**: Automatic `rel="noopener noreferrer"` for external navigation links
+  - **Accessibility**: Full keyboard navigation, ARIA compliance, screen reader support, and focus management
+  - **Spectrum Integration**: Complete Spectrum design system integration with CSS custom properties and Material icons
+  - **TypeScript Support**: Full type definitions with `CardVariant`, `CardSize`, and comprehensive prop interfaces
+  - **Comprehensive Testing**: Complete test suite with interactive states, navigation, and accessibility validation
+  - **Background Level Integration**: Uses `spectrum-panel` background levels (opaque, partial-frost, full-frost, transparent)
+  - **Debug Mode**: Built-in debug logging for development and troubleshooting
+  - **Props**: `variant`, `size`, `background`, `clickable`, `disabled`, `action`, `cardTitle`, `cardSubtitle`, `imageUrl`, `imageAlt`, `showHeaderActions`, `showFooterActions`, `width`, `height`, `noPadding`, `href`, `target`, `rel`
+  - **Slots**: `content` (default), `header-actions`, `footer-actions`, `media`, `media-overlay`
+  - **Level 1 Component**: Atomic component with no internal dependencies on other Spectrum components (imports `BackgroundLevel` type from spectrum-panel)
+
+### 📝 Documentation
+- **spectrum-card**: Comprehensive Storybook documentation with 12 detailed stories showcasing all variants and use cases
+  - **Playground Story**: Interactive testing environment with all controls for real-time experimentation
+  - **Variant Stories**: Complete demonstration of default, elevated, outlined, and filled variants
+  - **Size Stories**: Examples of small, medium, large, and auto sizing options
+  - **Media Stories**: Image cards with overlay examples including badges and full overlays
+  - **Interactive Stories**: Clickable and disabled state demonstrations
+  - **Navigation Stories**: Same-tab, new-tab, internal links, and disabled navigation examples
+  - **Action Stories**: Header and footer action slots with spectrum-button and spectrum-chip integration
+  - **Background Effects**: Frost effects demonstration over gradient backgrounds
+  - **Custom Dimensions**: Width and height customization examples
+  - **Dashboard Stories**: Real-world dashboard card examples with analytics and metrics
+  - **Product Catalog Stories**: E-commerce card examples with pricing, ratings, and purchase actions
+  - **Use Cases Stories**: Comprehensive examples for content cards, form cards, and various application scenarios
+  - **API Documentation**: Complete property, event, and slot documentation with TypeScript interfaces
+  - **Integration Examples**: Shows usage with other Spectrum components (buttons, chips, badges, avatar)
+  - **Security Guidelines**: Documentation for safe external link handling and navigation patterns
+  - **Accessibility Guide**: Keyboard navigation patterns and screen reader optimization examples
+- **Release Preparation**: Updated package version to 0.0.1-alpha.36 for spectrum-card release
+
+---
+
 ## [0.0.1-alpha.35] - 19/Aug/25
 
 ### 🧪 Pre-release

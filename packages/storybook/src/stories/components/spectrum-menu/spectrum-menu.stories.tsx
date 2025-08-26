@@ -1087,6 +1087,435 @@ The navigation color feature works in all orientations, variants, and responsive
 };
 
 /**
+ * Direct navigation demonstration with real web pages for testing deep menu navigation.
+ * Tests the event bubbling fix to ensure submenu clicks navigate to correct URLs instead of parent URLs.
+ */
+export const DirectNavigationRealLinks: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'default',
+    items: [
+      { 
+        label: 'Documentation', 
+        href: 'https://storybook.js.org/docs', 
+        icon: 'library_books',
+        children: [
+          { 
+            label: 'Storybook Guides', 
+            href: 'https://storybook.js.org/tutorials', 
+            icon: 'school',
+            children: [
+              { label: 'React Tutorial', href: 'https://storybook.js.org/tutorials/intro-to-storybook/react/en/get-started/', icon: 'code' },
+              { label: 'Vue Tutorial', href: 'https://storybook.js.org/tutorials/intro-to-storybook/vue/en/get-started/', icon: 'code' },
+              { label: 'Angular Tutorial', href: 'https://storybook.js.org/tutorials/intro-to-storybook/angular/en/get-started/', icon: 'code' }
+            ]
+          },
+          { label: 'API Reference', href: 'https://storybook.js.org/docs/api', icon: 'integration_instructions' },
+          { label: 'Configuration', href: 'https://storybook.js.org/docs/configure', icon: 'settings' }
+        ]
+      },
+      { 
+        label: 'Development Tools', 
+        href: 'https://developer.mozilla.org/', 
+        icon: 'build',
+        children: [
+          { 
+            label: 'Web Standards', 
+            href: 'https://developer.mozilla.org/en-US/docs/Web', 
+            icon: 'language',
+            children: [
+              { label: 'HTML Reference', href: 'https://developer.mozilla.org/en-US/docs/Web/HTML', icon: 'code' },
+              { label: 'CSS Reference', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS', icon: 'palette' },
+              { label: 'JavaScript Guide', href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript', icon: 'javascript' }
+            ]
+          },
+          { label: 'Web APIs', href: 'https://developer.mozilla.org/en-US/docs/Web/API', icon: 'api' },
+          { label: 'Web Components', href: 'https://developer.mozilla.org/en-US/docs/Web/Web_Components', icon: 'widgets' }
+        ]
+      },
+      { 
+        label: 'Design Resources', 
+        href: 'https://material.io/', 
+        icon: 'palette',
+        children: [
+          { 
+            label: 'Material Design', 
+            href: 'https://material.io/design', 
+            icon: 'design_services',
+            children: [
+              { label: 'Color System', href: 'https://material.io/design/color', icon: 'color_lens' },
+              { label: 'Typography', href: 'https://material.io/design/typography', icon: 'text_fields' },
+              { label: 'Iconography', href: 'https://material.io/design/iconography', icon: 'star' }
+            ]
+          },
+          { label: 'Material Icons', href: 'https://fonts.google.com/icons', icon: 'emoji_symbols' },
+          { label: 'Design Tokens', href: 'https://material.io/design/design-tokens', icon: 'token' }
+        ]
+      },
+      { 
+        label: 'Community', 
+        href: 'https://github.com/', 
+        icon: 'groups',
+        children: [
+          { label: 'GitHub', href: 'https://github.com/', icon: 'code' },
+          { label: 'Stack Overflow', href: 'https://stackoverflow.com/', icon: 'help' },
+          { label: 'Dev.to', href: 'https://dev.to/', icon: 'article' }
+        ]
+      }
+    ],
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Resources',
+    directNavigation: true
+  },
+  render: (args) => html`
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: var(--spectrum-sys-color-surface);">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-primary-container); border-radius: 6px;">
+        <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-primary-container);">🔗 Direct Navigation Test - Real Web Links</h3>
+        <div style="color: var(--spectrum-sys-color-on-primary-container);">
+          <p style="margin: 0 0 1rem 0;"><strong>Event Bubbling Fix Demonstration:</strong></p>
+          <ol style="margin: 0; padding-left: 1.5rem;">
+            <li><strong>Test Parent vs Child Navigation:</strong> Click on "Documentation" (parent) vs "React Tutorial" (deep child)</li>
+            <li><strong>Expected Behavior:</strong> Each link should navigate to its own URL, not the parent's URL</li>
+            <li><strong>Deep Nesting Test:</strong> Try "Web Standards" → "HTML Reference" (3 levels deep)</li>
+            <li><strong>Real Links:</strong> All links point to actual websites (Storybook, MDN, Material Design, GitHub)</li>
+          </ol>
+          <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 255, 255, 0.2); border-radius: 4px;">
+            <strong>⚠️ Navigation Notice:</strong> Clicking these links will navigate to real websites. Use browser back button to return to Storybook.
+          </div>
+        </div>
+      </div>
+      
+      <spectrum-menu
+        orientation=${args.orientation}
+        variant=${args.variant}
+        .items=${args.items}
+        mobile-breakpoint=${args.mobileBreakpoint}
+        mobile-menu-title=${args.mobileMenuTitle}
+        ?direct-navigation=${args.directNavigation}
+        @itemClick=${(e: CustomEvent) => action('direct-navigation-itemClick')(e.detail)}
+      ></spectrum-menu>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface-variant);">🧪 Test Scenarios:</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div style="padding: 0.75rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <strong style="color: var(--spectrum-sys-color-primary);">Level 1 (Parent)</strong>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">
+              Click "Documentation" → Should go to Storybook docs homepage
+            </p>
+          </div>
+          <div style="padding: 0.75rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <strong style="color: var(--spectrum-sys-color-secondary);">Level 2 (Child)</strong>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">
+              Click "Storybook Guides" → Should go to tutorials page, NOT docs homepage
+            </p>
+          </div>
+          <div style="padding: 0.75rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <strong style="color: var(--spectrum-sys-color-tertiary);">Level 3 (Deep Child)</strong>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">
+              Click "React Tutorial" → Should go to React tutorial, NOT guides or docs homepage
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: var(--spectrum-sys-color-success-container); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-success-container);">✅ Fix Verification:</h4>
+        <p style="margin: 0; color: var(--spectrum-sys-color-on-success-container);">
+          <strong>Before Fix:</strong> Clicking "React Tutorial" would navigate to "Documentation" URL due to event bubbling.<br/>
+          <strong>After Fix:</strong> Each menu item navigates to its own specific URL with stopPropagation() preventing bubbling.
+        </p>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### Direct Navigation with Real Web Links
+
+This story demonstrates the **event bubbling fix** for deep menu navigation with real web links.
+
+**Problem Solved:**
+- **Before Fix**: Clicking submenu items would navigate to parent URLs due to event bubbling
+- **After Fix**: Each menu item navigates to its own specific URL with \`stopPropagation()\`
+
+**Test Structure:**
+- **Level 1**: Documentation → Storybook docs homepage
+- **Level 2**: Storybook Guides → Tutorials page (not docs homepage)  
+- **Level 3**: React Tutorial → Specific React tutorial (not guides or docs)
+
+**Real World Links:**
+- **Documentation**: Storybook, MDN Web Docs, tutorials
+- **Development Tools**: Web standards, APIs, component guides
+- **Design Resources**: Material Design, icons, design tokens
+- **Community**: GitHub, Stack Overflow, Dev.to
+
+**How to Test:**
+1. **Hover** over menu items to see submenu structure
+2. **Click parent items** (e.g., "Documentation") to verify they go to their URLs
+3. **Click child items** (e.g., "React Tutorial") to verify they go to THEIR URLs, not parents
+4. **Compare navigation** between different menu levels
+
+**Technical Implementation:**
+- \`directNavigation={true}\` enables automatic URL navigation
+- \`stopPropagation()\` prevents event bubbling to parent handlers
+- Each menu item has its own click handler with proper event isolation
+- Events still emit for analytics while navigation works correctly
+
+**Expected Behavior:**
+✅ Each menu item navigates to its own URL
+✅ No event bubbling to parent items
+✅ Deep nesting works correctly (3+ levels)
+✅ Mobile touch navigation works the same way
+
+⚠️ **Note**: These are real web links that will navigate away from Storybook. Use browser back button to return.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Direct navigation megamenu demonstration with real web pages for testing deep menu navigation in megamenu variant.
+ * Tests the event bubbling fix specifically for megamenu items with multiple levels of nesting.
+ */
+export const DirectNavigationMegamenu: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'megamenu',
+    items: [
+      { 
+        label: 'Web Development', 
+        href: 'https://developer.mozilla.org/en-US/docs/Learn', 
+        icon: 'code',
+        children: [
+          { 
+            label: 'Frontend Technologies', 
+            href: 'https://developer.mozilla.org/en-US/docs/Learn/Front-end_web_developer', 
+            icon: 'web',
+            description: 'Client-side development technologies and frameworks',
+            children: [
+              { label: 'HTML5 Guide', href: 'https://developer.mozilla.org/en-US/docs/Learn/HTML', icon: 'html', description: 'Structure and semantics' },
+              { label: 'CSS3 Techniques', href: 'https://developer.mozilla.org/en-US/docs/Learn/CSS', icon: 'css', description: 'Styling and layout' },
+              { label: 'JavaScript Fundamentals', href: 'https://developer.mozilla.org/en-US/docs/Learn/JavaScript', icon: 'javascript', description: 'Interactive programming' }
+            ]
+          },
+          { 
+            label: 'Backend Development', 
+            href: 'https://developer.mozilla.org/en-US/docs/Learn/Server-side', 
+            icon: 'dns',
+            description: 'Server-side programming and databases',
+            children: [
+              { label: 'Node.js Development', href: 'https://nodejs.org/en/docs/', icon: 'code', description: 'JavaScript runtime environment' },
+              { label: 'Express.js Framework', href: 'https://expressjs.com/', icon: 'api', description: 'Web application framework' },
+              { label: 'Database Design', href: 'https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security', icon: 'storage', description: 'Data modeling and storage' }
+            ]
+          },
+          { 
+            label: 'Development Tools', 
+            href: 'https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing', 
+            icon: 'build',
+            description: 'Essential tools for modern web development',
+            children: [
+              { label: 'Version Control with Git', href: 'https://git-scm.com/doc', icon: 'account_tree', description: 'Source code management' },
+              { label: 'Webpack Bundling', href: 'https://webpack.js.org/guides/', icon: 'package', description: 'Module bundler setup' },
+              { label: 'Testing Frameworks', href: 'https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing', icon: 'bug_report', description: 'Automated testing strategies' }
+            ]
+          }
+        ]
+      },
+      { 
+        label: 'Design Systems', 
+        href: 'https://spectrum.adobe.com/', 
+        icon: 'palette',
+        children: [
+          { 
+            label: 'Adobe Spectrum', 
+            href: 'https://spectrum.adobe.com/page/design-system/', 
+            icon: 'design_services',
+            description: 'Adobe\'s design system for consistent user experiences',
+            children: [
+              { label: 'Color Tokens', href: 'https://spectrum.adobe.com/page/color/', icon: 'color_lens', description: 'Consistent color palette' },
+              { label: 'Typography Scale', href: 'https://spectrum.adobe.com/page/typography/', icon: 'text_fields', description: 'Type system guidelines' },
+              { label: 'Component Library', href: 'https://spectrum.adobe.com/page/components/', icon: 'widgets', description: 'UI component specifications' }
+            ]
+          },
+          { 
+            label: 'Material Design', 
+            href: 'https://material.io/design', 
+            icon: 'android',
+            description: 'Google\'s design system for unified user interfaces',
+            children: [
+              { label: 'Material You', href: 'https://material.io/blog/announcing-material-you', icon: 'auto_awesome', description: 'Personalized design system' },
+              { label: 'Design Tokens', href: 'https://material.io/design/design-tokens', icon: 'token', description: 'Design decision variables' },
+              { label: 'Motion Guidelines', href: 'https://material.io/design/motion', icon: 'animation', description: 'Animation principles' }
+            ]
+          },
+          { 
+            label: 'Design Tools', 
+            href: 'https://www.figma.com/design/', 
+            icon: 'brush',
+            description: 'Professional design and prototyping tools',
+            children: [
+              { label: 'Figma Collaboration', href: 'https://www.figma.com/', icon: 'group_work', description: 'Real-time design collaboration' },
+              { label: 'Adobe XD Prototyping', href: 'https://www.adobe.com/products/xd.html', icon: 'preview', description: 'Interactive prototypes' },
+              { label: 'Sketch Design', href: 'https://www.sketch.com/', icon: 'edit', description: 'Vector-based design tool' }
+            ]
+          }
+        ]
+      },
+      { 
+        label: 'Learning Resources', 
+        href: 'https://developer.mozilla.org/en-US/docs/Learn', 
+        icon: 'school',
+        children: [
+          { 
+            label: 'Interactive Tutorials', 
+            href: 'https://www.freecodecamp.org/', 
+            icon: 'quiz',
+            description: 'Hands-on coding challenges and projects',
+            children: [
+              { label: 'freeCodeCamp', href: 'https://www.freecodecamp.org/learn', icon: 'code', description: 'Free coding bootcamp' },
+              { label: 'Codecademy', href: 'https://www.codecademy.com/', icon: 'school', description: 'Interactive coding lessons' },
+              { label: 'The Odin Project', href: 'https://www.theodinproject.com/', icon: 'auto_stories', description: 'Full-stack curriculum' }
+            ]
+          },
+          { 
+            label: 'Documentation Sites', 
+            href: 'https://developer.mozilla.org/', 
+            icon: 'library_books',
+            description: 'Comprehensive reference materials and guides',
+            children: [
+              { label: 'MDN Web Docs', href: 'https://developer.mozilla.org/en-US/', icon: 'description', description: 'Web standards reference' },
+              { label: 'W3Schools', href: 'https://www.w3schools.com/', icon: 'menu_book', description: 'Web tutorials and references' },
+              { label: 'CSS-Tricks', href: 'https://css-tricks.com/', icon: 'tips_and_updates', description: 'CSS techniques and tips' }
+            ]
+          }
+        ]
+      }
+    ],
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Learning Hub',
+    directNavigation: true
+  },
+  render: (args) => html`
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: var(--spectrum-sys-color-surface);">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: var(--spectrum-sys-color-secondary-container); border-radius: 6px;">
+        <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-secondary-container);">🎯 Megamenu Direct Navigation Test</h3>
+        <div style="color: var(--spectrum-sys-color-on-secondary-container);">
+          <p style="margin: 0 0 1rem 0;"><strong>Megamenu Event Bubbling Fix:</strong></p>
+          <ol style="margin: 0; padding-left: 1.5rem;">
+            <li><strong>Rich Content Test:</strong> Hover over "Web Development" to see megamenu with descriptions</li>
+            <li><strong>Multi-Level Navigation:</strong> Click "Frontend Technologies" vs "HTML5 Guide"</li>
+            <li><strong>Megamenu vs Regular:</strong> Compare with regular menu behavior</li>
+            <li><strong>Deep Nesting:</strong> Test 3-level navigation in full-width megamenu format</li>
+          </ol>
+          <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 255, 255, 0.2); border-radius: 4px;">
+            <strong>📋 Megamenu Features:</strong> Full-width dropdowns, rich descriptions, multi-column layout, and proper navigation isolation.
+          </div>
+        </div>
+      </div>
+      
+      <spectrum-menu
+        orientation=${args.orientation}
+        variant=${args.variant}
+        .items=${args.items}
+        mobile-breakpoint=${args.mobileBreakpoint}
+        mobile-menu-title=${args.mobileMenuTitle}
+        ?direct-navigation=${args.directNavigation}
+        @itemClick=${(e: CustomEvent) => action('megamenu-direct-navigation-itemClick')(e.detail)}
+      ></spectrum-menu>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface-variant);">🧪 Megamenu Test Scenarios:</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div style="padding: 0.75rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <strong style="color: var(--spectrum-sys-color-primary);">Main Category</strong>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">
+              Click "Web Development" → Should go to MDN Learn homepage
+            </p>
+          </div>
+          <div style="padding: 0.75rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <strong style="color: var(--spectrum-sys-color-secondary);">Section Header</strong>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">
+              Click "Frontend Technologies" → Should go to frontend guide, NOT main category
+            </p>
+          </div>
+          <div style="padding: 0.75rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <strong style="color: var(--spectrum-sys-color-tertiary);">Specific Resource</strong>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--spectrum-sys-color-on-surface-variant);">
+              Click "HTML5 Guide" → Should go to HTML tutorial, NOT section or category
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: var(--spectrum-sys-color-success-container); border-radius: 6px;">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-success-container);">✅ Megamenu Fix Results:</h4>
+        <div style="margin: 0; color: var(--spectrum-sys-color-on-success-container);">
+          <p style="margin: 0 0 0.5rem 0;"><strong>Fixed Issues:</strong></p>
+          <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.9rem;">
+            <li>Megamenu item clicks now navigate to correct URLs</li>
+            <li>Megamenu subitem clicks don't bubble to parent items</li>
+            <li>Rich content (descriptions, icons) doesn't interfere with navigation</li>
+            <li>Multi-column layout maintains proper event isolation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### Megamenu Direct Navigation Test
+
+This story specifically tests the **event bubbling fix for megamenu variant** with real web links and rich content.
+
+**Megamenu-Specific Challenges:**
+- **Rich Content**: Descriptions, icons, and multi-column layout create complex DOM structure
+- **Full-Width Layout**: Megamenus span entire viewport with multiple interaction zones
+- **Nested Clickable Areas**: Section headers AND individual items need isolated click handling
+- **Complex Event Paths**: More nested elements mean more potential for event bubbling
+
+**Test Structure:**
+- **Web Development** (Main) → MDN Learn homepage
+- **Frontend Technologies** (Section) → Frontend guide (not main category)
+- **HTML5 Guide** (Item) → Specific HTML tutorial (not section or main)
+
+**Real Learning Resources:**
+- **Web Development**: MDN Learn, frontend/backend guides, development tools
+- **Design Systems**: Adobe Spectrum, Material Design, design tools
+- **Learning Resources**: Interactive tutorials, documentation sites
+
+**Megamenu Features Tested:**
+- ✅ **Multi-column layout** with proper click isolation
+- ✅ **Rich descriptions** that don't interfere with navigation
+- ✅ **Section headers** as clickable navigation items
+- ✅ **Deep nesting** (3 levels) with full-width presentation
+- ✅ **Icon integration** throughout the megamenu structure
+
+**Expected Behavior:**
+- Each megamenu item navigates to its own specific URL
+- Section headers work as navigation items, not just organizing elements
+- Rich content (descriptions, icons) enhances UX without breaking navigation
+- Full-width layout maintains event isolation across all interaction zones
+
+**Technical Implementation:**
+- Same \`stopPropagation()\` fix applied to megamenu-specific click handlers
+- Separate event handlers for megamenu items vs. regular menu items
+- Rich content rendering doesn't interfere with click event isolation
+- Multi-column CSS layout preserves proper event targeting
+
+⚠️ **Note**: Real web links will navigate away from Storybook. Use browser back to return.
+        `
+      }
+    }
+  }
+};
+
+/**
  * New navigation layout demonstration with separate left navigation items, centered logo, and right navigation items.
  * Perfect for branded headers with distinct navigation sections and prominent logo placement.
  */

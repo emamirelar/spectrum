@@ -1365,6 +1365,12 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: Landing pages, feature highlights, and content showcase applications
   - Purpose: Hero sections with image/video backgrounds, text overlays, and call-to-action buttons
 
+- **spectrum-card**: Versatile content card component
+  - Dependencies: spectrum-panel (BackgroundLevel type)
+  - Used by: Content displays, product catalogs, dashboards, user interfaces
+  - Integrates with: spectrum-button, spectrum-chip, spectrum-badge, spectrum-avatar (via slots)
+  - Purpose: Structured content containers with optional header, footer, media, and interactive elements
+
 ### Complex Components (Multiple Internal Dependencies)
 - **spectrum-rail**: Main navigation rail
   - Dependencies: spectrum-button, spectrum-search-input (via slots), spectrum-collapsible-list (via slots), spectrum-rail-item (via slots), spectrum-context-menu (imports ContextMenuAction interface)
@@ -1463,7 +1469,8 @@ Level 2 (Composed):
 ├── spectrum-collapsible-list (depends on: spectrum-context-menu)
 ├── spectrum-select (depends on: spectrum-button)
 ├── spectrum-image-gallery (depends on: spectrum-button, spectrum-badge, spectrum-panel)
-└── spectrum-hero (depends on: spectrum-button)
+├── spectrum-hero (depends on: spectrum-button)
+└── spectrum-card (depends on: spectrum-panel)
 
 Level 3 (Complex):
 ├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item, spectrum-context-menu)

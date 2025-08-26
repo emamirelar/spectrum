@@ -10,8 +10,10 @@
 // Root Variables and Custom Properties
 // ==============================================
 spectrum-conversation-panel {
-  display: block;
+  display: flex;
+  flex: 1;
   height: 100%;
+  min-height: 0; /* Allow shrinking */
   
   // Core conversation panel properties
   --conversation-panel-background: var(--spectrum-color-background, #f6f6f6);
@@ -84,10 +86,11 @@ spectrum-conversation-panel body {
 
 spectrum-conversation-panel .conversation-panel-host {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
-  flex-grow: 1;
+  flex: 1;
   height: 100%;
+  min-height: 0; /* Allow shrinking */
 }
 
 /* Conversation panel container - remove any padding/margin since spectrum-panel handles it */
@@ -95,11 +98,16 @@ spectrum-conversation-panel .conversation-panel {
   display: flex;
   flex-direction: column;
   gap: var(--conversation-panel-spacing-small);
+  flex: 1;
   height: 100%;
   width: 100%;
+  min-height: 0; /* Allow shrinking */
   /* Remove any padding/margin since spectrum-panel handles container spacing */
   padding: 0;
   margin: 0;
+  /* Enable scrolling for messages */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 // ==============================================
@@ -377,13 +385,7 @@ spectrum-conversation-panel .exploration-chip {
   }
 }
 
-spectrum-conversation-panel .conversation-panel-host {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  flex-grow: 1;
-}
+/* Duplicate definition removed - defined above */
 
 
 

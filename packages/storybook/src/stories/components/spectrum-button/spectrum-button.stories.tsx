@@ -15,7 +15,7 @@ import { action } from 'storybook/actions';
  * 
  * ### Key Features
  * - **Multiple Variants**: Eight distinct button styles for different semantic contexts and UI patterns
- * - **Size Options**: Small, base, and large sizes for various interface density requirements
+ * - **Size Options**: Small, medium (base), and large sizes for various interface density requirements
  * - **Icon Support**: Left icon, right icon, or icon-only configurations with Material Design icons
  * - **Interactive States**: Hover, active, disabled states with smooth animations and transitions
  * - **Haptic Feedback**: Optional haptic feedback for enhanced mobile user experience
@@ -35,7 +35,7 @@ import { action } from 'storybook/actions';
 interface SpectrumButtonElement extends HTMLElement {
   debug: boolean;
   variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab';
-  size: 'sm' | 'base' | 'lg';
+  size: 'sm' | 'base' | 'medium' | 'lg';
   outline: boolean;
   iconOnly: boolean;
   disabled: boolean;
@@ -81,7 +81,7 @@ This button component is used throughout the Spectrum Design System by conversat
   args: {
     debug: false,
     variant: 'primary',
-    size: 'base',
+    size: 'medium',
     outline: false,
     iconOnly: false,
     disabled: false,
@@ -119,11 +119,11 @@ This button component is used throughout the Spectrum Design System by conversat
     },
     size: {
       control: 'select',
-      options: ['sm', 'base', 'lg'],
+      options: ['sm', 'base', 'medium', 'lg'],
       description: 'The button size',
       table: {
         type: { summary: 'ButtonSize' },
-        defaultValue: { summary: 'base' }
+        defaultValue: { summary: 'medium' }
       }
     },
     outline: {
@@ -381,7 +381,7 @@ export const Sizes: Story = {
         <small>Compact interfaces</small>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-        <spectrum-button variant="primary" size="base" button-text="Base" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+        <spectrum-button variant="primary" size="medium" button-text="Medium" show-button-text="true" @buttonAction=${action('buttonAction')}></spectrum-button>
         <small>Standard size</small>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
@@ -396,8 +396,10 @@ export const Sizes: Story = {
         story: `
 Button sizes accommodate different interface contexts and accessibility requirements:
 - **Small**: Compact interfaces, toolbars, dense layouts, secondary actions
-- **Base**: Standard size for most interfaces, optimal balance of visibility and space
+- **Medium**: Standard size for most interfaces, optimal balance of visibility and space
 - **Large**: Prominent actions, accessibility considerations, mobile-first interfaces
+
+**Note**: The \`base\` size option is still supported for backward compatibility and renders the same as \`medium\`.
         `
       }
     }
@@ -462,7 +464,7 @@ export const IconButtons: Story = {
         <h3 style="color: var(--spectrum-sys-color-on-surface-variant); margin-top: 0; margin-bottom: 1rem;">Floating Action Buttons</h3>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; align-items: center;">
           <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-            <spectrum-button variant="fab" size="base" icon-only="true" show-left-icon="true" left-icon="add" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <spectrum-button variant="fab" size="medium" icon-only="true" show-left-icon="true" left-icon="add" @buttonAction=${action('buttonAction')}></spectrum-button>
             <small>Add item</small>
           </div>
           <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
