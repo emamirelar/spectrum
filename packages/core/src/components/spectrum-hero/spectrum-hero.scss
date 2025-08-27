@@ -70,6 +70,14 @@
   &--rounded {
     border-radius: var(--spectrum-sys-shape-corner-large, 1rem);
   }
+  
+  // Carousel mode modifier
+  &--carousel {
+    // Ensure carousel-specific styles if needed
+    .spectrum-hero__overlay {
+      display: none !important; // Ensure overlays are hidden in carousel mode
+    }
+  }
 }
 
 // ==============================================
@@ -426,6 +434,36 @@
 }
 
 // ==============================================
+// Carousel Mode Subtitle Box - Full Width Bar
+// ==============================================
+.spectrum-hero__carousel-subtitle {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4; /* Higher than overlay to ensure it appears on top */
+  display: block;
+  pointer-events: none;
+}
+
+.spectrum-hero__carousel-subtitle-text {
+  margin: 0;
+  padding: var(--hero-spacing) var(--hero-spacing-large);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: var(--spectrum-sys-typescale-body-medium-size, 1rem);
+  font-weight: 400;
+  line-height: 1.5;
+  border-radius: 0; /* No border radius for full-width bar */
+  backdrop-filter: blur(8px);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2); /* Shadow above the bar */
+  text-align: center;
+  width: 100%; /* Full width */
+  display: block;
+  transition: all var(--hero-animation-duration) var(--hero-animation-easing);
+}
+
+// ==============================================
 // Responsive Design
 // ==============================================
 
@@ -455,6 +493,15 @@
   .spectrum-hero__dots {
     bottom: var(--hero-spacing);
   }
+  
+  .spectrum-hero__carousel-subtitle {
+    bottom: 0; /* Keep full width on tablet */
+  }
+  
+  .spectrum-hero__carousel-subtitle-text {
+    padding: var(--hero-spacing-small) var(--hero-spacing);
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);
+  }
 }
 
 // Mobile landscape
@@ -477,6 +524,10 @@
   .spectrum-hero__dots {
     bottom: var(--hero-spacing-small);
     padding: var(--hero-spacing-small);
+  }
+  
+  .spectrum-hero__carousel-subtitle {
+    bottom: 0; /* Keep full width on mobile */
   }
 }
 
@@ -535,6 +586,12 @@
     // Visual size can be smaller but touch target stays accessible
     --hero-dot-size: calc(var(--spectrum-sys-spacing-small, 0.5rem) * 0.75);
   }
+  
+  .spectrum-hero__carousel-subtitle-text {
+    padding: var(--hero-spacing-small);
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);
+    width: 100%; /* Keep full width */
+  }
 }
 
 // ==============================================
@@ -553,6 +610,13 @@
   
   .spectrum-hero__dot {
     border: 1px solid var(--spectrum-sys-color-outline);
+  }
+  
+  .spectrum-hero__carousel-subtitle-text {
+    background-color: var(--spectrum-sys-color-surface);
+    color: var(--spectrum-sys-color-on-surface);
+    border-top: 2px solid var(--spectrum-sys-color-outline); /* Only top border for full-width bar */
+    border-radius: 0; /* Ensure no border radius in high contrast */
   }
 }
 

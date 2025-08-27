@@ -15,7 +15,33 @@ Features:
 - Responsive image support through srcset and sizes attributes for optimal delivery
 - Direct navigation support for call-to-action buttons via href, target, and rel attributes
 - Event-based interactions for custom handling alongside direct navigation
+- Carousel mode with image click detection and bottom subtitle display
 - Accessibility support with keyboard navigation and screen reader compatibility
+
+## Carousel Mode
+
+When `carouselMode` is enabled, the hero provides a streamlined interface:
+
+- **No titles or buttons displayed** - clean, minimal interface
+- **Subtitle displayed in full-width box** at bottom of image
+- **Image click detection** - left half = previous, right half = next
+- **Event-only navigation** - emits `imageNavigation` events without auto-changing slides
+
+### Image Navigation Events
+```javascript
+// Image clicks emit navigation events only
+heroElement.addEventListener('imageNavigation', (event) => {
+  console.log('Image clicked:', event.detail);
+  // { action: 'image-navigation', slideIndex: 0, direction: 'next' }
+  
+  // Handle navigation in your application if needed
+  if (event.detail.direction === 'next') {
+    // Custom next slide logic
+  }
+});
+```
+
+**Important**: Image clicks only emit `imageNavigation` events. They do not automatically change slides. This allows applications to implement custom navigation logic or choose to ignore the events.
 
 ## Properties
 
@@ -23,6 +49,7 @@ Features:
 | -------------------- | --------------------- | --------------------------------------------------------------------------------------- | --------- | --------- |
 | `animationDuration`  | `animation-duration`  | Animation duration for slide transitions                                                | `number`  | `1000`    |
 | `autoplay`           | `autoplay`            | Enable carousel autoplay Time in milliseconds between slides (0 to disable)             | `number`  | `0`       |
+| `carouselMode`       | `carousel-mode`       | Enable carousel mode with bottom subtitle display and image navigation                  | `boolean` | `false`   |
 | `debug`              | `debug`               | Debug mode                                                                              | `boolean` | `false`   |
 | `height`             | `height`              | Hero height (CSS value)                                                                 | `string`  | `'100vh'` |
 | `keyboardNavigation` | `keyboard-navigation` | Enable keyboard navigation                                                              | `boolean` | `true`    |
@@ -37,10 +64,11 @@ Features:
 
 ## Events
 
-| Event         | Description                                        | Type                                                                        |
-| ------------- | -------------------------------------------------- | --------------------------------------------------------------------------- |
-| `heroAction`  | Event emitted when a hero action button is clicked | `CustomEvent<{ action: string; slideIndex: number; slideTitle?: string; }>` |
-| `slideChange` | Event emitted when slide changes                   | `CustomEvent<{ action: string; slideIndex: number; totalSlides: number; }>` |
+| Event             | Description                                             | Type                                                                                                                            |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `heroAction`      | Event emitted when a hero action button is clicked      | `CustomEvent<{ action: string; slideIndex: number; slideTitle?: string; navigationType: "event" \| "direct"; href?: string; }>` |
+| `imageNavigation` | Event emitted when an image is clicked in carousel mode | `CustomEvent<{ action: string; slideIndex: number; direction: "next" \| "previous"; }>`                                         |
+| `slideChange`     | Event emitted when slide changes                        | `CustomEvent<{ action: string; slideIndex: number; totalSlides: number; }>`                                                     |
 
 
 ## Dependencies

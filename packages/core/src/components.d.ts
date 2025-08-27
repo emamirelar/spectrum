@@ -1163,6 +1163,11 @@ export namespace Components {
          */
         "autoplay": number;
         /**
+          * Enable carousel mode with bottom subtitle display and image navigation
+          * @default false
+         */
+        "carouselMode": boolean;
+        /**
           * Debug mode
           * @default false
          */
@@ -1335,6 +1340,15 @@ export namespace Components {
       }>;
     }>;
   }>;
+        /**
+          * URL to navigate to when the logo is clicked When provided, the logo becomes a clickable link
+         */
+        "logoHref": string;
+        /**
+          * Accessible label for the logo Used for screen readers and ARIA labeling
+          * @default 'Home'
+         */
+        "logoLabel": string;
         /**
           * The breakpoint at which the menu switches to mobile view
           * @default 768
@@ -2463,8 +2477,9 @@ declare global {
         new (): HTMLSpectrumGridElement;
     };
     interface HTMLSpectrumHeroElementEventMap {
-        "heroAction": { action: string; slideIndex: number; slideTitle?: string };
+        "heroAction": { action: string; slideIndex: number; slideTitle?: string; navigationType: 'event' | 'direct'; href?: string };
         "slideChange": { action: string; slideIndex: number; totalSlides: number };
+        "imageNavigation": { action: string; slideIndex: number; direction: 'next' | 'previous' };
     }
     /**
      * Spectrum Hero Component
@@ -3915,6 +3930,11 @@ declare namespace LocalJSX {
          */
         "autoplay"?: number;
         /**
+          * Enable carousel mode with bottom subtitle display and image navigation
+          * @default false
+         */
+        "carouselMode"?: boolean;
+        /**
           * Debug mode
           * @default false
          */
@@ -3932,7 +3952,11 @@ declare namespace LocalJSX {
         /**
           * Event emitted when a hero action button is clicked
          */
-        "onHeroAction"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; slideTitle?: string }>) => void;
+        "onHeroAction"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; slideTitle?: string; navigationType: 'event' | 'direct'; href?: string }>) => void;
+        /**
+          * Event emitted when an image is clicked in carousel mode
+         */
+        "onImageNavigation"?: (event: SpectrumHeroCustomEvent<{ action: string; slideIndex: number; direction: 'next' | 'previous' }>) => void;
         /**
           * Event emitted when slide changes
          */
@@ -4100,6 +4124,15 @@ declare namespace LocalJSX {
       }>;
     }>;
   }>;
+        /**
+          * URL to navigate to when the logo is clicked When provided, the logo becomes a clickable link
+         */
+        "logoHref"?: string;
+        /**
+          * Accessible label for the logo Used for screen readers and ARIA labeling
+          * @default 'Home'
+         */
+        "logoLabel"?: string;
         /**
           * The breakpoint at which the menu switches to mobile view
           * @default 768

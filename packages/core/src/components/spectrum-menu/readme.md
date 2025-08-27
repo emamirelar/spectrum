@@ -131,6 +131,29 @@ The spectrum-menu component includes enhanced positioning logic to prevent subme
 ></spectrum-menu>
 ```
 
+### Logo Functionality
+```html
+<!-- Basic logo (non-interactive) -->
+<spectrum-menu
+  orientation="horizontal"
+  logoLabel="Company Logo"
+  items='[...]'
+>
+  <img slot="logo" src="/logo.svg" alt="Company Logo" />
+</spectrum-menu>
+
+<!-- Interactive logo (clickable to navigate home) -->
+<spectrum-menu
+  orientation="horizontal"
+  logoHref="/"
+  logoLabel="Go to homepage"
+  directNavigation="true"
+  items='[...]'
+>
+  <img slot="logo" src="/logo.svg" alt="Company Logo" />
+</spectrum-menu>
+```
+
 ### Direct Navigation
 ```html
 <!-- Default behavior: Only emits events when items are clicked -->
@@ -178,6 +201,8 @@ The spectrum-menu component includes enhanced positioning logic to prevent subme
 | `items` | `items` | The menu items configuration. Can be provided as a JSON string or array of objects. Use the `icon` property for a Material icon name (e.g. "home", "info"). | `string \| Array<{ label: string; href?: string; icon?: string; disabled?: boolean; children?: Array<{ label: string; href?: string; icon?: string; disabled?: boolean; }>; }>` | `[]` |
 | `mobileBreakpoint` | `mobile-breakpoint` | The breakpoint at which the menu switches to mobile view | `number` | `768` |
 | `directNavigation` | `direct-navigation` | Whether to enable direct browser navigation when menu items are clicked. When true, clicking a menu item will navigate to its href in the current tab. When false, only the itemClick event will be emitted. | `boolean` | `false` |
+| `logoHref` | `logo-href` | URL to navigate to when the logo is clicked. When provided, the logo becomes a clickable link. | `string` | `undefined` |
+| `logoLabel` | `logo-label` | Accessible label for the logo. Used for screen readers and ARIA labeling. | `string` | `'Home'` |
 
 ## Events
 
@@ -238,6 +263,8 @@ The menu component follows WAI-ARIA best practices:
 | `directNavigation` | `direct-navigation` | Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted                                    | `boolean`                                                                                                                                                                                                                                                                                                                  | `false`        |
 | `items`            | `items`             | The menu items configuration Can be provided as a JSON string or array of objects icon: Material icon name (e.g. 'home', 'info', 'shopping_cart') For megamenu variant, children can have additional properties like description and columns | `string \| { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; }[]; }[]; }[]` | `[]`           |
 | `leftItems`        | `left-items`        | The left navigation items configuration Used for horizontal layout with separate left and right sections                                                                                                                                     | `string \| { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; children?: { label: string; href?: string; icon?: string; disabled?: boolean; description?: string; }[]; }[]; }[]` | `[]`           |
+| `logoHref`         | `logo-href`         | URL to navigate to when the logo is clicked When provided, the logo becomes a clickable link                                                                                                                                                 | `string`                                                                                                                                                                                                                                                                                                                   | `undefined`    |
+| `logoLabel`        | `logo-label`        | Accessible label for the logo Used for screen readers and ARIA labeling                                                                                                                                                                      | `string`                                                                                                                                                                                                                                                                                                                   | `'Home'`       |
 | `mobileBreakpoint` | `mobile-breakpoint` | The breakpoint at which the menu switches to mobile view                                                                                                                                                                                     | `number`                                                                                                                                                                                                                                                                                                                   | `768`          |
 | `mobileIconColor`  | `mobile-icon-color` | Color for mobile menu icons (hamburger, close, and menu item icons) When provided, this will override the default icon color                                                                                                                 | `string`                                                                                                                                                                                                                                                                                                                   | `'#000000'`    |
 | `mobileMenuTitle`  | `mobile-menu-title` | The title displayed in the mobile menu header                                                                                                                                                                                                | `string`                                                                                                                                                                                                                                                                                                                   | `'Menu'`       |

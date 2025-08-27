@@ -375,11 +375,14 @@ export const SpectrumHero = /*@__PURE__*/ defineContainer<JSX.SpectrumHero>('spe
   'rounded',
   'shaded',
   'overlayStyle',
+  'carouselMode',
   'heroAction',
-  'slideChange'
+  'slideChange',
+  'imageNavigation'
 ], [
   'heroAction',
-  'slideChange'
+  'slideChange',
+  'imageNavigation'
 ]);
 
 
@@ -427,6 +430,8 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'directNavigation',
   'navigationColor',
   'mobileIconColor',
+  'logoHref',
+  'logoLabel',
   'itemClick'
 ], [
   'itemClick'

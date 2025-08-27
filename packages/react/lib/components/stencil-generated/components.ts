@@ -289,8 +289,9 @@ export const SpectrumGrid: StencilReactComponent<SpectrumGridElement, SpectrumGr
 });
 
 type SpectrumHeroEvents = {
-    onHeroAction: EventName<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string }>>,
-    onSlideChange: EventName<CustomEvent<{ action: string; slideIndex: number; totalSlides: number }>>
+    onHeroAction: EventName<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string; navigationType: 'event' | 'direct'; href?: string }>>,
+    onSlideChange: EventName<CustomEvent<{ action: string; slideIndex: number; totalSlides: number }>>,
+    onImageNavigation: EventName<CustomEvent<{ action: string; slideIndex: number; direction: 'next' | 'previous' }>>
 };
 
 export const SpectrumHero: StencilReactComponent<SpectrumHeroElement, SpectrumHeroEvents> = /*@__PURE__*/ createComponent<SpectrumHeroElement, SpectrumHeroEvents>({
@@ -300,7 +301,8 @@ export const SpectrumHero: StencilReactComponent<SpectrumHeroElement, SpectrumHe
     react: React,
     events: {
         onHeroAction: 'heroAction',
-        onSlideChange: 'slideChange'
+        onSlideChange: 'slideChange',
+        onImageNavigation: 'imageNavigation'
     } as SpectrumHeroEvents,
     defineCustomElement: defineSpectrumHero
 });

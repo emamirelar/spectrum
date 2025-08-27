@@ -484,21 +484,21 @@ export declare interface SpectrumGrid extends Components.SpectrumGrid {}
 
 
 @ProxyCmp({
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides']
+  inputs: ['animationDuration', 'autoplay', 'carouselMode', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides']
 })
 @Component({
   selector: 'spectrum-hero',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides'],
+  inputs: ['animationDuration', 'autoplay', 'carouselMode', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides'],
 })
 export class SpectrumHero {
   protected el: HTMLSpectrumHeroElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['heroAction', 'slideChange']);
+    proxyOutputs(this, this.el, ['heroAction', 'slideChange', 'imageNavigation']);
   }
 }
 
@@ -507,11 +507,15 @@ export declare interface SpectrumHero extends Components.SpectrumHero {
   /**
    * Event emitted when a hero action button is clicked
    */
-  heroAction: EventEmitter<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string }>>;
+  heroAction: EventEmitter<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string; navigationType: 'event' | 'direct'; href?: string }>>;
   /**
    * Event emitted when slide changes
    */
   slideChange: EventEmitter<CustomEvent<{ action: string; slideIndex: number; totalSlides: number }>>;
+  /**
+   * Event emitted when an image is clicked in carousel mode
+   */
+  imageNavigation: EventEmitter<CustomEvent<{ action: string; slideIndex: number; direction: 'next' | 'previous' }>>;
 }
 
 
@@ -556,7 +560,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['directNavigation', 'items', 'leftItems', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
+  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -564,7 +568,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['directNavigation', 'items', 'leftItems', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
+  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLSpectrumMenuElement;

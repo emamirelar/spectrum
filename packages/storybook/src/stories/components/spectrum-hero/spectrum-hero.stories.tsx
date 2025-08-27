@@ -10,6 +10,7 @@ import { action } from 'storybook/actions';
  * ### Key Features
  * - **Multi-Media Support**: Supports both images and videos with poster frames
  * - **Carousel Functionality**: Optional autoplay with customizable timing and transitions
+ * - **Carousel Mode**: Special mode with bottom subtitle display and image click navigation
  * - **Text Overlays**: Flexible positioning for titles, subtitles, and call-to-action buttons
  * - **Direct Navigation**: Optional direct navigation via href, target, and rel attributes
  * - **Custom Overlay Styling**: Full CSS control over overlay container appearance and layout
@@ -18,20 +19,26 @@ import { action } from 'storybook/actions';
  * - **Accessibility**: Full keyboard navigation and screen reader support
  * - **Performance Optimized**: Efficient rendering with smooth animations
  * 
+ * ### Display Modes
+ * - **Standard Mode**: Full overlay with titles, subtitles, and buttons (default)
+ * - **Carousel Mode**: Bottom subtitle box with image click navigation for gallery-style presentations
+ * 
  * ### Navigation Modes
  * - **Event-based**: Traditional event emission for custom handling (default)
  * - **Direct navigation**: HTML anchor tags for immediate page navigation
- * - **Mixed approach**: Combine both modes in the same hero component
+ * - **Image navigation**: Click left/right half of image to navigate (carousel mode only)
+ * - **Mixed approach**: Combine multiple modes in the same hero component
  * 
  * ### Usage Guidelines
  * - Use for: Landing page headers, feature showcases, product highlights
- * - Perfect for: Brand storytelling, product demos, call-to-action sections
+ * - Perfect for: Brand storytelling, product demos, call-to-action sections, image galleries
  * - Avoid when: Simple static content would suffice, complex forms or data entry
  * 
  * ### Event System (Component Events Rule Compliant)
  * All events follow the Component Events Rule with consistent action attributes:
  * - **heroAction**: Emitted when action buttons are clicked with slide context (always fired, even with direct navigation)
  * - **slideChange**: Emitted when slides change with current slide information
+ * - **imageNavigation**: Emitted when images are clicked in carousel mode with direction information
  */
 
 // Hero slide interface
@@ -66,10 +73,15 @@ interface SpectrumHeroElement extends HTMLElement {
   rounded: boolean;
   shaded: boolean;
   overlayStyle: string;
+  carouselMode: boolean;
   overlayPosition: 'left' | 'center' | 'right';
   overlayVertical: 'top' | 'center' | 'bottom';
   srcset: string;
   sizes: string;
+  buttonHref: string;
+  buttonTarget: string;
+  buttonRel: string;
+  buttonAction: string;
 }
 
 // Story arguments interface
@@ -82,7 +94,18 @@ const meta: Meta<SpectrumHeroArgs> = {
     docs: {
       description: {
         component: `
-The \`spectrum-hero\` component provides a sophisticated hero section with support for images, videos, carousel functionality, and interactive overlays.
+The \`spectrum-hero\` component provides a sophisticated hero section with support for images, videos, carousel functionality, interactive overlays, and a special carousel mode for gallery-style presentations.
+
+### Carousel Mode Image Navigation
+When \`carouselMode\` is enabled, clicking on images emits \`imageNavigation\` events without automatically changing slides. This allows applications to implement custom navigation logic:
+
+\`\`\`javascript
+// Listen for image click events
+heroElement.addEventListener('imageNavigation', (event) => {
+  console.log('Image clicked:', event.detail.direction); // 'next' or 'previous'
+  // Implement custom navigation if needed
+});
+\`\`\`
 
 ### Data Structures
 
@@ -128,10 +151,13 @@ interface HeroSlide {
 - **Autoplay**: Configurable timing with pause-on-hover support
 - **Navigation**: Dots and arrows with keyboard accessibility
 - **Transitions**: Smooth animations with customizable duration
+- **Carousel Mode**: Special mode with bottom subtitle display and image click navigation
 
 ### Interactive Controls
 - **Overlay Position**: Use the controls panel to change horizontal (left, center, right) and vertical (top, center, bottom) positioning
 - **Responsive Images**: Configure srcset and sizes for optimized image delivery across devices
+- **Direct Navigation**: Set buttonHref, buttonTarget, buttonRel, and buttonAction for testing navigation modes
+- **Carousel Mode**: Toggle between standard overlay mode and carousel mode with bottom subtitles
 - **Live Preview**: All changes update in real-time as you adjust the controls
 - **All Stories**: Controls work across all story variants for easy experimentation
 
@@ -144,6 +170,16 @@ interface HeroSlide {
   overlay-style="padding: 2rem 3rem; background: rgba(0,0,0,0.1);"
   rounded="true"
   shaded="true">
+</spectrum-hero>
+\`\`\`
+
+### Carousel Mode Usage
+\`\`\`
+<spectrum-hero
+  carousel-mode="true"
+  slides='[{"type":"image","src":"image1.jpg","subtitle":"First image description"},{"type":"image","src":"image2.jpg","subtitle":"Second image description"}]'
+  autoplay="3000"
+  height="60vh">
 </spectrum-hero>
 \`\`\`
 
@@ -177,6 +213,12 @@ document.addEventListener('heroAction', (event) => {
   if (event.detail.action === 'show-signup-modal') {
     // Show custom modal
   }
+});
+
+// Listen for image navigation in carousel mode
+document.addEventListener('imageNavigation', (event) => {
+  console.log('Image clicked:', event.detail.direction); // 'next' or 'previous'
+  console.log('Slide index:', event.detail.slideIndex);
 });
 \`\`\`
 
@@ -230,10 +272,15 @@ const mixedSlides = [
     rounded: false,
     shaded: true,
     overlayStyle: '',
+    carouselMode: false,
     overlayPosition: 'left',
     overlayVertical: 'center',
     srcset: '',
-    sizes: ''
+    sizes: '',
+    buttonHref: '',
+    buttonTarget: '',
+    buttonRel: '',
+    buttonAction: 'hero-action'
   },
   argTypes: {
     slides: {
@@ -332,6 +379,14 @@ const mixedSlides = [
         defaultValue: { summary: "''" }
       }
     },
+    carouselMode: {
+      control: 'boolean',
+      description: 'Enable carousel mode with bottom subtitle display and image navigation',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
     overlayPosition: {
       control: { type: 'select' },
       options: ['left', 'center', 'right'],
@@ -365,6 +420,39 @@ const mixedSlides = [
         type: { summary: 'string' },
         defaultValue: { summary: "''" }
       }
+    },
+    buttonHref: {
+      control: 'text',
+      description: 'URL for direct navigation when button is clicked (enables direct navigation mode)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" }
+      }
+    },
+    buttonTarget: {
+      control: { type: 'select' },
+      options: ['', '_self', '_blank', '_parent', '_top'],
+      description: 'Target for navigation (e.g., "_blank" for new tab)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" }
+      }
+    },
+    buttonRel: {
+      control: 'text',
+      description: 'Rel attribute for security when using target="_blank" (e.g., "noopener noreferrer")',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "''" }
+      }
+    },
+    buttonAction: {
+      control: 'text',
+      description: 'Action identifier for heroAction events (used for tracking and custom handling)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "'hero-action'" }
+      }
     }
   }
 };
@@ -385,7 +473,12 @@ const renderHero = (args: SpectrumHeroArgs) => {
       overlayVertical: args.overlayVertical,
       // Only add srcset and sizes if they're provided
       ...(args.srcset && { srcset: args.srcset }),
-      ...(args.sizes && { sizes: args.sizes })
+      ...(args.sizes && { sizes: args.sizes }),
+      // Add direct navigation controls if provided
+      ...(args.buttonHref && { buttonHref: args.buttonHref }),
+      ...(args.buttonTarget && { buttonTarget: args.buttonTarget }),
+      ...(args.buttonRel && { buttonRel: args.buttonRel }),
+      ...(args.buttonAction && { buttonAction: args.buttonAction })
     }));
   } catch (error) {
     console.warn('Error parsing slides:', error);
@@ -413,8 +506,10 @@ const renderHero = (args: SpectrumHeroArgs) => {
           rounded=${args.rounded}
           shaded=${args.shaded}
           overlay-style=${args.overlayStyle}
+          carousel-mode=${args.carouselMode}
           @heroAction=${(e: CustomEvent) => action('heroAction')(e.detail)}
           @slideChange=${(e: CustomEvent) => action('slideChange')(e.detail)}
+          @imageNavigation=${(e: CustomEvent) => action('imageNavigation')(e.detail)}
         ></spectrum-hero>
       </div>
     </spectrum-theme>
@@ -455,7 +550,8 @@ export const SingleSlide: Story = {
     height: '70vh',
     autoplay: 0,
     showDots: false,
-    showArrows: false
+    showArrows: false,
+    carouselMode: false
   },
   render: renderHero
 };
@@ -538,7 +634,8 @@ export const MultiSlideCarousel: Story = {
     height: '80vh',
     showDots: true,
     showArrows: true,
-    pauseOnHover: true
+    pauseOnHover: true,
+    carouselMode: false
   },
   render: renderHero,
   parameters: {
@@ -616,7 +713,8 @@ export const VideoHero: Story = {
     height: '100vh',
     autoplay: 0,
     showDots: false,
-    showArrows: false
+    showArrows: false,
+    carouselMode: false
   },
   render: renderHero
 };
@@ -637,7 +735,8 @@ export const ImageOnly: Story = {
     height: '60vh',
     autoplay: 0,
     showDots: false,
-    showArrows: false
+    showArrows: false,
+    carouselMode: false
   },
   render: renderHero
 };
@@ -664,7 +763,8 @@ export const MobileOptimized: Story = {
     height: '50vh',
     autoplay: 0,
     showDots: false,
-    showArrows: false
+    showArrows: false,
+    carouselMode: false
   },
   render: renderHero,
   parameters: {
@@ -721,7 +821,8 @@ export const FastAutoplay: Story = {
     height: '70vh',
     showDots: true,
     showArrows: false,
-    pauseOnHover: true
+    pauseOnHover: true,
+    carouselMode: false
   },
   render: renderHero,
   parameters: {
@@ -735,6 +836,419 @@ Fast autoplay demonstration with:
 - Dots navigation for manual override
 
 Perfect for attention-grabbing displays and rapid content showcasing.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
+// CAROUSEL MODE STORIES
+// =================================================================
+
+/**
+ * Basic carousel mode with subtitle-only display and image click navigation.
+ * Demonstrates the fundamental carousel mode functionality with clean presentation.
+ */
+export const CarouselMode: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Modern office workspace',
+        subtitle: 'Innovative workspace design that inspires creativity and collaboration'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2326&auto=format&fit=crop',
+        alt: 'Collaboration space',
+        subtitle: 'Dynamic environments where teams come together to build the future'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=2339&auto=format&fit=crop',
+        alt: 'Creative environment',
+        subtitle: 'Spaces designed for innovation and creative thinking'
+      }
+    ]),
+    carouselMode: true,
+    height: '70vh',
+    autoplay: 0,
+    showDots: true,
+    showArrows: true
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates the basic carousel mode functionality:
+
+### **Carousel Mode Features**
+- **Bottom subtitle display**: Subtitles appear in a styled box at the bottom of each slide
+- **Image click navigation**: Click the left half of an image to go to the previous slide, right half to go to the next slide
+- **No titles or buttons**: Clean, gallery-style presentation focused on the imagery
+- **Standard font size**: Uses \`--spectrum-sys-typescale-body-medium-size\` for subtitle text
+
+### **Navigation Methods**
+- **Image clicks**: Left/right halves of the image navigate to previous/next slides
+- **Navigation arrows**: Traditional arrow buttons for manual control
+- **Navigation dots**: Dot indicators for direct slide selection
+- **Keyboard navigation**: Arrow keys and spacebar for accessibility
+
+### **Event Emission**
+- **imageNavigation**: Emitted when images are clicked with direction information
+- **slideChange**: Emitted when slides change through any navigation method
+
+### **Use Cases**
+- Image galleries and portfolios
+- Product showcases
+- Photo storytelling
+- Visual content presentations
+
+Click on the left or right side of any image to navigate, and check the Actions panel to see the emitted events!
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Auto-playing carousel mode demonstrating smooth transitions with subtitle descriptions.
+ * Perfect for engaging content that cycles automatically while maintaining user control.
+ */
+export const CarouselAutoplay: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Technology innovation',
+        subtitle: 'Cutting-edge technology solutions transforming modern business'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2326&auto=format&fit=crop',
+        alt: 'Team collaboration',
+        subtitle: 'Collaborative workspaces fostering innovation and teamwork'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=2339&auto=format&fit=crop',
+        alt: 'Digital workspace',
+        subtitle: 'Modern digital environments enabling remote collaboration'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1486312338219-ce68e2c6ad42?q=80&w=2372&auto=format&fit=crop',
+        alt: 'Professional environment',
+        subtitle: 'Professional spaces designed for productivity and success'
+      }
+    ]),
+    carouselMode: true,
+    height: '80vh',
+    autoplay: 3500,
+    pauseOnHover: true,
+    showDots: true,
+    showArrows: false,
+    animationDuration: 800
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story showcases carousel mode with autoplay functionality:
+
+### **Autoplay Configuration**
+- **3.5-second intervals**: Balanced timing for reading subtitles and viewing images
+- **Pause on hover**: User can pause automatic cycling by hovering over the carousel
+- **Smooth transitions**: 800ms animation duration for elegant slide changes
+- **Manual override**: Users can click images or dots to navigate immediately
+
+### **Design Features**
+- **No arrow navigation**: Clean presentation relying on autoplay and image clicks
+- **Dot navigation**: Visual indicators showing progress and allowing direct access
+- **Subtitle focus**: Descriptive text provides context for each image
+- **Responsive height**: 80vh provides good visibility while fitting various screens
+
+### **User Interaction**
+- **Hover to pause**: Autoplay stops when user hovers, resumes when they move away
+- **Click to navigate**: Image clicks provide immediate control over the experience
+- **Dot selection**: Direct navigation to any slide via dot indicators
+- **Keyboard accessibility**: Full keyboard navigation support
+
+### **Perfect For**
+- Welcome sequences and onboarding
+- Feature tours and product introductions
+- Brand storytelling and messaging
+- Attention-grabbing hero sections
+
+The autoplay creates an engaging experience while maintaining full user control through multiple interaction methods.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Minimalist carousel mode with no navigation controls, focusing purely on image content.
+ * Ideal for artistic presentations and content where navigation should be subtle.
+ */
+export const CarouselMinimal: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Minimal workspace design',
+        subtitle: 'Clean, minimal design principles'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2326&auto=format&fit=crop',
+        alt: 'Simplified collaboration',
+        subtitle: 'Simplified environments for focused work'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=2339&auto=format&fit=crop',
+        alt: 'Elegant simplicity',
+        subtitle: 'Elegant simplicity in every detail'
+      }
+    ]),
+    carouselMode: true,
+    height: '75vh',
+    autoplay: 0,
+    showDots: false,
+    showArrows: false,
+    rounded: true,
+    shaded: true
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates a minimal carousel mode approach:
+
+### **Minimal Design Features**
+- **No navigation controls**: Pure image focus without visual distractions
+- **Image-only navigation**: Users navigate exclusively by clicking on images
+- **Rounded corners**: Elegant design enhancement using Spectrum design tokens
+- **Subtle styling**: Gradient shade overlay maintains text readability
+
+### **Interaction Model**
+- **Click-only navigation**: Left/right image clicks provide all navigation control
+- **Clean aesthetic**: No dots or arrows for minimal visual impact
+- **Focus on content**: Images and subtitles are the primary interface elements
+- **Accessible navigation**: Keyboard support maintained despite minimal UI
+
+### **Design Philosophy**
+- **Less is more**: Removing UI elements focuses attention on content
+- **Artistic presentation**: Suitable for portfolios, galleries, and brand showcases
+- **User discovery**: Subtle interaction model encourages exploration
+- **Content-first**: Visual content takes precedence over navigation elements
+
+### **Ideal Applications**
+- Art and photography portfolios
+- Brand storytelling without distractions
+- Product galleries with high-quality imagery
+- Presentations where navigation should be invisible
+
+### **User Experience**
+- **Intuitive interaction**: Natural left/right click pattern
+- **Seamless presentation**: No UI elements interrupting the visual flow
+- **Keyboard accessible**: Maintains accessibility despite minimal visual cues
+- **Responsive design**: Adapts beautifully to all screen sizes
+
+Perfect for scenarios where the imagery should be the star and navigation should remain subtle and discoverable.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Fast-cycling carousel mode with quick autoplay for dynamic presentations.
+ * Demonstrates rapid content cycling with user control options.
+ */
+export const CarouselFast: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Dynamic workspace',
+        subtitle: 'Fast-paced innovation'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2326&auto=format&fit=crop',
+        alt: 'Rapid collaboration',
+        subtitle: 'Rapid team collaboration'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=2339&auto=format&fit=crop',
+        alt: 'Quick solutions',
+        subtitle: 'Quick solutions delivery'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1486312338219-ce68e2c6ad42?q=80&w=2372&auto=format&fit=crop',
+        alt: 'Agile workflow',
+        subtitle: 'Agile workflow processes'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop',
+        alt: 'Speed of thought',
+        subtitle: 'Speed of thought execution'
+      }
+    ]),
+    carouselMode: true,
+    height: '70vh',
+    autoplay: 1500,
+    pauseOnHover: true,
+    showDots: true,
+    showArrows: false,
+    animationDuration: 400
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates fast-cycling carousel mode:
+
+### **Fast Autoplay Configuration**
+- **1.5-second intervals**: Rapid cycling for dynamic presentations
+- **400ms transitions**: Quick, smooth animations for seamless flow
+- **Pause on hover**: Users can stop the fast cycling by hovering
+- **5 slides**: More content in rapid succession
+
+### **Dynamic Presentation Features**
+- **Attention-grabbing**: Fast cycling catches and holds viewer attention
+- **Short subtitles**: Brief descriptions that can be read quickly
+- **Dot navigation**: Quick reference for slide position and manual navigation
+- **Immediate control**: Image clicks provide instant navigation override
+
+### **User Control Options**
+- **Hover to pause**: Essential for reading subtitles in fast mode
+- **Click navigation**: Override autoplay with immediate slide changes
+- **Dot selection**: Jump directly to any slide to stop the cycle
+- **Keyboard support**: Full accessibility with arrow key navigation
+
+### **Performance Considerations**
+- **Optimized animations**: Short duration reduces resource usage
+- **Image preloading**: Adjacent slides preloaded for smooth transitions
+- **Responsive design**: Fast cycling works across all device sizes
+- **Battery friendly**: Pauses automatically when not in view
+
+### **Best Use Cases**
+- Product feature highlights with quick overviews
+- Brand messaging with rapid visual storytelling
+- Attention-grabbing landing page elements
+- Event or conference presentations
+- Marketing campaigns with multiple quick messages
+
+### **Design Strategy**
+- **Brief content**: Subtitles designed for quick consumption
+- **High contrast**: Images and text optimized for rapid viewing
+- **Clear indicators**: Dots help users track position in fast sequence
+- **Pause accessibility**: Essential user control for content consumption
+
+Perfect for creating dynamic, engaging presentations that capture attention while maintaining user control over the experience.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Mobile-optimized carousel mode demonstrating responsive behavior and touch-friendly interactions.
+ * Shows how carousel mode adapts to smaller screens and mobile usage patterns.
+ */
+export const CarouselMobile: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Mobile workspace',
+        subtitle: 'Mobile-first workspace design'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2326&auto=format&fit=crop',
+        alt: 'Touch interface',
+        subtitle: 'Intuitive touch interactions'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=2339&auto=format&fit=crop',
+        alt: 'Responsive design',
+        subtitle: 'Responsive across all devices'
+      }
+    ]),
+    carouselMode: true,
+    height: '50vh',
+    autoplay: 4000,
+    pauseOnHover: false,
+    showDots: true,
+    showArrows: false,
+    rounded: false,
+    shaded: true
+  },
+  render: renderHero,
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile1'
+    },
+    docs: {
+      description: {
+        story: `
+This story demonstrates carousel mode optimized for mobile devices:
+
+### **Mobile Optimization Features**
+- **Reduced height (50vh)**: Appropriate sizing for mobile screens
+- **Touch-friendly interactions**: Large tap areas for image navigation
+- **No hover behavior**: Pause on hover disabled for touch devices
+- **Simplified navigation**: Dots only, no arrows for cleaner mobile interface
+
+### **Mobile-Specific Adaptations**
+- **Larger tap targets**: Images provide generous touch areas for navigation
+- **Optimized subtitle positioning**: Bottom placement works well on vertical screens
+- **Responsive typography**: Text scaling adapts to mobile viewport
+- **Battery consideration**: Longer autoplay intervals (4 seconds) for mobile usage
+
+### **Touch Interaction Model**
+- **Tap left/right**: Clear left and right tap zones on images
+- **Swipe support**: Component includes built-in swipe gesture handling
+- **Dot navigation**: Large enough touch targets for precise selection
+- **Keyboard support**: External keyboard support maintained
+
+### **Mobile Design Considerations**
+- **Content hierarchy**: Subtitles remain prominent without overwhelming the interface
+- **Loading performance**: Optimized image delivery for mobile connections
+- **Accessibility**: Touch-accessible while maintaining screen reader support
+- **Orientation support**: Works in both portrait and landscape modes
+
+### **Responsive Behavior**
+- **CSS Grid layout**: Adapts smoothly to different mobile screen sizes
+- **Flexible typography**: Text scales appropriately for readability
+- **Touch-optimized spacing**: Proper margins and padding for mobile interaction
+- **Performance optimized**: Efficient rendering for mobile devices
+
+### **Mobile User Patterns**
+- **Quick interaction**: Fast image taps for rapid navigation
+- **Content consumption**: Longer autoplay allows for mobile multitasking
+- **Gesture-based**: Natural left/right swipe gestures supported
+- **Accessibility**: Voice control and assistive technology compatible
+
+This configuration provides an optimal mobile experience while maintaining all the functionality of the desktop version.
         `
       }
     }
@@ -765,7 +1279,8 @@ export const RoundedCorners: Story = {
     shaded: true,
     autoplay: 0,
     showDots: false,
-    showArrows: false
+    showArrows: false,
+    carouselMode: false
   },
   render: renderHero,
   parameters: {
@@ -931,8 +1446,10 @@ export const WallpaperThemedHero: Story = {
                 rounded=${args.rounded}
                 shaded=${args.shaded}
                 overlay-style=${args.overlayStyle}
+                carousel-mode=${args.carouselMode}
                 @heroAction=${(e: CustomEvent) => action('heroAction')(e.detail)}
                 @slideChange=${(e: CustomEvent) => action('slideChange')(e.detail)}
+                @imageNavigation=${(e: CustomEvent) => action('imageNavigation')(e.detail)}
               ></spectrum-hero>
             </div>
           </spectrum-theme>
@@ -1031,8 +1548,10 @@ export const SunsetThemedHero: Story = {
                 rounded=${args.rounded}
                 shaded=${args.shaded}
                 overlay-style=${args.overlayStyle}
+                carousel-mode=${args.carouselMode}
                 @heroAction=${(e: CustomEvent) => action('heroAction')(e.detail)}
                 @slideChange=${(e: CustomEvent) => action('slideChange')(e.detail)}
+                @imageNavigation=${(e: CustomEvent) => action('imageNavigation')(e.detail)}
               ></spectrum-hero>
             </div>
           </spectrum-theme>
@@ -1115,8 +1634,10 @@ export const RedWallpaperWhiteHero: Story = {
                 rounded=${args.rounded}
                 shaded=${args.shaded}
                 overlay-style=${args.overlayStyle}
+                carousel-mode=${args.carouselMode}
                 @heroAction=${(e: CustomEvent) => action('heroAction')(e.detail)}
                 @slideChange=${(e: CustomEvent) => action('slideChange')(e.detail)}
+                @imageNavigation=${(e: CustomEvent) => action('imageNavigation')(e.detail)}
               ></spectrum-hero>
             </div>
           </spectrum-theme>
@@ -1477,7 +1998,8 @@ Use the controls panel to experiment with different srcset and sizes configurati
 
 /**
  * Direct navigation hero demonstrating HTML anchor tag functionality.
- * Button will navigate directly to the specified URL without emitting custom events for navigation.
+ * Button will navigate directly to the specified URL. Note: heroAction events are still emitted for tracking purposes.
+ * In carousel mode, buttons are hidden - use standard mode to see direct navigation buttons.
  */
 export const DirectNavigation: Story = {
   args: {
@@ -1489,6 +2011,7 @@ export const DirectNavigation: Story = {
         title: 'Direct Navigation',
         subtitle: 'Click the button to navigate directly to an external site',
         buttonText: 'Visit Example.com',
+        buttonAction: 'external-link', // Add action for tracking
         buttonHref: 'https://example.com',
         buttonTarget: '_blank',
         buttonRel: 'noopener noreferrer',
@@ -1501,7 +2024,12 @@ export const DirectNavigation: Story = {
     showDots: false,
     showArrows: false,
     rounded: true,
-    shaded: true
+    shaded: true,
+    carouselMode: false,
+    buttonHref: 'https://example.com',
+    buttonTarget: '_blank',
+    buttonRel: 'noopener noreferrer',
+    buttonAction: 'external-link'
   },
   render: renderHero,
   parameters: {
@@ -1514,7 +2042,7 @@ This story demonstrates direct navigation functionality:
 - **buttonHref**: \`"https://example.com"\` - Direct URL navigation
 - **buttonTarget**: \`"_blank"\` - Opens link in new tab/window
 - **buttonRel**: \`"noopener noreferrer"\` - Security attributes for external links
-- **No custom navigation logic**: Browser handles the navigation directly
+- **Browser navigation**: Standard anchor tag behavior handles navigation
 
 ### **Security Considerations**
 - \`noopener\`: Prevents the new page from accessing \`window.opener\`
@@ -1522,9 +2050,36 @@ This story demonstrates direct navigation functionality:
 - Automatic application when \`target="_blank"\` without explicit \`rel\` attribute
 
 ### **Event Behavior**
-- \`heroAction\` event is still emitted for tracking and analytics
-- Navigation happens via standard browser anchor tag behavior
-- No need for custom event listeners for navigation logic
+- \`heroAction\` event is **still emitted** for tracking and analytics purposes
+- This allows applications to track clicks even when using direct navigation
+- Navigation happens via standard browser anchor tag behavior after event emission
+- Events are useful for analytics, tracking, and logging user interactions
+
+### **Interactive Controls**
+Use the Storybook controls panel to experiment with direct navigation:
+- **buttonHref**: Set URL for direct navigation (empty = event-only mode)
+- **buttonTarget**: Choose navigation target (_blank, _self, etc.)
+- **buttonRel**: Set security attributes (use "noopener noreferrer" for external links)
+- **buttonAction**: Set action name for tracking events
+
+### **Carousel Mode Behavior**
+- **Standard mode**: Shows title, subtitle, and button (current view)
+- **Carousel mode**: Hides all buttons and shows only subtitle in bottom bar
+- Toggle the "carouselMode" control to see the difference
+- Direct navigation is only available in standard mode
+
+### **Testing Navigation Modes**
+1. **Event-Based Mode**: Clear the "buttonHref" control to use event-only navigation
+   - Button emits events with navigationType: 'event'
+   - Application handles navigation logic via event listeners
+   
+2. **Direct Navigation Mode**: Set "buttonHref" to a URL (e.g., "https://example.com")
+   - Button uses HTML anchor tag for direct browser navigation
+   - Still emits events with navigationType: 'direct' and href for tracking
+   - Browser handles navigation automatically
+
+3. **Monitor Actions Panel**: See different event payloads for each mode
+4. **Test Security**: Use "buttonTarget" and "buttonRel" for external links
 
 ### **Use Cases**
 - External website links
@@ -1533,7 +2088,7 @@ This story demonstrates direct navigation functionality:
 - Download links
 - Contact pages
 
-Perfect for simple navigation scenarios where custom logic isn't needed.
+Perfect for navigation scenarios where you want both tracking and direct browser navigation.
         `
       }
     }
@@ -1564,7 +2119,12 @@ export const EventBased: Story = {
     showDots: false,
     showArrows: false,
     rounded: false,
-    shaded: true
+    shaded: true,
+    carouselMode: false,
+    buttonHref: '', // No direct navigation - event-only mode
+    buttonTarget: '',
+    buttonRel: '',
+    buttonAction: 'custom-signup-action'
   },
   render: renderHero,
   parameters: {
@@ -1599,6 +2159,23 @@ document.addEventListener('heroAction', (event) => {
 - \`action\`: "custom-signup-action" (from buttonAction)
 - \`slideIndex\`: Current slide number (0-based)
 - \`slideTitle\`: "Event-Based Interaction" (slide title)
+
+### **Navigation Mode Comparison**
+
+#### **Current Configuration**: Event-Based Navigation
+- **buttonHref**: Empty (event-only mode)
+- **Event payload**: navigationType: 'event', action: 'custom-signup-action'
+- **Behavior**: Application receives event and handles navigation logic
+
+#### **Switch to Direct Navigation**
+Use the controls panel to test the other navigation mode:
+1. **Set buttonHref**: Add a URL like "https://example.com"
+2. **Event payload changes**: navigationType: 'direct', href: URL
+3. **Behavior**: Browser navigates directly + event for tracking
+
+### **Real-World Usage**
+- **Event-based**: Modals, forms, multi-step workflows, custom routing
+- **Direct navigation**: External links, documentation, download pages
 
 ### **Use Cases**
 - Modal dialogs
@@ -1664,7 +2241,8 @@ export const MixedNavigation: Story = {
     showArrows: true,
     pauseOnHover: true,
     rounded: false,
-    shaded: true
+    shaded: true,
+    carouselMode: false
   },
   render: renderHero,
   parameters: {

@@ -127,6 +127,18 @@ export class SpectrumMenu {
    */
   @Prop() mobileIconColor: string = '#000000';
 
+  /**
+   * URL to navigate to when the logo is clicked
+   * When provided, the logo becomes a clickable link
+   */
+  @Prop() logoHref: string;
+
+  /**
+   * Accessible label for the logo
+   * Used for screen readers and ARIA labeling
+   */
+  @Prop() logoLabel: string = 'Home';
+
 
 
   /**
@@ -360,6 +372,19 @@ export class SpectrumMenu {
     this.activeItem = item.label;
     if (this.isMobile) {
       this.isMobileMenuOpen = false;
+    }
+  }
+
+  private handleLogoClick() {
+    if (this.logoHref) {
+      // Emit event for logo click
+      this.itemClick.emit({ label: this.logoLabel, href: this.logoHref });
+      
+      // Navigate directly if directNavigation is enabled
+      if (this.directNavigation) {
+        window.location.href = this.logoHref;
+        return;
+      }
     }
   }
 
@@ -745,9 +770,28 @@ export class SpectrumMenu {
               
               {this.useNewLayout() && (
                 <div class="spectrum-menu__mobile-nav-logo">
-                  <slot name="mobile-nav-logo">
-                    <slot name="logo"></slot>
-                  </slot>
+                  {this.logoHref ? (
+                    <a
+                      href={this.logoHref}
+                      class="spectrum-menu__logo-link"
+                      aria-label={this.logoLabel}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.handleLogoClick();
+                      }}
+                      tabindex={0}
+                    >
+                      <slot name="mobile-nav-logo">
+                        <slot name="logo"></slot>
+                      </slot>
+                    </a>
+                  ) : (
+                    <div class="spectrum-menu__logo-container" aria-label={this.logoLabel}>
+                      <slot name="mobile-nav-logo">
+                        <slot name="logo"></slot>
+                      </slot>
+                    </div>
+                  )}
                 </div>
               )}
               
@@ -759,9 +803,28 @@ export class SpectrumMenu {
                   <div class="spectrum-menu__mobile-header-content">
                     {this.useNewLayout() && (
                       <div class="spectrum-menu__mobile-header-logo">
-                        <slot name="mobile-nav-logo">
-                          <slot name="logo"></slot>
-                        </slot>
+                        {this.logoHref ? (
+                          <a
+                            href={this.logoHref}
+                            class="spectrum-menu__logo-link"
+                            aria-label={this.logoLabel}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              this.handleLogoClick();
+                            }}
+                            tabindex={0}
+                          >
+                            <slot name="mobile-nav-logo">
+                              <slot name="logo"></slot>
+                            </slot>
+                          </a>
+                        ) : (
+                          <div class="spectrum-menu__logo-container" aria-label={this.logoLabel}>
+                            <slot name="mobile-nav-logo">
+                              <slot name="logo"></slot>
+                            </slot>
+                          </div>
+                        )}
                       </div>
                     )}
                     <h2 class="spectrum-menu__mobile-title">{this.mobileMenuTitle}</h2>
@@ -808,22 +871,43 @@ export class SpectrumMenu {
         ) : (
           <nav class="spectrum-menu__nav" role="navigation" aria-label="Main navigation">
             {this.useNewLayout() ? (
-              <div class="spectrum-menu__layout" role="menubar" aria-label="Main navigation">
-                {/* Left navigation items */}
+              <div class="spectrum-menu__layout">
+                {/* Left navigation items as separate menubar */}
                 {this.parsedLeftItems.length > 0 && (
-                  <div class="spectrum-menu__section spectrum-menu__section--left">
+                  <div class="spectrum-menu__section spectrum-menu__section--left" role="menubar" aria-label="Left navigation">
                     {this.parsedLeftItems.map((item) => this.renderMenuItem(item))}
                   </div>
                 )}
                 
-                {/* Logo section */}
-                <div class="spectrum-menu__section spectrum-menu__section--logo">
-                  <slot name="logo"></slot>
+                {/* Logo section with proper semantics and accessibility */}
+                <div 
+                  class="spectrum-menu__section spectrum-menu__section--logo" 
+                  role="banner" 
+                  aria-label="Site logo and branding"
+                >
+                  {this.logoHref ? (
+                    <a
+                      href={this.logoHref}
+                      class="spectrum-menu__logo-link"
+                      aria-label={this.logoLabel}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.handleLogoClick();
+                      }}
+                      tabindex={0}
+                    >
+                      <slot name="logo"></slot>
+                    </a>
+                  ) : (
+                    <div class="spectrum-menu__logo-container" aria-label={this.logoLabel}>
+                      <slot name="logo"></slot>
+                    </div>
+                  )}
                 </div>
                 
-                {/* Right navigation items */}
+                {/* Right navigation items as separate menubar */}
                 {this.parsedRightItems.length > 0 && (
-                  <div class="spectrum-menu__section spectrum-menu__section--right">
+                  <div class="spectrum-menu__section spectrum-menu__section--right" role="menubar" aria-label="Right navigation">
                     {this.parsedRightItems.map((item) => this.renderMenuItem(item))}
                   </div>
                 )}
