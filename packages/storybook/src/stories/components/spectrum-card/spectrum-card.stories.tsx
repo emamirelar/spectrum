@@ -50,6 +50,7 @@ interface SpectrumCardElement extends HTMLElement {
   action: string;
   cardTitle?: string;
   cardSubtitle?: string;
+  textOverflow: 'ellipsis' | 'wrap';
 
   imageUrl?: string;
   imageAlt?: string;
@@ -224,6 +225,12 @@ card.addEventListener('cardAction', (e) => {
       description: 'Card subtitle text',
       table: { category: 'Content' },
     },
+    textOverflow: {
+      control: 'select',
+      options: ['ellipsis', 'wrap'],
+      description: 'Text overflow behavior for title and subtitle',
+      table: { category: 'Content' },
+    },
 
     imageUrl: {
       control: 'text',
@@ -307,6 +314,7 @@ card.addEventListener('cardAction', (e) => {
     action: '',
     cardTitle: 'Test Card',
     cardSubtitle: 'Test Subtitle',
+    textOverflow: 'ellipsis',
     imageUrl: '',
     imageAlt: '',
     showHeaderActions: false,
@@ -339,7 +347,7 @@ const Template = (args: SpectrumCardArgs) => html`
     .action=${args.action}
     .cardTitle=${args.cardTitle}
     .cardSubtitle=${args.cardSubtitle}
-
+    text-overflow=${args.textOverflow}
     .imageUrl=${args.imageUrl}
     .imageAlt=${args.imageAlt}
     .showHeaderActions=${args.showHeaderActions}
@@ -414,6 +422,115 @@ export const Sizes: Story = {
     docs: {
       description: {
         story: 'Different predefined sizes for cards. Auto size adapts to container width.',
+      },
+    },
+  },
+};
+
+export const LongTitles: Story = {
+  render: (args) => html`
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; padding: 1rem;">
+      ${Template({ 
+        ...args, 
+        cardTitle: 'This is an Extremely Long Card Title That Should Test Text Wrapping and Overflow Behavior Across Multiple Lines', 
+        cardSubtitle: 'This is also a very long subtitle that contains multiple sentences and should demonstrate how the component handles extended subtitle text that may span several lines when displayed in various container widths and responsive scenarios',
+        size: 'small',
+        content: sampleContent.long
+      })}
+      ${Template({ 
+        ...args, 
+        cardTitle: 'Ultra-Long Card Title with Complex Information Including Technical Specifications and Detailed Product Descriptions That Will Definitely Wrap', 
+        cardSubtitle: 'An exceptionally comprehensive subtitle featuring detailed explanations, technical specifications, user benefits, and additional context that thoroughly tests the text rendering capabilities of the card component in medium-sized containers',
+        size: 'medium',
+        content: sampleContent.long
+      })}
+      ${Template({ 
+        ...args, 
+        cardTitle: 'Comprehensive Enterprise-Level Card Title with Full Technical Documentation and Extensive Feature Descriptions for Large-Scale Applications', 
+        cardSubtitle: 'A thoroughly detailed and extensively comprehensive subtitle that encompasses multiple aspects of functionality, detailed technical specifications, comprehensive user guidance, enterprise-level features, and extensive documentation that will thoroughly test the text handling capabilities of large card layouts',
+        size: 'large',
+        content: sampleContent.long
+      })}
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Cards with extremely long titles and subtitles to test text overflow behavior. Use the **textOverflow** control to switch between ellipsis and wrap modes.
+
+**Text Overflow Options:**
+- **ellipsis**: Truncates text with "..." (default behavior)
+- **wrap**: Allows text to wrap to multiple lines
+
+Use the \`textOverflow\` prop to control this behavior:
+
+\`\`\`html
+<!-- Ellipsis behavior (default) -->
+<spectrum-card 
+  card-title="Very long title..."
+  text-overflow="ellipsis">
+</spectrum-card>
+
+<!-- Wrapping behavior -->
+<spectrum-card 
+  card-title="Very long title that will wrap to multiple lines"
+  text-overflow="wrap">
+</spectrum-card>
+\`\`\`
+
+**Use the textOverflow control above to see the difference between ellipsis and wrap modes.**
+        `,
+      },
+    },
+  },
+};
+
+export const TextOverflow: Story = {
+  render: (args) => html`
+    <div style="display: flex; flex-direction: column; gap: 2rem; padding: 1rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        ${Template({ 
+          ...args, 
+          cardTitle: 'Long Title: Advanced Analytics Dashboard with Real-time Data Visualization and Interactive Charts', 
+          cardSubtitle: 'Subtitle: Comprehensive monitoring solution for enterprise-level data analysis and business intelligence',
+          textOverflow: 'ellipsis',
+          content: 'Ellipsis mode truncates long text with "..." to keep layouts clean.'
+        })}
+        ${Template({ 
+          ...args, 
+          cardTitle: 'Long Title: Advanced Analytics Dashboard with Real-time Data Visualization and Interactive Charts', 
+          cardSubtitle: 'Subtitle: Comprehensive monitoring solution for enterprise-level data analysis and business intelligence',
+          textOverflow: 'wrap',
+          content: 'Wrap mode allows titles and subtitles to flow across multiple lines, showing all content.'
+        })}
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Direct comparison of ellipsis vs wrap text overflow behaviors for titles and subtitles.
+
+**Ellipsis Mode (Default):**
+- Truncates text with "..." 
+- Maintains consistent card heights
+- Clean, uniform layout
+- Best for grid layouts where alignment is important
+
+**Wrap Mode:**
+- Shows full text across multiple lines
+- Variable card heights based on content
+- More accessible for users who need to read all content
+- Best when content readability is prioritized over layout uniformity
+
+Control this behavior with the \`textOverflow\` prop:
+\`\`\`html
+<spectrum-card text-overflow="ellipsis">...</spectrum-card>
+<spectrum-card text-overflow="wrap">...</spectrum-card>
+\`\`\`
+        `,
       },
     },
   },

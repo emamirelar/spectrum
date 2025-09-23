@@ -1,0 +1,401 @@
+// ==============================================
+// Spectrum Switch Component Styles
+// ==============================================
+// BEM naming convention: spectrum-switch (block), __element (element), --modifier (modifier)
+// Material Design 3 inspired toggle switch with spectrum color integration
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: inline-block;
+  
+  // Core switch properties - clean solid design with minimal padding
+  --switch-track-width: 51px;
+  --switch-track-height: 31px;
+  --switch-track-border-radius: 16px;
+  --switch-track-padding: 2px;
+  --switch-thumb-size: 27px;
+  --switch-thumb-border-radius: 50%;
+  
+  // Clean color properties
+  --switch-track-background-off: #e5e5e5;
+  --switch-track-background-on: var(--spectrum-sys-color-primary, #5b5fc7);
+  --switch-thumb-background: #ffffff;
+  --switch-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --switch-thumb-shadow-pressed: 0 2px 8px rgba(0, 0, 0, 0.15);
+  
+  // Interactive states
+  --switch-focus-outline: var(--spectrum-sys-color-primary, #5b5fc7);
+  --switch-disabled-opacity: 0.4;
+  
+  // Animation properties
+  --switch-transition: all 0.2s ease;
+  --switch-thumb-transition: all 0.2s ease;
+  --switch-icon-transition: all 0.1s ease;
+  
+  // Size variations
+  --switch-track-width-sm: 44px;
+  --switch-track-height-sm: 24px;
+  --switch-track-width-lg: 60px;
+  --switch-track-height-lg: 36px;
+  
+  // Icon properties
+  --switch-icon-size: 18px;
+  --switch-icon-size-sm: 16px;
+  --switch-icon-size-lg: 20px;
+  
+  // Label spacing
+  --switch-label-gap: var(--spectrum-sys-spacing-small, 8px);
+  --switch-label-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --switch-label-font-size: var(--spectrum-sys-font-size, 16px);
+  --switch-label-color: var(--spectrum-color-on-surface, #1d1b20);
+  
+  // Variant colors using Spectrum theme
+  --switch-positive-color: var(--spectrum-sys-color-success, #10b981);
+  --switch-caution-color: var(--spectrum-sys-color-warning, #f59e0b);
+  --switch-destructive-color: var(--spectrum-sys-color-error, #ef4444);
+}
+
+// ==============================================
+// Base Switch Wrapper
+// ==============================================
+.spectrum-switch-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--switch-label-gap);
+}
+
+// ==============================================
+// Switch Label
+// ==============================================
+.spectrum-switch__label {
+  font-family: var(--switch-label-font-family);
+  font-size: var(--switch-label-font-size);
+  color: var(--switch-label-color);
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.4;
+  
+  // Disabled state
+  .spectrum-switch--disabled + & {
+    opacity: var(--switch-disabled-opacity);
+    cursor: not-allowed;
+  }
+}
+
+// ==============================================
+// Base Switch Styles
+// ==============================================
+.spectrum-switch {
+  position: relative;
+  display: inline-block;
+  width: var(--switch-track-width);
+  height: var(--switch-track-height);
+  background-color: var(--switch-track-background-off);
+  border: none;
+  border-radius: var(--switch-track-border-radius);
+  cursor: pointer;
+  outline: none;
+  transition: var(--switch-transition);
+  padding: var(--switch-track-padding);
+  
+  // Remove default button styles
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  // Track element (simplified and transparent)
+  &__track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    border-radius: var(--switch-track-border-radius);
+  }
+  
+  // Thumb element
+  &__thumb {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--switch-thumb-size);
+    height: var(--switch-thumb-size);
+    background-color: var(--switch-thumb-background);
+    border-radius: var(--switch-thumb-border-radius);
+    box-shadow: var(--switch-thumb-shadow);
+    transform: translateX(0);
+    transition: var(--switch-thumb-transition);
+    z-index: 1;
+  }
+  
+  // Icon within thumb
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: var(--switch-icon-transition);
+    
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: var(--switch-icon-size);
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+      color: var(--spectrum-sys-color-primary, #6366f1);
+    }
+  }
+  
+  // Loading animation
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-size: var(--switch-icon-size);
+      color: var(--spectrum-color-on-surface-variant, #49454f);
+      animation: switch-spin 1s linear infinite;
+    }
+  }
+  
+  // ==============================================
+  // Size Variations
+  // ==============================================
+  &--sm {
+    width: var(--switch-track-width-sm);
+    height: var(--switch-track-height-sm);
+    
+    .spectrum-switch__thumb {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .spectrum-switch__icon .material-symbols-outlined {
+      font-size: var(--switch-icon-size-sm);
+    }
+    
+    .spectrum-switch__loading .material-symbols-outlined {
+      font-size: var(--switch-icon-size-sm);
+    }
+  }
+  
+  &--lg {
+    width: var(--switch-track-width-lg);
+    height: var(--switch-track-height-lg);
+    
+    .spectrum-switch__thumb {
+      width: 32px;
+      height: 32px;
+    }
+    
+    .spectrum-switch__icon .material-symbols-outlined {
+      font-size: var(--switch-icon-size-lg);
+    }
+    
+    .spectrum-switch__loading .material-symbols-outlined {
+      font-size: var(--switch-icon-size-lg);
+    }
+  }
+  
+  // ==============================================
+  // Variant Styles
+  // ==============================================
+  &--primary {
+    &.spectrum-switch--checked {
+      background-color: var(--spectrum-sys-color-primary, #5b5fc7);
+    }
+    
+    &.spectrum-switch--checked .spectrum-switch__icon .material-symbols-outlined {
+      color: var(--spectrum-sys-color-primary, #5b5fc7);
+    }
+  }
+  
+  &--positive {
+    &.spectrum-switch--checked {
+      background-color: var(--switch-positive-color);
+    }
+    
+    &.spectrum-switch--checked .spectrum-switch__icon .material-symbols-outlined {
+      color: var(--switch-positive-color);
+    }
+  }
+  
+  &--caution {
+    &.spectrum-switch--checked {
+      background-color: var(--switch-caution-color);
+    }
+    
+    &.spectrum-switch--checked .spectrum-switch__icon .material-symbols-outlined {
+      color: var(--switch-caution-color);
+    }
+  }
+  
+  &--destructive {
+    &.spectrum-switch--checked {
+      background-color: var(--switch-destructive-color);
+    }
+    
+    &.spectrum-switch--checked .spectrum-switch__icon .material-symbols-outlined {
+      color: var(--switch-destructive-color);
+    }
+  }
+  
+  // ==============================================
+  // State Styles
+  // ==============================================
+  
+  // Checked state
+  &--checked {
+    background-color: var(--switch-track-background-on);
+    
+    .spectrum-switch__thumb {
+      transform: translateX(calc(var(--switch-track-width) - var(--switch-thumb-size) - var(--switch-track-padding) * 2));
+    }
+    
+    .spectrum-switch__icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    &.spectrum-switch--sm .spectrum-switch__thumb {
+      transform: translateX(calc(var(--switch-track-width-sm) - 22px - var(--switch-track-padding) * 2));
+    }
+    
+    &.spectrum-switch--lg .spectrum-switch__thumb {
+      transform: translateX(calc(var(--switch-track-width-lg) - 32px - var(--switch-track-padding) * 2));
+    }
+  }
+  
+  // Hover state
+  &:hover:not(.spectrum-switch--disabled):not(.spectrum-switch--loading) {
+    opacity: 0.8;
+  }
+  
+  // Pressed state
+  &--pressed:not(.spectrum-switch--disabled):not(.spectrum-switch--loading) {
+    .spectrum-switch__thumb {
+      box-shadow: var(--switch-thumb-shadow-pressed);
+      transform: translateX(0) scale(1.1);
+    }
+    
+    &.spectrum-switch--checked .spectrum-switch__thumb {
+      transform: translateX(calc(var(--switch-track-width) - var(--switch-thumb-size) - var(--switch-track-padding) * 2)) scale(1.1);
+    }
+    
+    &.spectrum-switch--sm.spectrum-switch--checked .spectrum-switch__thumb {
+      transform: translateX(calc(var(--switch-track-width-sm) - var(--switch-thumb-size) - var(--switch-track-padding) * 2)) scale(1.1);
+    }
+    
+    &.spectrum-switch--lg.spectrum-switch--checked .spectrum-switch__thumb {
+      transform: translateX(calc(var(--switch-track-width-lg) - var(--switch-thumb-size) - var(--switch-track-padding) * 2)) scale(1.1);
+    }
+    
+    .spectrum-switch__track::before {
+      background-color: var(--switch-track-pressed-overlay);
+    }
+  }
+  
+  // Focus state
+  &--focused:not(.spectrum-switch--disabled) {
+    &::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border: 2px solid var(--switch-focus-outline);
+      border-radius: calc(var(--switch-track-border-radius) + 4px);
+      opacity: 0.8;
+    }
+  }
+  
+  // Disabled state
+  &--disabled {
+    opacity: var(--switch-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  // Loading state
+  &--loading {
+    cursor: wait;
+    
+    .spectrum-switch__icon {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+  }
+}
+
+// ==============================================
+// Accessibility Styles
+// ==============================================
+
+// Screen reader only content
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .spectrum-switch {
+    .spectrum-switch__track {
+      border: 1px solid;
+    }
+    
+    &--focused::after {
+      border-width: 3px;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-switch {
+    --switch-transition: none;
+    --switch-thumb-transition: none;
+    --switch-icon-transition: none;
+    
+    .spectrum-switch__loading .material-symbols-outlined {
+      animation: none;
+    }
+  }
+}
+
+// ==============================================
+// Animations
+// ==============================================
+
+@keyframes switch-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

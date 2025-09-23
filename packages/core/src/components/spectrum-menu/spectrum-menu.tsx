@@ -127,6 +127,18 @@ export class SpectrumMenu {
    */
   @Prop() mobileIconColor: string = '#000000';
 
+  /**
+   * URL to navigate to when the logo is clicked
+   * When provided, the logo becomes a clickable link
+   */
+  @Prop() logoHref: string;
+
+  /**
+   * Accessible label for the logo
+   * Used for screen readers and ARIA labeling
+   */
+  @Prop() logoLabel: string = 'Home';
+
 
 
   /**
@@ -363,6 +375,19 @@ export class SpectrumMenu {
     }
   }
 
+  private handleLogoClick() {
+    if (this.logoHref) {
+      // Emit event for logo click
+      this.itemClick.emit({ label: this.logoLabel, href: this.logoHref });
+      
+      // Navigate directly if directNavigation is enabled
+      if (this.directNavigation) {
+        window.location.href = this.logoHref;
+        return;
+      }
+    }
+  }
+
   private toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
@@ -577,6 +602,11 @@ export class SpectrumMenu {
   }
 
   private handleItemMouseEnter(event: MouseEvent, item: any) {
+    // Skip positioning logic for mobile menus - they use static positioning
+    if (this.isMobile) {
+      return;
+    }
+    
     if (item.children && item.children.length > 0) {
       const menuItemElement = event.currentTarget as HTMLElement;
       const submenu = menuItemElement.querySelector('.spectrum-menu__submenu, .spectrum-menu__megamenu') as HTMLElement;
@@ -590,7 +620,7 @@ export class SpectrumMenu {
         
         if (this.variant === 'megamenu') {
           // Megamenu positioning - full width below the menu bar
-          submenu.style.position = 'fixed';
+          submenu.style.position = 'fixed'; // Megamenu still uses fixed for full viewport width
           submenu.style.top = `${rect.bottom + spacing}px`;
           submenu.style.left = '0px';
           submenu.style.width = '100vw';
@@ -598,8 +628,11 @@ export class SpectrumMenu {
           submenu.style.removeProperty('visibility');
           submenu.style.removeProperty('opacity');
         } else if (this.orientation === 'vertical') {
+          // Get host element bounds for relative positioning calculations
+          const hostRect = this.el.getBoundingClientRect();
+          
           // Temporarily position submenu off-screen to get accurate measurements
-          submenu.style.position = 'fixed';
+          submenu.style.position = 'absolute';
           submenu.style.left = '-9999px';
           submenu.style.top = '-9999px';
           submenu.style.visibility = 'visible';
@@ -609,33 +642,33 @@ export class SpectrumMenu {
           submenu.offsetHeight;
           const submenuRect = submenu.getBoundingClientRect();
           
-          // Calculate optimal horizontal position
-          let left = rect.right + spacing;
+          // Calculate optimal horizontal position relative to host
+          let left = (rect.right - hostRect.left) + spacing;
           
           // Check if submenu would overflow on the right
-          if (left + submenuRect.width > viewportWidth - spacing) {
+          if (hostRect.left + left + submenuRect.width > viewportWidth - spacing) {
             // Try positioning to the left of the menu item
-            const leftPosition = rect.left - submenuRect.width - spacing;
-            if (leftPosition >= spacing) {
+            const leftPosition = (rect.left - hostRect.left) - submenuRect.width - spacing;
+            if (hostRect.left + leftPosition >= spacing) {
               left = leftPosition;
             } else {
               // If both sides don't fit, position as far right as possible with some margin
-              left = Math.max(spacing, viewportWidth - submenuRect.width - spacing);
+              left = Math.max(spacing - hostRect.left, viewportWidth - hostRect.left - submenuRect.width - spacing);
             }
           }
           
-          // Calculate optimal vertical position
-          let top = rect.top;
+          // Calculate optimal vertical position relative to host
+          let top = rect.top - hostRect.top;
           
           // Check if submenu would overflow on the bottom
-          if (top + submenuRect.height > viewportHeight - spacing) {
+          if (hostRect.top + top + submenuRect.height > viewportHeight - spacing) {
             // Try aligning bottom of submenu with bottom of viewport
-            const topPosition = viewportHeight - submenuRect.height - spacing;
-            if (topPosition >= spacing) {
+            const topPosition = viewportHeight - hostRect.top - submenuRect.height - spacing;
+            if (hostRect.top + topPosition >= spacing) {
               top = topPosition;
             } else {
               // If submenu is taller than viewport, align to top with some margin
-              top = spacing;
+              top = spacing - hostRect.top;
             }
           }
           
@@ -647,8 +680,11 @@ export class SpectrumMenu {
           
         } else {
           // Horizontal menu - position submenu below the menu item
+          // Get host element bounds for relative positioning calculations
+          const hostRect = this.el.getBoundingClientRect();
+          
           // Temporarily position submenu off-screen to get accurate measurements
-          submenu.style.position = 'fixed';
+          submenu.style.position = 'absolute';
           submenu.style.left = '-9999px';
           submenu.style.top = '-9999px';
           submenu.style.visibility = 'visible';
@@ -658,33 +694,33 @@ export class SpectrumMenu {
           submenu.offsetHeight;
           const submenuRect = submenu.getBoundingClientRect();
           
-          // Calculate optimal horizontal position
-          let left = rect.left;
+          // Calculate optimal horizontal position relative to host
+          let left = rect.left - hostRect.left;
           
           // Check if submenu would overflow on the right
-          if (left + submenuRect.width > viewportWidth - spacing) {
+          if (hostRect.left + left + submenuRect.width > viewportWidth - spacing) {
             // Try aligning right edge of submenu with right edge of menu item
-            const rightAlignedLeft = rect.right - submenuRect.width;
-            if (rightAlignedLeft >= spacing) {
+            const rightAlignedLeft = (rect.right - hostRect.left) - submenuRect.width;
+            if (hostRect.left + rightAlignedLeft >= spacing) {
               left = rightAlignedLeft;
             } else {
               // If submenu is wider than available space, position as far right as possible
-              left = Math.max(spacing, viewportWidth - submenuRect.width - spacing);
+              left = Math.max(spacing - hostRect.left, viewportWidth - hostRect.left - submenuRect.width - spacing);
             }
           }
           
-          // Calculate optimal vertical position
-          let top = rect.bottom + spacing;
+          // Calculate optimal vertical position relative to host
+          let top = (rect.bottom - hostRect.top) + spacing;
           
           // Check if submenu would overflow on the bottom
-          if (top + submenuRect.height > viewportHeight - spacing) {
+          if (hostRect.top + top + submenuRect.height > viewportHeight - spacing) {
             // Try positioning above the menu item
-            const topPosition = rect.top - submenuRect.height - spacing;
-            if (topPosition >= spacing) {
+            const topPosition = (rect.top - hostRect.top) - submenuRect.height - spacing;
+            if (hostRect.top + topPosition >= spacing) {
               top = topPosition;
             } else {
               // If submenu doesn't fit above or below, position as high as possible
-              top = Math.max(spacing, viewportHeight - submenuRect.height - spacing);
+              top = Math.max(spacing - hostRect.top, viewportHeight - hostRect.top - submenuRect.height - spacing);
             }
           }
           
@@ -729,6 +765,35 @@ export class SpectrumMenu {
         {this.isMobile ? (
           <div class="spectrum-menu__mobile">
             <div class="spectrum-menu__mobile-nav">
+              <div class="spectrum-menu__mobile-nav-spacer"></div>
+              
+              {this.useNewLayout() && (
+                <div class="spectrum-menu__mobile-nav-logo">
+                  {this.logoHref ? (
+                    <a
+                      href={this.logoHref}
+                      class="spectrum-menu__logo-link"
+                      aria-label={this.logoLabel}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.handleLogoClick();
+                      }}
+                      tabindex={0}
+                    >
+                      <slot name="mobile-nav-logo">
+                        <slot name="logo"></slot>
+                      </slot>
+                    </a>
+                  ) : (
+                    <div class="spectrum-menu__logo-container" aria-label={this.logoLabel}>
+                      <slot name="mobile-nav-logo">
+                        <slot name="logo"></slot>
+                      </slot>
+                    </div>
+                  )}
+                </div>
+              )}
+              
               <button
                 class="spectrum-menu__mobile-toggle"
                 onClick={() => this.toggleMobileMenu()}
@@ -742,16 +807,6 @@ export class SpectrumMenu {
                   <span class="spectrum-menu__hamburger-line"></span>
                 </span>
               </button>
-              
-              {this.useNewLayout() && (
-                <div class="spectrum-menu__mobile-nav-logo">
-                  <slot name="mobile-nav-logo">
-                    <slot name="logo"></slot>
-                  </slot>
-                </div>
-              )}
-              
-              <div class="spectrum-menu__mobile-nav-spacer"></div>
             </div>
             {this.isMobileMenuOpen && (
               <div class="spectrum-menu__mobile-overlay">
@@ -759,9 +814,28 @@ export class SpectrumMenu {
                   <div class="spectrum-menu__mobile-header-content">
                     {this.useNewLayout() && (
                       <div class="spectrum-menu__mobile-header-logo">
-                        <slot name="mobile-nav-logo">
-                          <slot name="logo"></slot>
-                        </slot>
+                        {this.logoHref ? (
+                          <a
+                            href={this.logoHref}
+                            class="spectrum-menu__logo-link"
+                            aria-label={this.logoLabel}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              this.handleLogoClick();
+                            }}
+                            tabindex={0}
+                          >
+                            <slot name="mobile-nav-logo">
+                              <slot name="logo"></slot>
+                            </slot>
+                          </a>
+                        ) : (
+                          <div class="spectrum-menu__logo-container" aria-label={this.logoLabel}>
+                            <slot name="mobile-nav-logo">
+                              <slot name="logo"></slot>
+                            </slot>
+                          </div>
+                        )}
                       </div>
                     )}
                     <h2 class="spectrum-menu__mobile-title">{this.mobileMenuTitle}</h2>
@@ -808,22 +882,43 @@ export class SpectrumMenu {
         ) : (
           <nav class="spectrum-menu__nav" role="navigation" aria-label="Main navigation">
             {this.useNewLayout() ? (
-              <div class="spectrum-menu__layout" role="menubar" aria-label="Main navigation">
-                {/* Left navigation items */}
+              <div class="spectrum-menu__layout">
+                {/* Left navigation items as separate menubar */}
                 {this.parsedLeftItems.length > 0 && (
-                  <div class="spectrum-menu__section spectrum-menu__section--left">
+                  <div class="spectrum-menu__section spectrum-menu__section--left" role="menubar" aria-label="Left navigation">
                     {this.parsedLeftItems.map((item) => this.renderMenuItem(item))}
                   </div>
                 )}
                 
-                {/* Logo section */}
-                <div class="spectrum-menu__section spectrum-menu__section--logo">
-                  <slot name="logo"></slot>
+                {/* Logo section with proper semantics and accessibility */}
+                <div 
+                  class="spectrum-menu__section spectrum-menu__section--logo" 
+                  role="banner" 
+                  aria-label="Site logo and branding"
+                >
+                  {this.logoHref ? (
+                    <a
+                      href={this.logoHref}
+                      class="spectrum-menu__logo-link"
+                      aria-label={this.logoLabel}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.handleLogoClick();
+                      }}
+                      tabindex={0}
+                    >
+                      <slot name="logo"></slot>
+                    </a>
+                  ) : (
+                    <div class="spectrum-menu__logo-container" aria-label={this.logoLabel}>
+                      <slot name="logo"></slot>
+                    </div>
+                  )}
                 </div>
                 
-                {/* Right navigation items */}
+                {/* Right navigation items as separate menubar */}
                 {this.parsedRightItems.length > 0 && (
-                  <div class="spectrum-menu__section spectrum-menu__section--right">
+                  <div class="spectrum-menu__section spectrum-menu__section--right" role="menubar" aria-label="Right navigation">
                     {this.parsedRightItems.map((item) => this.renderMenuItem(item))}
                   </div>
                 )}

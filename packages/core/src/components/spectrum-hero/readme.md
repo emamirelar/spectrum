@@ -23,6 +23,7 @@ Features:
 | -------------------- | --------------------- | --------------------------------------------------------------------------------------- | --------- | --------- |
 | `animationDuration`  | `animation-duration`  | Animation duration for slide transitions                                                | `number`  | `1000`    |
 | `autoplay`           | `autoplay`            | Enable carousel autoplay Time in milliseconds between slides (0 to disable)             | `number`  | `0`       |
+| `carouselMode`       | `carousel-mode`       | Enable carousel mode with bottom subtitle display and image navigation                  | `boolean` | `false`   |
 | `debug`              | `debug`               | Debug mode                                                                              | `boolean` | `false`   |
 | `height`             | `height`              | Hero height (CSS value)                                                                 | `string`  | `'100vh'` |
 | `keyboardNavigation` | `keyboard-navigation` | Enable keyboard navigation                                                              | `boolean` | `true`    |
@@ -37,10 +38,11 @@ Features:
 
 ## Events
 
-| Event         | Description                                        | Type                                                                        |
-| ------------- | -------------------------------------------------- | --------------------------------------------------------------------------- |
-| `heroAction`  | Event emitted when a hero action button is clicked | `CustomEvent<{ action: string; slideIndex: number; slideTitle?: string; }>` |
-| `slideChange` | Event emitted when slide changes                   | `CustomEvent<{ action: string; slideIndex: number; totalSlides: number; }>` |
+| Event             | Description                                             | Type                                                                                                                            |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `heroAction`      | Event emitted when a hero action button is clicked      | `CustomEvent<{ action: string; slideIndex: number; slideTitle?: string; navigationType: "event" \| "direct"; href?: string; }>` |
+| `imageNavigation` | Event emitted when an image is clicked in carousel mode | `CustomEvent<{ action: string; slideIndex: number; direction: "next" \| "previous"; }>`                                         |
+| `slideChange`     | Event emitted when slide changes                        | `CustomEvent<{ action: string; slideIndex: number; totalSlides: number; }>`                                                     |
 
 
 ## Dependencies

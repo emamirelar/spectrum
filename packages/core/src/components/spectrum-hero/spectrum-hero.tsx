@@ -10,7 +10,7 @@ export interface HeroSlide {
   buttonText?: string;
   buttonAction?: string;
   overlayPosition?: 'left' | 'center' | 'right';
-  overlayVertical?: 'top' | 'center' | 'bottom';
+  overlayVertical?: 'top' | 'center' | 'bottom' | 'under';
   // Navigation support (optional direct navigation)
   buttonHref?: string; // URL for direct navigation when button is clicked
   buttonTarget?: string; // Target for navigation (e.g., '_blank' for new tab)
@@ -111,6 +111,11 @@ export class SpectrumHero {
    */
   @Prop() overlayStyle: string = '';
 
+  /**
+   * Enable carousel mode with bottom subtitle display and image navigation
+   */
+  @Prop() carouselMode: boolean = false;
+
   // ============== Component State ==============
   @State() currentSlide: number = 0;
   @State() isPlaying: boolean = false;
@@ -126,7 +131,7 @@ export class SpectrumHero {
     composed: true,
     cancelable: true,
     bubbles: true
-  }) heroAction: EventEmitter<{ action: string; slideIndex: number; slideTitle?: string }>;
+  }) heroAction: EventEmitter<{ action: string; slideIndex: number; slideTitle?: string; navigationType: 'event' | 'direct'; href?: string }>;
 
   /**
    * Event emitted when slide changes
@@ -137,6 +142,16 @@ export class SpectrumHero {
     cancelable: true,
     bubbles: true
   }) slideChange: EventEmitter<{ action: string; slideIndex: number; totalSlides: number }>;
+
+  /**
+   * Event emitted when an image is clicked in carousel mode
+   */
+  @Event({
+    eventName: 'imageNavigation',
+    composed: true,
+    cancelable: true,
+    bubbles: true
+  }) imageNavigation: EventEmitter<{ action: string; slideIndex: number; direction: 'next' | 'previous' }>;
 
   // ============== Private Properties ==============
   private autoplayInterval: NodeJS.Timeout | null = null;
@@ -347,18 +362,61 @@ export class SpectrumHero {
   }
 
   private handleButtonClick = (slide: HeroSlide, index: number) => {
-    // Always emit the event for tracking, even when using direct navigation
-    this.heroAction.emit({
-      action: slide.buttonAction || 'hero-action',
+    const hasDirectNavigation = slide.buttonHref && slide.buttonHref.trim() !== '';
+    
+    if (hasDirectNavigation) {
+      // Direct navigation mode: emit event for tracking, then let browser handle navigation
+      this.heroAction.emit({
+        action: slide.buttonAction || 'hero-action',
+        slideIndex: index,
+        slideTitle: slide.title,
+        navigationType: 'direct',
+        href: slide.buttonHref
+      });
+      this.log('Direct navigation clicked', { 
+        action: slide.buttonAction, 
+        index, 
+        title: slide.title,
+        href: slide.buttonHref,
+        target: slide.buttonTarget
+      });
+    } else {
+      // Event-based navigation mode: emit event for custom handling
+      this.heroAction.emit({
+        action: slide.buttonAction || 'hero-action',
+        slideIndex: index,
+        slideTitle: slide.title,
+        navigationType: 'event'
+      });
+      this.log('Event-based navigation clicked', { 
+        action: slide.buttonAction, 
+        index, 
+        title: slide.title
+      });
+    }
+  };
+
+  private handleImageClick = (event: MouseEvent, index: number) => {
+    if (!this.carouselMode) return;
+    
+    // Determine click position and direction
+    const clickX = event.offsetX;
+    const elementWidth = (event.target as HTMLElement).offsetWidth;
+    const isLeftHalf = clickX < elementWidth / 2;
+    const direction = isLeftHalf ? 'previous' : 'next';
+    
+    // Emit navigation event only - let application handle navigation
+    this.imageNavigation.emit({
+      action: 'image-navigation',
       slideIndex: index,
-      slideTitle: slide.title
+      direction: direction
     });
-    this.log('Hero action clicked', { 
-      action: slide.buttonAction, 
-      index, 
-      title: slide.title,
-      href: slide.buttonHref,
-      target: slide.buttonTarget
+    
+    this.log('Image navigation clicked', { 
+      direction, 
+      slideIndex: index,
+      clickX,
+      elementWidth
     });
   };
 
@@ -698,6 +756,11 @@ export class SpectrumHero {
       `spectrum-hero__overlay--${slide.overlayVertical || 'center'}`
     ].join(' ');
 
+    // Debug carousel mode
+    if (this.debug) {
+      console.log('Rendering slide:', index, 'carouselMode:', this.carouselMode, 'subtitle:', slide.subtitle);
+    }
+
     // Determine slide state for transitions
     let slideClass = 'spectrum-hero__slide';
     if (isActive) {
@@ -706,6 +769,11 @@ export class SpectrumHero {
       slideClass += ' spectrum-hero__slide--prev';
     } else {
       slideClass += ' spectrum-hero__slide--next';
+    }
+
+    // Add modifier for "under" layout
+    if (slide.overlayVertical === 'under') {
+      slideClass += ' spectrum-hero__slide--under';
     }
 
     return (
@@ -761,6 +829,8 @@ export class SpectrumHero {
             sizes={slide.sizes}
             alt={slide.alt || 'Hero image'}
             loading={index === 0 ? 'eager' : isAdjacent ? 'eager' : 'lazy'}
+            onClick={(event) => this.handleImageClick(event, index)}
+            style={this.carouselMode ? { cursor: 'pointer' } : {}}
             {...(index === 0 ? { 'fetchpriority': 'high' } : 
                 isAdjacent ? { 'fetchpriority': 'auto' } : 
                 { 'fetchpriority': 'low' })}
@@ -769,33 +839,71 @@ export class SpectrumHero {
         
         {this.renderShade()}
         
-        {(slide.title || slide.subtitle || slide.buttonText) && (
-          <div 
-            class={overlayClasses}
-            style={this.parseOverlayStyle()}
-          >
-            <div class="spectrum-hero__content">
-              {slide.title && (
-                <h1 class="spectrum-hero__title">{slide.title}</h1>
-              )}
-              {slide.subtitle && (
-                <p class="spectrum-hero__subtitle">{slide.subtitle}</p>
-              )}
-              {slide.buttonText && (
-                <spectrum-button
-                  class="spectrum-hero__button"
-                  variant="primary"
-                  size="medium"
-                  buttonText={slide.buttonText}
-                  action={slide.buttonAction || 'hero-action'}
-                  href={slide.buttonHref}
-                  target={slide.buttonTarget}
-                  rel={slide.buttonRel}
-                  onClick={() => this.handleButtonClick(slide, index)}
-                />
-              )}
+        {/* Render content based on mode */}
+        {this.carouselMode ? (
+          // Carousel mode: Only subtitle in bottom box, no overlay
+          slide.subtitle && (
+            <div class="spectrum-hero__carousel-subtitle">
+              <p class="spectrum-hero__carousel-subtitle-text">{slide.subtitle}</p>
             </div>
-          </div>
+          )
+        ) : slide.overlayVertical === 'under' ? (
+          // Under mode: Content positioned below hero in horizontal layout
+          (slide.title || slide.subtitle || slide.buttonText) && (
+            <div class="spectrum-hero__under-content">
+              <div class="spectrum-hero__under-layout">
+                {slide.title && (
+                  <h2 class="spectrum-hero__under-title">{slide.title}:</h2>
+                )}
+                {slide.subtitle && (
+                  <p class="spectrum-hero__under-subtitle">{slide.subtitle}</p>
+                )}
+                {slide.buttonText && (
+                  <spectrum-button
+                    class="spectrum-hero__under-button"
+                    variant="primary"
+                    size="small"
+                    buttonText={slide.buttonText}
+                    action={slide.buttonAction || 'hero-action'}
+                    href={slide.buttonHref || undefined}
+                    target={slide.buttonTarget || undefined}
+                    rel={slide.buttonRel || undefined}
+                    onClick={() => this.handleButtonClick(slide, index)}
+                  />
+                )}
+              </div>
+            </div>
+          )
+        ) : (
+          // Standard mode: Full overlay with title, subtitle, and button
+          (slide.title || slide.subtitle || slide.buttonText) && (
+            <div 
+              class={overlayClasses}
+              style={this.parseOverlayStyle()}
+            >
+              <div class="spectrum-hero__content">
+                {slide.title && (
+                  <h1 class="spectrum-hero__title">{slide.title}</h1>
+                )}
+                {slide.subtitle && (
+                  <p class="spectrum-hero__subtitle">{slide.subtitle}</p>
+                )}
+                {slide.buttonText && (
+                  <spectrum-button
+                    class="spectrum-hero__button"
+                    variant="primary"
+                    size="medium"
+                    buttonText={slide.buttonText}
+                    action={slide.buttonAction || 'hero-action'}
+                    href={slide.buttonHref || undefined}
+                    target={slide.buttonTarget || undefined}
+                    rel={slide.buttonRel || undefined}
+                    onClick={() => this.handleButtonClick(slide, index)}
+                  />
+                )}
+              </div>
+            </div>
+          )
         )}
       </div>
     );
@@ -845,7 +953,8 @@ export class SpectrumHero {
   render() {
     const heroClasses = [
       'spectrum-hero',
-      this.rounded ? 'spectrum-hero--rounded' : ''
+      this.rounded ? 'spectrum-hero--rounded' : '',
+      this.carouselMode ? 'spectrum-hero--carousel' : ''
     ].filter(Boolean).join(' ');
 
     return (

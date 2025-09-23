@@ -27,6 +27,79 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.1-alpha.37] - 23/Sep/25
+
+### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-switch**: 🚀 **New Component** - Toggle switch component for binary choices with accessibility support
+  - **Multiple Variants**: Primary, positive, caution, and destructive variants for different contexts
+  - **Size Options**: Small, medium (base), and large sizing with responsive scaling
+  - **Interactive States**: Comprehensive hover, focus, active, disabled, and loading states
+  - **Accessibility First**: Full ARIA compliance with role="switch", keyboard navigation (Enter, Space, Arrow keys)
+  - **Material Icons**: Built-in check/close icons with loading spinner support and icon toggle option
+  - **Screen Reader Support**: Automatic state announcements and comprehensive ARIA labeling
+  - **Form Integration**: Hidden input support for form submission with name/value attributes
+  - **Event System**: `switchChange` events with action attributes ("check"/"uncheck") and value payload
+  - **Keyboard Navigation**: Arrow key navigation (left=uncheck, right=check) plus standard activation keys
+  - **Loading States**: Loading spinner with disabled interaction during loading operations
+  - **Custom Styling**: Extensive CSS custom properties for theming and visual customization
+  - **Responsive Design**: Mobile-optimized with proper touch targets and responsive behavior
+  - **TypeScript Support**: Complete type definitions with comprehensive prop and event interfaces
+  - **Level 1 Component**: Atomic component with no internal dependencies on other Spectrum components
+
+- **spectrum-wizard**: 🚀 **New Component** - Step-by-step guided experience component with progress tracking
+  - **Flexible Step System**: Define steps with titles, HTML content, time estimates, and completion tracking
+  - **Progress Navigation**: Linear step progression with previous/next navigation and direct step access
+  - **Cookie Persistence**: Optional cookie-based progress persistence (opt-in for privacy compliance)
+  - **Time Estimation**: Per-step and total time estimates with formatted display (minutes/hours)
+  - **Accessibility**: Full ARIA compliance, keyboard navigation (Arrow keys, Home, End), screen reader support
+  - **Visual Progress**: Step indicators with completion checkmarks, progress connectors, and active states
+  - **Smart Navigation**: Configurable step accessibility and intelligent next/previous button states
+  - **Event System**: `stepChange` and `wizardComplete` events with comprehensive progress data
+  - **Cookie Management**: Configurable expiration, automatic cleanup on completion, and privacy controls
+  - **Interactive Controls**: Built-in progress persistence toggle with spectrum-switch integration
+  - **Responsive Design**: Mobile-first layout with touch-friendly navigation and responsive step indicators
+  - **Custom Labels**: Configurable button labels for next, previous, and complete actions
+  - **Debug Support**: Comprehensive error handling and cookie management with fallback states
+  - **TypeScript Support**: Complete interfaces for `WizardStep`, `WizardStepChangeEvent`, and `WizardCompleteEvent`
+  - **Level 2 Component**: Composed component with dependencies on spectrum-button, spectrum-chip, and spectrum-switch
+
+### 🔄 Changed
+- **spectrum-button**: Enhanced with additional interactive states and improved accessibility features
+- **spectrum-card**: Updated styling and interaction patterns for better visual consistency
+- **spectrum-chip**: Improved visual feedback and interaction states for enhanced user experience
+- **spectrum-hero**: Enhanced carousel functionality and responsive behavior improvements
+- **spectrum-menu**: Improved navigation patterns and accessibility enhancements
+- **spectrum-rail-item**: Updated styling for better integration with rail navigation patterns
+- **spectrum-rail**: Enhanced navigation behavior and improved responsive design
+
+### 📝 Documentation
+- **spectrum-switch**: Comprehensive Storybook documentation with interactive examples
+  - **Complete Story Collection**: 12+ stories covering all variants, sizes, and interaction states
+  - **Playground Story**: Interactive testing environment with full control panel for real-time experimentation
+  - **Variant Demonstrations**: Complete examples of primary, positive, caution, and destructive variants
+  - **Size Examples**: Small, medium, and large sizing demonstrations with responsive behavior
+  - **State Stories**: Loading states, disabled states, and accessibility feature demonstrations
+  - **Form Integration**: Examples showing form submission and hidden input functionality
+  - **Icon Toggle**: Stories demonstrating icons on/off and custom icon configurations
+  - **Accessibility Examples**: Keyboard navigation patterns and screen reader optimization
+  - **API Documentation**: Complete property, event, and method documentation with TypeScript interfaces
+
+- **spectrum-wizard**: Comprehensive Storybook documentation with guided experience examples
+  - **Complete Story Collection**: Multiple stories showcasing different wizard configurations and use cases
+  - **Onboarding Wizard**: Real-world example with user profile setup, preferences, and completion flow
+  - **Settings Wizard**: Configuration-based example with system settings and privacy controls
+  - **Cookie Persistence**: Demonstrations of progress persistence with privacy-conscious design
+  - **Time Estimation**: Examples showing time indicators and total duration calculations
+  - **Accessibility Examples**: Full keyboard navigation and screen reader support demonstrations
+  - **Event Handling**: Complete examples of step change and completion event handling
+  - **API Documentation**: Detailed documentation of all props, events, methods, and interfaces
+
+- **Release Preparation**: Updated package version to 0.0.1-alpha.37 for new component release
+
+---
+
 ## [0.0.1-alpha.36] - 26/Aug/25
 
 ### 🧪 Pre-release

@@ -162,14 +162,14 @@ export declare interface SpectrumButton extends Components.SpectrumButton {
 
 
 @ProxyCmp({
-  inputs: ['action', 'background', 'cardSubtitle', 'cardTitle', 'clickable', 'debug', 'disabled', 'height', 'href', 'imageAlt', 'imageUrl', 'noPadding', 'rel', 'showFooterActions', 'showHeaderActions', 'size', 'target', 'variant', 'width']
+  inputs: ['action', 'background', 'cardSubtitle', 'cardTitle', 'clickable', 'debug', 'disabled', 'height', 'href', 'imageAlt', 'imageUrl', 'noPadding', 'rel', 'showFooterActions', 'showHeaderActions', 'size', 'target', 'textOverflow', 'variant', 'width']
 })
 @Component({
   selector: 'spectrum-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['action', 'background', 'cardSubtitle', 'cardTitle', 'clickable', 'debug', 'disabled', 'height', 'href', 'imageAlt', 'imageUrl', 'noPadding', 'rel', 'showFooterActions', 'showHeaderActions', 'size', 'target', 'variant', 'width'],
+  inputs: ['action', 'background', 'cardSubtitle', 'cardTitle', 'clickable', 'debug', 'disabled', 'height', 'href', 'imageAlt', 'imageUrl', 'noPadding', 'rel', 'showFooterActions', 'showHeaderActions', 'size', 'target', 'textOverflow', 'variant', 'width'],
 })
 export class SpectrumCard {
   protected el: HTMLSpectrumCardElement;
@@ -484,21 +484,21 @@ export declare interface SpectrumGrid extends Components.SpectrumGrid {}
 
 
 @ProxyCmp({
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides']
+  inputs: ['animationDuration', 'autoplay', 'carouselMode', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides']
 })
 @Component({
   selector: 'spectrum-hero',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['animationDuration', 'autoplay', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides'],
+  inputs: ['animationDuration', 'autoplay', 'carouselMode', 'debug', 'height', 'keyboardNavigation', 'overlayStyle', 'pauseOnHover', 'rounded', 'shaded', 'showArrows', 'showDots', 'slides'],
 })
 export class SpectrumHero {
   protected el: HTMLSpectrumHeroElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['heroAction', 'slideChange']);
+    proxyOutputs(this, this.el, ['heroAction', 'slideChange', 'imageNavigation']);
   }
 }
 
@@ -507,11 +507,15 @@ export declare interface SpectrumHero extends Components.SpectrumHero {
   /**
    * Event emitted when a hero action button is clicked
    */
-  heroAction: EventEmitter<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string }>>;
+  heroAction: EventEmitter<CustomEvent<{ action: string; slideIndex: number; slideTitle?: string; navigationType: 'event' | 'direct'; href?: string }>>;
   /**
    * Event emitted when slide changes
    */
   slideChange: EventEmitter<CustomEvent<{ action: string; slideIndex: number; totalSlides: number }>>;
+  /**
+   * Event emitted when an image is clicked in carousel mode
+   */
+  imageNavigation: EventEmitter<CustomEvent<{ action: string; slideIndex: number; direction: 'next' | 'previous' }>>;
 }
 
 
@@ -556,7 +560,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['directNavigation', 'items', 'leftItems', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
+  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -564,7 +568,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['directNavigation', 'items', 'leftItems', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
+  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLSpectrumMenuElement;
@@ -847,6 +851,32 @@ export declare interface SpectrumStack extends Components.SpectrumStack {}
 
 
 @ProxyCmp({
+  inputs: ['accessibleDescribedBy', 'accessibleLabel', 'accessibleLabelledBy', 'checked', 'disabled', 'label', 'loading', 'name', 'showIcons', 'size', 'value', 'variant']
+})
+@Component({
+  selector: 'spectrum-switch',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['accessibleDescribedBy', 'accessibleLabel', 'accessibleLabelledBy', 'checked', 'disabled', 'label', 'loading', 'name', 'showIcons', 'size', 'value', 'variant'],
+})
+export class SpectrumSwitch {
+  protected el: HTMLSpectrumSwitchElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['switchChange']);
+  }
+}
+
+
+export declare interface SpectrumSwitch extends Components.SpectrumSwitch {
+
+  switchChange: EventEmitter<CustomEvent<{ action: string; checked: boolean; value?: string }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['autoLoadFonts', 'color', 'config', 'coordinationTimeout', 'dark', 'debug', 'fontLoadTimeout', 'hideContentUntilReady', 'preloadFonts', 'showSwatches', 'waitForWallpaper']
 })
 @Component({
@@ -917,5 +947,41 @@ export class SpectrumWallpaper {
 
 
 export declare interface SpectrumWallpaper extends Components.SpectrumWallpaper {}
+
+
+@ProxyCmp({
+  inputs: ['allowStepSelection', 'completeButtonLabel', 'cookieExpirationDays', 'currentStep', 'nextButtonLabel', 'persistProgress', 'previousButtonLabel', 'showNavigation', 'showTimeIndicators', 'steps', 'wizardId'],
+  methods: ['nextStep', 'previousStep', 'goToStep', 'completeWizard', 'resetProgress', 'getTotalEstimatedTime']
+})
+@Component({
+  selector: 'spectrum-wizard',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['allowStepSelection', 'completeButtonLabel', 'cookieExpirationDays', 'currentStep', 'nextButtonLabel', 'persistProgress', 'previousButtonLabel', 'showNavigation', 'showTimeIndicators', 'steps', 'wizardId'],
+})
+export class SpectrumWizard {
+  protected el: HTMLSpectrumWizardElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['stepChange', 'wizardComplete']);
+  }
+}
+
+
+import type { WizardStepChangeEvent as ISpectrumWizardWizardStepChangeEvent } from '@unops-itg-npm/cpit-spectrum';
+import type { WizardCompleteEvent as ISpectrumWizardWizardCompleteEvent } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumWizard extends Components.SpectrumWizard {
+  /**
+   * Emitted when step changes
+   */
+  stepChange: EventEmitter<CustomEvent<ISpectrumWizardWizardStepChangeEvent>>;
+  /**
+   * Emitted when wizard is completed
+   */
+  wizardComplete: EventEmitter<CustomEvent<ISpectrumWizardWizardCompleteEvent>>;
+}
 
 

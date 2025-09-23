@@ -32,6 +32,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: spectrum-accordion, spectrum-conversation-panel
   - Purpose: Display tags, selections, or actionable items
 
+- **spectrum-switch**: Toggle switch component for binary choices
+  - Dependencies: None (pure component)
+  - Used by: spectrum-wizard
+  - Purpose: Toggle switch for on/off, true/false, or enabled/disabled states with accessibility support
+
 - **spectrum-badge**: Status and notification badge component
   - Dependencies: None (pure component)
   - Used by: spectrum-image-gallery
@@ -86,6 +91,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Dependencies: spectrum-button
   - Used by: spectrum-rail (via slots)
   - Purpose: Rail navigation items with expand/collapse states
+
+- **spectrum-wizard**: Step-by-step guided experience component
+  - Dependencies: spectrum-button, spectrum-chip, spectrum-switch
+  - Used by: Onboarding flows, multi-step forms, configuration processes, and guided user experiences
+  - Purpose: Provides step-by-step navigation with progress tracking, cookie-based persistence, time estimation, and comprehensive accessibility support
 
 - **spectrum-collapsible-list**: Hierarchical list with context menus
   - Dependencies: spectrum-context-menu (imports ContextMenuAction interface)
@@ -195,6 +205,7 @@ Level 1 (Atomic):
 ├── spectrum-avatar
 ├── spectrum-button
 ├── spectrum-chip
+├── spectrum-switch
 ├── spectrum-badge
 ├── spectrum-toast
 ├── spectrum-panel
@@ -211,6 +222,7 @@ Level 2 (Composed):
 ├── spectrum-collapsible-list (depends on: spectrum-context-menu)
 ├── spectrum-select (depends on: spectrum-button)
 ├── spectrum-search-results (depends on: spectrum-button)
+├── spectrum-wizard (depends on: spectrum-button, spectrum-chip, spectrum-switch)
 ├── spectrum-image-gallery (depends on: spectrum-button, spectrum-badge, spectrum-panel)
 ├── spectrum-hero (depends on: spectrum-button)
 └── spectrum-cookie-compliance (depends on: spectrum-button, spectrum-toast, spectrum-dialog)

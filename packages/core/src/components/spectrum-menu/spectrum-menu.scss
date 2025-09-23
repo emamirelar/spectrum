@@ -133,6 +133,40 @@
   }
 }
 
+// Logo link and container styles
+.spectrum-menu__logo-link,
+.spectrum-menu__logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  outline: none;
+  min-width: 0; // Allow shrinking if needed
+  
+  // Focus styles for accessibility
+  &:focus-visible {
+    outline: 2px solid var(--menu-focus-outline);
+    outline-offset: 2px;
+    border-radius: var(--menu-border-radius);
+  }
+}
+
+.spectrum-menu__logo-link {
+  cursor: pointer;
+  transition: var(--menu-transition-fast);
+  
+  // Hover effect for interactive logos
+  &:hover {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+  
+  // Active state
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 // ==============================================
 // Menu Items
 // ==============================================
@@ -216,7 +250,7 @@
 .spectrum-menu__submenu {
   margin: 0;
   padding: 0; // Remove padding to allow edge-to-edge highlighting
-  position: fixed; // Use fixed positioning for all submenus to escape container bounds
+  position: absolute; // Use absolute positioning to scroll with parent content
   top: auto;
   left: auto;
   min-width: var(--menu-submenu-min-width);
@@ -355,7 +389,7 @@
   }
   
   .spectrum-menu__submenu {
-    position: fixed; // Position relative to viewport to escape all containers
+    position: absolute; // Position relative to parent container to scroll naturally
     top: auto;
     left: auto;
     transform: none;
