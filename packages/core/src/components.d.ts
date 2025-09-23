@@ -7,7 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 import { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
-import { CardSize, CardVariant } from "./components/spectrum-card/spectrum-card";
+import { CardSize, CardVariant, TextOverflow } from "./components/spectrum-card/spectrum-card";
 import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
@@ -18,9 +18,10 @@ import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDire
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
+import { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
 export { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 export { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
-export { CardSize, CardVariant } from "./components/spectrum-card/spectrum-card";
+export { CardSize, CardVariant, TextOverflow } from "./components/spectrum-card/spectrum-card";
 export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
@@ -31,6 +32,7 @@ export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDire
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 export { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
+export { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
 export namespace Components {
     interface SpectrumAccordion {
         /**
@@ -438,7 +440,7 @@ export namespace Components {
         /**
           * @default 'base'
          */
-        "size": 'sm' | 'base' | 'medium' | 'lg';
+        "size": 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
         /**
           * @default false
          */
@@ -536,6 +538,11 @@ export namespace Components {
           * Target for navigation (e.g., '_blank' for new tab)
          */
         "target"?: string;
+        /**
+          * Text overflow behavior for title and subtitle
+          * @default 'ellipsis'
+         */
+        "textOverflow": TextOverflow;
         /**
           * Card variant/style
           * @default 'default'
@@ -1921,6 +1928,43 @@ export namespace Components {
          */
         "wrap": boolean;
     }
+    /**
+     * Spectrum Switch Component
+     * A toggle switch component with multiple variants and accessibility support.
+     * Supports Material Icons and follows spectrum design system.
+     */
+    interface SpectrumSwitch {
+        "accessibleDescribedBy"?: string;
+        "accessibleLabel"?: string;
+        "accessibleLabelledBy"?: string;
+        /**
+          * @default false
+         */
+        "checked": boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        "label"?: string;
+        /**
+          * @default false
+         */
+        "loading": boolean;
+        "name"?: string;
+        /**
+          * @default true
+         */
+        "showIcons": boolean;
+        /**
+          * @default 'base'
+         */
+        "size": 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: string;
+        /**
+          * @default 'primary'
+         */
+        "variant": 'primary' | 'positive' | 'caution' | 'destructive';
+    }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
@@ -2099,6 +2143,103 @@ export namespace Components {
          */
         "signalReady": boolean;
     }
+    /**
+     * Spectrum Wizard Component
+     * A step-by-step guided experience component that provides navigation,
+     * progress tracking, and optional cookie-based persistence.
+     * Cookie persistence is disabled by default for privacy. Enable it by setting
+     * persistProgress={true} and providing a unique wizardId.
+     * @example // Basic wizard without cookies
+     * <spectrum-wizard steps={steps}></spectrum-wizard>
+     * @example // Wizard with cookie persistence enabled
+     * <spectrum-wizard 
+     *   steps={steps} 
+     *   persistProgress={true}
+     *   wizardId="my-wizard"
+     *   cookieExpirationDays={30}>
+     * </spectrum-wizard>
+     */
+    interface SpectrumWizard {
+        /**
+          * Allow jumping to any accessible step
+          * @default true
+         */
+        "allowStepSelection": boolean;
+        /**
+          * Label for the complete button
+          * @default 'Complete'
+         */
+        "completeButtonLabel": string;
+        /**
+          * Complete the wizard
+         */
+        "completeWizard": () => Promise<void>;
+        /**
+          * Cookie expiration in days
+          * @default 30
+         */
+        "cookieExpirationDays": number;
+        /**
+          * Current active step index (0-based)
+          * @default 0
+         */
+        "currentStep": number;
+        /**
+          * Get total estimated time for all steps
+         */
+        "getTotalEstimatedTime": () => Promise<number>;
+        /**
+          * Navigate to specific step
+         */
+        "goToStep": (stepIndex: number) => Promise<boolean>;
+        /**
+          * Label for the next button
+          * @default 'Next'
+         */
+        "nextButtonLabel": string;
+        /**
+          * Navigate to next step
+         */
+        "nextStep": () => Promise<boolean>;
+        /**
+          * Whether to persist progress in cookies (opt-in)
+          * @default false
+         */
+        "persistProgress": boolean;
+        /**
+          * Label for the previous button
+          * @default 'Previous'
+         */
+        "previousButtonLabel": string;
+        /**
+          * Navigate to previous step
+         */
+        "previousStep": () => Promise<boolean>;
+        /**
+          * Reset wizard progress
+         */
+        "resetProgress": () => Promise<void>;
+        /**
+          * Whether navigation controls are shown
+          * @default true
+         */
+        "showNavigation": boolean;
+        /**
+          * Show time indicators for steps
+          * @default true
+         */
+        "showTimeIndicators": boolean;
+        /**
+          * Array of wizard steps
+          * @default []
+         */
+        "steps": WizardStep[];
+        /**
+          * Unique identifier for cookie persistence
+          * @default 'spectrum-wizard'
+         */
+        "wizardId": string;
+    }
 }
 export interface SpectrumAccordionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2176,9 +2317,17 @@ export interface SpectrumSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSelectElement;
 }
+export interface SpectrumSwitchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumSwitchElement;
+}
 export interface SpectrumToastCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumToastElement;
+}
+export interface SpectrumWizardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumWizardElement;
 }
 declare global {
     interface HTMLSpectrumAccordionElementEventMap {
@@ -2703,6 +2852,28 @@ declare global {
         prototype: HTMLSpectrumStackElement;
         new (): HTMLSpectrumStackElement;
     };
+    interface HTMLSpectrumSwitchElementEventMap {
+        "switchChange": { action: string; checked: boolean; value?: string };
+    }
+    /**
+     * Spectrum Switch Component
+     * A toggle switch component with multiple variants and accessibility support.
+     * Supports Material Icons and follows spectrum design system.
+     */
+    interface HTMLSpectrumSwitchElement extends Components.SpectrumSwitch, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumSwitchElementEventMap>(type: K, listener: (this: HTMLSpectrumSwitchElement, ev: SpectrumSwitchCustomEvent<HTMLSpectrumSwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumSwitchElementEventMap>(type: K, listener: (this: HTMLSpectrumSwitchElement, ev: SpectrumSwitchCustomEvent<HTMLSpectrumSwitchElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumSwitchElement: {
+        prototype: HTMLSpectrumSwitchElement;
+        new (): HTMLSpectrumSwitchElement;
+    };
     interface HTMLSpectrumThemeElement extends Components.SpectrumTheme, HTMLStencilElement {
     }
     var HTMLSpectrumThemeElement: {
@@ -2738,6 +2909,40 @@ declare global {
         prototype: HTMLSpectrumWallpaperElement;
         new (): HTMLSpectrumWallpaperElement;
     };
+    interface HTMLSpectrumWizardElementEventMap {
+        "stepChange": WizardStepChangeEvent;
+        "wizardComplete": WizardCompleteEvent;
+    }
+    /**
+     * Spectrum Wizard Component
+     * A step-by-step guided experience component that provides navigation,
+     * progress tracking, and optional cookie-based persistence.
+     * Cookie persistence is disabled by default for privacy. Enable it by setting
+     * persistProgress={true} and providing a unique wizardId.
+     * @example // Basic wizard without cookies
+     * <spectrum-wizard steps={steps}></spectrum-wizard>
+     * @example // Wizard with cookie persistence enabled
+     * <spectrum-wizard 
+     *   steps={steps} 
+     *   persistProgress={true}
+     *   wizardId="my-wizard"
+     *   cookieExpirationDays={30}>
+     * </spectrum-wizard>
+     */
+    interface HTMLSpectrumWizardElement extends Components.SpectrumWizard, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumWizardElementEventMap>(type: K, listener: (this: HTMLSpectrumWizardElement, ev: SpectrumWizardCustomEvent<HTMLSpectrumWizardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumWizardElementEventMap>(type: K, listener: (this: HTMLSpectrumWizardElement, ev: SpectrumWizardCustomEvent<HTMLSpectrumWizardElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumWizardElement: {
+        prototype: HTMLSpectrumWizardElement;
+        new (): HTMLSpectrumWizardElement;
+    };
     interface HTMLElementTagNameMap {
         "spectrum-accordion": HTMLSpectrumAccordionElement;
         "spectrum-app-layout": HTMLSpectrumAppLayoutElement;
@@ -2768,9 +2973,11 @@ declare global {
         "spectrum-select": HTMLSpectrumSelectElement;
         "spectrum-sidebar": HTMLSpectrumSidebarElement;
         "spectrum-stack": HTMLSpectrumStackElement;
+        "spectrum-switch": HTMLSpectrumSwitchElement;
         "spectrum-theme": HTMLSpectrumThemeElement;
         "spectrum-toast": HTMLSpectrumToastElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
+        "spectrum-wizard": HTMLSpectrumWizardElement;
     }
 }
 declare namespace LocalJSX {
@@ -3194,7 +3401,7 @@ declare namespace LocalJSX {
         /**
           * @default 'base'
          */
-        "size"?: 'sm' | 'base' | 'medium' | 'lg';
+        "size"?: 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
         /**
           * @default false
          */
@@ -3296,6 +3503,11 @@ declare namespace LocalJSX {
           * Target for navigation (e.g., '_blank' for new tab)
          */
         "target"?: string;
+        /**
+          * Text overflow behavior for title and subtitle
+          * @default 'ellipsis'
+         */
+        "textOverflow"?: TextOverflow;
         /**
           * Card variant/style
           * @default 'default'
@@ -4736,6 +4948,44 @@ declare namespace LocalJSX {
          */
         "wrap"?: boolean;
     }
+    /**
+     * Spectrum Switch Component
+     * A toggle switch component with multiple variants and accessibility support.
+     * Supports Material Icons and follows spectrum design system.
+     */
+    interface SpectrumSwitch {
+        "accessibleDescribedBy"?: string;
+        "accessibleLabel"?: string;
+        "accessibleLabelledBy"?: string;
+        /**
+          * @default false
+         */
+        "checked"?: boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        "label"?: string;
+        /**
+          * @default false
+         */
+        "loading"?: boolean;
+        "name"?: string;
+        "onSwitchChange"?: (event: SpectrumSwitchCustomEvent<{ action: string; checked: boolean; value?: string }>) => void;
+        /**
+          * @default true
+         */
+        "showIcons"?: boolean;
+        /**
+          * @default 'base'
+         */
+        "size"?: 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: string;
+        /**
+          * @default 'primary'
+         */
+        "variant"?: 'primary' | 'positive' | 'caution' | 'destructive';
+    }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
@@ -4913,6 +5163,87 @@ declare namespace LocalJSX {
          */
         "signalReady"?: boolean;
     }
+    /**
+     * Spectrum Wizard Component
+     * A step-by-step guided experience component that provides navigation,
+     * progress tracking, and optional cookie-based persistence.
+     * Cookie persistence is disabled by default for privacy. Enable it by setting
+     * persistProgress={true} and providing a unique wizardId.
+     * @example // Basic wizard without cookies
+     * <spectrum-wizard steps={steps}></spectrum-wizard>
+     * @example // Wizard with cookie persistence enabled
+     * <spectrum-wizard 
+     *   steps={steps} 
+     *   persistProgress={true}
+     *   wizardId="my-wizard"
+     *   cookieExpirationDays={30}>
+     * </spectrum-wizard>
+     */
+    interface SpectrumWizard {
+        /**
+          * Allow jumping to any accessible step
+          * @default true
+         */
+        "allowStepSelection"?: boolean;
+        /**
+          * Label for the complete button
+          * @default 'Complete'
+         */
+        "completeButtonLabel"?: string;
+        /**
+          * Cookie expiration in days
+          * @default 30
+         */
+        "cookieExpirationDays"?: number;
+        /**
+          * Current active step index (0-based)
+          * @default 0
+         */
+        "currentStep"?: number;
+        /**
+          * Label for the next button
+          * @default 'Next'
+         */
+        "nextButtonLabel"?: string;
+        /**
+          * Emitted when step changes
+         */
+        "onStepChange"?: (event: SpectrumWizardCustomEvent<WizardStepChangeEvent>) => void;
+        /**
+          * Emitted when wizard is completed
+         */
+        "onWizardComplete"?: (event: SpectrumWizardCustomEvent<WizardCompleteEvent>) => void;
+        /**
+          * Whether to persist progress in cookies (opt-in)
+          * @default false
+         */
+        "persistProgress"?: boolean;
+        /**
+          * Label for the previous button
+          * @default 'Previous'
+         */
+        "previousButtonLabel"?: string;
+        /**
+          * Whether navigation controls are shown
+          * @default true
+         */
+        "showNavigation"?: boolean;
+        /**
+          * Show time indicators for steps
+          * @default true
+         */
+        "showTimeIndicators"?: boolean;
+        /**
+          * Array of wizard steps
+          * @default []
+         */
+        "steps"?: WizardStep[];
+        /**
+          * Unique identifier for cookie persistence
+          * @default 'spectrum-wizard'
+         */
+        "wizardId"?: string;
+    }
     interface IntrinsicElements {
         "spectrum-accordion": SpectrumAccordion;
         "spectrum-app-layout": SpectrumAppLayout;
@@ -4943,9 +5274,11 @@ declare namespace LocalJSX {
         "spectrum-select": SpectrumSelect;
         "spectrum-sidebar": SpectrumSidebar;
         "spectrum-stack": SpectrumStack;
+        "spectrum-switch": SpectrumSwitch;
         "spectrum-theme": SpectrumTheme;
         "spectrum-toast": SpectrumToast;
         "spectrum-wallpaper": SpectrumWallpaper;
+        "spectrum-wizard": SpectrumWizard;
     }
 }
 export { LocalJSX as JSX };
@@ -5077,6 +5410,12 @@ declare module "@stencil/core" {
              * with consistent spacing and alignment options.
              */
             "spectrum-stack": LocalJSX.SpectrumStack & JSXBase.HTMLAttributes<HTMLSpectrumStackElement>;
+            /**
+             * Spectrum Switch Component
+             * A toggle switch component with multiple variants and accessibility support.
+             * Supports Material Icons and follows spectrum design system.
+             */
+            "spectrum-switch": LocalJSX.SpectrumSwitch & JSXBase.HTMLAttributes<HTMLSpectrumSwitchElement>;
             "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
             /**
              * Spectrum Toast Component
@@ -5085,6 +5424,23 @@ declare module "@stencil/core" {
              */
             "spectrum-toast": LocalJSX.SpectrumToast & JSXBase.HTMLAttributes<HTMLSpectrumToastElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
+            /**
+             * Spectrum Wizard Component
+             * A step-by-step guided experience component that provides navigation,
+             * progress tracking, and optional cookie-based persistence.
+             * Cookie persistence is disabled by default for privacy. Enable it by setting
+             * persistProgress={true} and providing a unique wizardId.
+             * @example // Basic wizard without cookies
+             * <spectrum-wizard steps={steps}></spectrum-wizard>
+             * @example // Wizard with cookie persistence enabled
+             * <spectrum-wizard 
+             *   steps={steps} 
+             *   persistProgress={true}
+             *   wizardId="my-wizard"
+             *   cookieExpirationDays={30}>
+             * </spectrum-wizard>
+             */
+            "spectrum-wizard": LocalJSX.SpectrumWizard & JSXBase.HTMLAttributes<HTMLSpectrumWizardElement>;
         }
     }
 }

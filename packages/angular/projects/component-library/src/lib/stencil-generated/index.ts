@@ -31,7 +31,9 @@ export const DIRECTIVES = [
   d.SpectrumSelect,
   d.SpectrumSidebar,
   d.SpectrumStack,
+  d.SpectrumSwitch,
   d.SpectrumTheme,
   d.SpectrumToast,
-  d.SpectrumWallpaper
+  d.SpectrumWallpaper,
+  d.SpectrumWizard
 ];

@@ -250,7 +250,7 @@
 .spectrum-menu__submenu {
   margin: 0;
   padding: 0; // Remove padding to allow edge-to-edge highlighting
-  position: fixed; // Use fixed positioning for all submenus to escape container bounds
+  position: absolute; // Use absolute positioning to scroll with parent content
   top: auto;
   left: auto;
   min-width: var(--menu-submenu-min-width);
@@ -389,7 +389,7 @@
   }
   
   .spectrum-menu__submenu {
-    position: fixed; // Position relative to viewport to escape all containers
+    position: absolute; // Position relative to parent container to scroll naturally
     top: auto;
     left: auto;
     transform: none;

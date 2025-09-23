@@ -9,7 +9,7 @@
 
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
-import { type CookieConsent, type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type PaginationActionPayload, type SearchResultActionPayload, type SpectrumCookieComplianceCustomEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSearchResultsCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption } from "@unops-itg-npm/cpit-spectrum";
+import { type CookieConsent, type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type PaginationActionPayload, type SearchResultActionPayload, type SpectrumCookieComplianceCustomEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSearchResultsCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption, type SpectrumWizardCustomEvent, type WizardCompleteEvent, type WizardStepChangeEvent } from "@unops-itg-npm/cpit-spectrum";
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumAppLayout as SpectrumAppLayoutElement, defineCustomElement as defineSpectrumAppLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-app-layout.js";
 import { SpectrumApplicationLayout as SpectrumApplicationLayoutElement, defineCustomElement as defineSpectrumApplicationLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-application-layout.js";
@@ -39,9 +39,11 @@ import { SpectrumSearchResults as SpectrumSearchResultsElement, defineCustomElem
 import { SpectrumSelect as SpectrumSelectElement, defineCustomElement as defineSpectrumSelect } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-select.js";
 import { SpectrumSidebar as SpectrumSidebarElement, defineCustomElement as defineSpectrumSidebar } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-sidebar.js";
 import { SpectrumStack as SpectrumStackElement, defineCustomElement as defineSpectrumStack } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-stack.js";
+import { SpectrumSwitch as SpectrumSwitchElement, defineCustomElement as defineSpectrumSwitch } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-switch.js";
 import { SpectrumTheme as SpectrumThemeElement, defineCustomElement as defineSpectrumTheme } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-theme.js";
 import { SpectrumToast as SpectrumToastElement, defineCustomElement as defineSpectrumToast } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-toast.js";
 import { SpectrumWallpaper as SpectrumWallpaperElement, defineCustomElement as defineSpectrumWallpaper } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-wallpaper.js";
+import { SpectrumWizard as SpectrumWizardElement, defineCustomElement as defineSpectrumWizard } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-wizard.js";
 import React from 'react';
 
 type SpectrumAccordionEvents = {
@@ -487,6 +489,17 @@ export const SpectrumStack: StencilReactComponent<SpectrumStackElement, Spectrum
     defineCustomElement: defineSpectrumStack
 });
 
+type SpectrumSwitchEvents = { onSwitchChange: EventName<CustomEvent<{ action: string; checked: boolean; value?: string }>> };
+
+export const SpectrumSwitch: StencilReactComponent<SpectrumSwitchElement, SpectrumSwitchEvents> = /*@__PURE__*/ createComponent<SpectrumSwitchElement, SpectrumSwitchEvents>({
+    tagName: 'spectrum-switch',
+    elementClass: SpectrumSwitchElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onSwitchChange: 'switchChange' } as SpectrumSwitchEvents,
+    defineCustomElement: defineSpectrumSwitch
+});
+
 type SpectrumThemeEvents = NonNullable<unknown>;
 
 export const SpectrumTheme: StencilReactComponent<SpectrumThemeElement, SpectrumThemeEvents> = /*@__PURE__*/ createComponent<SpectrumThemeElement, SpectrumThemeEvents>({
@@ -524,4 +537,21 @@ export const SpectrumWallpaper: StencilReactComponent<SpectrumWallpaperElement, 
     react: React,
     events: {} as SpectrumWallpaperEvents,
     defineCustomElement: defineSpectrumWallpaper
+});
+
+type SpectrumWizardEvents = {
+    onStepChange: EventName<SpectrumWizardCustomEvent<WizardStepChangeEvent>>,
+    onWizardComplete: EventName<SpectrumWizardCustomEvent<WizardCompleteEvent>>
+};
+
+export const SpectrumWizard: StencilReactComponent<SpectrumWizardElement, SpectrumWizardEvents> = /*@__PURE__*/ createComponent<SpectrumWizardElement, SpectrumWizardEvents>({
+    tagName: 'spectrum-wizard',
+    elementClass: SpectrumWizardElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: {
+        onStepChange: 'stepChange',
+        onWizardComplete: 'wizardComplete'
+    } as SpectrumWizardEvents,
+    defineCustomElement: defineSpectrumWizard
 });

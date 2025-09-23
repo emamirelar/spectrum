@@ -10,7 +10,7 @@ export interface HeroSlide {
   buttonText?: string;
   buttonAction?: string;
   overlayPosition?: 'left' | 'center' | 'right';
-  overlayVertical?: 'top' | 'center' | 'bottom';
+  overlayVertical?: 'top' | 'center' | 'bottom' | 'under';
   // Navigation support (optional direct navigation)
   buttonHref?: string; // URL for direct navigation when button is clicked
   buttonTarget?: string; // Target for navigation (e.g., '_blank' for new tab)
@@ -771,6 +771,11 @@ export class SpectrumHero {
       slideClass += ' spectrum-hero__slide--next';
     }
 
+    // Add modifier for "under" layout
+    if (slide.overlayVertical === 'under') {
+      slideClass += ' spectrum-hero__slide--under';
+    }
+
     return (
       <div
         class={slideClass}
@@ -840,6 +845,33 @@ export class SpectrumHero {
           slide.subtitle && (
             <div class="spectrum-hero__carousel-subtitle">
               <p class="spectrum-hero__carousel-subtitle-text">{slide.subtitle}</p>
+            </div>
+          )
+        ) : slide.overlayVertical === 'under' ? (
+          // Under mode: Content positioned below hero in horizontal layout
+          (slide.title || slide.subtitle || slide.buttonText) && (
+            <div class="spectrum-hero__under-content">
+              <div class="spectrum-hero__under-layout">
+                {slide.title && (
+                  <h2 class="spectrum-hero__under-title">{slide.title}:</h2>
+                )}
+                {slide.subtitle && (
+                  <p class="spectrum-hero__under-subtitle">{slide.subtitle}</p>
+                )}
+                {slide.buttonText && (
+                  <spectrum-button
+                    class="spectrum-hero__under-button"
+                    variant="primary"
+                    size="small"
+                    buttonText={slide.buttonText}
+                    action={slide.buttonAction || 'hero-action'}
+                    href={slide.buttonHref || undefined}
+                    target={slide.buttonTarget || undefined}
+                    rel={slide.buttonRel || undefined}
+                    onClick={() => this.handleButtonClick(slide, index)}
+                  />
+                )}
+              </div>
             </div>
           )
         ) : (

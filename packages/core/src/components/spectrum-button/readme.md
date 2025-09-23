@@ -4,12 +4,17 @@
 
 The button component supports the following size options:
 
-- `sm` - Small size button
-- `medium` - Medium size button (recommended for new implementations)
-- `base` - Legacy medium size button (maintained for backward compatibility)
-- `lg` - Large size button
+- `sm` or `small` - Small size button  
+- `medium` or `base` - Medium size button (recommended for new implementations)
+- `lg` or `large` - Large size button
 
-**Note:** Both `medium` and `base` render the same visual size. The `medium` option is the preferred way to specify medium-sized buttons going forward, while `base` is maintained for backward compatibility with existing implementations.
+**Size Aliases:**
+- `small` → maps to `sm` (user-friendly alias)
+- `large` → maps to `lg` (user-friendly alias)  
+- `medium` → maps to `base` (recommended alias)
+- `base` → legacy medium size (maintained for backward compatibility)
+
+**Note:** The friendly aliases (`small`, `medium`, `large`) are recommended for new implementations as they are more intuitive. The short forms (`sm`, `base`, `lg`) are maintained for backward compatibility with existing implementations.
 
 <!-- Auto Generated Below -->
 
@@ -41,7 +46,7 @@ Supports icons, text, and various interactive states.
 | `showButtonText`   | `show-button-text`  |             | `boolean`                                                                                         | `true`      |
 | `showLeftIcon`     | `show-left-icon`    |             | `boolean`                                                                                         | `false`     |
 | `showRightIcon`    | `show-right-icon`   |             | `boolean`                                                                                         | `false`     |
-| `size`             | `size`              |             | `"base" \| "lg" \| "medium" \| "sm"`                                                              | `'base'`    |
+| `size`             | `size`              |             | `"base" \| "large" \| "lg" \| "medium" \| "sm" \| "small"`                                        | `'base'`    |
 | `sound`            | `sound`             |             | `boolean`                                                                                         | `false`     |
 | `state`            | `state`             |             | `"active" \| "default" \| "disabled" \| "hover"`                                                  | `'default'` |
 | `target`           | `target`            |             | `string`                                                                                          | `undefined` |
@@ -70,6 +75,7 @@ Supports icons, text, and various interactive states.
  - [spectrum-search-results](../spectrum-search-results)
  - [spectrum-select](../spectrum-select)
  - [spectrum-toast](../spectrum-toast)
+ - [spectrum-wizard](../spectrum-wizard)
 
 ### Graph
 ```mermaid
@@ -85,6 +91,7 @@ graph TD;
   spectrum-search-results --> spectrum-button
   spectrum-select --> spectrum-button
   spectrum-toast --> spectrum-button
+  spectrum-wizard --> spectrum-button
   style spectrum-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

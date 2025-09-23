@@ -151,6 +151,7 @@ export const SpectrumCard = /*@__PURE__*/ defineContainer<JSX.SpectrumCard>('spe
   'action',
   'cardTitle',
   'cardSubtitle',
+  'textOverflow',
   'imageUrl',
   'imageAlt',
   'showHeaderActions',
@@ -607,6 +608,25 @@ export const SpectrumStack = /*@__PURE__*/ defineContainer<JSX.SpectrumStack>('s
 ]);
 
 
+export const SpectrumSwitch = /*@__PURE__*/ defineContainer<JSX.SpectrumSwitch>('spectrum-switch', undefined, [
+  'checked',
+  'disabled',
+  'variant',
+  'size',
+  'value',
+  'name',
+  'label',
+  'showIcons',
+  'accessibleLabel',
+  'accessibleDescribedBy',
+  'accessibleLabelledBy',
+  'loading',
+  'switchChange'
+], [
+  'switchChange'
+]);
+
+
 export const SpectrumTheme = /*@__PURE__*/ defineContainer<JSX.SpectrumTheme>('spectrum-theme', undefined, [
   'color',
   'dark',
@@ -657,5 +677,25 @@ export const SpectrumWallpaper = /*@__PURE__*/ defineContainer<JSX.SpectrumWallp
   'applyToRoot',
   'backgroundPosition',
   'backgroundSize'
+]);
+
+
+export const SpectrumWizard = /*@__PURE__*/ defineContainer<JSX.SpectrumWizard>('spectrum-wizard', undefined, [
+  'steps',
+  'currentStep',
+  'wizardId',
+  'persistProgress',
+  'showTimeIndicators',
+  'allowStepSelection',
+  'cookieExpirationDays',
+  'showNavigation',
+  'nextButtonLabel',
+  'previousButtonLabel',
+  'completeButtonLabel',
+  'stepChange',
+  'wizardComplete'
+], [
+  'stepChange',
+  'wizardComplete'
 ]);
 

@@ -1,0 +1,568 @@
+// ==============================================
+// Spectrum Wizard Component Styles
+// ==============================================
+// BEM naming convention: spectrum-wizard (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+:host {
+  display: block;
+  
+  // ==============================================
+  // Root Variables and Custom Properties
+  // ==============================================
+  
+  // Core component properties
+  --wizard-background: var(--spectrum-sys-color-surface, #ffffff);
+  --wizard-color: var(--spectrum-sys-color-on-surface, #000000);
+  --wizard-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --wizard-padding: var(--spectrum-sys-spacing-large, 2rem);
+  --wizard-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  
+  // Spacing using proper Spectrum tokens
+  --wizard-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --wizard-spacing: var(--spectrum-sys-spacing, 1rem);
+  --wizard-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  --wizard-spacing-x-large: var(--spectrum-sys-spacing-x-large, 3rem);
+  
+  // Step indicator properties
+  --wizard-step-size: 2.5rem;
+  --wizard-step-border-width: 2px;
+  --wizard-step-connector-height: 2px;
+  --wizard-step-font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);
+  
+  // Colors for different states
+  --wizard-step-background: var(--spectrum-sys-color-surface-variant, #f5f5f5);
+  --wizard-step-color: var(--spectrum-sys-color-on-surface-variant, #666666);
+  --wizard-step-border: var(--spectrum-sys-color-outline, #e0e0e0);
+  --wizard-step-active-background: var(--spectrum-color-primary, #0070d2);
+  --wizard-step-active-color: var(--spectrum-color-on-primary, #ffffff);
+  --wizard-step-completed-background: var(--spectrum-color-primary, #0070d2);
+  --wizard-step-completed-color: var(--spectrum-color-on-primary, #ffffff);
+  --wizard-step-inaccessible-background: var(--spectrum-sys-color-surface-disabled, #f9f9f9);
+  --wizard-step-inaccessible-color: var(--spectrum-sys-color-on-surface-disabled, #cccccc);
+  
+  // Navigation uses spectrum-button components - no custom button styles needed
+  
+  // Content properties
+  --wizard-content-background: var(--spectrum-sys-color-surface, #ffffff);
+  --wizard-content-border: var(--spectrum-sys-color-outline, #e0e0e0);
+  --wizard-content-padding: var(--wizard-spacing-large);
+  
+  // Animation and transitions
+  --wizard-transition: all 0.2s ease-in-out;
+  --wizard-transition-duration: 0.2s;
+  --wizard-transition-timing: ease-in-out;
+  
+  // Time indicator properties
+  --wizard-time-color: var(--spectrum-sys-color-on-surface-variant, #666666);
+  --wizard-time-font-size: var(--spectrum-sys-typescale-body-size, 1rem);
+  
+  // Focus indicators
+  --wizard-focus-outline: var(--spectrum-color-primary, #0070d2);
+  --wizard-focus-outline-offset: 2px;
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-wizard {
+  background-color: var(--wizard-background);
+  color: var(--wizard-color);
+  border-radius: var(--wizard-border-radius);
+  padding: var(--wizard-padding);
+  font-family: var(--wizard-font-family);
+  display: flex;
+  flex-direction: column;
+  gap: var(--wizard-spacing-large);
+  min-height: 300px;
+  
+  // Empty state
+  &--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: var(--wizard-step-color);
+    font-style: italic;
+  }
+}
+
+// ==============================================
+// Time Summary Styles
+// ==============================================
+.spectrum-wizard__time-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--wizard-spacing-small) var(--wizard-spacing);
+  background-color: var(--wizard-step-background);
+  border-radius: var(--wizard-border-radius);
+  position: relative;
+  overflow: visible;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--wizard-spacing-small);
+    text-align: center;
+  }
+}
+
+.spectrum-wizard__time-info {
+  display: flex;
+  align-items: center;
+  gap: var(--wizard-spacing-small);
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+}
+
+.spectrum-wizard__time-label {
+  font-size: var(--wizard-time-font-size);
+  color: var(--wizard-time-color);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.spectrum-wizard__total-time-chip {
+  // Total time chip gets default spectrum-chip styling
+  font-weight: 600;
+}
+
+.spectrum-wizard__progress-control {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  margin-left: var(--wizard-spacing);
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+    margin-left: 0;
+  }
+  
+  // Ensure the switch component has proper isolation
+  spectrum-switch {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ==============================================
+// Step Indicator Styles
+// ==============================================
+.spectrum-wizard__steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--wizard-spacing-small);
+  margin: var(--wizard-spacing) 0;
+  overflow-x: auto;
+  padding: var(--wizard-spacing-small) 0;
+  
+  // Responsive layout for mobile
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--wizard-spacing);
+  }
+}
+
+.spectrum-wizard__step {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+
+.spectrum-wizard__step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wizard-spacing-small);
+  min-width: 120px;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    flex-direction: row;
+    min-width: 100%;
+    text-align: left;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+
+.spectrum-wizard__step-button {
+  // Custom styling for step indicator button
+  border-radius: 50% !important;
+  width: var(--wizard-step-size);
+  height: var(--wizard-step-size);
+  min-width: var(--wizard-step-size);
+  min-height: var(--wizard-step-size);
+  
+  // Default step button styling
+  background-color: var(--wizard-step-background);
+  color: var(--wizard-step-color);
+  border: var(--wizard-step-border-width) solid var(--wizard-step-border);
+  cursor: pointer;
+  transition: var(--wizard-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--spectrum-color-surface-hover, var(--wizard-step-background));
+    border-color: var(--spectrum-color-outline-hover, var(--wizard-step-border));
+  }
+  
+  &:disabled {
+    background-color: var(--wizard-step-inaccessible-background);
+    color: var(--wizard-step-inaccessible-color);
+    border-color: var(--wizard-step-inaccessible-color);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  @media (max-width: 768px) {
+    flex-shrink: 0;
+  }
+}
+
+.spectrum-wizard__step-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    flex: 1;
+    margin-left: var(--wizard-spacing-small);
+  }
+}
+
+.spectrum-wizard__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--wizard-step-font-size);
+  font-weight: 600;
+}
+
+.spectrum-wizard__step-check {
+  width: 1rem;
+  height: 1rem;
+}
+
+.spectrum-wizard__step-title {
+  font-size: var(--wizard-step-font-size);
+  font-weight: 500;
+  color: var(--wizard-step-color);
+  transition: var(--wizard-transition);
+  line-height: 1.4;
+  
+  @media (max-width: 768px) {
+    flex: 1;
+  }
+}
+
+.spectrum-wizard__step-time-chip {
+  // Step time chip gets default spectrum-chip styling
+  // Additional customization can be added here if needed
+  margin-top: 0.125rem;
+}
+
+.spectrum-wizard__step-connector {
+  flex: 1;
+  height: var(--wizard-step-connector-height);
+  background-color: var(--wizard-step-border);
+  margin: 0 var(--wizard-spacing-small);
+  border-radius: 1px;
+  transition: var(--wizard-transition);
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+// ==============================================
+// Step State Modifiers
+// ==============================================
+.spectrum-wizard__step--active {
+  .spectrum-wizard__step-title {
+    color: var(--wizard-step-active-background);
+    font-weight: 600;
+  }
+}
+
+// Active step button styling with higher specificity
+.spectrum-wizard__step--active .spectrum-wizard__step-button {
+  background-color: var(--spectrum-color-primary, #0070d2) !important;
+  color: var(--spectrum-color-on-primary, #ffffff) !important;
+  border-color: var(--spectrum-color-primary, #0070d2) !important;
+  box-shadow: none !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--spectrum-color-primary-hover, var(--spectrum-color-primary, #0070d2)) !important;
+  }
+  
+  &:active:not(:disabled) {
+    background-color: var(--spectrum-color-primary-active, var(--spectrum-color-primary, #0070d2)) !important;
+  }
+  
+  &:focus:not(:disabled) {
+    background-color: var(--spectrum-color-primary, #0070d2) !important;
+    outline: 2px solid var(--spectrum-color-primary, #0070d2);
+    outline-offset: 2px;
+  }
+  
+  .spectrum-wizard__step-number {
+    color: inherit !important;
+  }
+}
+
+.spectrum-wizard__step--completed {
+  .spectrum-wizard__step-title {
+    color: var(--wizard-step-completed-background);
+  }
+  
+  .spectrum-wizard__step-connector {
+    background-color: var(--wizard-step-completed-background);
+  }
+}
+
+// Completed step button styling with higher specificity
+.spectrum-wizard__step--completed .spectrum-wizard__step-button {
+  background-color: var(--spectrum-color-primary, #0070d2) !important;
+  color: var(--spectrum-color-on-primary, #ffffff) !important;
+  border-color: var(--spectrum-color-primary, #0070d2) !important;
+  box-shadow: none !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--spectrum-color-primary-hover, var(--spectrum-color-primary, #0070d2)) !important;
+  }
+  
+  &:active:not(:disabled) {
+    background-color: var(--spectrum-color-primary-active, var(--spectrum-color-primary, #0070d2)) !important;
+  }
+  
+  &:focus:not(:disabled) {
+    background-color: var(--spectrum-color-primary, #0070d2) !important;
+    outline: 2px solid var(--spectrum-color-primary, #0070d2);
+    outline-offset: 2px;
+  }
+  
+  .spectrum-wizard__step-number,
+  .spectrum-wizard__step-check {
+    color: inherit !important;
+  }
+}
+
+.spectrum-wizard__step--inaccessible {
+  .spectrum-wizard__step-title {
+    color: var(--wizard-step-inaccessible-color);
+  }
+}
+
+// ==============================================
+// Main Content Styles
+// ==============================================
+.spectrum-wizard__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wizard-spacing-large);
+  flex: 1;
+}
+
+.spectrum-wizard__content {
+  background-color: var(--wizard-content-background);
+  border: 1px solid var(--wizard-content-border);
+  border-radius: var(--wizard-border-radius);
+  padding: var(--wizard-content-padding);
+  min-height: 200px;
+  flex: 1;
+}
+
+.spectrum-wizard__content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--wizard-spacing);
+  padding-bottom: var(--wizard-spacing);
+  border-bottom: 1px solid var(--wizard-content-border);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--wizard-spacing-small);
+    align-items: stretch;
+  }
+}
+
+.spectrum-wizard__content-title {
+  margin: 0;
+  font-size: var(--spectrum-sys-typescale-heading-medium-size, 1.5rem);
+  font-weight: 600;
+  color: var(--wizard-color);
+  line-height: 1.3;
+  flex: 1;
+}
+
+// Content time now uses spectrum-chip - no custom styles needed
+
+.spectrum-wizard__content-body {
+  line-height: 1.6;
+  color: var(--wizard-color);
+  
+  // Reset styles for injected HTML content
+  p {
+    margin: 0 0 var(--wizard-spacing) 0;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  ul, ol {
+    margin: 0 0 var(--wizard-spacing) 0;
+    padding-left: var(--wizard-spacing-large);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin: var(--wizard-spacing) 0 var(--wizard-spacing-small) 0;
+    color: var(--wizard-color);
+    
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--wizard-border-radius);
+  }
+  
+  code {
+    background-color: var(--wizard-step-background);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+  
+  pre {
+    background-color: var(--wizard-step-background);
+    padding: var(--wizard-spacing);
+    border-radius: var(--wizard-border-radius);
+    overflow-x: auto;
+    margin: var(--wizard-spacing) 0;
+  }
+  
+  blockquote {
+    border-left: 4px solid var(--wizard-step-active-background);
+    padding-left: var(--wizard-spacing);
+    margin: var(--wizard-spacing) 0;
+    font-style: italic;
+  }
+}
+
+// ==============================================
+// Navigation Styles
+// ==============================================
+.spectrum-wizard__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--wizard-spacing);
+  padding-top: var(--wizard-spacing);
+  border-top: 1px solid var(--wizard-content-border);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--wizard-spacing-small);
+    
+    spectrum-button {
+      width: 100%;
+    }
+  }
+}
+
+.spectrum-wizard__nav-info {
+  font-size: var(--wizard-time-font-size);
+  color: var(--wizard-time-color);
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  
+  @media (max-width: 768px) {
+    order: -1;
+  }
+}
+
+// ==============================================
+// Accessibility Enhancements
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-wizard {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-wizard {
+    --wizard-step-border-width: 3px;
+    --wizard-content-border: currentColor;
+    
+    .spectrum-wizard__step-number,
+    .spectrum-wizard__nav-button {
+      border: 2px solid currentColor;
+    }
+  }
+}
+
+// ==============================================
+// Focus Management
+// ==============================================
+.spectrum-wizard {
+  &:focus-within {
+    .spectrum-wizard__step-button:focus-visible {
+      z-index: 1;
+      position: relative;
+    }
+  }
+}
+
+// ==============================================
+// Print Styles
+// ==============================================
+@media print {
+  .spectrum-wizard {
+    --wizard-background: white;
+    --wizard-color: black;
+    
+    .spectrum-wizard__navigation {
+      display: none;
+    }
+    
+    .spectrum-wizard__steps {
+      flex-direction: row;
+      gap: 1rem;
+    }
+    
+    .spectrum-wizard__step-connector {
+      display: none;
+    }
+  }
+}

@@ -1,8 +1,9 @@
-import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Element, State, Watch } from '@stencil/core';
 import { BackgroundLevel } from '../spectrum-panel/spectrum-panel';
 
 export type CardVariant = 'default' | 'elevated' | 'outlined' | 'filled';
 export type CardSize = 'small' | 'medium' | 'large' | 'auto';
+export type TextOverflow = 'ellipsis' | 'wrap';
 
 /**
  * Spectrum Card Component
@@ -62,6 +63,11 @@ export class SpectrumCard {
    * Card subtitle
    */
   @Prop() cardSubtitle?: string;
+
+  /**
+   * Text overflow behavior for title and subtitle
+   */
+  @Prop({ reflect: true }) textOverflow: TextOverflow = 'ellipsis';
 
 
 
@@ -216,14 +222,24 @@ export class SpectrumCard {
   private renderHeader() {
     if (!this.cardTitle && !this.showHeaderActions) return null;
 
+    const titleClasses = {
+      'spectrum-card__title': true,
+      [`spectrum-card__title--${this.textOverflow}`]: true
+    };
+
+    const subtitleClasses = {
+      'spectrum-card__subtitle': true,
+      [`spectrum-card__subtitle--${this.textOverflow}`]: true
+    };
+
     return (
       <div class="spectrum-card__header">
         <div class="spectrum-card__header-content">
           {this.cardTitle && (
-            <h3 class="spectrum-card__title">{this.cardTitle}</h3>
+            <h3 class={titleClasses}>{this.cardTitle}</h3>
           )}
           {this.cardSubtitle && (
-            <p class="spectrum-card__subtitle">{this.cardSubtitle}</p>
+            <p class={subtitleClasses}>{this.cardSubtitle}</p>
           )}
         </div>
         {this.showHeaderActions && (
@@ -251,6 +267,12 @@ export class SpectrumCard {
         <slot name="footer-actions"></slot>
       </div>
     );
+  }
+
+  // ============== Watchers ==============
+  @Watch('textOverflow')
+  textOverflowChanged(_newValue: TextOverflow) {
+    // Force re-render when textOverflow changes
   }
 
   // ============== Lifecycle Methods ==============

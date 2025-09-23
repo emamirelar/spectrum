@@ -52,7 +52,7 @@ interface HeroSlide {
   buttonText?: string;
   buttonAction?: string;
   overlayPosition?: 'left' | 'center' | 'right';
-  overlayVertical?: 'top' | 'center' | 'bottom';
+  overlayVertical?: 'top' | 'center' | 'bottom' | 'under';
   // Navigation support (optional direct navigation)
   buttonHref?: string; // URL for direct navigation when button is clicked
   buttonTarget?: string; // Target for navigation (e.g., '_blank' for new tab)
@@ -75,7 +75,7 @@ interface SpectrumHeroElement extends HTMLElement {
   overlayStyle: string;
   carouselMode: boolean;
   overlayPosition: 'left' | 'center' | 'right';
-  overlayVertical: 'top' | 'center' | 'bottom';
+  overlayVertical: 'top' | 'center' | 'bottom' | 'under';
   srcset: string;
   sizes: string;
   buttonHref: string;
@@ -121,7 +121,7 @@ interface HeroSlide {
   buttonText?: string;               // Call-to-action button text
   buttonAction?: string;             // Action identifier for events
   overlayPosition?: 'left' | 'center' | 'right';    // Horizontal positioning
-  overlayVertical?: 'top' | 'center' | 'bottom';    // Vertical positioning
+  overlayVertical?: 'top' | 'center' | 'bottom' | 'under';    // Vertical positioning or under layout
   // Navigation support (optional direct navigation)
   buttonHref?: string;               // URL for direct navigation when button is clicked
   buttonTarget?: string;             // Target for navigation (e.g., '_blank' for new tab)
@@ -134,6 +134,7 @@ interface HeroSlide {
 ### Overlay Positioning
 - **Horizontal**: left, center, right - Controls text alignment and positioning
 - **Vertical**: top, center, bottom - Controls vertical placement of overlay content
+- **Under**: Places content below the hero in a horizontal flex layout (title: bold + colon, subtitle: body text, button: small)
 
 ### Media Support
 - **Images**: Any web-compatible image format (JPEG, PNG, WebP, SVG)
@@ -398,10 +399,10 @@ const mixedSlides = [
     },
     overlayVertical: {
       control: { type: 'select' },
-      options: ['top', 'center', 'bottom'],
-      description: 'Vertical positioning of overlay content',
+      options: ['top', 'center', 'bottom', 'under'],
+      description: 'Vertical positioning of overlay content. "under" places content below the hero in horizontal layout.',
       table: {
-        type: { summary: "'top' | 'center' | 'bottom'" },
+        type: { summary: "'top' | 'center' | 'bottom' | 'under'" },
         defaultValue: { summary: "'center'" }
       }
     },
@@ -1249,6 +1250,85 @@ This story demonstrates carousel mode optimized for mobile devices:
 - **Accessibility**: Voice control and assistive technology compatible
 
 This configuration provides an optimal mobile experience while maintaining all the functionality of the desktop version.
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Hero with content positioned horizontally below the image instead of overlaid.
+ * Demonstrates the "under" layout option with title (bold + colon), subtitle, and small button.
+ */
+export const UnderLayout: Story = {
+  args: {
+    slides: JSON.stringify([
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop',
+        alt: 'Clean workspace with content positioned below',
+        title: 'Innovation Hub',
+        subtitle: 'Discover cutting-edge solutions that transform how teams collaborate and create',
+        buttonText: 'Learn More',
+        buttonAction: 'explore-under-layout',
+        overlayPosition: 'left', // Not used in under mode, but kept for consistency
+        overlayVertical: 'under' // Key: positions content below hero
+      }
+    ]),
+    height: '60vh',
+    autoplay: 0,
+    showDots: false,
+    showArrows: false,
+    rounded: false,
+    shaded: true,
+    carouselMode: false,
+    overlayVertical: 'under' // Story-level control
+  },
+  render: renderHero,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates the new "under" layout option:
+
+### **Under Layout Features**
+- **Content positioning**: Title, subtitle, and button appear below the hero image, not overlaid
+- **Horizontal arrangement**: Elements are arranged in a flex layout with \`justify-content: flex-start\` and \`align-items: center\`
+- **Text formatting**: 
+  - Title uses bold body text and includes a colon ":"
+  - Subtitle uses regular body text
+  - Button uses small size variant
+- **Responsive design**: Stacks vertically on mobile devices (≤768px)
+
+### **Layout Structure**
+- **Hero image**: Takes up the specified height (\`60vh\` in this example)
+- **Content area**: Positioned below using \`transform: translateY(100%)\`
+- **Background**: Uses surface color with subtle border for definition
+- **Spacing**: Consistent Spectrum spacing tokens throughout
+
+### **Formatting Specifications**
+- **Title**: \`font-weight: bold\` + \`var(--spectrum-sys-typescale-body-large-size)\` + automatic colon
+- **Subtitle**: \`var(--spectrum-sys-typescale-body-medium-size)\` + flexible width
+- **Button**: \`size="small"\` + \`flex-shrink: 0\`
+
+### **Use Cases**
+- Content-heavy layouts where overlay text would interfere with image visibility
+- Designs that need clear separation between visual and textual content
+- Layouts where you want maximum image impact without text interference
+- Informational displays where readability is more important than visual drama
+
+### **Responsive Behavior**
+- **Desktop**: Horizontal arrangement with proper spacing
+- **Mobile**: Automatic vertical stacking for better mobile UX
+- **Flexible**: Content adapts to available width while maintaining readability
+
+### **Design Considerations**
+- Works best with images that don't need text overlay for context
+- Provides excellent readability since text has a solid background
+- Creates clear visual hierarchy with distinct image and content areas
+- Ideal for educational or informational content presentations
+
+Perfect for scenarios where you want the visual impact of a hero image with the clarity of separated content.
         `
       }
     }

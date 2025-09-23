@@ -54,7 +54,7 @@
   position: relative;
   width: 100%;
   height: var(--hero-height);
-  overflow: hidden;
+  overflow: hidden; /* Restore original overflow behavior */
   background-color: var(--spectrum-sys-color-surface);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   
@@ -123,6 +123,20 @@
   // Next slide (slide in from right)
   &--next {
     transform: translateX(100%);
+  }
+
+  // Under layout modifier - reserve space for content below
+  &--under {
+    display: flex;
+    flex-direction: column;
+
+    .spectrum-hero__media {
+      position: relative; /* Override absolute positioning */
+      flex: 1; /* Take up available space, let content area size to fit */
+      width: 100%;
+      object-fit: cover;
+      min-height: 0; /* Allow flexbox to shrink if needed */
+    }
   }
 }
 
@@ -461,6 +475,59 @@
   width: 100%; /* Full width */
   display: block;
   transition: all var(--hero-animation-duration) var(--hero-animation-easing);
+}
+
+// ==============================================
+// Under Layout - Content Below Hero
+// ==============================================
+.spectrum-hero__under-content {
+  flex-shrink: 0; /* Size to fit content, don't grow */
+  display: flex;
+  align-items: center;
+  background-color: var(--spectrum-sys-color-surface);
+  padding: var(--hero-spacing); /* Standard Spectrum padding */
+}
+
+.spectrum-hero__under-layout {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--hero-spacing);
+  width: 100%;
+  
+  // Responsive stacking on smaller screens
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--hero-spacing-small);
+  }
+}
+
+.spectrum-hero__under-title {
+  margin: 0;
+  font-weight: var(--spectrum-sys-font-weight-bold, 700);
+  font-size: var(--spectrum-sys-typescale-body-large-size, 1.125rem);
+  line-height: 1.2;
+  color: var(--spectrum-sys-color-on-surface);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.spectrum-hero__under-subtitle {
+  margin: 0;
+  font-weight: var(--spectrum-sys-font-weight-normal, 400);
+  font-size: var(--spectrum-sys-typescale-body-medium-size, 1rem);
+  line-height: 1.4;
+  color: var(--spectrum-sys-color-on-surface);
+  flex: 1; /* Take up available space */
+}
+
+.spectrum-hero__under-button {
+  flex-shrink: 0;
+  
+  // Ensure button uses small variant styles
+  --button-font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);
+  --button-padding: var(--hero-spacing-small) var(--hero-spacing);
 }
 
 // ==============================================

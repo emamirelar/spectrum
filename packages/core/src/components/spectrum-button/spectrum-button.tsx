@@ -20,7 +20,7 @@ export class SpectrumButton {
 
   // Button Variants and Appearance
   @Prop() variant: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'ghost' | 'outline' | 'fab' = 'primary';
-  @Prop() size: 'sm' | 'base' | 'medium' | 'lg' = 'base';
+  @Prop() size: 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large' = 'base';
   @Prop() outline: boolean = false;
   @Prop() iconOnly: boolean = false;
   @Prop() disabled: boolean = false;
@@ -357,6 +357,21 @@ export class SpectrumButton {
     }
   }
 
+  // ============== Helper Methods ==============
+  private getMappedSize(): string {
+    // Map friendly aliases to internal CSS class names
+    switch (this.size) {
+      case 'small':
+        return 'sm';
+      case 'large':
+        return 'lg';
+      case 'medium':
+        return 'base';
+      default:
+        return this.size;
+    }
+  }
+
   // ============== Render Methods ==============
   render() {
     this.log('Rendering component', {
@@ -370,7 +385,7 @@ export class SpectrumButton {
     const buttonClasses: { [key: string]: boolean } = {
       'spectrum-button': true,
       [`spectrum-button--${this.variant}`]: true,
-      [`spectrum-button--${this.size === 'medium' ? 'base' : this.size}`]: true,
+      [`spectrum-button--${this.getMappedSize()}`]: true,
       'spectrum-button--disabled': this.disabled,
       'spectrum-button--outline': this.outline,
       'spectrum-button--icon-only': this.iconOnly,
