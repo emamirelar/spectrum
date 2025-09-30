@@ -540,3 +540,76 @@ Different spectrum-wizard variants and configurations showing various customizat
     }
   }
 };
+
+/**
+ * JSON String Example for Pure HTML Usage
+ * This story demonstrates how to use the wizard with JSON strings directly in HTML,
+ * without needing JavaScript object binding.
+ */
+export const JSONStringExample: Story = {
+  render: () => html`
+    <div style="padding: 2rem; min-height: 600px; background: var(--spectrum-sys-color-surface-variant, #f5f5f5); border-radius: 8px;">
+      <h3 style="margin-bottom: 2rem; text-align: center;">Copy-Paste HTML Example</h3>
+      <p style="background: #e3f2fd; padding: 1rem; border-radius: 4px; margin-bottom: 2rem;">
+        <strong>💡 Usage:</strong> This example shows how to use spectrum-wizard with JSON strings in pure HTML. 
+        You can copy the HTML below and paste it into any HTML file!
+      </p>
+      
+      <spectrum-wizard
+        steps='[{"id":"welcome","title":"Welcome to the Platform","content":"<div style=\\"text-align: center; padding: 2rem;\\"><h2>🎉 Welcome!</h2><p>We are excited to have you here. This wizard will guide you through setting up your account in just a few minutes.</p><div style=\\"background: #e3f2fd; padding: 1rem; border-radius: 8px; margin: 1rem 0;\\"><strong>What you will accomplish:</strong><ul style=\\"text-align: left; margin: 1rem 0;\\"><li>Create your profile</li><li>Set up preferences</li><li>Connect integrations</li><li>Complete your setup</li></ul></div><p><em>Let us get started on your journey!</em></p></div>","estimatedTime":2,"accessible":true},{"id":"profile","title":"Create Your Profile","content":"<div style=\\"padding: 1rem;\\"><h3>👤 Set Up Your Profile</h3><p>Tell us a bit about yourself to personalize your experience.</p><form style=\\"max-width: 400px; margin: 0 auto;\\"><div style=\\"margin-bottom: 1rem;\\"><label style=\\"display: block; margin-bottom: 0.5rem; font-weight: 500;\\">Full Name *</label><input type=\\"text\\" style=\\"width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;\\" placeholder=\\"Enter your full name\\" /></div><div style=\\"margin-bottom: 1rem;\\"><label style=\\"display: block; margin-bottom: 0.5rem; font-weight: 500;\\">Email Address *</label><input type=\\"email\\" style=\\"width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;\\" placeholder=\\"Enter your email\\" /></div><div style=\\"margin-bottom: 1rem;\\"><label style=\\"display: block; margin-bottom: 0.5rem; font-weight: 500;\\">Job Title</label><input type=\\"text\\" style=\\"width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;\\" placeholder=\\"What is your role?\\" /></div></form></div>","estimatedTime":5,"accessible":false},{"id":"preferences","title":"Configure Preferences","content":"<div style=\\"padding: 1rem;\\"><h3>⚙️ Your Preferences</h3><p>Customize the platform to match your workflow and needs.</p><div style=\\"display: grid; gap: 1.5rem; margin: 2rem 0;\\"><div style=\\"background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border: 1px solid #e9ecef;\\"><h4 style=\\"margin: 0 0 1rem 0; color: #495057;\\">🔔 Notifications</h4><label style=\\"display: flex; align-items: center; margin-bottom: 0.5rem;\\"><input type=\\"checkbox\\" style=\\"margin-right: 0.5rem;\\" checked> Email notifications</label><label style=\\"display: flex; align-items: center; margin-bottom: 0.5rem;\\"><input type=\\"checkbox\\" style=\\"margin-right: 0.5rem;\\"> Push notifications</label><label style=\\"display: flex; align-items: center;\\"><input type=\\"checkbox\\" style=\\"margin-right: 0.5rem;\\" checked> Weekly digest</label></div><div style=\\"background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border: 1px solid #e9ecef;\\"><h4 style=\\"margin: 0 0 1rem 0; color: #495057;\\">🎨 Interface</h4><label style=\\"display: flex; align-items: center; margin-bottom: 0.5rem;\\"><input type=\\"radio\\" name=\\"theme\\" style=\\"margin-right: 0.5rem;\\" checked> Light theme</label><label style=\\"display: flex; align-items: center; margin-bottom: 0.5rem;\\"><input type=\\"radio\\" name=\\"theme\\" style=\\"margin-right: 0.5rem;\\"> Dark theme</label><label style=\\"display: flex; align-items: center;\\"><input type=\\"radio\\" name=\\"theme\\" style=\\"margin-right: 0.5rem;\\"> Auto (system)</label></div></div></div>","estimatedTime":8,"accessible":false},{"id":"complete","title":"All Set!","content":"<div style=\\"text-align: center; padding: 2rem;\\"><h2>🎯 You are All Set!</h2><p style=\\"font-size: 1.2rem; color: #28a745; margin: 1rem 0;\\"><strong>Congratulations!</strong> Your account is now ready to use.</p><div style=\\"background: #d4edda; border: 1px solid #c3e6cb; padding: 1.5rem; border-radius: 8px; margin: 2rem 0;\\"><h4 style=\\"color: #155724; margin: 0 0 1rem 0;\\">✅ Setup Complete</h4><ul style=\\"text-align: left; color: #155724; margin: 0;\\"><li>Profile created and configured</li><li>Preferences saved</li><li>Account fully activated</li></ul></div><p><em>Welcome to the platform - let us build something amazing together!</em></p></div>","estimatedTime":3,"accessible":false}]'
+        wizard-id="json-example-wizard"
+        persist-progress="true"
+        cookie-expiration-days="7"
+        show-time-indicators="true"
+        allow-step-selection="false"
+        next-button-label="Continue"
+        previous-button-label="Back"
+        complete-button-label="Get Started"
+        @stepChange=${(e: CustomEvent) => action('stepChange')(e.detail)}
+        @wizardComplete=${(e: CustomEvent) => action('wizardComplete')(e.detail)}
+      ></spectrum-wizard>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+        <h4>📋 Copy This HTML:</h4>
+        <pre style="background: white; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem; border: 1px solid #ddd;"><code>&lt;spectrum-wizard
+  steps='[{"id":"welcome","title":"Welcome to the Platform","content":"&lt;div style=\\"text-align: center; padding: 2rem;\\"&gt;&lt;h2&gt;🎉 Welcome!&lt;/h2&gt;&lt;p&gt;We are excited to have you here. This wizard will guide you through setting up your account in just a few minutes.&lt;/p&gt;&lt;/div&gt;","estimatedTime":2,"accessible":true},{"id":"profile","title":"Create Your Profile","content":"&lt;div style=\\"padding: 1rem;\\"&gt;&lt;h3&gt;👤 Set Up Your Profile&lt;/h3&gt;&lt;p&gt;Tell us a bit about yourself to personalize your experience.&lt;/p&gt;&lt;/div&gt;","estimatedTime":5,"accessible":false}]'
+  wizard-id="my-wizard"
+  persist-progress="true"
+  show-time-indicators="true"&gt;
+&lt;/spectrum-wizard&gt;</code></pre>
+        <p style="margin-top: 1rem; color: #666; font-style: italic;">
+          ✨ This HTML works directly in any web page without JavaScript setup!
+        </p>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates the HTML-friendly JSON string approach for using spectrum-wizard. 
+
+**Key Benefits:**
+- ✅ Works in pure HTML without JavaScript object binding
+- ✅ Copy-paste ready for any HTML file
+- ✅ No framework dependencies required
+- ✅ Maintains full functionality and styling
+
+**Usage Pattern:**
+\`\`\`html
+<spectrum-wizard
+  steps='[{"id":"step1","title":"Step 1","content":"<p>Content</p>","accessible":true}]'
+  wizard-id="my-wizard">
+</spectrum-wizard>
+\`\`\`
+
+This approach is perfect for:
+- Static HTML pages
+- Quick prototypes
+- Documentation examples
+- Integration testing
+        `
+      }
+    }
+  }
+};

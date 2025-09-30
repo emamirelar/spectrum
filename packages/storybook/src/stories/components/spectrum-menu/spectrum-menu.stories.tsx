@@ -47,6 +47,8 @@ interface SpectrumMenuElement extends HTMLElement {
   directNavigation: boolean;
   navigationColor: string;
   mobileIconColor: string;
+  logoHref: string;
+  logoLabel: string;
 }
 
 // Story arguments interface
@@ -311,7 +313,9 @@ Supports all Material Design icons via Material Symbols Outlined. The font is au
     mobileMenuTitle: 'Navigation',
     directNavigation: false,
     navigationColor: undefined,
-    mobileIconColor: '#000000'
+    mobileIconColor: '#000000',
+    logoHref: undefined,
+    logoLabel: 'Home'
   },
   argTypes: {
     orientation: {
@@ -395,6 +399,22 @@ Supports all Material Design icons via Material Symbols Outlined. The font is au
         type: { summary: 'string' },
         defaultValue: { summary: '#000000' }
       }
+    },
+    logoHref: {
+      control: 'text',
+      description: 'URL to navigate to when the logo is clicked. When provided, the logo becomes a clickable link.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' }
+      }
+    },
+    logoLabel: {
+      control: 'text',
+      description: 'Accessible label for the logo used for screen readers and ARIA labeling.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Home' }
+      }
     }
   }
 };
@@ -417,6 +437,8 @@ const renderMenu = (args: SpectrumMenuArgs) => {
         ?direct-navigation=${args.directNavigation}
         navigation-color=${args.navigationColor}
         mobile-icon-color=${args.mobileIconColor}
+        logo-href=${args.logoHref}
+        logo-label=${args.logoLabel}
         @itemClick=${(e: CustomEvent) => action('itemClick')(e.detail)}
       >
         ${args.leftItems && args.leftItems.length > 0 || args.rightItems && args.rightItems.length > 0 ? html`
@@ -1554,7 +1576,9 @@ export const NavigationWithLogo: Story = {
     ],
     mobileBreakpoint: 768,
     mobileMenuTitle: 'Main Navigation',
-    directNavigation: false
+    directNavigation: false,
+    logoHref: '/',
+    logoLabel: 'Spectrum Home'
   },
   render: (args) => html`
     <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh;">
@@ -1580,6 +1604,8 @@ export const NavigationWithLogo: Story = {
         mobile-breakpoint=${args.mobileBreakpoint}
         mobile-menu-title=${args.mobileMenuTitle}
         ?direct-navigation=${args.directNavigation}
+        logo-href=${args.logoHref}
+        logo-label=${args.logoLabel}
         @itemClick=${(e: CustomEvent) => action('navigation-with-logo-itemClick')(e.detail)}
       >
         <div slot="logo" style="display: flex; align-items: center; justify-content: center; padding: 0 2rem;">

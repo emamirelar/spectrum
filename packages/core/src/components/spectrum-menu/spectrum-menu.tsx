@@ -1,5 +1,20 @@
 import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State, Watch } from '@stencil/core';
 
+/**
+ * Spectrum Menu Component
+ * A responsive navigation menu component that supports both horizontal and vertical layouts,
+ * with mobile-optimized behavior and support for nested menu items.
+ * 
+ * @example
+ * // JavaScript array
+ * <spectrum-menu .items=${[{label: 'Home', href: '/'}]}></spectrum-menu>
+ * 
+ * @example
+ * // JSON string (HTML-friendly)
+ * <spectrum-menu 
+ *   items='[{"label":"Home","href":"/"},{"label":"About","href":"/about"}]'>
+ * </spectrum-menu>
+ */
 @Component({
   tag: 'spectrum-menu',
   styleUrl: 'spectrum-menu.scss',
@@ -253,6 +268,7 @@ export class SpectrumMenu {
   rightItemsChanged(newValue: string | Array<any>) {
     this.parseRightItems(newValue);
   }
+
 
   @Listen('resize', { target: 'window' })
   handleResize() {

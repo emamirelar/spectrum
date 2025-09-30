@@ -14,7 +14,7 @@
 | `conversationtitle` | `conversationtitle` | The title to display in the conversation panel Default: null     | `string`                                                       | `'No title provided'` |
 | `debug`             | `debug`             | Whether to enable debug logging                                  | `boolean`                                                      | `false`               |
 | `loading`           | `loading`           | Whether to show the loading indicator Default: false             | `boolean`                                                      | `false`               |
-| `messages`          | `messages`          | The messsages to display in the conversation panel Default: null | `string`                                                       | `''`                  |
+| `messages`          | `messages`          | The messages to display in the conversation panel as JSON string | `string`                                                       | `''`                  |
 | `sound`             | `sound`             | Whether to enable sound effects Default: false                   | `boolean`                                                      | `false`               |
 | `sources`           | `sources`           | The sources to display in the messages Default: null             | `string`                                                       | `''`                  |
 

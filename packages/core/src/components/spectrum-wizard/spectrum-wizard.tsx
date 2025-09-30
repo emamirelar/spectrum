@@ -39,8 +39,15 @@ export interface WizardCompleteEvent {
  * persistProgress={true} and providing a unique wizardId.
  * 
  * @example
- * // Basic wizard without cookies
+ * // Basic wizard with JavaScript array
  * <spectrum-wizard steps={steps}></spectrum-wizard>
+ * 
+ * @example
+ * // Wizard with JSON string (HTML-friendly)
+ * <spectrum-wizard 
+ *   steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'
+ *   wizard-id="my-wizard">
+ * </spectrum-wizard>
  * 
  * @example
  * // Wizard with cookie persistence enabled
@@ -58,9 +65,20 @@ export interface WizardCompleteEvent {
 })
 export class SpectrumWizard {
   /**
-   * Array of wizard steps
+   * Array of wizard steps or JSON string representing the steps
+   * @example
+   * // JavaScript array
+   * component.steps = [{id: 'step1', title: 'Welcome', content: '<p>Hello</p>', accessible: true}];
+   * 
+   * // JSON string  
+   * <spectrum-wizard steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'></spectrum-wizard>
    */
-  @Prop() steps: WizardStep[] = [];
+  @Prop() steps: WizardStep[] | string = [];
+
+  /**
+   * Internal parsed steps array
+   */
+  private parsedSteps: WizardStep[] = [];
 
   /**
    * Current active step index (0-based)
@@ -133,7 +151,13 @@ export class SpectrumWizard {
   }) wizardComplete: EventEmitter<WizardCompleteEvent>;
 
   componentWillLoad() {
+    this.parseSteps();
     this.loadProgressFromCookie();
+  }
+
+  componentDidLoad() {
+    // Ensure parsing happens after attributes are fully set
+    this.parseSteps();
   }
 
   @Watch('currentStep')
@@ -142,14 +166,40 @@ export class SpectrumWizard {
       this.saveProgressToCookie();
     }
     
-    if (this.steps[newStep]) {
+    if (this.parsedSteps[newStep]) {
       this.stepChange.emit({
         action: newStep > oldStep ? 'next' : newStep < oldStep ? 'previous' : 'select',
         currentStep: newStep,
         previousStep: oldStep,
-        stepId: this.steps[newStep].id,
-        totalSteps: this.steps.length
+        stepId: this.parsedSteps[newStep].id,
+        totalSteps: this.parsedSteps.length
       });
+    }
+  }
+
+  @Watch('steps')
+  onStepsChange() {
+    this.parseSteps();
+  }
+
+  /**
+   * Parse steps property whether it's an array or JSON string
+   */
+  private parseSteps() {
+    try {
+      if (typeof this.steps === 'string' && this.steps.length > 0) {
+        // Parse JSON string
+        this.parsedSteps = JSON.parse(this.steps);
+      } else if (Array.isArray(this.steps)) {
+        // Use array directly
+        this.parsedSteps = this.steps;
+      } else {
+        // Fallback to empty array
+        this.parsedSteps = [];
+      }
+    } catch (error) {
+      console.error('Invalid JSON in steps property:', error);
+      this.parsedSteps = [];
     }
   }
 
@@ -170,7 +220,7 @@ export class SpectrumWizard {
         break;
       case 'End':
         event.preventDefault();
-        this.goToStep(this.steps.length - 1);
+        this.goToStep(this.parsedSteps.length - 1);
         break;
     }
   }
@@ -219,11 +269,11 @@ export class SpectrumWizard {
   async completeWizard(): Promise<void> {
     this.markStepCompleted(this.currentStep);
     
-    const completedSteps = this.steps.filter(step => step.completed).length;
+    const completedSteps = this.parsedSteps.filter(step => step.completed).length;
     
     this.wizardComplete.emit({
       action: 'complete',
-      totalSteps: this.steps.length,
+      totalSteps: this.parsedSteps.length,
       completedSteps
     });
 
@@ -238,9 +288,9 @@ export class SpectrumWizard {
   @Method()
   async resetProgress(): Promise<void> {
     this.currentStep = 0;
-    this.steps.forEach(step => {
+    this.parsedSteps.forEach(step => {
       step.completed = false;
-      step.accessible = step === this.steps[0];
+      step.accessible = step === this.parsedSteps[0];
     });
     
     if (this.persistProgress) {
@@ -253,11 +303,11 @@ export class SpectrumWizard {
    */
   @Method()
   async getTotalEstimatedTime(): Promise<number> {
-    return this.steps.reduce((total, step) => total + (step.estimatedTime || 0), 0);
+    return this.parsedSteps.reduce((total, step) => total + (step.estimatedTime || 0), 0);
   }
 
   private canGoNext(): boolean {
-    return this.currentStep < this.steps.length - 1;
+    return this.currentStep < this.parsedSteps.length - 1;
   }
 
   private canGoPrevious(): boolean {
@@ -265,7 +315,7 @@ export class SpectrumWizard {
   }
 
   private canGoToStep(stepIndex: number): boolean {
-    if (stepIndex < 0 || stepIndex >= this.steps.length) {
+    if (stepIndex < 0 || stepIndex >= this.parsedSteps.length) {
       return false;
     }
 
@@ -273,21 +323,21 @@ export class SpectrumWizard {
       return false;
     }
 
-    const step = this.steps[stepIndex];
+    const step = this.parsedSteps[stepIndex];
     return step.accessible !== false;
   }
 
   private markStepCompleted(stepIndex: number): void {
-    if (this.steps[stepIndex]) {
-      this.steps[stepIndex].completed = true;
+    if (this.parsedSteps[stepIndex]) {
+      this.parsedSteps[stepIndex].completed = true;
       
       // Make next step accessible
-      if (stepIndex + 1 < this.steps.length) {
-        this.steps[stepIndex + 1].accessible = true;
+      if (stepIndex + 1 < this.parsedSteps.length) {
+        this.parsedSteps[stepIndex + 1].accessible = true;
       }
       
       // Force re-render
-      this.steps = [...this.steps];
+      this.parsedSteps = [...this.parsedSteps];
     }
   }
 
@@ -296,7 +346,7 @@ export class SpectrumWizard {
 
     const progress = {
       currentStep: this.currentStep,
-      completedSteps: this.steps.map(step => step.completed),
+      completedSteps: this.parsedSteps.map(step => step.completed),
       timestamp: Date.now()
     };
 
@@ -321,22 +371,22 @@ export class SpectrumWizard {
         );
 
         if (progressData.currentStep !== undefined) {
-          this.currentStep = Math.min(progressData.currentStep, this.steps.length - 1);
+          this.currentStep = Math.min(progressData.currentStep, this.parsedSteps.length - 1);
         }
 
         if (progressData.completedSteps && Array.isArray(progressData.completedSteps)) {
           progressData.completedSteps.forEach((completed, index) => {
-            if (this.steps[index]) {
-              this.steps[index].completed = completed;
-              this.steps[index].accessible = completed || index <= this.currentStep;
+            if (this.parsedSteps[index]) {
+              this.parsedSteps[index].completed = completed;
+              this.parsedSteps[index].accessible = completed || index <= this.currentStep;
             }
           });
         }
 
         // Ensure current and previous steps are accessible
         for (let i = 0; i <= this.currentStep; i++) {
-          if (this.steps[i]) {
-            this.steps[i].accessible = true;
+          if (this.parsedSteps[i]) {
+            this.parsedSteps[i].accessible = true;
           }
         }
       } catch (error) {
@@ -437,7 +487,7 @@ export class SpectrumWizard {
             )}
           </div>
         </div>
-        {index < this.steps.length - 1 && (
+        {index < this.parsedSteps.length - 1 && (
           <div class="spectrum-wizard__step-connector" aria-hidden="true"></div>
         )}
       </div>
@@ -445,7 +495,7 @@ export class SpectrumWizard {
   }
 
   private renderStepContent(): any {
-    const currentStepData = this.steps[this.currentStep];
+    const currentStepData = this.parsedSteps[this.currentStep];
     
     if (!currentStepData) {
       return <div class="spectrum-wizard__content">No content available</div>;
@@ -477,7 +527,7 @@ export class SpectrumWizard {
     }
 
     const isFirstStep = this.currentStep === 0;
-    const isLastStep = this.currentStep === this.steps.length - 1;
+    const isLastStep = this.currentStep === this.parsedSteps.length - 1;
 
     return (
       <div class="spectrum-wizard__navigation">
@@ -491,7 +541,7 @@ export class SpectrumWizard {
         ></spectrum-button>
 
         <div class="spectrum-wizard__nav-info">
-          Step {this.currentStep + 1} of {this.steps.length}
+          Step {this.currentStep + 1} of {this.parsedSteps.length}
         </div>
 
         {isLastStep ? (
@@ -517,7 +567,7 @@ export class SpectrumWizard {
   }
 
   render() {
-    if (!this.steps || this.steps.length === 0) {
+    if (!this.parsedSteps || this.parsedSteps.length === 0) {
       return (
         <Host>
           <div class="spectrum-wizard spectrum-wizard--empty">
@@ -527,7 +577,7 @@ export class SpectrumWizard {
       );
     }
 
-    const totalTime = this.steps.reduce((total, step) => total + (step.estimatedTime || 0), 0);
+    const totalTime = this.parsedSteps.reduce((total, step) => total + (step.estimatedTime || 0), 0);
 
     return (
       <Host>
@@ -557,7 +607,7 @@ export class SpectrumWizard {
           )}
           
           <div class="spectrum-wizard__steps" role="tablist">
-            {this.steps.map((step, index) => this.renderStepIndicator(step, index))}
+            {this.parsedSteps.map((step, index) => this.renderStepIndicator(step, index))}
           </div>
 
           <div class="spectrum-wizard__main" role="tabpanel" aria-labelledby={`step-${this.currentStep}`}>
