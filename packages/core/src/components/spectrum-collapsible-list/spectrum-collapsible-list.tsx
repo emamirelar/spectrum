@@ -1,5 +1,20 @@
-import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment, Element, Listen } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter, State, Host, Fragment, Element, Listen, Watch } from '@stencil/core';
 import { ContextMenuAction } from '../spectrum-context-menu/spectrum-context-menu';
+
+/**
+ * Spectrum Collapsible List Component
+ * A hierarchical list component that supports collapsible/expandable items with context menus.
+ * 
+ * @example
+ * // JavaScript array
+ * <spectrum-collapsible-list .items=${[{label: 'Item 1', id: 'item1'}]}></spectrum-collapsible-list>
+ * 
+ * @example
+ * // JSON string (HTML-friendly)
+ * <spectrum-collapsible-list 
+ *   items='[{"label":"Item 1","id":"item1","children":[{"label":"Child 1","id":"child1"}]}]'>
+ * </spectrum-collapsible-list>
+ */
 
 /**
  * Collapsible List Item interface
@@ -21,9 +36,20 @@ export interface CollapsibleListItem {
 })
 export class SpectrumCollapsibleList {
   /**
-   * The nested data structure for the list
+   * The nested data structure for the list or JSON string representing the items
+   * @example
+   * // JavaScript array
+   * component.items = [{label: 'Item 1', id: 'item1'}];
+   * 
+   * // JSON string  
+   * <spectrum-collapsible-list items='[{"label":"Item 1","id":"item1"}]'></spectrum-collapsible-list>
    */
-  @Prop() items: CollapsibleListItem[] = [];
+  @Prop() items: CollapsibleListItem[] | string = [];
+
+  /**
+   * Internal parsed items array
+   */
+  private parsedItems: CollapsibleListItem[] = [];
 
   /**
    * Filter value to filter list items
@@ -31,9 +57,20 @@ export class SpectrumCollapsibleList {
   @Prop() filter: string = '';
 
   /**
-   * Context actions for all leaf nodes
+   * Context actions for all leaf nodes or JSON string representing the actions
+   * @example
+   * // JavaScript array
+   * component.contextActions = [{action: 'delete', label: 'Delete'}];
+   * 
+   * // JSON string  
+   * <spectrum-collapsible-list contextActions='[{"action":"delete","label":"Delete"}]'></spectrum-collapsible-list>
    */
-  @Prop() contextActions: ContextMenuAction[] = [];
+  @Prop() contextActions: ContextMenuAction[] | string = [];
+
+  /**
+   * Internal parsed context actions array
+   */
+  private parsedContextActions: ContextMenuAction[] = [];
 
   /**
    * Controls whether expanding one parent collapses other parents at the same level
@@ -70,6 +107,58 @@ export class SpectrumCollapsibleList {
    * Host element reference
    */
   @Element() hostElement!: HTMLElement;
+
+  @Watch('items')
+  onItemsChange() {
+    this.parseItems();
+  }
+
+  @Watch('contextActions')
+  onContextActionsChange() {
+    this.parseContextActions();
+  }
+
+  /**
+   * Parse items property whether it's an array or JSON string
+   */
+  private parseItems() {
+    try {
+      if (typeof this.items === 'string') {
+        // Parse JSON string
+        this.parsedItems = JSON.parse(this.items);
+      } else if (Array.isArray(this.items)) {
+        // Use array directly
+        this.parsedItems = this.items;
+      } else {
+        // Fallback to empty array
+        this.parsedItems = [];
+      }
+    } catch (error) {
+      console.error('Invalid JSON in items property:', error);
+      this.parsedItems = [];
+    }
+  }
+
+  /**
+   * Parse contextActions property whether it's an array or JSON string
+   */
+  private parseContextActions() {
+    try {
+      if (typeof this.contextActions === 'string') {
+        // Parse JSON string
+        this.parsedContextActions = JSON.parse(this.contextActions);
+      } else if (Array.isArray(this.contextActions)) {
+        // Use array directly
+        this.parsedContextActions = this.contextActions;
+      } else {
+        // Fallback to empty array
+        this.parsedContextActions = [];
+      }
+    } catch (error) {
+      console.error('Invalid JSON in contextActions property:', error);
+      this.parsedContextActions = [];
+    }
+  }
 
   /**
    * Event emitted when a child node is clicked
@@ -126,14 +215,17 @@ export class SpectrumCollapsibleList {
   }
 
   componentWillLoad() {
+    // Parse complex properties first
+    this.parseItems();
+    this.parseContextActions();
     // Store original items when component loads
-    this.originalItems = [...this.items];
+    this.originalItems = [...this.parsedItems];
   }
 
   componentWillUpdate() {
     // Update original items when items prop changes
-    if (JSON.stringify(this.items) !== JSON.stringify(this.originalItems)) {
-      this.originalItems = [...this.items];
+    if (JSON.stringify(this.parsedItems) !== JSON.stringify(this.originalItems)) {
+      this.originalItems = [...this.parsedItems];
     }
   }
 
@@ -410,7 +502,7 @@ export class SpectrumCollapsibleList {
       const isExpanded = this.expandedMap[key] ?? !!item.expanded;
       const contextIconId = `context-icon-${(key || 'unknown').replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`;
       // Determine context actions for this branch
-      const currentContextActions = item.contextActions || parentContextActions || this.contextActions;
+      const currentContextActions = item.contextActions || parentContextActions || this.parsedContextActions;
 
       return (
         <li class={`spectrum-collapsible-list__item ${isParent ? 'spectrum-collapsible-list__item--parent' : ''} ${isExpanded ? 'spectrum-collapsible-list__item--expanded' : ''}`}>

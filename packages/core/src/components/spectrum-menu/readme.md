@@ -256,6 +256,12 @@ The menu component follows WAI-ARIA best practices:
 <!-- Auto Generated Below -->
 
 
+## Overview
+
+Spectrum Menu Component
+A responsive navigation menu component that supports both horizontal and vertical layouts,
+with mobile-optimized behavior and support for nested menu items.
+
 ## Properties
 
 | Property           | Attribute           | Description                                                                                                                                                                                                                                  | Type                                                                                                                                                                                                                                                                                                                       | Default        |

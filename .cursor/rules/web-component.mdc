@@ -1,15 +1,225 @@
 ---
-description: 
+description: Standard patterns and requirements for all Spectrum web components built with Stencil
 globs: 
 alwaysApply: true
 ---
 
+# Spectrum Web Component Development Rules
 
-# Your rule content
+## Component Creation Process
+
 Components are created by:
 
-Navigating to the stencil core package: cd /packages/core
-Generating a new component with npm run generate <component-nam>
+1. Navigating to the stencil core package: `cd packages/core`
+2. Generating a new component with `npm run generate <component-name>`
 
-Do not create new directories.
-Do not create components without running npm run generate
+**Important:**
+- Do not create new directories manually
+- Do not create components without running `npm run generate`
+- Follow the established component structure and naming conventions
+
+## Property Handling Standards
+
+### Complex Property Support (MANDATORY)
+
+**All components that accept complex properties (arrays, objects) MUST support both JavaScript objects and JSON strings for maximum HTML compatibility.**
+
+#### Implementation Pattern
+
+For any `@Prop()` that accepts arrays or objects, implement the following pattern:
+
+```typescript
+/**
+ * Enhanced property that accepts both objects and JSON strings
+ */
+@Prop() complexProperty: MyType[] | string = [];
+
+/**
+ * Internal parsed property
+ */
+private parsedComplexProperty: MyType[] = [];
+
+/**
+ * Parse complex property whether it's an object or JSON string
+ */
+private parseComplexProperty() {
+  try {
+    if (typeof this.complexProperty === 'string') {
+      // Parse JSON string
+      this.parsedComplexProperty = JSON.parse(this.complexProperty);
+    } else if (Array.isArray(this.complexProperty)) {
+      // Use array directly
+      this.parsedComplexProperty = this.complexProperty;
+    } else {
+      // Fallback to empty array/object
+      this.parsedComplexProperty = [];
+    }
+  } catch (error) {
+    console.error('Invalid JSON in complexProperty:', error);
+    this.parsedComplexProperty = [];
+  }
+}
+
+/**
+ * Watch for property changes and re-parse
+ */
+@Watch('complexProperty')
+onComplexPropertyChange() {
+  this.parseComplexProperty();
+}
+
+/**
+ * Initialize parsing during component load
+ */
+componentWillLoad() {
+  this.parseComplexProperty();
+  // ... other initialization
+}
+```
+
+#### Required Pattern Components
+
+This pattern is **MANDATORY** for components with these property types:
+- `@Prop() items: MyInterface[]` → Must support JSON string arrays
+- `@Prop() config: MyConfig` → Must support JSON string objects  
+- `@Prop() data: any[]` → Must support JSON string arrays
+- `@Prop() options: OptionType[]` → Must support JSON string arrays
+
+#### Usage Examples After Implementation
+
+```html
+<!-- ✅ JSON String (HTML-friendly) -->
+<spectrum-component 
+  items='[{"id":"1","name":"Item 1"},{"id":"2","name":"Item 2"}]'
+  config='{"theme":"dark","size":"large"}'>
+</spectrum-component>
+
+<!-- ✅ JavaScript Objects (Framework-friendly) -->
+<spectrum-component 
+  .items=${[{id:"1",name:"Item 1"},{id:"2",name:"Item 2"}]}
+  .config=${{theme:"dark",size:"large"}}>
+</spectrum-component>
+```
+
+### Benefits of This Pattern
+
+1. **HTML Compatibility**: Pure HTML usage without JavaScript
+2. **Framework Agnostic**: Works with React, Vue, Angular, vanilla JS
+3. **Progressive Enhancement**: Graceful fallbacks for invalid JSON
+4. **Developer Experience**: Automatic type detection and parsing
+5. **Backward Compatibility**: Existing JavaScript object usage continues to work
+
+### Implementation Checklist
+
+When creating or updating components with complex properties:
+
+- [ ] Identify all `@Prop()` declarations that accept arrays or objects
+- [ ] Update property types to include `| string` union type
+- [ ] Add private `parsed*` properties for internal use
+- [ ] Implement `parse*()` method with error handling
+- [ ] Add `@Watch()` decorator for property changes
+- [ ] Call parse method in `componentWillLoad()`
+- [ ] Update all internal references to use parsed properties
+- [ ] Test with both JSON strings and JavaScript objects
+
+### Error Handling Requirements
+
+- **Invalid JSON**: Log error to console and use fallback value
+- **Type Mismatch**: Gracefully handle unexpected types
+- **Performance**: Parse only when property changes (use `@Watch`)
+- **User Feedback**: Provide clear error messages for developers
+
+## Property Documentation
+
+### JSDoc Requirements
+
+Document the dual nature of complex properties:
+
+```typescript
+/**
+ * Array of items or JSON string representing the items
+ * @example
+ * // JavaScript array
+ * component.items = [{id: 1, name: 'Item'}];
+ * 
+ * // JSON string  
+ * <component items='[{"id":1,"name":"Item"}]'></component>
+ */
+@Prop() items: MyItem[] | string = [];
+```
+
+### TypeScript Interface Support
+
+Export type definitions to help developers:
+
+```typescript
+// Export interfaces for external use
+export interface MyItem {
+  id: string;
+  name: string;
+  data?: any;
+}
+
+// Component class with enhanced property
+export class SpectrumComponent {
+  @Prop() items: MyItem[] | string = [];
+  // ...
+}
+```
+
+## Component Testing Requirements
+
+### Test Both Input Formats
+
+```typescript
+describe('Component Property Parsing', () => {
+  it('should accept JavaScript arrays', async () => {
+    const component = await newE2EPage();
+    await component.setContent('<spectrum-component></spectrum-component>');
+    
+    const element = await component.find('spectrum-component');
+    element.setProperty('items', [{id: '1', name: 'Test'}]);
+    
+    // Assert component behavior
+  });
+
+  it('should accept JSON strings', async () => {
+    const component = await newE2EPage();
+    await component.setContent(`
+      <spectrum-component items='[{"id":"1","name":"Test"}]'></spectrum-component>
+    `);
+    
+    // Assert component behavior
+  });
+
+  it('should handle invalid JSON gracefully', async () => {
+    const component = await newE2EPage();
+    await component.setContent(`
+      <spectrum-component items='invalid-json'></spectrum-component>
+    `);
+    
+    // Assert fallback behavior
+  });
+});
+```
+
+## Migration Strategy
+
+### For Existing Components
+
+When updating existing components to support JSON strings:
+
+1. **Assessment**: Identify complex properties that would benefit from JSON support
+2. **Enhancement**: Add JSON parsing using the standard pattern
+3. **Validation**: Update all internal references to use parsed properties
+4. **Testing**: Verify both object and string inputs work correctly
+5. **Documentation**: Update README and Storybook examples
+
+### Dependency Impact
+
+Check component dependency map before changes:
+- Update dependent components if they pass complex properties
+- Ensure integration tests cover both input formats
+- Coordinate changes across the component system
+
+This comprehensive approach ensures all Spectrum components provide consistent, HTML-friendly APIs while maintaining full compatibility with JavaScript frameworks.

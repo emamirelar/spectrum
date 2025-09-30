@@ -1,6 +1,18 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Method, Watch } from '@stencil/core';
 import { BackgroundLevel } from '../spectrum-panel/spectrum-panel';
 
+/**
+ * Spectrum Conversation Panel Component
+ * A chat-like interface component that displays messages, sources, and explorations
+ * with support for JSON string input for HTML compatibility.
+ * 
+ * @example
+ * // JSON string (HTML-friendly)
+ * <spectrum-conversation-panel 
+ *   messages='[{"id":"msg1","isRequest":true,"content":"Hello!","timestamp":"2023-01-01"}]'>
+ * </spectrum-conversation-panel>
+ */
+
 export interface ContentCard {
   title: string;
   subtitle: string;
@@ -40,9 +52,13 @@ export class SpectrumConversationPanel {
     **/
 
   /**
-   * The messsages to display in the conversation panel
-   * Default: null
-  **/
+   * The messages to display in the conversation panel as JSON string
+   * @example
+   * // JSON string format
+   * <spectrum-conversation-panel 
+   *   messages='[{"id":"msg1","isRequest":true,"content":"Hello!","timestamp":"2023-01-01"}]'>
+   * </spectrum-conversation-panel>
+   */
   @Prop() messages: string = '';
 
   /**

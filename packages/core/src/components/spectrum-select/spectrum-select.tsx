@@ -20,6 +20,16 @@ export interface SpectrumSelectGroup {
  * A comprehensive select component with advanced features including search, loading states,
  * enhanced animations, mobile optimization, and accessibility improvements.
  * Based on the Spectrum design system and Material Design 3 patterns.
+ * 
+ * @example
+ * // JavaScript array
+ * <spectrum-select .options=${[{value: 'opt1', label: 'Option 1'}]}></spectrum-select>
+ * 
+ * @example
+ * // JSON string (HTML-friendly)
+ * <spectrum-select 
+ *   options='[{"value":"opt1","label":"Option 1"},{"value":"opt2","label":"Option 2"}]'>
+ * </spectrum-select>
  */
 @Component({
   tag: 'spectrum-select',
@@ -59,7 +69,21 @@ export class SpectrumSelect {
   @Prop() selectedValues: string[] = [];
   @Prop() multiple: boolean = false;
   @Prop() selectionsLabel: string = 'selections';
-  @Prop() options: SpectrumSelectOption[] = [];
+  /**
+   * Array of select options or JSON string representing the options
+   * @example
+   * // JavaScript array
+   * component.options = [{value: 'opt1', label: 'Option 1'}];
+   * 
+   * // JSON string  
+   * <spectrum-select options='[{"value":"opt1","label":"Option 1"}]'></spectrum-select>
+   */
+  @Prop() options: SpectrumSelectOption[] | string = [];
+
+  /**
+   * Internal parsed options array
+   */
+  private parsedOptions: SpectrumSelectOption[] = [];
   @Prop() showIcon: boolean = true;
   @Prop() showDropdownIcon: boolean = true;
   @Prop() dropdownIcon: string = 'expand_more';
@@ -102,6 +126,33 @@ export class SpectrumSelect {
   private dropdownRef!: HTMLDivElement;
   private rippleTimeout: number;
   private searchTimeout: number;
+
+  @Watch('options')
+  onOptionsChange() {
+    this.parseOptions();
+  }
+
+  /**
+   * Parse options property whether it's an array or JSON string
+   */
+  private parseOptions() {
+    try {
+      if (typeof this.options === 'string') {
+        // Parse JSON string
+        this.parsedOptions = JSON.parse(this.options);
+      } else if (Array.isArray(this.options)) {
+        // Use array directly
+        this.parsedOptions = this.options;
+      } else {
+        // Fallback to empty array
+        this.parsedOptions = [];
+      }
+    } catch (error) {
+      console.error('Invalid JSON in options property:', error);
+      this.parsedOptions = [];
+    }
+  }
+
 
   @Watch('selectedValue')
   handleSelectedValueChange(newValue: string) {
@@ -260,21 +311,21 @@ export class SpectrumSelect {
   }
 
   private updateSelectedOption(value: string) {
-    this.selectedOption = this.options.find(option => option.value === value) || null;
+    this.selectedOption = this.parsedOptions.find(option => option.value === value) || null;
     this.log('Selected option updated', this.selectedOption);
   }
 
   private updateSelectedOptions(values: string[]) {
-    this.selectedOptions = this.options.filter(option => values.includes(option.value));
+    this.selectedOptions = this.parsedOptions.filter(option => values.includes(option.value));
     this.log('Selected options updated', this.selectedOptions);
   }
 
   private updateFilteredOptions() {
     if (!this.searchQuery || this.searchQuery.trim() === '') {
-      this.filteredOptions = [...this.options];
+      this.filteredOptions = [...this.parsedOptions];
     } else {
       const query = this.searchQuery.toLowerCase().trim();
-      this.filteredOptions = this.options.filter(option =>
+      this.filteredOptions = this.parsedOptions.filter(option =>
         option.label.toLowerCase().includes(query) ||
         option.value.toLowerCase().includes(query) ||
         (option.description && option.description.toLowerCase().includes(query))
@@ -504,7 +555,7 @@ export class SpectrumSelect {
   };
 
   private updateSelection = (value: string) => {
-    const selectedOption = this.options.find(option => option.value === value);
+    const selectedOption = this.parsedOptions.find(option => option.value === value);
 
     if (selectedOption) {
       this.selectedValue = value;
@@ -607,12 +658,13 @@ export class SpectrumSelect {
 
   // ============== Lifecycle Methods ==============
   componentWillLoad() {
+    this.parseOptions();
     this.log('Component will load', {
       variant: this.variant,
       size: this.size,
       state: this.state,
       multiple: this.multiple,
-      options: this.options
+      options: this.parsedOptions
     });
     
     if (this.multiple) {
@@ -700,7 +752,7 @@ export class SpectrumSelect {
                 {this.placeholder}
               </option>
             )}
-            {this.options.map(option => (
+            {this.parsedOptions.map(option => (
               <option
                 value={option.value}
                 disabled={option.disabled}

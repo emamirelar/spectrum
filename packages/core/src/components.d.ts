@@ -673,10 +673,11 @@ export namespace Components {
     }
     interface SpectrumCollapsibleList {
         /**
-          * Context actions for all leaf nodes
+          * Context actions for all leaf nodes or JSON string representing the actions
+          * @example // JavaScript array component.contextActions = [{action: 'delete', label: 'Delete'}];  // JSON string   <spectrum-collapsible-list contextActions='[{"action":"delete","label":"Delete"}]'></spectrum-collapsible-list>
           * @default []
          */
-        "contextActions": ContextMenuAction[];
+        "contextActions": ContextMenuAction[] | string;
         /**
           * Whether to enable debug logging
           * @default false
@@ -688,10 +689,11 @@ export namespace Components {
          */
         "filter": string;
         /**
-          * The nested data structure for the list
+          * The nested data structure for the list or JSON string representing the items
+          * @example // JavaScript array component.items = [{label: 'Item 1', id: 'item1'}];  // JSON string   <spectrum-collapsible-list items='[{"label":"Item 1","id":"item1"}]'></spectrum-collapsible-list>
           * @default []
          */
-        "items": CollapsibleListItem[];
+        "items": CollapsibleListItem[] | string;
         /**
           * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
           * @default true
@@ -790,7 +792,8 @@ export namespace Components {
          */
         "loading": boolean;
         /**
-          * The messsages to display in the conversation panel Default: null
+          * The messages to display in the conversation panel as JSON string
+          * @example // JSON string format <spectrum-conversation-panel    messages='[{"id":"msg1","isRequest":true,"content":"Hello!","timestamp":"2023-01-01"}]'> </spectrum-conversation-panel>
           * @default ''
          */
         "messages": string;
@@ -1290,6 +1293,17 @@ export namespace Components {
          */
         "selectionMode": SelectionMode;
     }
+    /**
+     * Spectrum Menu Component
+     * A responsive navigation menu component that supports both horizontal and vertical layouts,
+     * with mobile-optimized behavior and support for nested menu items.
+     * @example // JavaScript array
+     * <spectrum-menu .items=${[{label: 'Home', href: '/'}]}></spectrum-menu>
+     * @example // JSON string (HTML-friendly)
+     * <spectrum-menu 
+     *   items='[{"label":"Home","href":"/"},{"label":"About","href":"/about"}]'>
+     * </spectrum-menu>
+     */
     interface SpectrumMenu {
         "close": () => Promise<void>;
         /**
@@ -1691,6 +1705,12 @@ export namespace Components {
      * A comprehensive select component with advanced features including search, loading states,
      * enhanced animations, mobile optimization, and accessibility improvements.
      * Based on the Spectrum design system and Material Design 3 patterns.
+     * @example // JavaScript array
+     * <spectrum-select .options=${[{value: 'opt1', label: 'Option 1'}]}></spectrum-select>
+     * @example // JSON string (HTML-friendly)
+     * <spectrum-select 
+     *   options='[{"value":"opt1","label":"Option 1"},{"value":"opt2","label":"Option 2"}]'>
+     * </spectrum-select>
      */
     interface SpectrumSelect {
         /**
@@ -1750,9 +1770,11 @@ export namespace Components {
          */
         "noResultsText": string;
         /**
+          * Array of select options or JSON string representing the options
+          * @example // JavaScript array component.options = [{value: 'opt1', label: 'Option 1'}];  // JSON string   <spectrum-select options='[{"value":"opt1","label":"Option 1"}]'></spectrum-select>
           * @default []
          */
-        "options": SpectrumSelectOption[];
+        "options": SpectrumSelectOption[] | string;
         /**
           * @default 'Select an option'
          */
@@ -2149,8 +2171,13 @@ export namespace Components {
      * progress tracking, and optional cookie-based persistence.
      * Cookie persistence is disabled by default for privacy. Enable it by setting
      * persistProgress={true} and providing a unique wizardId.
-     * @example // Basic wizard without cookies
+     * @example // Basic wizard with JavaScript array
      * <spectrum-wizard steps={steps}></spectrum-wizard>
+     * @example // Wizard with JSON string (HTML-friendly)
+     * <spectrum-wizard 
+     *   steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'
+     *   wizard-id="my-wizard">
+     * </spectrum-wizard>
      * @example // Wizard with cookie persistence enabled
      * <spectrum-wizard 
      *   steps={steps} 
@@ -2230,10 +2257,11 @@ export namespace Components {
          */
         "showTimeIndicators": boolean;
         /**
-          * Array of wizard steps
+          * Array of wizard steps or JSON string representing the steps
+          * @example // JavaScript array component.steps = [{id: 'step1', title: 'Welcome', content: '<p>Hello</p>', accessible: true}];  // JSON string   <spectrum-wizard steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'></spectrum-wizard>
           * @default []
          */
-        "steps": WizardStep[];
+        "steps": WizardStep[] | string;
         /**
           * Unique identifier for cookie persistence
           * @default 'spectrum-wizard'
@@ -2682,6 +2710,17 @@ declare global {
     href?: string;
   };
     }
+    /**
+     * Spectrum Menu Component
+     * A responsive navigation menu component that supports both horizontal and vertical layouts,
+     * with mobile-optimized behavior and support for nested menu items.
+     * @example // JavaScript array
+     * <spectrum-menu .items=${[{label: 'Home', href: '/'}]}></spectrum-menu>
+     * @example // JSON string (HTML-friendly)
+     * <spectrum-menu 
+     *   items='[{"label":"Home","href":"/"},{"label":"About","href":"/about"}]'>
+     * </spectrum-menu>
+     */
     interface HTMLSpectrumMenuElement extends Components.SpectrumMenu, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumMenuElementEventMap>(type: K, listener: (this: HTMLSpectrumMenuElement, ev: SpectrumMenuCustomEvent<HTMLSpectrumMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2815,6 +2854,12 @@ declare global {
      * A comprehensive select component with advanced features including search, loading states,
      * enhanced animations, mobile optimization, and accessibility improvements.
      * Based on the Spectrum design system and Material Design 3 patterns.
+     * @example // JavaScript array
+     * <spectrum-select .options=${[{value: 'opt1', label: 'Option 1'}]}></spectrum-select>
+     * @example // JSON string (HTML-friendly)
+     * <spectrum-select 
+     *   options='[{"value":"opt1","label":"Option 1"},{"value":"opt2","label":"Option 2"}]'>
+     * </spectrum-select>
      */
     interface HTMLSpectrumSelectElement extends Components.SpectrumSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLSpectrumSelectElementEventMap>(type: K, listener: (this: HTMLSpectrumSelectElement, ev: SpectrumSelectCustomEvent<HTMLSpectrumSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2919,8 +2964,13 @@ declare global {
      * progress tracking, and optional cookie-based persistence.
      * Cookie persistence is disabled by default for privacy. Enable it by setting
      * persistProgress={true} and providing a unique wizardId.
-     * @example // Basic wizard without cookies
+     * @example // Basic wizard with JavaScript array
      * <spectrum-wizard steps={steps}></spectrum-wizard>
+     * @example // Wizard with JSON string (HTML-friendly)
+     * <spectrum-wizard 
+     *   steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'
+     *   wizard-id="my-wizard">
+     * </spectrum-wizard>
      * @example // Wizard with cookie persistence enabled
      * <spectrum-wizard 
      *   steps={steps} 
@@ -3639,10 +3689,11 @@ declare namespace LocalJSX {
     }
     interface SpectrumCollapsibleList {
         /**
-          * Context actions for all leaf nodes
+          * Context actions for all leaf nodes or JSON string representing the actions
+          * @example // JavaScript array component.contextActions = [{action: 'delete', label: 'Delete'}];  // JSON string   <spectrum-collapsible-list contextActions='[{"action":"delete","label":"Delete"}]'></spectrum-collapsible-list>
           * @default []
          */
-        "contextActions"?: ContextMenuAction[];
+        "contextActions"?: ContextMenuAction[] | string;
         /**
           * Whether to enable debug logging
           * @default false
@@ -3654,10 +3705,11 @@ declare namespace LocalJSX {
          */
         "filter"?: string;
         /**
-          * The nested data structure for the list
+          * The nested data structure for the list or JSON string representing the items
+          * @example // JavaScript array component.items = [{label: 'Item 1', id: 'item1'}];  // JSON string   <spectrum-collapsible-list items='[{"label":"Item 1","id":"item1"}]'></spectrum-collapsible-list>
           * @default []
          */
-        "items"?: CollapsibleListItem[];
+        "items"?: CollapsibleListItem[] | string;
         /**
           * Controls whether expanding one parent collapses other parents at the same level Default is true (mutually exclusive expansion)
           * @default true
@@ -3777,7 +3829,8 @@ declare namespace LocalJSX {
          */
         "loading"?: boolean;
         /**
-          * The messsages to display in the conversation panel Default: null
+          * The messages to display in the conversation panel as JSON string
+          * @example // JSON string format <spectrum-conversation-panel    messages='[{"id":"msg1","isRequest":true,"content":"Hello!","timestamp":"2023-01-01"}]'> </spectrum-conversation-panel>
           * @default ''
          */
         "messages"?: string;
@@ -4280,6 +4333,17 @@ declare namespace LocalJSX {
          */
         "selectionMode"?: SelectionMode;
     }
+    /**
+     * Spectrum Menu Component
+     * A responsive navigation menu component that supports both horizontal and vertical layouts,
+     * with mobile-optimized behavior and support for nested menu items.
+     * @example // JavaScript array
+     * <spectrum-menu .items=${[{label: 'Home', href: '/'}]}></spectrum-menu>
+     * @example // JSON string (HTML-friendly)
+     * <spectrum-menu 
+     *   items='[{"label":"Home","href":"/"},{"label":"About","href":"/about"}]'>
+     * </spectrum-menu>
+     */
     interface SpectrumMenu {
         /**
           * Whether to enable direct browser navigation when menu items are clicked When true, clicking a menu item will navigate to its href in the current tab When false, only the itemClick event will be emitted
@@ -4701,6 +4765,12 @@ declare namespace LocalJSX {
      * A comprehensive select component with advanced features including search, loading states,
      * enhanced animations, mobile optimization, and accessibility improvements.
      * Based on the Spectrum design system and Material Design 3 patterns.
+     * @example // JavaScript array
+     * <spectrum-select .options=${[{value: 'opt1', label: 'Option 1'}]}></spectrum-select>
+     * @example // JSON string (HTML-friendly)
+     * <spectrum-select 
+     *   options='[{"value":"opt1","label":"Option 1"},{"value":"opt2","label":"Option 2"}]'>
+     * </spectrum-select>
      */
     interface SpectrumSelect {
         /**
@@ -4770,9 +4840,11 @@ declare namespace LocalJSX {
     selectedOptions?: SpectrumSelectOption[];
   }>) => void;
         /**
+          * Array of select options or JSON string representing the options
+          * @example // JavaScript array component.options = [{value: 'opt1', label: 'Option 1'}];  // JSON string   <spectrum-select options='[{"value":"opt1","label":"Option 1"}]'></spectrum-select>
           * @default []
          */
-        "options"?: SpectrumSelectOption[];
+        "options"?: SpectrumSelectOption[] | string;
         /**
           * @default 'Select an option'
          */
@@ -5169,8 +5241,13 @@ declare namespace LocalJSX {
      * progress tracking, and optional cookie-based persistence.
      * Cookie persistence is disabled by default for privacy. Enable it by setting
      * persistProgress={true} and providing a unique wizardId.
-     * @example // Basic wizard without cookies
+     * @example // Basic wizard with JavaScript array
      * <spectrum-wizard steps={steps}></spectrum-wizard>
+     * @example // Wizard with JSON string (HTML-friendly)
+     * <spectrum-wizard 
+     *   steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'
+     *   wizard-id="my-wizard">
+     * </spectrum-wizard>
      * @example // Wizard with cookie persistence enabled
      * <spectrum-wizard 
      *   steps={steps} 
@@ -5234,10 +5311,11 @@ declare namespace LocalJSX {
          */
         "showTimeIndicators"?: boolean;
         /**
-          * Array of wizard steps
+          * Array of wizard steps or JSON string representing the steps
+          * @example // JavaScript array component.steps = [{id: 'step1', title: 'Welcome', content: '<p>Hello</p>', accessible: true}];  // JSON string   <spectrum-wizard steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'></spectrum-wizard>
           * @default []
          */
-        "steps"?: WizardStep[];
+        "steps"?: WizardStep[] | string;
         /**
           * Unique identifier for cookie persistence
           * @default 'spectrum-wizard'
@@ -5368,6 +5446,17 @@ declare module "@stencil/core" {
              */
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
+            /**
+             * Spectrum Menu Component
+             * A responsive navigation menu component that supports both horizontal and vertical layouts,
+             * with mobile-optimized behavior and support for nested menu items.
+             * @example // JavaScript array
+             * <spectrum-menu .items=${[{label: 'Home', href: '/'}]}></spectrum-menu>
+             * @example // JSON string (HTML-friendly)
+             * <spectrum-menu 
+             *   items='[{"label":"Home","href":"/"},{"label":"About","href":"/about"}]'>
+             * </spectrum-menu>
+             */
             "spectrum-menu": LocalJSX.SpectrumMenu & JSXBase.HTMLAttributes<HTMLSpectrumMenuElement>;
             "spectrum-panel": LocalJSX.SpectrumPanel & JSXBase.HTMLAttributes<HTMLSpectrumPanelElement>;
             /**
@@ -5396,6 +5485,12 @@ declare module "@stencil/core" {
              * A comprehensive select component with advanced features including search, loading states,
              * enhanced animations, mobile optimization, and accessibility improvements.
              * Based on the Spectrum design system and Material Design 3 patterns.
+             * @example // JavaScript array
+             * <spectrum-select .options=${[{value: 'opt1', label: 'Option 1'}]}></spectrum-select>
+             * @example // JSON string (HTML-friendly)
+             * <spectrum-select 
+             *   options='[{"value":"opt1","label":"Option 1"},{"value":"opt2","label":"Option 2"}]'>
+             * </spectrum-select>
              */
             "spectrum-select": LocalJSX.SpectrumSelect & JSXBase.HTMLAttributes<HTMLSpectrumSelectElement>;
             /**
@@ -5430,8 +5525,13 @@ declare module "@stencil/core" {
              * progress tracking, and optional cookie-based persistence.
              * Cookie persistence is disabled by default for privacy. Enable it by setting
              * persistProgress={true} and providing a unique wizardId.
-             * @example // Basic wizard without cookies
+             * @example // Basic wizard with JavaScript array
              * <spectrum-wizard steps={steps}></spectrum-wizard>
+             * @example // Wizard with JSON string (HTML-friendly)
+             * <spectrum-wizard 
+             *   steps='[{"id":"step1","title":"Welcome","content":"<p>Hello</p>","accessible":true}]'
+             *   wizard-id="my-wizard">
+             * </spectrum-wizard>
              * @example // Wizard with cookie persistence enabled
              * <spectrum-wizard 
              *   steps={steps} 
