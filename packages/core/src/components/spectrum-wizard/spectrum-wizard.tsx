@@ -1,12 +1,14 @@
-import { Component, Host, h, Prop, Watch, Event, EventEmitter, Method, Listen } from '@stencil/core';
+import { Component, Host, h, Prop, State, Watch, Event, EventEmitter, Method, Listen, Element } from '@stencil/core';
 
 export interface WizardStep {
   /** Unique identifier for the step */
   id: string;
   /** Title of the step */
   title: string;
-  /** HTML content for the step */
-  content: string;
+  /** HTML content for the step (used when slotName is not provided) */
+  content?: string;
+  /** Optional slot name for rich content with external CSS support */
+  slotName?: string;
   /** Optional estimated time to complete in minutes */
   estimatedTime?: number;
   /** Whether this step is completed */
@@ -64,6 +66,8 @@ export interface WizardCompleteEvent {
   shadow: true,
 })
 export class SpectrumWizard {
+  @Element() element: HTMLElement;
+
   /**
    * Array of wizard steps or JSON string representing the steps
    * @example
@@ -78,7 +82,7 @@ export class SpectrumWizard {
   /**
    * Internal parsed steps array
    */
-  private parsedSteps: WizardStep[] = [];
+  @State() private parsedSteps: WizardStep[] = [];
 
   /**
    * Current active step index (0-based)
@@ -131,6 +135,13 @@ export class SpectrumWizard {
   @Prop() completeButtonLabel: string = 'Complete';
 
   /**
+   * External CSS styles to inject into shadow DOM for styling step content
+   * @example
+   * <spectrum-wizard external-styles=".custom { color: red; } p { font-size: 1.2rem; }">
+   */
+  @Prop() externalStyles?: string;
+
+  /**
    * Emitted when step changes
    */
   @Event({
@@ -158,6 +169,8 @@ export class SpectrumWizard {
   componentDidLoad() {
     // Ensure parsing happens after attributes are fully set
     this.parseSteps();
+    // Inject external styles into shadow DOM
+    this.injectExternalStyles();
   }
 
   @Watch('currentStep')
@@ -182,6 +195,11 @@ export class SpectrumWizard {
     this.parseSteps();
   }
 
+  @Watch('externalStyles')
+  onExternalStylesChange() {
+    this.injectExternalStyles();
+  }
+
   /**
    * Parse steps property whether it's an array or JSON string
    */
@@ -200,6 +218,29 @@ export class SpectrumWizard {
     } catch (error) {
       console.error('Invalid JSON in steps property:', error);
       this.parsedSteps = [];
+    }
+  }
+
+  /**
+   * Inject external CSS styles into shadow DOM using Constructable Stylesheets
+   */
+  private injectExternalStyles() {
+    if (!this.externalStyles || !this.element.shadowRoot) {
+      return;
+    }
+
+    try {
+      // Create a new stylesheet
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(this.externalStyles);
+      
+      // Adopt the stylesheet into the shadow root
+      this.element.shadowRoot.adoptedStyleSheets = [
+        ...this.element.shadowRoot.adoptedStyleSheets,
+        sheet
+      ];
+    } catch (error) {
+      console.error('Failed to inject external styles into shadow DOM:', error);
     }
   }
 
@@ -513,10 +554,15 @@ export class SpectrumWizard {
             </span>
           )}
         </div>
-        <div 
-          class="spectrum-wizard__content-body"
-          innerHTML={currentStepData.content}
-        ></div>
+        <div class="spectrum-wizard__content-body">
+          {currentStepData.slotName ? (
+            // Render slotted content - allows external CSS
+            <slot name={currentStepData.slotName}></slot>
+          ) : (
+            // Render HTML string content - uses innerHTML
+            <div innerHTML={currentStepData.content}></div>
+          )}
+        </div>
       </div>
     );
   }

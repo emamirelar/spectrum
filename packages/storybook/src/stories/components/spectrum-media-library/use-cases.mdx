@@ -1,0 +1,606 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumMediaLibrary/Use Cases" />
+
+# Media Library Use Cases
+
+Real-world applications and implementation patterns for the `spectrum-media-library` component.
+
+## Table of Contents
+
+1. [Photo Galleries](#photo-galleries)
+2. [Video Course Platforms](#video-course-platforms)
+3. [Product Showcases](#product-showcases)
+4. [Documentation Systems](#documentation-systems)
+5. [Media Asset Management](#media-asset-management)
+6. [Event Coverage](#event-coverage)
+7. [Portfolio Websites](#portfolio-websites)
+8. [Real Estate Listings](#real-estate-listings)
+
+---
+
+## Photo Galleries
+
+### Professional Photography Portfolio
+
+Display a curated collection of professional photographs with detailed captions and metadata.
+
+**Requirements:**
+- High-resolution images with optimization
+- Descriptive captions for context
+- Organized by categories or albums
+- Responsive grid layout
+- Full-screen viewing experience
+
+**Implementation:**
+
+~~~javascript
+const photographyPortfolio = [
+  {
+    id: 'landscape-01',
+    type: 'image',
+    url: '/portfolio/landscapes/mountain-sunset.jpg',
+    altText: 'Mountain peaks at golden hour with dramatic clouds',
+    caption: 'Cascade Mountains, Washington | Canon 5D Mark IV | f/11, 1/125s, ISO 100'
+  },
+  {
+    id: 'landscape-02',
+    type: 'image',
+    url: '/portfolio/landscapes/ocean-waves.jpg',
+    altText: 'Long exposure of ocean waves creating silky smooth water effect',
+    caption: 'Oregon Coast | Canon 5D Mark IV | f/16, 30s, ISO 100'
+  },
+  {
+    id: 'portrait-01',
+    type: 'image',
+    url: '/portfolio/portraits/natural-light.jpg',
+    altText: 'Portrait in natural window light with shallow depth of field',
+    caption: 'Studio Portrait | Canon 5D Mark IV | f/1.8, 1/160s, ISO 400'
+  }
+];
+
+// Usage
+library.mediaItems = photographyPortfolio;
+library.thumbnailSize = 'large';
+library.horizontal = true;
+~~~
+
+**Benefits:**
+- Professional presentation of work
+- Detailed technical information in captions
+- Immersive full-screen viewing
+- Keyboard navigation for quick browsing
+
+---
+
+## Video Course Platforms
+
+### Online Learning Platform
+
+Create an engaging video course library with automatic YouTube thumbnail extraction and organized lessons.
+
+**Requirements:**
+- YouTube video integration
+- Auto-generated thumbnails
+- Lesson descriptions and titles
+- Sequential navigation
+- Progress tracking (via events)
+
+**Implementation:**
+
+~~~javascript
+const courseLessons = [
+  {
+    id: 'intro',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=INTRO_VIDEO_ID',
+    altText: 'Course Introduction',
+    caption: 'Lesson 1: Welcome and Course Overview (5:30)',
+    platform: 'youtube'
+  },
+  {
+    id: 'lesson-01',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=LESSON_01_ID',
+    altText: 'Getting Started with Web Components',
+    caption: 'Lesson 2: Building Your First Component (12:45)',
+    platform: 'youtube'
+  },
+  {
+    id: 'lesson-02',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=LESSON_02_ID',
+    altText: 'Component Properties and Events',
+    caption: 'Lesson 3: Advanced Props and Event Handling (18:20)',
+    platform: 'youtube'
+  }
+];
+
+// Track viewing progress
+library.addEventListener('mediaAction', (e) => {
+  if (e.detail.action === 'view') {
+    trackLessonStart(e.detail.mediaItem.id);
+  } else if (e.detail.action === 'close') {
+    trackLessonComplete(e.detail.mediaItem.id);
+  }
+});
+
+library.mediaItems = courseLessons;
+library.thumbnailSize = 'medium';
+library.showCaptions = true;
+~~~
+
+**Benefits:**
+- No manual thumbnail management for YouTube videos
+- Clear lesson structure with durations
+- Easy navigation between lessons
+- Event tracking for progress analytics
+
+---
+
+## Product Showcases
+
+### E-Commerce Product Gallery
+
+Combine product images with demo videos to create compelling product pages.
+
+**Requirements:**
+- Multiple product angles
+- Demo videos showing product in use
+- High-quality images
+- Zoom capability via lightbox
+- Mobile-optimized viewing
+
+**Implementation:**
+
+~~~javascript
+const productMedia = [
+  {
+    id: 'product-front',
+    type: 'image',
+    url: '/products/wireless-headphones/front-view.jpg',
+    altText: 'Wireless headphones front view showing controls',
+    caption: 'Front View - Premium Wireless Headphones'
+  },
+  {
+    id: 'product-side',
+    type: 'image',
+    url: '/products/wireless-headphones/side-view.jpg',
+    altText: 'Side profile showing ear cup padding and adjustable band',
+    caption: 'Side Profile - Ergonomic Design'
+  },
+  {
+    id: 'demo-video',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=PRODUCT_DEMO_ID',
+    altText: 'Product demonstration and unboxing',
+    caption: 'Product Demo: Features and Setup Guide',
+    platform: 'youtube'
+  },
+  {
+    id: 'product-detail',
+    type: 'image',
+    url: '/products/wireless-headphones/detail-shot.jpg',
+    altText: 'Close-up of premium materials and build quality',
+    caption: 'Detail Shot - Premium Materials'
+  }
+];
+
+library.mediaItems = productMedia;
+library.thumbnailSize = 'large';
+library.horizontal = true;
+library.gap = '1.5rem';
+~~~
+
+**Benefits:**
+- Comprehensive product visualization
+- Video demonstrations alongside images
+- Professional presentation
+- Enhanced customer confidence
+
+---
+
+## Documentation Systems
+
+### Technical Documentation with Visual Guides
+
+Enhance documentation with screenshots, diagrams, and tutorial videos.
+
+**Requirements:**
+- Step-by-step screenshots
+- Tutorial videos
+- Diagram images
+- Clear captions explaining each step
+- Easy reference and navigation
+
+**Implementation:**
+
+~~~javascript
+const documentationMedia = [
+  {
+    id: 'step-01',
+    type: 'image',
+    url: '/docs/setup/login-screen.png',
+    altText: 'Application login screen with username and password fields',
+    caption: 'Step 1: Navigate to the login screen and enter your credentials'
+  },
+  {
+    id: 'video-tutorial',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=TUTORIAL_ID',
+    altText: 'Complete setup walkthrough video',
+    caption: 'Video Tutorial: Complete Setup Walkthrough (8:15)',
+    platform: 'youtube'
+  },
+  {
+    id: 'step-02',
+    type: 'image',
+    url: '/docs/setup/dashboard.png',
+    altText: 'Main dashboard showing navigation menu and widgets',
+    caption: 'Step 2: Familiarize yourself with the dashboard layout'
+  },
+  {
+    id: 'architecture',
+    type: 'image',
+    url: '/docs/diagrams/system-architecture.png',
+    altText: 'System architecture diagram showing component relationships',
+    caption: 'System Architecture Overview'
+  }
+];
+
+library.mediaItems = documentationMedia;
+library.thumbnailSize = 'medium';
+library.showCaptions = true;
+~~~
+
+**Benefits:**
+- Clear visual step-by-step guides
+- Combined image and video tutorials
+- Professional documentation appearance
+- Easy reference for users
+
+---
+
+## Media Asset Management
+
+### Digital Asset Library
+
+Organize and manage company media assets with easy browsing and selection.
+
+**Requirements:**
+- Large media collection
+- Quick browsing and preview
+- Selection capability
+- Asset metadata
+- Search integration
+
+**Implementation:**
+
+~~~javascript
+const assetLibrary = [
+  {
+    id: 'asset-001',
+    type: 'image',
+    url: '/assets/images/brand/logo-primary.png',
+    altText: 'Primary company logo - full color version',
+    caption: 'Primary Logo | PNG | 2000x800px | Last updated: 2024-01-15'
+  },
+  {
+    id: 'asset-002',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=BRAND_VIDEO_ID',
+    altText: 'Company brand video for social media',
+    caption: 'Brand Video | 30s | Social Media | Approved: 2024-01-10',
+    platform: 'youtube'
+  },
+  {
+    id: 'asset-003',
+    type: 'image',
+    url: '/assets/images/marketing/campaign-hero.jpg',
+    altText: 'Marketing campaign hero image',
+    caption: 'Campaign Hero | JPG | 1920x1080px | Spring 2024'
+  }
+];
+
+// Handle asset selection
+library.addEventListener('mediaAction', (e) => {
+  if (e.detail.action === 'view') {
+    showAssetDetails(e.detail.mediaItem);
+    enableDownloadButton(e.detail.mediaItem);
+  }
+});
+
+library.mediaItems = assetLibrary;
+library.thumbnailSize = 'medium';
+library.gap = '1rem';
+~~~
+
+**Benefits:**
+- Organized asset browsing
+- Quick preview capability
+- Metadata display in captions
+- Event-based selection workflow
+
+---
+
+## Event Coverage
+
+### Event Photo and Video Gallery
+
+Document events with a mix of photos and highlight videos.
+
+**Requirements:**
+- Mixed media (photos + videos)
+- Chronological organization
+- Event details in captions
+- Social sharing capability
+- Mobile viewing optimization
+
+**Implementation:**
+
+~~~javascript
+const eventCoverage = [
+  {
+    id: 'event-opening',
+    type: 'image',
+    url: '/events/2024/conference/opening-ceremony.jpg',
+    altText: 'Opening ceremony with keynote speaker on stage',
+    caption: 'Opening Ceremony - Tech Conference 2024 | Jan 15, 9:00 AM'
+  },
+  {
+    id: 'keynote-video',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=KEYNOTE_ID',
+    altText: 'Keynote presentation highlights',
+    caption: 'Keynote Highlights: The Future of AI | 45 minutes',
+    platform: 'youtube'
+  },
+  {
+    id: 'networking',
+    type: 'image',
+    url: '/events/2024/conference/networking-break.jpg',
+    altText: 'Attendees networking during coffee break',
+    caption: 'Networking Break | Jan 15, 10:30 AM'
+  },
+  {
+    id: 'panel-discussion',
+    type: 'image',
+    url: '/events/2024/conference/panel-discussion.jpg',
+    altText: 'Expert panel discussion on industry trends',
+    caption: 'Panel Discussion: Industry Trends | Jan 15, 2:00 PM'
+  }
+];
+
+library.mediaItems = eventCoverage;
+library.thumbnailSize = 'medium';
+library.horizontal = true;
+~~~
+
+**Benefits:**
+- Comprehensive event documentation
+- Mixed media storytelling
+- Chronological event flow
+- Professional presentation
+
+---
+
+## Portfolio Websites
+
+### Creative Professional Portfolio
+
+Showcase design work, illustrations, and creative projects.
+
+**Requirements:**
+- High-quality project images
+- Project descriptions
+- Case study videos
+- Visual hierarchy
+- Impressive presentation
+
+**Implementation:**
+
+~~~javascript
+const creativePortfolio = [
+  {
+    id: 'branding-project',
+    type: 'image',
+    url: '/portfolio/branding/logo-suite.jpg',
+    altText: 'Complete brand identity system with logo variations',
+    caption: 'Brand Identity | Tech Startup | Complete logo suite and guidelines'
+  },
+  {
+    id: 'case-study',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=CASE_STUDY_ID',
+    altText: 'Brand development case study walkthrough',
+    caption: 'Case Study: From Concept to Launch | 6 minutes',
+    platform: 'youtube'
+  },
+  {
+    id: 'web-design',
+    type: 'image',
+    url: '/portfolio/web/homepage-design.jpg',
+    altText: 'Modern website homepage design mockup',
+    caption: 'Web Design | E-Commerce Platform | Responsive homepage design'
+  },
+  {
+    id: 'ui-design',
+    type: 'image',
+    url: '/portfolio/ui/mobile-app.jpg',
+    altText: 'Mobile app UI design screens',
+    caption: 'UI/UX Design | Mobile App | Complete user flow'
+  }
+];
+
+library.mediaItems = creativePortfolio;
+library.thumbnailSize = 'large';
+library.gap = '2rem';
+~~~
+
+**Benefits:**
+- Striking visual presentation
+- Project context via captions
+- Case study video integration
+- Professional portfolio appearance
+
+---
+
+## Real Estate Listings
+
+### Property Photo and Video Tours
+
+Showcase properties with photos and virtual tour videos.
+
+**Requirements:**
+- Property photos
+- Virtual tour videos
+- Room descriptions
+- Multiple views per property
+- Professional presentation
+
+**Implementation:**
+
+~~~javascript
+const propertyMedia = [
+  {
+    id: 'exterior',
+    type: 'image',
+    url: '/listings/123-main-st/exterior.jpg',
+    altText: 'Front exterior view of modern two-story home',
+    caption: 'Exterior | 123 Main Street | 3 bed, 2.5 bath | $650,000'
+  },
+  {
+    id: 'virtual-tour',
+    type: 'video',
+    url: 'https://www.youtube.com/watch?v=TOUR_ID',
+    altText: 'Complete property virtual tour',
+    caption: 'Virtual Tour | Full walkthrough of all rooms | 5:30',
+    platform: 'youtube'
+  },
+  {
+    id: 'living-room',
+    type: 'image',
+    url: '/listings/123-main-st/living-room.jpg',
+    altText: 'Spacious living room with fireplace and large windows',
+    caption: 'Living Room | Open concept with fireplace | 450 sq ft'
+  },
+  {
+    id: 'kitchen',
+    type: 'image',
+    url: '/listings/123-main-st/kitchen.jpg',
+    altText: 'Modern kitchen with island and stainless appliances',
+    caption: 'Kitchen | Granite countertops, new appliances | 300 sq ft'
+  },
+  {
+    id: 'master-bedroom',
+    type: 'image',
+    url: '/listings/123-main-st/master-bedroom.jpg',
+    altText: 'Master bedroom with walk-in closet',
+    caption: 'Master Bedroom | En-suite bathroom, walk-in closet | 350 sq ft'
+  }
+];
+
+library.mediaItems = propertyMedia;
+library.thumbnailSize = 'large';
+library.horizontal = true;
+library.showCaptions = true;
+~~~
+
+**Benefits:**
+- Comprehensive property visualization
+- Virtual tours for remote viewing
+- Detailed room information
+- Professional listing presentation
+
+---
+
+## Implementation Best Practices
+
+### 1. Optimize Media Assets
+
+~~~javascript
+// Use appropriately sized images
+const optimizedMedia = [
+  {
+    id: 'img1',
+    type: 'image',
+    url: '/images/optimized/photo-800w.jpg',  // Thumbnail size
+    thumbnailUrl: '/images/thumbs/photo-200w.jpg',  // Custom thumbnail
+    altText: 'Description',
+    caption: 'Caption'
+  }
+];
+~~~
+
+### 2. Implement Loading States
+
+~~~javascript
+library.addEventListener('mediaAction', (e) => {
+  if (e.detail.action === 'view') {
+    showLoadingIndicator();
+  } else if (e.detail.action === 'error') {
+    showErrorMessage(e.detail.errorMessage);
+    hideLoadingIndicator();
+  }
+});
+~~~
+
+### 3. Add Analytics Tracking
+
+~~~javascript
+library.addEventListener('mediaAction', (e) => {
+  const { action, mediaItem, index } = e.detail;
+  
+  // Track with your analytics platform
+  analytics.track('Media Interaction', {
+    action: action,
+    mediaType: mediaItem?.type,
+    mediaId: mediaItem?.id,
+    position: index
+  });
+});
+~~~
+
+### 4. Implement Lazy Loading
+
+The component automatically implements lazy loading for images. For additional optimization:
+
+~~~javascript
+// Load media data only when needed
+async function loadMediaLibrary() {
+  const mediaData = await fetch('/api/media-items').then(r => r.json());
+  library.mediaItems = mediaData;
+}
+
+// Initialize on user interaction or viewport entry
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      loadMediaLibrary();
+      observer.disconnect();
+    }
+  });
+  
+  observer.observe(library);
+}
+~~~
+
+---
+
+## Summary
+
+The `spectrum-media-library` component is versatile enough to handle a wide range of use cases, from simple photo galleries to complex media asset management systems. Its combination of flexibility, accessibility, and professional presentation makes it suitable for:
+
+- **Content Creators**: Photographers, designers, and artists
+- **Educational Platforms**: Course providers and training systems
+- **E-Commerce**: Product showcases and demos
+- **Corporate**: Asset management and brand resources
+- **Real Estate**: Property listings and virtual tours
+- **Documentation**: Technical guides and tutorials
+
+Choose the configuration and customization options that best fit your specific use case, and leverage the event system for advanced integrations with your application logic.
+
+
+
+
+

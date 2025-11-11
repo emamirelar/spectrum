@@ -560,7 +560,38 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
 
 
 @ProxyCmp({
-  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
+  inputs: ['enableKeyboardNav', 'enableLightbox', 'gap', 'height', 'horizontal', 'mediaItems', 'showCaptions', 'thumbnailSize', 'width'],
+  methods: ['closeLightbox', 'navigatePrevious', 'navigateNext']
+})
+@Component({
+  selector: 'spectrum-media-library',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['enableKeyboardNav', 'enableLightbox', 'gap', 'height', 'horizontal', 'mediaItems', 'showCaptions', 'thumbnailSize', 'width'],
+})
+export class SpectrumMediaLibrary {
+  protected el: HTMLSpectrumMediaLibraryElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['mediaAction']);
+  }
+}
+
+
+import type { MediaActionPayload as ISpectrumMediaLibraryMediaActionPayload } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumMediaLibrary extends Components.SpectrumMediaLibrary {
+  /**
+   * Event emitted when media item is interacted with
+   */
+  mediaAction: EventEmitter<CustomEvent<ISpectrumMediaLibraryMediaActionPayload>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'megamenuFooterItems', 'megamenuFooterTitle', 'megamenuFooterTitleIcon', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
   methods: ['close']
 })
 @Component({
@@ -568,7 +599,7 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
+  inputs: ['directNavigation', 'items', 'leftItems', 'logoHref', 'logoLabel', 'megamenuFooterItems', 'megamenuFooterTitle', 'megamenuFooterTitleIcon', 'mobileBreakpoint', 'mobileIconColor', 'mobileMenuTitle', 'navigationColor', 'orientation', 'rightItems', 'variant'],
 })
 export class SpectrumMenu {
   protected el: HTMLSpectrumMenuElement;
@@ -950,7 +981,7 @@ export declare interface SpectrumWallpaper extends Components.SpectrumWallpaper 
 
 
 @ProxyCmp({
-  inputs: ['allowStepSelection', 'completeButtonLabel', 'cookieExpirationDays', 'currentStep', 'nextButtonLabel', 'persistProgress', 'previousButtonLabel', 'showNavigation', 'showTimeIndicators', 'steps', 'wizardId'],
+  inputs: ['allowStepSelection', 'completeButtonLabel', 'cookieExpirationDays', 'currentStep', 'externalStyles', 'nextButtonLabel', 'persistProgress', 'previousButtonLabel', 'showNavigation', 'showTimeIndicators', 'steps', 'wizardId'],
   methods: ['nextStep', 'previousStep', 'goToStep', 'completeWizard', 'resetProgress', 'getTotalEstimatedTime']
 })
 @Component({
@@ -958,7 +989,7 @@ export declare interface SpectrumWallpaper extends Components.SpectrumWallpaper 
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['allowStepSelection', 'completeButtonLabel', 'cookieExpirationDays', 'currentStep', 'nextButtonLabel', 'persistProgress', 'previousButtonLabel', 'showNavigation', 'showTimeIndicators', 'steps', 'wizardId'],
+  inputs: ['allowStepSelection', 'completeButtonLabel', 'cookieExpirationDays', 'currentStep', 'externalStyles', 'nextButtonLabel', 'persistProgress', 'previousButtonLabel', 'showNavigation', 'showTimeIndicators', 'steps', 'wizardId'],
 })
 export class SpectrumWizard {
   protected el: HTMLSpectrumWizardElement;

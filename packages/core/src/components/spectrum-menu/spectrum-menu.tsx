@@ -154,6 +154,30 @@ export class SpectrumMenu {
    */
   @Prop() logoLabel: string = 'Home';
 
+  /**
+   * The megamenu footer items configuration (optional)
+   * Used for the footer section of megamenu variant
+   * Can be provided as a JSON string or array of objects
+   */
+  @Prop() megamenuFooterItems: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+  }> = [];
+
+  /**
+   * The megamenu footer title configuration (optional)
+   * Can be provided as a simple string or as a JSON string with text and icon
+   * @example "Our Sites" or '{"text":"Our Sites","icon":"public"}'
+   */
+  @Prop() megamenuFooterTitle: string = '';
+
+  /**
+   * The megamenu footer title icon (optional)
+   * Material icon name to display with the footer title
+   */
+  @Prop() megamenuFooterTitleIcon: string = '';
 
 
   /**
@@ -247,6 +271,16 @@ export class SpectrumMenu {
   }> = [];
 
   /**
+   * Parsed megamenu footer items (internal state)
+   */
+  @State() parsedMegamenuFooterItems: Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+  }> = [];
+
+  /**
    * Event emitted when a menu item is clicked
    */
   @Event() itemClick: EventEmitter<{
@@ -267,6 +301,11 @@ export class SpectrumMenu {
   @Watch('rightItems')
   rightItemsChanged(newValue: string | Array<any>) {
     this.parseRightItems(newValue);
+  }
+
+  @Watch('megamenuFooterItems')
+  megamenuFooterItemsChanged(newValue: string | Array<any>) {
+    this.parseMegamenuFooterItems(newValue);
   }
 
 
@@ -363,6 +402,7 @@ export class SpectrumMenu {
     this.parseItems(this.items);
     this.parseLeftItems(this.leftItems);
     this.parseRightItems(this.rightItems);
+    this.parseMegamenuFooterItems(this.megamenuFooterItems);
   }
 
   componentDidLoad() {
@@ -449,6 +489,19 @@ export class SpectrumMenu {
       }
     } else {
       this.parsedRightItems = items;
+    }
+  }
+
+  private parseMegamenuFooterItems(items: string | Array<any>) {
+    if (typeof items === 'string') {
+      try {
+        this.parsedMegamenuFooterItems = JSON.parse(items);
+      } catch (e) {
+        console.error('Failed to parse megamenuFooterItems JSON:', e);
+        this.parsedMegamenuFooterItems = [];
+      }
+    } else {
+      this.parsedMegamenuFooterItems = items;
     }
   }
 
@@ -606,6 +659,52 @@ export class SpectrumMenu {
               <div class="spectrum-menu__megamenu-content">
                 {this.renderMegamenuContent(item.children)}
               </div>
+                {this.parsedMegamenuFooterItems && this.parsedMegamenuFooterItems.length > 0 && (
+                <div class="spectrum-menu__megamenu-footer">
+                  {this.megamenuFooterTitle && (
+                    <div class="spectrum-menu__megamenu-footer-title-container">
+                      {this.megamenuFooterTitleIcon && this.renderIcon(this.megamenuFooterTitleIcon)}
+                      <div class="spectrum-menu__megamenu-footer-title">{this.megamenuFooterTitle}</div>
+                    </div>
+                  )}
+                  <div class="spectrum-menu__megamenu-footer-items">
+                    {this.parsedMegamenuFooterItems.map((footerItem) => (
+                      <div
+                        class={{
+                          'spectrum-menu__megamenu-footer-item': true,
+                          'spectrum-menu__megamenu-footer-item--disabled': footerItem.disabled,
+                        }}
+                        role="menuitem"
+                        tabindex={footerItem.disabled ? -1 : 0}
+                        aria-disabled={footerItem.disabled ? 'true' : 'false'}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (!footerItem.disabled) {
+                            this.handleItemClick(footerItem);
+                          }
+                        }}
+                      >
+                        <a
+                          class="spectrum-menu__megamenu-footer-item-link"
+                          href={footerItem.href || '#'}
+                          tabindex={-1}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (!footerItem.disabled) {
+                              this.handleItemClick(footerItem);
+                            }
+                          }}
+                        >
+                          {this.renderIcon(footerItem.icon)}
+                          <span class="spectrum-menu__megamenu-footer-item-label">{footerItem.label}</span>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div class="spectrum-menu__submenu" role="menu" aria-label={`${item.label} submenu`}>

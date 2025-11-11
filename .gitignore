@@ -210,3 +210,8 @@ packages/core/src/components.d.ts
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
+# Code Review Rule - Ignore generated task files but keep documentation
+.cursor/tasks/code-review-*.md
+!.cursor/tasks/README.md
+!.cursor/tasks/example-*.md
+

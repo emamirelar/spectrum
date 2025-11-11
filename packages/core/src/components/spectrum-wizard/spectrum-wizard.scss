@@ -475,6 +475,48 @@
 }
 
 // ==============================================
+// Slotted Content Support
+// ==============================================
+// Styles for slotted content allow external CSS to work
+// while providing sensible defaults
+::slotted(*) {
+  // Inherit font settings from component
+  font-family: var(--wizard-font-family);
+  color: var(--wizard-color);
+  line-height: 1.6;
+}
+
+::slotted(p) {
+  margin: 0 0 var(--wizard-spacing) 0;
+}
+
+::slotted(p:last-child) {
+  margin-bottom: 0;
+}
+
+::slotted(ul),
+::slotted(ol) {
+  margin: 0 0 var(--wizard-spacing) 0;
+  padding-left: var(--wizard-spacing-large);
+}
+
+::slotted(h1),
+::slotted(h2),
+::slotted(h3),
+::slotted(h4),
+::slotted(h5),
+::slotted(h6) {
+  margin: var(--wizard-spacing) 0 var(--wizard-spacing-small) 0;
+  color: var(--wizard-color);
+}
+
+::slotted(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--wizard-border-radius);
+}
+
+// ==============================================
 // Navigation Styles
 // ==============================================
 .spectrum-wizard__navigation {

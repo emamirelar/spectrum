@@ -57,6 +57,11 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: spectrum-conversation-panel, spectrum-image-gallery, spectrum-cookie-compliance
   - Purpose: Flexible content container with background effects and customizable sizing
 
+- **spectrum-media-library**: Comprehensive media library component with lightbox viewer
+  - Dependencies: None (pure component)
+  - Used by: Media galleries, portfolios, documentation systems, and media management applications
+  - Purpose: Display images and videos in a scrollable grid with integrated lightbox viewer, automatic YouTube thumbnail extraction, and full keyboard navigation
+
 ### Utility Components
 - **spectrum-context-menu**: Contextual menu overlay
   - Dependencies: None (pure component)
@@ -96,6 +101,7 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Dependencies: spectrum-button, spectrum-chip, spectrum-switch
   - Used by: Onboarding flows, multi-step forms, configuration processes, and guided user experiences
   - Purpose: Provides step-by-step navigation with progress tracking, cookie-based persistence, time estimation, and comprehensive accessibility support
+  - Recent Updates: Consistent use of spectrum-chip (size="small", variant="primary") for all time indicators; chips display time value only; content area shows "Estimated time:" label outside the chip; completed step indicators use success color (green) while step titles maintain normal text color
 
 - **spectrum-collapsible-list**: Hierarchical list with context menus
   - Dependencies: spectrum-context-menu (imports ContextMenuAction interface)

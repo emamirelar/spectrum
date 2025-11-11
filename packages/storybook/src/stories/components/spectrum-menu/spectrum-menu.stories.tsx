@@ -49,6 +49,9 @@ interface SpectrumMenuElement extends HTMLElement {
   mobileIconColor: string;
   logoHref: string;
   logoLabel: string;
+  megamenuFooterItems: Array<{ label: string; href?: string; icon?: string; disabled?: boolean }>;
+  megamenuFooterTitle: string;
+  megamenuFooterTitleIcon: string;
 }
 
 // Story arguments interface
@@ -432,6 +435,9 @@ const renderMenu = (args: SpectrumMenuArgs) => {
         .items=${args.items}
         .leftItems=${args.leftItems}
         .rightItems=${args.rightItems}
+        .megamenuFooterItems=${args.megamenuFooterItems}
+        .megamenuFooterTitle=${args.megamenuFooterTitle}
+        .megamenuFooterTitleIcon=${args.megamenuFooterTitleIcon}
         mobile-breakpoint=${args.mobileBreakpoint}
         mobile-menu-title=${args.mobileMenuTitle}
         ?direct-navigation=${args.directNavigation}
@@ -522,18 +528,31 @@ export const MegamenuDemo: Story = {
     variant: 'megamenu',
     items: megamenuItems,
     mobileBreakpoint: 768,
-    mobileMenuTitle: 'Enterprise Menu'
+    mobileMenuTitle: 'Enterprise Menu',
+    megamenuFooterTitle: 'Our Platform',
+    megamenuFooterTitleIcon: 'public',
+    megamenuFooterItems: [
+      { label: 'Documentation', href: '/docs', icon: 'description' },
+      { label: 'API Reference', href: '/api', icon: 'code' },
+      { label: 'Support Portal', href: '/support', icon: 'help_center' },
+      { label: 'Community', href: '/community', icon: 'group' },
+      { label: 'Blog', href: '/blog', icon: 'article' },
+      { label: 'Status Page', href: '/status', icon: 'assessment' },
+      { label: 'Roadmap', href: '/roadmap', icon: 'map' },
+      { label: 'Contact Sales', href: '/sales', icon: 'phone' }
+    ]
   },
   render: renderMenu,
   parameters: {
     docs: {
       description: {
         story: `
-Megamenu demonstration with rich content and descriptions:
-- **Full-width dropdowns** with organized content columns
+Megamenu demonstration with rich content, descriptions, and footer section:
+- **Full-width dropdowns** with organized content in 4-column layout
 - **Rich descriptions** for each section and subsection
 - **Material icons** throughout for visual hierarchy
 - **Multi-level hierarchy** supporting complex site structures
+- **Footer section** with additional navigation links (4-column grid)
 - **Enterprise focus** with business-oriented categories
 
 Perfect for corporate websites, SaaS platforms, and complex applications.
@@ -1652,12 +1671,12 @@ This story demonstrates the new flexible navigation layout with separate left an
 - **Right Items**: Secondary actions (Login, Contact, Account)
 
 **Desktop Layout (Horizontal):**
-\`\`\`
+~~~
 [Left Items] ←→ [  Spectrum Logo  ] ←→ [Right Items]
-\`\`\`
+~~~
 
 **Mobile Layout (Vertical):**
-\`\`\`
+~~~
 Header: [Logo] Main Navigation                    [X]
 ├── Left Items
 │   ├── Home
@@ -1667,7 +1686,7 @@ Header: [Logo] Main Navigation                    [X]
     ├── Login
     ├── Contact
     └── Account
-\`\`\`
+~~~
 
 **Key Features:**
 - **Flexible Logo Space**: Logo section uses \`flex: 1\` to expand and center content
@@ -1678,7 +1697,7 @@ Header: [Logo] Main Navigation                    [X]
 - **Brand Integration**: Logo slot accepts any content (text, images, components)
 
 **Usage:**
-\`\`\`html
+~~~html
 <spectrum-menu
   .leftItems=\${leftNavItems}
   .rightItems=\${rightNavItems}>
@@ -1686,7 +1705,7 @@ Header: [Logo] Main Navigation                    [X]
     <img src="logo.png" alt="Brand Logo" />
   </div>
 </spectrum-menu>
-\`\`\`
+~~~
 
 **Perfect For:**
 - Corporate websites with branded headers
@@ -1699,6 +1718,153 @@ Header: [Logo] Main Navigation                    [X]
 - Logo section has \`flex: 1\` for expansion
 - Left and right sections have \`flex-shrink: 0\` to maintain size
 - Mobile layout uses vertical flex direction
+        `
+      }
+    }
+  }
+};
+
+/**
+ * Navigation with a larger, more prominent logo that is twice as tall as the standard version.
+ * Perfect for premium branding or hero-style headers requiring a larger logo presence.
+ */
+export const LargeLogo: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'default',
+    items: [], // Empty regular items since we're using left/right
+    leftItems: [
+      { label: 'Home', href: '/', icon: 'home' },
+      { label: 'About', href: '/about', icon: 'info' },
+      { 
+        label: 'Services', 
+        href: '/services', 
+        icon: 'design_services',
+        children: [
+          { label: 'Web Development', href: '/services/web', icon: 'web' },
+          { label: 'Mobile Apps', href: '/services/mobile', icon: 'phone_android' },
+          { label: 'UI/UX Design', href: '/services/design', icon: 'palette' }
+        ]
+      }
+    ],
+    rightItems: [
+      { label: 'Login', href: '/login', icon: 'login' },
+      { label: 'Contact', href: '/contact', icon: 'contact_mail' },
+      { 
+        label: 'Account', 
+        href: '/account', 
+        icon: 'account_circle',
+        children: [
+          { label: 'Profile', href: '/profile', icon: 'person' },
+          { label: 'Settings', href: '/settings', icon: 'settings' },
+          { label: 'Logout', href: '/logout', icon: 'logout' }
+        ]
+      }
+    ],
+    mobileBreakpoint: 768,
+    mobileMenuTitle: 'Main Navigation',
+    directNavigation: false,
+    logoHref: '/',
+    logoLabel: 'Spectrum Home'
+  },
+  render: (args) => html`
+    <div style="padding: 2rem; border: 2px solid var(--spectrum-sys-color-outline); border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh;">
+      <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.95); border-radius: 6px; backdrop-filter: blur(10px);">
+        <h3 style="margin: 0 0 1rem 0; color: var(--spectrum-sys-color-on-surface);">🏢 Navigation with Large Logo (2x Height)</h3>
+        <div style="color: var(--spectrum-sys-color-on-surface-variant);">
+          <p style="margin: 0 0 1rem 0;"><strong>Premium Branding Layout:</strong></p>
+          <div style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem; background: var(--spectrum-sys-color-surface); border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline-variant);">
+            <div style="padding: 0.25rem 0.5rem; background: var(--spectrum-sys-color-primary-container); border-radius: 4px; font-size: 0.875rem;">Left Items</div>
+            <div style="flex: 1; text-align: center; padding: 0.25rem 0.5rem; background: var(--spectrum-sys-color-secondary-container); border-radius: 4px; font-size: 0.875rem;">Large Spectrum Logo (Expands)</div>
+            <div style="padding: 0.25rem 0.5rem; background: var(--spectrum-sys-color-tertiary-container); border-radius: 4px; font-size: 0.875rem;">Right Items</div>
+          </div>
+          <p style="margin: 1rem 0 0 0;"><strong>Logo Height:</strong> 80px (2x the standard 40px)</p>
+        </div>
+      </div>
+      
+      <spectrum-menu
+        orientation=${args.orientation}
+        variant=${args.variant}
+        .items=${args.items}
+        .leftItems=${args.leftItems}
+        .rightItems=${args.rightItems}
+        mobile-breakpoint=${args.mobileBreakpoint}
+        mobile-menu-title=${args.mobileMenuTitle}
+        ?direct-navigation=${args.directNavigation}
+        logo-href=${args.logoHref}
+        logo-label=${args.logoLabel}
+        @itemClick=${(e: CustomEvent) => action('large-logo-itemClick')(e.detail)}
+      >
+        <div slot="logo" style="display: flex; align-items: center; justify-content: center; padding: 0 2rem;">
+          <img 
+            src="./spectrum-logo.svg" 
+            alt="Spectrum Logo" 
+            style="height: 80px; width: auto; max-width: 300px;"
+          />
+        </div>
+        <div slot="mobile-nav-logo" style="display: flex; align-items: center; justify-content: center;">
+          <img 
+            src="./spectrum-logo.svg" 
+            alt="Spectrum Logo" 
+            style="height: 40px; width: auto; max-width: 200px;"
+          />
+        </div>
+      </spectrum-menu>
+      
+      <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.95); border-radius: 6px; backdrop-filter: blur(10px);">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--spectrum-sys-color-on-surface);">✨ Large Logo Features:</h4>
+        <ul style="margin: 0; padding-left: 1.5rem; color: var(--spectrum-sys-color-on-surface);">
+          <li><strong>Premium Branding</strong>: Larger logo creates a more impressive header</li>
+          <li><strong>Enhanced Visibility</strong>: 80px height makes the logo more prominent</li>
+          <li><strong>Responsive Logo Slot</strong>: Logo expands to take available space on desktop</li>
+          <li><strong>Mobile Optimization</strong>: Mobile logo reduced to 40px for space efficiency</li>
+          <li><strong>Navigation Alignment</strong>: Left and right navigation items properly aligned with large logo</li>
+          <li><strong>Flexible Layout</strong>: Works with different logo aspect ratios</li>
+          <li><strong>Perfect For</strong>: Premium sites, luxury brands, enterprise applications</li>
+        </ul>
+      </div>
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+### Navigation with Large Logo
+
+This story demonstrates a premium navigation layout with a significantly larger logo (80px height - 2x the standard size).
+
+**Logo Sizes:**
+- **Desktop Logo**: 80px height (2x standard)
+- **Mobile Logo**: 40px height (optimized for mobile screens)
+
+**Layout Structure:**
+- **Left Items**: Primary navigation (Home, About, Services)
+- **Large Logo Section**: Centered logo at 80px height for maximum prominence
+- **Right Items**: Secondary actions (Login, Contact, Account)
+
+**Use Cases:**
+- **Premium Branding**: Luxury brands requiring prominent logo placement
+- **Enterprise Applications**: Corporate sites with strong brand identity
+- **Hero Headers**: Landing pages with emphasized branding
+- **Luxury E-commerce**: High-end retail sites with sophisticated headers
+
+**Mobile Behavior:**
+- Logo automatically scales down to 40px on mobile
+- Navigation items stack vertically for mobile devices
+- Logo maintains aspect ratio at all sizes
+
+**Design Considerations:**
+- Large logo creates visual hierarchy and brand dominance
+- Increased header height accommodates larger logo
+- Navigation items vertically centered with large logo
+- Mobile-first responsive design prevents layout issues
+- CSS flexbox ensures proper alignment and spacing
+
+**Customization:**
+You can adjust the logo height by modifying the \`height\` CSS property in the logo slot. Examples:
+- **60px**: Medium prominence (1.5x standard)
+- **80px**: Large prominence (2x standard) - Current
+- **100px**: Maximum prominence (2.5x standard)
         `
       }
     }

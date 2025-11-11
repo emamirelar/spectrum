@@ -1,0 +1,502 @@
+// ==============================================
+// Spectrum Media Library Component Styles
+// ==============================================
+// BEM naming convention: spectrum-media-library (block), __element (element), --modifier (modifier)
+// Responsive design using CSS Grid and Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+:host {
+  display: block;
+  
+  // Core component properties
+  --media-library-background: var(--spectrum-sys-color-surface, #ffffff);
+  --media-library-color: var(--spectrum-sys-color-on-surface, #000000);
+  --media-library-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --media-library-padding: var(--spectrum-sys-spacing, 1rem);
+  --media-library-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  
+  // Thumbnail properties
+  --media-library-thumbnail-border: 1px solid var(--spectrum-sys-color-outline, #e0e0e0);
+  --media-library-thumbnail-radius: var(--spectrum-sys-shape-corner-small, 0.25rem);
+  --media-library-thumbnail-hover-scale: 1.05;
+  --media-library-thumbnail-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  // Overlay properties
+  --media-library-overlay-background: rgba(0, 0, 0, 0.4);
+  --media-library-overlay-hover: rgba(0, 0, 0, 0.6);
+  
+  // Lightbox properties
+  --media-library-lightbox-background: rgba(0, 0, 0, 0.95);
+  --media-library-lightbox-content-background: var(--spectrum-sys-color-surface, #ffffff);
+  --media-library-lightbox-max-width: 90vw;
+  --media-library-lightbox-max-height: 90vh;
+  
+  // Interactive states
+  --media-library-focus-outline: var(--spectrum-sys-color-primary, #4A90E2);
+  --media-library-hover-background: var(--spectrum-sys-color-surface-hover, #f5f5f5);
+  
+  // Animation and transitions
+  --media-library-transition: all 0.2s ease-in-out;
+  --media-library-transition-duration: 0.2s;
+  --media-library-transition-timing: ease-in-out;
+  
+  // Spacing
+  --media-library-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --media-library-spacing: var(--spectrum-sys-spacing, 1rem);
+  --media-library-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-media-library {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: var(--media-library-spacing);
+  background-color: var(--media-library-background);
+  border-radius: var(--media-library-border-radius);
+  font-family: var(--media-library-font-family);
+  
+  // Smooth scrolling
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  // Layout modifiers
+  &--horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+  
+  &--vertical {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  
+  // ==============================================
+  // Thumbnail Styles
+  // ==============================================
+  &__thumbnail {
+    position: relative;
+    flex-shrink: 0;
+    border: var(--media-library-thumbnail-border);
+    border-radius: var(--media-library-thumbnail-radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--media-library-transition);
+    outline: none;
+    
+    // Hover state
+    &:hover {
+      transform: scale(var(--media-library-thumbnail-hover-scale));
+      box-shadow: var(--media-library-thumbnail-hover-shadow);
+      z-index: 1;
+      
+      .spectrum-media-library__thumbnail-overlay {
+        background-color: var(--media-library-overlay-hover);
+      }
+    }
+    
+    // Focus state
+    &:focus-visible {
+      outline: 2px solid var(--media-library-focus-outline);
+      outline-offset: 2px;
+    }
+    
+    // Active state
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+  
+  &__thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  &__thumbnail-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--media-library-overlay-background);
+    transition: background-color var(--media-library-transition-duration);
+  }
+  
+  &__play-icon {
+    width: 48px;
+    height: 48px;
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+  
+  // ==============================================
+  // Empty State
+  // ==============================================
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--spectrum-sys-color-on-surface-variant, #666666);
+    font-size: var(--spectrum-sys-typescale-body-medium-size, 1rem);
+    text-align: center;
+    
+    p {
+      margin: 0;
+    }
+  }
+}
+
+// ==============================================
+// Lightbox Styles
+// ==============================================
+.spectrum-media-library__lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--media-library-lightbox-background);
+  animation: fadeIn 0.3s ease-in-out;
+  
+  &-content {
+    position: relative;
+    width: var(--media-library-lightbox-max-width);
+    height: var(--media-library-lightbox-max-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  // Close button
+  &-close {
+    position: absolute;
+    top: var(--media-library-spacing);
+    right: var(--media-library-spacing);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: var(--media-library-transition);
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+      transform: scale(1.1);
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--media-library-focus-outline);
+      outline-offset: 2px;
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  // Navigation buttons
+  &-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: var(--media-library-transition);
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--media-library-focus-outline);
+      outline-offset: 2px;
+    }
+    
+    &:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    
+    &--prev {
+      left: var(--media-library-spacing);
+    }
+    
+    &--next {
+      right: var(--media-library-spacing);
+    }
+  }
+  
+  // Media content
+  &-media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--media-library-border-radius);
+  }
+  
+  &-video {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: var(--media-library-border-radius);
+  }
+  
+  // Loading spinner
+  &-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 5;
+  }
+  
+  // Caption
+  &-caption {
+    position: absolute;
+    bottom: var(--media-library-spacing);
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 80%;
+    padding: var(--media-library-spacing-small) var(--media-library-spacing);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: var(--media-library-border-radius);
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);
+    text-align: center;
+  }
+  
+  // Counter
+  &-counter {
+    position: absolute;
+    top: var(--media-library-spacing);
+    left: var(--media-library-spacing);
+    padding: var(--media-library-spacing-small) var(--media-library-spacing);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: var(--media-library-border-radius);
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.875rem);
+    font-weight: 600;
+  }
+}
+
+// ==============================================
+// Spinner Animation
+// ==============================================
+.spectrum-media-library__spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+// ==============================================
+// Animations
+// ==============================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ==============================================
+// Accessibility - Screen Reader Only
+// ==============================================
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ==============================================
+// Accessibility - High Contrast Mode
+// ==============================================
+@media (prefers-contrast: high) {
+  .spectrum-media-library {
+    &__thumbnail {
+      border: 2px solid;
+      
+      &:focus-visible {
+        outline: 3px solid ButtonText;
+      }
+    }
+  }
+  
+  .spectrum-media-library__lightbox {
+    &-close,
+    &-nav {
+      border: 1px solid white;
+    }
+  }
+}
+
+// ==============================================
+// Accessibility - Reduced Motion
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-media-library {
+    scroll-behavior: auto;
+    
+    &__thumbnail {
+      transition: none;
+      
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+  
+  .spectrum-media-library__lightbox {
+    animation: none;
+    
+    &-close,
+    &-nav {
+      transition: none;
+      
+      &:hover {
+        transform: none;
+      }
+      
+      &:active {
+        transform: none;
+      }
+    }
+    
+    &-nav {
+      &--prev,
+      &--next {
+        &:hover {
+          transform: translateY(-50%);
+        }
+        
+        &:active {
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+  
+  .spectrum-media-library__spinner {
+    animation-duration: 0.01ms;
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (max-width: 768px) {
+  .spectrum-media-library__lightbox {
+    &-content {
+      --media-library-lightbox-max-width: 95vw;
+      --media-library-lightbox-max-height: 95vh;
+    }
+    
+    &-nav {
+      width: 40px;
+      height: 40px;
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    
+    &-close {
+      width: 40px;
+      height: 40px;
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    
+    &-caption {
+      font-size: var(--spectrum-sys-typescale-body-x-small-size, 0.75rem);
+      max-width: 90%;
+    }
+  }
+}
