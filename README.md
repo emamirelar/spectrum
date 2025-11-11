@@ -100,7 +100,7 @@ Before publishing any release:
 - [ ] Version number matches `packages/core/package.json`
 - [ ] Breaking changes clearly marked with migration paths
 - [ ] Component dependency map updated
-- [ ] Date format is YYYY-MM-DD
+- [ ] Date format is dd/mmm/yy (e.g., 11/Nov/25)
 - [ ] Grammar and spelling checked
 - [ ] Storybook renders changelog correctly
 

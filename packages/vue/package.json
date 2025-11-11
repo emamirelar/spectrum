@@ -24,7 +24,7 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@unops-itg-npm/cpit-spectrum": "*"
+    "@unops-itg-npm/cpit-spectrum": "^0.0.1-alpha.39"
   },
   "devDependencies": {
     "vue": "^3.5.13"

@@ -873,7 +873,7 @@
 .spectrum-menu__megamenu-content {
   padding: var(--menu-spacing-x-large);
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 0; // Anchor to left; avoid centered block
   width: 100%;
   flex: 1; // Grow to fill available space
   display: flex;
@@ -901,15 +901,20 @@
   gap: var(--menu-spacing-small);
   margin-bottom: 0;
   flex: 1; // Allow section to grow and fill available space
+  align-items: stretch; // Ensure children span full width (prevents centering)
 }
 
 .spectrum-menu__megamenu-subitems {
   display: flex;
   flex-direction: column;
   gap: var(--menu-spacing-small);
-  padding-left: var(--menu-spacing-large);
-  padding-right: var(--menu-spacing);
-  border-left: 3px solid var(--spectrum-sys-color-primary, #6750a4);
+  padding-left: 0;
+  padding-right: 0;
+  border-left: none;
+  align-items: flex-start; // Ensure the whole block aligns to the left
+  text-align: left; // Explicit left text alignment
+  justify-content: flex-start; // Explicitly align content to the start
+  width: 100%; // Span full column width to avoid centered appearance
   margin-top: auto; // Push subitems to the bottom
 }
 
@@ -988,6 +993,7 @@
   border-radius: 0;
   cursor: pointer;
   background-color: transparent;
+  width: 100%; // Stretch to container width for consistent left alignment
   
   &.spectrum-menu__megamenu-subitem--disabled {
     opacity: var(--menu-item-disabled-opacity);
@@ -1011,7 +1017,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--menu-spacing-small);
-  width: fit-content; // Only text width, not full width
+  width: auto; // Avoid centering by content width
 }
 
 .spectrum-menu__megamenu-subitem-label {
