@@ -734,11 +734,11 @@ export class SpectrumMenu {
         const viewportHeight = window.innerHeight;
         
         if (this.variant === 'megamenu') {
-          // Megamenu positioning - full width below the menu bar
-          submenu.style.position = 'fixed'; // Megamenu still uses fixed for full viewport width
-          submenu.style.top = `${rect.bottom + spacing}px`;
-          submenu.style.left = '0px';
-          submenu.style.width = '100vw';
+          // Let CSS control positioning and visibility for megamenu
+          submenu.style.removeProperty('position');
+          submenu.style.removeProperty('top');
+          submenu.style.removeProperty('left');
+          submenu.style.removeProperty('width');
           // Let CSS hover control visibility
           submenu.style.removeProperty('visibility');
           submenu.style.removeProperty('opacity');

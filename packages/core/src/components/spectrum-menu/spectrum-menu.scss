@@ -60,7 +60,7 @@
   --mobile-icon-color: var(--spectrum-sys-color-on-surface, #1f1f1f); // Default value, can be overridden by mobileIconColor prop
   
   // Megamenu styling
-  --megamenu-background: color-mix(in srgb, var(--spectrum-color-surface) 95%, transparent);
+  --megamenu-background: var(--spectrum-sys-color-surface, #ffffff);
 }
 
 // ==============================================
@@ -845,11 +845,12 @@
 // Megamenu Variant Styles
 // ==============================================
 .spectrum-menu__megamenu {
-  position: fixed;
-  top: auto;
-  left: auto;
-  width: 100vw;
-  max-width: 100vw;
+  position: absolute;
+  top: calc(100% + var(--menu-spacing-small));
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
   min-height: calc(100vh - 64px); // Fill remaining vertical space under menu bar
   background-color: var(--megamenu-background);
   border-top: 1px solid var(--spectrum-sys-color-on-surface, #1f1f1f);
