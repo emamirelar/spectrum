@@ -1,0 +1,621 @@
+# Code Review Rule
+
+## ⚠️ CRITICAL INSTRUCTIONS
+
+### 1. Validation Requirement
+**Before flagging ANY issue, you MUST validate it against the "Legitimate Patterns & Exceptions" section and complete the mandatory validation checklist. Context and intent matter more than rigid rule application.**
+
+### 2. Format Selection (MANDATORY)
+**DEFAULT**: Use **TERSE FORMAT** for all standard review commands
+**EXPLICIT REQUEST ONLY**: Use **VERBOSE FORMAT** when user specifically requests detailed/comprehensive/verbose analysis
+
+**Terse Format Triggers** (Use terse format):
+- "Review my changes"
+- "Run code review" 
+- "Code review [component]"
+- "Review [component-name]"
+- Any standard review request
+
+**Verbose Format Triggers** (Use verbose format):
+- "Run **detailed** code review"
+- "Perform **verbose** review"
+- "Run **comprehensive** code review"
+- "**Detailed** review of [component]"
+- Explicit mention of "detailed", "verbose", "comprehensive", or "in-depth"
+
+## Overview
+Performs comprehensive, **context-aware** code review of git changes or entire codebase using project-specific rules and industry best practices. Reviews are based on the established Spectrum component guidelines and output structured feedback for resolution. **Emphasizes pattern recognition and validation over rigid rule enforcement.**
+
+**Output Format**: Terse (concise, actionable) by default. Verbose (comprehensive analysis) only on explicit request.
+
+## Usage
+
+### Review Git Changes (Default)
+```
+Review my changes
+```
+```
+Run code review on my commits
+```
+```
+Code review the current branch changes
+```
+
+### Review Entire Codebase (Explicit Request)
+```
+Run code review on the entire codebase
+```
+```
+Perform full codebase review
+```
+
+## Review Criteria
+
+### 1. Spectrum Component Architecture
+- **Component Creation**: Must use `npm run generate <component-name>` in packages/core
+- **BEM CSS Naming**: Follow spectrum-[component], __element, --modifier pattern
+- **Complex Properties**: Arrays/objects must support both JavaScript objects and JSON strings
+- **Event Patterns**: Events must include `action` attribute and follow camelCase naming
+- **Dependency Hierarchy**: Components must respect the established dependency map
+
+### 2. Accessibility Compliance (WCAG 2.1 AA)
+- **ARIA Attributes**: Required attributes based on component type
+- **Keyboard Navigation**: Tab order, Enter/Space/Arrow/Escape key support
+- **Focus Management**: Visible focus indicators, logical tab sequence
+- **Screen Reader Support**: Compatible with NVDA, JAWS, VoiceOver
+- **Color Contrast**: Minimum 4.5:1 ratio for normal text
+- **Reduced Motion**: Support for prefers-reduced-motion
+
+### 3. CSS Architecture Standards
+- **Design Tokens**: Use Spectrum design tokens, avoid arbitrary hardcoded values
+- **Custom Properties**: Declare in :host with fallback values
+- **Responsive Design**: Mobile-first approach with proper breakpoints
+- **Performance**: GPU-accelerated transforms, efficient selectors
+- **Documentation**: Clear section comments and file headers
+
+### 4. Component Integration
+- **Dependency Management**: Check dependency map before changes
+- **Event Communication**: Use CustomEvents for loose coupling
+- **Slot Composition**: Flexible composition patterns
+- **Type Safety**: TypeScript interfaces for all event payloads
+
+### 5. Testing & Documentation
+- **Accessibility Tests**: axe-core integration, keyboard navigation tests
+- **Storybook Stories**: Follow 'Spectrum/Components/ComponentName' pattern
+- **Component Documentation**: README with accessibility section
+- **Change Documentation**: Update CHANGELOG with dd/mmm/yy format
+
+### 6. Performance & Security
+- **Bundle Size**: Monitor component bundle impact
+- **Memory Leaks**: Proper event listener cleanup
+- **XSS Prevention**: Sanitize user inputs
+- **CSP Compliance**: Content Security Policy compatibility
+
+## Legitimate Patterns & Exceptions
+
+**CRITICAL**: These patterns should NOT be flagged as issues when used appropriately:
+
+### CSS Architecture Exceptions
+- **Hardcoded Colors in Algorithms**: Color palettes for initials, data visualization, or consistent hashing algorithms
+- **!important for State Overrides**: Disabled states, focus management, or high-specificity overrides
+- **Calculated Values**: Mathematical calculations for sizing, positioning, or responsive design
+- **Animation Keyframes**: Hardcoded values in @keyframes for specific animation effects
+
+### Accessibility Pattern Recognition
+- **Good ARIA Implementation**: Comprehensive fallback chains like `this.label || this.alt || \`Avatar ${initials}\``
+- **Proper Focus Management**: Conditional tabIndex and focus handling based on component state
+- **Semantic HTML Usage**: Using appropriate HTML elements (button vs div) based on functionality
+- **Screen Reader Optimization**: Strategic use of aria-hidden and sr-only classes
+
+### Component Architecture Patterns
+- **Style Objects**: Properties like `customStyle: { [key: string]: string }` don't need JSON parsing
+- **Event Emission Patterns**: Well-structured events with action attributes and proper payloads
+- **Fallback Hierarchies**: Image → Icon → Initials → Default fallback patterns
+- **State Management**: Internal state for loading, error, and interaction states
+
+### TypeScript & Property Patterns
+- **Union Types**: Proper use of string literals and optional properties
+- **Interface Definitions**: Well-structured interfaces for events and component APIs
+- **Property Validation**: Smart defaults and type checking without over-engineering
+
+### Performance Optimizations
+- **Image Preloading**: Proper image loading with error handling and state management
+- **Conditional Rendering**: Smart rendering based on component state and props
+- **Event Handler Optimization**: Arrow functions and proper event handling patterns
+
+## Review Process
+
+### Stage 1: Change Analysis
+1. **Git Diff Analysis**: Identify changed files and modifications
+2. **Scope Classification**: Determine if changes affect:
+   - Component API (props, events, methods)
+   - CSS architecture
+   - Dependency relationships
+   - Documentation
+3. **Impact Assessment**: Check for breaking changes
+
+### Stage 2: Context-Aware Analysis
+**CRITICAL**: Always consider the context and purpose before flagging issues
+1. **Pattern Recognition**: Identify legitimate design patterns vs violations
+2. **Intent Understanding**: Analyze WHY code is written a certain way
+3. **Domain Knowledge**: Apply component-specific knowledge and patterns
+4. **Exception Handling**: Recognize valid use cases for seemingly problematic code
+
+### Stage 3: Rule Application with Validation
+Apply project-specific rules in order, **with mandatory validation steps**:
+
+1. **Accessibility Standards**: WCAG 2.1 AA compliance check
+   - **Validate**: Is the implementation actually inaccessible or just different?
+   - **Context**: Consider component purpose and user interaction patterns
+   - **Check**: Does it follow established accessibility patterns from the rule?
+
+2. **CSS Architecture**: Design token usage, BEM naming, responsive patterns
+   - **Validate**: Are hardcoded values intentional for algorithms/consistency?
+   - **Context**: Check if design tokens would actually improve the implementation
+   - **Check**: Review legitimate pattern exceptions before flagging
+
+3. **Component Patterns**: Event structure, property handling, integration
+   - **Validate**: Does the pattern serve the component's specific needs?
+   - **Context**: Consider the component's role in the design system
+   - **Check**: Verify against known good patterns before flagging as issue
+
+4. **Dependency Analysis**: Check dependency map and update requirements
+5. **Documentation Review**: Storybook stories, README updates, changelog
+
+### Validation Checklist (MANDATORY)
+Before flagging any issue, ask:
+- [ ] **Is this actually a problem?** Or is it a legitimate design pattern?
+- [ ] **Would "fixing" this make the code worse?** Consider the trade-offs
+- [ ] **Is this consistent with project patterns?** Check existing similar implementations
+- [ ] **Does the context justify the approach?** Consider the specific use case
+- [ ] **Is this severity accurate?** Is it really critical/major or just different?
+
+### Stage 4: Issue Classification with Severity Validation
+Issues are classified by **actual impact**, not rule violations:
+- **Critical**: Genuinely broken functionality, security vulnerabilities, major accessibility barriers
+- **Major**: Significant architecture problems, missing essential features, performance issues
+- **Minor**: Style improvements, optimization opportunities, consistency enhancements
+- **Enhancement**: Optional improvements, future considerations, nice-to-have features
+
+### Stage 5: Positive Pattern Recognition
+**NEW**: Always identify and acknowledge good patterns:
+- **Architecture Excellence**: Well-implemented design patterns
+- **Accessibility Excellence**: Proper WCAG compliance and inclusive design
+- **Performance Excellence**: Optimized implementations
+- **Integration Excellence**: Good component relationships and API design
+
+### Stage 6: Output Generation with Format Options
+Creates outputs in **TERSE** (default) or **VERBOSE** format based on user preference:
+
+## Output Format Options
+
+### Format Selection
+- **Default**: Terse format for everyday development workflow
+- **Explicit Request**: Verbose format for comprehensive analysis
+- **Commands**:
+  - Standard: `"Review my changes"` → **Terse format**
+  - Verbose: `"Run detailed code review"` or `"Perform verbose review"` → **Verbose format**
+
+## Terse Format (DEFAULT)
+
+### Chat Response (Terse)
+```
+## Code Review Summary
+
+**Files Reviewed**: 4 | **Issues Found**: 2 (Minor: 1, Enhancement: 1)
+
+### Issues
+- [ ] **[tests]** Add accessibility test coverage for keyboard nav and ARIA validation
+- [ ] **[status indicators]** Optional aria-label enhancement for screen readers
+
+### Excellent Patterns
+- Smart fallback hierarchy (Image→Icon→Initials→Default)  
+- Comprehensive accessibility with proper ARIA implementation
+- Sophisticated algorithm design with consistent hashing
+- Perfect Spectrum component architecture
+
+### Summary
+Outstanding component serving as an exemplar. Zero critical issues.
+
+**Task file**: .cursor/tasks/code-review-YYYY-MM-DD-HHMMSS.md
+```
+
+### Task File Structure (Terse)
+```markdown
+# Code Review - [Component] ([Date])
+
+## Issues Found: X (Critical: X, Major: X, Minor: X, Enhancement: X)
+
+### Critical Issues (Must Fix)
+- [ ] **[file.tsx:line]** Brief description with specific fix needed
+
+### Major Issues (Should Fix)  
+- [ ] **[file.scss:line]** Architecture improvement with recommended solution
+
+### Minor Issues (Consider Fixing)
+- [ ] **[file.ts:line]** Enhancement suggestion with clear benefit
+
+### Enhancement Opportunities
+- [ ] **[component]** Optional improvement with potential value
+
+## Excellent Patterns Identified
+- Pattern 1: Brief explanation of why it's good
+- Pattern 2: Key strength and architectural benefit
+- Pattern 3: Notable implementation excellence
+
+## Summary
+Brief overall assessment with key recommendation.
+
+---
+Generated by Spectrum Code Review Rule v2.0 (Terse)
+```
+
+## Verbose Format (Explicit Request Only)
+
+### Chat Response (Verbose)
+```
+## Comprehensive Code Review Analysis
+
+**Context-Aware Analysis** ✅ **Validation Checklist** ✅ **Pattern Recognition** ✅
+
+**Files Reviewed**: 4 | **Issues Found**: 2 (Critical: 0, Major: 0, Minor: 1, Enhancement: 1)
+
+### Issues Found
+
+#### Minor Issues
+- [ ] **[test/spectrum-component.e2e.ts]** Test coverage enhancement
+  - **Fix**: Add accessibility testing for keyboard navigation and ARIA validation
+  - **Impact**: Better regression protection for accessibility features
+  - **✅ Validated**: Confirmed beneficial, not critical, aligns with project standards
+
+#### Enhancement Opportunities  
+- [ ] **[spectrum-component.tsx:262-287]** Optional status indicator enhancement
+  - **Enhancement**: Add `aria-label` to status dots for enhanced screen reader context
+  - **✅ Validated**: Current implementation accessible, this adds extra value
+
+### Exceptional Patterns Identified
+
+#### Architecture Excellence ⭐⭐⭐⭐⭐
+- **Perfect Component Structure**: Exemplary TypeScript implementation with proper decorators
+- **Intelligent Fallback Hierarchy**: Sophisticated Image → Icon → Initials → Default pattern
+- **Clean Separation of Concerns**: Dedicated render methods and event handlers
+
+#### Accessibility Excellence ⭐⭐⭐⭐⭐
+- **WCAG 2.1 AA Compliance**: Full keyboard navigation and screen reader support
+- **Outstanding ARIA Implementation**: Comprehensive fallback chain implementation
+- **Inclusive Design**: Reduced motion support and high contrast compatibility
+
+#### Performance Excellence ⭐⭐⭐⭐⭐
+- **Smart State Management**: Efficient loading and error handling patterns
+- **Optimized Rendering**: Conditional rendering based on content priority
+- **GPU-Accelerated Animations**: Transform-based interactions for smooth performance
+
+### Validation Applied ✅
+All potential issues validated against legitimate patterns section:
+- ✅ Hardcoded colors recognized as algorithm requirement
+- ✅ !important usage recognized as proper state override
+- ✅ ARIA implementation recognized as excellent accessibility pattern
+
+### Summary
+Outstanding component demonstrating engineering excellence across all evaluation criteria. Serves as an exemplar for Spectrum component development. Zero critical issues identified.
+
+**Detailed task file**: .cursor/tasks/code-review-[component]-verbose-YYYY-MM-DD-HHMMSS.md
+```
+
+### Task File Structure (Verbose)
+```markdown
+# Comprehensive Code Review - [Component] ([Date])
+
+## Context-Aware Review Applied
+**Validation Checklist** ✅ **Pattern Recognition** ✅ **Legitimate Patterns Check** ✅
+
+## Issues Found: X (Critical: X, Major: X, Minor: X, Enhancement: X)
+
+### Critical Issues (Must Fix)
+- [ ] **[file.tsx:line]** Detailed description with context analysis
+  - **Rule**: Specific rule violated with validation context
+  - **Fix**: Specific solution with implementation guidance
+  - **Impact**: Detailed impact analysis and user consequences
+  - **Priority**: Critical
+  - **✅ Validation**: Multi-point validation checklist results
+
+### Major Issues (Should Fix)
+- [ ] **[file.scss:line]** Architecture improvement needed
+  - **Rule**: Architecture pattern with context validation
+  - **Fix**: Recommended solution with alternatives
+  - **Impact**: System-wide implications
+  - **Priority**: Major
+  - **✅ Validation**: Confirmed against legitimate patterns
+
+### Minor Issues (Consider Fixing)
+- [ ] **[file.ts:line]** Enhancement opportunity
+  - **Rule**: Best practice suggestion with validation
+  - **Fix**: Implementation approach
+  - **Impact**: Improvement benefits
+  - **Priority**: Minor
+
+### Enhancement Opportunities
+- [ ] **[component]** Future improvement potential
+  - **Enhancement**: Optional improvement description
+  - **Benefit**: Value proposition and use cases
+  - **Priority**: Enhancement
+
+## Exceptional Patterns Identified
+
+### Architecture Excellence ⭐⭐⭐⭐⭐
+- **Pattern 1**: Detailed explanation of architectural strength
+- **Pattern 2**: Component design excellence and reasoning
+- **Pattern 3**: Integration and API design mastery
+
+### Accessibility Excellence ⭐⭐⭐⭐⭐  
+- **WCAG Compliance**: Specific compliance achievements
+- **Inclusive Design**: Universal access considerations
+- **Screen Reader Support**: Assistive technology compatibility
+
+### Performance Excellence ⭐⭐⭐⭐⭐
+- **Optimization Techniques**: Specific performance optimizations
+- **Resource Management**: Efficient resource handling
+- **User Experience**: Smooth interaction patterns
+
+### Integration Excellence ⭐⭐⭐⭐⭐
+- **Event Patterns**: Perfect event system implementation
+- **Type Safety**: Comprehensive TypeScript integration
+- **Component System**: Excellent modular design
+
+### Legitimate Pattern Validation ✅
+**Patterns Correctly Recognized as Good Design:**
+- ✅ **Pattern A**: Why this is intentionally good design
+- ✅ **Pattern B**: Context that justifies the implementation approach  
+- ✅ **Pattern C**: Algorithm or architectural requirement validation
+
+### Validation Success Metrics
+- **False Positives**: 0 (✅ All flagged issues are legitimate)
+- **Context Analysis**: ✅ Applied throughout review process
+- **Pattern Recognition**: ✅ Distinguished legitimate vs problematic patterns
+- **Severity Accuracy**: ✅ All severities validated for actual impact
+
+### Overall Assessment
+Comprehensive assessment with detailed reasoning, architectural analysis, and recommendations for future development.
+
+---
+Generated by Enhanced Spectrum Code Review Rule v2.0 (Verbose)  
+Validation: All issues verified against context and legitimate patterns
+```
+
+### Legacy Task File Structure
+
+## Critical Issues (Must Fix)
+- [ ] **[filename.ts:line]** Issue description with specific fix needed
+- [ ] **[filename.scss:line]** CSS issue with recommended solution
+
+## Major Issues (Should Fix)
+- [ ] **[filename.tsx:line]** Architecture improvement needed
+
+## Minor Issues (Consider Fixing)
+- [ ] **[filename.ts:line]** Code style improvement suggestion
+
+## Enhancement Opportunities
+- [ ] **[component]** Future improvement suggestion
+
+---
+Generated by Spectrum Code Review Rule
+Priority: Critical > Major > Minor > Enhancement
+```
+
+## Rule Configuration
+
+### Review Scope Options
+- **changed-files**: Review only git-modified files (default)
+- **staged-files**: Review only git-staged files
+- **branch-diff**: Review diff against main/master branch
+- **full-codebase**: Review entire codebase (explicit request only)
+
+### Severity Filters
+- **critical-only**: Show only critical issues
+- **major-and-above**: Show critical and major issues
+- **all**: Show all issues including minor and enhancements
+
+### File Type Focus
+- **components-only**: Focus on .tsx component files
+- **styles-only**: Focus on .scss style files
+- **docs-only**: Focus on documentation files
+- **all-types**: Review all file types
+
+## Integration with Existing Rules
+
+### Accessibility Standards Rule
+- Apply WCAG 2.1 AA requirements
+- Check for required ARIA attributes
+- Validate keyboard navigation patterns
+- Verify screen reader compatibility
+
+### CSS Architecture Guidelines
+- Enforce Spectrum design token usage
+- Validate BEM naming conventions
+- Check responsive design patterns
+- Verify custom property structure
+
+### Component Dependency Management
+- Cross-reference dependency map
+- Check for breaking changes in dependent components
+- Validate event contract consistency
+- Ensure proper import patterns
+
+### Event Handling Patterns
+- Validate event payload structure
+- Check for required action attributes
+- Verify event naming conventions
+- Test event bubbling and composition
+
+## Examples
+
+### Basic Change Review
+```
+User: "Review my changes"
+
+Assistant Response:
+1. Analyze git diff to identify changed files
+2. Apply accessibility, CSS, and component rules
+3. Generate task list with specific issues
+4. Provide summary with priority breakdown
+```
+
+### Full Codebase Review
+```
+User: "Run code review on the entire codebase"
+
+Assistant Response:
+1. Scan all component files in packages/core/src/components/
+2. Apply comprehensive rule set
+3. Generate prioritized issue list
+4. Focus on critical accessibility and architecture violations
+```
+
+### Component-Specific Review
+```
+User: "Review spectrum-button component changes"
+
+Assistant Response:
+1. Focus on spectrum-button related files
+2. Check dependency map for impact on dependent components
+3. Validate button-specific accessibility requirements
+4. Verify integration patterns
+```
+
+## Task File Templates
+
+### Critical Issue Template
+```markdown
+- [ ] **[spectrum-component.tsx:45]** Missing aria-label attribute
+  - **Rule**: Accessibility Standards - Interactive Components
+  - **Fix**: Add `aria-label={this.ariaLabel || this.label}` to button element
+  - **Impact**: Screen reader users cannot identify button purpose
+  - **Priority**: Critical
+```
+
+### Major Issue Template
+```markdown
+- [ ] **[spectrum-component.scss:12]** Using hardcoded color value
+  - **Rule**: CSS Architecture - Design Tokens
+  - **Fix**: Replace `#ffffff` with `var(--spectrum-sys-color-surface)`
+  - **Impact**: Theming system broken, affects visual consistency
+  - **Priority**: Major
+```
+
+### Minor Issue Template
+```markdown
+- [ ] **[spectrum-component.tsx:32]** Could optimize animation performance
+  - **Rule**: CSS Architecture - Performance Optimization
+  - **Fix**: Use `transform` instead of changing `margin-top`
+  - **Impact**: Better animation performance on low-end devices
+  - **Priority**: Minor
+```
+
+## Implementation Workflow
+
+### Automated Checks
+1. **Git Analysis**: Parse git diff/status for changed files
+2. **Rule Engine**: Apply rules based on file types and patterns
+3. **Cross-Reference**: Check against dependency map and existing patterns
+4. **Issue Generation**: Create structured issue list with priorities
+
+### Manual Review Points
+- **Architecture Decisions**: Complex component interactions
+- **Breaking Changes**: API modifications affecting dependent components
+- **Performance Impact**: Bundle size and runtime performance considerations
+- **User Experience**: Accessibility and usability implications
+
+## Rule Maintenance & Continuous Improvement
+
+### Update Requirements
+This rule must be updated when:
+- New workspace rules are added
+- Component dependency map changes
+- Accessibility standards evolve
+- New architectural patterns emerge
+- **False positives are identified in reviews**
+
+### Version Control
+- Document rule changes in CHANGELOG
+- Maintain backward compatibility for existing task files
+- Update examples when patterns change
+- **Track review accuracy and improve patterns**
+
+### Learning from Review Feedback
+When reviews are challenged or corrected:
+1. **Analyze the false positive**: What pattern was misidentified?
+2. **Update the exceptions list**: Add the legitimate pattern to avoid future false positives
+3. **Refine validation criteria**: Improve the validation checklist
+4. **Document the learning**: Add to the legitimate patterns section
+
+### Common False Positive Patterns (Learned from Experience)
+Based on spectrum-avatar review corrections:
+
+#### ❌ **Don't Flag These as Issues:**
+- **Hardcoded colors in algorithms** (e.g., initials color generation)
+- **!important for disabled states** (legitimate override cases)
+- **Good aria-label fallback chains** (comprehensive accessibility)
+- **Style object properties** (don't need JSON string support)
+- **Image preloading patterns** (proper error handling)
+
+#### ✅ **Do Recognize These as Good Patterns:**
+- **Smart fallback hierarchies** (Image → Icon → Initials → Default)
+- **Proper ARIA implementation** with multiple fallback options
+- **Context-aware event handling** with state management
+- **Thoughtful use of CSS specificity** for component states
+- **Comprehensive TypeScript typing** with proper interfaces
+
+## Integration Points
+
+### Cursor IDE Integration
+- Task files use standard markdown checkboxes for Cursor task tracking
+- File paths include line numbers for direct navigation
+- Priority levels help focus development effort
+
+### CI/CD Integration
+- Can be adapted for automated pull request reviews
+- Generates machine-readable issue reports
+- Supports quality gates based on critical issue counts
+
+### Developer Workflow
+- Integrates with existing git workflow
+- Provides actionable feedback with specific fixes
+- Maintains consistency with project architecture
+
+---
+
+## Rule Activation Commands
+
+### Terse Format Commands (DEFAULT)
+- **"Review my changes"** → Review git modified files (terse format)
+- **"Run code review"** → Review git modified files (terse format)
+- **"Code review the current branch"** → Review branch diff vs main (terse format)
+- **"Perform code review"** → Review git modified files (terse format)
+- **"Review [component-name]"** → Review specific component (terse format)
+
+### Verbose Format Commands (Explicit Request)
+- **"Run detailed code review"** → Comprehensive analysis with full validation details
+- **"Perform verbose review"** → In-depth review with pattern recognition details
+- **"Run comprehensive code review"** → Full analysis with all validation steps shown
+- **"Detailed review of [component-name]"** → Component-specific verbose analysis
+
+### Full Codebase Review Commands
+- **"Run code review on the entire codebase"** → Full repo review (terse by default)
+- **"Perform full codebase review"** → Complete codebase analysis (terse)
+- **"Run detailed codebase review"** → Comprehensive full repo analysis (verbose)
+- **"Review all components for compliance"** → Architecture compliance review
+
+### Scoped Review Commands
+- **"Review accessibility compliance"** → Focus on accessibility rules only (terse)
+- **"Review CSS architecture"** → Focus on CSS/SCSS files only (terse)
+- **"Review component dependencies"** → Focus on integration patterns (terse)
+- **"Detailed accessibility review"** → Comprehensive accessibility analysis (verbose)
+
+### Format Override Commands
+- **"Review with terse format"** → Explicitly request concise output
+- **"Review with verbose format"** → Explicitly request detailed output
+- **"Quick review"** → Guaranteed terse format for rapid feedback
+
+---
+
+*This rule ensures consistent code quality across the Spectrum component system while providing actionable feedback for continuous improvement.*

@@ -1,0 +1,1167 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Documentation/CSS Variables" />
+
+# 🎨 CSS Variables Reference
+
+This document provides a comprehensive reference of all CSS custom properties (CSS variables) available in the UNOPS Spectrum Design System. These variables enable consistent theming, styling, and maintainability across all Spectrum components.
+
+---
+
+## 📋 Overview
+
+CSS Variables in the Spectrum Design System are organized into several categories:
+
+- **UNOPS Brand Colors**: Core organizational colors
+- **Spectrum System Colors**: Design system semantic colors
+- **Material Design 3 Theme Colors**: Dynamic theme colors (can be overridden by spectrum-theme/spectrum-wallpaper)
+- **Typography**: Font families, sizes, and weights
+- **Material Icons**: Icon font settings
+- **Spacing & Layout**: Padding, spacing, and sizing tokens
+- **Borders & Shapes**: Border radius and border widths
+- **Animation**: Timing and duration values
+- **Component-Specific**: Special-purpose component variables
+
+---
+
+## 🎨 UNOPS Brand Colors
+
+### Core Brand Colors
+
+```css
+--unops-color-white: #ffffff;
+--unops-color-black: #333333;
+--unops-color-gray: #f6f6f6;
+--unops-color-blue: #0070d2;
+--unops-color-midnight: #005fb2;
+--unops-color-success: #2d844a;
+--unops-color-warning: #cc6900;
+--unops-color-danger: #c41e3a;
+```
+
+### 2Blue Color Scale
+
+```css
+--unops-color-2blue-50: #bfd9e6;
+--unops-color-2blue-100: #99c2d7;
+--unops-color-2blue-200: #73abc7;
+--unops-color-2blue-300: #4d94b8;
+--unops-color-2blue-400: #00669a;
+--unops-color-2blue-500: #005783;
+--unops-color-2blue-600: #00476c;
+--unops-color-2blue-700: #003855;
+--unops-color-2blue-800: #00293e;
+--unops-color-2blue-900: #001a27;
+```
+
+### Ocean Color Scale
+
+```css
+--unops-color-ocean-50: #d3f0f7;
+--unops-color-ocean-100: #b8e7f3;
+--unops-color-ocean-200: #9edeee;
+--unops-color-ocean-300: #83d5e9;
+--unops-color-ocean-400: #4ec3e0;
+--unops-color-ocean-500: #42a6be;
+--unops-color-ocean-600: #37899d;
+--unops-color-ocean-700: #2b6b7b;
+--unops-color-ocean-800: #1f4e5a;
+--unops-color-ocean-900: #143138;
+```
+
+### Teal Color Scale
+
+```css
+--unops-color-teal-50: #bfeae5;
+--unops-color-teal-100: #99ddd5;
+--unops-color-teal-200: #73d0c6;
+--unops-color-teal-300: #4dc3b6;
+--unops-color-teal-400: #00a997;
+--unops-color-teal-500: #009080;
+--unops-color-teal-600: #00766a;
+--unops-color-teal-700: #005d53;
+--unops-color-teal-800: #00443c;
+--unops-color-teal-900: #00121e;
+```
+
+### Orange Color Scale
+
+```css
+--unops-color-orange-50: #f9d6c3;
+--unops-color-orange-100: #f6be9f;
+--unops-color-orange-200: #f2a57a;
+--unops-color-orange-300: #ef8d56;
+--unops-color-orange-400: #eb7432;
+--unops-color-orange-500: #c54e0c;
+--unops-color-orange-600: #a2400a;
+--unops-color-orange-700: #803308;
+--unops-color-orange-800: #5d2506;
+--unops-color-orange-900: #3a1704;
+```
+
+### Red Color Scale
+
+```css
+--unops-color-red-50: #f6cac6;
+--unops-color-red-100: #f0a9a4;
+--unops-color-red-200: #eb8982;
+--unops-color-red-300: #e56960;
+--unops-color-red-400: #e0493e;
+--unops-color-red-500: #da291c;
+--unops-color-red-600: #991d14;
+--unops-color-red-700: #78170f;
+--unops-color-red-800: #57100b;
+--unops-color-red-900: #370a07;
+```
+
+### Green Color Scale
+
+```css
+--unops-color-green-50: #d2e7cd;
+--unops-color-green-100: #b7d9af;
+--unops-color-green-200: #9dca92;
+--unops-color-green-300: #82bc74;
+--unops-color-green-400: #67ad56;
+--unops-color-green-500: #4c9f38;
+--unops-color-green-600: #418730;
+--unops-color-green-700: #2a571f;
+--unops-color-green-800: #1e4016;
+--unops-color-green-900: #13280e;
+```
+
+### Neutral Colors
+
+```css
+--unops-color-n-cold: #EBF1F8;
+--unops-color-n-warm: #ECEFEF;
+```
+
+### UNOPS Gradients
+
+```css
+--unops-gradient-1: linear-gradient(83deg, #00A997 9%, #C4D600 77%, #F8EA44 100%);
+--unops-gradient-2: linear-gradient(83deg, #4FC3DD 9%, #C4D600 77%, #F8EA44 100%);
+--unops-gradient-3: radial-gradient(circle at 99.95% 7.97%, #FFA65D 5%, #FFC215 18%, #C4D600 37%, #96C93D 49%, #0092D1 89%);
+--unops-gradient-4: linear-gradient(87deg, #00A997 15%, #26A2D8 69%, #0092D1 100%);
+--unops-gradient-5: radial-gradient(circle at 49.15% 18.90%, #F8EA44 10%, #E85C0E 47%, #991E66 93%);
+--unops-gradient-6: linear-gradient(90deg, #991E66 3%, #C43C3E 52%, #E85C0E 100%);
+--unops-gradient-7: linear-gradient(90deg, #FFC215 0%, #E85C0E 100%);
+--unops-gradient-8: linear-gradient(80deg, #991E66 0%, #0092D1 100%);
+```
+
+---
+
+## 🌈 Spectrum System Colors
+
+### Semantic Colors
+
+These colors map UNOPS brand colors to semantic design system roles:
+
+```css
+--spectrum-sys-color-primary: var(--unops-color-blue);           /* #0070d2 */
+--spectrum-sys-color-secondary: var(--unops-color-midnight);     /* #005fb2 */
+--spectrum-sys-color-success: var(--unops-color-success);        /* #2d844a */
+--spectrum-sys-color-warning: var(--unops-color-warning);        /* #cc6900 */
+--spectrum-sys-color-danger: var(--unops-color-danger);          /* #c41e3a */
+--spectrum-sys-color-background: var(--unops-color-white);       /* #ffffff */
+--spectrum-sys-color-surface: var(--unops-color-gray);           /* #f6f6f6 */
+--spectrum-sys-color-text: var(--unops-color-black);             /* #333333 */
+```
+
+### On-Color Text Colors
+
+Colors for text/icons displayed on top of semantic colors:
+
+```css
+--spectrum-sys-color-on-primary: var(--unops-color-white);       /* #ffffff */
+--spectrum-sys-color-on-secondary: var(--unops-color-white);     /* #ffffff */
+--spectrum-sys-color-on-success: var(--unops-color-white);       /* #ffffff */
+--spectrum-sys-color-on-warning: var(--unops-color-white);       /* #ffffff */
+--spectrum-sys-color-on-danger: var(--unops-color-white);        /* #ffffff */
+--spectrum-sys-color-on-surface: var(--unops-color-black);       /* #333333 */
+```
+
+---
+
+## 🎭 Material Design 3 Theme Colors
+
+These colors are the default theme and can be dynamically overridden by `spectrum-theme` and `spectrum-wallpaper` components:
+
+### Primary Colors
+
+```css
+--spectrum-color-primary: #0070d2;
+--spectrum-color-on-primary: #ffffff;
+--spectrum-color-primary-container: #d0e4ff;
+--spectrum-color-on-primary-container: #001c3a;
+```
+
+### Secondary Colors
+
+```css
+--spectrum-color-secondary: #005fb2;
+--spectrum-color-on-secondary: #ffffff;
+--spectrum-color-secondary-container: #d1e4ff;
+--spectrum-color-on-secondary-container: #001c3a;
+```
+
+### Tertiary Colors
+
+```css
+--spectrum-color-tertiary: #7f525d;
+--spectrum-color-on-tertiary: #ffffff;
+--spectrum-color-tertiary-container: #ffd9e2;
+--spectrum-color-on-tertiary-container: #321018;
+```
+
+### Error Colors
+
+```css
+--spectrum-color-error: #ba1a1a;
+--spectrum-color-on-error: #ffffff;
+--spectrum-color-error-container: #ffdad6;
+--spectrum-color-on-error-container: #410002;
+```
+
+### Surface & Background Colors
+
+```css
+--spectrum-color-background: #f6f6f6;
+--spectrum-color-on-background: #333333;
+--spectrum-color-surface: #f6f6f6;
+--spectrum-color-on-surface: #333333;
+--spectrum-color-surface-variant: #dfe2eb;
+--spectrum-color-on-surface-variant: #42474e;
+```
+
+### Outline & Utility Colors
+
+```css
+--spectrum-color-outline: #72777f;
+--spectrum-color-outline-variant: #c2c7cf;
+--spectrum-color-shadow: #000000;
+--spectrum-color-scrim: #000000;
+```
+
+### Inverse Colors
+
+```css
+--spectrum-color-inverse-surface: #2f3033;
+--spectrum-color-inverse-on-surface: #f1f0f4;
+--spectrum-color-inverse-primary: #a8c8ff;
+```
+
+---
+
+## ✏️ Typography Variables
+
+### Font Families
+
+```css
+--spectrum-sys-font-family: 'Noto Sans', sans-serif;
+--spectrum-sys-icon-font-family: 'Material Symbols Outlined';
+```
+
+### Font Sizes
+
+```css
+--spectrum-sys-font-size: 16px;                                             /* Base size */
+--spectrum-sys-font-size-small: calc(var(--spectrum-sys-font-size) * 0.875);  /* 14px */
+--spectrum-sys-font-size-large: calc(var(--spectrum-sys-font-size) * 1.25);   /* 20px */
+--spectrum-sys-font-size-x-large: calc(var(--spectrum-sys-font-size) * 1.5);  /* 24px */
+```
+
+### Font Weights
+
+```css
+--spectrum-sys-font-weight-light: 300;
+--spectrum-sys-font-weight-regular: 400;
+--spectrum-sys-font-weight-medium: 500;
+--spectrum-sys-font-weight-bold: 700;
+```
+
+---
+
+## 🔤 Material Symbols Icon Font
+
+### Icon Font Settings
+
+```css
+--spectrum-sys-icon-font-family: 'Material Symbols Outlined';
+--spectrum-sys-icon-font-size: 20px;
+--spectrum-sys-icon-font-weight: 400;
+--spectrum-sys-icon-line-height: 1;
+```
+
+### Icon Variation Settings
+
+```css
+--spectrum-sys-icon-fill: 0;                /* Fill: 0 = outlined, 1 = filled */
+--spectrum-sys-icon-weight: 400;            /* Weight: 100-700 */
+--spectrum-sys-icon-grade: 0;               /* Grade: -25 to 200 */
+--spectrum-sys-icon-optical-size: 24;       /* Optical size: 20-48 */
+```
+
+---
+
+## 📏 Spacing & Layout Variables
+
+### Spacing Scale
+
+```css
+--spectrum-sys-spacing: 1rem;                                             /* Base: 16px */
+--spectrum-sys-spacing-small: calc(var(--spectrum-sys-spacing) / 2);      /* 8px */
+--spectrum-sys-spacing-large: calc(var(--spectrum-sys-spacing) * 2);      /* 32px */
+--spectrum-sys-spacing-x-large: calc(var(--spectrum-sys-spacing) * 3);    /* 48px */
+--spectrum-sys-spacing-xx-large: calc(var(--spectrum-sys-spacing) * 4);   /* 64px */
+```
+
+### Padding Scale
+
+```css
+--spectrum-sys-padding: 1em;                                              /* Base: 16px */
+--spectrum-sys-padding-small: calc(var(--spectrum-sys-padding) / 2);      /* 8px */
+--spectrum-sys-padding-large: calc(var(--spectrum-sys-padding) * 2);      /* 32px */
+--spectrum-sys-padding-x-large: calc(var(--spectrum-sys-padding) * 3);    /* 48px */
+--spectrum-sys-padding-xx-large: calc(var(--spectrum-sys-padding) * 4);   /* 64px */
+```
+
+### Legacy Sizing System
+
+```css
+--baseSize: 8px;                           /* Base unit for sizing */
+--buttonSize: calc(var(--baseSize) * 6);   /* 48px - standard button height */
+--standard-padding: 24px;                  /* Standard padding value */
+```
+
+---
+
+## 🔲 Borders & Shapes
+
+### Border Widths
+
+```css
+--spectrum-sys-border: 1px;
+```
+
+### Border Radius
+
+```css
+--spectrum-sys-border-radius: 4px;
+```
+
+---
+
+## ⏱️ Animation Variables
+
+### Duration
+
+```css
+--spectrum-sys-animation-duration: 300ms;              /* Standard duration */
+--spectrum-sys-animation-duration-fast: 200ms;         /* Fast animations */
+--spectrum-sys-animation-duration-slow: 400ms;         /* Slow animations */
+--animationTime: 0.33s;                                /* Legacy animation time */
+```
+
+### Timing Functions
+
+```css
+--spectrum-sys-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);  /* Material motion curve */
+```
+
+---
+
+## 🎯 Component-Specific Variables
+
+### Megamenu Component
+
+```css
+--spectrum-comp-megamenu-background-color: color-mix(in srgb, var(--spectrum-sys-color-background) 80%, transparent);
+--spectrum-comp-megamenu-background-filter: blur(5px);
+--spectrum-comp-megamenu-width: 60em;
+```
+
+### Frost Effect Variables
+
+```css
+--frostColor: rgba(255, 255, 255, 0.6);    /* Frosted glass color */
+--frostBlur: 6px;                           /* Frosted glass blur amount */
+```
+
+### Legacy Theme Variables
+
+```css
+--primary: rgba(0, 0, 0, 0);               /* Transparent - overridden by theme */
+--onPrimary: rgba(0, 0, 0, 0);             /* Transparent - overridden by theme */
+--secondary: rgba(0, 0, 0, 0);             /* Transparent - overridden by theme */
+--onSecondary: rgba(0, 0, 0, 0);           /* Transparent - overridden by theme */
+--surface: white;                           /* Surface color */
+```
+
+### Wallpaper Variables
+
+```css
+--wallpaper: url('...');                    /* Background wallpaper image URL */
+```
+
+---
+
+## 🎨 Usage Examples
+
+> **💡 Live Interactive Examples:** Visit the [CSS Variables Examples](?path=/story/documentation-css-variables--brand-colors) page to see all these examples rendered live in your browser!
+
+### Available Interactive Examples
+
+- **[Brand Colors](?path=/story/documentation-css-variables--brand-colors)** - View all UNOPS brand colors and color scales
+- **[Semantic Colors](?path=/story/documentation-css-variables--semantic-colors)** - System semantic colors in action
+- **[Gradients](?path=/story/documentation-css-variables--gradients)** - All 8 UNOPS gradient presets
+- **[Button Example](?path=/story/documentation-css-variables--button-example)** - Interactive buttons with hover states
+- **[Card Example](?path=/story/documentation-css-variables--card-example)** - Complete card components
+- **[Form Example](?path=/story/documentation-css-variables--form-example)** - Form inputs with focus and error states
+- **[Notification Example](?path=/story/documentation-css-variables--notification-example)** - Status notifications
+- **[Spacing Example](?path=/story/documentation-css-variables--spacing-example)** - Padding and gap variations
+- **[Typography Example](?path=/story/documentation-css-variables--typography-example)** - Font sizes and weights
+
+---
+
+### Basic Color Usage
+
+#### Using Brand Colors in Components
+
+```css
+/* Simple brand color application */
+.my-component {
+  background-color: var(--unops-color-blue);
+  color: var(--unops-color-white);
+}
+
+/* Using color scales for depth */
+.card-container {
+  background: var(--unops-color-2blue-50);
+  border-left: 4px solid var(--unops-color-2blue-500);
+}
+
+.card-container:hover {
+  background: var(--unops-color-2blue-100);
+}
+```
+
+#### Using Semantic System Colors
+
+```css
+/* Primary action button */
+.primary-button {
+  background-color: var(--spectrum-sys-color-primary);
+  color: var(--spectrum-sys-color-on-primary);
+  padding: var(--spectrum-sys-padding-small) var(--spectrum-sys-padding);
+  border-radius: var(--spectrum-sys-border-radius);
+}
+
+/* Success notification banner */
+.success-banner {
+  background-color: var(--spectrum-sys-color-success);
+  color: var(--spectrum-sys-color-on-success);
+  padding: var(--spectrum-sys-padding);
+}
+
+/* Warning alert box */
+.warning-alert {
+  background-color: var(--spectrum-sys-color-warning);
+  color: var(--spectrum-sys-color-on-warning);
+  border: var(--spectrum-sys-border) solid var(--spectrum-sys-color-danger);
+}
+```
+
+#### Using Material Design 3 Theme Colors
+
+```css
+/* Themed card component */
+.themed-card {
+  background-color: var(--spectrum-color-surface);
+  color: var(--spectrum-color-on-surface);
+  border: 1px solid var(--spectrum-color-outline);
+  border-radius: var(--spectrum-sys-border-radius);
+  padding: var(--spectrum-sys-padding);
+}
+
+/* Primary container with proper contrast */
+.primary-container {
+  background-color: var(--spectrum-color-primary-container);
+  color: var(--spectrum-color-on-primary-container);
+  padding: var(--spectrum-sys-padding-large);
+}
+
+/* Error state styling */
+.error-message {
+  background-color: var(--spectrum-color-error-container);
+  color: var(--spectrum-color-on-error-container);
+  border-left: 4px solid var(--spectrum-color-error);
+  padding: var(--spectrum-sys-padding);
+}
+```
+
+### Typography Examples
+
+#### Using Typography Variables
+
+```css
+/* Page heading */
+.heading {
+  font-family: var(--spectrum-sys-font-family);
+  font-size: var(--spectrum-sys-font-size-x-large);
+  font-weight: var(--spectrum-sys-font-weight-bold);
+  color: var(--spectrum-sys-color-text);
+}
+
+/* Body text with responsive sizing */
+.body-text {
+  font-family: var(--spectrum-sys-font-family);
+  font-size: var(--spectrum-sys-font-size);
+  font-weight: var(--spectrum-sys-font-weight-regular);
+  line-height: 1.6;
+  color: var(--spectrum-color-on-surface);
+}
+
+/* Small caption text */
+.caption {
+  font-family: var(--spectrum-sys-font-family);
+  font-size: var(--spectrum-sys-font-size-small);
+  font-weight: var(--spectrum-sys-font-weight-light);
+  color: var(--spectrum-color-on-surface-variant);
+}
+```
+
+#### Material Icons Integration
+
+```css
+/* Icon with proper sizing */
+.icon {
+  font-family: var(--spectrum-sys-icon-font-family);
+  font-size: var(--spectrum-sys-icon-font-size);
+  font-weight: var(--spectrum-sys-icon-font-weight);
+  font-variation-settings:
+    'FILL' var(--spectrum-sys-icon-fill),
+    'wght' var(--spectrum-sys-icon-weight),
+    'GRAD' var(--spectrum-sys-icon-grade),
+    'opsz' var(--spectrum-sys-icon-optical-size);
+}
+
+/* Larger icon for emphasis */
+.icon-large {
+  font-family: var(--spectrum-sys-icon-font-family);
+  font-size: calc(var(--spectrum-sys-icon-font-size) * 2);
+  color: var(--spectrum-sys-color-primary);
+}
+
+/* Filled icon variant */
+.icon-filled {
+  font-family: var(--spectrum-sys-icon-font-family);
+  font-size: var(--spectrum-sys-icon-font-size);
+  font-variation-settings: 'FILL' 1; /* Filled style */
+}
+```
+
+### Spacing & Layout Examples
+
+#### Using Spacing Variables
+
+```css
+/* Container with consistent spacing */
+.spaced-container {
+  padding: var(--spectrum-sys-padding);
+  gap: var(--spectrum-sys-spacing);
+  margin-bottom: var(--spectrum-sys-spacing-large);
+}
+
+/* Compact layout */
+.compact-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spectrum-sys-spacing-small);
+}
+
+/* Spacious layout */
+.spacious-section {
+  padding: var(--spectrum-sys-padding-x-large);
+  margin: var(--spectrum-sys-spacing-xx-large) auto;
+}
+```
+
+#### Responsive Spacing Pattern
+
+```css
+/* Responsive padding that scales */
+.responsive-container {
+  padding: var(--spectrum-sys-padding-small);
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    padding: var(--spectrum-sys-padding);
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-container {
+    padding: var(--spectrum-sys-padding-large);
+  }
+}
+```
+
+### Animation Examples
+
+#### Using Animation Variables
+
+```css
+/* Smooth transition */
+.animated-element {
+  transition: all var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function);
+}
+
+/* Fast micro-interaction */
+.button-ripple {
+  transition: transform var(--spectrum-sys-animation-duration-fast) var(--spectrum-sys-animation-timing-function);
+}
+
+/* Slow entrance animation */
+.modal-backdrop {
+  transition: opacity var(--spectrum-sys-animation-duration-slow) var(--spectrum-sys-animation-timing-function);
+}
+```
+
+#### Complex Animation Pattern
+
+```css
+/* Multi-property animation */
+.card-hover {
+  background-color: var(--spectrum-color-surface);
+  transform: translateY(0);
+  box-shadow: 0 2px 4px var(--spectrum-color-shadow);
+  transition:
+    transform var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function),
+    box-shadow var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function),
+    background-color var(--spectrum-sys-animation-duration-fast) var(--spectrum-sys-animation-timing-function);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px var(--spectrum-color-shadow);
+  background-color: var(--spectrum-color-surface-variant);
+}
+```
+
+### Complete Component Examples
+
+#### Interactive Button Component
+
+```css
+/* Primary button with all states */
+.spectrum-button {
+  /* Base styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spectrum-sys-spacing-small);
+  
+  /* Typography */
+  font-family: var(--spectrum-sys-font-family);
+  font-size: var(--spectrum-sys-font-size);
+  font-weight: var(--spectrum-sys-font-weight-medium);
+  
+  /* Colors */
+  background-color: var(--spectrum-sys-color-primary);
+  color: var(--spectrum-sys-color-on-primary);
+  
+  /* Spacing */
+  padding: var(--spectrum-sys-padding-small) var(--spectrum-sys-padding);
+  
+  /* Border */
+  border: none;
+  border-radius: var(--spectrum-sys-border-radius);
+  
+  /* Animation */
+  transition: all var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function);
+  
+  /* Interactive */
+  cursor: pointer;
+}
+
+.spectrum-button:hover {
+  background-color: var(--unops-color-midnight);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.spectrum-button:active {
+  transform: translateY(0);
+}
+
+.spectrum-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Secondary variant */
+.spectrum-button--secondary {
+  background-color: var(--spectrum-sys-color-secondary);
+  color: var(--spectrum-sys-color-on-secondary);
+}
+
+/* Outlined variant */
+.spectrum-button--outlined {
+  background-color: transparent;
+  color: var(--spectrum-sys-color-primary);
+  border: var(--spectrum-sys-border) solid var(--spectrum-sys-color-primary);
+}
+```
+
+#### Card Component with Full Styling
+
+```css
+.spectrum-card {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spectrum-sys-spacing);
+  
+  /* Colors */
+  background-color: var(--spectrum-color-surface);
+  color: var(--spectrum-color-on-surface);
+  
+  /* Spacing */
+  padding: var(--spectrum-sys-padding-large);
+  margin: var(--spectrum-sys-spacing);
+  
+  /* Border */
+  border: var(--spectrum-sys-border) solid var(--spectrum-color-outline-variant);
+  border-radius: var(--spectrum-sys-border-radius);
+  
+  /* Shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  /* Animation */
+  transition: all var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function);
+}
+
+.spectrum-card:hover {
+  border-color: var(--spectrum-color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.spectrum-card__header {
+  font-size: var(--spectrum-sys-font-size-large);
+  font-weight: var(--spectrum-sys-font-weight-bold);
+  color: var(--spectrum-color-on-surface);
+  margin-bottom: var(--spectrum-sys-spacing-small);
+}
+
+.spectrum-card__content {
+  font-size: var(--spectrum-sys-font-size);
+  font-weight: var(--spectrum-sys-font-weight-regular);
+  color: var(--spectrum-color-on-surface-variant);
+  line-height: 1.6;
+}
+
+.spectrum-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spectrum-sys-spacing-small);
+  margin-top: var(--spectrum-sys-spacing);
+  padding-top: var(--spectrum-sys-spacing);
+  border-top: var(--spectrum-sys-border) solid var(--spectrum-color-outline-variant);
+}
+```
+
+#### Form Input Component
+
+```css
+.spectrum-input {
+  /* Base styles */
+  display: block;
+  width: 100%;
+  
+  /* Typography */
+  font-family: var(--spectrum-sys-font-family);
+  font-size: var(--spectrum-sys-font-size);
+  font-weight: var(--spectrum-sys-font-weight-regular);
+  
+  /* Colors */
+  background-color: var(--spectrum-color-surface);
+  color: var(--spectrum-color-on-surface);
+  
+  /* Spacing */
+  padding: var(--spectrum-sys-padding-small) var(--spectrum-sys-padding);
+  
+  /* Border */
+  border: var(--spectrum-sys-border) solid var(--spectrum-color-outline);
+  border-radius: var(--spectrum-sys-border-radius);
+  
+  /* Animation */
+  transition: all var(--spectrum-sys-animation-duration-fast) var(--spectrum-sys-animation-timing-function);
+}
+
+.spectrum-input:focus {
+  outline: none;
+  border-color: var(--spectrum-sys-color-primary);
+  box-shadow: 0 0 0 3px var(--spectrum-color-primary-container);
+}
+
+.spectrum-input::placeholder {
+  color: var(--spectrum-color-on-surface-variant);
+  opacity: 0.7;
+}
+
+.spectrum-input:disabled {
+  background-color: var(--spectrum-color-surface-variant);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Error state */
+.spectrum-input--error {
+  border-color: var(--spectrum-color-error);
+}
+
+.spectrum-input--error:focus {
+  box-shadow: 0 0 0 3px var(--spectrum-color-error-container);
+}
+```
+
+#### Navigation Menu Component
+
+```css
+.spectrum-nav {
+  /* Layout */
+  display: flex;
+  gap: var(--spectrum-sys-spacing);
+  
+  /* Colors */
+  background-color: var(--spectrum-color-surface);
+  
+  /* Spacing */
+  padding: var(--spectrum-sys-padding);
+  
+  /* Border */
+  border-bottom: var(--spectrum-sys-border) solid var(--spectrum-color-outline-variant);
+}
+
+.spectrum-nav__item {
+  /* Typography */
+  font-family: var(--spectrum-sys-font-family);
+  font-size: var(--spectrum-sys-font-size);
+  font-weight: var(--spectrum-sys-font-weight-medium);
+  
+  /* Colors */
+  color: var(--spectrum-color-on-surface);
+  
+  /* Spacing */
+  padding: var(--spectrum-sys-padding-small) var(--spectrum-sys-padding);
+  
+  /* Border */
+  border-radius: var(--spectrum-sys-border-radius);
+  
+  /* Animation */
+  transition: all var(--spectrum-sys-animation-duration-fast) var(--spectrum-sys-animation-timing-function);
+  
+  /* Interactive */
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.spectrum-nav__item:hover {
+  background-color: var(--spectrum-color-surface-variant);
+  color: var(--spectrum-sys-color-primary);
+}
+
+.spectrum-nav__item--active {
+  background-color: var(--spectrum-color-primary-container);
+  color: var(--spectrum-color-on-primary-container);
+}
+```
+
+### Advanced Pattern Examples
+
+#### Gradient Backgrounds
+
+```css
+/* Using UNOPS gradient presets */
+.hero-section {
+  background: var(--unops-gradient-1);
+  color: var(--unops-color-white);
+  padding: var(--spectrum-sys-padding-xx-large);
+}
+
+.feature-banner {
+  background: var(--unops-gradient-4);
+  padding: var(--spectrum-sys-padding-large);
+  border-radius: var(--spectrum-sys-border-radius);
+}
+
+/* Custom gradient with brand colors */
+.custom-gradient-card {
+  background: linear-gradient(
+    135deg,
+    var(--unops-color-2blue-500) 0%,
+    var(--unops-color-teal-500) 100%
+  );
+  color: var(--unops-color-white);
+  padding: var(--spectrum-sys-padding-large);
+}
+```
+
+#### Frost Effect Pattern
+
+```css
+/* Glassmorphism card */
+.frost-card {
+  background: var(--frostColor);
+  backdrop-filter: blur(var(--frostBlur));
+  border: var(--spectrum-sys-border) solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--spectrum-sys-border-radius);
+  padding: var(--spectrum-sys-padding-large);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Megamenu with frost effect */
+.frost-menu {
+  background-color: var(--spectrum-comp-megamenu-background-color);
+  backdrop-filter: var(--spectrum-comp-megamenu-background-filter);
+  padding: var(--spectrum-sys-padding);
+}
+```
+
+#### Dark Mode Pattern
+
+```css
+/* Component that adapts to theme */
+.adaptive-component {
+  /* Use semantic colors that change with theme */
+  background-color: var(--spectrum-color-surface);
+  color: var(--spectrum-color-on-surface);
+  border: var(--spectrum-sys-border) solid var(--spectrum-color-outline);
+  
+  /* Ensure smooth theme transitions */
+  transition: 
+    background-color var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function),
+    color var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function),
+    border-color var(--spectrum-sys-animation-duration) var(--spectrum-sys-animation-timing-function);
+}
+```
+
+#### Responsive Grid Layout
+
+```css
+/* Responsive card grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spectrum-sys-spacing);
+  padding: var(--spectrum-sys-padding);
+}
+
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spectrum-sys-spacing-large);
+    padding: var(--spectrum-sys-padding-large);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spectrum-sys-spacing-x-large);
+    padding: var(--spectrum-sys-padding-x-large);
+  }
+}
+```
+
+### Status & Notification Examples
+
+```css
+/* Success notification */
+.notification--success {
+  background-color: var(--spectrum-sys-color-success);
+  color: var(--spectrum-sys-color-on-success);
+  padding: var(--spectrum-sys-padding);
+  border-radius: var(--spectrum-sys-border-radius);
+  border-left: 4px solid var(--unops-color-green-700);
+}
+
+/* Warning notification */
+.notification--warning {
+  background-color: var(--spectrum-sys-color-warning);
+  color: var(--spectrum-sys-color-on-warning);
+  padding: var(--spectrum-sys-padding);
+  border-radius: var(--spectrum-sys-border-radius);
+  border-left: 4px solid var(--unops-color-orange-700);
+}
+
+/* Error notification */
+.notification--error {
+  background-color: var(--spectrum-sys-color-danger);
+  color: var(--spectrum-sys-color-on-danger);
+  padding: var(--spectrum-sys-padding);
+  border-radius: var(--spectrum-sys-border-radius);
+  border-left: 4px solid var(--unops-color-red-700);
+}
+
+/* Info notification */
+.notification--info {
+  background-color: var(--spectrum-color-primary-container);
+  color: var(--spectrum-color-on-primary-container);
+  padding: var(--spectrum-sys-padding);
+  border-radius: var(--spectrum-sys-border-radius);
+  border-left: 4px solid var(--spectrum-sys-color-primary);
+}
+```
+
+### Accessibility Pattern
+
+```css
+/* Focus visible for keyboard navigation */
+.interactive-element:focus-visible {
+  outline: 2px solid var(--spectrum-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: var(--spectrum-sys-border-radius);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .interactive-element {
+    border: var(--spectrum-sys-border) solid var(--spectrum-color-outline);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+---
+
+## 🔄 Dynamic Theme Colors
+
+The Material Design 3 theme colors (`--spectrum-color-*`) can be dynamically overridden by:
+
+- **spectrum-theme**: Applies theme colors based on selected theme mode
+- **spectrum-wallpaper**: Extracts colors from wallpaper images and applies them to the theme
+
+These components coordinate via document-level events to ensure consistent theming throughout the application.
+
+### Theme Coordination Example
+
+```html
+<!-- Theme component with wallpaper coordination -->
+<spectrum-theme 
+  wait-for-wallpaper="true"
+  auto-load-fonts="true">
+</spectrum-theme>
+
+<!-- Wallpaper component with color extraction -->
+<spectrum-wallpaper 
+  image-url="/path/to/wallpaper.jpg"
+  preload-colors="true"
+  signal-ready="true">
+</spectrum-wallpaper>
+```
+
+When both components are present:
+1. Wallpaper extracts dominant colors from the image
+2. Theme waits for wallpaper color extraction
+3. Extracted colors are applied to `--spectrum-color-*` variables
+4. All components using these variables automatically update
+
+---
+
+## 📊 Color Scale Guidelines
+
+### Using Color Scales
+
+The color scales (50-900) follow Material Design color system conventions:
+
+- **50**: Lightest shade - use for backgrounds, hover states
+- **100-400**: Light to medium shades - use for surfaces, containers
+- **500**: Base color - primary brand representation
+- **600-900**: Medium to darkest shades - use for text, emphasis, shadows
+
+### Accessibility Considerations
+
+When using colors, ensure proper contrast ratios:
+
+- **Normal text**: Minimum 4.5:1 contrast ratio
+- **Large text** (18pt+ or 14pt+ bold): Minimum 3:1 contrast ratio
+- **UI components**: Minimum 3:1 contrast ratio
+
+Use the WCAG contrast checker tools or browser DevTools to verify contrast ratios.
+
+---
+
+## ⚠️ Maintenance Rules
+
+### When Adding New CSS Variables
+
+When adding new CSS variables to the design system:
+
+1. **Update Source Files**: Add variables to `spectrum-variables.css` or `spectrum-colors.css` in `/packages/core/src/styles/`
+2. **Update This Documentation**: Add the new variables to the appropriate section in this file
+3. **Update Dependency Map**: If variables affect component dependencies, update the dependency map
+4. **Document Usage**: Add usage examples showing how to use the new variables
+5. **Test Components**: Verify that existing components work correctly with new variables
+
+### When Modifying Existing Variables
+
+When changing existing CSS variable values or names:
+
+1. **Impact Analysis**: Search codebase for usage of the variable being changed
+2. **Breaking Changes**: If renaming, create migration path or keep old variable as alias
+3. **Update Documentation**: Update this file with new values and any migration notes
+4. **Test Thoroughly**: Test all components that use the modified variable
+5. **Update Changelog**: Document the change in the project changelog
+
+### Documentation Update Checklist
+
+- [ ] Update source CSS files (`spectrum-variables.css`, `spectrum-colors.css`)
+- [ ] Update this CSS Variables documentation file
+- [ ] Update usage examples if variable purpose changed
+- [ ] Add deprecation notices if removing old variables
+- [ ] Update component documentation for affected components
+- [ ] Run visual regression tests if available
+- [ ] Update Storybook stories that demonstrate the variables
+
+---
+
+## 🔗 Related Documentation
+
+- [Component Dependency Map](?path=/docs/documentation-dependency-map--docs) - Component relationships and integration patterns
+- [Changelog](?path=/docs/documentation-changelog--docs) - Version history and breaking changes
+- [spectrum-theme Component](?path=/docs/spectrum-components-spectrumtheme--docs) - Dynamic theming system
+- [spectrum-wallpaper Component](?path=/docs/spectrum-components-spectrumwallpaper--docs) - Background and color extraction
+
+---
+
+## 📚 Additional Resources
+
+### Source Files
+
+- `/packages/core/src/styles/spectrum-variables.css` - Main CSS variables
+- `/packages/core/src/styles/spectrum-colors.css` - UNOPS color scales and gradients
+- `/packages/storybook/styles/spectrum-variables.css` - Storybook-specific overrides
+- `/packages/storybook/styles/spectrum-colors.css` - Storybook color configuration
+
+### Material Design Resources
+
+- [Material Design 3 Color System](https://m3.material.io/styles/color/system/overview)
+- [Material Symbols Icons](https://fonts.google.com/icons)
+- [WCAG Contrast Guidelines](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
+
+---
+
+*This documentation is automatically maintained as part of the Spectrum Design System. For questions or updates, consult the Component Dependency Change Management rule in the workspace.*
+

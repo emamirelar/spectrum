@@ -9,7 +9,7 @@
 
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
-import { type CookieConsent, type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type PaginationActionPayload, type SearchResultActionPayload, type SpectrumCookieComplianceCustomEvent, type SpectrumImageGalleryCustomEvent, type SpectrumSearchResultsCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption, type SpectrumWizardCustomEvent, type WizardCompleteEvent, type WizardStepChangeEvent } from "@unops-itg-npm/cpit-spectrum";
+import { type CookieConsent, type ImageAddedEvent, type ImageConfig, type ImageDeletedEvent, type MediaActionPayload, type PaginationActionPayload, type SearchResultActionPayload, type SpectrumCookieComplianceCustomEvent, type SpectrumImageGalleryCustomEvent, type SpectrumMediaLibraryCustomEvent, type SpectrumSearchResultsCustomEvent, type SpectrumSelectCustomEvent, type SpectrumSelectOption, type SpectrumWizardCustomEvent, type WizardCompleteEvent, type WizardStepChangeEvent } from "@unops-itg-npm/cpit-spectrum";
 import { SpectrumAccordion as SpectrumAccordionElement, defineCustomElement as defineSpectrumAccordion } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-accordion.js";
 import { SpectrumAppLayout as SpectrumAppLayoutElement, defineCustomElement as defineSpectrumAppLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-app-layout.js";
 import { SpectrumApplicationLayout as SpectrumApplicationLayoutElement, defineCustomElement as defineSpectrumApplicationLayout } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-application-layout.js";
@@ -29,6 +29,7 @@ import { SpectrumFlex as SpectrumFlexElement, defineCustomElement as defineSpect
 import { SpectrumGrid as SpectrumGridElement, defineCustomElement as defineSpectrumGrid } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-grid.js";
 import { SpectrumHero as SpectrumHeroElement, defineCustomElement as defineSpectrumHero } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-hero.js";
 import { SpectrumImageGallery as SpectrumImageGalleryElement, defineCustomElement as defineSpectrumImageGallery } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-image-gallery.js";
+import { SpectrumMediaLibrary as SpectrumMediaLibraryElement, defineCustomElement as defineSpectrumMediaLibrary } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-media-library.js";
 import { SpectrumMenu as SpectrumMenuElement, defineCustomElement as defineSpectrumMenu } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-menu.js";
 import { SpectrumPanel as SpectrumPanelElement, defineCustomElement as defineSpectrumPanel } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-panel.js";
 import { SpectrumRailAlternative as SpectrumRailAlternativeElement, defineCustomElement as defineSpectrumRailAlternative } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-rail-alternative.js";
@@ -332,6 +333,17 @@ export const SpectrumImageGallery: StencilReactComponent<SpectrumImageGalleryEle
         onPrimaryAction: 'primaryAction'
     } as SpectrumImageGalleryEvents,
     defineCustomElement: defineSpectrumImageGallery
+});
+
+type SpectrumMediaLibraryEvents = { onMediaAction: EventName<SpectrumMediaLibraryCustomEvent<MediaActionPayload>> };
+
+export const SpectrumMediaLibrary: StencilReactComponent<SpectrumMediaLibraryElement, SpectrumMediaLibraryEvents> = /*@__PURE__*/ createComponent<SpectrumMediaLibraryElement, SpectrumMediaLibraryEvents>({
+    tagName: 'spectrum-media-library',
+    elementClass: SpectrumMediaLibraryElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onMediaAction: 'mediaAction' } as SpectrumMediaLibraryEvents,
+    defineCustomElement: defineSpectrumMediaLibrary
 });
 
 type SpectrumMenuEvents = {

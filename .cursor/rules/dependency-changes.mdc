@@ -23,6 +23,13 @@ When changing the signature, API, or behavior of any Spectrum component, you MUS
 - Modifying CSS class names or structure that dependents rely on
 - Changing internal state management that affects external interactions
 
+### CSS Variable Changes
+- Adding new CSS custom properties to the design system
+- Modifying values of existing CSS variables (especially if it affects visual appearance)
+- Removing or deprecating CSS variables that components may be using
+- Renaming CSS variables
+- Changing the calculated values of derived CSS variables
+
 ### Breaking vs Non-Breaking Changes
 **Breaking Changes (Require Dependent Updates):**
 - Removing props, events, or methods
@@ -90,6 +97,7 @@ Follow this order to minimize integration issues:
 - [ ] Update Storybook stories for the changed component and its dependents
 - [ ] Update README documentation for affected components
 - [ ] Update the Component Dependency Map if new relationships are created
+- [ ] Update CSS Variables documentation if CSS custom properties were added/modified/removed
 - [ ] Run the full test suite to catch any missed integration issues
 
 ## Examples
@@ -126,6 +134,39 @@ Follow this order to minimize integration issues:
 - Update the dependent's internal state management
 - Modify integration tests
 
+### Example 4: Adding CSS Variables
+**Change**: Adding new spacing scale CSS variables for micro-spacing
+**Location**: `packages/core/src/styles/spectrum-variables.css`
+**Required Actions**:
+```css
+/* Add to spectrum-variables.css */
+:root {
+  --spectrum-sys-spacing-xs: calc(var(--spectrum-sys-spacing) / 4);   /* 4px */
+  --spectrum-sys-spacing-2xs: calc(var(--spectrum-sys-spacing) / 8);  /* 2px */
+}
+```
+- Update CSS Variables documentation with new spacing variables
+- Add usage examples showing when to use micro-spacing
+- Update components that could benefit from finer spacing control
+- Add to spacing section in CSS Variables doc with descriptions
+- Document in changelog under "Added" section
+
+### Example 5: Modifying CSS Variable Values
+**Change**: Changing default border radius from 4px to 8px
+**Affected Variables**: `--spectrum-sys-border-radius`
+**Impact Analysis**:
+```bash
+# Find all usages
+grep -r "spectrum-sys-border-radius" packages/core/src/components/
+```
+**Required Actions**:
+- Update value in `spectrum-variables.css`
+- Document change in CSS Variables doc with migration note
+- Add changelog entry as breaking change
+- Test all components using border radius
+- Provide override instructions for components that need 4px
+- Consider adding new variable `--spectrum-sys-border-radius-small: 4px` for backward compatibility
+
 ## Documentation Updates
 
 ### Update Dependency Map
@@ -136,6 +177,46 @@ When changes create new relationships or break existing ones:
   - Dependencies: spectrum-button, spectrum-chip (newly added)
   - Used by: spectrum-conversation-panel (updated integration)
   - Purpose: Extended functionality with chip-based interactions
+```
+
+### Update CSS Variables Documentation
+When adding, modifying, or removing CSS variables:
+
+**Location**: `/packages/storybook/src/stories/css-variables.mdx`
+
+**Required Updates**:
+1. **Adding New Variables**: Add to appropriate section with description and default value
+2. **Modifying Values**: Update the documented value and add migration notes if breaking
+3. **Removing Variables**: Add deprecation notice and document replacement variable
+4. **Renaming Variables**: Document both old and new names with migration timeline
+
+**Update Checklist**:
+- [ ] Update source files: `spectrum-variables.css` or `spectrum-colors.css`
+- [ ] Update CSS Variables documentation with new/changed variables
+- [ ] Add usage examples for new variables
+- [ ] Document breaking changes in the Changelog
+- [ ] Search codebase for existing usage if modifying
+- [ ] Test affected components with new variable values
+
+**Example Updates**:
+```markdown
+### New Spacing Variable (Adding)
+~~~css
+--spectrum-sys-spacing-xs: calc(var(--spectrum-sys-spacing) / 4);  /* 4px - Extra small spacing */
+~~~
+
+### Modified Color Variable (Changing)
+~~~css
+/* Updated in v0.0.1-alpha.40 */
+--spectrum-sys-color-primary: #0070d2;  /* Changed from #005fb2 */
+~~~
+**Migration Note**: Update components using the old primary color value.
+
+### Deprecated Variable (Removing)
+~~~css
+--legacy-button-size: 48px;  /* ⚠️ DEPRECATED: Use --buttonSize instead */
+~~~
+**Removal Timeline**: Will be removed in v1.0.0
 ```
 
 ### Update Component README

@@ -420,6 +420,22 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
 ]);
 
 
+export const SpectrumMediaLibrary = /*@__PURE__*/ defineContainer<JSX.SpectrumMediaLibrary>('spectrum-media-library', undefined, [
+  'mediaItems',
+  'width',
+  'height',
+  'thumbnailSize',
+  'horizontal',
+  'gap',
+  'enableLightbox',
+  'showCaptions',
+  'enableKeyboardNav',
+  'mediaAction'
+], [
+  'mediaAction'
+]);
+
+
 export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spectrum-menu', undefined, [
   'orientation',
   'variant',
@@ -433,6 +449,9 @@ export const SpectrumMenu = /*@__PURE__*/ defineContainer<JSX.SpectrumMenu>('spe
   'mobileIconColor',
   'logoHref',
   'logoLabel',
+  'megamenuFooterItems',
+  'megamenuFooterTitle',
+  'megamenuFooterTitleIcon',
   'itemClick'
 ], [
   'itemClick'
@@ -692,6 +711,7 @@ export const SpectrumWizard = /*@__PURE__*/ defineContainer<JSX.SpectrumWizard>(
   'nextButtonLabel',
   'previousButtonLabel',
   'completeButtonLabel',
+  'externalStyles',
   'stepChange',
   'wizardComplete'
 ], [

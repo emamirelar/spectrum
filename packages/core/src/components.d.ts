@@ -15,6 +15,7 @@ import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-c
 import { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
 import { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+import { MediaActionPayload, MediaItem } from "./components/spectrum-media-library/spectrum-media-library";
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
@@ -29,6 +30,7 @@ export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-c
 export { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
 export { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
 export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+export { MediaActionPayload, MediaItem } from "./components/spectrum-media-library/spectrum-media-library";
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 export { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
@@ -1293,6 +1295,66 @@ export namespace Components {
          */
         "selectionMode": SelectionMode;
     }
+    interface SpectrumMediaLibrary {
+        /**
+          * Close lightbox
+         */
+        "closeLightbox": () => Promise<void>;
+        /**
+          * Enable keyboard navigation in lightbox
+          * @default true
+         */
+        "enableKeyboardNav": boolean;
+        /**
+          * Enable lightbox on thumbnail click
+          * @default true
+         */
+        "enableLightbox": boolean;
+        /**
+          * Gap between thumbnails (CSS units)
+          * @default '1rem'
+         */
+        "gap": string;
+        /**
+          * Height of the media library container (CSS units: px, %, vh, vw)
+          * @default '400px'
+         */
+        "height": string;
+        /**
+          * Enable horizontal scrolling (otherwise vertical)
+          * @default false
+         */
+        "horizontal": boolean;
+        /**
+          * Array of media items or JSON string representing the media items
+          * @example // JavaScript array component.mediaItems = [{id: '1', type: 'image', url: '...', altText: 'Image'}];  // JSON string   <spectrum-media-library media-items='[{"id":"1","type":"image","url":"...","altText":"Image"}]'></spectrum-media-library>
+          * @default []
+         */
+        "mediaItems": MediaItem[] | string;
+        /**
+          * Navigate to next media item
+         */
+        "navigateNext": () => Promise<void>;
+        /**
+          * Navigate to previous media item
+         */
+        "navigatePrevious": () => Promise<void>;
+        /**
+          * Show captions in lightbox
+          * @default true
+         */
+        "showCaptions": boolean;
+        /**
+          * Thumbnail size preset or custom size
+          * @default 'medium'
+         */
+        "thumbnailSize": 'small' | 'medium' | 'large' | string;
+        /**
+          * Width of the media library container (CSS units: px, %, vh, vw)
+          * @default '100%'
+         */
+        "width": string;
+    }
     /**
      * Spectrum Menu Component
      * A responsive navigation menu component that supports both horizontal and vertical layouts,
@@ -1370,6 +1432,27 @@ export namespace Components {
           * @default 'Home'
          */
         "logoLabel": string;
+        /**
+          * The megamenu footer items configuration (optional) Used for the footer section of megamenu variant Can be provided as a JSON string or array of objects
+          * @default []
+         */
+        "megamenuFooterItems": string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+  }>;
+        /**
+          * The megamenu footer title configuration (optional) Can be provided as a simple string or as a JSON string with text and icon
+          * @example "Our Sites" or '{"text":"Our Sites","icon":"public"}'
+          * @default ''
+         */
+        "megamenuFooterTitle": string;
+        /**
+          * The megamenu footer title icon (optional) Material icon name to display with the footer title
+          * @default ''
+         */
+        "megamenuFooterTitleIcon": string;
         /**
           * The breakpoint at which the menu switches to mobile view
           * @default 768
@@ -2212,6 +2295,11 @@ export namespace Components {
          */
         "currentStep": number;
         /**
+          * External CSS styles to inject into shadow DOM for styling step content
+          * @example <spectrum-wizard external-styles=".custom { color: red; } p { font-size: 1.2rem; }">
+         */
+        "externalStyles"?: string;
+        /**
           * Get total estimated time for all steps
          */
         "getTotalEstimatedTime": () => Promise<number>;
@@ -2320,6 +2408,10 @@ export interface SpectrumHeroCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumImageGalleryCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumImageGalleryElement;
+}
+export interface SpectrumMediaLibraryCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumMediaLibraryElement;
 }
 export interface SpectrumMenuCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2704,6 +2796,23 @@ declare global {
         prototype: HTMLSpectrumImageGalleryElement;
         new (): HTMLSpectrumImageGalleryElement;
     };
+    interface HTMLSpectrumMediaLibraryElementEventMap {
+        "mediaAction": MediaActionPayload;
+    }
+    interface HTMLSpectrumMediaLibraryElement extends Components.SpectrumMediaLibrary, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumMediaLibraryElementEventMap>(type: K, listener: (this: HTMLSpectrumMediaLibraryElement, ev: SpectrumMediaLibraryCustomEvent<HTMLSpectrumMediaLibraryElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumMediaLibraryElementEventMap>(type: K, listener: (this: HTMLSpectrumMediaLibraryElement, ev: SpectrumMediaLibraryCustomEvent<HTMLSpectrumMediaLibraryElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumMediaLibraryElement: {
+        prototype: HTMLSpectrumMediaLibraryElement;
+        new (): HTMLSpectrumMediaLibraryElement;
+    };
     interface HTMLSpectrumMenuElementEventMap {
         "itemClick": {
     label: string;
@@ -3013,6 +3122,7 @@ declare global {
         "spectrum-grid": HTMLSpectrumGridElement;
         "spectrum-hero": HTMLSpectrumHeroElement;
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
+        "spectrum-media-library": HTMLSpectrumMediaLibraryElement;
         "spectrum-menu": HTMLSpectrumMenuElement;
         "spectrum-panel": HTMLSpectrumPanelElement;
         "spectrum-rail": HTMLSpectrumRailElement;
@@ -4333,6 +4443,58 @@ declare namespace LocalJSX {
          */
         "selectionMode"?: SelectionMode;
     }
+    interface SpectrumMediaLibrary {
+        /**
+          * Enable keyboard navigation in lightbox
+          * @default true
+         */
+        "enableKeyboardNav"?: boolean;
+        /**
+          * Enable lightbox on thumbnail click
+          * @default true
+         */
+        "enableLightbox"?: boolean;
+        /**
+          * Gap between thumbnails (CSS units)
+          * @default '1rem'
+         */
+        "gap"?: string;
+        /**
+          * Height of the media library container (CSS units: px, %, vh, vw)
+          * @default '400px'
+         */
+        "height"?: string;
+        /**
+          * Enable horizontal scrolling (otherwise vertical)
+          * @default false
+         */
+        "horizontal"?: boolean;
+        /**
+          * Array of media items or JSON string representing the media items
+          * @example // JavaScript array component.mediaItems = [{id: '1', type: 'image', url: '...', altText: 'Image'}];  // JSON string   <spectrum-media-library media-items='[{"id":"1","type":"image","url":"...","altText":"Image"}]'></spectrum-media-library>
+          * @default []
+         */
+        "mediaItems"?: MediaItem[] | string;
+        /**
+          * Event emitted when media item is interacted with
+         */
+        "onMediaAction"?: (event: SpectrumMediaLibraryCustomEvent<MediaActionPayload>) => void;
+        /**
+          * Show captions in lightbox
+          * @default true
+         */
+        "showCaptions"?: boolean;
+        /**
+          * Thumbnail size preset or custom size
+          * @default 'medium'
+         */
+        "thumbnailSize"?: 'small' | 'medium' | 'large' | string;
+        /**
+          * Width of the media library container (CSS units: px, %, vh, vw)
+          * @default '100%'
+         */
+        "width"?: string;
+    }
     /**
      * Spectrum Menu Component
      * A responsive navigation menu component that supports both horizontal and vertical layouts,
@@ -4409,6 +4571,27 @@ declare namespace LocalJSX {
           * @default 'Home'
          */
         "logoLabel"?: string;
+        /**
+          * The megamenu footer items configuration (optional) Used for the footer section of megamenu variant Can be provided as a JSON string or array of objects
+          * @default []
+         */
+        "megamenuFooterItems"?: string | Array<{
+    label: string;
+    href?: string;
+    icon?: string;
+    disabled?: boolean;
+  }>;
+        /**
+          * The megamenu footer title configuration (optional) Can be provided as a simple string or as a JSON string with text and icon
+          * @example "Our Sites" or '{"text":"Our Sites","icon":"public"}'
+          * @default ''
+         */
+        "megamenuFooterTitle"?: string;
+        /**
+          * The megamenu footer title icon (optional) Material icon name to display with the footer title
+          * @default ''
+         */
+        "megamenuFooterTitleIcon"?: string;
         /**
           * The breakpoint at which the menu switches to mobile view
           * @default 768
@@ -5278,6 +5461,11 @@ declare namespace LocalJSX {
          */
         "currentStep"?: number;
         /**
+          * External CSS styles to inject into shadow DOM for styling step content
+          * @example <spectrum-wizard external-styles=".custom { color: red; } p { font-size: 1.2rem; }">
+         */
+        "externalStyles"?: string;
+        /**
           * Label for the next button
           * @default 'Next'
          */
@@ -5342,6 +5530,7 @@ declare namespace LocalJSX {
         "spectrum-grid": SpectrumGrid;
         "spectrum-hero": SpectrumHero;
         "spectrum-image-gallery": SpectrumImageGallery;
+        "spectrum-media-library": SpectrumMediaLibrary;
         "spectrum-menu": SpectrumMenu;
         "spectrum-panel": SpectrumPanel;
         "spectrum-rail": SpectrumRail;
@@ -5446,6 +5635,7 @@ declare module "@stencil/core" {
              */
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
+            "spectrum-media-library": LocalJSX.SpectrumMediaLibrary & JSXBase.HTMLAttributes<HTMLSpectrumMediaLibraryElement>;
             /**
              * Spectrum Menu Component
              * A responsive navigation menu component that supports both horizontal and vertical layouts,

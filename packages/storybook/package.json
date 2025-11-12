@@ -22,7 +22,7 @@
     "deploy-storybook-fast": "npm run deploy-storybook && npm run storybook.fast"
   },
   "dependencies": {
-    "@unops-itg-npm/cpit-spectrum": "*",
+    "@unops-itg-npm/cpit-spectrum": "^0.0.1-alpha.39",
     "lit": "^3.2.1"
   },
   "devDependencies": {

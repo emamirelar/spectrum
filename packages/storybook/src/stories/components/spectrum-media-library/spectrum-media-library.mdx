@@ -1,0 +1,386 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import * as MediaLibraryStories from './spectrum-media-library.stories';
+
+<Meta of={MediaLibraryStories} />
+
+# Media Library Component
+
+A comprehensive media library component that displays images and videos in a scrollable, responsive grid with an integrated lightbox viewer.
+
+## Overview
+
+The `spectrum-media-library` component provides a complete solution for displaying and managing media content including images and videos from various sources. It features automatic thumbnail generation for videos, a full-screen lightbox viewer with navigation, and comprehensive accessibility support.
+
+## Key Features
+
+- **Multi-Media Support**: Display images and videos (YouTube, Vimeo, direct links)
+- **Auto-Thumbnail Extraction**: Automatic thumbnail generation for YouTube videos
+- **Interactive Lightbox**: Full-screen viewer with keyboard and mouse navigation
+- **Configurable Layouts**: Horizontal or vertical scrolling with customizable sizes
+- **Fully Accessible**: WCAG 2.1 AA compliant with complete keyboard support
+- **Touch Optimized**: Native support for mobile touch gestures
+- **Event System**: Comprehensive events for tracking user interactions
+- **Framework Agnostic**: Works with vanilla JS, React, Vue, Angular, and more
+
+## Basic Usage
+
+<Canvas of={MediaLibraryStories.Default} />
+
+## Component Properties
+
+<Controls of={MediaLibraryStories.Default} />
+
+## Examples
+
+### Image Gallery
+
+Display a collection of images with large thumbnails in a grid layout.
+
+<Canvas of={MediaLibraryStories.ImageGallery} />
+
+### Video Library
+
+Showcase videos with automatic thumbnail extraction from YouTube links.
+
+<Canvas of={MediaLibraryStories.VideoLibrary} />
+
+### Vertical Layout
+
+Perfect for sidebars or narrow containers with vertical scrolling.
+
+<Canvas of={MediaLibraryStories.VerticalLayout} />
+
+### Thumbnail Sizes
+
+#### Small Thumbnails
+
+<Canvas of={MediaLibraryStories.SmallThumbnails} />
+
+#### Custom Thumbnail Size
+
+<Canvas of={MediaLibraryStories.CustomThumbnailSize} />
+
+### Configuration Options
+
+#### Without Lightbox
+
+<Canvas of={MediaLibraryStories.WithoutLightbox} />
+
+#### Without Captions
+
+<Canvas of={MediaLibraryStories.NoCaptions} />
+
+### Empty State
+
+<Canvas of={MediaLibraryStories.EmptyState} />
+
+## Advanced Usage
+
+### Using JSON String
+
+For HTML-only implementations without JavaScript, pass media items as a JSON string.
+
+<Canvas of={MediaLibraryStories.WithJSONString} />
+
+### Event Handling
+
+Listen to media interactions with the `mediaAction` event.
+
+<Canvas of={MediaLibraryStories.WithEventHandling} />
+
+### Responsive Design
+
+The component automatically adapts to different screen sizes.
+
+<Canvas of={MediaLibraryStories.Responsive} />
+
+## Accessibility
+
+The component is fully accessible and meets WCAG 2.1 AA standards.
+
+<Canvas of={MediaLibraryStories.Accessibility} />
+
+### Keyboard Navigation
+
+| Key | Action |
+|-----|--------|
+| `Tab` | Move focus between thumbnails |
+| `Enter` / `Space` | Open lightbox for focused thumbnail |
+| `Escape` | Close lightbox |
+| `Arrow Left` | Navigate to previous media in lightbox |
+| `Arrow Right` | Navigate to next media in lightbox |
+
+### Screen Reader Support
+
+- All thumbnails have descriptive ARIA labels
+- Lightbox has proper modal semantics
+- Loading states are announced
+- Navigation changes are announced
+- Counter updates are announced in real-time
+
+## API Reference
+
+### MediaItem Interface
+
+~~~typescript
+interface MediaItem {
+  id: string;                    // Unique identifier
+  type: 'image' | 'video';       // Type of media
+  url: string;                   // Source URL
+  thumbnailUrl?: string;         // Optional custom thumbnail
+  altText: string;               // Accessibility description
+  caption?: string;              // Optional caption for lightbox
+  platform?: 'youtube' | 'vimeo' | 'direct';  // Video platform (auto-detected)
+}
+~~~
+
+### MediaActionPayload Interface
+
+~~~typescript
+interface MediaActionPayload {
+  action: 'view' | 'close' | 'navigate' | 'error';
+  mediaItem?: MediaItem;
+  index?: number;
+  errorMessage?: string;
+}
+~~~
+
+### Events
+
+| Event | Detail Type | Description |
+|-------|-------------|-------------|
+| `mediaAction` | `MediaActionPayload` | Emitted when media is viewed, closed, or navigated |
+
+### Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `closeLightbox()` | `Promise<void>` | Close the lightbox programmatically |
+| `navigatePrevious()` | `Promise<void>` | Navigate to previous media item |
+| `navigateNext()` | `Promise<void>` | Navigate to next media item |
+
+## Video Platform Support
+
+### YouTube
+
+The component automatically detects YouTube URLs and extracts high-quality thumbnails.
+
+**Supported URL formats:**
+- `https://www.youtube.com/watch?v=VIDEO_ID`
+- `https://youtu.be/VIDEO_ID`
+- `https://www.youtube.com/embed/VIDEO_ID`
+
+**Features:**
+- Automatic thumbnail extraction
+- Embeddable player with autoplay
+- Full player controls
+
+### Vimeo
+
+Vimeo videos are supported with automatic player embedding.
+
+**URL format:** `https://vimeo.com/VIDEO_ID`
+
+**Note:** Vimeo thumbnail extraction requires API integration. The component provides a placeholder icon.
+
+### Direct Video Files
+
+Direct video files (`.mp4`, `.webm`, `.ogg`) are supported with HTML5 video player.
+
+## Styling
+
+### CSS Custom Properties
+
+Customize the component appearance using CSS custom properties:
+
+~~~css
+spectrum-media-library {
+  /* Container */
+  --media-library-background: #ffffff;
+  --media-library-border-radius: 0.5rem;
+  --media-library-padding: 1rem;
+  
+  /* Thumbnails */
+  --media-library-thumbnail-border: 1px solid #e0e0e0;
+  --media-library-thumbnail-radius: 0.25rem;
+  --media-library-thumbnail-hover-scale: 1.05;
+  
+  /* Lightbox */
+  --media-library-lightbox-background: rgba(0, 0, 0, 0.95);
+  --media-library-lightbox-max-width: 90vw;
+  
+  /* Focus */
+  --media-library-focus-outline: #4A90E2;
+}
+~~~
+
+## Use Cases
+
+### Photo Galleries and Portfolios
+
+Perfect for showcasing photography work, art portfolios, or product catalogs with high-quality images.
+
+### Video Libraries and Courses
+
+Ideal for educational platforms, training materials, and video course libraries with automatic thumbnail generation.
+
+### Documentation with Visual Content
+
+Enhance documentation with screenshots, diagrams, and tutorial videos in a user-friendly interface.
+
+### Media Asset Management
+
+Organize and display media assets for content management systems and digital asset libraries.
+
+### Product Showcases
+
+Combine product images and demo videos to create engaging product pages and showcases.
+
+## Best Practices
+
+### 1. Always Provide Alt Text
+
+~~~javascript
+{
+  id: 'img1',
+  type: 'image',
+  url: '/image.jpg',
+  altText: 'Clear, descriptive text for accessibility',  // ✅ Required
+  caption: 'Optional visual caption'
+}
+~~~
+
+### 2. Optimize Images
+
+- Use compressed images for better performance
+- Consider using WebP format with fallbacks
+- Provide appropriate dimensions for your use case
+
+### 3. Choose Appropriate Thumbnail Sizes
+
+- **Small (100px)**: For compact displays or many items
+- **Medium (150px)**: Default, works well for most cases
+- **Large (200px)**: For feature galleries or fewer items
+- **Custom**: Match your specific layout requirements
+
+### 4. Handle Events
+
+~~~javascript
+library.addEventListener('mediaAction', (event) => {
+  const { action, mediaItem } = event.detail;
+  
+  if (action === 'error') {
+    // Handle errors gracefully
+    console.error('Media error:', event.detail.errorMessage);
+  }
+});
+~~~
+
+### 5. Test Responsively
+
+Always test your media library on different screen sizes and devices to ensure optimal user experience.
+
+## Performance Considerations
+
+- **Lazy Loading**: Images load only when visible in viewport
+- **Efficient Scrolling**: CSS-based overflow for smooth performance
+- **GPU Acceleration**: Transform-based animations for better performance
+- **Cleanup**: Automatic cleanup of event listeners and resources
+
+## Browser Support
+
+| Browser | Support |
+|---------|---------|
+| Chrome/Edge | ✅ Full support |
+| Firefox | ✅ Full support |
+| Safari | ✅ Full support |
+| iOS Safari | ✅ Full support with touch |
+| Android Chrome | ✅ Full support with touch |
+
+## Framework Integration
+
+### Vanilla JavaScript
+
+~~~javascript
+const library = document.querySelector('spectrum-media-library');
+library.mediaItems = [...];
+library.addEventListener('mediaAction', handler);
+~~~
+
+### React
+
+~~~jsx
+import { SpectrumMediaLibrary } from '@unops-itg-npm/cpit-spectrum-react';
+
+function Gallery() {
+  const mediaItems = [...];
+  
+  return (
+    <SpectrumMediaLibrary
+      mediaItems={mediaItems}
+      width="100%"
+      height="400px"
+      onMediaAction={(e) => console.log(e.detail)}
+    />
+  );
+}
+~~~
+
+### Vue
+
+~~~vue
+<template>
+  <spectrum-media-library
+    :media-items="mediaItems"
+    width="100%"
+    height="400px"
+    @mediaAction="handleAction"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      mediaItems: [...]
+    };
+  }
+};
+</script>
+~~~
+
+### Angular
+
+~~~typescript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-gallery',
+  template: `
+    <spectrum-media-library
+      [mediaItems]="mediaItems"
+      width="100%"
+      height="400px"
+      (mediaAction)="handleAction($event)"
+    ></spectrum-media-library>
+  `
+})
+export class GalleryComponent {
+  mediaItems = [...];
+}
+~~~
+
+## Related Components
+
+- **spectrum-image-gallery**: For image-only galleries with upload capabilities
+- **spectrum-carousel**: For slideshow-style media presentation
+- **spectrum-hero**: For featured media with call-to-action overlays
+
+## Support
+
+For questions, issues, or feature requests, please visit our [GitHub repository](https://github.com/your-org/spectrum).
+
+
+
+
+

@@ -31,6 +31,7 @@ export { SpectrumDialog } from './components/spectrum-dialog/spectrum-dialog';
 export { SpectrumSearchResults } from './components/spectrum-search-results/spectrum-search-results';
 export { SpectrumCard } from './components/spectrum-card/spectrum-card';
 export { SpectrumWizard } from './components/spectrum-wizard/spectrum-wizard';
+export { SpectrumMediaLibrary } from './components/spectrum-media-library/spectrum-media-library';
 
 // Export CSS variables for independent use
 import './styles/spectrum-variables.css';
@@ -43,3 +44,4 @@ export type { BadgeVariant, BadgeSize } from './components/spectrum-badge/spectr
 export type { SearchResult, SearchResultsData, PaginationOptions, SearchResultActionPayload, PaginationActionPayload, SearchResultsTranslations } from './components/spectrum-search-results/spectrum-search-results';
 export type { CardVariant, CardSize } from './components/spectrum-card/spectrum-card';
 export type { WizardStep, WizardStepChangeEvent, WizardCompleteEvent } from './components/spectrum-wizard/spectrum-wizard';
+export type { MediaItem, MediaActionPayload } from './components/spectrum-media-library/spectrum-media-library';
