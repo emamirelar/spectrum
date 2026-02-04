@@ -1,0 +1,169 @@
+{
+  "id": "complete-dashboard",
+  "title": "Analytics Dashboard",
+  "description": "Complete dashboard with filters, charts, and data table",
+  "dataSources": {
+    "salesData": {
+      "id": "salesData",
+      "endpoint": "/data/sales-data.json",
+      "method": "GET",
+      "refreshInterval": 60000
+    }
+  },
+  "filters": [
+    {
+      "id": "region",
+      "type": "select",
+      "label": "Region",
+      "options": [
+        { "label": "All Regions", "value": "" },
+        { "label": "North America", "value": "NA" },
+        { "label": "Europe", "value": "EU" },
+        { "label": "Asia Pacific", "value": "APAC" }
+      ]
+    },
+    {
+      "id": "category",
+      "type": "select",
+      "label": "Category",
+      "options": [
+        { "label": "All Categories", "value": "" },
+        { "label": "Electronics", "value": "Electronics" },
+        { "label": "Furniture", "value": "Furniture" },
+        { "label": "Stationery", "value": "Stationery" }
+      ]
+    },
+    {
+      "id": "dateRange",
+      "type": "dateRange",
+      "label": "Date Range",
+      "defaultValue": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      }
+    }
+  ],
+  "layout": {
+    "template": [
+      "filters filters",
+      "revenue-chart region-chart",
+      "table table"
+    ],
+    "columns": "repeat(2, 1fr)",
+    "rows": "auto 300px 1fr",
+    "gap": "1.5rem"
+  },
+  "widgets": {
+    "filters": {
+      "component": "filter-panel",
+      "uiConfig": {
+        "layout": "horizontal",
+        "immediate": true,
+        "showButtons": false,
+        "filters": [
+          {
+            "id": "region",
+            "type": "select",
+            "label": "Region",
+            "options": [
+              { "label": "All Regions", "value": "" },
+              { "label": "North America", "value": "NA" },
+              { "label": "Europe", "value": "EU" },
+              { "label": "Asia Pacific", "value": "APAC" }
+            ]
+          },
+          {
+            "id": "category",
+            "type": "select",
+            "label": "Category",
+            "options": [
+              { "label": "All Categories", "value": "" },
+              { "label": "Electronics", "value": "Electronics" },
+              { "label": "Furniture", "value": "Furniture" },
+              { "label": "Stationery", "value": "Stationery" }
+            ]
+          },
+          {
+            "id": "dateRange",
+            "type": "dateRange",
+            "label": "Date Range",
+            "defaultValue": {
+              "start": "2024-01-01",
+              "end": "2024-12-31"
+            }
+          }
+        ]
+      }
+    },
+    "revenue-chart": {
+      "component": "line-chart",
+      "dataSourceId": "salesData",
+      "uiConfig": {
+        "chartType": "line",
+        "title": "Revenue Trend",
+        "labelField": "product",
+        "valueField": "revenue",
+        "datasetLabel": "Revenue ($)",
+        "height": "300px",
+        "showLegend": true
+      }
+    },
+    "region-chart": {
+      "component": "pie-chart",
+      "dataSourceId": "salesData",
+      "uiConfig": {
+        "chartType": "pie",
+        "title": "Sales by Product",
+        "labelField": "product",
+        "valueField": "revenue",
+        "height": "300px",
+        "showLegend": true,
+        "legendPosition": "right"
+      }
+    },
+    "table": {
+      "component": "data-table",
+      "dataSourceId": "salesData",
+      "uiConfig": {
+        "columns": [
+          { "key": "product", "label": "Product", "sortable": true },
+          { "key": "region", "label": "Region", "sortable": true },
+          { "key": "category", "label": "Category", "sortable": true },
+          { "key": "revenue", "label": "Revenue", "format": "currency", "sortable": true, "align": "right" },
+          { "key": "units", "label": "Units", "format": "number", "sortable": true, "align": "right" },
+          { "key": "inStock", "label": "Stock", "format": "boolean", "sortable": true, "align": "center" }
+        ],
+        "sortable": true,
+        "pageable": true,
+        "pageSize": 5,
+        "selectable": false,
+        "striped": true,
+        "hoverable": true,
+        "bordered": true
+      }
+    }
+  },
+  "theme": {
+    "colorScheme": "light",
+    "primaryColor": "#1976d2",
+    "borderRadius": "8px",
+    "spacing": "1.5rem"
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": "768px",
+      "tablet": "1024px",
+      "desktop": "1440px"
+    },
+    "mobileLayout": {
+      "columns": "1fr",
+      "areas": [
+        ["filters"],
+        ["revenue-chart"],
+        ["region-chart"],
+        ["sales-table"]
+      ]
+    }
+  }
+}
+

@@ -1,0 +1,187 @@
+{
+  "id": "sales-map-maplibre",
+  "title": "Sales Map Dashboard (MapLibre)",
+  "description": "Store locations with sales data using modern MapLibre GL JS provider (~200KB) with GPU acceleration",
+  "dataSources": {
+    "storeLocations": {
+      "id": "storeLocations",
+      "endpoint": "/api/stores",
+      "method": "GET",
+      "refreshInterval": 300000
+    },
+    "salesHeatmap": {
+      "id": "salesHeatmap",
+      "endpoint": "/api/sales/heatmap",
+      "method": "GET",
+      "refreshInterval": 600000
+    }
+  },
+  "layout": {
+    "template": [
+      "filters filters filters",
+      "map map charts",
+      "table table table"
+    ],
+    "columns": "2fr 2fr 1fr",
+    "rows": "auto 600px 1fr",
+    "gap": "1.5rem"
+  },
+  "widgets": {
+    "filters": {
+      "component": "filter-panel",
+      "uiConfig": {
+        "layout": "horizontal",
+        "immediate": true,
+        "showButtons": false,
+        "filters": [
+          {
+            "id": "region",
+            "type": "select",
+            "label": "Region",
+            "options": [
+              { "value": "north-america", "label": "North America" },
+              { "value": "europe", "label": "Europe" },
+              { "value": "asia", "label": "Asia" }
+            ]
+          },
+          {
+            "id": "salesRange",
+            "type": "range",
+            "label": "Annual Sales ($M)",
+            "min": 0,
+            "max": 100,
+            "defaultValue": { "min": 0, "max": 100 }
+          }
+        ]
+      }
+    },
+    "map": {
+      "component": "maplibre-map",
+      "dataSourceId": "storeLocations",
+      "uiConfig": {
+        "mapProvider": "maplibre",
+        "center": [40.7128, -74.0060],
+        "zoom": 4,
+        "minZoom": 2,
+        "maxZoom": 20,
+        "height": "600px",
+        "basemap": "streets",
+        "controls": {
+          "zoom": true,
+          "scale": true,
+          "fullscreen": true,
+          "attribution": true
+        },
+        "heatmap": {
+          "enabled": true,
+          "dataSourceId": "salesHeatmap",
+          "radius": 30,
+          "blur": 20,
+          "gradient": {
+            "0.4": "blue",
+            "0.6": "cyan",
+            "0.7": "lime",
+            "0.8": "yellow",
+            "1.0": "red"
+          }
+        }
+      },
+      "filtering": {
+        "subscribe": ["region", "salesRange"],
+        "clientSide": true,
+        "filterFunction": "default"
+      },
+      "drillDown": {
+        "action": "hierarchical-nav",
+        "targetView": "store-detail",
+        "contextMapping": {
+          "storeId": "id",
+          "storeName": "data.name",
+          "storeRegion": "data.region"
+        },
+        "preserveFilters": true,
+        "breadcrumbLabel": "{{data.name}}"
+      }
+    },
+    "charts": {
+      "component": "pie-chart",
+      "dataSourceId": "storeLocations",
+      "uiConfig": {
+        "chartType": "pie",
+        "title": "Stores by Region",
+        "labelField": "region",
+        "valueField": "revenue",
+        "datasetLabel": "Revenue",
+        "showLegend": true,
+        "legendPosition": "bottom",
+        "height": "280px"
+      },
+      "filtering": {
+        "subscribe": ["region", "salesRange"],
+        "clientSide": true,
+        "filterFunction": "default"
+      }
+    },
+    "table": {
+      "component": "data-table",
+      "dataSourceId": "storeLocations",
+      "uiConfig": {
+        "columns": [
+          {
+            "key": "name",
+            "label": "Store Name",
+            "sortable": true
+          },
+          {
+            "key": "region",
+            "label": "Region",
+            "sortable": true
+          },
+          {
+            "key": "lat",
+            "label": "Latitude",
+            "format": "number",
+            "sortable": true,
+            "align": "right"
+          },
+          {
+            "key": "lng",
+            "label": "Longitude",
+            "format": "number",
+            "sortable": true,
+            "align": "right"
+          },
+          {
+            "key": "revenue",
+            "label": "Annual Revenue",
+            "format": "currency",
+            "sortable": true,
+            "align": "right"
+          }
+        ],
+        "sortable": true,
+        "pageable": true,
+        "pageSize": 15,
+        "striped": true,
+        "hoverable": true,
+        "bordered": true
+      },
+      "filtering": {
+        "subscribe": ["region", "salesRange"],
+        "clientSide": true,
+        "filterFunction": "default"
+      },
+      "drillDown": {
+        "action": "dashboard-nav",
+        "targetView": "store-analytics",
+        "contextMapping": {
+          "storeId": "id",
+          "storeName": "name"
+        }
+      }
+    }
+  }
+}
+
+
+

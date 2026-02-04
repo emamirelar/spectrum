@@ -1,0 +1,239 @@
+// ==============================================
+// Spectrum Chart Component Styles
+// ==============================================
+// Chart.js integration component
+// Works standalone and as dashboard widget
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+// Note: shadow: false, so use element selector instead of :host
+
+spectrum-chart {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  
+  // Core component properties using Spectrum tokens
+  --chart-background: var(--spectrum-color-surface, var(--spectrum-sys-color-surface, #ffffff));
+  --chart-color: var(--spectrum-color-on-surface, var(--spectrum-sys-color-on-surface, #000000));
+  --chart-border-radius: var(--spectrum-sys-shape-corner-medium, 0.5rem);
+  --chart-padding: var(--spectrum-sys-spacing, 1rem);
+  --chart-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --chart-font-size: var(--spectrum-sys-font-size, 1rem);
+  
+  // Loading state
+  --chart-loading-color: var(--spectrum-sys-color-primary, #0078d4);
+  --chart-loading-background: var(--spectrum-color-surface-variant, var(--spectrum-sys-color-surface-variant, #f6f6f6));
+  
+  // Spacing
+  --chart-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --chart-spacing: var(--spectrum-sys-spacing, 1rem);
+  --chart-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  
+  // Animation
+  --chart-transition: all 0.2s ease-in-out;
+  
+  // Ensure all child elements use border-box
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+
+.chart-host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.spectrum-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--chart-background);
+  border-radius: var(--chart-border-radius);
+  padding: var(--chart-padding);
+  box-sizing: border-box;
+  font-family: var(--chart-font-family);
+  color: var(--chart-color);
+  position: relative;
+}
+
+// ==============================================
+// Canvas Styles
+// ==============================================
+
+.spectrum-chart__canvas {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+// ==============================================
+// Loading State
+// ==============================================
+
+.spectrum-chart__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--chart-spacing);
+  padding: var(--chart-spacing-large);
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  background: var(--chart-loading-background);
+  border-radius: var(--chart-border-radius);
+}
+
+.spectrum-chart__spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--chart-loading-color);
+  border-radius: 50%;
+  animation: chart-spin 0.8s linear infinite;
+  
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 2s;
+  }
+}
+
+@keyframes chart-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spectrum-chart__loading-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--spectrum-sys-color-on-surface-variant, #42474e);
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
+// Mobile: Smaller padding
+@media (max-width: 767px) {
+  .spectrum-chart {
+    padding: var(--chart-spacing-small);
+  }
+}
+
+// Tablet and up: Normal padding
+@media (min-width: 768px) {
+  .spectrum-chart {
+    padding: var(--chart-spacing);
+  }
+}
+
+// Desktop: Larger padding
+@media (min-width: 1024px) {
+  .spectrum-chart {
+    padding: var(--chart-spacing-large);
+  }
+}
+
+// ==============================================
+// Print Styles
+// ==============================================
+
+@media print {
+  .spectrum-chart {
+    background: white;
+    padding: 0;
+    page-break-inside: avoid;
+  }
+  
+  .spectrum-chart__loading {
+    display: none;
+  }
+}
+
+// ==============================================
+// Accessibility
+// ==============================================
+
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-chart,
+  .spectrum-chart__spinner {
+    animation-duration: 0s !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-chart {
+    border: 2px solid var(--spectrum-sys-color-outline);
+  }
+}
+
+// Dark mode support is handled by spectrum-theme component
+// Do not use prefers-color-scheme here - let the theme control colors
+
+// ==============================================
+// Chart.js Overrides
+// ==============================================
+
+// Ensure chart canvas is responsive
+.spectrum-chart canvas {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+// Chart.js tooltip styling
+// Uses Spectrum tokens that adapt to theme automatically
+.chartjs-tooltip {
+  background: var(--spectrum-color-surface-container, var(--spectrum-sys-color-surface-container, #f0f0f0)) !important;
+  border: 1px solid var(--spectrum-color-outline, var(--spectrum-sys-color-outline, #72777f)) !important;
+  border-radius: var(--spectrum-sys-shape-corner-small, 0.25rem) !important;
+  color: var(--spectrum-color-on-surface, var(--spectrum-sys-color-on-surface, #000000)) !important;
+  font-family: var(--chart-font-family) !important;
+  font-size: var(--chart-font-size) !important;
+}
+
+// ==============================================
+// Error State (Optional)
+// ==============================================
+
+.spectrum-chart__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--chart-spacing);
+  padding: var(--chart-spacing-large);
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  background: var(--spectrum-sys-color-error-container, #fce4e4);
+  border-radius: var(--chart-border-radius);
+  color: var(--spectrum-sys-color-error, #d32f2f);
+  text-align: center;
+}
+
+.spectrum-chart__error-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.spectrum-chart__error-message {
+  margin: 0;
+  font-size: 0.9rem;
+  max-width: 400px;
+}
+
+
+

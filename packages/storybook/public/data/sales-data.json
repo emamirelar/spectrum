@@ -1,0 +1,15 @@
+[
+    { "id": 1, "product": "Laptop Pro", "region": "NA", "category": "Electronics", "price": 1299.99, "units": 45, "revenue": 58499.55, "date": "2024-01-15", "inStock": true },
+    { "id": 2, "product": "Wireless Mouse", "region": "EU", "category": "Electronics", "price": 29.99, "units": 230, "revenue": 6897.70, "date": "2024-01-16", "inStock": true },
+    { "id": 3, "product": "Office Chair", "region": "NA", "category": "Furniture", "price": 399.00, "units": 67, "revenue": 26733.00, "date": "2024-01-17", "inStock": false },
+    { "id": 4, "product": "Desk Lamp", "region": "APAC", "category": "Furniture", "price": 59.99, "units": 120, "revenue": 7198.80, "date": "2024-01-18", "inStock": true },
+    { "id": 5, "product": "Notebook Set", "region": "EU", "category": "Stationery", "price": 12.99, "units": 450, "revenue": 5845.50, "date": "2024-01-19", "inStock": true },
+    { "id": 6, "product": "USB Hub", "region": "NA", "category": "Electronics", "price": 39.99, "units": 180, "revenue": 7198.20, "date": "2024-01-20", "inStock": true },
+    { "id": 7, "product": "Monitor Stand", "region": "APAC", "category": "Furniture", "price": 79.99, "units": 95, "revenue": 7599.05, "date": "2024-01-21", "inStock": false },
+    { "id": 8, "product": "Pen Pack", "region": "EU", "category": "Stationery", "price": 8.99, "units": 600, "revenue": 5394.00, "date": "2024-01-22", "inStock": true },
+    { "id": 9, "product": "Keyboard", "region": "NA", "category": "Electronics", "price": 89.99, "units": 156, "revenue": 14038.44, "date": "2024-01-23", "inStock": true },
+    { "id": 10, "product": "Desk Organizer", "region": "APAC", "category": "Furniture", "price": 24.99, "units": 210, "revenue": 5247.90, "date": "2024-01-24", "inStock": true },
+    { "id": 11, "product": "Webcam HD", "region": "EU", "category": "Electronics", "price": 79.99, "units": 89, "revenue": 7119.11, "date": "2024-01-25", "inStock": false },
+    { "id": 12, "product": "Sticky Notes", "region": "NA", "category": "Stationery", "price": 4.99, "units": 800, "revenue": 3992.00, "date": "2024-01-26", "inStock": true }
+]
+

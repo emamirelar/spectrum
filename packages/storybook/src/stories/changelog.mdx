@@ -27,6 +27,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.1-alpha.42] - 04/Feb/26
+
+### 🧪 Pre-release
+
+### 🆕 Added
+- **spectrum-chart**: Error state rendering with accessible error message display
+  - **Error State Management**: Added `@State() error` property for tracking chart initialization failures
+  - **Error UI**: New `renderError()` method displays error icon and message with proper ARIA `role="alert"` and `aria-live="assertive"`
+  - **Error Recovery**: Errors are captured during Chart.js initialization with meaningful error messages
+
+### 🔄 Changed
+- **spectrum-chart**: Enhanced accessibility for chart canvas and loading states
+  - **Canvas Accessibility**: Added `role="img"` and dynamic `aria-label` to canvas element with chart type, title, and dataset count information
+  - **Loading State Accessibility**: Added `role="status"`, `aria-live="polite"`, and `aria-busy="true"` to loading container
+  - **Screen Reader Support**: Chart descriptions now include title, type, dataset count, and data point count for comprehensive screen reader support
+- **spectrum-chart**: CSS architecture improvements
+  - **Element Selector**: Replaced `:host` with `spectrum-chart` element selector (component uses `shadow: false`)
+  - **Theme Integration**: Removed `prefers-color-scheme` dark mode blocks - now relies on spectrum-theme for proper theming
+  - **Token Usage**: Updated to use Spectrum color tokens that adapt automatically to theme changes
+- **dashboard-widget-host**: Enhanced accessibility for loading and error states
+  - **Loading State**: Added `role="status"`, `aria-live="polite"`, and `aria-busy="true"` for screen reader announcements
+  - **Error State**: Added `role="alert"` and `aria-live="assertive"` for immediate error announcements
+  - **Retry Button**: Added contextual `aria-label` with dynamic widget name for better screen reader context
+- **spectrum-dashboard**: CSS improvements for loading overlay
+  - **Token Usage**: Replaced hardcoded colors with Spectrum tokens (`--spectrum-color-scrim`, `--spectrum-color-outline-variant`)
+  - **Theme Consistency**: Loading overlay now adapts to theme automatically without manual dark mode handling
+
+### 🐛 Fixed
+- **spectrum-chart**: `:host` selector not working with `shadow: false` configuration
+  - **Root Cause**: Component uses `shadow: false` but CSS used `:host` which only works with Shadow DOM
+  - **Solution**: Replaced `:host` with `spectrum-chart` element selector matching other component patterns
+
+### 📝 Documentation
+- **Release Preparation**: Updated package version to 0.0.1-alpha.42 for accessibility and dashboard improvements release
+- **Code Review**: Dashboard and widget components passed code review with all issues resolved
+
+---
+
 ## [0.0.1-alpha.39] - 11/Nov/25
 
 ### 🧪 Pre-release

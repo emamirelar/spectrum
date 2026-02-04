@@ -1,0 +1,330 @@
+// ==============================================
+// Spectrum Text Input Component Styles
+// ==============================================
+// BEM naming convention: spectrum-text-input (block), __element (element), --modifier (modifier)
+// CSS custom properties for theming integration
+// Note: This component uses shadow: false, so styles apply to the element tag
+// ==============================================
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+spectrum-text-input {
+  // CSS Custom Properties using Spectrum tokens
+  --input-background: var(--spectrum-color-surface, #ffffff);
+  --input-color: var(--spectrum-color-on-surface, #1a1a1a);
+  --input-border-color: var(--spectrum-color-outline, rgba(0, 0, 0, 0.23));
+  --input-border-radius: var(--spectrum-sys-border-radius-medium, 8px);
+  --input-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --input-font-size: var(--spectrum-sys-typescale-body-medium-size, 0.875rem);
+  --input-placeholder-color: var(--spectrum-color-on-surface-variant, #666666);
+  
+  // Focus state
+  --input-focus-border-color: var(--spectrum-color-primary, #0070d2);
+  --input-focus-ring-color: var(--spectrum-color-primary-container, rgba(0, 112, 210, 0.12));
+  
+  // Error state
+  --input-error-color: var(--spectrum-color-error, #d32f2f);
+  --input-error-background: var(--spectrum-color-error-container, #ffdad6);
+  
+  // Disabled state
+  --input-disabled-opacity: 0.5;
+  --input-disabled-background: var(--spectrum-color-surface-variant, #f5f5f5);
+  
+  // Sizing
+  --input-height-small: 32px;
+  --input-height-medium: 40px;
+  --input-height-large: 48px;
+  --input-padding-x: var(--spectrum-sys-spacing, 1rem);
+  --input-padding-y: var(--spectrum-sys-spacing-small, 0.5rem);
+  
+  // Icon sizing
+  --input-icon-size: 20px;
+  --input-icon-color: var(--spectrum-color-on-surface-variant, #666666);
+  
+  // Transitions
+  --input-transition: all var(--spectrum-sys-animation-duration-fast, 150ms) var(--spectrum-sys-animation-timing-function, ease-in-out);
+
+  // Component layout
+  display: flex;
+  flex-direction: column;
+  gap: var(--spectrum-sys-spacing-small, 0.5rem);
+  width: 100%;
+  font-family: var(--input-font-family);
+}
+
+.spectrum-text-input {
+  // ==============================================
+  // Label Styles
+  // ==============================================
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.75rem);
+    font-weight: var(--spectrum-sys-font-weight-medium, 500);
+    color: var(--spectrum-color-on-surface, #1a1a1a);
+    line-height: 1.4;
+  }
+
+  &__required {
+    color: var(--input-error-color);
+  }
+
+  // ==============================================
+  // Input Wrapper
+  // ==============================================
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: var(--input-height-medium);
+    background-color: var(--input-background);
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--input-border-radius);
+    transition: var(--input-transition);
+    overflow: hidden;
+
+    &:hover:not(.spectrum-text-input--disabled &) {
+      border-color: var(--spectrum-color-on-surface, #1a1a1a);
+    }
+  }
+
+  // ==============================================
+  // Input Element
+  // ==============================================
+  &__input {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    padding: var(--input-padding-y) var(--input-padding-x);
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: var(--input-font-size);
+    color: var(--input-color);
+    line-height: 1.5;
+
+    &::placeholder {
+      color: var(--input-placeholder-color);
+      opacity: 1;
+    }
+
+    // Remove default browser styles for number inputs
+    &[type='number'] {
+      -moz-appearance: textfield;
+      
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    // Remove default date/time picker icon on some browsers
+    &[type='date'],
+    &[type='time'],
+    &[type='datetime-local'] {
+      &::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        opacity: 0.6;
+        
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  // ==============================================
+  // Icons
+  // ==============================================
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: var(--input-icon-size);
+    height: var(--input-icon-size);
+    font-size: var(--input-icon-size);
+    color: var(--input-icon-color);
+
+    &--leading {
+      margin-left: var(--input-padding-x);
+    }
+
+    &--trailing {
+      margin-right: var(--input-padding-x);
+      cursor: pointer;
+      
+      &:hover {
+        color: var(--spectrum-color-on-surface, #1a1a1a);
+      }
+    }
+  }
+
+  // ==============================================
+  // Clear Button
+  // ==============================================
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-right: calc(var(--input-padding-x) / 2);
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--input-icon-color);
+    transition: var(--input-transition);
+
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: var(--spectrum-color-on-surface-opacity-08, rgba(0, 0, 0, 0.08));
+      color: var(--spectrum-color-on-surface, #1a1a1a);
+    }
+  }
+
+  // ==============================================
+  // Helper & Error Text
+  // ==============================================
+  &__helper,
+  &__error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.75rem);
+    line-height: 1.4;
+  }
+
+  &__helper {
+    color: var(--spectrum-color-on-surface-variant, #666666);
+  }
+
+  &__error {
+    color: var(--input-error-color);
+
+    .material-symbols-outlined {
+      font-size: 16px;
+    }
+  }
+
+  // ==============================================
+  // Size Variants
+  // ==============================================
+  &--small {
+    .spectrum-text-input__wrapper {
+      min-height: var(--input-height-small);
+    }
+
+    .spectrum-text-input__input {
+      font-size: var(--spectrum-sys-typescale-body-small-size, 0.75rem);
+      padding: calc(var(--input-padding-y) / 2) calc(var(--input-padding-x) * 0.75);
+    }
+
+    .spectrum-text-input__icon {
+      --input-icon-size: 18px;
+    }
+  }
+
+  &--large {
+    .spectrum-text-input__wrapper {
+      min-height: var(--input-height-large);
+    }
+
+    .spectrum-text-input__input {
+      font-size: var(--spectrum-sys-typescale-body-large-size, 1rem);
+      padding: calc(var(--input-padding-y) * 1.5) calc(var(--input-padding-x) * 1.25);
+    }
+
+    .spectrum-text-input__icon {
+      --input-icon-size: 24px;
+    }
+  }
+
+  // ==============================================
+  // State Modifiers
+  // ==============================================
+  &--focused {
+    .spectrum-text-input__wrapper {
+      border-color: var(--input-focus-border-color);
+      box-shadow: 0 0 0 3px var(--input-focus-ring-color);
+    }
+  }
+
+  &--error {
+    .spectrum-text-input__wrapper {
+      border-color: var(--input-error-color);
+    }
+
+    &.spectrum-text-input--focused .spectrum-text-input__wrapper {
+      box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.12);
+    }
+  }
+
+  &--disabled {
+    opacity: var(--input-disabled-opacity);
+    pointer-events: none;
+
+    .spectrum-text-input__wrapper {
+      background-color: var(--input-disabled-background);
+    }
+  }
+
+  &--readonly {
+    .spectrum-text-input__wrapper {
+      background-color: var(--input-disabled-background);
+    }
+
+    .spectrum-text-input__input {
+      cursor: default;
+    }
+  }
+
+  // ==============================================
+  // With Icons
+  // ==============================================
+  &--has-leading-icon {
+    .spectrum-text-input__input {
+      padding-left: calc(var(--input-padding-x) / 2);
+    }
+  }
+
+  &--has-trailing-icon {
+    .spectrum-text-input__input {
+      padding-right: calc(var(--input-padding-x) / 2);
+    }
+  }
+}
+
+// ==============================================
+// Accessibility
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  spectrum-text-input {
+    --input-transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  spectrum-text-input {
+    .spectrum-text-input__wrapper {
+      border-width: 2px;
+    }
+
+    &.spectrum-text-input--focused .spectrum-text-input__wrapper {
+      outline: 2px solid;
+      outline-offset: 2px;
+    }
+  }
+}
+
+

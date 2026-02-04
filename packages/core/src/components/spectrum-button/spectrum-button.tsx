@@ -91,8 +91,7 @@ export class SpectrumButton {
 
   // ============== Debug Helpers ==============
   private log(message: string, data?: any) {
-    // Temporarily enable logging for sound-related messages
-    if (this.debug || message.toLowerCase().includes('audio') || message.toLowerCase().includes('sound') || message.toLowerCase().includes('beep')) {
+    if (this.debug) {
       console.log(`[spectrum-button] ${message}`, data);
     }
   }

@@ -67,6 +67,7 @@ Supports icons, text, and various interactive states.
  - [spectrum-conversation-panel](../spectrum-conversation-panel)
  - [spectrum-cookie-compliance](../spectrum-cookie-compliance)
  - [spectrum-dialog](../spectrum-dialog)
+ - [spectrum-filter-panel](../spectrum-filter-panel)
  - [spectrum-hero](../spectrum-hero)
  - [spectrum-image-gallery](../spectrum-image-gallery)
  - [spectrum-rail](../spectrum-rail)
@@ -83,6 +84,7 @@ graph TD;
   spectrum-conversation-panel --> spectrum-button
   spectrum-cookie-compliance --> spectrum-button
   spectrum-dialog --> spectrum-button
+  spectrum-filter-panel --> spectrum-button
   spectrum-hero --> spectrum-button
   spectrum-image-gallery --> spectrum-button
   spectrum-rail --> spectrum-button

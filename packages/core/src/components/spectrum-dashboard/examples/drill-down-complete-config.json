@@ -1,0 +1,263 @@
+{
+  "id": "sales-overview-dashboard",
+  "layout": {
+    "template": [
+      "filters filters filters filters",
+      "kpi1 kpi2 kpi3 kpi4",
+      "regional-chart regional-chart product-table product-table",
+      "trend-chart trend-chart customer-table customer-table"
+    ],
+    "gap": "24px",
+    "columns": "repeat(4, 1fr)",
+    "rows": "auto auto 400px 400px"
+  },
+  "dataSources": {
+    "sales-data": {
+      "id": "sales-data",
+      "endpoint": "/api/sales",
+      "refreshInterval": 300000,
+      "supportsServerFiltering": true,
+      "filterParamMap": {
+        "region": "region",
+        "dateRange": "date_range",
+        "category": "category"
+      }
+    },
+    "product-data": {
+      "id": "product-data",
+      "endpoint": "/api/products",
+      "refreshInterval": 600000,
+      "supportsServerFiltering": true,
+      "filterParamMap": {
+        "region": "region",
+        "category": "category"
+      }
+    },
+    "customer-data": {
+      "id": "customer-data",
+      "endpoint": "/api/customers",
+      "refreshInterval": 300000,
+      "supportsServerFiltering": false
+    }
+  },
+  "filters": {
+    "region": {
+      "type": "select",
+      "label": "Region",
+      "options": [
+        { "label": "All Regions", "value": "all" },
+        { "label": "North America", "value": "NA" },
+        { "label": "Europe", "value": "EU" },
+        { "label": "Asia Pacific", "value": "APAC" }
+      ]
+    },
+    "dateRange": {
+      "type": "dateRange",
+      "label": "Date Range",
+      "defaultValue": { "start": "2024-01-01", "end": "2024-12-31" }
+    },
+    "category": {
+      "type": "multiSelect",
+      "label": "Category",
+      "options": [
+        { "label": "Electronics", "value": "electronics" },
+        { "label": "Clothing", "value": "clothing" },
+        { "label": "Home", "value": "home" }
+      ]
+    }
+  },
+  "widgets": {
+    "filters": {
+      "component": "filter-panel",
+      "uiConfig": {
+        "layout": "horizontal"
+      },
+      "bus": {
+        "publish": ["region", "dateRange", "category"]
+      }
+    },
+    "kpi1": {
+      "component": "kpi-card",
+      "dataSourceId": "sales-data",
+      "filtering": {
+        "subscribe": ["region", "dateRange", "category"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "title": "Total Revenue",
+        "metric": "totalRevenue",
+        "format": "currency"
+      },
+      "drillDown": {
+        "action": "dashboard-nav",
+        "targetView": "revenue-analytics-dashboard",
+        "contextMapping": {
+          "metric": "metric",
+          "currentFilters": "filters"
+        }
+      }
+    },
+    "kpi2": {
+      "component": "kpi-card",
+      "dataSourceId": "sales-data",
+      "filtering": {
+        "subscribe": ["region", "dateRange"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "title": "Units Sold",
+        "metric": "totalUnits",
+        "format": "number"
+      },
+      "drillDown": {
+        "action": "dashboard-nav",
+        "targetView": "units-analytics-dashboard",
+        "contextMapping": {
+          "metric": "metric"
+        }
+      }
+    },
+    "kpi3": {
+      "component": "kpi-card",
+      "dataSourceId": "sales-data",
+      "filtering": {
+        "subscribe": ["region", "dateRange", "category"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "title": "Avg Order Value",
+        "metric": "averageOrderValue",
+        "format": "currency"
+      },
+      "drillDown": {
+        "action": "dashboard-nav",
+        "targetView": "order-analytics-dashboard",
+        "contextMapping": {
+          "metric": "metric"
+        }
+      }
+    },
+    "kpi4": {
+      "component": "kpi-card",
+      "dataSourceId": "sales-data",
+      "filtering": {
+        "subscribe": ["region", "dateRange"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "title": "Conversion Rate",
+        "metric": "conversionRate",
+        "format": "percentage"
+      },
+      "drillDown": {
+        "action": "dashboard-nav",
+        "targetView": "conversion-funnel-dashboard",
+        "contextMapping": {
+          "metric": "metric"
+        }
+      }
+    },
+    "regional-chart": {
+      "component": "pie-chart",
+      "dataSourceId": "sales-data",
+      "filtering": {
+        "subscribe": ["dateRange", "category"],
+        "mode": "auto"
+      },
+      "uiConfig": {
+        "title": "Revenue by Region",
+        "dataKey": "revenue",
+        "labelKey": "region",
+        "showLegend": true,
+        "legendPosition": "right"
+      },
+      "drillDown": {
+        "action": "cross-filter",
+        "filterMappings": {
+          "label": "region"
+        }
+      }
+    },
+    "trend-chart": {
+      "component": "line-chart",
+      "dataSourceId": "sales-data",
+      "filtering": {
+        "subscribe": ["region", "category"],
+        "mode": "auto"
+      },
+      "uiConfig": {
+        "title": "Revenue Trend",
+        "xAxis": "date",
+        "yAxis": "revenue",
+        "showLegend": true
+      }
+    },
+    "product-table": {
+      "component": "data-table",
+      "dataSourceId": "product-data",
+      "filtering": {
+        "subscribe": ["region", "dateRange", "category"],
+        "mode": "auto"
+      },
+      "uiConfig": {
+        "title": "Products",
+        "columns": [
+          { "key": "product", "label": "Product Name" },
+          { "key": "revenue", "label": "Revenue", "format": "currency" },
+          { "key": "units", "label": "Units Sold" },
+          { "key": "category", "label": "Category" }
+        ],
+        "sortable": true,
+        "pageSize": 10
+      },
+      "drillDown": {
+        "action": "hierarchical-nav",
+        "targetView": "product-detail-view",
+        "breadcrumbLabel": "Product: {product}",
+        "preserveFilters": true,
+        "contextMapping": {
+          "productId": "id",
+          "productName": "product",
+          "selectedCategory": "category"
+        }
+      }
+    },
+    "customer-table": {
+      "component": "data-table",
+      "dataSourceId": "customer-data",
+      "filtering": {
+        "subscribe": ["region"],
+        "mode": "client"
+      },
+      "uiConfig": {
+        "title": "Top Customers",
+        "columns": [
+          { "key": "customerName", "label": "Customer" },
+          { "key": "email", "label": "Email" },
+          { "key": "tier", "label": "Tier" },
+          { "key": "revenue", "label": "Revenue", "format": "currency" }
+        ],
+        "sortable": true,
+        "pageSize": 5
+      },
+      "drillDown": {
+        "action": "detail-panel",
+        "detailPanel": {
+          "title": "Customer Details",
+          "component": "customer-detail-card",
+          "width": "600px"
+        },
+        "contextMapping": {
+          "customerId": "id",
+          "customerName": "customerName",
+          "customerEmail": "email",
+          "customerTier": "tier",
+          "customerRevenue": "revenue"
+        }
+      }
+    }
+  }
+}
+
+
+

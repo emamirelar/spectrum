@@ -215,3 +215,15 @@ packages/core/src/components.d.ts
 !.cursor/tasks/README.md
 !.cursor/tasks/example-*.md
 
+# Debug scripts (temporary browser automation scripts for debugging)
+scripts/debug/
+
+# Debug screenshots and files (created during development/debugging)
+/*.png
+/*.jpg
+/*.jpeg
+/packages/core/debug/
+
+# Backup files
+*.backup
+

@@ -7,15 +7,16 @@
 
 ## Properties
 
-| Property              | Attribute               | Description                                                     | Type                   | Default             |
-| --------------------- | ----------------------- | --------------------------------------------------------------- | ---------------------- | ------------------- |
-| `clearOnSubmit`       | `clear-on-submit`       | Whether to clear the input value after submitting a search      | `boolean`              | `false`             |
-| `enableEnterSubmit`   | `enable-enter-submit`   | Whether to enable submitting search on Enter key press          | `boolean`              | `true`              |
-| `enableVoiceInput`    | `enable-voice-input`    | Whether to enable voice input capabilities (speech recognition) | `boolean`              | `true`              |
-| `maxLines`            | `max-lines`             |                                                                 | `number`               | `4`                 |
-| `placeholder`         | `placeholder`           | Placeholder text for the search input                           | `string`               | `'Ask anything...'` |
-| `searchButtonVariant` | `search-button-variant` | Variant of the search button - 'primary' or 'ghost'             | `"ghost" \| "primary"` | `'primary'`         |
-| `searchIconPosition`  | `search-icon-position`  | Position of the search icon - 'left' or 'right'                 | `"left" \| "right"`    | `'right'`           |
+| Property                 | Attribute                   | Description                                                     | Type                   | Default             |
+| ------------------------ | --------------------------- | --------------------------------------------------------------- | ---------------------- | ------------------- |
+| `clearOnSubmit`          | `clear-on-submit`           | Whether to clear the input value after submitting a search      | `boolean`              | `false`             |
+| `disableSubmitWhenEmpty` | `disable-submit-when-empty` | Whether to disable the submit button when the input is empty    | `boolean`              | `true`              |
+| `enableEnterSubmit`      | `enable-enter-submit`       | Whether to enable submitting search on Enter key press          | `boolean`              | `true`              |
+| `enableVoiceInput`       | `enable-voice-input`        | Whether to enable voice input capabilities (speech recognition) | `boolean`              | `true`              |
+| `maxLines`               | `max-lines`                 |                                                                 | `number`               | `4`                 |
+| `placeholder`            | `placeholder`               | Placeholder text for the search input                           | `string`               | `'Ask anything...'` |
+| `searchButtonVariant`    | `search-button-variant`     | Variant of the search button - 'primary' or 'ghost'             | `"ghost" \| "primary"` | `'primary'`         |
+| `searchIconPosition`     | `search-icon-position`      | Position of the search icon - 'left' or 'right'                 | `"left" \| "right"`    | `'right'`           |
 
 
 ## Events

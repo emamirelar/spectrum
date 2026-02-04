@@ -5,37 +5,84 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { DashboardConfig, DashboardNavEvent, DataRefreshEvent, DataSourceConfig, MultiViewDashboardConfig, WidgetDefinition } from "./components/spectrum-dashboard/types/dashboard.types";
+import { DataSourceManager } from "./components/spectrum-dashboard/services/data-source-manager";
 import { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 import { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
+import { BreadcrumbItem } from "./components/spectrum-breadcrumb/spectrum-breadcrumb";
 import { CardSize, CardVariant, TextOverflow } from "./components/spectrum-card/spectrum-card";
 import { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+import { ChartElementClickEvent, ChartLegendClickEvent, SpectrumChartConfig, SpectrumChartData } from "./components/spectrum-chart/types/chart.types";
+import { ChartType } from "chart.js";
 import { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 import { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 import { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
+import { DefaultSort, TableColumn, TableConfig } from "./components/spectrum-data-table/spectrum-data-table";
 import { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
+import { FilterDefinition } from "./components/spectrum-filter-panel/spectrum-filter-panel";
 import { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+import { MapBoundsChangeEvent, MapConfig, MapData, MapMarkerClickEvent, MapProvider, MapRegionClickEvent } from "./components/spectrum-map/types/map.types";
 import { MediaActionPayload, MediaItem } from "./components/spectrum-media-library/spectrum-media-library";
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
+import { ComparisonData, ScoreCardConfig, TrendIndicator } from "./components/spectrum-score-card/types/score-card.types";
 import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 import { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
+export { DashboardConfig, DashboardNavEvent, DataRefreshEvent, DataSourceConfig, MultiViewDashboardConfig, WidgetDefinition } from "./components/spectrum-dashboard/types/dashboard.types";
+export { DataSourceManager } from "./components/spectrum-dashboard/services/data-source-manager";
 export { AccordionSection } from "./components/spectrum-accordion/spectrum-accordion";
 export { BadgeSize, BadgeVariant } from "./components/spectrum-badge/spectrum-badge";
+export { BreadcrumbItem } from "./components/spectrum-breadcrumb/spectrum-breadcrumb";
 export { CardSize, CardVariant, TextOverflow } from "./components/spectrum-card/spectrum-card";
 export { BackgroundLevel } from "./components/spectrum-panel/spectrum-panel";
+export { ChartElementClickEvent, ChartLegendClickEvent, SpectrumChartConfig, SpectrumChartData } from "./components/spectrum-chart/types/chart.types";
+export { ChartType } from "chart.js";
 export { CollapsibleListItem } from "./components/spectrum-collapsible-list/spectrum-collapsible-list";
 export { ContextMenuAction } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { ContextMenuAction as ContextMenuAction1 } from "./components/spectrum-context-menu/spectrum-context-menu";
 export { CookieConsent, CookieTranslations } from "./components/spectrum-cookie-compliance/spectrum-cookie-compliance";
+export { DefaultSort, TableColumn, TableConfig } from "./components/spectrum-data-table/spectrum-data-table";
 export { DialogButton } from "./components/spectrum-dialog/spectrum-dialog";
+export { FilterDefinition } from "./components/spectrum-filter-panel/spectrum-filter-panel";
 export { FrostLevel, ImageAddedEvent, ImageConfig, ImageDeletedEvent, ScrollDirection, SelectionMode } from "./components/spectrum-image-gallery/spectrum-image-gallery";
+export { MapBoundsChangeEvent, MapConfig, MapData, MapMarkerClickEvent, MapProvider, MapRegionClickEvent } from "./components/spectrum-map/types/map.types";
 export { MediaActionPayload, MediaItem } from "./components/spectrum-media-library/spectrum-media-library";
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
+export { ComparisonData, ScoreCardConfig, TrendIndicator } from "./components/spectrum-score-card/types/score-card.types";
 export { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
 export namespace Components {
+    interface DashboardWidgetHost {
+        /**
+          * Grid area name for CSS Grid positioning
+         */
+        "area": string;
+        /**
+          * Data source manager instance
+         */
+        "dataSourceManager": DataSourceManager;
+        /**
+          * Available data sources from dashboard config
+          * @default {}
+         */
+        "dataSources": Record<string, DataSourceConfig>;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Global context (userId, authToken, etc.)
+          * @default {}
+         */
+        "globalContext": Record<string, any>;
+        /**
+          * Widget configuration
+         */
+        "widgetConfig": WidgetDefinition;
+    }
     interface SpectrumAccordion {
         /**
           * Unique identifier for the accordion
@@ -372,6 +419,40 @@ export namespace Components {
         "variant": BadgeVariant;
     }
     /**
+     * Breadcrumb navigation component for hierarchical drill-down.
+     * Displays navigation trail and allows users to navigate back through levels.
+     */
+    interface SpectrumBreadcrumb {
+        /**
+          * Configuration object (alternative to individual props) Used when component is rendered by dashboard-widget-host
+         */
+        "config": { items?: BreadcrumbItem[]; separator?: string; maxItems?: number; showHome?: boolean; homeLabel?: string } | string;
+        /**
+          * Home link label
+          * @default 'Home'
+         */
+        "homeLabel": string;
+        /**
+          * Array of breadcrumb items Can be JSON string or array of objects
+          * @default []
+         */
+        "items": BreadcrumbItem[] | string;
+        /**
+          * Maximum number of visible breadcrumbs (remaining collapsed)
+         */
+        "maxItems"?: number;
+        /**
+          * Separator character/symbol between breadcrumbs
+          * @default '/'
+         */
+        "separator": string;
+        /**
+          * Whether to show home/root link
+          * @default true
+         */
+        "showHome": boolean;
+    }
+    /**
      * Spectrum Button Component
      * A versatile button component with multiple variants, sizes, and states.
      * Supports icons, text, and various interactive states.
@@ -552,6 +633,51 @@ export namespace Components {
         "variant": CardVariant;
         /**
           * Custom width for the card
+         */
+        "width"?: string;
+    }
+    interface SpectrumChart {
+        /**
+          * Chart title
+         */
+        "chartTitle"?: string;
+        /**
+          * Chart configuration (simplified API or Chart.js config) Can be a JSON string or object
+          * @default {}
+         */
+        "config": SpectrumChartConfig | string;
+        /**
+          * Context from dashboard (optional)
+          * @default {}
+         */
+        "context": Record<string, any>;
+        /**
+          * Chart data Can be a JSON string or object
+          * @default { labels: [], datasets: [] }
+         */
+        "data": SpectrumChartData | any[] | string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Chart height (CSS value)
+          * @default '400px'
+         */
+        "height"?: string;
+        /**
+          * Loading state (for dashboard widget integration)
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * Chart type (line, bar, pie, doughnut, radar, polarArea, bubble, scatter) Overrides config.type if specified
+          * @default 'line'
+         */
+        "type": ChartType;
+        /**
+          * Chart width (CSS value)
          */
         "width"?: string;
     }
@@ -907,6 +1033,86 @@ export namespace Components {
          */
         "updateConsent": (consent: Partial<CookieConsent>) => Promise<void>;
     }
+    interface SpectrumDashboard {
+        /**
+          * Dashboard configuration (JSON-driven) Can be a JSON string or object Supports both single-view (DashboardConfig) and multi-view (MultiViewDashboardConfig)
+         */
+        "config": DashboardConfig | MultiViewDashboardConfig | string;
+        /**
+          * Global context for all widgets (userId, authToken, etc.)
+          * @default {}
+         */
+        "context": Record<string, any>;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+    }
+    interface SpectrumDataTable {
+        /**
+          * Column definitions (can be JSON string or array)
+          * @default []
+         */
+        "columns": TableColumn[] | string;
+        /**
+          * Table configuration (can be JSON string or object)
+          * @default {}
+         */
+        "config": TableConfig | string;
+        /**
+          * Dashboard context (optional)
+          * @default {}
+         */
+        "context": Record<string, any>;
+        /**
+          * Table data (array of objects or JSON string)
+          * @default []
+         */
+        "data": any[] | string;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Default sort configuration (column key and direction) Can be JSON string: '{"column": "name", "direction": "asc"}' Or object: { column: 'name', direction: 'asc' }
+         */
+        "defaultSort": DefaultSort | string;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * Maximum height of the table (enables vertical scrolling) Can be any valid CSS value: '400px', '50vh', 'calc(100vh - 200px)'
+         */
+        "maxHeight": string;
+        /**
+          * Number of rows per page
+          * @default 10
+         */
+        "pageSize": number;
+        /**
+          * Whether table has pagination
+          * @default true
+         */
+        "pageable": boolean;
+        /**
+          * Public method to manually refresh/re-parse data
+         */
+        "refresh": () => Promise<boolean>;
+        /**
+          * Whether rows are selectable
+          * @default false
+         */
+        "selectable": boolean;
+        /**
+          * Whether table is sortable
+          * @default true
+         */
+        "sortable": boolean;
+    }
     /**
      * Spectrum Dialog Component
      * A modal dialog component using the HTML dialog element with background shade.
@@ -986,6 +1192,38 @@ export namespace Components {
           * Custom width for the dialog
          */
         "width"?: string;
+    }
+    interface SpectrumFilterPanel {
+        /**
+          * Dashboard context (optional)
+          * @default {}
+         */
+        "context": Record<string, any>;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Filter definitions (can be JSON string or object array)
+          * @default []
+         */
+        "filters": FilterDefinition[] | string;
+        /**
+          * Whether to apply filters immediately on change
+          * @default false
+         */
+        "immediate": boolean;
+        /**
+          * Layout orientation
+          * @default 'horizontal'
+         */
+        "layout": 'horizontal' | 'vertical';
+        /**
+          * Whether to show apply/reset buttons
+          * @default true
+         */
+        "showButtons": boolean;
     }
     /**
      * Spectrum Flex Component
@@ -1294,6 +1532,56 @@ export namespace Components {
           * @default 'single'
          */
         "selectionMode": SelectionMode;
+    }
+    /**
+     * Spectrum Map Component
+     * A flexible map component that supports multiple providers (Leaflet, MapLibre GL JS)
+     * via dynamic imports and a common adapter interface.
+     * @example <spectrum-map
+     *   map-provider="leaflet"
+     *   config='{"center": [40.7128, -74.0060], "zoom": 10}'
+     *   data='[{"position": [40.7128, -74.0060], "label": "New York"}]'>
+     * </spectrum-map>
+     */
+    interface SpectrumMap {
+        /**
+          * Map configuration (JSON-driven) Can be a JSON string or object
+         */
+        "config": MapConfig | string;
+        /**
+          * Map data for markers, regions, heatmap, routes Can be a JSON string or object
+         */
+        "data": MapData | string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Public method: Fit bounds to show all features
+         */
+        "fitBounds": () => Promise<void>;
+        /**
+          * Public method: Get current bounds
+         */
+        "getBounds": () => Promise<{ north: number; south: number; east: number; west: number; }>;
+        /**
+          * Map provider to use ('leaflet' or 'maplibre') Default: 'leaflet' (lightweight, 40KB)  Choose 'maplibre' for modern GPU-accelerated vector tiles and 3D support (200KB)
+          * @default 'leaflet'
+         */
+        "mapProvider": MapProvider;
+        /**
+          * Public method: Resize map (call after container size changes)
+         */
+        "resize": () => Promise<void>;
+        /**
+          * Public method: Set map center
+         */
+        "setCenter": (lat: number, lng: number, zoom?: number) => Promise<void>;
+        /**
+          * Public method: Set zoom level
+         */
+        "setZoom": (zoom: number) => Promise<void>;
     }
     interface SpectrumMediaLibrary {
         /**
@@ -1659,12 +1947,104 @@ export namespace Components {
          */
         "onRailExpandedChange": (expanded: boolean) => Promise<boolean>;
     }
+    /**
+     * Score Card Component
+     * A presentational widget for displaying key metrics with trends, comparisons,
+     * and visual indicators. Designed for use in dashboards and analytics interfaces.
+     */
+    interface SpectrumScoreCard {
+        /**
+          * Comparison data (JSON string or object)
+         */
+        "comparison"?: ComparisonData | string;
+        /**
+          * Score card configuration (JSON string or object)
+          * @default {} as ScoreCardConfig
+         */
+        "config": ScoreCardConfig | string;
+        /**
+          * Data array for aggregation (when used with transform) Receives raw data from dashboard-widget-host
+         */
+        "data"?: any[] | string;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Value format type
+          * @default 'number'
+         */
+        "format"?: 'number' | 'currency' | 'percentage' | 'decimal' | 'custom';
+        /**
+          * Icon name (Material Icons)
+         */
+        "icon"?: string;
+        /**
+          * Icon position
+          * @default 'start'
+         */
+        "iconPosition"?: 'start' | 'end';
+        /**
+          * Metric label/title
+         */
+        "label"?: string;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Show progress bar
+          * @default false
+         */
+        "showProgress"?: boolean;
+        /**
+          * Size variant
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * Optional subtitle
+         */
+        "subtitle"?: string;
+        /**
+          * Target value for progress indicator
+         */
+        "target"?: number;
+        /**
+          * Trend indicator (JSON string or object)
+         */
+        "trend"?: TrendIndicator | string;
+        /**
+          * Main metric value
+         */
+        "value"?: number | string;
+        /**
+          * Prefix text (e.g., "$")
+         */
+        "valuePrefix"?: string;
+        /**
+          * Suffix text (e.g., "%")
+         */
+        "valueSuffix"?: string;
+        /**
+          * Visual variant
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'success' | 'warning' | 'error' | 'info';
+    }
     interface SpectrumSearchInput {
         /**
           * Whether to clear the input value after submitting a search
           * @default false
          */
         "clearOnSubmit": boolean;
+        /**
+          * Whether to disable the submit button when the input is empty
+          * @default true
+         */
+        "disableSubmitWhenEmpty": boolean;
         /**
           * Whether to enable submitting search on Enter key press
           * @default true
@@ -2070,6 +2450,109 @@ export namespace Components {
          */
         "variant": 'primary' | 'positive' | 'caution' | 'destructive';
     }
+    /**
+     * Text Input Component
+     * A versatile text input component supporting various input types,
+     * validation states, and Spectrum theming.
+     */
+    interface SpectrumTextInput {
+        /**
+          * Autocomplete attribute
+         */
+        "autocomplete": string;
+        /**
+          * Whether to show clear button
+          * @default false
+         */
+        "clearable": boolean;
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Error message (shows error state when set)
+         */
+        "errorMessage": string;
+        /**
+          * Helper text shown below the input
+         */
+        "helperText": string;
+        /**
+          * Unique ID for the input
+         */
+        "inputId": string;
+        /**
+          * Label text
+         */
+        "label": string;
+        /**
+          * Leading icon (Material Symbols name)
+         */
+        "leadingIcon": string;
+        /**
+          * Maximum value (for number/date types)
+         */
+        "max": number | string;
+        /**
+          * Maximum length
+         */
+        "maxlength": number;
+        /**
+          * Minimum value (for number/date types)
+         */
+        "min": number | string;
+        /**
+          * Minimum length
+         */
+        "minlength": number;
+        /**
+          * Input name attribute
+         */
+        "name": string;
+        /**
+          * Pattern for validation
+         */
+        "pattern": string;
+        /**
+          * Placeholder text
+          * @default ''
+         */
+        "placeholder": string;
+        /**
+          * Whether the input is readonly
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * Whether the input is required
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Size variant
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * Step value (for number type)
+         */
+        "step": number | string;
+        /**
+          * Trailing icon (Material Symbols name)
+         */
+        "trailingIcon": string;
+        /**
+          * Input type
+          * @default 'text'
+         */
+        "type": 'text' | 'number' | 'email' | 'password' | 'tel' | 'url' | 'search' | 'date' | 'time' | 'datetime-local';
+        /**
+          * Input value
+          * @default ''
+         */
+        "value": string;
+    }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
@@ -2092,10 +2575,9 @@ export namespace Components {
          */
         "coordinationTimeout": number;
         /**
-          * Whether to use dark mode
-          * @default false
+          * Whether to use dark mode - undefined/null: Auto-detect from user's prefers-color-scheme preference - true: Force dark mode - false: Force light mode
          */
-        "dark": boolean;
+        "dark"?: boolean;
         /**
           * Whether to enable debug logging
           * @default false
@@ -2369,6 +2851,10 @@ export interface SpectrumAvatarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumAvatarElement;
 }
+export interface SpectrumBreadcrumbCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumBreadcrumbElement;
+}
 export interface SpectrumButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumButtonElement;
@@ -2376,6 +2862,10 @@ export interface SpectrumButtonCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumCardCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumCardElement;
+}
+export interface SpectrumChartCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumChartElement;
 }
 export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2397,9 +2887,21 @@ export interface SpectrumCookieComplianceCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumCookieComplianceElement;
 }
+export interface SpectrumDashboardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumDashboardElement;
+}
+export interface SpectrumDataTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumDataTableElement;
+}
 export interface SpectrumDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumDialogElement;
+}
+export interface SpectrumFilterPanelCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumFilterPanelElement;
 }
 export interface SpectrumHeroCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2408,6 +2910,10 @@ export interface SpectrumHeroCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumImageGalleryCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumImageGalleryElement;
+}
+export interface SpectrumMapCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumMapElement;
 }
 export interface SpectrumMediaLibraryCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2441,6 +2947,10 @@ export interface SpectrumSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSwitchElement;
 }
+export interface SpectrumTextInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumTextInputElement;
+}
 export interface SpectrumToastCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumToastElement;
@@ -2450,6 +2960,12 @@ export interface SpectrumWizardCustomEvent<T> extends CustomEvent<T> {
     target: HTMLSpectrumWizardElement;
 }
 declare global {
+    interface HTMLDashboardWidgetHostElement extends Components.DashboardWidgetHost, HTMLStencilElement {
+    }
+    var HTMLDashboardWidgetHostElement: {
+        prototype: HTMLDashboardWidgetHostElement;
+        new (): HTMLDashboardWidgetHostElement;
+    };
     interface HTMLSpectrumAccordionElementEventMap {
         "accordionToggle": {
     expanded: boolean;
@@ -2530,6 +3046,27 @@ declare global {
         prototype: HTMLSpectrumBadgeElement;
         new (): HTMLSpectrumBadgeElement;
     };
+    interface HTMLSpectrumBreadcrumbElementEventMap {
+        "breadcrumbClick": { viewId: string; context: any; index: number };
+    }
+    /**
+     * Breadcrumb navigation component for hierarchical drill-down.
+     * Displays navigation trail and allows users to navigate back through levels.
+     */
+    interface HTMLSpectrumBreadcrumbElement extends Components.SpectrumBreadcrumb, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumBreadcrumbElementEventMap>(type: K, listener: (this: HTMLSpectrumBreadcrumbElement, ev: SpectrumBreadcrumbCustomEvent<HTMLSpectrumBreadcrumbElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumBreadcrumbElementEventMap>(type: K, listener: (this: HTMLSpectrumBreadcrumbElement, ev: SpectrumBreadcrumbCustomEvent<HTMLSpectrumBreadcrumbElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumBreadcrumbElement: {
+        prototype: HTMLSpectrumBreadcrumbElement;
+        new (): HTMLSpectrumBreadcrumbElement;
+    };
     interface HTMLSpectrumButtonElementEventMap {
         "buttonAction": { action?: string; label: string };
     }
@@ -2573,6 +3110,24 @@ declare global {
     var HTMLSpectrumCardElement: {
         prototype: HTMLSpectrumCardElement;
         new (): HTMLSpectrumCardElement;
+    };
+    interface HTMLSpectrumChartElementEventMap {
+        "elementClick": ChartElementClickEvent;
+        "legendClick": ChartLegendClickEvent;
+    }
+    interface HTMLSpectrumChartElement extends Components.SpectrumChart, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumChartElementEventMap>(type: K, listener: (this: HTMLSpectrumChartElement, ev: SpectrumChartCustomEvent<HTMLSpectrumChartElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumChartElementEventMap>(type: K, listener: (this: HTMLSpectrumChartElement, ev: SpectrumChartCustomEvent<HTMLSpectrumChartElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumChartElement: {
+        prototype: HTMLSpectrumChartElement;
+        new (): HTMLSpectrumChartElement;
     };
     interface HTMLSpectrumChipElementEventMap {
         "chipAction": { action?: string; label: string };
@@ -2700,6 +3255,44 @@ declare global {
         prototype: HTMLSpectrumCookieComplianceElement;
         new (): HTMLSpectrumCookieComplianceElement;
     };
+    interface HTMLSpectrumDashboardElementEventMap {
+        "dashboardNav": DashboardNavEvent;
+        "dataRefresh": DataRefreshEvent;
+    }
+    interface HTMLSpectrumDashboardElement extends Components.SpectrumDashboard, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumDashboardElementEventMap>(type: K, listener: (this: HTMLSpectrumDashboardElement, ev: SpectrumDashboardCustomEvent<HTMLSpectrumDashboardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumDashboardElementEventMap>(type: K, listener: (this: HTMLSpectrumDashboardElement, ev: SpectrumDashboardCustomEvent<HTMLSpectrumDashboardElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumDashboardElement: {
+        prototype: HTMLSpectrumDashboardElement;
+        new (): HTMLSpectrumDashboardElement;
+    };
+    interface HTMLSpectrumDataTableElementEventMap {
+        "rowClick": any;
+        "rowsSelected": any[];
+        "sortChange": { column: string; direction: 'asc' | 'desc' };
+        "pageChange": { page: number; pageSize: number };
+    }
+    interface HTMLSpectrumDataTableElement extends Components.SpectrumDataTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumDataTableElementEventMap>(type: K, listener: (this: HTMLSpectrumDataTableElement, ev: SpectrumDataTableCustomEvent<HTMLSpectrumDataTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumDataTableElementEventMap>(type: K, listener: (this: HTMLSpectrumDataTableElement, ev: SpectrumDataTableCustomEvent<HTMLSpectrumDataTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumDataTableElement: {
+        prototype: HTMLSpectrumDataTableElement;
+        new (): HTMLSpectrumDataTableElement;
+    };
     interface HTMLSpectrumDialogElementEventMap {
         "dialogAction": {action: string; dialogId?: string; buttonId?: string};
         "dialogClose": {action: string; dialogId?: string};
@@ -2722,6 +3315,25 @@ declare global {
     var HTMLSpectrumDialogElement: {
         prototype: HTMLSpectrumDialogElement;
         new (): HTMLSpectrumDialogElement;
+    };
+    interface HTMLSpectrumFilterPanelElementEventMap {
+        "filterChange": Record<string, any>;
+        "filterApply": Record<string, any>;
+        "filterReset": void;
+    }
+    interface HTMLSpectrumFilterPanelElement extends Components.SpectrumFilterPanel, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumFilterPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumFilterPanelElement, ev: SpectrumFilterPanelCustomEvent<HTMLSpectrumFilterPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumFilterPanelElementEventMap>(type: K, listener: (this: HTMLSpectrumFilterPanelElement, ev: SpectrumFilterPanelCustomEvent<HTMLSpectrumFilterPanelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumFilterPanelElement: {
+        prototype: HTMLSpectrumFilterPanelElement;
+        new (): HTMLSpectrumFilterPanelElement;
     };
     /**
      * Spectrum Flex Component
@@ -2795,6 +3407,35 @@ declare global {
     var HTMLSpectrumImageGalleryElement: {
         prototype: HTMLSpectrumImageGalleryElement;
         new (): HTMLSpectrumImageGalleryElement;
+    };
+    interface HTMLSpectrumMapElementEventMap {
+        "markerClick": MapMarkerClickEvent;
+        "regionClick": MapRegionClickEvent;
+        "boundsChange": MapBoundsChangeEvent;
+    }
+    /**
+     * Spectrum Map Component
+     * A flexible map component that supports multiple providers (Leaflet, MapLibre GL JS)
+     * via dynamic imports and a common adapter interface.
+     * @example <spectrum-map
+     *   map-provider="leaflet"
+     *   config='{"center": [40.7128, -74.0060], "zoom": 10}'
+     *   data='[{"position": [40.7128, -74.0060], "label": "New York"}]'>
+     * </spectrum-map>
+     */
+    interface HTMLSpectrumMapElement extends Components.SpectrumMap, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumMapElementEventMap>(type: K, listener: (this: HTMLSpectrumMapElement, ev: SpectrumMapCustomEvent<HTMLSpectrumMapElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumMapElementEventMap>(type: K, listener: (this: HTMLSpectrumMapElement, ev: SpectrumMapCustomEvent<HTMLSpectrumMapElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumMapElement: {
+        prototype: HTMLSpectrumMapElement;
+        new (): HTMLSpectrumMapElement;
     };
     interface HTMLSpectrumMediaLibraryElementEventMap {
         "mediaAction": MediaActionPayload;
@@ -2909,6 +3550,17 @@ declare global {
     var HTMLSpectrumRailItemElement: {
         prototype: HTMLSpectrumRailItemElement;
         new (): HTMLSpectrumRailItemElement;
+    };
+    /**
+     * Score Card Component
+     * A presentational widget for displaying key metrics with trends, comparisons,
+     * and visual indicators. Designed for use in dashboards and analytics interfaces.
+     */
+    interface HTMLSpectrumScoreCardElement extends Components.SpectrumScoreCard, HTMLStencilElement {
+    }
+    var HTMLSpectrumScoreCardElement: {
+        prototype: HTMLSpectrumScoreCardElement;
+        new (): HTMLSpectrumScoreCardElement;
     };
     interface HTMLSpectrumSearchInputElementEventMap {
         "searchSubmit": { action: string; value: string };
@@ -3028,6 +3680,33 @@ declare global {
         prototype: HTMLSpectrumSwitchElement;
         new (): HTMLSpectrumSwitchElement;
     };
+    interface HTMLSpectrumTextInputElementEventMap {
+        "inputChange": string;
+        "inputInput": string;
+        "inputFocus": void;
+        "inputBlur": void;
+        "inputClear": void;
+        "trailingIconClick": void;
+    }
+    /**
+     * Text Input Component
+     * A versatile text input component supporting various input types,
+     * validation states, and Spectrum theming.
+     */
+    interface HTMLSpectrumTextInputElement extends Components.SpectrumTextInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumTextInputElementEventMap>(type: K, listener: (this: HTMLSpectrumTextInputElement, ev: SpectrumTextInputCustomEvent<HTMLSpectrumTextInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumTextInputElementEventMap>(type: K, listener: (this: HTMLSpectrumTextInputElement, ev: SpectrumTextInputCustomEvent<HTMLSpectrumTextInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumTextInputElement: {
+        prototype: HTMLSpectrumTextInputElement;
+        new (): HTMLSpectrumTextInputElement;
+    };
     interface HTMLSpectrumThemeElement extends Components.SpectrumTheme, HTMLStencilElement {
     }
     var HTMLSpectrumThemeElement: {
@@ -3103,13 +3782,16 @@ declare global {
         new (): HTMLSpectrumWizardElement;
     };
     interface HTMLElementTagNameMap {
+        "dashboard-widget-host": HTMLDashboardWidgetHostElement;
         "spectrum-accordion": HTMLSpectrumAccordionElement;
         "spectrum-app-layout": HTMLSpectrumAppLayoutElement;
         "spectrum-application-layout": HTMLSpectrumApplicationLayoutElement;
         "spectrum-avatar": HTMLSpectrumAvatarElement;
         "spectrum-badge": HTMLSpectrumBadgeElement;
+        "spectrum-breadcrumb": HTMLSpectrumBreadcrumbElement;
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-card": HTMLSpectrumCardElement;
+        "spectrum-chart": HTMLSpectrumChartElement;
         "spectrum-chip": HTMLSpectrumChipElement;
         "spectrum-cluster": HTMLSpectrumClusterElement;
         "spectrum-collapsible-list": HTMLSpectrumCollapsibleListElement;
@@ -3117,23 +3799,29 @@ declare global {
         "spectrum-context-menu": HTMLSpectrumContextMenuElement;
         "spectrum-conversation-panel": HTMLSpectrumConversationPanelElement;
         "spectrum-cookie-compliance": HTMLSpectrumCookieComplianceElement;
+        "spectrum-dashboard": HTMLSpectrumDashboardElement;
+        "spectrum-data-table": HTMLSpectrumDataTableElement;
         "spectrum-dialog": HTMLSpectrumDialogElement;
+        "spectrum-filter-panel": HTMLSpectrumFilterPanelElement;
         "spectrum-flex": HTMLSpectrumFlexElement;
         "spectrum-grid": HTMLSpectrumGridElement;
         "spectrum-hero": HTMLSpectrumHeroElement;
         "spectrum-image-gallery": HTMLSpectrumImageGalleryElement;
+        "spectrum-map": HTMLSpectrumMapElement;
         "spectrum-media-library": HTMLSpectrumMediaLibraryElement;
         "spectrum-menu": HTMLSpectrumMenuElement;
         "spectrum-panel": HTMLSpectrumPanelElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-rail-alternative": HTMLSpectrumRailAlternativeElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
+        "spectrum-score-card": HTMLSpectrumScoreCardElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-search-results": HTMLSpectrumSearchResultsElement;
         "spectrum-select": HTMLSpectrumSelectElement;
         "spectrum-sidebar": HTMLSpectrumSidebarElement;
         "spectrum-stack": HTMLSpectrumStackElement;
         "spectrum-switch": HTMLSpectrumSwitchElement;
+        "spectrum-text-input": HTMLSpectrumTextInputElement;
         "spectrum-theme": HTMLSpectrumThemeElement;
         "spectrum-toast": HTMLSpectrumToastElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
@@ -3141,6 +3829,35 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface DashboardWidgetHost {
+        /**
+          * Grid area name for CSS Grid positioning
+         */
+        "area": string;
+        /**
+          * Data source manager instance
+         */
+        "dataSourceManager": DataSourceManager;
+        /**
+          * Available data sources from dashboard config
+          * @default {}
+         */
+        "dataSources"?: Record<string, DataSourceConfig>;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Global context (userId, authToken, etc.)
+          * @default {}
+         */
+        "globalContext"?: Record<string, any>;
+        /**
+          * Widget configuration
+         */
+        "widgetConfig": WidgetDefinition;
+    }
     interface SpectrumAccordion {
         /**
           * Unique identifier for the accordion
@@ -3490,6 +4207,44 @@ declare namespace LocalJSX {
         "variant"?: BadgeVariant;
     }
     /**
+     * Breadcrumb navigation component for hierarchical drill-down.
+     * Displays navigation trail and allows users to navigate back through levels.
+     */
+    interface SpectrumBreadcrumb {
+        /**
+          * Configuration object (alternative to individual props) Used when component is rendered by dashboard-widget-host
+         */
+        "config"?: { items?: BreadcrumbItem[]; separator?: string; maxItems?: number; showHome?: boolean; homeLabel?: string } | string;
+        /**
+          * Home link label
+          * @default 'Home'
+         */
+        "homeLabel"?: string;
+        /**
+          * Array of breadcrumb items Can be JSON string or array of objects
+          * @default []
+         */
+        "items"?: BreadcrumbItem[] | string;
+        /**
+          * Maximum number of visible breadcrumbs (remaining collapsed)
+         */
+        "maxItems"?: number;
+        /**
+          * Event emitted when a breadcrumb is clicked
+         */
+        "onBreadcrumbClick"?: (event: SpectrumBreadcrumbCustomEvent<{ viewId: string; context: any; index: number }>) => void;
+        /**
+          * Separator character/symbol between breadcrumbs
+          * @default '/'
+         */
+        "separator"?: string;
+        /**
+          * Whether to show home/root link
+          * @default true
+         */
+        "showHome"?: boolean;
+    }
+    /**
      * Spectrum Button Component
      * A versatile button component with multiple variants, sizes, and states.
      * Supports icons, text, and various interactive states.
@@ -3675,6 +4430,59 @@ declare namespace LocalJSX {
         "variant"?: CardVariant;
         /**
           * Custom width for the card
+         */
+        "width"?: string;
+    }
+    interface SpectrumChart {
+        /**
+          * Chart title
+         */
+        "chartTitle"?: string;
+        /**
+          * Chart configuration (simplified API or Chart.js config) Can be a JSON string or object
+          * @default {}
+         */
+        "config"?: SpectrumChartConfig | string;
+        /**
+          * Context from dashboard (optional)
+          * @default {}
+         */
+        "context"?: Record<string, any>;
+        /**
+          * Chart data Can be a JSON string or object
+          * @default { labels: [], datasets: [] }
+         */
+        "data"?: SpectrumChartData | any[] | string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Chart height (CSS value)
+          * @default '400px'
+         */
+        "height"?: string;
+        /**
+          * Loading state (for dashboard widget integration)
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Event emitted when a chart element (bar, point, segment) is clicked
+         */
+        "onElementClick"?: (event: SpectrumChartCustomEvent<ChartElementClickEvent>) => void;
+        /**
+          * Event emitted when a legend item is clicked
+         */
+        "onLegendClick"?: (event: SpectrumChartCustomEvent<ChartLegendClickEvent>) => void;
+        /**
+          * Chart type (line, bar, pie, doughnut, radar, polarArea, bubble, scatter) Overrides config.type if specified
+          * @default 'line'
+         */
+        "type"?: ChartType;
+        /**
+          * Chart width (CSS value)
          */
         "width"?: string;
     }
@@ -4041,6 +4849,106 @@ declare namespace LocalJSX {
          */
         "translations"?: CookieTranslations;
     }
+    interface SpectrumDashboard {
+        /**
+          * Dashboard configuration (JSON-driven) Can be a JSON string or object Supports both single-view (DashboardConfig) and multi-view (MultiViewDashboardConfig)
+         */
+        "config": DashboardConfig | MultiViewDashboardConfig | string;
+        /**
+          * Global context for all widgets (userId, authToken, etc.)
+          * @default {}
+         */
+        "context"?: Record<string, any>;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Event emitted when navigation/drill-down is requested
+         */
+        "onDashboardNav"?: (event: SpectrumDashboardCustomEvent<DashboardNavEvent>) => void;
+        /**
+          * Event emitted when data refresh is requested
+         */
+        "onDataRefresh"?: (event: SpectrumDashboardCustomEvent<DataRefreshEvent>) => void;
+    }
+    interface SpectrumDataTable {
+        /**
+          * Column definitions (can be JSON string or array)
+          * @default []
+         */
+        "columns"?: TableColumn[] | string;
+        /**
+          * Table configuration (can be JSON string or object)
+          * @default {}
+         */
+        "config"?: TableConfig | string;
+        /**
+          * Dashboard context (optional)
+          * @default {}
+         */
+        "context"?: Record<string, any>;
+        /**
+          * Table data (array of objects or JSON string)
+          * @default []
+         */
+        "data"?: any[] | string;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Default sort configuration (column key and direction) Can be JSON string: '{"column": "name", "direction": "asc"}' Or object: { column: 'name', direction: 'asc' }
+         */
+        "defaultSort"?: DefaultSort | string;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Maximum height of the table (enables vertical scrolling) Can be any valid CSS value: '400px', '50vh', 'calc(100vh - 200px)'
+         */
+        "maxHeight"?: string;
+        /**
+          * Emitted when page changes
+         */
+        "onPageChange"?: (event: SpectrumDataTableCustomEvent<{ page: number; pageSize: number }>) => void;
+        /**
+          * Emitted when row is clicked
+         */
+        "onRowClick"?: (event: SpectrumDataTableCustomEvent<any>) => void;
+        /**
+          * Emitted when rows are selected
+         */
+        "onRowsSelected"?: (event: SpectrumDataTableCustomEvent<any[]>) => void;
+        /**
+          * Emitted when sort changes
+         */
+        "onSortChange"?: (event: SpectrumDataTableCustomEvent<{ column: string; direction: 'asc' | 'desc' }>) => void;
+        /**
+          * Number of rows per page
+          * @default 10
+         */
+        "pageSize"?: number;
+        /**
+          * Whether table has pagination
+          * @default true
+         */
+        "pageable"?: boolean;
+        /**
+          * Whether rows are selectable
+          * @default false
+         */
+        "selectable"?: boolean;
+        /**
+          * Whether table is sortable
+          * @default true
+         */
+        "sortable"?: boolean;
+    }
     /**
      * Spectrum Dialog Component
      * A modal dialog component using the HTML dialog element with background shade.
@@ -4116,6 +5024,50 @@ declare namespace LocalJSX {
           * Custom width for the dialog
          */
         "width"?: string;
+    }
+    interface SpectrumFilterPanel {
+        /**
+          * Dashboard context (optional)
+          * @default {}
+         */
+        "context"?: Record<string, any>;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Filter definitions (can be JSON string or object array)
+          * @default []
+         */
+        "filters"?: FilterDefinition[] | string;
+        /**
+          * Whether to apply filters immediately on change
+          * @default false
+         */
+        "immediate"?: boolean;
+        /**
+          * Layout orientation
+          * @default 'horizontal'
+         */
+        "layout"?: 'horizontal' | 'vertical';
+        /**
+          * Emitted when filters are applied
+         */
+        "onFilterApply"?: (event: SpectrumFilterPanelCustomEvent<Record<string, any>>) => void;
+        /**
+          * Emitted when filters change
+         */
+        "onFilterChange"?: (event: SpectrumFilterPanelCustomEvent<Record<string, any>>) => void;
+        /**
+          * Emitted when filters are reset
+         */
+        "onFilterReset"?: (event: SpectrumFilterPanelCustomEvent<void>) => void;
+        /**
+          * Whether to show apply/reset buttons
+          * @default true
+         */
+        "showButtons"?: boolean;
     }
     /**
      * Spectrum Flex Component
@@ -4442,6 +5394,48 @@ declare namespace LocalJSX {
           * @default 'single'
          */
         "selectionMode"?: SelectionMode;
+    }
+    /**
+     * Spectrum Map Component
+     * A flexible map component that supports multiple providers (Leaflet, MapLibre GL JS)
+     * via dynamic imports and a common adapter interface.
+     * @example <spectrum-map
+     *   map-provider="leaflet"
+     *   config='{"center": [40.7128, -74.0060], "zoom": 10}'
+     *   data='[{"position": [40.7128, -74.0060], "label": "New York"}]'>
+     * </spectrum-map>
+     */
+    interface SpectrumMap {
+        /**
+          * Map configuration (JSON-driven) Can be a JSON string or object
+         */
+        "config"?: MapConfig | string;
+        /**
+          * Map data for markers, regions, heatmap, routes Can be a JSON string or object
+         */
+        "data"?: MapData | string;
+        /**
+          * Whether to enable debug logging
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Map provider to use ('leaflet' or 'maplibre') Default: 'leaflet' (lightweight, 40KB)  Choose 'maplibre' for modern GPU-accelerated vector tiles and 3D support (200KB)
+          * @default 'leaflet'
+         */
+        "mapProvider"?: MapProvider;
+        /**
+          * Event emitted when map bounds change
+         */
+        "onBoundsChange"?: (event: SpectrumMapCustomEvent<MapBoundsChangeEvent>) => void;
+        /**
+          * Event emitted when a marker is clicked
+         */
+        "onMarkerClick"?: (event: SpectrumMapCustomEvent<MapMarkerClickEvent>) => void;
+        /**
+          * Event emitted when a region is clicked
+         */
+        "onRegionClick"?: (event: SpectrumMapCustomEvent<MapRegionClickEvent>) => void;
     }
     interface SpectrumMediaLibrary {
         /**
@@ -4817,12 +5811,104 @@ declare namespace LocalJSX {
          */
         "label": string;
     }
+    /**
+     * Score Card Component
+     * A presentational widget for displaying key metrics with trends, comparisons,
+     * and visual indicators. Designed for use in dashboards and analytics interfaces.
+     */
+    interface SpectrumScoreCard {
+        /**
+          * Comparison data (JSON string or object)
+         */
+        "comparison"?: ComparisonData | string;
+        /**
+          * Score card configuration (JSON string or object)
+          * @default {} as ScoreCardConfig
+         */
+        "config"?: ScoreCardConfig | string;
+        /**
+          * Data array for aggregation (when used with transform) Receives raw data from dashboard-widget-host
+         */
+        "data"?: any[] | string;
+        /**
+          * Debug mode
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Value format type
+          * @default 'number'
+         */
+        "format"?: 'number' | 'currency' | 'percentage' | 'decimal' | 'custom';
+        /**
+          * Icon name (Material Icons)
+         */
+        "icon"?: string;
+        /**
+          * Icon position
+          * @default 'start'
+         */
+        "iconPosition"?: 'start' | 'end';
+        /**
+          * Metric label/title
+         */
+        "label"?: string;
+        /**
+          * Loading state
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Show progress bar
+          * @default false
+         */
+        "showProgress"?: boolean;
+        /**
+          * Size variant
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * Optional subtitle
+         */
+        "subtitle"?: string;
+        /**
+          * Target value for progress indicator
+         */
+        "target"?: number;
+        /**
+          * Trend indicator (JSON string or object)
+         */
+        "trend"?: TrendIndicator | string;
+        /**
+          * Main metric value
+         */
+        "value"?: number | string;
+        /**
+          * Prefix text (e.g., "$")
+         */
+        "valuePrefix"?: string;
+        /**
+          * Suffix text (e.g., "%")
+         */
+        "valueSuffix"?: string;
+        /**
+          * Visual variant
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'success' | 'warning' | 'error' | 'info';
+    }
     interface SpectrumSearchInput {
         /**
           * Whether to clear the input value after submitting a search
           * @default false
          */
         "clearOnSubmit"?: boolean;
+        /**
+          * Whether to disable the submit button when the input is empty
+          * @default true
+         */
+        "disableSubmitWhenEmpty"?: boolean;
         /**
           * Whether to enable submitting search on Enter key press
           * @default true
@@ -5241,6 +6327,133 @@ declare namespace LocalJSX {
          */
         "variant"?: 'primary' | 'positive' | 'caution' | 'destructive';
     }
+    /**
+     * Text Input Component
+     * A versatile text input component supporting various input types,
+     * validation states, and Spectrum theming.
+     */
+    interface SpectrumTextInput {
+        /**
+          * Autocomplete attribute
+         */
+        "autocomplete"?: string;
+        /**
+          * Whether to show clear button
+          * @default false
+         */
+        "clearable"?: boolean;
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Error message (shows error state when set)
+         */
+        "errorMessage"?: string;
+        /**
+          * Helper text shown below the input
+         */
+        "helperText"?: string;
+        /**
+          * Unique ID for the input
+         */
+        "inputId"?: string;
+        /**
+          * Label text
+         */
+        "label"?: string;
+        /**
+          * Leading icon (Material Symbols name)
+         */
+        "leadingIcon"?: string;
+        /**
+          * Maximum value (for number/date types)
+         */
+        "max"?: number | string;
+        /**
+          * Maximum length
+         */
+        "maxlength"?: number;
+        /**
+          * Minimum value (for number/date types)
+         */
+        "min"?: number | string;
+        /**
+          * Minimum length
+         */
+        "minlength"?: number;
+        /**
+          * Input name attribute
+         */
+        "name"?: string;
+        /**
+          * Emitted when input loses focus
+         */
+        "onInputBlur"?: (event: SpectrumTextInputCustomEvent<void>) => void;
+        /**
+          * Emitted when input value changes
+         */
+        "onInputChange"?: (event: SpectrumTextInputCustomEvent<string>) => void;
+        /**
+          * Emitted when clear button is clicked
+         */
+        "onInputClear"?: (event: SpectrumTextInputCustomEvent<void>) => void;
+        /**
+          * Emitted when input receives focus
+         */
+        "onInputFocus"?: (event: SpectrumTextInputCustomEvent<void>) => void;
+        /**
+          * Emitted on input event (every keystroke)
+         */
+        "onInputInput"?: (event: SpectrumTextInputCustomEvent<string>) => void;
+        /**
+          * Emitted when trailing icon is clicked
+         */
+        "onTrailingIconClick"?: (event: SpectrumTextInputCustomEvent<void>) => void;
+        /**
+          * Pattern for validation
+         */
+        "pattern"?: string;
+        /**
+          * Placeholder text
+          * @default ''
+         */
+        "placeholder"?: string;
+        /**
+          * Whether the input is readonly
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * Whether the input is required
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Size variant
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * Step value (for number type)
+         */
+        "step"?: number | string;
+        /**
+          * Trailing icon (Material Symbols name)
+         */
+        "trailingIcon"?: string;
+        /**
+          * Input type
+          * @default 'text'
+         */
+        "type"?: 'text' | 'number' | 'email' | 'password' | 'tel' | 'url' | 'search' | 'date' | 'time' | 'datetime-local';
+        /**
+          * Input value
+          * @default ''
+         */
+        "value"?: string;
+    }
     interface SpectrumTheme {
         /**
           * Whether to automatically load fonts and prevent FOUC
@@ -5263,8 +6476,7 @@ declare namespace LocalJSX {
          */
         "coordinationTimeout"?: number;
         /**
-          * Whether to use dark mode
-          * @default false
+          * Whether to use dark mode - undefined/null: Auto-detect from user's prefers-color-scheme preference - true: Force dark mode - false: Force light mode
          */
         "dark"?: boolean;
         /**
@@ -5511,13 +6723,16 @@ declare namespace LocalJSX {
         "wizardId"?: string;
     }
     interface IntrinsicElements {
+        "dashboard-widget-host": DashboardWidgetHost;
         "spectrum-accordion": SpectrumAccordion;
         "spectrum-app-layout": SpectrumAppLayout;
         "spectrum-application-layout": SpectrumApplicationLayout;
         "spectrum-avatar": SpectrumAvatar;
         "spectrum-badge": SpectrumBadge;
+        "spectrum-breadcrumb": SpectrumBreadcrumb;
         "spectrum-button": SpectrumButton;
         "spectrum-card": SpectrumCard;
+        "spectrum-chart": SpectrumChart;
         "spectrum-chip": SpectrumChip;
         "spectrum-cluster": SpectrumCluster;
         "spectrum-collapsible-list": SpectrumCollapsibleList;
@@ -5525,23 +6740,29 @@ declare namespace LocalJSX {
         "spectrum-context-menu": SpectrumContextMenu;
         "spectrum-conversation-panel": SpectrumConversationPanel;
         "spectrum-cookie-compliance": SpectrumCookieCompliance;
+        "spectrum-dashboard": SpectrumDashboard;
+        "spectrum-data-table": SpectrumDataTable;
         "spectrum-dialog": SpectrumDialog;
+        "spectrum-filter-panel": SpectrumFilterPanel;
         "spectrum-flex": SpectrumFlex;
         "spectrum-grid": SpectrumGrid;
         "spectrum-hero": SpectrumHero;
         "spectrum-image-gallery": SpectrumImageGallery;
+        "spectrum-map": SpectrumMap;
         "spectrum-media-library": SpectrumMediaLibrary;
         "spectrum-menu": SpectrumMenu;
         "spectrum-panel": SpectrumPanel;
         "spectrum-rail": SpectrumRail;
         "spectrum-rail-alternative": SpectrumRailAlternative;
         "spectrum-rail-item": SpectrumRailItem;
+        "spectrum-score-card": SpectrumScoreCard;
         "spectrum-search-input": SpectrumSearchInput;
         "spectrum-search-results": SpectrumSearchResults;
         "spectrum-select": SpectrumSelect;
         "spectrum-sidebar": SpectrumSidebar;
         "spectrum-stack": SpectrumStack;
         "spectrum-switch": SpectrumSwitch;
+        "spectrum-text-input": SpectrumTextInput;
         "spectrum-theme": SpectrumTheme;
         "spectrum-toast": SpectrumToast;
         "spectrum-wallpaper": SpectrumWallpaper;
@@ -5552,6 +6773,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "dashboard-widget-host": LocalJSX.DashboardWidgetHost & JSXBase.HTMLAttributes<HTMLDashboardWidgetHostElement>;
             "spectrum-accordion": LocalJSX.SpectrumAccordion & JSXBase.HTMLAttributes<HTMLSpectrumAccordionElement>;
             /**
              * Spectrum App Layout Component
@@ -5568,6 +6790,11 @@ declare module "@stencil/core" {
             "spectrum-avatar": LocalJSX.SpectrumAvatar & JSXBase.HTMLAttributes<HTMLSpectrumAvatarElement>;
             "spectrum-badge": LocalJSX.SpectrumBadge & JSXBase.HTMLAttributes<HTMLSpectrumBadgeElement>;
             /**
+             * Breadcrumb navigation component for hierarchical drill-down.
+             * Displays navigation trail and allows users to navigate back through levels.
+             */
+            "spectrum-breadcrumb": LocalJSX.SpectrumBreadcrumb & JSXBase.HTMLAttributes<HTMLSpectrumBreadcrumbElement>;
+            /**
              * Spectrum Button Component
              * A versatile button component with multiple variants, sizes, and states.
              * Supports icons, text, and various interactive states.
@@ -5579,6 +6806,7 @@ declare module "@stencil/core" {
              * Supports media, interactive states, and follows Material Design 3 patterns.
              */
             "spectrum-card": LocalJSX.SpectrumCard & JSXBase.HTMLAttributes<HTMLSpectrumCardElement>;
+            "spectrum-chart": LocalJSX.SpectrumChart & JSXBase.HTMLAttributes<HTMLSpectrumChartElement>;
             /**
              * Spectrum Chip Component
              * A versatile chip component that can be used for tags, filters, and selections.
@@ -5605,12 +6833,15 @@ declare module "@stencil/core" {
             "spectrum-context-menu": LocalJSX.SpectrumContextMenu & JSXBase.HTMLAttributes<HTMLSpectrumContextMenuElement>;
             "spectrum-conversation-panel": LocalJSX.SpectrumConversationPanel & JSXBase.HTMLAttributes<HTMLSpectrumConversationPanelElement>;
             "spectrum-cookie-compliance": LocalJSX.SpectrumCookieCompliance & JSXBase.HTMLAttributes<HTMLSpectrumCookieComplianceElement>;
+            "spectrum-dashboard": LocalJSX.SpectrumDashboard & JSXBase.HTMLAttributes<HTMLSpectrumDashboardElement>;
+            "spectrum-data-table": LocalJSX.SpectrumDataTable & JSXBase.HTMLAttributes<HTMLSpectrumDataTableElement>;
             /**
              * Spectrum Dialog Component
              * A modal dialog component using the HTML dialog element with background shade.
              * Features close functionality, optional title, control bar, and uses spectrum-panel for styling.
              */
             "spectrum-dialog": LocalJSX.SpectrumDialog & JSXBase.HTMLAttributes<HTMLSpectrumDialogElement>;
+            "spectrum-filter-panel": LocalJSX.SpectrumFilterPanel & JSXBase.HTMLAttributes<HTMLSpectrumFilterPanelElement>;
             /**
              * Spectrum Flex Component
              * An advanced flexbox layout component with comprehensive flex properties,
@@ -5635,6 +6866,17 @@ declare module "@stencil/core" {
              */
             "spectrum-hero": LocalJSX.SpectrumHero & JSXBase.HTMLAttributes<HTMLSpectrumHeroElement>;
             "spectrum-image-gallery": LocalJSX.SpectrumImageGallery & JSXBase.HTMLAttributes<HTMLSpectrumImageGalleryElement>;
+            /**
+             * Spectrum Map Component
+             * A flexible map component that supports multiple providers (Leaflet, MapLibre GL JS)
+             * via dynamic imports and a common adapter interface.
+             * @example <spectrum-map
+             *   map-provider="leaflet"
+             *   config='{"center": [40.7128, -74.0060], "zoom": 10}'
+             *   data='[{"position": [40.7128, -74.0060], "label": "New York"}]'>
+             * </spectrum-map>
+             */
+            "spectrum-map": LocalJSX.SpectrumMap & JSXBase.HTMLAttributes<HTMLSpectrumMapElement>;
             "spectrum-media-library": LocalJSX.SpectrumMediaLibrary & JSXBase.HTMLAttributes<HTMLSpectrumMediaLibraryElement>;
             /**
              * Spectrum Menu Component
@@ -5668,6 +6910,12 @@ declare module "@stencil/core" {
              * switches between icon-only and full display modes
              */
             "spectrum-rail-item": LocalJSX.SpectrumRailItem & JSXBase.HTMLAttributes<HTMLSpectrumRailItemElement>;
+            /**
+             * Score Card Component
+             * A presentational widget for displaying key metrics with trends, comparisons,
+             * and visual indicators. Designed for use in dashboards and analytics interfaces.
+             */
+            "spectrum-score-card": LocalJSX.SpectrumScoreCard & JSXBase.HTMLAttributes<HTMLSpectrumScoreCardElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
             "spectrum-search-results": LocalJSX.SpectrumSearchResults & JSXBase.HTMLAttributes<HTMLSpectrumSearchResultsElement>;
             /**
@@ -5701,6 +6949,12 @@ declare module "@stencil/core" {
              * Supports Material Icons and follows spectrum design system.
              */
             "spectrum-switch": LocalJSX.SpectrumSwitch & JSXBase.HTMLAttributes<HTMLSpectrumSwitchElement>;
+            /**
+             * Text Input Component
+             * A versatile text input component supporting various input types,
+             * validation states, and Spectrum theming.
+             */
+            "spectrum-text-input": LocalJSX.SpectrumTextInput & JSXBase.HTMLAttributes<HTMLSpectrumTextInputElement>;
             "spectrum-theme": LocalJSX.SpectrumTheme & JSXBase.HTMLAttributes<HTMLSpectrumThemeElement>;
             /**
              * Spectrum Toast Component

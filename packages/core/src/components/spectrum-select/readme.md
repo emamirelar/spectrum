@@ -60,6 +60,10 @@ Based on the Spectrum design system and Material Design 3 patterns.
 
 ## Dependencies
 
+### Used by
+
+ - [spectrum-filter-panel](../spectrum-filter-panel)
+
 ### Depends on
 
 - [spectrum-button](../spectrum-button)
@@ -68,6 +72,7 @@ Based on the Spectrum design system and Material Design 3 patterns.
 ```mermaid
 graph TD;
   spectrum-select --> spectrum-button
+  spectrum-filter-panel --> spectrum-select
   style spectrum-select fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

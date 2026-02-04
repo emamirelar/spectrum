@@ -1,0 +1,500 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumChart/Use Cases" />
+
+# Use Cases
+
+## Overview
+
+The `spectrum-chart` component is designed for diverse data visualization needs across analytics dashboards, reports, monitoring systems, and embedded visualizations.
+
+## Primary Use Cases
+
+### 1. Analytics Dashboards
+
+**Scenario**: Executive dashboard showing key business metrics
+
+**Implementation**:
+```html
+<!-- Revenue Trend -->
+<spectrum-chart
+  type="line"
+  config='{"title":"Revenue Trend","valueFormat":"currency","showLegend":true}'
+  data='{"labels":["Q1","Q2","Q3","Q4"],"datasets":[{"label":"Revenue","data":[500000,550000,600000,650000]}]}'
+  height="400px"
+></spectrum-chart>
+
+<!-- Market Share -->
+<spectrum-chart
+  type="pie"
+  config='{"title":"Market Share","showLegend":true,"legendPosition":"right"}'
+  data='{"labels":["Us","Competitor A","Competitor B","Others"],"datasets":[{"label":"Share","data":[35,25,20,20]}]}'
+  height="400px"
+></spectrum-chart>
+```
+
+**Benefits**:
+- Multiple chart types for different data types
+- Responsive layouts adapt to screen size
+- Professional appearance with Spectrum design
+- Fast rendering for real-time updates
+
+---
+
+### 2. Sales Performance Tracking
+
+**Scenario**: Sales team monitoring regional performance
+
+**Implementation**:
+```html
+<!-- Regional Comparison -->
+<spectrum-chart
+  type="bar"
+  config='{"title":"Sales by Region","xAxisLabel":"Region","yAxisLabel":"Sales ($K)","valueFormat":"currency"}'
+  data='{"labels":["North","South","East","West"],"datasets":[{"label":"Q4 Sales","data":[450,380,520,410]}]}'
+></spectrum-chart>
+
+<!-- Trend Analysis -->
+<spectrum-chart
+  type="line"
+  config='{"title":"Monthly Sales Trend","valueFormat":"currency","showGrid":true}'
+  data='{"labels":["Jan","Feb","Mar","Apr","May","Jun"],"datasets":[{"label":"Sales","data":[45000,48000,52000,51000,55000,58000]}]}'
+></spectrum-chart>
+```
+
+**Benefits**:
+- Clear visual comparisons
+- Currency formatting built-in
+- Easy to identify trends and patterns
+- Mobile-responsive for field sales teams
+
+---
+
+### 3. Project Management & KPIs
+
+**Scenario**: Project dashboard tracking multiple dimensions
+
+**Implementation**:
+```html
+<!-- Project Health Radar -->
+<spectrum-chart
+  type="radar"
+  config='{"title":"Project Health Metrics","showLegend":true}'
+  data='{
+    "labels":["Schedule","Budget","Quality","Team Morale","Risk Management"],
+    "datasets":[
+      {"label":"Current","data":[85,90,75,80,70]},
+      {"label":"Target","data":[90,95,85,85,80]}
+    ]
+  }'
+></spectrum-chart>
+
+<!-- Milestone Progress -->
+<spectrum-chart
+  type="bar"
+  config='{"title":"Milestone Completion","stacked":true,"valueFormat":"percent"}'
+  data='{
+    "labels":["Phase 1","Phase 2","Phase 3","Phase 4"],
+    "datasets":[
+      {"label":"Completed","data":[100,75,50,25]},
+      {"label":"Remaining","data":[0,25,50,75]}
+    ]
+  }'
+></spectrum-chart>
+```
+
+**Benefits**:
+- Multi-dimensional comparisons with radar charts
+- Stacked bars show progress vs remaining
+- Percentage formatting for completion rates
+- Clear visual communication with stakeholders
+
+---
+
+### 4. Financial Reporting
+
+**Scenario**: Monthly financial report with income statement visualization
+
+**Implementation**:
+```html
+<!-- Income Statement -->
+<spectrum-chart
+  type="bar"
+  config='{"title":"Income Statement","stacked":true,"valueFormat":"currency","yAxisLabel":"Amount ($)"}'
+  data='{
+    "labels":["Jan","Feb","Mar","Apr","May","Jun"],
+    "datasets":[
+      {"label":"Revenue","data":[100000,105000,110000,115000,120000,125000]},
+      {"label":"Cost of Goods","data":[-40000,-42000,-44000,-46000,-48000,-50000]},
+      {"label":"Operating Expenses","data":[-35000,-36000,-37000,-38000,-39000,-40000]}
+    ]
+  }'
+></spectrum-chart>
+
+<!-- Budget vs Actual -->
+<spectrum-chart
+  type="line"
+  config='{"title":"Budget vs Actual","valueFormat":"currency","showLegend":true}'
+  data='{
+    "labels":["Jan","Feb","Mar","Apr","May","Jun"],
+    "datasets":[
+      {"label":"Budget","data":[50000,52000,54000,56000,58000,60000],"borderDash":[5,5]},
+      {"label":"Actual","data":[48000,53000,52000,57000,59000,61000]}
+    ]
+  }'
+></spectrum-chart>
+```
+
+**Benefits**:
+- Professional financial visualizations
+- Stacked bars for component analysis
+- Line charts for variance analysis
+- Currency formatting throughout
+
+---
+
+### 5. Website & App Analytics
+
+**Scenario**: User behavior and traffic analysis
+
+**Implementation**:
+```html
+<!-- User Acquisition -->
+<spectrum-chart
+  type="line"
+  config='{"title":"User Acquisition","showLegend":true,"xAxisLabel":"Date","yAxisLabel":"Users"}'
+  data='{
+    "labels":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+    "datasets":[
+      {"label":"New Users","data":[450,520,480,610,590,380,420]},
+      {"label":"Returning Users","data":[1200,1150,1300,1250,1180,980,1050]}
+    ]
+  }'
+></spectrum-chart>
+
+<!-- Traffic Sources -->
+<spectrum-chart
+  type="doughnut"
+  config='{"title":"Traffic Sources","showLegend":true,"legendPosition":"right"}'
+  data='{
+    "labels":["Organic Search","Direct","Social Media","Email","Referral"],
+    "datasets":[{"label":"Sessions","data":[45,25,15,10,5]}]
+  }'
+></spectrum-chart>
+```
+
+**Benefits**:
+- Real-time data visualization
+- Multiple metrics tracking
+- Clear source attribution
+- Mobile analytics monitoring
+
+---
+
+### 6. Inventory & Supply Chain
+
+**Scenario**: Warehouse inventory monitoring
+
+**Implementation**:
+```html
+<!-- Stock Levels -->
+<spectrum-chart
+  type="bar"
+  config='{"title":"Current Stock Levels","xAxisLabel":"Product Category","yAxisLabel":"Units","colors":["#00b294","#f7630c","#d13438"]}'
+  data='{
+    "labels":["Electronics","Clothing","Home Goods","Toys","Sports"],
+    "datasets":[{"label":"In Stock","data":[1500,2200,1800,1200,900]}]
+  }'
+></spectrum-chart>
+
+<!-- Turnover Rate -->
+<spectrum-chart
+  type="line"
+  config='{"title":"Inventory Turnover Rate","valueFormat":"decimal","decimalPlaces":1}'
+  data='{
+    "labels":["Jan","Feb","Mar","Apr","May","Jun"],
+    "datasets":[
+      {"label":"Turnover Rate","data":[4.2,4.5,4.8,4.6,5.1,5.3]},
+      {"label":"Target","data":[4.5,4.5,4.5,4.5,4.5,4.5],"borderDash":[5,5]}
+    ]
+  }'
+></spectrum-chart>
+```
+
+**Benefits**:
+- Stock level visualization
+- Color coding for alerts (low stock = red)
+- Turnover rate tracking
+- Trend identification
+
+---
+
+### 7. HR & Workforce Analytics
+
+**Scenario**: HR dashboard for workforce planning
+
+**Implementation**:
+```html
+<!-- Department Headcount -->
+<spectrum-chart
+  type="bar"
+  config='{"title":"Department Headcount","stacked":true,"showLegend":true}'
+  data='{
+    "labels":["Engineering","Sales","Marketing","Operations","Finance"],
+    "datasets":[
+      {"label":"Full-time","data":[45,32,18,25,12]},
+      {"label":"Contract","data":[8,12,5,7,3]}
+    ]
+  }'
+></spectrum-chart>
+
+<!-- Skills Matrix -->
+<spectrum-chart
+  type="radar"
+  config='{"title":"Team Skills Assessment","showLegend":true}'
+  data='{
+    "labels":["Technical","Communication","Leadership","Problem Solving","Innovation"],
+    "datasets":[
+      {"label":"Team A","data":[85,75,70,80,90]},
+      {"label":"Team B","data":[70,90,85,75,80]}
+    ]
+  }'
+></spectrum-chart>
+```
+
+**Benefits**:
+- Workforce composition visibility
+- Skills gap identification
+- Team comparison
+- Planning support
+
+---
+
+### 8. Customer Support Metrics
+
+**Scenario**: Support team performance dashboard
+
+**Implementation**:
+```html
+<!-- Ticket Volume -->
+<spectrum-chart
+  type="line"
+  config='{"title":"Daily Ticket Volume","showLegend":true,"xAxisLabel":"Day","yAxisLabel":"Tickets"}'
+  data='{
+    "labels":["Mon","Tue","Wed","Thu","Fri"],
+    "datasets":[
+      {"label":"New","data":[45,52,48,61,59]},
+      {"label":"Resolved","data":[42,50,51,58,60]},
+      {"label":"Escalated","data":[3,2,4,3,2]}
+    ]
+  }'
+></spectrum-chart>
+
+<!-- Response Time Distribution -->
+<spectrum-chart
+  type="pie"
+  config='{"title":"Response Time Distribution","showLegend":true,"colors":["#00b294","#f7630c","#d13438"]}'
+  data='{
+    "labels":["< 1 hour","1-4 hours","> 4 hours"],
+    "datasets":[{"label":"Tickets","data":[65,25,10]}]
+  }'
+></spectrum-chart>
+```
+
+**Benefits**:
+- SLA monitoring
+- Team performance tracking
+- Volume trend identification
+- Response time analytics
+
+---
+
+## Dashboard Integration Use Cases
+
+### 9. Multi-Widget Dashboard
+
+**Scenario**: Comprehensive analytics dashboard with multiple charts
+
+**Implementation**:
+```json
+{
+  "id": "analytics-dashboard",
+  "layout": {
+    "template": [
+      "kpi1 kpi2 kpi3 kpi4",
+      "revenue revenue market market",
+      "category category performance performance"
+    ],
+    "gap": "24px",
+    "columns": "1fr 1fr 1fr 1fr"
+  },
+  "widgets": {
+    "revenue": {
+      "component": "line-chart",
+      "dataSourceId": "sales-data",
+      "uiConfig": {
+        "type": "line",
+        "title": "Revenue Trend",
+        "valueFormat": "currency"
+      }
+    },
+    "market": {
+      "component": "pie-chart",
+      "dataSourceId": "market-data",
+      "uiConfig": {
+        "type": "pie",
+        "title": "Market Share"
+      }
+    }
+  }
+}
+```
+
+**Benefits**:
+- Single configuration for entire dashboard
+- Shared data sources (no duplicate API calls)
+- Centralized filter management
+- Consistent styling
+
+---
+
+### 10. Filtered Dashboard with Dynamic Data
+
+**Scenario**: Dashboard with region/date filters affecting multiple charts
+
+**Implementation**:
+```json
+{
+  "dataSources": {
+    "sales-data": {
+      "id": "sales-data",
+      "endpoint": "/api/sales",
+      "supportsServerFiltering": true,
+      "filterParamMap": {
+        "region": "region",
+        "dateRange": "date_range"
+      }
+    }
+  },
+  "widgets": {
+    "chart1": {
+      "component": "line-chart",
+      "dataSourceId": "sales-data",
+      "filtering": {
+        "subscribe": ["region", "dateRange"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "type": "line",
+        "title": "Regional Sales"
+      }
+    }
+  }
+}
+```
+
+**Benefits**:
+- Automatic filter propagation
+- Server-side filtering (efficient)
+- Smart caching by filter state
+- Widget independence
+
+---
+
+## Advanced Use Cases
+
+### 11. Real-Time Monitoring
+
+**Scenario**: Live system monitoring with auto-refresh
+
+```html
+<spectrum-chart
+  type="line"
+  config='{"title":"Server CPU Usage","yAxisLabel":"Percentage","minValue":0,"maxValue":100,"animated":false}'
+  data='...'
+  height="300px"
+></spectrum-chart>
+
+<script>
+  const chart = document.querySelector('spectrum-chart');
+  setInterval(async () => {
+    const data = await fetchServerMetrics();
+    chart.data = data;
+  }, 5000);
+</script>
+```
+
+---
+
+### 12. Embedded Visualizations
+
+**Scenario**: Charts embedded in CMS content
+
+```html
+<!-- In WordPress, Drupal, or any CMS -->
+<spectrum-chart
+  type="bar"
+  config='{"title":"Survey Results","showLegend":false}'
+  data='{"labels":["Very Satisfied","Satisfied","Neutral","Unsatisfied"],"datasets":[{"label":"Responses","data":[45,35,15,5]}]}'
+  height="350px"
+></spectrum-chart>
+```
+
+---
+
+## Best Practices by Use Case
+
+### When to Use Each Chart Type
+
+| Use Case | Recommended Chart | Why |
+|----------|-------------------|-----|
+| Trends over time | Line | Shows progression clearly |
+| Category comparison | Bar | Easy to compare values |
+| Part-to-whole | Pie/Doughnut | Shows proportions |
+| Multi-dimensional data | Radar | Compares multiple variables |
+| Correlation | Scatter | Shows relationship between variables |
+| Distribution | Polar Area | Circular category visualization |
+| Stacked categories | Stacked Bar | Shows totals + composition |
+
+### Performance Considerations
+
+- **Small datasets** (< 100 points): Any chart type
+- **Medium datasets** (100-1000 points): Line, Bar, Scatter
+- **Large datasets** (> 1000 points): Aggregated Line, consider data sampling
+- **Real-time updates**: Disable animations, use efficient data updates
+
+### Accessibility Considerations
+
+- Always provide meaningful titles
+- Use legends for multi-dataset charts
+- Ensure sufficient color contrast
+- Provide text alternatives for critical data
+- Support keyboard navigation
+
+---
+
+## Anti-Patterns (What to Avoid)
+
+❌ **Too many datasets on one chart** - Keep it simple (max 3-5 datasets)
+❌ **3D charts** - Not supported, and harder to read accurately
+❌ **Pie charts with too many slices** - Use bar chart instead (max 7 slices)
+❌ **Dual Y-axes** - Can be misleading, use separate charts
+❌ **Overly complex charts** - Break into multiple simpler visualizations
+
+---
+
+## Summary
+
+The `spectrum-chart` component excels at:
+- ✅ Dashboard visualizations
+- ✅ Business analytics
+- ✅ Real-time monitoring
+- ✅ Financial reporting
+- ✅ Performance tracking
+- ✅ Data exploration
+- ✅ Embedded visualizations
+
+Choose the right chart type for your data, configure appropriately, and leverage the dashboard integration for complex multi-chart applications.
+
+
+

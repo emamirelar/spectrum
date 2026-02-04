@@ -40,11 +40,13 @@ Supports Material Icons and follows spectrum design system.
 
 ### Used by
 
+ - [spectrum-filter-panel](../spectrum-filter-panel)
  - [spectrum-wizard](../spectrum-wizard)
 
 ### Graph
 ```mermaid
 graph TD;
+  spectrum-filter-panel --> spectrum-switch
   spectrum-wizard --> spectrum-switch
   style spectrum-switch fill:#f9f,stroke:#333,stroke-width:4px
 ```
