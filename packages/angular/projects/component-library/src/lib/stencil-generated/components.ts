@@ -8,6 +8,28 @@ import { Components } from '@unops-itg-npm/cpit-spectrum';
 
 
 @ProxyCmp({
+  inputs: ['area', 'dataSourceManager', 'dataSources', 'debug', 'globalContext', 'widgetConfig']
+})
+@Component({
+  selector: 'dashboard-widget-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['area', 'dataSourceManager', 'dataSources', 'debug', 'globalContext', 'widgetConfig'],
+})
+export class DashboardWidgetHost {
+  protected el: HTMLDashboardWidgetHostElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface DashboardWidgetHost extends Components.DashboardWidgetHost {}
+
+
+@ProxyCmp({
   inputs: ['accordionId', 'chipVariant', 'collapsedIcon', 'debug', 'disabled', 'expandMode', 'expanded', 'expandedIcon', 'haptic', 'horizontalScroll', 'label', 'outline', 'sections', 'sound', 'variant']
 })
 @Component({
@@ -136,6 +158,34 @@ export declare interface SpectrumBadge extends Components.SpectrumBadge {}
 
 
 @ProxyCmp({
+  inputs: ['config', 'homeLabel', 'items', 'maxItems', 'separator', 'showHome']
+})
+@Component({
+  selector: 'spectrum-breadcrumb',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['config', 'homeLabel', 'items', 'maxItems', 'separator', 'showHome'],
+})
+export class SpectrumBreadcrumb {
+  protected el: HTMLSpectrumBreadcrumbElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['breadcrumbClick']);
+  }
+}
+
+
+export declare interface SpectrumBreadcrumb extends Components.SpectrumBreadcrumb {
+  /**
+   * Event emitted when a breadcrumb is clicked
+   */
+  breadcrumbClick: EventEmitter<CustomEvent<{ viewId: string; context: any; index: number }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['action', 'buttonText', 'customStyle', 'debug', 'disabled', 'haptic', 'href', 'iconOnly', 'leftIcon', 'minimalAnimation', 'outline', 'rel', 'rightIcon', 'ripple', 'showButtonText', 'showLeftIcon', 'showRightIcon', 'size', 'sound', 'state', 'target', 'variant']
 })
 @Component({
@@ -186,6 +236,41 @@ export declare interface SpectrumCard extends Components.SpectrumCard {
    * Event emitted when card is clicked
    */
   cardAction: EventEmitter<CustomEvent<{action: string; cardId?: string; title?: string}>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['chartTitle', 'config', 'context', 'data', 'debug', 'height', 'loading', 'type', 'width']
+})
+@Component({
+  selector: 'spectrum-chart',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['chartTitle', 'config', 'context', 'data', 'debug', 'height', 'loading', 'type', 'width'],
+})
+export class SpectrumChart {
+  protected el: HTMLSpectrumChartElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['elementClick', 'legendClick']);
+  }
+}
+
+
+import type { ChartElementClickEvent as ISpectrumChartChartElementClickEvent } from '@unops-itg-npm/cpit-spectrum';
+import type { ChartLegendClickEvent as ISpectrumChartChartLegendClickEvent } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumChart extends Components.SpectrumChart {
+  /**
+   * Event emitted when a chart element (bar, point, segment) is clicked
+   */
+  elementClick: EventEmitter<CustomEvent<ISpectrumChartChartElementClickEvent>>;
+  /**
+   * Event emitted when a legend item is clicked
+   */
+  legendClick: EventEmitter<CustomEvent<ISpectrumChartChartLegendClickEvent>>;
 }
 
 
@@ -407,6 +492,82 @@ export declare interface SpectrumCookieCompliance extends Components.SpectrumCoo
 
 
 @ProxyCmp({
+  inputs: ['config', 'context', 'debug']
+})
+@Component({
+  selector: 'spectrum-dashboard',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['config', 'context', 'debug'],
+})
+export class SpectrumDashboard {
+  protected el: HTMLSpectrumDashboardElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['dashboardNav', 'dataRefresh']);
+  }
+}
+
+
+import type { DashboardNavEvent as ISpectrumDashboardDashboardNavEvent } from '@unops-itg-npm/cpit-spectrum';
+import type { DataRefreshEvent as ISpectrumDashboardDataRefreshEvent } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumDashboard extends Components.SpectrumDashboard {
+  /**
+   * Event emitted when navigation/drill-down is requested
+   */
+  dashboardNav: EventEmitter<CustomEvent<ISpectrumDashboardDashboardNavEvent>>;
+  /**
+   * Event emitted when data refresh is requested
+   */
+  dataRefresh: EventEmitter<CustomEvent<ISpectrumDashboardDataRefreshEvent>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['columns', 'config', 'context', 'data', 'debug', 'defaultSort', 'loading', 'maxHeight', 'pageSize', 'pageable', 'selectable', 'sortable'],
+  methods: ['refresh']
+})
+@Component({
+  selector: 'spectrum-data-table',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['columns', 'config', 'context', 'data', 'debug', 'defaultSort', 'loading', 'maxHeight', 'pageSize', 'pageable', 'selectable', 'sortable'],
+})
+export class SpectrumDataTable {
+  protected el: HTMLSpectrumDataTableElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['rowClick', 'rowsSelected', 'sortChange', 'pageChange']);
+  }
+}
+
+
+export declare interface SpectrumDataTable extends Components.SpectrumDataTable {
+  /**
+   * Emitted when row is clicked
+   */
+  rowClick: EventEmitter<CustomEvent<any>>;
+  /**
+   * Emitted when rows are selected
+   */
+  rowsSelected: EventEmitter<CustomEvent<any[]>>;
+  /**
+   * Emitted when sort changes
+   */
+  sortChange: EventEmitter<CustomEvent<{ column: string; direction: 'asc' | 'desc' }>>;
+  /**
+   * Emitted when page changes
+   */
+  pageChange: EventEmitter<CustomEvent<{ page: number; pageSize: number }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['background', 'buttons', 'closeOnEscape', 'closeOnOutsideClick', 'debug', 'dialogId', 'dialogTitle', 'height', 'noPadding', 'open', 'showCloseButton', 'size', 'width'],
   methods: ['show', 'hide', 'toggle']
 })
@@ -436,6 +597,42 @@ export declare interface SpectrumDialog extends Components.SpectrumDialog {
    * Event emitted when dialog is closed
    */
   dialogClose: EventEmitter<CustomEvent<{action: string; dialogId?: string}>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['context', 'debug', 'filters', 'immediate', 'layout', 'showButtons']
+})
+@Component({
+  selector: 'spectrum-filter-panel',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['context', 'debug', 'filters', 'immediate', 'layout', 'showButtons'],
+})
+export class SpectrumFilterPanel {
+  protected el: HTMLSpectrumFilterPanelElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['filterChange', 'filterApply', 'filterReset']);
+  }
+}
+
+
+export declare interface SpectrumFilterPanel extends Components.SpectrumFilterPanel {
+  /**
+   * Emitted when filters change
+   */
+  filterChange: EventEmitter<CustomEvent<Record<string, any>>>;
+  /**
+   * Emitted when filters are applied
+   */
+  filterApply: EventEmitter<CustomEvent<Record<string, any>>>;
+  /**
+   * Emitted when filters are reset
+   */
+  filterReset: EventEmitter<CustomEvent<void>>;
 }
 
 
@@ -556,6 +753,47 @@ export declare interface SpectrumImageGallery extends Components.SpectrumImageGa
   imagePreview: EventEmitter<CustomEvent<ISpectrumImageGalleryImageConfig>>;
 
   primaryAction: EventEmitter<CustomEvent<{ action: string; selectedImages: [object Object][]; selectedIds: string[]; count: number }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['config', 'data', 'debug', 'mapProvider'],
+  methods: ['setCenter', 'setZoom', 'fitBounds', 'getBounds', 'resize']
+})
+@Component({
+  selector: 'spectrum-map',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['config', 'data', 'debug', 'mapProvider'],
+})
+export class SpectrumMap {
+  protected el: HTMLSpectrumMapElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['markerClick', 'regionClick', 'boundsChange']);
+  }
+}
+
+
+import type { MapMarkerClickEvent as ISpectrumMapMapMarkerClickEvent } from '@unops-itg-npm/cpit-spectrum';
+import type { MapRegionClickEvent as ISpectrumMapMapRegionClickEvent } from '@unops-itg-npm/cpit-spectrum';
+import type { MapBoundsChangeEvent as ISpectrumMapMapBoundsChangeEvent } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumMap extends Components.SpectrumMap {
+  /**
+   * Event emitted when a marker is clicked
+   */
+  markerClick: EventEmitter<CustomEvent<ISpectrumMapMapMarkerClickEvent>>;
+  /**
+   * Event emitted when a region is clicked
+   */
+  regionClick: EventEmitter<CustomEvent<ISpectrumMapMapRegionClickEvent>>;
+  /**
+   * Event emitted when map bounds change
+   */
+  boundsChange: EventEmitter<CustomEvent<ISpectrumMapMapBoundsChangeEvent>>;
 }
 
 
@@ -737,7 +975,29 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
 
 
 @ProxyCmp({
-  inputs: ['clearOnSubmit', 'enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
+  inputs: ['comparison', 'config', 'data', 'debug', 'format', 'icon', 'iconPosition', 'label', 'loading', 'showProgress', 'size', 'subtitle', 'target', 'trend', 'value', 'valuePrefix', 'valueSuffix', 'variant']
+})
+@Component({
+  selector: 'spectrum-score-card',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['comparison', 'config', 'data', 'debug', 'format', 'icon', 'iconPosition', 'label', 'loading', 'showProgress', 'size', 'subtitle', 'target', 'trend', 'value', 'valuePrefix', 'valueSuffix', 'variant'],
+})
+export class SpectrumScoreCard {
+  protected el: HTMLSpectrumScoreCardElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumScoreCard extends Components.SpectrumScoreCard {}
+
+
+@ProxyCmp({
+  inputs: ['clearOnSubmit', 'disableSubmitWhenEmpty', 'enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
   methods: ['setFocus']
 })
 @Component({
@@ -745,7 +1005,7 @@ export declare interface SpectrumRailItem extends Components.SpectrumRailItem {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['clearOnSubmit', 'enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
+  inputs: ['clearOnSubmit', 'disableSubmitWhenEmpty', 'enableEnterSubmit', 'enableVoiceInput', 'maxLines', 'placeholder', 'searchButtonVariant', 'searchIconPosition'],
 })
 export class SpectrumSearchInput {
   protected el: HTMLSpectrumSearchInputElement;
@@ -904,6 +1164,54 @@ export class SpectrumSwitch {
 export declare interface SpectrumSwitch extends Components.SpectrumSwitch {
 
   switchChange: EventEmitter<CustomEvent<{ action: string; checked: boolean; value?: string }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['autocomplete', 'clearable', 'disabled', 'errorMessage', 'helperText', 'inputId', 'label', 'leadingIcon', 'max', 'maxlength', 'min', 'minlength', 'name', 'pattern', 'placeholder', 'readonly', 'required', 'size', 'step', 'trailingIcon', 'type', 'value']
+})
+@Component({
+  selector: 'spectrum-text-input',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['autocomplete', 'clearable', 'disabled', 'errorMessage', 'helperText', 'inputId', 'label', 'leadingIcon', 'max', 'maxlength', 'min', 'minlength', 'name', 'pattern', 'placeholder', 'readonly', 'required', 'size', 'step', 'trailingIcon', 'type', 'value'],
+})
+export class SpectrumTextInput {
+  protected el: HTMLSpectrumTextInputElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['inputChange', 'inputInput', 'inputFocus', 'inputBlur', 'inputClear', 'trailingIconClick']);
+  }
+}
+
+
+export declare interface SpectrumTextInput extends Components.SpectrumTextInput {
+  /**
+   * Emitted when input value changes
+   */
+  inputChange: EventEmitter<CustomEvent<string>>;
+  /**
+   * Emitted on input event (every keystroke)
+   */
+  inputInput: EventEmitter<CustomEvent<string>>;
+  /**
+   * Emitted when input receives focus
+   */
+  inputFocus: EventEmitter<CustomEvent<void>>;
+  /**
+   * Emitted when input loses focus
+   */
+  inputBlur: EventEmitter<CustomEvent<void>>;
+  /**
+   * Emitted when clear button is clicked
+   */
+  inputClear: EventEmitter<CustomEvent<void>>;
+  /**
+   * Emitted when trailing icon is clicked
+   */
+  trailingIconClick: EventEmitter<CustomEvent<void>>;
 }
 
 

@@ -31,8 +31,16 @@ export class SpectrumTheme {
 
   /**
    * Whether to use dark mode
+   * - undefined/null: Auto-detect from user's prefers-color-scheme preference
+   * - true: Force dark mode
+   * - false: Force light mode
    */
-  @Prop() dark: boolean = false;
+  @Prop() dark?: boolean;
+  
+  /**
+   * Internal state tracking the effective dark mode (after auto-detection)
+   */
+  @State() private effectiveDark: boolean = false;
 
   /**
    * Whether to show theme color swatches (useful for development)
@@ -85,10 +93,43 @@ export class SpectrumTheme {
   @State() private fontsReady: boolean = false;
   private coordinationTimer: any = null;
   private wallpaperColorsApplied: boolean = false;
+  private darkModeMediaQuery: MediaQueryList | null = null;
   
   // Static flag to track global font loading state
   private static globalFontsLoaded: boolean = false;
   private static fontLoadingPromise: Promise<void> | null = null;
+
+  /**
+   * Determine the effective dark mode based on prop and user preference
+   */
+  private getEffectiveDarkMode(): boolean {
+    // If dark prop is explicitly set (true or false), use it
+    if (this.dark !== undefined && this.dark !== null) {
+      return this.dark;
+    }
+    
+    // Otherwise, auto-detect from user's system preference
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    
+    // Default to light mode
+    return false;
+  }
+
+  /**
+   * Handle changes to the user's color scheme preference
+   */
+  private handleColorSchemeChange = (event: MediaQueryListEvent) => {
+    // Only respond to changes if dark prop is not explicitly set
+    if (this.dark === undefined || this.dark === null) {
+      this.effectiveDark = event.matches;
+      if (this.debug) {
+        this.debugWarn(`Color scheme changed to: ${event.matches ? 'dark' : 'light'}`);
+      }
+      this.generateTheme();
+    }
+  };
 
   /**
    * Debug warning utility
@@ -222,6 +263,21 @@ export class SpectrumTheme {
       }
     }
     
+    // Initialize effective dark mode (auto-detect if not explicitly set)
+    this.effectiveDark = this.getEffectiveDarkMode();
+    
+    // Set up listener for user preference changes (only if not explicitly set)
+    if (typeof window !== 'undefined' && window.matchMedia && (this.dark === undefined || this.dark === null)) {
+      this.darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      this.darkModeMediaQuery.addEventListener('change', this.handleColorSchemeChange);
+      
+      if (this.debug) {
+        this.debugWarn(`Dark mode: auto-detected as ${this.effectiveDark ? 'dark' : 'light'} (from user preference)`);
+      }
+    } else if (this.debug) {
+      this.debugWarn(`Dark mode: explicitly set to ${this.dark}`);
+    }
+    
     // Initialize font loading if enabled
     if (this.autoLoadFonts) {
       await this.initializeFontLoading();
@@ -310,6 +366,12 @@ export class SpectrumTheme {
   }
 
   disconnectedCallback() {
+    // Clean up dark mode media query listener
+    if (this.darkModeMediaQuery) {
+      this.darkModeMediaQuery.removeEventListener('change', this.handleColorSchemeChange);
+      this.darkModeMediaQuery = null;
+    }
+    
     // Clean up event listeners (remove regardless of current state)
     if (this.autoLoadFonts) {
       document.removeEventListener('fontsloaded', this.handleFontsLoaded.bind(this));
@@ -477,8 +539,33 @@ export class SpectrumTheme {
     this.applyThemeScheme(scheme);
   }
 
-  @Watch('color')
   @Watch('dark')
+  onDarkPropChange() {
+    // When dark prop changes, recalculate effective dark mode
+    this.effectiveDark = this.getEffectiveDarkMode();
+    
+    // Update or remove the media query listener based on explicit setting
+    if (this.dark !== undefined && this.dark !== null) {
+      // Dark mode explicitly set - remove auto-detection listener
+      if (this.darkModeMediaQuery) {
+        this.darkModeMediaQuery.removeEventListener('change', this.handleColorSchemeChange);
+        this.darkModeMediaQuery = null;
+      }
+    } else if (!this.darkModeMediaQuery && typeof window !== 'undefined' && window.matchMedia) {
+      // Dark mode not set - enable auto-detection
+      this.darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      this.darkModeMediaQuery.addEventListener('change', this.handleColorSchemeChange);
+    }
+    
+    if (this.debug) {
+      this.debugWarn(`Dark prop changed: effectiveDark is now ${this.effectiveDark}`);
+    }
+    
+    // Re-generate the theme with the new dark mode setting
+    this.generateTheme();
+  }
+
+  @Watch('color')
   @Watch('config')
   @Watch('autoLoadFonts')
   @Watch('fontLoadTimeout')
@@ -522,7 +609,7 @@ export class SpectrumTheme {
     
     // Generate theme from source color
     const theme = themeFromSourceColor(argb);
-    const scheme = this.dark ? theme.schemes.dark : theme.schemes.light;
+    const scheme = this.effectiveDark ? theme.schemes.dark : theme.schemes.light;
 
     // Apply the scheme
     this.applyThemeScheme(scheme);

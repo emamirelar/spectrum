@@ -1,0 +1,486 @@
+// ==============================================
+// Spectrum Score Card Component Styles
+// ==============================================
+// BEM naming convention: spectrum-score-card (block), __element (element), --modifier (modifier)
+// Responsive design using Flexbox
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+// Note: This component uses shadow: false with Host, so styles apply to the element tag
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+spectrum-score-card {
+  // CSS Custom Properties (defined here since shadow: false means :host doesn't work)
+  // Core component properties using Spectrum tokens
+  --score-card-background: var(--spectrum-color-surface, var(--spectrum-sys-color-surface, #ffffff));
+  --score-card-color: var(--spectrum-color-on-surface, var(--spectrum-sys-color-on-surface, #333333));
+  --score-card-border-radius: var(--spectrum-sys-border-radius-large, 12px);
+  --score-card-padding: var(--spectrum-sys-spacing-large, 1.5rem);
+  --score-card-padding-large: var(--spectrum-sys-spacing-x-large, 2rem);
+  --score-card-border: 1px solid var(--spectrum-color-outline, var(--spectrum-sys-color-outline, rgba(0, 0, 0, 0.15)));
+  
+  // Typography using Spectrum font tokens
+  --score-card-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --score-card-label-size: 0.75rem;
+  --score-card-label-weight: var(--spectrum-sys-font-weight-medium, 600);
+  --score-card-label-color: var(--spectrum-color-on-surface-variant, #666666);
+  --score-card-value-size: 2rem;
+  --score-card-value-weight: var(--spectrum-sys-font-weight-bold, 700);
+  --score-card-subtitle-size: 0.8125rem;
+  --score-card-subtitle-color: var(--spectrum-color-on-surface-variant, var(--spectrum-sys-color-on-surface-variant, #42474e));
+  
+  // Trend colors using Spectrum semantic tokens
+  --score-card-trend-positive: var(--spectrum-sys-color-success, #2d844a);
+  --score-card-trend-negative: var(--spectrum-sys-color-danger, #c41e3a);
+  --score-card-trend-neutral: var(--spectrum-color-on-surface-variant, #42474e);
+  
+  // Variant colors using Spectrum container tokens
+  --score-card-success-bg: var(--spectrum-sys-color-success-container, #e8f5e9);
+  --score-card-success-color: var(--spectrum-sys-color-on-success-container, #1b5e20);
+  --score-card-warning-bg: var(--spectrum-sys-color-warning-container, #fff3e0);
+  --score-card-warning-color: var(--spectrum-sys-color-on-warning-container, #cc6900);
+  --score-card-error-bg: var(--spectrum-color-error-container, #ffdad6);
+  --score-card-error-color: var(--spectrum-color-on-error-container, #410002);
+  --score-card-info-bg: var(--spectrum-color-primary-container, #d0e4ff);
+  --score-card-info-color: var(--spectrum-color-on-primary-container, #001c3a);
+  
+  // Card elevation shadows (Material Design inspired)
+  --score-card-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+  --score-card-shadow-hover: 
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+  
+  // Transitions using Spectrum animation tokens
+  --score-card-transition: all var(--spectrum-sys-animation-duration-fast, 200ms) var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  
+  // Progress bar
+  --score-card-progress-height: 4px;
+  --score-card-progress-bg: var(--spectrum-color-surface-variant, #dfe2eb);
+  --score-card-progress-color: var(--spectrum-sys-color-primary, #0070d2);
+  
+  // Icon styling
+  --score-card-icon-size: 24px;
+  --score-card-icon-color: var(--spectrum-sys-color-primary, #0070d2);
+  --score-card-icon-background: var(--spectrum-color-primary-container, rgba(0, 112, 210, 0.1));
+  
+  // Size constraints - percentage-based widths for size variants (used in flex containers)
+  // These control the flex-basis relative to the parent container
+  --score-card-width-large: 50%;
+  --score-card-width-medium: 33.333%;
+  --score-card-width-small: 20%;
+  --score-card-min-width: 200px;
+
+  // Component styles
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background-color: var(--score-card-background);
+  color: var(--score-card-color);
+  border-radius: var(--score-card-border-radius);
+  border: var(--score-card-border);
+  padding: var(--score-card-padding-large);
+  font-family: var(--score-card-font-family);
+  transition: var(--score-card-transition);
+  box-shadow: var(--score-card-shadow);
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+  min-width: var(--score-card-min-width);
+  box-sizing: border-box;
+  // Default: fill available space (works with both grid and flex)
+  width: 100%;
+  flex: 1 1 auto;
+  
+  &:hover {
+    box-shadow: var(--score-card-shadow-hover);
+    transform: translateY(-2px);
+  }
+  
+  // ==============================================
+  // Size Variations (using class selectors for modifiers)
+  // In flex containers: flex-basis controls preferred width, cards wrap when needed
+  // In grid containers: width: 100% fills the grid cell
+  // ==============================================
+  &.spectrum-score-card--small {
+    flex: 1 1 calc(var(--score-card-width-small) - 1rem);
+    max-width: calc(var(--score-card-width-small) - 1rem);
+    padding: var(--score-card-padding);
+    min-height: 100px;
+    --score-card-label-size: 0.6875rem;
+    --score-card-value-size: 1.5rem;
+    --score-card-icon-size: 20px;
+    gap: 0.5rem;
+  }
+  
+  &.spectrum-score-card--medium {
+    flex: 1 1 calc(var(--score-card-width-medium) - 1rem);
+    max-width: calc(var(--score-card-width-medium) - 1rem);
+    // Other values are defaults
+  }
+  
+  &.spectrum-score-card--large {
+    flex: 1 1 calc(var(--score-card-width-large) - 1rem);
+    max-width: calc(var(--score-card-width-large) - 1rem);
+    padding: calc(var(--score-card-padding-large) * 1.25);
+    min-height: 160px;
+    --score-card-label-size: 0.875rem;
+    --score-card-value-size: 2.5rem;
+    --score-card-icon-size: 28px;
+    gap: 1rem;
+  }
+  
+  // ==============================================
+  // Variant Styles
+  // Override all internal color variables for proper contrast
+  // Icon uses semi-transparent version of text color for background
+  // ==============================================
+  &.spectrum-score-card--success {
+    --score-card-background: var(--score-card-success-bg);
+    --score-card-color: var(--score-card-success-color);
+    --score-card-label-color: var(--score-card-success-color);
+    --score-card-subtitle-color: var(--score-card-success-color);
+    --score-card-icon-color: var(--score-card-success-color);
+    --score-card-icon-background: color-mix(in srgb, var(--score-card-success-color) 15%, transparent);
+    background-color: var(--score-card-success-bg);
+    color: var(--score-card-success-color);
+    border-color: color-mix(in srgb, var(--score-card-success-color) 30%, transparent);
+  }
+  
+  &.spectrum-score-card--warning {
+    --score-card-background: var(--score-card-warning-bg);
+    --score-card-color: var(--score-card-warning-color);
+    --score-card-label-color: var(--score-card-warning-color);
+    --score-card-subtitle-color: var(--score-card-warning-color);
+    --score-card-icon-color: var(--score-card-warning-color);
+    --score-card-icon-background: color-mix(in srgb, var(--score-card-warning-color) 15%, transparent);
+    background-color: var(--score-card-warning-bg);
+    color: var(--score-card-warning-color);
+    border-color: color-mix(in srgb, var(--score-card-warning-color) 30%, transparent);
+  }
+  
+  &.spectrum-score-card--error {
+    --score-card-background: var(--score-card-error-bg);
+    --score-card-color: var(--score-card-error-color);
+    --score-card-label-color: var(--score-card-error-color);
+    --score-card-subtitle-color: var(--score-card-error-color);
+    --score-card-icon-color: var(--score-card-error-color);
+    --score-card-icon-background: color-mix(in srgb, var(--score-card-error-color) 15%, transparent);
+    background-color: var(--score-card-error-bg);
+    color: var(--score-card-error-color);
+    border-color: color-mix(in srgb, var(--score-card-error-color) 30%, transparent);
+  }
+  
+  &.spectrum-score-card--info {
+    --score-card-background: var(--score-card-info-bg);
+    --score-card-color: var(--score-card-info-color);
+    --score-card-label-color: var(--score-card-info-color);
+    --score-card-subtitle-color: var(--score-card-info-color);
+    --score-card-icon-color: var(--score-card-info-color);
+    --score-card-icon-background: color-mix(in srgb, var(--score-card-info-color) 15%, transparent);
+    background-color: var(--score-card-info-bg);
+    color: var(--score-card-info-color);
+    border-color: color-mix(in srgb, var(--score-card-info-color) 30%, transparent);
+  }
+  
+  // ==============================================
+  // Loading State
+  // ==============================================
+  &.spectrum-score-card--loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+}
+
+// ==============================================
+// Element Styles
+// ==============================================
+
+// Header Section
+.spectrum-score-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.spectrum-score-card__icon {
+  font-family: var(--spectrum-sys-icon-font-family, 'Material Symbols Outlined');
+  font-size: var(--score-card-icon-size);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  color: var(--score-card-icon-color);
+  flex-shrink: 0;
+  // Icon container with proper Spectrum spacing
+  width: calc(var(--score-card-icon-size) + var(--spectrum-sys-spacing, 1rem));
+  height: calc(var(--score-card-icon-size) + var(--spectrum-sys-spacing, 1rem));
+  padding: var(--spectrum-sys-spacing-small, 0.5rem);
+  background: var(--score-card-icon-background);
+  border-radius: var(--spectrum-sys-border-radius-medium, 8px);
+  box-sizing: border-box;
+}
+
+.spectrum-score-card__header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.spectrum-score-card__label {
+  margin: 0;
+  font-size: var(--score-card-label-size);
+  font-weight: var(--score-card-label-weight);
+  line-height: 1.4;
+  color: var(--score-card-label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+}
+
+.spectrum-score-card__subtitle {
+  margin: 2px 0 0;
+  font-size: var(--score-card-subtitle-size);
+  color: var(--score-card-subtitle-color);
+  line-height: 1.4;
+}
+
+// Body Section - Value
+.spectrum-score-card__body {
+  display: flex;
+  align-items: baseline;
+  flex: 1;
+}
+
+.spectrum-score-card__value-container {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.spectrum-score-card__value {
+  font-size: var(--score-card-value-size);
+  font-weight: var(--score-card-value-weight);
+  line-height: 1.1;
+  color: var(--score-card-color);
+  letter-spacing: -0.02em;
+}
+
+.spectrum-score-card__prefix {
+  font-size: calc(var(--score-card-value-size) * 0.6);
+  font-weight: var(--score-card-value-weight);
+  color: var(--score-card-color);
+  opacity: 0.7;
+}
+
+.spectrum-score-card__suffix {
+  font-size: calc(var(--score-card-value-size) * 0.45);
+  font-weight: var(--score-card-label-weight);
+  color: var(--score-card-subtitle-color);
+  margin-left: 2px;
+}
+
+// Loading Skeleton
+.spectrum-score-card__skeleton {
+  height: var(--score-card-value-size);
+  width: 120px;
+  background: linear-gradient(
+    90deg,
+    var(--spectrum-sys-color-surface-variant, #f5f5f5) 25%,
+    var(--spectrum-sys-color-surface, #ffffff) 50%,
+    var(--spectrum-sys-color-surface-variant, #f5f5f5) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Footer Section - Trend & Comparison
+.spectrum-score-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--spectrum-sys-typescale-body-small-size, 13px);
+  padding-top: 0.75rem;
+  margin-top: auto;
+}
+
+// Trend Indicator
+.spectrum-score-card__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spectrum-sys-spacing-2xs, 4px);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.04);
+  
+  &--positive {
+    color: var(--score-card-trend-positive);
+    background-color: rgba(76, 175, 80, 0.1);
+    
+    .spectrum-score-card__trend-icon {
+      color: var(--score-card-trend-positive);
+    }
+  }
+  
+  &--negative {
+    color: var(--score-card-trend-negative);
+    background-color: rgba(244, 67, 54, 0.1);
+    
+    .spectrum-score-card__trend-icon {
+      color: var(--score-card-trend-negative);
+    }
+  }
+  
+  &--neutral {
+    color: var(--score-card-trend-neutral);
+    
+    .spectrum-score-card__trend-icon {
+      color: var(--score-card-trend-neutral);
+    }
+  }
+}
+
+.spectrum-score-card__trend-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.spectrum-score-card__trend-value {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.spectrum-score-card__trend-label {
+  opacity: 0.7;
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+// Comparison
+.spectrum-score-card__comparison {
+  display: flex;
+  align-items: center;
+  gap: var(--spectrum-sys-spacing-2xs, 4px);
+  color: var(--score-card-subtitle-color);
+  margin-left: auto;
+}
+
+.spectrum-score-card__comparison-value {
+  font-weight: 600;
+}
+
+.spectrum-score-card__comparison-label {
+  opacity: 0.8;
+}
+
+// Progress Bar
+.spectrum-score-card__progress {
+  width: 100%;
+  height: var(--score-card-progress-height);
+  background-color: var(--score-card-progress-bg);
+  border-radius: calc(var(--score-card-progress-height) / 2);
+  overflow: hidden;
+  margin-top: var(--spectrum-sys-spacing-small, 8px);
+}
+
+.spectrum-score-card__progress-bar {
+  height: 100%;
+  background-color: var(--score-card-progress-color);
+  transition: width 0.3s ease-in-out;
+  border-radius: calc(var(--score-card-progress-height) / 2);
+}
+
+// Icon Position Modifiers
+spectrum-score-card.spectrum-score-card--icon-end {
+  .spectrum-score-card__header {
+    flex-direction: row-reverse;
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (max-width: 768px) {
+  spectrum-score-card {
+    --score-card-padding: var(--spectrum-sys-spacing, 16px);
+    --score-card-value-size: var(--spectrum-sys-typescale-headline-medium-size, 28px);
+  }
+  
+  .spectrum-score-card__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spectrum-sys-spacing-small, 8px);
+  }
+  
+  .spectrum-score-card__comparison {
+    margin-left: 0;
+  }
+}
+
+// Dark mode support is handled by spectrum-theme component
+// Do not use prefers-color-scheme here - let the theme control colors
+
+// ==============================================
+// High Contrast Mode
+// ==============================================
+@media (prefers-contrast: high) {
+  spectrum-score-card {
+    border-width: 2px;
+  }
+  
+  .spectrum-score-card__value {
+    font-weight: 700;
+  }
+}
+
+// ==============================================
+// Reduced Motion
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  spectrum-score-card {
+    transition: none;
+  }
+  
+  .spectrum-score-card__progress-bar {
+    transition: none;
+  }
+  
+  .spectrum-score-card__skeleton {
+    animation: none;
+  }
+}
+
+// ==============================================
+// Print Styles
+// ==============================================
+@media print {
+  spectrum-score-card {
+    border: 2px solid #000;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+}
+

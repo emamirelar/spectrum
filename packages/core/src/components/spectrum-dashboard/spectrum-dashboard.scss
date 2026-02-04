@@ -1,0 +1,249 @@
+// ==============================================
+// Spectrum Dashboard Component Styles
+// ==============================================
+// JSON-driven dashboard with CSS Grid layout engine
+// Supports configurable grid areas, widgets, and filtering
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+
+// Note: shadow: false, so use element selector instead of :host
+spectrum-dashboard {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  
+  // Core dashboard properties using Spectrum tokens
+  --dashboard-background: var(--spectrum-color-background, var(--spectrum-sys-color-background, #f6f6f6));
+  --dashboard-color: var(--spectrum-color-on-background, var(--spectrum-sys-color-on-surface, #333333));
+  --dashboard-border-radius: var(--spectrum-sys-border-radius, 4px);
+  --dashboard-padding: var(--spectrum-sys-spacing, 1rem);
+  --dashboard-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --dashboard-font-size: var(--spectrum-sys-font-size, 1rem);
+  
+  // Grid properties
+  --dashboard-grid-gap: var(--spectrum-sys-spacing, 1rem);
+  
+  // Error state colors using Spectrum error tokens
+  --dashboard-error-background: var(--spectrum-color-error-container, #ffdad6);
+  --dashboard-error-color: var(--spectrum-sys-color-danger, #c41e3a);
+  
+  // Spacing using Spectrum spacing tokens
+  --dashboard-spacing-small: var(--spectrum-sys-spacing-small, 0.5rem);
+  --dashboard-spacing: var(--spectrum-sys-spacing, 1rem);
+  --dashboard-spacing-large: var(--spectrum-sys-spacing-large, 2rem);
+  
+  // Animation and transitions using Spectrum animation tokens
+  --dashboard-transition: all var(--spectrum-sys-animation-duration-fast, 200ms) var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  --dashboard-transition-duration: var(--spectrum-sys-animation-duration, 300ms);
+  --dashboard-transition-timing: var(--spectrum-sys-animation-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  
+  // Ensure all child elements use border-box
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+
+.dashboard-host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.spectrum-dashboard {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  background-color: var(--dashboard-background);
+  color: var(--dashboard-color);
+  padding: var(--dashboard-padding);
+  font-family: var(--dashboard-font-family);
+  font-size: var(--dashboard-font-size);
+  box-sizing: border-box;
+  
+  // Default grid settings (will be overridden by inline styles from config)
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--dashboard-grid-gap);
+  
+  // Ensure grid items don't overflow
+  & > * {
+    min-width: 0;
+    min-height: 0;
+  }
+}
+
+// ==============================================
+// Error State
+// ==============================================
+
+.spectrum-dashboard--error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--dashboard-spacing-large);
+}
+
+.dashboard__error {
+  max-width: 600px;
+  padding: var(--dashboard-spacing-large);
+  background: var(--dashboard-error-background);
+  border: 2px solid var(--dashboard-error-color);
+  border-radius: var(--dashboard-border-radius);
+  text-align: center;
+}
+
+.dashboard__error-title {
+  margin: 0 0 var(--dashboard-spacing) 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dashboard-error-color);
+}
+
+.dashboard__error-message {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--dashboard-color);
+  line-height: 1.5;
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
+// Mobile: Stack widgets vertically
+@media (max-width: 767px) {
+  .spectrum-dashboard {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: none !important;
+    grid-auto-flow: row;
+    padding: var(--dashboard-spacing-small);
+    gap: var(--dashboard-spacing-small);
+  }
+  
+  // Remove grid-area on mobile for natural flow
+  dashboard-widget-host {
+    grid-area: auto !important;
+  }
+}
+
+// Tablet: Adjust padding and gaps
+@media (min-width: 768px) and (max-width: 1023px) {
+  .spectrum-dashboard {
+    padding: var(--dashboard-spacing);
+    gap: var(--dashboard-spacing);
+  }
+}
+
+// Desktop: Full layout with larger gaps
+@media (min-width: 1024px) {
+  .spectrum-dashboard {
+    padding: var(--dashboard-spacing-large);
+    gap: var(--dashboard-spacing-large);
+  }
+}
+
+// ==============================================
+// Print Styles
+// ==============================================
+
+@media print {
+  .spectrum-dashboard {
+    display: block;
+    background: white;
+    padding: 0;
+  }
+  
+  dashboard-widget-host {
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+}
+
+// ==============================================
+// Accessibility
+// ==============================================
+
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-dashboard,
+  .dashboard__error {
+    transition: none;
+    animation: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-dashboard {
+    border: 1px solid;
+  }
+  
+  .dashboard__error {
+    border-width: 3px;
+  }
+}
+
+// Dark mode support is handled by spectrum-theme component
+// Do not use prefers-color-scheme here - let the theme control colors
+
+// ==============================================
+// Loading Overlay (Optional)
+// ==============================================
+// Uses Spectrum tokens that adapt to theme automatically
+
+.dashboard__loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--spectrum-color-scrim, rgba(0, 0, 0, 0.4));
+  z-index: 1000;
+}
+
+.dashboard__loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--spectrum-color-outline-variant, rgba(0, 0, 0, 0.1));
+  border-top-color: var(--spectrum-sys-color-primary, #0078d4);
+  border-radius: 50%;
+  animation: dashboard-spin 1s linear infinite;
+  
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 2s;
+  }
+}
+
+@keyframes dashboard-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ==============================================
+// Utility Classes
+// ==============================================
+
+// Hide on mobile
+.dashboard__hide-mobile {
+  @media (max-width: 767px) {
+    display: none !important;
+  }
+}
+
+// Hide on desktop
+.dashboard__hide-desktop {
+  @media (min-width: 768px) {
+    display: none !important;
+  }
+}

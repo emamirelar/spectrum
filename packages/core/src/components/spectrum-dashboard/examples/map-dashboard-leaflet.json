@@ -1,0 +1,193 @@
+{
+  "id": "sales-map-leaflet",
+  "title": "Sales Map Dashboard (Leaflet)",
+  "description": "Store locations with sales data using lightweight Leaflet provider (~40KB)",
+  "dataSources": {
+    "storeLocations": {
+      "id": "storeLocations",
+      "endpoint": "/api/stores",
+      "method": "GET",
+      "refreshInterval": 300000
+    }
+  },
+  "layout": {
+    "template": [
+      "filters filters filters",
+      "map map scorecard",
+      "table table table"
+    ],
+    "columns": "2fr 2fr 1fr",
+    "rows": "auto 500px 1fr",
+    "gap": "1.5rem"
+  },
+  "filters": [
+    {
+      "id": "region",
+      "type": "select",
+      "label": "Region",
+      "options": [
+        { "value": "north-america", "label": "North America" },
+        { "value": "europe", "label": "Europe" },
+        { "value": "asia", "label": "Asia" }
+      ]
+    },
+    {
+      "id": "storeType",
+      "type": "select",
+      "label": "Store Type",
+      "options": [
+        { "value": "flagship", "label": "Flagship" },
+        { "value": "retail", "label": "Retail" },
+        { "value": "outlet", "label": "Outlet" }
+      ]
+    }
+  ],
+  "widgets": {
+    "filters": {
+      "component": "filter-panel",
+      "uiConfig": {
+        "layout": "horizontal",
+        "immediate": true,
+        "showButtons": false,
+        "filters": [
+          {
+            "id": "region",
+            "type": "select",
+            "label": "Region",
+            "options": [
+              { "value": "north-america", "label": "North America" },
+              { "value": "europe", "label": "Europe" },
+              { "value": "asia", "label": "Asia" }
+            ]
+          },
+          {
+            "id": "storeType",
+            "type": "select",
+            "label": "Store Type",
+            "options": [
+              { "value": "flagship", "label": "Flagship" },
+              { "value": "retail", "label": "Retail" },
+              { "value": "outlet", "label": "Outlet" }
+            ]
+          }
+        ]
+      }
+    },
+    "map": {
+      "component": "map",
+      "dataSourceId": "storeLocations",
+      "uiConfig": {
+        "mapProvider": "leaflet",
+        "center": [40.7128, -74.0060],
+        "zoom": 4,
+        "minZoom": 3,
+        "maxZoom": 18,
+        "height": "500px",
+        "basemap": "streets",
+        "clustering": {
+          "enabled": true,
+          "radius": 80,
+          "maxZoom": 15,
+          "showCount": true
+        },
+        "controls": {
+          "zoom": true,
+          "scale": true,
+          "attribution": true
+        }
+      },
+      "filtering": {
+        "subscribe": ["region", "storeType"],
+        "clientSide": true,
+        "filterFunction": "default"
+      },
+      "drillDown": {
+        "action": "cross-filter",
+        "filterMappings": {
+          "id": "storeId",
+          "data.region": "region",
+          "data.storeType": "storeType"
+        }
+      }
+    },
+    "scorecard": {
+      "component": "score-card",
+      "dataSourceId": "storeLocations",
+      "uiConfig": {
+        "value": "{{data.length}}",
+        "label": "Total Stores",
+        "icon": "store",
+        "variant": "primary",
+        "size": "medium"
+      },
+      "filtering": {
+        "subscribe": ["region", "storeType"],
+        "clientSide": true,
+        "filterFunction": "default"
+      }
+    },
+    "table": {
+      "component": "data-table",
+      "dataSourceId": "storeLocations",
+      "uiConfig": {
+        "columns": [
+          {
+            "key": "name",
+            "label": "Store Name",
+            "sortable": true
+          },
+          {
+            "key": "region",
+            "label": "Region",
+            "sortable": true
+          },
+          {
+            "key": "storeType",
+            "label": "Type",
+            "sortable": true
+          },
+          {
+            "key": "revenue",
+            "label": "Revenue",
+            "format": "currency",
+            "sortable": true,
+            "align": "right"
+          },
+          {
+            "key": "employees",
+            "label": "Employees",
+            "format": "number",
+            "sortable": true,
+            "align": "right"
+          }
+        ],
+        "sortable": true,
+        "pageable": true,
+        "pageSize": 10,
+        "striped": true,
+        "hoverable": true,
+        "bordered": true
+      },
+      "filtering": {
+        "subscribe": ["region", "storeType"],
+        "clientSide": true,
+        "filterFunction": "default"
+      },
+      "drillDown": {
+        "action": "detail-panel",
+        "contextMapping": {
+          "storeId": "id",
+          "storeName": "name",
+          "storeData": "data"
+        },
+        "detailPanel": {
+          "title": "Store Details: {{storeName}}",
+          "width": "500px"
+        }
+      }
+    }
+  }
+}
+
+
+

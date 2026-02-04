@@ -1,0 +1,243 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Spectrum/Components/SpectrumChart/Dependencies" />
+
+# Dependencies
+
+## External Dependencies
+
+### Chart.js (v4.4+)
+The primary dependency for chart rendering and visualization.
+
+**Installation:**
+```bash
+npm install chart.js
+```
+
+**What it provides:**
+- Core chart rendering engine
+- 8 chart types (line, bar, pie, doughnut, radar, polarArea, bubble, scatter)
+- Responsive and animated charts
+- Extensive configuration options
+- Plugin system for extensibility
+
+**Chart.js Components Used:**
+- `CategoryScale` - Category axis
+- `LinearScale` - Linear numeric axis
+- `PointElement` - Points for line/scatter charts
+- `LineElement` - Lines for line charts
+- `BarElement` - Bars for bar charts
+- `ArcElement` - Arcs for pie/doughnut charts
+- `RadialLinearScale` - Radial axis for radar/polar charts
+- `Filler` - Area fills under lines
+- `Tooltip` - Interactive tooltips
+- `Legend` - Chart legends
+- `Title` - Chart titles
+
+## Internal Dependencies
+
+### Stencil.js Core
+The component framework providing:
+- `@Component` decorator
+- `@Prop`, `@State`, `@Element` decorators
+- `@Watch` decorator for property changes
+- JSX rendering with `h()` function
+- Component lifecycle methods
+
+### TypeScript
+Strict type checking and interfaces:
+- `ChartType` from Chart.js
+- `ChartConfiguration` from Chart.js
+- Custom `SpectrumChartConfig` interface
+- Custom `SpectrumChartData` interface
+
+### Spectrum Design Tokens
+CSS custom properties from the Spectrum design system:
+- `--spectrum-sys-color-*` - Color tokens
+- `--spectrum-sys-spacing-*` - Spacing tokens
+- `--spectrum-sys-shape-*` - Shape tokens (border radius)
+- `--spectrum-sys-font-*` - Typography tokens
+
+## Component Relationships
+
+### Standalone Usage
+No dependencies on other Spectrum components.
+
+```html
+<spectrum-chart
+  type="line"
+  data='...'
+></spectrum-chart>
+```
+
+### Dashboard Integration
+Used by `spectrum-dashboard` as a widget:
+
+```
+spectrum-dashboard
+  └── dashboard-widget-host
+        └── spectrum-chart
+```
+
+**Integration Points:**
+- Widget Registry: Maps chart types to `spectrum-chart`
+- DataSourceManager: Provides data to chart
+- Dashboard Store: Manages filter state
+- Context: Passes global context for data hydration
+
+### Widget Registry
+All chart types map to the same component:
+
+```typescript
+const widgetRegistry = {
+  'line-chart': 'spectrum-chart',
+  'bar-chart': 'spectrum-chart',
+  'pie-chart': 'spectrum-chart',
+  'doughnut-chart': 'spectrum-chart',
+  'radar-chart': 'spectrum-chart',
+  'polar-chart': 'spectrum-chart',
+  'bubble-chart': 'spectrum-chart',
+  'scatter-chart': 'spectrum-chart',
+};
+```
+
+## Optional Dependencies
+
+### Dashboard Features (Optional)
+When used as a dashboard widget:
+- `@stencil/store` - State management
+- `DataSourceManager` - Data fetching
+- `DashboardStore` - Filter coordination
+
+### Advanced Features (Future)
+Potential future dependencies:
+- `chart.js-plugin-annotation` - Annotations and markers
+- `chart.js-plugin-zoom` - Zoom and pan
+- `chart.js-plugin-datalabels` - Data labels on points
+
+## Peer Dependencies
+
+None. The component is self-contained with Chart.js as the only external dependency.
+
+## Bundle Size
+
+- **Component**: ~8KB (minified)
+- **Chart.js**: ~190KB (minified)
+- **Total**: ~198KB (minified)
+- **Gzipped**: ~52KB
+
+Chart.js is tree-shakeable - only imported chart types are included in the bundle.
+
+## Browser Compatibility
+
+**Required by Chart.js:**
+- ES6 support (classes, arrow functions, template literals)
+- Canvas API
+- Resize Observer API (polyfill available if needed)
+
+**Supported Browsers:**
+- Chrome 60+
+- Firefox 55+
+- Safari 11+
+- Edge 79+
+
+## Installation
+
+```bash
+# Install Chart.js
+npm install chart.js@^4.4.1
+
+# The component is part of the Spectrum core package
+# No additional installation needed
+```
+
+## Import Structure
+
+```typescript
+// Chart.js imports (in component)
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  RadialLinearScale,
+  Filler,
+  Tooltip,
+  Legend,
+  Title,
+  type ChartType,
+  type ChartConfiguration,
+} from 'chart.js';
+
+// Register Chart.js components
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  RadialLinearScale,
+  Filler,
+  Tooltip,
+  Legend,
+  Title
+);
+```
+
+## Dependency Graph
+
+```
+spectrum-chart
+  ├── chart.js (external) [REQUIRED]
+  │   ├── CategoryScale
+  │   ├── LinearScale
+  │   ├── PointElement
+  │   ├── LineElement
+  │   ├── BarElement
+  │   ├── ArcElement
+  │   ├── RadialLinearScale
+  │   ├── Filler
+  │   ├── Tooltip
+  │   ├── Legend
+  │   └── Title
+  │
+  ├── @stencil/core [FRAMEWORK]
+  │   ├── Component decorator
+  │   ├── Props decorators
+  │   ├── State management
+  │   └── Lifecycle hooks
+  │
+  └── Spectrum Design Tokens [STYLING]
+      ├── Color system
+      ├── Spacing system
+      ├── Shape system
+      └── Typography system
+```
+
+## Version Requirements
+
+| Dependency | Version | Required |
+|------------|---------|----------|
+| Chart.js | 4.4+ | Yes |
+| @stencil/core | Latest | Yes (framework) |
+| TypeScript | 4.5+ | Yes (dev) |
+| Node.js | 16+ | Yes (dev) |
+
+## Updates and Maintenance
+
+**Chart.js:**
+- Major version updates may require component updates
+- Minor version updates are generally compatible
+- Check [Chart.js changelog](https://github.com/chartjs/Chart.js/releases) for breaking changes
+
+**Spectrum Design Tokens:**
+- Updated automatically with Spectrum design system
+- Component adapts to token changes without code changes
+- Theme switching handled by CSS custom properties
+
+
+

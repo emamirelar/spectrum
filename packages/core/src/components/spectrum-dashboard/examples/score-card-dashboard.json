@@ -1,0 +1,260 @@
+{
+  "id": "analytics-score-card-dashboard",
+  "layout": {
+    "template": [
+      "filters filters filters filters",
+      "score1 score2 score3 score4",
+      "score5 score6 score7 score8"
+    ],
+    "gap": "24px",
+    "columns": "repeat(4, 1fr)",
+    "rows": "auto 1fr 1fr"
+  },
+  "dataSources": {
+    "analytics-data": {
+      "id": "analytics-data",
+      "endpoint": "/api/analytics/metrics",
+      "refreshInterval": 300000,
+      "supportsServerFiltering": true,
+      "filterParamMap": {
+        "dateRange": "date_range",
+        "region": "region"
+      }
+    }
+  },
+  "filters": {
+    "dateRange": {
+      "type": "dateRange",
+      "label": "Date Range",
+      "defaultValue": { "start": "2024-01-01", "end": "2024-12-31" }
+    },
+    "region": {
+      "type": "select",
+      "label": "Region",
+      "options": [
+        { "label": "All Regions", "value": "all" },
+        { "label": "North America", "value": "NA" },
+        { "label": "Europe", "value": "EU" },
+        { "label": "Asia Pacific", "value": "APAC" }
+      ]
+    }
+  },
+  "widgets": {
+    "filters": {
+      "component": "filter-panel",
+      "uiConfig": {
+        "layout": "horizontal"
+      },
+      "bus": {
+        "publish": ["dateRange", "region"]
+      }
+    },
+    "score1": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "Total Revenue",
+        "subtitle": "Last 30 days",
+        "format": "currency",
+        "icon": "account_balance_wallet",
+        "variant": "success",
+        "size": "medium",
+        "trend": {
+          "direction": "up",
+          "value": "+12.5%",
+          "label": "vs last month"
+        }
+      },
+      "drillDown": {
+        "action": "dashboard-nav",
+        "targetView": "revenue-analytics",
+        "contextMapping": {
+          "metric": "totalRevenue"
+        }
+      }
+    },
+    "score2": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "New Customers",
+        "subtitle": "This month",
+        "format": "number",
+        "icon": "person_add",
+        "variant": "default",
+        "size": "medium",
+        "trend": {
+          "direction": "up",
+          "value": "+23",
+          "label": "vs last month"
+        },
+        "comparison": {
+          "value": "1,222",
+          "label": "last month"
+        }
+      },
+      "drillDown": {
+        "action": "hierarchical-nav",
+        "targetView": "customer-details",
+        "breadcrumbLabel": "Customers",
+        "preserveFilters": true,
+        "contextMapping": {
+          "metric": "newCustomers"
+        }
+      }
+    },
+    "score3": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "Conversion Rate",
+        "subtitle": "Current period",
+        "format": "percentage",
+        "icon": "trending_up",
+        "variant": "warning",
+        "size": "medium",
+        "trend": {
+          "direction": "down",
+          "value": "-2.3%",
+          "label": "vs last week",
+          "isPositive": false
+        }
+      }
+    },
+    "score4": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "Active Sessions",
+        "subtitle": "Right now",
+        "format": "number",
+        "icon": "people",
+        "variant": "info",
+        "size": "medium",
+        "comparison": {
+          "value": "735",
+          "label": "yesterday"
+        }
+      }
+    },
+    "score5": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "Avg Order Value",
+        "subtitle": "Per transaction",
+        "format": "currency",
+        "icon": "shopping_cart",
+        "variant": "default",
+        "size": "medium",
+        "trend": {
+          "direction": "up",
+          "value": "+$0.32",
+          "label": "vs last month"
+        }
+      }
+    },
+    "score6": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "Monthly Target",
+        "subtitle": "Progress to goal",
+        "format": "currency",
+        "icon": "flag",
+        "variant": "default",
+        "size": "medium",
+        "target": 100000,
+        "showProgress": true,
+        "trend": {
+          "direction": "up",
+          "value": "85%",
+          "label": "completed"
+        }
+      }
+    },
+    "score7": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "Customer Satisfaction",
+        "subtitle": "Average rating",
+        "format": "decimal",
+        "icon": "star",
+        "variant": "success",
+        "size": "medium",
+        "suffix": "/ 5.0",
+        "trend": {
+          "direction": "up",
+          "value": "+0.3",
+          "label": "vs last quarter"
+        }
+      }
+    },
+    "score8": {
+      "component": "score-card",
+      "dataSourceId": "analytics-data",
+      "filtering": {
+        "subscribe": ["dateRange", "region"],
+        "mode": "server"
+      },
+      "uiConfig": {
+        "label": "Support Tickets",
+        "subtitle": "Open issues",
+        "format": "number",
+        "icon": "support",
+        "variant": "error",
+        "size": "medium",
+        "trend": {
+          "direction": "up",
+          "value": "+5",
+          "label": "new today",
+          "isPositive": false
+        }
+      },
+      "drillDown": {
+        "action": "detail-panel",
+        "detailPanel": {
+          "title": "Support Ticket Details",
+          "component": "ticket-detail-card",
+          "width": "600px"
+        },
+        "contextMapping": {
+          "ticketCount": "value",
+          "period": "dateRange"
+        }
+      }
+    }
+  }
+}
+
+
+

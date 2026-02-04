@@ -1,0 +1,179 @@
+// ==============================================
+// Spectrum Filter Panel Component Styles
+// ==============================================
+// BEM naming convention: spectrum-filter-panel (block), __element (element), --modifier (modifier)
+// Responsive design using Flexbox
+// CSS custom properties for theming integration
+// Note: This component uses shadow: false, so styles apply to the element tag
+// ==============================================
+
+spectrum-filter-panel {
+  display: block;
+  
+  // Core component properties using Spectrum tokens
+  --filter-panel-background: var(--spectrum-color-surface, #ffffff);
+  --filter-panel-color: var(--spectrum-color-on-surface, #1a1a1a);
+  --filter-panel-border-radius: var(--spectrum-sys-border-radius-large, 12px);
+  --filter-panel-padding: var(--spectrum-sys-spacing-large, 1.5rem);
+  --filter-panel-gap: var(--spectrum-sys-spacing-large, 1.5rem);
+  --filter-panel-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --filter-panel-border: 1px solid var(--spectrum-color-outline-variant, rgba(0, 0, 0, 0.12));
+  
+  // Transition
+  --filter-panel-transition: all var(--spectrum-sys-animation-duration-fast, 150ms) ease-in-out;
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-filter-panel {
+  background-color: var(--filter-panel-background);
+  color: var(--filter-panel-color);
+  border-radius: var(--filter-panel-border-radius);
+  border: var(--filter-panel-border);
+  padding: var(--filter-panel-padding);
+  font-family: var(--filter-panel-font-family);
+  
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--filter-panel-gap);
+  }
+  
+  &__filters {
+    display: flex;
+    gap: var(--filter-panel-gap);
+    flex-wrap: wrap;
+    align-items: flex-end; // Align items to bottom for consistent button alignment
+  }
+  
+  &__filter {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+    
+    // Spectrum components handle their own spacing
+    spectrum-select,
+    spectrum-text-input {
+      width: 100%;
+    }
+    
+    &--checkbox {
+      flex-direction: row;
+      align-items: center;
+      min-width: auto;
+    }
+    
+    &--date-range {
+      min-width: 320px;
+    }
+  }
+  
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.75rem);
+    font-weight: var(--spectrum-sys-font-weight-medium, 500);
+    color: var(--spectrum-color-on-surface, #1a1a1a);
+    margin-bottom: var(--spectrum-sys-spacing-small, 0.5rem);
+  }
+  
+  &__required {
+    color: var(--spectrum-color-error, #d32f2f);
+  }
+  
+  &__date-range {
+    display: flex;
+    align-items: center;
+    gap: var(--spectrum-sys-spacing-small, 0.5rem);
+    
+    spectrum-text-input {
+      flex: 1;
+    }
+  }
+  
+  &__date-separator {
+    font-size: var(--spectrum-sys-typescale-body-small-size, 0.75rem);
+    color: var(--spectrum-color-on-surface-variant, #666666);
+    padding: 0 var(--spectrum-sys-spacing-small, 0.5rem);
+  }
+  
+  &__actions {
+    display: flex;
+    gap: var(--spectrum-sys-spacing, 1rem);
+    justify-content: flex-end;
+    padding-top: var(--filter-panel-gap);
+    border-top: 1px solid var(--spectrum-color-outline-variant, rgba(0, 0, 0, 0.12));
+    margin-top: var(--spectrum-sys-spacing-small, 0.5rem);
+  }
+  
+  // ==============================================
+  // Layout Variations
+  // ==============================================
+  &--vertical {
+    .spectrum-filter-panel__filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .spectrum-filter-panel__filter {
+      min-width: 100%;
+    }
+  }
+  
+  &--horizontal {
+    .spectrum-filter-panel__filters {
+      flex-direction: row;
+    }
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+@media (max-width: 768px) {
+  .spectrum-filter-panel {
+    &__filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    &__filter {
+      min-width: 100%;
+    }
+    
+    &__date-range {
+      flex-direction: column;
+      
+      spectrum-text-input {
+        width: 100%;
+      }
+    }
+    
+    &__actions {
+      flex-direction: column;
+      
+      spectrum-button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ==============================================
+// Accessibility
+// ==============================================
+@media (prefers-reduced-motion: reduce) {
+  spectrum-filter-panel {
+    --filter-panel-transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-filter-panel {
+    border-width: 2px;
+  }
+}
+

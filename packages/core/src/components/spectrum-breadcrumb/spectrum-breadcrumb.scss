@@ -1,0 +1,182 @@
+// ==============================================
+// Spectrum Breadcrumb Component Styles
+// ==============================================
+// BEM naming convention: spectrum-breadcrumb (block), __element (element), --modifier (modifier)
+// Responsive breadcrumb navigation with collapse support
+// CSS custom properties for theming integration
+// ==============================================
+
+// ==============================================
+// Root Variables and Custom Properties
+// ==============================================
+spectrum-breadcrumb {
+  display: block;
+  
+  // Core component properties using Spectrum tokens
+  --breadcrumb-font-family: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --breadcrumb-font-size: var(--spectrum-sys-font-size-small, 0.875rem);
+  --breadcrumb-line-height: 1.5;
+  --breadcrumb-padding: var(--spectrum-sys-spacing-small, 0.5rem) 0;
+  
+  // Link colors using Spectrum tokens
+  --breadcrumb-link-color: var(--spectrum-sys-color-primary, #0070d2);
+  --breadcrumb-link-hover-color: var(--spectrum-sys-color-secondary, #005fb2);
+  --breadcrumb-current-color: var(--spectrum-color-on-surface, var(--spectrum-sys-color-on-surface, #333333));
+  --breadcrumb-separator-color: var(--spectrum-color-outline, #72777f);
+  
+  // Interactive states
+  --breadcrumb-link-hover-text-decoration: underline;
+  --breadcrumb-focus-outline: var(--spectrum-sys-color-primary, #0070d2);
+  
+  // Spacing
+  --breadcrumb-item-spacing: var(--spectrum-sys-spacing-small, 0.5rem);
+  --breadcrumb-separator-spacing: 0.25rem;
+  
+  // Transitions using Spectrum animation tokens
+  --breadcrumb-transition: color var(--spectrum-sys-animation-duration-fast, 200ms) var(--spectrum-sys-animation-timing-function, ease-in-out);
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+.spectrum-breadcrumb {
+  font-family: var(--breadcrumb-font-family);
+  font-size: var(--breadcrumb-font-size);
+  line-height: var(--breadcrumb-line-height);
+  padding: var(--breadcrumb-padding);
+  
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--breadcrumb-item-spacing);
+  }
+  
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--breadcrumb-separator-spacing);
+    
+    // Collapsed indicator
+    &--collapsed {
+      .spectrum-breadcrumb__ellipsis {
+        color: var(--breadcrumb-separator-color);
+        font-weight: bold;
+        padding: 0 var(--breadcrumb-separator-spacing);
+      }
+    }
+  }
+  
+  &__link {
+    color: var(--breadcrumb-link-color);
+    text-decoration: none;
+    transition: var(--breadcrumb-transition);
+    cursor: pointer;
+    
+    // Hover state
+    &:hover {
+      color: var(--breadcrumb-link-hover-color);
+      text-decoration: var(--breadcrumb-link-hover-text-decoration);
+    }
+    
+    // Focus state (keyboard navigation)
+    &:focus {
+      outline: 2px solid var(--breadcrumb-focus-outline);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+    
+    // Focus visible (modern browsers)
+    &:focus-visible {
+      outline: 2px solid var(--breadcrumb-focus-outline);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+    
+    // Active state
+    &:active {
+      opacity: 0.8;
+    }
+  }
+  
+  &__current {
+    color: var(--breadcrumb-current-color);
+    font-weight: 500;
+    cursor: default;
+  }
+  
+  &__separator {
+    color: var(--breadcrumb-separator-color);
+    user-select: none;
+    padding: 0 var(--breadcrumb-separator-spacing);
+  }
+}
+
+// ==============================================
+// Responsive Design
+// ==============================================
+
+// Mobile devices
+@media (max-width: 768px) {
+  .spectrum-breadcrumb {
+    --breadcrumb-font-size: var(--spectrum-sys-typescale-body-x-small-size, 0.75rem);
+    
+    &__list {
+      --breadcrumb-item-spacing: var(--spectrum-sys-spacing-2x-small, 0.125rem);
+      --breadcrumb-separator-spacing: var(--spectrum-sys-spacing-2x-small, 0.125rem);
+    }
+  }
+}
+
+// ==============================================
+// Accessibility Enhancements
+// ==============================================
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .spectrum-breadcrumb {
+    &__link {
+      border-bottom: 1px solid currentColor;
+      
+      &:focus-visible {
+        outline: 3px solid ButtonText;
+      }
+    }
+    
+    &__current {
+      border-bottom: 2px solid currentColor;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-breadcrumb {
+    --breadcrumb-transition: none;
+  }
+}
+
+// Focus visible polyfill for older browsers
+.spectrum-breadcrumb__link:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// ==============================================
+// Print Styles
+// ==============================================
+@media print {
+  .spectrum-breadcrumb {
+    &__link {
+      color: #000;
+      text-decoration: underline;
+    }
+    
+    &__separator {
+      color: #000;
+    }
+  }
+}
+

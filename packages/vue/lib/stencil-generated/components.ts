@@ -8,6 +8,16 @@ import type { JSX } from '@unops-itg-npm/cpit-spectrum';
 
 
 
+export const DashboardWidgetHost = /*@__PURE__*/ defineContainer<JSX.DashboardWidgetHost>('dashboard-widget-host', undefined, [
+  'area',
+  'widgetConfig',
+  'dataSourceManager',
+  'globalContext',
+  'dataSources',
+  'debug'
+]);
+
+
 export const SpectrumAccordion = /*@__PURE__*/ defineContainer<JSX.SpectrumAccordion>('spectrum-accordion', undefined, [
   'expanded',
   'label',
@@ -112,6 +122,19 @@ export const SpectrumBadge = /*@__PURE__*/ defineContainer<JSX.SpectrumBadge>('s
 ]);
 
 
+export const SpectrumBreadcrumb = /*@__PURE__*/ defineContainer<JSX.SpectrumBreadcrumb>('spectrum-breadcrumb', undefined, [
+  'items',
+  'config',
+  'separator',
+  'maxItems',
+  'showHome',
+  'homeLabel',
+  'breadcrumbClick'
+], [
+  'breadcrumbClick'
+]);
+
+
 export const SpectrumButton = /*@__PURE__*/ defineContainer<JSX.SpectrumButton>('spectrum-button', undefined, [
   'debug',
   'variant',
@@ -165,6 +188,24 @@ export const SpectrumCard = /*@__PURE__*/ defineContainer<JSX.SpectrumCard>('spe
   'cardAction'
 ], [
   'cardAction'
+]);
+
+
+export const SpectrumChart = /*@__PURE__*/ defineContainer<JSX.SpectrumChart>('spectrum-chart', undefined, [
+  'config',
+  'data',
+  'type',
+  'chartTitle',
+  'width',
+  'height',
+  'loading',
+  'context',
+  'debug',
+  'elementClick',
+  'legendClick'
+], [
+  'elementClick',
+  'legendClick'
 ]);
 
 
@@ -295,6 +336,43 @@ export const SpectrumCookieCompliance = /*@__PURE__*/ defineContainer<JSX.Spectr
 ]);
 
 
+export const SpectrumDashboard = /*@__PURE__*/ defineContainer<JSX.SpectrumDashboard>('spectrum-dashboard', undefined, [
+  'config',
+  'context',
+  'debug',
+  'dashboardNav',
+  'dataRefresh'
+], [
+  'dashboardNav',
+  'dataRefresh'
+]);
+
+
+export const SpectrumDataTable = /*@__PURE__*/ defineContainer<JSX.SpectrumDataTable>('spectrum-data-table', undefined, [
+  'data',
+  'config',
+  'columns',
+  'sortable',
+  'defaultSort',
+  'pageable',
+  'pageSize',
+  'maxHeight',
+  'selectable',
+  'loading',
+  'context',
+  'debug',
+  'rowClick',
+  'rowsSelected',
+  'sortChange',
+  'pageChange'
+], [
+  'rowClick',
+  'rowsSelected',
+  'sortChange',
+  'pageChange'
+]);
+
+
 export const SpectrumDialog = /*@__PURE__*/ defineContainer<JSX.SpectrumDialog>('spectrum-dialog', undefined, [
   'debug',
   'open',
@@ -314,6 +392,23 @@ export const SpectrumDialog = /*@__PURE__*/ defineContainer<JSX.SpectrumDialog>(
 ], [
   'dialogAction',
   'dialogClose'
+]);
+
+
+export const SpectrumFilterPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumFilterPanel>('spectrum-filter-panel', undefined, [
+  'filters',
+  'layout',
+  'showButtons',
+  'immediate',
+  'context',
+  'debug',
+  'filterChange',
+  'filterApply',
+  'filterReset'
+], [
+  'filterChange',
+  'filterApply',
+  'filterReset'
 ]);
 
 
@@ -420,6 +515,21 @@ export const SpectrumImageGallery = /*@__PURE__*/ defineContainer<JSX.SpectrumIm
 ]);
 
 
+export const SpectrumMap = /*@__PURE__*/ defineContainer<JSX.SpectrumMap>('spectrum-map', undefined, [
+  'mapProvider',
+  'config',
+  'data',
+  'debug',
+  'markerClick',
+  'regionClick',
+  'boundsChange'
+], [
+  'markerClick',
+  'regionClick',
+  'boundsChange'
+]);
+
+
 export const SpectrumMediaLibrary = /*@__PURE__*/ defineContainer<JSX.SpectrumMediaLibrary>('spectrum-media-library', undefined, [
   'mediaItems',
   'width',
@@ -511,6 +621,28 @@ export const SpectrumRailItem = /*@__PURE__*/ defineContainer<JSX.SpectrumRailIt
 ]);
 
 
+export const SpectrumScoreCard = /*@__PURE__*/ defineContainer<JSX.SpectrumScoreCard>('spectrum-score-card', undefined, [
+  'config',
+  'value',
+  'label',
+  'subtitle',
+  'format',
+  'variant',
+  'size',
+  'icon',
+  'iconPosition',
+  'loading',
+  'valuePrefix',
+  'valueSuffix',
+  'trend',
+  'comparison',
+  'target',
+  'showProgress',
+  'debug',
+  'data'
+]);
+
+
 export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSearchInput>('spectrum-search-input', undefined, [
   'maxLines',
   'placeholder',
@@ -519,6 +651,7 @@ export const SpectrumSearchInput = /*@__PURE__*/ defineContainer<JSX.SpectrumSea
   'searchIconPosition',
   'searchButtonVariant',
   'clearOnSubmit',
+  'disableSubmitWhenEmpty',
   'searchSubmit',
   'searchInput'
 ], [
@@ -643,6 +776,45 @@ export const SpectrumSwitch = /*@__PURE__*/ defineContainer<JSX.SpectrumSwitch>(
   'switchChange'
 ], [
   'switchChange'
+]);
+
+
+export const SpectrumTextInput = /*@__PURE__*/ defineContainer<JSX.SpectrumTextInput>('spectrum-text-input', undefined, [
+  'type',
+  'value',
+  'name',
+  'placeholder',
+  'label',
+  'helperText',
+  'errorMessage',
+  'disabled',
+  'readonly',
+  'required',
+  'size',
+  'min',
+  'max',
+  'step',
+  'minlength',
+  'maxlength',
+  'pattern',
+  'autocomplete',
+  'leadingIcon',
+  'trailingIcon',
+  'clearable',
+  'inputId',
+  'inputChange',
+  'inputInput',
+  'inputFocus',
+  'inputBlur',
+  'inputClear',
+  'trailingIconClick'
+], [
+  'inputChange',
+  'inputInput',
+  'inputFocus',
+  'inputBlur',
+  'inputClear',
+  'trailingIconClick'
 ]);
 
 

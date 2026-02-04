@@ -62,6 +62,18 @@ This map shows the relationships between Spectrum components. Keep this updated 
   - Used by: Media galleries, portfolios, documentation systems, and media management applications
   - Purpose: Display images and videos in a scrollable grid with integrated lightbox viewer, automatic YouTube thumbnail extraction, and full keyboard navigation
 
+- **spectrum-dashboard**: Dashboard container component
+  - Dependencies: @stencil/store, DataSourceManager, DashboardStore, WidgetRegistry
+  - Used by: Dashboard applications, analytics interfaces, monitoring views
+  - Purpose: JSON-driven dashboard engine with CSS Grid layout, centralized data management, and filtering
+  - Status: Production ready - Core infrastructure complete
+
+- **spectrum-chart**: Chart visualization component
+  - Dependencies: chart.js (external)
+  - Used by: Data visualization, dashboard widgets, analytics displays
+  - Purpose: Flexible chart component supporting multiple chart types (line, bar, pie, etc.)
+  - Status: Production ready - Works standalone and as dashboard widget
+
 ### Utility Components
 - **spectrum-context-menu**: Contextual menu overlay
   - Dependencies: None (pure component)
@@ -219,7 +231,8 @@ Level 1 (Atomic):
 ├── spectrum-wallpaper
 ├── spectrum-carousel
 ├── spectrum-megamenu
-└── spectrum-menu
+├── spectrum-menu
+└── spectrum-chart (depends on: chart.js external)
 
 Level 2 (Composed):
 ├── spectrum-accordion (depends on: spectrum-chip)
@@ -235,7 +248,8 @@ Level 2 (Composed):
 
 Level 3 (Complex):
 ├── spectrum-rail (depends on: spectrum-button, spectrum-search-input, spectrum-collapsible-list, spectrum-rail-item, spectrum-context-menu)
-└── spectrum-conversation-panel (depends on: spectrum-accordion, spectrum-button, spectrum-chip, spectrum-panel)
+├── spectrum-conversation-panel (depends on: spectrum-accordion, spectrum-button, spectrum-chip, spectrum-panel)
+└── spectrum-dashboard (depends on: @stencil/store, DataSourceManager, DashboardStore, WidgetRegistry)
 
 Level 4 (Layout Components - Production Ready) ✅:
 ├── spectrum-app-layout

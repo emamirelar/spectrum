@@ -40,6 +40,11 @@ export class SpectrumSearchInput {
    */
   @Prop() clearOnSubmit: boolean = false;
   
+  /**
+   * Whether to disable the submit button when the input is empty
+   */
+  @Prop() disableSubmitWhenEmpty: boolean = true;
+  
   @State() searchText: string = '';
   @State() isListening: boolean = false;
   @State() isSpeechAvailable: boolean = false;
@@ -117,7 +122,8 @@ export class SpectrumSearchInput {
   };
   
   private handleKeyDown = (event: KeyboardEvent) => {
-    if (this.enableEnterSubmit && event.key === 'Enter' && !event.shiftKey) {
+    const isSubmitDisabled = this.disableSubmitWhenEmpty && !this.searchText.trim();
+    if (this.enableEnterSubmit && event.key === 'Enter' && !event.shiftKey && !isSubmitDisabled) {
       event.preventDefault();
       this.handleSearch();
     }
@@ -169,6 +175,8 @@ export class SpectrumSearchInput {
   };
   
   render() {
+    const isSubmitDisabled = this.disableSubmitWhenEmpty && !this.searchText.trim();
+    
     const searchButton = (
       <spectrum-button
         variant={this.searchButtonVariant}
@@ -177,6 +185,7 @@ export class SpectrumSearchInput {
         leftIcon="search"
         showLeftIcon={true}
         onClick={this.handleSearch}
+        disabled={isSubmitDisabled}
         aria-label="Search"
       />
     );

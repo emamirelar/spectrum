@@ -39,6 +39,7 @@ interface SpectrumSearchInputElement extends HTMLElement {
   searchIconPosition: 'left' | 'right';
   searchButtonVariant: 'primary' | 'ghost';
   clearOnSubmit: boolean;
+  disableSubmitWhenEmpty: boolean;
   setFocus(): Promise<void>;
 }
 
@@ -153,6 +154,7 @@ The \`spectrum-search-input\` component provides an advanced search interface wi
     searchIconPosition: 'right',
     searchButtonVariant: 'primary',
     clearOnSubmit: false,
+    disableSubmitWhenEmpty: true,
     demoMode: 'standard',
     withLiveResults: false
   },
@@ -215,6 +217,14 @@ The \`spectrum-search-input\` component provides an advanced search interface wi
         defaultValue: { summary: 'false' }
       }
     },
+    disableSubmitWhenEmpty: {
+      control: 'boolean',
+      description: 'Disable the submit button when the input is empty',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
+    },
     demoMode: {
       control: { type: 'select' },
       options: ['standard', 'filtering', 'chat', 'command'],
@@ -250,6 +260,7 @@ const renderSearchInput = (args: SpectrumSearchInputArgs) => {
         search-icon-position=${args.searchIconPosition}
         search-button-variant=${args.searchButtonVariant}
         .clearOnSubmit=${args.clearOnSubmit}
+        .disableSubmitWhenEmpty=${args.disableSubmitWhenEmpty}
         @searchSubmit=${(e: CustomEvent) => action('searchSubmit')(e.detail)}
         @searchInput=${(e: CustomEvent) => {
           action('searchInput')(e.detail);
@@ -306,6 +317,12 @@ const renderSearchInput = (args: SpectrumSearchInputArgs) => {
             <strong style="color: var(--spectrum-sys-color-success);">🧹 Clear on Submit</strong><br/>
             <small style="color: var(--spectrum-sys-color-on-surface-variant);">
               ${args.clearOnSubmit ? 'Enabled' : 'Disabled'}
+            </small>
+          </div>
+          <div style="padding: 0.75rem; background: var(--spectrum-sys-color-surface); border-radius: 4px;">
+            <strong style="color: var(--spectrum-sys-color-warning);">🚫 Disable When Empty</strong><br/>
+            <small style="color: var(--spectrum-sys-color-on-surface-variant);">
+              ${args.disableSubmitWhenEmpty ? 'Enabled' : 'Disabled'}
             </small>
           </div>
         </div>
