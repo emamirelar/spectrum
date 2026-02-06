@@ -1,0 +1,260 @@
+{
+  "id": "store-analytics-multiview",
+  "navigation": {
+    "initialView": "overview",
+    "enableBreadcrumbs": true,
+    "breadcrumb": {
+      "showHome": false,
+      "separator": "/"
+    }
+  },
+  "sharedDataSources": {
+    "stores": {
+      "id": "stores",
+      "endpoint": "/data/stores.json",
+      "method": "GET",
+      "refreshInterval": 60000
+    },
+    "transactions": {
+      "id": "transactions",
+      "endpoint": "/data/store-transactions.json",
+      "method": "GET",
+      "refreshInterval": 60000
+    },
+    "items": {
+      "id": "items",
+      "endpoint": "/data/transaction-items.json",
+      "method": "GET",
+      "refreshInterval": 60000
+    }
+  },
+  "views": {
+    "overview": {
+      "breadcrumbLabel": "Store Map",
+      "layout": {
+        "template": [
+          "map map map map"
+        ],
+        "columns": "1fr 1fr 1fr 1fr",
+        "rows": "1fr",
+        "gap": "1rem"
+      },
+      "widgets": {
+        "map": {
+          "component": "map",
+          "dataSourceId": "stores",
+          "uiConfig": {
+            "mapProvider": "leaflet",
+            "center": [40.7128, -74.006],
+            "zoom": 10,
+            "height": "100%",
+            "controls": {
+              "zoom": true,
+              "attribution": true
+            },
+            "clustering": {
+              "enabled": true,
+              "radius": 60
+            },
+            "markerConfig": {
+              "idField": "id",
+              "positionField": "position",
+              "labelField": "name",
+              "tooltipField": "tooltip",
+              "dataFields": ["id", "name", "region", "city", "revenue", "units", "employees"]
+            }
+          },
+          "drillDown": {
+            "action": "dashboard-nav",
+            "targetView": "store-detail",
+            "contextMapping": {
+              "storeId": "id",
+              "storeName": "name",
+              "storeRegion": "region"
+            }
+          }
+        }
+      }
+    },
+    "store-detail": {
+      "breadcrumbLabel": "{{context.storeName}}",
+      "layout": {
+        "template": [
+          "breadcrumb breadcrumb breadcrumb breadcrumb",
+          "revenue units avgorder conversion",
+          "transactions transactions transactions transactions"
+        ],
+        "columns": "1fr 1fr 1fr 1fr",
+        "rows": "auto auto 1fr",
+        "gap": "1.5rem"
+      },
+      "widgets": {
+        "breadcrumb": {
+          "component": "breadcrumb",
+          "uiConfig": {}
+        },
+        "revenue": {
+          "component": "score-card",
+          "dataSourceId": "transactions",
+          "uiConfig": {
+            "label": "Revenue",
+            "icon": "account_balance_wallet",
+            "variant": "success",
+            "size": "medium",
+            "valuePrefix": "$",
+            "transform": "sum(amount)"
+          }
+        },
+        "units": {
+          "component": "score-card",
+          "dataSourceId": "transactions",
+          "uiConfig": {
+            "label": "Transactions",
+            "icon": "receipt_long",
+            "variant": "primary",
+            "size": "medium",
+            "transform": "count()"
+          }
+        },
+        "avgorder": {
+          "component": "score-card",
+          "dataSourceId": "transactions",
+          "uiConfig": {
+            "label": "Avg Order",
+            "icon": "shopping_cart",
+            "variant": "info",
+            "size": "medium",
+            "valuePrefix": "$",
+            "transform": "avg(amount)"
+          }
+        },
+        "conversion": {
+          "component": "score-card",
+          "dataSourceId": "transactions",
+          "uiConfig": {
+            "label": "Items/Order",
+            "icon": "inventory_2",
+            "variant": "warning",
+            "size": "medium",
+            "transform": "avg(items)"
+          }
+        },
+        "transactions": {
+          "component": "data-table",
+          "dataSourceId": "transactions",
+          "uiConfig": {
+            "columns": [
+              { "key": "transactionDate", "label": "Date", "sortable": true },
+              { "key": "customer", "label": "Customer", "sortable": true },
+              { "key": "amount", "label": "Amount", "format": "currency", "sortable": true, "align": "right" },
+              { "key": "items", "label": "Items", "format": "number", "sortable": true, "align": "right" },
+              { "key": "paymentMethod", "label": "Payment", "sortable": true }
+            ],
+            "sortable": true,
+            "pageable": true,
+            "pageSize": 10,
+            "striped": true,
+            "hoverable": true,
+            "bordered": true
+          },
+          "drillDown": {
+            "action": "dashboard-nav",
+            "targetView": "transaction-detail",
+            "contextMapping": {
+              "transactionId": "id",
+              "transactionAmount": "amount",
+              "customerName": "customer"
+            }
+          }
+        }
+      }
+    },
+    "transaction-detail": {
+      "breadcrumbLabel": "Transaction #{{context.transactionId}}",
+      "layout": {
+        "template": [
+          "breadcrumb breadcrumb breadcrumb breadcrumb",
+          "total itemcount discount tax",
+          "lineitems lineitems lineitems lineitems"
+        ],
+        "columns": "1fr 1fr 1fr 1fr",
+        "rows": "auto auto 1fr",
+        "gap": "1.5rem"
+      },
+      "widgets": {
+        "breadcrumb": {
+          "component": "breadcrumb",
+          "uiConfig": {}
+        },
+        "total": {
+          "component": "score-card",
+          "dataSourceId": "items",
+          "uiConfig": {
+            "label": "Total Amount",
+            "icon": "payments",
+            "variant": "success",
+            "size": "medium",
+            "valuePrefix": "$",
+            "transform": "sum(totalPrice)"
+          }
+        },
+        "itemcount": {
+          "component": "score-card",
+          "dataSourceId": "items",
+          "uiConfig": {
+            "label": "Line Items",
+            "icon": "inventory",
+            "variant": "primary",
+            "size": "medium",
+            "transform": "count()"
+          }
+        },
+        "discount": {
+          "component": "score-card",
+          "dataSourceId": "items",
+          "uiConfig": {
+            "label": "Avg Unit Price",
+            "icon": "local_offer",
+            "variant": "info",
+            "size": "medium",
+            "valuePrefix": "$",
+            "transform": "avg(unitPrice)"
+          }
+        },
+        "tax": {
+          "component": "score-card",
+          "dataSourceId": "items",
+          "uiConfig": {
+            "label": "Total Quantity",
+            "icon": "numbers",
+            "variant": "warning",
+            "size": "medium",
+            "transform": "sum(quantity)"
+          }
+        },
+        "lineitems": {
+          "component": "data-table",
+          "dataSourceId": "items",
+          "uiConfig": {
+            "columns": [
+              { "key": "productName", "label": "Product", "sortable": true },
+              { "key": "sku", "label": "SKU", "sortable": true },
+              { "key": "quantity", "label": "Qty", "format": "number", "sortable": true, "align": "right" },
+              { "key": "unitPrice", "label": "Unit Price", "format": "currency", "sortable": true, "align": "right" },
+              { "key": "totalPrice", "label": "Total", "format": "currency", "sortable": true, "align": "right" }
+            ],
+            "sortable": true,
+            "pageable": true,
+            "pageSize": 10,
+            "striped": true,
+            "hoverable": true,
+            "bordered": true
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
