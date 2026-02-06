@@ -1,0 +1,170 @@
+[
+  {
+    "id": "txn-001",
+    "storeId": "store-001",
+    "storeName": "Manhattan Flagship",
+    "transactionDate": "2025-01-15",
+    "amount": 1245.50,
+    "items": 8,
+    "customer": "John Smith",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-002",
+    "storeId": "store-001",
+    "storeName": "Manhattan Flagship",
+    "transactionDate": "2025-01-15",
+    "amount": 892.30,
+    "items": 5,
+    "customer": "Sarah Johnson",
+    "paymentMethod": "Debit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-003",
+    "storeId": "store-001",
+    "storeName": "Manhattan Flagship",
+    "transactionDate": "2025-01-16",
+    "amount": 2156.75,
+    "items": 12,
+    "customer": "Michael Chen",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-004",
+    "storeId": "store-001",
+    "storeName": "Manhattan Flagship",
+    "transactionDate": "2025-01-16",
+    "amount": 567.90,
+    "items": 3,
+    "customer": "Emily Davis",
+    "paymentMethod": "Cash",
+    "status": "completed"
+  },
+  {
+    "id": "txn-005",
+    "storeId": "store-001",
+    "storeName": "Manhattan Flagship",
+    "transactionDate": "2025-01-17",
+    "amount": 1834.20,
+    "items": 9,
+    "customer": "David Wilson",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-006",
+    "storeId": "store-002",
+    "storeName": "Brooklyn Retail",
+    "transactionDate": "2025-01-15",
+    "amount": 678.45,
+    "items": 4,
+    "customer": "Lisa Anderson",
+    "paymentMethod": "Debit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-007",
+    "storeId": "store-002",
+    "storeName": "Brooklyn Retail",
+    "transactionDate": "2025-01-16",
+    "amount": 1123.60,
+    "items": 7,
+    "customer": "Robert Martinez",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-008",
+    "storeId": "store-002",
+    "storeName": "Brooklyn Retail",
+    "transactionDate": "2025-01-17",
+    "amount": 445.80,
+    "items": 2,
+    "customer": "Jennifer Taylor",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-009",
+    "storeId": "store-003",
+    "storeName": "Queens Outlet",
+    "transactionDate": "2025-01-15",
+    "amount": 234.50,
+    "items": 6,
+    "customer": "James Brown",
+    "paymentMethod": "Cash",
+    "status": "completed"
+  },
+  {
+    "id": "txn-010",
+    "storeId": "store-003",
+    "storeName": "Queens Outlet",
+    "transactionDate": "2025-01-16",
+    "amount": 567.30,
+    "items": 9,
+    "customer": "Patricia White",
+    "paymentMethod": "Debit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-011",
+    "storeId": "store-004",
+    "storeName": "Los Angeles Flagship",
+    "transactionDate": "2025-01-15",
+    "amount": 1987.65,
+    "items": 10,
+    "customer": "Christopher Lee",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-012",
+    "storeId": "store-004",
+    "storeName": "Los Angeles Flagship",
+    "transactionDate": "2025-01-16",
+    "amount": 1456.90,
+    "items": 8,
+    "customer": "Amanda Garcia",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-013",
+    "storeId": "store-005",
+    "storeName": "San Francisco Retail",
+    "transactionDate": "2025-01-15",
+    "amount": 2345.80,
+    "items": 11,
+    "customer": "Daniel Rodriguez",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-014",
+    "storeId": "store-005",
+    "storeName": "San Francisco Retail",
+    "transactionDate": "2025-01-17",
+    "amount": 789.40,
+    "items": 5,
+    "customer": "Michelle Thomas",
+    "paymentMethod": "Debit Card",
+    "status": "completed"
+  },
+  {
+    "id": "txn-015",
+    "storeId": "store-006",
+    "storeName": "Chicago Flagship",
+    "transactionDate": "2025-01-16",
+    "amount": 1678.25,
+    "items": 9,
+    "customer": "Matthew Jackson",
+    "paymentMethod": "Credit Card",
+    "status": "completed"
+  }
+]
+
+
+
