@@ -17,7 +17,8 @@
 - Expanded ALL typescale entries to include font, weight, weight-emphasized, size, line-height, tracking
 - Added 6 missing shape tokens (corner-none, corner-extra-small, corner-large-increased, corner-extra-large, corner-extra-large-increased, corner-extra-extra-large)
 - Added font theme tokens (brand, plain, tracking-none, tracking-small)
-- Exposed all as CSS custom properties in spectrum-variables.css
+- Exposed all as CSS custom properties in spectrum-variables.css (including all 15 weight-emphasized vars)
+- Synced typescale (90 vars), font theme (4 vars), shape (10 vars), and elevation (5 vars) to secondary copies: `packages/core/styles/spectrum-variables.css` and `packages/storybook/styles/spectrum-variables.css`
 
 ### Phase 3: Non-Color Variable Creation -- READY TO RUN
 - Plugin extended with "Create Spectrum Typescale/Font/Shape vars" command
@@ -79,4 +80,7 @@ All files under `packages/core/src/tokens/`:
 - `m3-to-spectrum-component-mapping.json` -- M3-to-Spectrum component mapping (34 components)
 - `M3/` directory -- original M3 token source files
 
-CSS custom properties: `packages/core/src/styles/spectrum-variables.css`
+CSS custom properties (all three copies kept in sync):
+- `packages/core/src/styles/spectrum-variables.css` (authoritative, imported by components)
+- `packages/core/styles/spectrum-variables.css` (secondary copy)
+- `packages/storybook/styles/spectrum-variables.css` (storybook overrides)
