@@ -119,16 +119,19 @@
   /* Typescale: Display */
   --spectrum-sys-typescale-display-large-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-display-large-weight: 400;
+  --spectrum-sys-typescale-display-large-weight-emphasized: 700;
   --spectrum-sys-typescale-display-large-size: 57px;
   --spectrum-sys-typescale-display-large-line-height: 64px;
   --spectrum-sys-typescale-display-large-tracking: -0.25px;
   --spectrum-sys-typescale-display-medium-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-display-medium-weight: 400;
+  --spectrum-sys-typescale-display-medium-weight-emphasized: 700;
   --spectrum-sys-typescale-display-medium-size: 45px;
   --spectrum-sys-typescale-display-medium-line-height: 52px;
   --spectrum-sys-typescale-display-medium-tracking: 0px;
   --spectrum-sys-typescale-display-small-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-display-small-weight: 400;
+  --spectrum-sys-typescale-display-small-weight-emphasized: 700;
   --spectrum-sys-typescale-display-small-size: 36px;
   --spectrum-sys-typescale-display-small-line-height: 44px;
   --spectrum-sys-typescale-display-small-tracking: 0px;
@@ -136,16 +139,19 @@
   /* Typescale: Headline */
   --spectrum-sys-typescale-headline-large-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-headline-large-weight: 400;
+  --spectrum-sys-typescale-headline-large-weight-emphasized: 700;
   --spectrum-sys-typescale-headline-large-size: 32px;
   --spectrum-sys-typescale-headline-large-line-height: 40px;
   --spectrum-sys-typescale-headline-large-tracking: 0px;
   --spectrum-sys-typescale-headline-medium-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-headline-medium-weight: 400;
+  --spectrum-sys-typescale-headline-medium-weight-emphasized: 700;
   --spectrum-sys-typescale-headline-medium-size: 28px;
   --spectrum-sys-typescale-headline-medium-line-height: 36px;
   --spectrum-sys-typescale-headline-medium-tracking: 0px;
   --spectrum-sys-typescale-headline-small-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-headline-small-weight: 400;
+  --spectrum-sys-typescale-headline-small-weight-emphasized: 700;
   --spectrum-sys-typescale-headline-small-size: 24px;
   --spectrum-sys-typescale-headline-small-line-height: 32px;
   --spectrum-sys-typescale-headline-small-tracking: 0px;
@@ -153,16 +159,19 @@
   /* Typescale: Title */
   --spectrum-sys-typescale-title-large-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-title-large-weight: 400;
+  --spectrum-sys-typescale-title-large-weight-emphasized: 700;
   --spectrum-sys-typescale-title-large-size: 22px;
   --spectrum-sys-typescale-title-large-line-height: 28px;
   --spectrum-sys-typescale-title-large-tracking: 0px;
   --spectrum-sys-typescale-title-medium-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-title-medium-weight: 500;
+  --spectrum-sys-typescale-title-medium-weight-emphasized: 700;
   --spectrum-sys-typescale-title-medium-size: 16px;
   --spectrum-sys-typescale-title-medium-line-height: 24px;
   --spectrum-sys-typescale-title-medium-tracking: 0.15px;
   --spectrum-sys-typescale-title-small-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-title-small-weight: 500;
+  --spectrum-sys-typescale-title-small-weight-emphasized: 700;
   --spectrum-sys-typescale-title-small-size: 14px;
   --spectrum-sys-typescale-title-small-line-height: 20px;
   --spectrum-sys-typescale-title-small-tracking: 0.1px;
@@ -170,16 +179,19 @@
   /* Typescale: Body */
   --spectrum-sys-typescale-body-large-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-body-large-weight: 400;
+  --spectrum-sys-typescale-body-large-weight-emphasized: 700;
   --spectrum-sys-typescale-body-large-size: 16px;
   --spectrum-sys-typescale-body-large-line-height: 24px;
   --spectrum-sys-typescale-body-large-tracking: 0.5px;
   --spectrum-sys-typescale-body-medium-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-body-medium-weight: 400;
+  --spectrum-sys-typescale-body-medium-weight-emphasized: 700;
   --spectrum-sys-typescale-body-medium-size: 14px;
   --spectrum-sys-typescale-body-medium-line-height: 20px;
   --spectrum-sys-typescale-body-medium-tracking: 0.25px;
   --spectrum-sys-typescale-body-small-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-body-small-weight: 400;
+  --spectrum-sys-typescale-body-small-weight-emphasized: 700;
   --spectrum-sys-typescale-body-small-size: 12px;
   --spectrum-sys-typescale-body-small-line-height: 16px;
   --spectrum-sys-typescale-body-small-tracking: 0.4px;
@@ -187,16 +199,19 @@
   /* Typescale: Label */
   --spectrum-sys-typescale-label-large-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-label-large-weight: 500;
+  --spectrum-sys-typescale-label-large-weight-emphasized: 700;
   --spectrum-sys-typescale-label-large-size: 14px;
   --spectrum-sys-typescale-label-large-line-height: 20px;
   --spectrum-sys-typescale-label-large-tracking: 0.1px;
   --spectrum-sys-typescale-label-medium-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-label-medium-weight: 500;
+  --spectrum-sys-typescale-label-medium-weight-emphasized: 700;
   --spectrum-sys-typescale-label-medium-size: 12px;
   --spectrum-sys-typescale-label-medium-line-height: 16px;
   --spectrum-sys-typescale-label-medium-tracking: 0.5px;
   --spectrum-sys-typescale-label-small-font: var(--spectrum-sys-font-family);
   --spectrum-sys-typescale-label-small-weight: 500;
+  --spectrum-sys-typescale-label-small-weight-emphasized: 700;
   --spectrum-sys-typescale-label-small-size: 11px;
   --spectrum-sys-typescale-label-small-line-height: 16px;
   --spectrum-sys-typescale-label-small-tracking: 0.5px;
