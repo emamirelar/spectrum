@@ -94,6 +94,292 @@ const SHAPE_VARS: Record<string, number> = {
 };
 
 // ---------------------------------------------------------------------------
+// M3-to-Spectrum Component Mapping
+// ---------------------------------------------------------------------------
+
+interface ComponentMapping {
+  spectrum: string | null;
+  status: 'mapped' | 'partial' | 'missing';
+  notes: string;
+  variantMap: Record<string, Record<string, string>>;
+}
+
+const COMPONENT_MAP: Record<string, ComponentMapping> = {
+  'Navigation Rail': {
+    spectrum: 'spectrum-rail',
+    status: 'mapped',
+    notes: 'Spectrum rail is more feature-rich (search, add button, collapsible lists)',
+    variantMap: {},
+  },
+  'Button': {
+    spectrum: 'spectrum-button',
+    status: 'mapped',
+    notes: '',
+    variantMap: {
+      'Filled':       { variant: 'primary' },
+      'Outlined':     { variant: 'outline' },
+      'Text':         { variant: 'ghost' },
+      'Filled Tonal': { variant: 'secondary' },
+      'Elevated':     { variant: 'primary' },
+    },
+  },
+  'FAB': {
+    spectrum: 'spectrum-button',
+    status: 'mapped',
+    notes: '',
+    variantMap: {
+      'FAB':          { variant: 'fab' },
+      'Extended FAB': { variant: 'fab' },
+    },
+  },
+  'Icon Button': {
+    spectrum: 'spectrum-button',
+    status: 'mapped',
+    notes: '',
+    variantMap: {
+      'Standard':     { variant: 'ghost', iconOnly: 'true' },
+      'Filled':       { variant: 'primary', iconOnly: 'true' },
+      'Filled Tonal': { variant: 'secondary', iconOnly: 'true' },
+      'Outlined':     { variant: 'outline', iconOnly: 'true' },
+    },
+  },
+  'Chip': {
+    spectrum: 'spectrum-chip',
+    status: 'mapped',
+    notes: '',
+    variantMap: {
+      'Assist':     { variant: 'assist' },
+      'Filter':     { variant: 'filter' },
+      'Input':      { variant: 'input' },
+      'Suggestion': { variant: 'suggestion' },
+    },
+  },
+  'Card': {
+    spectrum: 'spectrum-card',
+    status: 'mapped',
+    notes: '',
+    variantMap: {
+      'Elevated': { variant: 'elevated' },
+      'Filled':   { variant: 'filled' },
+      'Outlined': { variant: 'outlined' },
+    },
+  },
+  'Dialog': {
+    spectrum: 'spectrum-dialog',
+    status: 'mapped',
+    notes: '',
+    variantMap: {
+      'Basic':       { size: 'medium' },
+      'Full-screen': { size: 'full' },
+    },
+  },
+  'Switch': {
+    spectrum: 'spectrum-switch',
+    status: 'mapped',
+    notes: 'Spectrum adds showIcons, loading, variant (primary/positive/caution/destructive)',
+    variantMap: {},
+  },
+  'Text Field': {
+    spectrum: 'spectrum-text-input',
+    status: 'partial',
+    notes: 'M3 has Filled/Outlined variants; Spectrum uses single style',
+    variantMap: {
+      'Filled':   {},
+      'Outlined': {},
+    },
+  },
+  'Search': {
+    spectrum: 'spectrum-search-input',
+    status: 'partial',
+    notes: 'Spectrum search is AI-chat oriented (multiline, voice input). M3 search bar is simpler.',
+    variantMap: {
+      'Search bar':  {},
+      'Search view': {},
+    },
+  },
+  'Snackbar': {
+    spectrum: 'spectrum-toast',
+    status: 'mapped',
+    notes: 'Spectrum toast adds position, persistent, variant options',
+    variantMap: {},
+  },
+  'Badge': {
+    spectrum: 'spectrum-badge',
+    status: 'mapped',
+    notes: '',
+    variantMap: {
+      'Small': { size: 'small' },
+      'Large': { size: 'large' },
+    },
+  },
+  'Navigation Drawer': {
+    spectrum: 'spectrum-sidebar',
+    status: 'partial',
+    notes: 'Spectrum sidebar is layout-focused; M3 drawer has specific navigation patterns',
+    variantMap: {
+      'Standard': { position: 'left' },
+      'Modal':    { overlay: 'true' },
+    },
+  },
+  'Menu': {
+    spectrum: 'spectrum-menu',
+    status: 'mapped',
+    notes: 'Spectrum adds megamenu variant and responsive mobile handling',
+    variantMap: {},
+  },
+  'Exposed Dropdown Menu': {
+    spectrum: 'spectrum-select',
+    status: 'mapped',
+    notes: 'Spectrum adds searchable, virtualScrolling, multiple selection',
+    variantMap: {
+      'Filled':   { variant: 'primary' },
+      'Outlined': { variant: 'outline' },
+    },
+  },
+  'Top App Bar': {
+    spectrum: 'spectrum-app-layout',
+    status: 'partial',
+    notes: 'Spectrum handles this at layout level, not as standalone component',
+    variantMap: {},
+  },
+  'Segmented Button': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Could be composed from spectrum-chip group or spectrum-button group',
+    variantMap: {},
+  },
+  'Checkbox': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Needs spectrum-checkbox component',
+    variantMap: {},
+  },
+  'Radio Button': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Needs spectrum-radio component',
+    variantMap: {},
+  },
+  'Tabs': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Needs spectrum-tabs component. M3 has Primary and Secondary tab variants.',
+    variantMap: {},
+  },
+  'Progress Indicator': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Needs spectrum-progress component. M3 has Circular and Linear variants.',
+    variantMap: {},
+  },
+  'Tooltip': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Needs spectrum-tooltip component. M3 has Plain and Rich variants.',
+    variantMap: {},
+  },
+  'Slider': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Needs spectrum-slider component. M3 has Continuous and Discrete variants.',
+    variantMap: {},
+  },
+  'Divider': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Simple CSS utility; could be spectrum-divider or handled with border/hr',
+    variantMap: {},
+  },
+  'Date Picker': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Complex component; M3 has Docked, Modal, and Input variants',
+    variantMap: {},
+  },
+  'Time Picker': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Complex component; M3 has Dial and Input variants',
+    variantMap: {},
+  },
+  'Bottom Sheet': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Could partially use spectrum-dialog size="full" on mobile',
+    variantMap: {},
+  },
+  'Carousel': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Needs spectrum-carousel component',
+    variantMap: {},
+  },
+  'Bottom Navigation Bar': {
+    spectrum: null,
+    status: 'missing',
+    notes: 'Mobile-specific navigation pattern',
+    variantMap: {},
+  },
+  'Side Sheet': {
+    spectrum: 'spectrum-sidebar',
+    status: 'partial',
+    notes: 'Could extend spectrum-sidebar with sheet behavior (position right, overlay)',
+    variantMap: {},
+  },
+  'Lists': {
+    spectrum: 'spectrum-collapsible-list',
+    status: 'partial',
+    notes: "Spectrum's list is specialized for rail navigation; M3 lists are more general purpose",
+    variantMap: {},
+  },
+};
+
+const M3_NAME_ALIASES: Record<string, string> = {
+  'filled button':       'Button',
+  'outlined button':     'Button',
+  'text button':         'Button',
+  'tonal button':        'Button',
+  'elevated button':     'Button',
+  'extended fab':        'FAB',
+  'floating action button': 'FAB',
+  'icon button':         'Icon Button',
+  'filter chip':         'Chip',
+  'assist chip':         'Chip',
+  'input chip':          'Chip',
+  'suggestion chip':     'Chip',
+  'filled card':         'Card',
+  'elevated card':       'Card',
+  'outlined card':       'Card',
+  'navigation rail':     'Navigation Rail',
+  'navigation drawer':   'Navigation Drawer',
+  'nav rail':            'Navigation Rail',
+  'nav drawer':          'Navigation Drawer',
+  'snackbar':            'Snackbar',
+  'top app bar':         'Top App Bar',
+  'app bar':             'Top App Bar',
+  'text field':          'Text Field',
+  'text input':          'Text Field',
+  'search bar':          'Search',
+  'dropdown':            'Exposed Dropdown Menu',
+  'dropdown menu':       'Exposed Dropdown Menu',
+  'select':              'Exposed Dropdown Menu',
+  'exposed dropdown menu': 'Exposed Dropdown Menu',
+  'segmented button':    'Segmented Button',
+  'radio button':        'Radio Button',
+  'radio':               'Radio Button',
+  'progress indicator':  'Progress Indicator',
+  'progress bar':        'Progress Indicator',
+  'circular progress':   'Progress Indicator',
+  'linear progress':     'Progress Indicator',
+  'date picker':         'Date Picker',
+  'time picker':         'Time Picker',
+  'bottom sheet':        'Bottom Sheet',
+  'bottom navigation':   'Bottom Navigation Bar',
+  'bottom nav':          'Bottom Navigation Bar',
+  'side sheet':          'Side Sheet',
+};
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -108,6 +394,88 @@ function toKebabCase(titleCase: string): string {
 function findCollectionByName(name: string): VariableCollection | undefined {
   const collections = figma.variables.getLocalVariableCollections();
   return collections.find(c => c.name.toLowerCase() === name.toLowerCase());
+}
+
+// ---------------------------------------------------------------------------
+// M3 Component Identification
+// ---------------------------------------------------------------------------
+
+interface M3Match {
+  m3Name: string;
+  mapping: ComponentMapping;
+}
+
+async function identifyM3Component(instance: InstanceNode): Promise<M3Match | null> {
+  const main = await instance.getMainComponentAsync();
+  if (!main) return null;
+
+  const setName = (main.parent && main.parent.type === 'COMPONENT_SET')
+    ? (main.parent as ComponentSetNode).name
+    : null;
+  const componentName = main.name;
+
+  if (componentName.toLowerCase().startsWith('spectrum-')) return null;
+  if (setName && setName.toLowerCase().startsWith('spectrum-')) return null;
+
+  const candidateName = setName || componentName;
+  if (COMPONENT_MAP[candidateName]) {
+    return { m3Name: candidateName, mapping: COMPONENT_MAP[candidateName] };
+  }
+
+  const normalized = candidateName.replace(/\//g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  if (M3_NAME_ALIASES[normalized]) {
+    const key = M3_NAME_ALIASES[normalized];
+    return { m3Name: key, mapping: COMPONENT_MAP[key] };
+  }
+
+  for (const [alias, mapKey] of Object.entries(M3_NAME_ALIASES)) {
+    if (normalized.includes(alias)) {
+      return { m3Name: mapKey, mapping: COMPONENT_MAP[mapKey] };
+    }
+  }
+
+  for (const mapKey of Object.keys(COMPONENT_MAP)) {
+    if (normalized === mapKey.toLowerCase()) {
+      return { m3Name: mapKey, mapping: COMPONENT_MAP[mapKey] };
+    }
+  }
+
+  return null;
+}
+
+function extractVariantValues(instance: InstanceNode): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const [rawName, prop] of Object.entries(instance.componentProperties)) {
+    if (prop.type === 'VARIANT') {
+      result[rawName.split('#')[0]] = prop.value as string;
+    }
+  }
+  return result;
+}
+
+function findVariantMapping(
+  m3Variants: Record<string, string>,
+  mapping: ComponentMapping,
+): Record<string, string> | null {
+  for (const variantValue of Object.values(m3Variants)) {
+    if (mapping.variantMap[variantValue]) {
+      return mapping.variantMap[variantValue];
+    }
+  }
+  return null;
+}
+
+function setInstanceProperty(instance: InstanceNode, propName: string, value: string): boolean {
+  const props = instance.componentProperties;
+  for (const rawName of Object.keys(props)) {
+    if (rawName.split('#')[0] === propName) {
+      try {
+        instance.setProperties({ [rawName]: value });
+        return true;
+      } catch (_e) { return false; }
+    }
+  }
+  return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -802,16 +1170,326 @@ async function swapAll(): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Command: auditComponents
+// ---------------------------------------------------------------------------
+
+interface AuditEntry {
+  m3Name: string;
+  status: 'mapped' | 'partial' | 'missing';
+  spectrumTarget: string | null;
+  notes: string;
+  count: number;
+  variantBreakdown: Record<string, number>;
+  pages: Record<string, number>;
+}
+
+async function auditComponents(): Promise<void> {
+  await figma.loadAllPagesAsync();
+
+  const audit = new Map<string, AuditEntry>();
+
+  async function processNode(node: SceneNode | PageNode, pageName: string): Promise<void> {
+    if (node.type === 'INSTANCE') {
+      const match = await identifyM3Component(node);
+      if (match) {
+        let entry = audit.get(match.m3Name);
+        if (!entry) {
+          entry = {
+            m3Name: match.m3Name,
+            status: match.mapping.status,
+            spectrumTarget: match.mapping.spectrum,
+            notes: match.mapping.notes,
+            count: 0,
+            variantBreakdown: {},
+            pages: {},
+          };
+          audit.set(match.m3Name, entry);
+        }
+
+        entry.count++;
+        entry.pages[pageName] = (entry.pages[pageName] || 0) + 1;
+
+        const variants = extractVariantValues(node);
+        for (const val of Object.values(variants)) {
+          entry.variantBreakdown[val] = (entry.variantBreakdown[val] || 0) + 1;
+        }
+      }
+    }
+
+    if ('children' in node) {
+      for (const child of (node as ChildrenMixin).children) {
+        await processNode(child as SceneNode, pageName);
+      }
+    }
+  }
+
+  let pageNum = 0;
+  const totalPages = figma.root.children.length;
+  for (const page of figma.root.children) {
+    pageNum++;
+    figma.notify(`Auditing page ${pageNum}/${totalPages}: ${page.name}...`, { timeout: 500 });
+    await processNode(page, page.name);
+  }
+
+  const entries = [...audit.values()].sort((a, b) => b.count - a.count);
+  const totalInstances = entries.reduce((sum, e) => sum + e.count, 0);
+  const mappedCount = entries.filter(e => e.status === 'mapped').reduce((s, e) => s + e.count, 0);
+  const partialCount = entries.filter(e => e.status === 'partial').reduce((s, e) => s + e.count, 0);
+  const missingCount = entries.filter(e => e.status === 'missing').reduce((s, e) => s + e.count, 0);
+
+  const pageBreakdown = new Map<string, number>();
+  for (const entry of entries) {
+    for (const [pg, ct] of Object.entries(entry.pages)) {
+      pageBreakdown.set(pg, (pageBreakdown.get(pg) || 0) + ct);
+    }
+  }
+
+  let html = `<div style="font-family:system-ui,-apple-system,sans-serif;padding:16px;font-size:13px;line-height:1.5">`;
+  html += `<h2 style="margin:0 0 12px">M3 Component Audit</h2>`;
+  html += `<div style="background:#f0f4ff;padding:12px;border-radius:8px;margin-bottom:16px">`;
+  html += `<strong>Total M3 instances:</strong> ${totalInstances}<br>`;
+  html += `<span style="color:#16a34a">Ready to swap (mapped):</span> <strong>${mappedCount}</strong><br>`;
+  html += `<span style="color:#ca8a04">Partial match:</span> <strong>${partialCount}</strong><br>`;
+  html += `<span style="color:#dc2626">No equivalent (missing):</span> <strong>${missingCount}</strong>`;
+  html += `</div>`;
+
+  if (pageBreakdown.size > 0) {
+    html += `<h3 style="margin:16px 0 8px">Per-page breakdown</h3>`;
+    html += `<table style="border-collapse:collapse;width:100%">`;
+    for (const [pg, ct] of [...pageBreakdown.entries()].sort((a, b) => b[1] - a[1])) {
+      html += `<tr><td style="padding:2px 8px 2px 0">${pg}</td><td style="text-align:right">${ct}</td></tr>`;
+    }
+    html += `</table>`;
+  }
+
+  html += `<h3 style="margin:16px 0 8px">Component breakdown</h3>`;
+  for (const entry of entries) {
+    const badge = entry.status === 'mapped'
+      ? '<span style="background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-size:11px">mapped</span>'
+      : entry.status === 'partial'
+        ? '<span style="background:#fef9c3;color:#854d0e;padding:1px 6px;border-radius:4px;font-size:11px">partial</span>'
+        : '<span style="background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:4px;font-size:11px">missing</span>';
+
+    html += `<div style="margin-bottom:10px;padding:8px;border:1px solid #e5e7eb;border-radius:6px">`;
+    html += `<strong>${entry.m3Name}</strong> ${badge} &mdash; <strong>${entry.count}</strong> instance(s)<br>`;
+    if (entry.spectrumTarget) {
+      html += `<span style="color:#666">Target: ${entry.spectrumTarget}</span><br>`;
+    }
+    const variantKeys = Object.keys(entry.variantBreakdown);
+    if (variantKeys.length > 0) {
+      const variantParts = variantKeys.map(k => `${k}: ${entry.variantBreakdown[k]}`);
+      html += `<span style="color:#888;font-size:12px">Variants: ${variantParts.join(', ')}</span><br>`;
+    }
+    if (entry.notes) {
+      html += `<span style="color:#999;font-size:11px;font-style:italic">${entry.notes}</span>`;
+    }
+    html += `</div>`;
+  }
+
+  if (totalInstances === 0) {
+    html += `<p style="color:#666;font-style:italic">No M3 component instances detected in this file.</p>`;
+  }
+
+  html += `</div>`;
+
+  figma.showUI(html, { width: 560, height: 600 });
+}
+
+// ---------------------------------------------------------------------------
+// Command: swapComponents
+// ---------------------------------------------------------------------------
+
+async function swapComponents(): Promise<void> {
+  await figma.loadAllPagesAsync();
+
+  const spectrumComponents = new Map<string, ComponentNode>();
+  const spectrumSets = new Map<string, ComponentSetNode>();
+
+  function indexComponents(node: SceneNode | PageNode | DocumentNode): void {
+    if (node.type === 'COMPONENT_SET') {
+      const setNode = node as ComponentSetNode;
+      spectrumSets.set(setNode.name, setNode);
+      return;
+    }
+    if (node.type === 'COMPONENT') {
+      const comp = node as ComponentNode;
+      if (!comp.parent || comp.parent.type !== 'COMPONENT_SET') {
+        spectrumComponents.set(comp.name, comp);
+      }
+    }
+    if ('children' in node) {
+      for (const child of (node as ChildrenMixin).children) {
+        indexComponents(child);
+      }
+    }
+  }
+
+  for (const page of figma.root.children) {
+    indexComponents(page);
+  }
+
+  function findSpectrumTarget(
+    spectrumName: string,
+    desiredProps: Record<string, string>,
+  ): ComponentNode | null {
+    const set = spectrumSets.get(spectrumName);
+    if (set) {
+      if (Object.keys(desiredProps).length === 0) {
+        const first = set.children.find(c => c.type === 'COMPONENT') as ComponentNode | undefined;
+        return first || null;
+      }
+      for (const child of set.children) {
+        if (child.type !== 'COMPONENT') continue;
+        const parts = child.name.split(',').map(s => s.trim());
+        const parsed: Record<string, string> = {};
+        for (const part of parts) {
+          const eq = part.indexOf('=');
+          if (eq > 0) parsed[part.slice(0, eq).trim()] = part.slice(eq + 1).trim();
+        }
+        let allMatch = true;
+        for (const [k, v] of Object.entries(desiredProps)) {
+          if (parsed[k] !== v) { allMatch = false; break; }
+        }
+        if (allMatch) return child as ComponentNode;
+      }
+      const fallback = set.children.find(c => c.type === 'COMPONENT') as ComponentNode | undefined;
+      return fallback || null;
+    }
+
+    return spectrumComponents.get(spectrumName) || null;
+  }
+
+  let swappedCount = 0;
+  let skippedNoTarget = 0;
+  let failedCount = 0;
+  let propsMappedCount = 0;
+  const notAvailable = new Map<string, number>();
+  const swapErrors: string[] = [];
+
+  async function processNode(node: SceneNode | PageNode, pageName: string): Promise<void> {
+    if ('children' in node) {
+      const children = [...(node as ChildrenMixin).children];
+      for (const child of children) {
+        await processNode(child as SceneNode, pageName);
+      }
+    }
+
+    if (node.type !== 'INSTANCE') return;
+
+    const match = await identifyM3Component(node);
+    if (!match) return;
+    if (!match.mapping.spectrum) return;
+    if (match.mapping.status === 'missing') return;
+
+    const m3Variants = extractVariantValues(node);
+    const desiredSpecProps = findVariantMapping(m3Variants, match.mapping) || {};
+    const target = findSpectrumTarget(match.mapping.spectrum, desiredSpecProps);
+
+    if (!target) {
+      skippedNoTarget++;
+      const key = match.mapping.spectrum;
+      notAvailable.set(key, (notAvailable.get(key) || 0) + 1);
+      return;
+    }
+
+    const textSnapshot = new Map<string, string>();
+    try {
+      const textNodes = (node as InstanceNode).findAll(n => n.type === 'TEXT') as TextNode[];
+      for (const tn of textNodes) {
+        textSnapshot.set(tn.name, tn.characters);
+      }
+    } catch (_e) { /* may fail on detached overrides */ }
+
+    try {
+      (node as InstanceNode).swapComponent(target);
+      swappedCount++;
+    } catch (e) {
+      failedCount++;
+      swapErrors.push(`${match.m3Name} on "${pageName}": ${(e as Error).message}`);
+      return;
+    }
+
+    for (const [propName, propValue] of Object.entries(desiredSpecProps)) {
+      if (setInstanceProperty(node as InstanceNode, propName, propValue)) {
+        propsMappedCount++;
+      }
+    }
+
+    try {
+      const newTextNodes = (node as InstanceNode).findAll(n => n.type === 'TEXT') as TextNode[];
+      for (const tn of newTextNodes) {
+        const original = textSnapshot.get(tn.name);
+        if (original && tn.characters !== original) {
+          figma.loadFontAsync(tn.fontName as FontName).then(() => {
+            tn.characters = original;
+          }).catch(() => { /* font not available */ });
+        }
+      }
+    } catch (_e) { /* text restore best-effort */ }
+  }
+
+  let pageNum = 0;
+  const totalPages = figma.root.children.length;
+  for (const page of figma.root.children) {
+    pageNum++;
+    figma.notify(`Swapping components page ${pageNum}/${totalPages}: ${page.name}...`, { timeout: 500 });
+    await processNode(page, page.name);
+  }
+
+  let html = `<div style="font-family:system-ui,-apple-system,sans-serif;padding:16px;font-size:13px;line-height:1.5">`;
+  html += `<h2 style="margin:0 0 12px">Component Swap Results</h2>`;
+  html += `<div style="background:#f0f4ff;padding:12px;border-radius:8px;margin-bottom:16px">`;
+  html += `<span style="color:#16a34a">Swapped:</span> <strong>${swappedCount}</strong> instance(s)<br>`;
+  html += `<span style="color:#ca8a04">Skipped (target not in file):</span> <strong>${skippedNoTarget}</strong><br>`;
+  html += `<span style="color:#dc2626">Failed:</span> <strong>${failedCount}</strong><br>`;
+  html += `Properties mapped: <strong>${propsMappedCount}</strong>`;
+  html += `</div>`;
+
+  if (notAvailable.size > 0) {
+    html += `<h3 style="margin:16px 0 8px">Spectrum components not yet in file</h3>`;
+    html += `<p style="color:#666;font-size:12px;margin:0 0 8px">Create these components, then re-run this command:</p>`;
+    html += `<table style="border-collapse:collapse;width:100%">`;
+    for (const [name, ct] of [...notAvailable.entries()].sort((a, b) => b[1] - a[1])) {
+      html += `<tr><td style="padding:2px 8px 2px 0;font-family:monospace;font-size:12px">${name}</td>`;
+      html += `<td style="text-align:right">${ct} instance(s)</td></tr>`;
+    }
+    html += `</table>`;
+  }
+
+  if (swapErrors.length > 0) {
+    html += `<h3 style="margin:16px 0 8px;color:#dc2626">Errors</h3>`;
+    html += `<ul style="margin:0;padding-left:20px;font-size:12px;color:#666">`;
+    for (const err of swapErrors.slice(0, 20)) {
+      html += `<li>${err}</li>`;
+    }
+    if (swapErrors.length > 20) {
+      html += `<li>... and ${swapErrors.length - 20} more</li>`;
+    }
+    html += `</ul>`;
+  }
+
+  if (swappedCount === 0 && skippedNoTarget === 0 && failedCount === 0) {
+    html += `<p style="color:#666;font-style:italic">No M3 component instances with swappable Spectrum targets found.</p>`;
+  }
+
+  html += `</div>`;
+
+  figma.showUI(html, { width: 560, height: 520 });
+}
+
+// ---------------------------------------------------------------------------
 // Command router
 // ---------------------------------------------------------------------------
 
 switch (figma.command) {
-  case 'debug':           debug();            break;
-  case 'rename':          rename();           break;
-  case 'revert':          revert();           break;
-  case 'swap':            swap();             break;
+  case 'debug':              debug();              break;
+  case 'rename':             rename();             break;
+  case 'revert':             revert();             break;
+  case 'swap':               swap();               break;
   case 'createStateLayers':  createStateLayers();  break;
   case 'createNonColorVars': createNonColorVars(); break;
-  case 'swapAll':         swapAll();          break;
-  default:                figma.closePlugin();
+  case 'swapAll':            swapAll();            break;
+  case 'auditComponents':    auditComponents();    break;
+  case 'swapComponents':     swapComponents();     break;
+  default:                   figma.closePlugin();
 }

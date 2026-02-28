@@ -15,6 +15,9 @@
     { "name": "5. Create Spectrum State Layers", "command": "createStateLayers" },
     { "name": "6. Create Spectrum Typescale/Font/Shape vars", "command": "createNonColorVars" },
     { "separator": true },
-    { "name": "7. Swap ALL M3 collections to Spectrum", "command": "swapAll" }
+    { "name": "7. Swap ALL M3 collections to Spectrum", "command": "swapAll" },
+    { "separator": true },
+    { "name": "8. Audit M3 Components", "command": "auditComponents" },
+    { "name": "9. Swap M3 Components to Spectrum", "command": "swapComponents" }
   ]
 }
