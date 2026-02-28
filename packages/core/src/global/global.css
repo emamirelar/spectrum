@@ -26,3 +26,13 @@ html.fonts-failed .material-symbols-outlined {
   text-decoration: underline;
   text-decoration-style: dotted;
 }
+
+@media (prefers-scheme: dark) {
+  :root {
+    --spectrum-sys-color-surface-subtle: #121212;
+    --spectrum-sys-color-border-subtle: #212121;
+    --spectrum-sys-color-text: #ffffff;
+    --spectrum-color-surface-hover: rgba(255, 255, 255, 0.03);
+    --spectrum-color-surface-active: rgba(255, 255, 255, 0.1);
+  }
+}

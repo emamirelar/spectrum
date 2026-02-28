@@ -1,28 +1,19 @@
 import type { StorybookConfig } from "@storybook/web-components-vite";
 
-import { join, dirname } from "path";
-
 const { BASE_PATH } = process.env
 
-/**
- * This function is used to resolve the absolute path of a package.
- * It is needed in projects that use Yarn PnP or are set up within a monorepo.
- */
-function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, "package.json")));
-}
 const config: StorybookConfig = {
   stories: [
     "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
-    getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@storybook/addon-a11y"),
-    getAbsolutePath("@storybook/addon-docs")
+    "@storybook/addon-links",
+    "@storybook/addon-a11y",
+    "@storybook/addon-docs"
   ],
   framework: {
-    name: getAbsolutePath("@storybook/web-components-vite"),
+    name: "@storybook/web-components-vite",
     options: {}
   },
   previewHead: (head) => `${head}
@@ -35,34 +26,22 @@ const config: StorybookConfig = {
 
     const { mergeConfig } = await import('vite');
     return mergeConfig(config, {
-      // Enable React JSX support
       esbuild: {
         jsx: 'automatic',
       },
-      resolve: {
-        alias: {
-          // Ensure consistent React version resolution
-          'react': require.resolve('react'),
-          'react-dom': require.resolve('react-dom'),
-        },
-      },
       build: {
         chunkSizeWarningLimit: 2000,
-        sourcemap: false, // Disable sourcemaps for faster builds
+        sourcemap: false,
         rollupOptions: {
           output: {
             manualChunks: (id) => {
-              // Bundle node_modules separately to avoid dynamic import issues
               if (id.includes('node_modules')) {
-                // Don't separate Mermaid into its own chunk for GitHub Pages compatibility
-                // Instead, bundle it with the main vendor chunk to avoid initialization issues
                 if (id.includes('mermaid')) {
                   return 'vendor';
                 }
                 if (id.includes('lit')) {
                   return 'lit';
                 }
-                // Keep React and ReactDOM together to avoid scheduler issues
                 if (id.includes('react-dom') || id.includes('react/') || id.includes('scheduler')) {
                   return 'react';
                 }
@@ -71,12 +50,6 @@ const config: StorybookConfig = {
             },
           },
         },
-      },
-      // Define import.meta.url for proper asset resolution
-      define: {
-        'import.meta.url': JSON.stringify(config.base || '/'),
-        // Ensure global React is available
-        'global': 'globalThis',
       },
       optimizeDeps: {
         include: ['react', 'react-dom', 'react/jsx-runtime', 'mermaid'],
@@ -92,9 +65,8 @@ const config: StorybookConfig = {
       },
     });
   },
-  // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
   typescript: {
-    check: false, // Disable type-checking for faster dev builds
+    check: false,
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
@@ -103,5 +75,4 @@ const config: StorybookConfig = {
   }
 };
 
-// @ts-ignore
 export default config;

@@ -28,6 +28,7 @@ import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel
 import { ComparisonData, ScoreCardConfig, TrendIndicator } from "./components/spectrum-score-card/types/score-card.types";
 import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
+import { TabItem } from "./components/spectrum-tabs/spectrum-tabs";
 import { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
 export { DashboardConfig, DashboardNavEvent, DataRefreshEvent, DataSourceConfig, MultiViewDashboardConfig, WidgetDefinition } from "./components/spectrum-dashboard/types/dashboard.types";
 export { DataSourceManager } from "./components/spectrum-dashboard/services/data-source-manager";
@@ -52,6 +53,7 @@ export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel
 export { ComparisonData, ScoreCardConfig, TrendIndicator } from "./components/spectrum-score-card/types/score-card.types";
 export { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
+export { TabItem } from "./components/spectrum-tabs/spectrum-tabs";
 export { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
 export namespace Components {
     interface DashboardWidgetHost {
@@ -680,6 +682,33 @@ export namespace Components {
           * Chart width (CSS value)
          */
         "width"?: string;
+    }
+    interface SpectrumCheckbox {
+        "accessibleDescribedBy"?: string;
+        "accessibleLabel"?: string;
+        /**
+          * @default false
+         */
+        "checked": boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default false
+         */
+        "indeterminate": boolean;
+        "label"?: string;
+        "name"?: string;
+        /**
+          * @default 'base'
+         */
+        "size": 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: string;
+        /**
+          * @default 'primary'
+         */
+        "variant": 'primary' | 'positive' | 'caution' | 'destructive';
     }
     /**
      * Spectrum Chip Component
@@ -1841,6 +1870,53 @@ export namespace Components {
          */
         "width"?: string;
     }
+    interface SpectrumProgress {
+        /**
+          * @default 'primary'
+         */
+        "color": 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        "label"?: string;
+        /**
+          * @default false
+         */
+        "showLabel": boolean;
+        /**
+          * @default 'base'
+         */
+        "size": 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: number;
+        /**
+          * @default 'linear'
+         */
+        "variant": 'circular' | 'linear';
+    }
+    interface SpectrumRadio {
+        "accessibleDescribedBy"?: string;
+        "accessibleLabel"?: string;
+        /**
+          * @default false
+         */
+        "checked": boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        "label"?: string;
+        "name"?: string;
+        /**
+          * @default 'base'
+         */
+        "size": 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: string;
+        /**
+          * @default 'primary'
+         */
+        "variant": 'primary' | 'positive' | 'caution' | 'destructive';
+    }
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
@@ -2450,6 +2526,32 @@ export namespace Components {
          */
         "variant": 'primary' | 'positive' | 'caution' | 'destructive';
     }
+    interface SpectrumTabs {
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default []
+         */
+        "items": TabItem[] | string;
+        /**
+          * @default false
+         */
+        "scrollable": boolean;
+        /**
+          * @default 0
+         */
+        "selectedIndex": number;
+        /**
+          * @default 'base'
+         */
+        "size": 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        /**
+          * @default 'primary'
+         */
+        "variant": 'primary' | 'secondary';
+    }
     /**
      * Text Input Component
      * A versatile text input component supporting various input types,
@@ -2689,6 +2791,31 @@ export namespace Components {
          */
         "visible": boolean;
     }
+    interface SpectrumTooltip {
+        /**
+          * @default 300
+         */
+        "delay": number;
+        "hide": () => Promise<void>;
+        /**
+          * @default 'top'
+         */
+        "position": 'top' | 'bottom' | 'left' | 'right';
+        "show": () => Promise<void>;
+        "text"?: string;
+        /**
+          * @default 'hover'
+         */
+        "trigger": 'hover' | 'click' | 'manual';
+        /**
+          * @default 'plain'
+         */
+        "variant": 'plain' | 'rich';
+        /**
+          * @default false
+         */
+        "visible": boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * Whether to apply theme variables to document root instead of host element This gives wallpaper theme higher priority over other theme components
@@ -2867,6 +2994,10 @@ export interface SpectrumChartCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumChartElement;
 }
+export interface SpectrumCheckboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumCheckboxElement;
+}
 export interface SpectrumChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumChipElement;
@@ -2927,6 +3058,10 @@ export interface SpectrumPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumPanelElement;
 }
+export interface SpectrumRadioCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumRadioElement;
+}
 export interface SpectrumRailCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumRailElement;
@@ -2947,6 +3082,10 @@ export interface SpectrumSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSwitchElement;
 }
+export interface SpectrumTabsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumTabsElement;
+}
 export interface SpectrumTextInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumTextInputElement;
@@ -2954,6 +3093,10 @@ export interface SpectrumTextInputCustomEvent<T> extends CustomEvent<T> {
 export interface SpectrumToastCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumToastElement;
+}
+export interface SpectrumTooltipCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumTooltipElement;
 }
 export interface SpectrumWizardCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3128,6 +3271,23 @@ declare global {
     var HTMLSpectrumChartElement: {
         prototype: HTMLSpectrumChartElement;
         new (): HTMLSpectrumChartElement;
+    };
+    interface HTMLSpectrumCheckboxElementEventMap {
+        "checkboxChange": { action: string; checked: boolean; indeterminate: boolean; value?: string };
+    }
+    interface HTMLSpectrumCheckboxElement extends Components.SpectrumCheckbox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumCheckboxElementEventMap>(type: K, listener: (this: HTMLSpectrumCheckboxElement, ev: SpectrumCheckboxCustomEvent<HTMLSpectrumCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumCheckboxElementEventMap>(type: K, listener: (this: HTMLSpectrumCheckboxElement, ev: SpectrumCheckboxCustomEvent<HTMLSpectrumCheckboxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumCheckboxElement: {
+        prototype: HTMLSpectrumCheckboxElement;
+        new (): HTMLSpectrumCheckboxElement;
     };
     interface HTMLSpectrumChipElementEventMap {
         "chipAction": { action?: string; label: string };
@@ -3502,6 +3662,29 @@ declare global {
         prototype: HTMLSpectrumPanelElement;
         new (): HTMLSpectrumPanelElement;
     };
+    interface HTMLSpectrumProgressElement extends Components.SpectrumProgress, HTMLStencilElement {
+    }
+    var HTMLSpectrumProgressElement: {
+        prototype: HTMLSpectrumProgressElement;
+        new (): HTMLSpectrumProgressElement;
+    };
+    interface HTMLSpectrumRadioElementEventMap {
+        "radioChange": { action: string; checked: boolean; value?: string; name?: string };
+    }
+    interface HTMLSpectrumRadioElement extends Components.SpectrumRadio, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumRadioElementEventMap>(type: K, listener: (this: HTMLSpectrumRadioElement, ev: SpectrumRadioCustomEvent<HTMLSpectrumRadioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumRadioElementEventMap>(type: K, listener: (this: HTMLSpectrumRadioElement, ev: SpectrumRadioCustomEvent<HTMLSpectrumRadioElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumRadioElement: {
+        prototype: HTMLSpectrumRadioElement;
+        new (): HTMLSpectrumRadioElement;
+    };
     interface HTMLSpectrumRailElementEventMap {
         "expandedChange": { action: string; expanded: boolean };
         "searchChange": { action: string; value: string };
@@ -3680,6 +3863,23 @@ declare global {
         prototype: HTMLSpectrumSwitchElement;
         new (): HTMLSpectrumSwitchElement;
     };
+    interface HTMLSpectrumTabsElementEventMap {
+        "tabChange": { action: string; index: number; tab: TabItem };
+    }
+    interface HTMLSpectrumTabsElement extends Components.SpectrumTabs, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumTabsElementEventMap>(type: K, listener: (this: HTMLSpectrumTabsElement, ev: SpectrumTabsCustomEvent<HTMLSpectrumTabsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumTabsElementEventMap>(type: K, listener: (this: HTMLSpectrumTabsElement, ev: SpectrumTabsCustomEvent<HTMLSpectrumTabsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumTabsElement: {
+        prototype: HTMLSpectrumTabsElement;
+        new (): HTMLSpectrumTabsElement;
+    };
     interface HTMLSpectrumTextInputElementEventMap {
         "inputChange": string;
         "inputInput": string;
@@ -3735,6 +3935,24 @@ declare global {
     var HTMLSpectrumToastElement: {
         prototype: HTMLSpectrumToastElement;
         new (): HTMLSpectrumToastElement;
+    };
+    interface HTMLSpectrumTooltipElementEventMap {
+        "tooltipShow": void;
+        "tooltipHide": void;
+    }
+    interface HTMLSpectrumTooltipElement extends Components.SpectrumTooltip, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumTooltipElementEventMap>(type: K, listener: (this: HTMLSpectrumTooltipElement, ev: SpectrumTooltipCustomEvent<HTMLSpectrumTooltipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumTooltipElementEventMap>(type: K, listener: (this: HTMLSpectrumTooltipElement, ev: SpectrumTooltipCustomEvent<HTMLSpectrumTooltipElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumTooltipElement: {
+        prototype: HTMLSpectrumTooltipElement;
+        new (): HTMLSpectrumTooltipElement;
     };
     interface HTMLSpectrumWallpaperElement extends Components.SpectrumWallpaper, HTMLStencilElement {
     }
@@ -3792,6 +4010,7 @@ declare global {
         "spectrum-button": HTMLSpectrumButtonElement;
         "spectrum-card": HTMLSpectrumCardElement;
         "spectrum-chart": HTMLSpectrumChartElement;
+        "spectrum-checkbox": HTMLSpectrumCheckboxElement;
         "spectrum-chip": HTMLSpectrumChipElement;
         "spectrum-cluster": HTMLSpectrumClusterElement;
         "spectrum-collapsible-list": HTMLSpectrumCollapsibleListElement;
@@ -3811,6 +4030,8 @@ declare global {
         "spectrum-media-library": HTMLSpectrumMediaLibraryElement;
         "spectrum-menu": HTMLSpectrumMenuElement;
         "spectrum-panel": HTMLSpectrumPanelElement;
+        "spectrum-progress": HTMLSpectrumProgressElement;
+        "spectrum-radio": HTMLSpectrumRadioElement;
         "spectrum-rail": HTMLSpectrumRailElement;
         "spectrum-rail-alternative": HTMLSpectrumRailAlternativeElement;
         "spectrum-rail-item": HTMLSpectrumRailItemElement;
@@ -3821,9 +4042,11 @@ declare global {
         "spectrum-sidebar": HTMLSpectrumSidebarElement;
         "spectrum-stack": HTMLSpectrumStackElement;
         "spectrum-switch": HTMLSpectrumSwitchElement;
+        "spectrum-tabs": HTMLSpectrumTabsElement;
         "spectrum-text-input": HTMLSpectrumTextInputElement;
         "spectrum-theme": HTMLSpectrumThemeElement;
         "spectrum-toast": HTMLSpectrumToastElement;
+        "spectrum-tooltip": HTMLSpectrumTooltipElement;
         "spectrum-wallpaper": HTMLSpectrumWallpaperElement;
         "spectrum-wizard": HTMLSpectrumWizardElement;
     }
@@ -4485,6 +4708,34 @@ declare namespace LocalJSX {
           * Chart width (CSS value)
          */
         "width"?: string;
+    }
+    interface SpectrumCheckbox {
+        "accessibleDescribedBy"?: string;
+        "accessibleLabel"?: string;
+        /**
+          * @default false
+         */
+        "checked"?: boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default false
+         */
+        "indeterminate"?: boolean;
+        "label"?: string;
+        "name"?: string;
+        "onCheckboxChange"?: (event: SpectrumCheckboxCustomEvent<{ action: string; checked: boolean; indeterminate: boolean; value?: string }>) => void;
+        /**
+          * @default 'base'
+         */
+        "size"?: 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: string;
+        /**
+          * @default 'primary'
+         */
+        "variant"?: 'primary' | 'positive' | 'caution' | 'destructive';
     }
     /**
      * Spectrum Chip Component
@@ -5697,6 +5948,54 @@ declare namespace LocalJSX {
          */
         "width"?: string;
     }
+    interface SpectrumProgress {
+        /**
+          * @default 'primary'
+         */
+        "color"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        "label"?: string;
+        /**
+          * @default false
+         */
+        "showLabel"?: boolean;
+        /**
+          * @default 'base'
+         */
+        "size"?: 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: number;
+        /**
+          * @default 'linear'
+         */
+        "variant"?: 'circular' | 'linear';
+    }
+    interface SpectrumRadio {
+        "accessibleDescribedBy"?: string;
+        "accessibleLabel"?: string;
+        /**
+          * @default false
+         */
+        "checked"?: boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        "label"?: string;
+        "name"?: string;
+        "onRadioChange"?: (event: SpectrumRadioCustomEvent<{ action: string; checked: boolean; value?: string; name?: string }>) => void;
+        /**
+          * @default 'base'
+         */
+        "size"?: 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        "value"?: string;
+        /**
+          * @default 'primary'
+         */
+        "variant"?: 'primary' | 'positive' | 'caution' | 'destructive';
+    }
     /**
      * Spectrum Rail Component
      * A vertical navigation rail with two states: expanded and contracted
@@ -6327,6 +6626,33 @@ declare namespace LocalJSX {
          */
         "variant"?: 'primary' | 'positive' | 'caution' | 'destructive';
     }
+    interface SpectrumTabs {
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default []
+         */
+        "items"?: TabItem[] | string;
+        "onTabChange"?: (event: SpectrumTabsCustomEvent<{ action: string; index: number; tab: TabItem }>) => void;
+        /**
+          * @default false
+         */
+        "scrollable"?: boolean;
+        /**
+          * @default 0
+         */
+        "selectedIndex"?: number;
+        /**
+          * @default 'base'
+         */
+        "size"?: 'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large';
+        /**
+          * @default 'primary'
+         */
+        "variant"?: 'primary' | 'secondary';
+    }
     /**
      * Text Input Component
      * A versatile text input component supporting various input types,
@@ -6589,6 +6915,31 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
     }
+    interface SpectrumTooltip {
+        /**
+          * @default 300
+         */
+        "delay"?: number;
+        "onTooltipHide"?: (event: SpectrumTooltipCustomEvent<void>) => void;
+        "onTooltipShow"?: (event: SpectrumTooltipCustomEvent<void>) => void;
+        /**
+          * @default 'top'
+         */
+        "position"?: 'top' | 'bottom' | 'left' | 'right';
+        "text"?: string;
+        /**
+          * @default 'hover'
+         */
+        "trigger"?: 'hover' | 'click' | 'manual';
+        /**
+          * @default 'plain'
+         */
+        "variant"?: 'plain' | 'rich';
+        /**
+          * @default false
+         */
+        "visible"?: boolean;
+    }
     interface SpectrumWallpaper {
         /**
           * Whether to apply theme variables to document root instead of host element This gives wallpaper theme higher priority over other theme components
@@ -6733,6 +7084,7 @@ declare namespace LocalJSX {
         "spectrum-button": SpectrumButton;
         "spectrum-card": SpectrumCard;
         "spectrum-chart": SpectrumChart;
+        "spectrum-checkbox": SpectrumCheckbox;
         "spectrum-chip": SpectrumChip;
         "spectrum-cluster": SpectrumCluster;
         "spectrum-collapsible-list": SpectrumCollapsibleList;
@@ -6752,6 +7104,8 @@ declare namespace LocalJSX {
         "spectrum-media-library": SpectrumMediaLibrary;
         "spectrum-menu": SpectrumMenu;
         "spectrum-panel": SpectrumPanel;
+        "spectrum-progress": SpectrumProgress;
+        "spectrum-radio": SpectrumRadio;
         "spectrum-rail": SpectrumRail;
         "spectrum-rail-alternative": SpectrumRailAlternative;
         "spectrum-rail-item": SpectrumRailItem;
@@ -6762,9 +7116,11 @@ declare namespace LocalJSX {
         "spectrum-sidebar": SpectrumSidebar;
         "spectrum-stack": SpectrumStack;
         "spectrum-switch": SpectrumSwitch;
+        "spectrum-tabs": SpectrumTabs;
         "spectrum-text-input": SpectrumTextInput;
         "spectrum-theme": SpectrumTheme;
         "spectrum-toast": SpectrumToast;
+        "spectrum-tooltip": SpectrumTooltip;
         "spectrum-wallpaper": SpectrumWallpaper;
         "spectrum-wizard": SpectrumWizard;
     }
@@ -6807,6 +7163,7 @@ declare module "@stencil/core" {
              */
             "spectrum-card": LocalJSX.SpectrumCard & JSXBase.HTMLAttributes<HTMLSpectrumCardElement>;
             "spectrum-chart": LocalJSX.SpectrumChart & JSXBase.HTMLAttributes<HTMLSpectrumChartElement>;
+            "spectrum-checkbox": LocalJSX.SpectrumCheckbox & JSXBase.HTMLAttributes<HTMLSpectrumCheckboxElement>;
             /**
              * Spectrum Chip Component
              * A versatile chip component that can be used for tags, filters, and selections.
@@ -6891,6 +7248,8 @@ declare module "@stencil/core" {
              */
             "spectrum-menu": LocalJSX.SpectrumMenu & JSXBase.HTMLAttributes<HTMLSpectrumMenuElement>;
             "spectrum-panel": LocalJSX.SpectrumPanel & JSXBase.HTMLAttributes<HTMLSpectrumPanelElement>;
+            "spectrum-progress": LocalJSX.SpectrumProgress & JSXBase.HTMLAttributes<HTMLSpectrumProgressElement>;
+            "spectrum-radio": LocalJSX.SpectrumRadio & JSXBase.HTMLAttributes<HTMLSpectrumRadioElement>;
             /**
              * Spectrum Rail Component
              * A vertical navigation rail with two states: expanded and contracted
@@ -6949,6 +7308,7 @@ declare module "@stencil/core" {
              * Supports Material Icons and follows spectrum design system.
              */
             "spectrum-switch": LocalJSX.SpectrumSwitch & JSXBase.HTMLAttributes<HTMLSpectrumSwitchElement>;
+            "spectrum-tabs": LocalJSX.SpectrumTabs & JSXBase.HTMLAttributes<HTMLSpectrumTabsElement>;
             /**
              * Text Input Component
              * A versatile text input component supporting various input types,
@@ -6962,6 +7322,7 @@ declare module "@stencil/core" {
              * Supports various variants, positioning, auto-dismiss functionality, and custom sizing.
              */
             "spectrum-toast": LocalJSX.SpectrumToast & JSXBase.HTMLAttributes<HTMLSpectrumToastElement>;
+            "spectrum-tooltip": LocalJSX.SpectrumTooltip & JSXBase.HTMLAttributes<HTMLSpectrumTooltipElement>;
             "spectrum-wallpaper": LocalJSX.SpectrumWallpaper & JSXBase.HTMLAttributes<HTMLSpectrumWallpaperElement>;
             /**
              * Spectrum Wizard Component

@@ -209,6 +209,23 @@ export const SpectrumChart = /*@__PURE__*/ defineContainer<JSX.SpectrumChart>('s
 ]);
 
 
+export const SpectrumCheckbox = /*@__PURE__*/ defineContainer<JSX.SpectrumCheckbox>('spectrum-checkbox', undefined, [
+  'checked',
+  'indeterminate',
+  'disabled',
+  'variant',
+  'size',
+  'value',
+  'name',
+  'label',
+  'accessibleLabel',
+  'accessibleDescribedBy',
+  'checkboxChange'
+], [
+  'checkboxChange'
+]);
+
+
 export const SpectrumChip = /*@__PURE__*/ defineContainer<JSX.SpectrumChip>('spectrum-chip', undefined, [
   'debug',
   'variant',
@@ -584,6 +601,33 @@ export const SpectrumPanel = /*@__PURE__*/ defineContainer<JSX.SpectrumPanel>('s
 ]);
 
 
+export const SpectrumProgress = /*@__PURE__*/ defineContainer<JSX.SpectrumProgress>('spectrum-progress', undefined, [
+  'variant',
+  'value',
+  'size',
+  'disabled',
+  'color',
+  'label',
+  'showLabel'
+]);
+
+
+export const SpectrumRadio = /*@__PURE__*/ defineContainer<JSX.SpectrumRadio>('spectrum-radio', undefined, [
+  'checked',
+  'disabled',
+  'variant',
+  'size',
+  'value',
+  'name',
+  'label',
+  'accessibleLabel',
+  'accessibleDescribedBy',
+  'radioChange'
+], [
+  'radioChange'
+]);
+
+
 export const SpectrumRail = /*@__PURE__*/ defineContainer<JSX.SpectrumRail>('spectrum-rail', undefined, [
   'appName',
   'expandedWidth',
@@ -779,6 +823,19 @@ export const SpectrumSwitch = /*@__PURE__*/ defineContainer<JSX.SpectrumSwitch>(
 ]);
 
 
+export const SpectrumTabs = /*@__PURE__*/ defineContainer<JSX.SpectrumTabs>('spectrum-tabs', undefined, [
+  'variant',
+  'size',
+  'items',
+  'selectedIndex',
+  'scrollable',
+  'disabled',
+  'tabChange'
+], [
+  'tabChange'
+]);
+
+
 export const SpectrumTextInput = /*@__PURE__*/ defineContainer<JSX.SpectrumTextInput>('spectrum-text-input', undefined, [
   'type',
   'value',
@@ -856,6 +913,21 @@ export const SpectrumToast = /*@__PURE__*/ defineContainer<JSX.SpectrumToast>('s
 ], [
   'toastAction',
   'toastDismiss'
+]);
+
+
+export const SpectrumTooltip = /*@__PURE__*/ defineContainer<JSX.SpectrumTooltip>('spectrum-tooltip', undefined, [
+  'variant',
+  'position',
+  'text',
+  'visible',
+  'delay',
+  'trigger',
+  'tooltipShow',
+  'tooltipHide'
+], [
+  'tooltipShow',
+  'tooltipHide'
 ]);
 
 

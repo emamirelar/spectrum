@@ -1,0 +1,271 @@
+{
+  "_meta": {
+    "description": "Maps M3 Schemes variables to Spectrum equivalents. Keys are M3 variable paths (within the M3 collection). Values describe the Spectrum match or suggested fallback.",
+    "m3_collection": "M3",
+    "spectrum_collection": "Spectrum",
+    "statuses": {
+      "exact": "Direct name match — Swap Variables plugin handles automatically",
+      "fallback": "No direct match — fallback is the closest Spectrum equivalent",
+      "missing": "No reasonable Spectrum equivalent exists"
+    },
+    "generated": "2026-02-27"
+  },
+  "mappings": {
+    "Schemes/Primary": {
+      "spectrum": "Schemes/Primary",
+      "status": "exact"
+    },
+    "Schemes/On Primary": {
+      "spectrum": "Schemes/On Primary",
+      "status": "exact"
+    },
+    "Schemes/Primary Container": {
+      "spectrum": "Schemes/Primary Container",
+      "status": "exact"
+    },
+    "Schemes/On Primary Container": {
+      "spectrum": "Schemes/On Primary Container",
+      "status": "exact"
+    },
+    "Schemes/Secondary": {
+      "spectrum": "Schemes/Secondary",
+      "status": "exact"
+    },
+    "Schemes/On Secondary": {
+      "spectrum": "Schemes/On Secondary",
+      "status": "exact"
+    },
+    "Schemes/Secondary Container": {
+      "spectrum": null,
+      "fallback": "Schemes/Secondary",
+      "status": "fallback",
+      "reason": "secondary-container not in spectrum sys.color; falls back to parent color family"
+    },
+    "Schemes/On Secondary Container": {
+      "spectrum": null,
+      "fallback": "Schemes/On Secondary",
+      "status": "fallback",
+      "reason": "on-secondary-container not in spectrum sys.color; falls back to on-secondary foreground"
+    },
+    "Schemes/Tertiary": {
+      "spectrum": "Schemes/Tertiary",
+      "status": "exact"
+    },
+    "Schemes/On Tertiary": {
+      "spectrum": null,
+      "fallback": "Schemes/On Primary",
+      "status": "fallback",
+      "reason": "on-tertiary not in spectrum sys.color; on-primary is closest light foreground"
+    },
+    "Schemes/Tertiary Container": {
+      "spectrum": null,
+      "fallback": "Schemes/Tertiary",
+      "status": "fallback",
+      "reason": "tertiary-container not in spectrum sys.color; falls back to parent color family"
+    },
+    "Schemes/On Tertiary Container": {
+      "spectrum": null,
+      "fallback": "Schemes/On Surface",
+      "status": "fallback",
+      "reason": "on-tertiary-container not in spectrum sys.color; on-surface is closest dark foreground"
+    },
+    "Schemes/Error": {
+      "spectrum": "Schemes/Error",
+      "status": "exact"
+    },
+    "Schemes/On Error": {
+      "spectrum": null,
+      "fallback": "Schemes/On Danger",
+      "status": "fallback",
+      "reason": "on-error not in spectrum sys.color; on-danger is semantically equivalent (both are foreground on error/danger)"
+    },
+    "Schemes/Error Container": {
+      "spectrum": "Schemes/Error Container",
+      "status": "exact"
+    },
+    "Schemes/On Error Container": {
+      "spectrum": null,
+      "fallback": "Schemes/On Danger",
+      "status": "fallback",
+      "reason": "on-error-container not in spectrum sys.color; on-danger is closest foreground for error states"
+    },
+    "Schemes/Background": {
+      "spectrum": "Schemes/Background",
+      "status": "exact"
+    },
+    "Schemes/On Background": {
+      "spectrum": null,
+      "fallback": "Schemes/On Surface",
+      "status": "fallback",
+      "reason": "on-background not in spectrum sys.color; on-surface serves the same role as primary text on neutral backgrounds"
+    },
+    "Schemes/Surface": {
+      "spectrum": "Schemes/Surface",
+      "status": "exact"
+    },
+    "Schemes/On Surface": {
+      "spectrum": "Schemes/On Surface",
+      "status": "exact"
+    },
+    "Schemes/Surface Variant": {
+      "spectrum": "Schemes/Surface Variant",
+      "status": "exact"
+    },
+    "Schemes/On Surface Variant": {
+      "spectrum": "Schemes/On Surface Variant",
+      "status": "exact"
+    },
+    "Schemes/Outline": {
+      "spectrum": "Schemes/Outline",
+      "status": "exact"
+    },
+    "Schemes/Outline Variant": {
+      "spectrum": "Schemes/Outline Variant",
+      "status": "exact"
+    },
+    "Schemes/Surface Tint": {
+      "spectrum": null,
+      "fallback": "Schemes/Primary",
+      "status": "fallback",
+      "reason": "surface-tint not in spectrum; M3 surface tint is derived from primary"
+    },
+    "Schemes/Shadow": {
+      "spectrum": "Schemes/Shadow",
+      "status": "exact"
+    },
+    "Schemes/Scrim": {
+      "spectrum": null,
+      "fallback": "Schemes/Shadow",
+      "status": "fallback",
+      "reason": "scrim not in spectrum sys.color; shadow is semantically equivalent (both are dark overlays)"
+    },
+    "Schemes/Inverse Surface": {
+      "spectrum": null,
+      "fallback": "Schemes/On Surface",
+      "status": "fallback",
+      "reason": "inverse-surface not in spectrum sys.color; on-surface is the closest dark neutral"
+    },
+    "Schemes/Inverse On Surface": {
+      "spectrum": null,
+      "fallback": "Schemes/Surface",
+      "status": "fallback",
+      "reason": "inverse-on-surface not in spectrum sys.color; surface is the closest light neutral"
+    },
+    "Schemes/Inverse Primary": {
+      "spectrum": null,
+      "fallback": "Schemes/Primary",
+      "status": "fallback",
+      "reason": "inverse-primary not in spectrum sys.color; primary is the same hue family"
+    },
+    "Schemes/Primary Fixed": {
+      "spectrum": null,
+      "fallback": "Schemes/Primary Container",
+      "status": "fallback",
+      "reason": "Fixed variants absent from spectrum; primary-container is the closest lighter tone"
+    },
+    "Schemes/On Primary Fixed": {
+      "spectrum": null,
+      "fallback": "Schemes/On Primary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; on-primary is closest foreground"
+    },
+    "Schemes/Primary Fixed Dim": {
+      "spectrum": null,
+      "fallback": "Schemes/Primary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; primary is closest mid-tone"
+    },
+    "Schemes/On Primary Fixed Variant": {
+      "spectrum": null,
+      "fallback": "Schemes/On Primary Container",
+      "status": "fallback",
+      "reason": "Fixed variants absent; on-primary-container is closest dark foreground in the primary family"
+    },
+    "Schemes/Secondary Fixed": {
+      "spectrum": null,
+      "fallback": "Schemes/Secondary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; secondary is closest match"
+    },
+    "Schemes/On Secondary Fixed": {
+      "spectrum": null,
+      "fallback": "Schemes/On Secondary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; on-secondary is closest foreground"
+    },
+    "Schemes/Secondary Fixed Dim": {
+      "spectrum": null,
+      "fallback": "Schemes/Secondary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; secondary is closest mid-tone"
+    },
+    "Schemes/On Secondary Fixed Variant": {
+      "spectrum": null,
+      "fallback": "Schemes/On Secondary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; on-secondary is closest foreground"
+    },
+    "Schemes/Tertiary Fixed": {
+      "spectrum": null,
+      "fallback": "Schemes/Tertiary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; tertiary is closest match"
+    },
+    "Schemes/On Tertiary Fixed": {
+      "spectrum": null,
+      "fallback": "Schemes/On Primary",
+      "status": "fallback",
+      "reason": "Fixed variants absent and on-tertiary missing; on-primary is closest light foreground"
+    },
+    "Schemes/Tertiary Fixed Dim": {
+      "spectrum": null,
+      "fallback": "Schemes/Tertiary",
+      "status": "fallback",
+      "reason": "Fixed variants absent; tertiary is closest mid-tone"
+    },
+    "Schemes/On Tertiary Fixed Variant": {
+      "spectrum": null,
+      "fallback": "Schemes/On Surface",
+      "status": "fallback",
+      "reason": "Fixed variants absent and on-tertiary-container missing; on-surface is closest dark foreground"
+    },
+    "Schemes/Surface Dim": {
+      "spectrum": null,
+      "fallback": "Schemes/Surface",
+      "status": "fallback",
+      "reason": "surface-dim not in spectrum; surface is closest neutral background"
+    },
+    "Schemes/Surface Bright": {
+      "spectrum": null,
+      "fallback": "Schemes/Surface",
+      "status": "fallback",
+      "reason": "surface-bright not in spectrum; surface is closest neutral background"
+    },
+    "Schemes/Surface Container Lowest": {
+      "spectrum": null,
+      "fallback": "Schemes/Surface Container Low",
+      "status": "fallback",
+      "reason": "surface-container-lowest not in spectrum; surface-container-low is nearest elevation step"
+    },
+    "Schemes/Surface Container Low": {
+      "spectrum": "Schemes/Surface Container Low",
+      "status": "exact"
+    },
+    "Schemes/Surface Container": {
+      "spectrum": "Schemes/Surface Container",
+      "status": "exact"
+    },
+    "Schemes/Surface Container High": {
+      "spectrum": null,
+      "fallback": "Schemes/Surface Container",
+      "status": "fallback",
+      "reason": "surface-container-high not in spectrum; surface-container is nearest elevation step"
+    },
+    "Schemes/Surface Container Highest": {
+      "spectrum": null,
+      "fallback": "Schemes/Surface Container",
+      "status": "fallback",
+      "reason": "surface-container-highest not in spectrum; surface-container is nearest available step"
+    }
+  }
+}

@@ -12,6 +12,7 @@ export const DIRECTIVES = [
   d.SpectrumButton,
   d.SpectrumCard,
   d.SpectrumChart,
+  d.SpectrumCheckbox,
   d.SpectrumChip,
   d.SpectrumCluster,
   d.SpectrumCollapsibleList,
@@ -31,6 +32,8 @@ export const DIRECTIVES = [
   d.SpectrumMediaLibrary,
   d.SpectrumMenu,
   d.SpectrumPanel,
+  d.SpectrumProgress,
+  d.SpectrumRadio,
   d.SpectrumRail,
   d.SpectrumRailAlternative,
   d.SpectrumRailItem,
@@ -41,9 +44,11 @@ export const DIRECTIVES = [
   d.SpectrumSidebar,
   d.SpectrumStack,
   d.SpectrumSwitch,
+  d.SpectrumTabs,
   d.SpectrumTextInput,
   d.SpectrumTheme,
   d.SpectrumToast,
+  d.SpectrumTooltip,
   d.SpectrumWallpaper,
   d.SpectrumWizard
 ];

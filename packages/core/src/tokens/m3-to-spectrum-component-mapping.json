@@ -1,0 +1,233 @@
+{
+  "_meta": {
+    "description": "Maps M3 (Material Design 3) Figma components to their Spectrum equivalents. Used as reference for design migration and as input for automated component swapping.",
+    "generated": "2026-02-28",
+    "statuses": {
+      "mapped": "Direct Spectrum equivalent exists",
+      "partial": "Spectrum component covers some but not all M3 functionality",
+      "missing": "No Spectrum equivalent -- component needs to be created"
+    }
+  },
+  "components": {
+    "Navigation Rail": {
+      "spectrum": "spectrum-rail",
+      "status": "mapped",
+      "notes": "Spectrum rail is more feature-rich (search, add button, collapsible lists)",
+      "variants": {
+        "default": "spectrum-rail with default props"
+      }
+    },
+    "Button": {
+      "spectrum": "spectrum-button",
+      "status": "mapped",
+      "variants": {
+        "Filled": "variant=\"primary\"",
+        "Outlined": "variant=\"outline\"",
+        "Text": "variant=\"ghost\"",
+        "Filled Tonal": "variant=\"secondary\"",
+        "Elevated": "variant=\"primary\" (no direct elevated variant)"
+      }
+    },
+    "FAB": {
+      "spectrum": "spectrum-button",
+      "status": "mapped",
+      "variants": {
+        "FAB": "variant=\"fab\"",
+        "Extended FAB": "variant=\"fab\" with buttonText"
+      }
+    },
+    "Icon Button": {
+      "spectrum": "spectrum-button",
+      "status": "mapped",
+      "variants": {
+        "Standard": "variant=\"ghost\" iconOnly={true}",
+        "Filled": "variant=\"primary\" iconOnly={true}",
+        "Filled Tonal": "variant=\"secondary\" iconOnly={true}",
+        "Outlined": "variant=\"outline\" iconOnly={true}"
+      }
+    },
+    "Chip": {
+      "spectrum": "spectrum-chip",
+      "status": "mapped",
+      "variants": {
+        "Assist": "variant=\"assist\"",
+        "Filter": "variant=\"filter\"",
+        "Input": "variant=\"input\"",
+        "Suggestion": "variant=\"suggestion\""
+      }
+    },
+    "Card": {
+      "spectrum": "spectrum-card",
+      "status": "mapped",
+      "variants": {
+        "Elevated": "variant=\"elevated\"",
+        "Filled": "variant=\"filled\"",
+        "Outlined": "variant=\"outlined\""
+      }
+    },
+    "Dialog": {
+      "spectrum": "spectrum-dialog",
+      "status": "mapped",
+      "variants": {
+        "Basic": "size=\"medium\"",
+        "Full-screen": "size=\"full\""
+      }
+    },
+    "Switch": {
+      "spectrum": "spectrum-switch",
+      "status": "mapped",
+      "notes": "Spectrum adds showIcons, loading, variant (primary/positive/caution/destructive)",
+      "variants": {
+        "default": "spectrum-switch with default props"
+      }
+    },
+    "Text Field": {
+      "spectrum": "spectrum-text-input",
+      "status": "partial",
+      "notes": "M3 has Filled/Outlined variants; Spectrum uses single style. Spectrum adds clearable, leading/trailing icons.",
+      "variants": {
+        "Filled": "spectrum-text-input (single style)",
+        "Outlined": "spectrum-text-input (single style)"
+      }
+    },
+    "Search": {
+      "spectrum": "spectrum-search-input",
+      "status": "partial",
+      "notes": "Spectrum search is AI-chat oriented (multiline, voice input). M3 search bar is simpler.",
+      "variants": {
+        "Search bar": "spectrum-search-input",
+        "Search view": "spectrum-search-input (partial)"
+      }
+    },
+    "Snackbar": {
+      "spectrum": "spectrum-toast",
+      "status": "mapped",
+      "notes": "Spectrum toast adds position, persistent, variant options",
+      "variants": {
+        "Single-line": "spectrum-toast",
+        "Two-line": "spectrum-toast with message",
+        "With action": "spectrum-toast with actionLabel"
+      }
+    },
+    "Badge": {
+      "spectrum": "spectrum-badge",
+      "status": "mapped",
+      "variants": {
+        "Small": "size=\"small\"",
+        "Large": "size=\"large\" with text"
+      }
+    },
+    "Navigation Drawer": {
+      "spectrum": "spectrum-sidebar",
+      "status": "partial",
+      "notes": "Spectrum sidebar is layout-focused; M3 drawer has specific navigation patterns",
+      "variants": {
+        "Standard": "spectrum-sidebar position=\"left\"",
+        "Modal": "spectrum-sidebar overlay={true}"
+      }
+    },
+    "Menu": {
+      "spectrum": "spectrum-menu",
+      "status": "mapped",
+      "notes": "Spectrum adds megamenu variant and responsive mobile handling",
+      "variants": {
+        "default": "spectrum-menu with items prop"
+      }
+    },
+    "Exposed Dropdown Menu": {
+      "spectrum": "spectrum-select",
+      "status": "mapped",
+      "notes": "Spectrum adds searchable, virtualScrolling, multiple selection",
+      "variants": {
+        "Filled": "spectrum-select variant=\"primary\"",
+        "Outlined": "spectrum-select variant=\"outline\""
+      }
+    },
+    "Top App Bar": {
+      "spectrum": "spectrum-app-layout",
+      "status": "partial",
+      "notes": "Spectrum handles this at layout level, not as standalone component"
+    },
+    "Segmented Button": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Could be composed from spectrum-chip group or spectrum-button group"
+    },
+    "Checkbox": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Needs spectrum-checkbox component"
+    },
+    "Radio Button": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Needs spectrum-radio component"
+    },
+    "Tabs": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Needs spectrum-tabs component. M3 has Primary and Secondary tab variants."
+    },
+    "Progress Indicator": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Needs spectrum-progress component. M3 has Circular and Linear variants."
+    },
+    "Tooltip": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Needs spectrum-tooltip component. M3 has Plain and Rich variants."
+    },
+    "Slider": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Needs spectrum-slider component. M3 has Continuous and Discrete variants."
+    },
+    "Divider": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Simple CSS utility; could be spectrum-divider or handled with border/hr"
+    },
+    "Date Picker": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Complex component; M3 has Docked, Modal, and Input variants"
+    },
+    "Time Picker": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Complex component; M3 has Dial and Input variants"
+    },
+    "Bottom Sheet": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Could partially use spectrum-dialog size=\"full\" on mobile"
+    },
+    "Carousel": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Needs spectrum-carousel component"
+    },
+    "Bottom Navigation Bar": {
+      "spectrum": null,
+      "status": "missing",
+      "notes": "Mobile-specific navigation pattern"
+    },
+    "Side Sheet": {
+      "spectrum": "spectrum-sidebar",
+      "status": "partial",
+      "notes": "Could extend spectrum-sidebar with sheet behavior (position right, overlay)"
+    },
+    "Lists": {
+      "spectrum": "spectrum-collapsible-list",
+      "status": "partial",
+      "notes": "Spectrum's list is specialized for rail navigation; M3 lists are more general purpose"
+    }
+  },
+  "summary": {
+    "mapped": 17,
+    "partial": 6,
+    "missing": 11,
+    "total": 34
+  }
+}

@@ -275,6 +275,32 @@ export declare interface SpectrumChart extends Components.SpectrumChart {
 
 
 @ProxyCmp({
+  inputs: ['accessibleDescribedBy', 'accessibleLabel', 'checked', 'disabled', 'indeterminate', 'label', 'name', 'size', 'value', 'variant']
+})
+@Component({
+  selector: 'spectrum-checkbox',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['accessibleDescribedBy', 'accessibleLabel', 'checked', 'disabled', 'indeterminate', 'label', 'name', 'size', 'value', 'variant'],
+})
+export class SpectrumCheckbox {
+  protected el: HTMLSpectrumCheckboxElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['checkboxChange']);
+  }
+}
+
+
+export declare interface SpectrumCheckbox extends Components.SpectrumCheckbox {
+
+  checkboxChange: EventEmitter<CustomEvent<{ action: string; checked: boolean; indeterminate: boolean; value?: string }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['action', 'debug', 'disabled', 'haptic', 'label', 'leadingIcon', 'outline', 'ripple', 'selected', 'showTrailingIcon', 'size', 'sound', 'trailingIcon', 'variant']
 })
 @Component({
@@ -886,6 +912,54 @@ export declare interface SpectrumPanel extends Components.SpectrumPanel {
 
 
 @ProxyCmp({
+  inputs: ['color', 'disabled', 'label', 'showLabel', 'size', 'value', 'variant']
+})
+@Component({
+  selector: 'spectrum-progress',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['color', 'disabled', 'label', 'showLabel', 'size', 'value', 'variant'],
+})
+export class SpectrumProgress {
+  protected el: HTMLSpectrumProgressElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+  }
+}
+
+
+export declare interface SpectrumProgress extends Components.SpectrumProgress {}
+
+
+@ProxyCmp({
+  inputs: ['accessibleDescribedBy', 'accessibleLabel', 'checked', 'disabled', 'label', 'name', 'size', 'value', 'variant']
+})
+@Component({
+  selector: 'spectrum-radio',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['accessibleDescribedBy', 'accessibleLabel', 'checked', 'disabled', 'label', 'name', 'size', 'value', 'variant'],
+})
+export class SpectrumRadio {
+  protected el: HTMLSpectrumRadioElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['radioChange']);
+  }
+}
+
+
+export declare interface SpectrumRadio extends Components.SpectrumRadio {
+
+  radioChange: EventEmitter<CustomEvent<{ action: string; checked: boolean; value?: string; name?: string }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['addIcon', 'addLabel', 'appName', 'collapsedOffset', 'debug', 'expandedWidth', 'initialExpanded', 'moreContextActions', 'moreIcon', 'moreLabel', 'showAddButton'],
   methods: ['setExpanded', 'setShowAddButton']
 })
@@ -1168,6 +1242,34 @@ export declare interface SpectrumSwitch extends Components.SpectrumSwitch {
 
 
 @ProxyCmp({
+  inputs: ['disabled', 'items', 'scrollable', 'selectedIndex', 'size', 'variant']
+})
+@Component({
+  selector: 'spectrum-tabs',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['disabled', 'items', 'scrollable', 'selectedIndex', 'size', 'variant'],
+})
+export class SpectrumTabs {
+  protected el: HTMLSpectrumTabsElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tabChange']);
+  }
+}
+
+
+import type { TabItem as ISpectrumTabsTabItem } from '@unops-itg-npm/cpit-spectrum';
+
+export declare interface SpectrumTabs extends Components.SpectrumTabs {
+
+  tabChange: EventEmitter<CustomEvent<{ action: string; index: number; tab: [object Object] }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['autocomplete', 'clearable', 'disabled', 'errorMessage', 'helperText', 'inputId', 'label', 'leadingIcon', 'max', 'maxlength', 'min', 'minlength', 'name', 'pattern', 'placeholder', 'readonly', 'required', 'size', 'step', 'trailingIcon', 'type', 'value']
 })
 @Component({
@@ -1263,6 +1365,35 @@ export declare interface SpectrumToast extends Components.SpectrumToast {
   toastAction: EventEmitter<CustomEvent<{ action: string; toast: any }>>;
 
   toastDismiss: EventEmitter<CustomEvent<{ action: string; toast: any }>>;
+}
+
+
+@ProxyCmp({
+  inputs: ['delay', 'position', 'text', 'trigger', 'variant', 'visible'],
+  methods: ['show', 'hide']
+})
+@Component({
+  selector: 'spectrum-tooltip',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['delay', 'position', 'text', 'trigger', 'variant', 'visible'],
+})
+export class SpectrumTooltip {
+  protected el: HTMLSpectrumTooltipElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tooltipShow', 'tooltipHide']);
+  }
+}
+
+
+export declare interface SpectrumTooltip extends Components.SpectrumTooltip {
+
+  tooltipShow: EventEmitter<CustomEvent<void>>;
+
+  tooltipHide: EventEmitter<CustomEvent<void>>;
 }
 
 

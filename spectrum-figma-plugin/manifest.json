@@ -1,0 +1,20 @@
+{
+  "name": "Spectrum M3 Tools",
+  "id": "spectrum-m3-tools-local",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "editorType": ["figma"],
+  "networkAccess": { "allowedDomains": ["none"] },
+  "menu": [
+    { "name": "1. Debug - List variable names", "command": "debug" },
+    { "separator": true },
+    { "name": "2. Swap M3 color to Spectrum (rebind all layers)", "command": "swap" },
+    { "name": "3. Rename Spectrum to M3 paths", "command": "rename" },
+    { "name": "4. Revert M3 to Spectrum paths", "command": "revert" },
+    { "separator": true },
+    { "name": "5. Create Spectrum State Layers", "command": "createStateLayers" },
+    { "name": "6. Create Spectrum Typescale/Font/Shape vars", "command": "createNonColorVars" },
+    { "separator": true },
+    { "name": "7. Swap ALL M3 collections to Spectrum", "command": "swapAll" }
+  ]
+}

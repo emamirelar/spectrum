@@ -370,6 +370,11 @@ const COMPONENT_DEPENDENCY_MAP = {
   'spectrum-switch': [],
   'spectrum-dialog': ['spectrum-button'],
   'spectrum-avatar': [],
+  'spectrum-checkbox': [],
+  'spectrum-radio': [],
+  'spectrum-tabs': [],
+  'spectrum-progress': [],
+  'spectrum-tooltip': [],
   
   // Layout Components
   'spectrum-app-layout': [],

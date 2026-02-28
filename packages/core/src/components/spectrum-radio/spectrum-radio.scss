@@ -1,0 +1,152 @@
+:host {
+  display: inline-block;
+
+  --radio-size: 20px;
+  --radio-size-sm: 16px;
+  --radio-size-lg: 24px;
+  --radio-dot-scale: 0.45;
+  --radio-border-width: 2px;
+  --radio-border-color: var(--spectrum-color-outline, #72777f);
+  --radio-bg-checked: var(--spectrum-sys-color-primary, #0070d2);
+  --radio-dot-color: var(--spectrum-sys-color-primary, #0070d2);
+  --radio-focus-outline: var(--spectrum-sys-color-primary, #0070d2);
+  --radio-disabled-opacity: 0.4;
+  --radio-transition: all 0.15s ease;
+  --radio-label-gap: var(--spectrum-sys-spacing-small, 8px);
+  --radio-label-font: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --radio-label-size: var(--spectrum-sys-typescale-body-medium-size, 14px);
+  --radio-label-color: var(--spectrum-color-on-surface, #333333);
+  --radio-positive-color: var(--spectrum-sys-color-success, #2d844a);
+  --radio-caution-color: var(--spectrum-sys-color-warning, #cc6900);
+  --radio-destructive-color: var(--spectrum-sys-color-danger, #c41e3a);
+}
+
+.spectrum-radio-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--radio-label-gap);
+}
+
+.spectrum-radio__label {
+  font-family: var(--radio-label-font);
+  font-size: var(--radio-label-size);
+  color: var(--radio-label-color);
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.4;
+}
+
+.spectrum-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--radio-size);
+  height: var(--radio-size);
+  border: var(--radio-border-width) solid var(--radio-border-color);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: var(--radio-transition);
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+
+  &__circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  &__dot {
+    display: block;
+    width: calc(var(--radio-size) * var(--radio-dot-scale));
+    height: calc(var(--radio-size) * var(--radio-dot-scale));
+    border-radius: 50%;
+    background-color: var(--radio-dot-color);
+    transition: var(--radio-transition);
+  }
+
+  // Size variants
+  &--sm {
+    width: var(--radio-size-sm);
+    height: var(--radio-size-sm);
+    .spectrum-radio__dot {
+      width: calc(var(--radio-size-sm) * var(--radio-dot-scale));
+      height: calc(var(--radio-size-sm) * var(--radio-dot-scale));
+    }
+  }
+
+  &--lg {
+    width: var(--radio-size-lg);
+    height: var(--radio-size-lg);
+    .spectrum-radio__dot {
+      width: calc(var(--radio-size-lg) * var(--radio-dot-scale));
+      height: calc(var(--radio-size-lg) * var(--radio-dot-scale));
+    }
+  }
+
+  // Color variants
+  &--primary.spectrum-radio--checked {
+    border-color: var(--radio-bg-checked);
+    .spectrum-radio__dot { background-color: var(--radio-bg-checked); }
+  }
+
+  &--positive.spectrum-radio--checked {
+    border-color: var(--radio-positive-color);
+    .spectrum-radio__dot { background-color: var(--radio-positive-color); }
+  }
+
+  &--caution.spectrum-radio--checked {
+    border-color: var(--radio-caution-color);
+    .spectrum-radio__dot { background-color: var(--radio-caution-color); }
+  }
+
+  &--destructive.spectrum-radio--checked {
+    border-color: var(--radio-destructive-color);
+    .spectrum-radio__dot { background-color: var(--radio-destructive-color); }
+  }
+
+  // States
+  &:hover:not(.spectrum-radio--disabled) {
+    border-color: var(--spectrum-color-on-surface, #333333);
+  }
+
+  &--focused:not(.spectrum-radio--disabled) {
+    &::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border: 2px solid var(--radio-focus-outline);
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+  }
+
+  &--disabled {
+    opacity: var(--radio-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-contrast: high) {
+  .spectrum-radio { border-width: 3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-radio { --radio-transition: none; }
+}
