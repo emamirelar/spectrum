@@ -19,7 +19,8 @@
     "update": "npx npm-check-updates -u",
     "test-storybook": "test-storybook",
     "deploy-storybook": "npm run storybook.restore && storybook-to-ghpages",
-    "deploy-storybook-fast": "npm run deploy-storybook && npm run storybook.fast"
+    "deploy-storybook-fast": "npm run deploy-storybook && npm run storybook.fast",
+    "chromatic": "npx chromatic --exit-zero-on-changes"
   },
   "dependencies": {
     "@unops-itg-npm/cpit-spectrum": "^0.0.1-alpha.42",
@@ -33,6 +34,7 @@
     "@storybook/web-components-vite": "^9.1.19",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "chromatic": "^15.2.0",
     "concurrently": "^9.1.0",
     "http-server": "^14.1.1",
     "mermaid": "^10.9.1",
