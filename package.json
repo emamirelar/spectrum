@@ -23,6 +23,7 @@
     "build:pack": "npm run build:core && npm run pack:core",
     "link:core": "cd packages/core && npm link",
     "clean": "rm -rf packages/core/dist packages/core/*.tgz",
-    "rebuild": "npm run clean && npm run build:pack"
+    "rebuild": "npm run clean && npm run build:pack",
+    "build:storybook": "npm run build:core && cd packages/storybook && npm run build-storybook"
   }
 }
