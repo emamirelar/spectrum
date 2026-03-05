@@ -149,34 +149,55 @@
       "notes": "Spectrum handles this at layout level, not as standalone component"
     },
     "Segmented Button": {
-      "spectrum": null,
-      "status": "missing",
-      "notes": "Could be composed from spectrum-chip group or spectrum-button group"
+      "spectrum": "spectrum-segmented-button",
+      "status": "mapped",
+      "notes": "M3 Segmented Button maps to Spectrum segmented-button component",
+      "variants": {
+        "default": "spectrum-segmented-button with default props"
+      }
     },
     "Checkbox": {
-      "spectrum": null,
-      "status": "missing",
-      "notes": "Needs spectrum-checkbox component"
+      "spectrum": "spectrum-checkbox",
+      "status": "mapped",
+      "notes": "M3 Checkbox maps directly to Spectrum checkbox",
+      "variants": {
+        "default": "spectrum-checkbox with default props"
+      }
     },
     "Radio Button": {
-      "spectrum": null,
-      "status": "missing",
-      "notes": "Needs spectrum-radio component"
+      "spectrum": "spectrum-radio",
+      "status": "mapped",
+      "notes": "M3 Radio Button maps to Spectrum radio with variant support",
+      "variants": {
+        "default": "spectrum-radio with default props"
+      }
     },
     "Tabs": {
-      "spectrum": null,
-      "status": "missing",
-      "notes": "Needs spectrum-tabs component. M3 has Primary and Secondary tab variants."
+      "spectrum": "spectrum-tabs",
+      "status": "mapped",
+      "notes": "M3 Primary/Secondary tab variants map to Spectrum variant prop",
+      "variants": {
+        "Primary": "variant=\"primary\"",
+        "Secondary": "variant=\"secondary\""
+      }
     },
     "Progress Indicator": {
-      "spectrum": null,
-      "status": "missing",
-      "notes": "Needs spectrum-progress component. M3 has Circular and Linear variants."
+      "spectrum": "spectrum-progress",
+      "status": "mapped",
+      "notes": "M3 Circular/Linear variants map to Spectrum variant prop",
+      "variants": {
+        "Circular": "variant=\"circular\"",
+        "Linear": "variant=\"linear\""
+      }
     },
     "Tooltip": {
-      "spectrum": null,
-      "status": "missing",
-      "notes": "Needs spectrum-tooltip component. M3 has Plain and Rich variants."
+      "spectrum": "spectrum-tooltip",
+      "status": "mapped",
+      "notes": "M3 Plain/Rich variants map to Spectrum variant prop",
+      "variants": {
+        "Plain": "variant=\"plain\"",
+        "Rich": "variant=\"rich\""
+      }
     },
     "Slider": {
       "spectrum": null,
@@ -225,9 +246,9 @@
     }
   },
   "summary": {
-    "mapped": 17,
+    "mapped": 23,
     "partial": 6,
-    "missing": 11,
+    "missing": 5,
     "total": 34
   }
 }

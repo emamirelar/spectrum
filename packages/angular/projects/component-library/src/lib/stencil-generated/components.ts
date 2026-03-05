@@ -1138,6 +1138,32 @@ export declare interface SpectrumSearchResults extends Components.SpectrumSearch
 
 
 @ProxyCmp({
+  inputs: ['ariaLabel', 'disabled', 'items', 'multiSelect', 'selectedIndex', 'size']
+})
+@Component({
+  selector: 'spectrum-segmented-button',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '<ng-content></ng-content>',
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+  inputs: ['ariaLabel', 'disabled', 'items', 'multiSelect', 'selectedIndex', 'size'],
+})
+export class SpectrumSegmentedButton {
+  protected el: HTMLSpectrumSegmentedButtonElement;
+  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+    c.detach();
+    this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['segmentChange']);
+  }
+}
+
+
+export declare interface SpectrumSegmentedButton extends Components.SpectrumSegmentedButton {
+
+  segmentChange: EventEmitter<CustomEvent<{ action: string; index: number; value: string; selected: boolean }>>;
+}
+
+
+@ProxyCmp({
   inputs: ['action', 'customStyle', 'debug', 'disabled', 'dropdownIcon', 'errorText', 'invalid', 'itemHeight', 'loading', 'loadingText', 'maxHeight', 'mobileFullscreen', 'multiple', 'noResultsText', 'options', 'placeholder', 'required', 'searchPlaceholder', 'searchTitle', 'searchable', 'selectAllText', 'selectedValue', 'selectedValues', 'selectionsLabel', 'showDropdownIcon', 'showIcon', 'showSelectAll', 'size', 'state', 'touchOptimized', 'variant', 'virtualScrolling']
 })
 @Component({

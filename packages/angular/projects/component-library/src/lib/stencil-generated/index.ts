@@ -40,6 +40,7 @@ export const DIRECTIVES = [
   d.SpectrumScoreCard,
   d.SpectrumSearchInput,
   d.SpectrumSearchResults,
+  d.SpectrumSegmentedButton,
   d.SpectrumSelect,
   d.SpectrumSidebar,
   d.SpectrumStack,

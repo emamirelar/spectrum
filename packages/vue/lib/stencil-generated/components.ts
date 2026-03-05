@@ -728,6 +728,19 @@ export const SpectrumSearchResults = /*@__PURE__*/ defineContainer<JSX.SpectrumS
 ]);
 
 
+export const SpectrumSegmentedButton = /*@__PURE__*/ defineContainer<JSX.SpectrumSegmentedButton>('spectrum-segmented-button', undefined, [
+  'items',
+  'selectedIndex',
+  'multiSelect',
+  'size',
+  'disabled',
+  'ariaLabel',
+  'segmentChange'
+], [
+  'segmentChange'
+]);
+
+
 export const SpectrumSelect = /*@__PURE__*/ defineContainer<JSX.SpectrumSelect>('spectrum-select', undefined, [
   'debug',
   'variant',

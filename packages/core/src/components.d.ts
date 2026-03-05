@@ -27,6 +27,7 @@ import { MediaActionPayload, MediaItem } from "./components/spectrum-media-libra
 import { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 import { ComparisonData, ScoreCardConfig, TrendIndicator } from "./components/spectrum-score-card/types/score-card.types";
 import { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
+import { SegmentItem } from "./components/spectrum-segmented-button/spectrum-segmented-button";
 import { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 import { TabItem } from "./components/spectrum-tabs/spectrum-tabs";
 import { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
@@ -52,6 +53,7 @@ export { MediaActionPayload, MediaItem } from "./components/spectrum-media-libra
 export { BackgroundLevel as BackgroundLevel1 } from "./components/spectrum-panel/spectrum-panel";
 export { ComparisonData, ScoreCardConfig, TrendIndicator } from "./components/spectrum-score-card/types/score-card.types";
 export { PaginationActionPayload, SearchResultActionPayload, SearchResultsData, SearchResultsTranslations } from "./components/spectrum-search-results/spectrum-search-results";
+export { SegmentItem } from "./components/spectrum-segmented-button/spectrum-segmented-button";
 export { SpectrumSelectOption } from "./components/spectrum-select/spectrum-select";
 export { TabItem } from "./components/spectrum-tabs/spectrum-tabs";
 export { WizardCompleteEvent, WizardStep, WizardStepChangeEvent } from "./components/spectrum-wizard/spectrum-wizard";
@@ -2239,6 +2241,37 @@ export namespace Components {
          */
         "translations": SearchResultsTranslations;
     }
+    interface SpectrumSegmentedButton {
+        /**
+          * Accessible label for the group
+         */
+        "ariaLabel": string;
+        /**
+          * Disable entire segmented button
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Segment items as array or JSON string
+          * @default []
+         */
+        "items": SegmentItem[] | string;
+        /**
+          * Allow multiple segment selection
+          * @default false
+         */
+        "multiSelect": boolean;
+        /**
+          * Currently selected index (single-select mode)
+          * @default 0
+         */
+        "selectedIndex": number;
+        /**
+          * Size variant
+          * @default 'base'
+         */
+        "size": 'sm' | 'base' | 'lg';
+    }
     /**
      * Spectrum Select Component
      * A comprehensive select component with advanced features including search, loading states,
@@ -3074,6 +3107,10 @@ export interface SpectrumSearchResultsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSearchResultsElement;
 }
+export interface SpectrumSegmentedButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSpectrumSegmentedButtonElement;
+}
 export interface SpectrumSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSpectrumSelectElement;
@@ -3781,6 +3818,23 @@ declare global {
         prototype: HTMLSpectrumSearchResultsElement;
         new (): HTMLSpectrumSearchResultsElement;
     };
+    interface HTMLSpectrumSegmentedButtonElementEventMap {
+        "segmentChange": { action: string; index: number; value: string; selected: boolean };
+    }
+    interface HTMLSpectrumSegmentedButtonElement extends Components.SpectrumSegmentedButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLSpectrumSegmentedButtonElementEventMap>(type: K, listener: (this: HTMLSpectrumSegmentedButtonElement, ev: SpectrumSegmentedButtonCustomEvent<HTMLSpectrumSegmentedButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLSpectrumSegmentedButtonElementEventMap>(type: K, listener: (this: HTMLSpectrumSegmentedButtonElement, ev: SpectrumSegmentedButtonCustomEvent<HTMLSpectrumSegmentedButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLSpectrumSegmentedButtonElement: {
+        prototype: HTMLSpectrumSegmentedButtonElement;
+        new (): HTMLSpectrumSegmentedButtonElement;
+    };
     interface HTMLSpectrumSelectElementEventMap {
         "selectChange": { 
     value: string; 
@@ -4038,6 +4092,7 @@ declare global {
         "spectrum-score-card": HTMLSpectrumScoreCardElement;
         "spectrum-search-input": HTMLSpectrumSearchInputElement;
         "spectrum-search-results": HTMLSpectrumSearchResultsElement;
+        "spectrum-segmented-button": HTMLSpectrumSegmentedButtonElement;
         "spectrum-select": HTMLSpectrumSelectElement;
         "spectrum-sidebar": HTMLSpectrumSidebarElement;
         "spectrum-stack": HTMLSpectrumStackElement;
@@ -6328,6 +6383,38 @@ declare namespace LocalJSX {
          */
         "translations"?: SearchResultsTranslations;
     }
+    interface SpectrumSegmentedButton {
+        /**
+          * Accessible label for the group
+         */
+        "ariaLabel"?: string;
+        /**
+          * Disable entire segmented button
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Segment items as array or JSON string
+          * @default []
+         */
+        "items"?: SegmentItem[] | string;
+        /**
+          * Allow multiple segment selection
+          * @default false
+         */
+        "multiSelect"?: boolean;
+        "onSegmentChange"?: (event: SpectrumSegmentedButtonCustomEvent<{ action: string; index: number; value: string; selected: boolean }>) => void;
+        /**
+          * Currently selected index (single-select mode)
+          * @default 0
+         */
+        "selectedIndex"?: number;
+        /**
+          * Size variant
+          * @default 'base'
+         */
+        "size"?: 'sm' | 'base' | 'lg';
+    }
     /**
      * Spectrum Select Component
      * A comprehensive select component with advanced features including search, loading states,
@@ -7112,6 +7199,7 @@ declare namespace LocalJSX {
         "spectrum-score-card": SpectrumScoreCard;
         "spectrum-search-input": SpectrumSearchInput;
         "spectrum-search-results": SpectrumSearchResults;
+        "spectrum-segmented-button": SpectrumSegmentedButton;
         "spectrum-select": SpectrumSelect;
         "spectrum-sidebar": SpectrumSidebar;
         "spectrum-stack": SpectrumStack;
@@ -7277,6 +7365,7 @@ declare module "@stencil/core" {
             "spectrum-score-card": LocalJSX.SpectrumScoreCard & JSXBase.HTMLAttributes<HTMLSpectrumScoreCardElement>;
             "spectrum-search-input": LocalJSX.SpectrumSearchInput & JSXBase.HTMLAttributes<HTMLSpectrumSearchInputElement>;
             "spectrum-search-results": LocalJSX.SpectrumSearchResults & JSXBase.HTMLAttributes<HTMLSpectrumSearchResultsElement>;
+            "spectrum-segmented-button": LocalJSX.SpectrumSegmentedButton & JSXBase.HTMLAttributes<HTMLSpectrumSegmentedButtonElement>;
             /**
              * Spectrum Select Component
              * A comprehensive select component with advanced features including search, loading states,

@@ -48,6 +48,7 @@ import { SpectrumRail as SpectrumRailElement, defineCustomElement as defineSpect
 import { SpectrumScoreCard as SpectrumScoreCardElement, defineCustomElement as defineSpectrumScoreCard } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-score-card.js";
 import { SpectrumSearchInput as SpectrumSearchInputElement, defineCustomElement as defineSpectrumSearchInput } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-search-input.js";
 import { SpectrumSearchResults as SpectrumSearchResultsElement, defineCustomElement as defineSpectrumSearchResults } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-search-results.js";
+import { SpectrumSegmentedButton as SpectrumSegmentedButtonElement, defineCustomElement as defineSpectrumSegmentedButton } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-segmented-button.js";
 import { SpectrumSelect as SpectrumSelectElement, defineCustomElement as defineSpectrumSelect } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-select.js";
 import { SpectrumSidebar as SpectrumSidebarElement, defineCustomElement as defineSpectrumSidebar } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-sidebar.js";
 import { SpectrumStack as SpectrumStackElement, defineCustomElement as defineSpectrumStack } from "@unops-itg-npm/cpit-spectrum/dist/components/spectrum-stack.js";
@@ -623,6 +624,17 @@ export const SpectrumSearchResults: StencilReactComponent<SpectrumSearchResultsE
         onPaginationAction: 'paginationAction'
     } as SpectrumSearchResultsEvents,
     defineCustomElement: defineSpectrumSearchResults
+});
+
+type SpectrumSegmentedButtonEvents = { onSegmentChange: EventName<CustomEvent<{ action: string; index: number; value: string; selected: boolean }>> };
+
+export const SpectrumSegmentedButton: StencilReactComponent<SpectrumSegmentedButtonElement, SpectrumSegmentedButtonEvents> = /*@__PURE__*/ createComponent<SpectrumSegmentedButtonElement, SpectrumSegmentedButtonEvents>({
+    tagName: 'spectrum-segmented-button',
+    elementClass: SpectrumSegmentedButtonElement,
+    // @ts-ignore - React type of Stencil Output Target may differ from the React version used in the Nuxt.js project, this can be ignored.
+    react: React,
+    events: { onSegmentChange: 'segmentChange' } as SpectrumSegmentedButtonEvents,
+    defineCustomElement: defineSpectrumSegmentedButton
 });
 
 type SpectrumSelectEvents = {

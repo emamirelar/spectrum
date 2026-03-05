@@ -1,0 +1,193 @@
+// ==============================================
+// Spectrum Segmented Button Component Styles
+// ==============================================
+// BEM naming: spectrum-segmented-button (block), __segment (element), --modifier
+// Renders as a group of buttons with shared border-radius
+// ==============================================
+
+:host {
+  display: inline-block;
+
+  --segmented-font: var(--spectrum-sys-font-family, 'Noto Sans', sans-serif);
+  --segmented-font-size: var(--spectrum-sys-typescale-label-large-size, 14px);
+  --segmented-font-size-sm: 12px;
+  --segmented-font-size-lg: 16px;
+  --segmented-font-weight: 500;
+  --segmented-height: 40px;
+  --segmented-height-sm: 32px;
+  --segmented-height-lg: 48px;
+  --segmented-border-radius: 100vw;
+  --segmented-border-color: var(--spectrum-color-outline, #79747e);
+  --segmented-bg: transparent;
+  --segmented-text-color: var(--spectrum-color-on-surface, #1d1b20);
+  --segmented-selected-bg: var(--spectrum-color-secondary-container, #e8def8);
+  --segmented-selected-color: var(--spectrum-color-on-secondary-container, #1d192b);
+  --segmented-hover-bg: var(--spectrum-sys-color-primary-opacity-08, rgba(0, 112, 210, 0.08));
+  --segmented-disabled-opacity: 0.4;
+  --segmented-transition: all 0.2s ease;
+  --segmented-padding: 0 16px;
+  --segmented-padding-sm: 0 12px;
+  --segmented-padding-lg: 0 24px;
+  --segmented-icon-gap: 8px;
+  --segmented-icon-size: 18px;
+  --segmented-focus-outline: var(--spectrum-sys-color-primary, #0070d2);
+}
+
+// ==============================================
+// Base Component Styles
+// ==============================================
+
+.spectrum-segmented-button {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--segmented-border-color);
+  border-radius: var(--segmented-border-radius);
+  overflow: hidden;
+  background: var(--segmented-bg);
+
+  // ==============================================
+  // Segment (individual button)
+  // ==============================================
+
+  &__segment {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--segmented-height);
+    padding: var(--segmented-padding);
+    gap: var(--segmented-icon-gap);
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--segmented-border-color);
+    cursor: pointer;
+    outline: none;
+    font-family: var(--segmented-font);
+    font-size: var(--segmented-font-size);
+    font-weight: var(--segmented-font-weight);
+    color: var(--segmented-text-color);
+    white-space: nowrap;
+    transition: var(--segmented-transition);
+    -webkit-appearance: none;
+    appearance: none;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover:not(.spectrum-segmented-button__segment--disabled) {
+      background: var(--segmented-hover-bg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--segmented-focus-outline);
+      outline-offset: -2px;
+      z-index: 1;
+    }
+
+    &--selected {
+      background: var(--segmented-selected-bg);
+      color: var(--segmented-selected-color);
+
+      &:hover:not(.spectrum-segmented-button__segment--disabled) {
+        background: var(--segmented-selected-bg);
+        filter: brightness(0.95);
+      }
+    }
+
+    &--disabled {
+      opacity: var(--segmented-disabled-opacity);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    &--focused:not(.spectrum-segmented-button__segment--disabled) {
+      background: var(--segmented-hover-bg);
+    }
+  }
+
+  // ==============================================
+  // Icon
+  // ==============================================
+
+  &__icon {
+    display: flex;
+    align-items: center;
+
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-size: var(--segmented-icon-size);
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  }
+
+  // ==============================================
+  // Label
+  // ==============================================
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  // ==============================================
+  // Size Variations
+  // ==============================================
+
+  &--sm {
+    .spectrum-segmented-button__segment {
+      height: var(--segmented-height-sm);
+      padding: var(--segmented-padding-sm);
+      font-size: var(--segmented-font-size-sm);
+    }
+  }
+
+  &--lg {
+    .spectrum-segmented-button__segment {
+      height: var(--segmented-height-lg);
+      padding: var(--segmented-padding-lg);
+      font-size: var(--segmented-font-size-lg);
+    }
+  }
+
+  // ==============================================
+  // Disabled State
+  // ==============================================
+
+  &--disabled {
+    opacity: var(--segmented-disabled-opacity);
+    pointer-events: none;
+  }
+}
+
+// ==============================================
+// Accessibility
+// ==============================================
+
+@media (prefers-contrast: high) {
+  .spectrum-segmented-button {
+    border-width: 2px;
+
+    &__segment {
+      border-right-width: 2px;
+
+      &--selected {
+        outline: 2px solid ButtonText;
+        outline-offset: -2px;
+      }
+
+      &:focus-visible {
+        outline: 3px solid ButtonText;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-segmented-button {
+    --segmented-transition: none;
+  }
+}
