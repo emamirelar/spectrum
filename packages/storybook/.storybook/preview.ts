@@ -1,17 +1,15 @@
 import './globals.css'
 import '../src/components/mermaid-diagram.ts'
 import type { Preview } from "@storybook/web-components-vite";
+import { html } from 'lit';
 
-// Initialize Spectrum components
 async function initializeSpectrum() {
   try {
-    // Try to import from the workspace package first
     const { defineCustomElements } = await import('../../core/loader/index.js');
     await defineCustomElements();
     console.log('✅ Spectrum components initialized successfully');
   } catch (error) {
     console.error('❌ Failed to initialize Spectrum components:', error);
-    // Fallback: try to load from the built ESM files
     try {
       const { defineCustomElements } = await import('../../core/dist/esm/loader.js');
       await defineCustomElements();
@@ -22,41 +20,28 @@ async function initializeSpectrum() {
   }
 }
 
-// Initialize on load
 initializeSpectrum();
 
 const preview: Preview = {
   parameters: {
-    viewMode: 'story', // Change default to story for faster loading
+    viewMode: 'story',
     controls: {
+      expanded: true,
+      sort: 'requiredFirst',
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
     },
-    // Custom backgrounds for testing components
     backgrounds: {
       default: 'light',
       values: [
-        {
-          name: 'light',
-          value: '#ffffff',
-        },
-        {
-          name: 'spectrum-surface',
-          value: '#fafafa',
-        },
-        {
-          name: 'dark',
-          value: '#121212',
-        },
-        {
-          name: 'primary',
-          value: '#1976d2',
-        },
+        { name: 'light', value: '#ffffff' },
+        { name: 'spectrum-surface', value: '#fafafa' },
+        { name: 'dark', value: '#121212' },
+        { name: 'primary', value: '#1976d2' },
       ],
     },
-    // Enhanced viewport options
     viewport: {
       viewports: {
         mobile: {
@@ -82,6 +67,13 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (story) => html`
+      <div class="spectrum-story-container" style="padding: 1.5rem;">
+        ${story()}
+      </div>
+    `,
+  ],
 };
 
 export default preview;

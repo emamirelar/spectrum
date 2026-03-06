@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import { action } from 'storybook/actions';
 
-// Define local interfaces for better type safety
 interface SelectOption {
   value: string;
   label: string;
@@ -40,7 +39,6 @@ interface SpectrumSelectArgs {
   options: SelectOption[];
 }
 
-// Sample data sets for different use cases
 const basicOptions: SelectOption[] = [
   { value: 'option1', label: 'Option 1', description: 'Basic choice without icon' },
   { value: 'option2', label: 'Option 2', description: 'Another simple selection' },
@@ -50,301 +48,52 @@ const basicOptions: SelectOption[] = [
 
 const navigationOptions: SelectOption[] = [
   { value: 'home', label: 'Home', icon: 'home', description: 'Navigate to homepage' },
-  { value: 'profile', label: 'Profile', icon: 'person', description: 'Manage personal information' },
-  { value: 'settings', label: 'Settings', icon: 'settings', description: 'Configure application preferences' },
-  { value: 'notifications', label: 'Notifications', icon: 'notifications', description: 'Control notification settings' },
-  { value: 'help', label: 'Help & Support', icon: 'help', description: 'Get assistance and documentation' },
-  { value: 'logout', label: 'Logout', icon: 'logout', disabled: true, description: 'Sign out of account' },
+  { value: 'profile', label: 'Profile', icon: 'person', description: 'Manage personal info' },
+  { value: 'settings', label: 'Settings', icon: 'settings', description: 'Configure preferences' },
+  { value: 'notifications', label: 'Notifications', icon: 'notifications', description: 'Notification settings' },
+  { value: 'help', label: 'Help & Support', icon: 'help', description: 'Get assistance' },
+  { value: 'logout', label: 'Logout', icon: 'logout', disabled: true, description: 'Sign out' },
 ];
 
 const statusOptions: SelectOption[] = [
-  { value: 'active', label: 'Active', icon: 'check_circle', description: 'Currently operational and available' },
-  { value: 'pending', label: 'Pending', icon: 'schedule', description: 'Awaiting approval or processing' },
-  { value: 'inactive', label: 'Inactive', icon: 'cancel', description: 'Temporarily disabled or unavailable' },
-  { value: 'draft', label: 'Draft', icon: 'edit', description: 'Work in progress, not yet published' },
-  { value: 'archived', label: 'Archived', icon: 'archive', description: 'Stored for reference, not active' },
+  { value: 'active', label: 'Active', icon: 'check_circle', description: 'Currently operational' },
+  { value: 'pending', label: 'Pending', icon: 'schedule', description: 'Awaiting approval' },
+  { value: 'inactive', label: 'Inactive', icon: 'cancel', description: 'Temporarily disabled' },
+  { value: 'draft', label: 'Draft', icon: 'edit', description: 'Work in progress' },
+  { value: 'archived', label: 'Archived', icon: 'archive', description: 'Stored for reference' },
 ];
 
 const countryOptions: SelectOption[] = [
-  { value: 'us', label: 'United States', icon: 'flag', description: 'North America, Washington D.C.' },
-  { value: 'uk', label: 'United Kingdom', icon: 'flag', description: 'Europe, London' },
-  { value: 'ca', label: 'Canada', icon: 'flag', description: 'North America, Ottawa' },
-  { value: 'au', label: 'Australia', icon: 'flag', description: 'Oceania, Canberra' },
-  { value: 'de', label: 'Germany', icon: 'flag', description: 'Europe, Berlin' },
-  { value: 'fr', label: 'France', icon: 'flag', description: 'Europe, Paris' },
-  { value: 'jp', label: 'Japan', icon: 'flag', description: 'Asia, Tokyo' },
-  { value: 'br', label: 'Brazil', icon: 'flag', description: 'South America, Brasília' },
-  { value: 'in', label: 'India', icon: 'flag', description: 'Asia, New Delhi' },
-  { value: 'cn', label: 'China', icon: 'flag', description: 'Asia, Beijing' },
+  { value: 'us', label: 'United States', icon: 'flag' },
+  { value: 'uk', label: 'United Kingdom', icon: 'flag' },
+  { value: 'ca', label: 'Canada', icon: 'flag' },
+  { value: 'au', label: 'Australia', icon: 'flag' },
+  { value: 'de', label: 'Germany', icon: 'flag' },
+  { value: 'fr', label: 'France', icon: 'flag' },
+  { value: 'jp', label: 'Japan', icon: 'flag' },
+  { value: 'br', label: 'Brazil', icon: 'flag' },
+  { value: 'in', label: 'India', icon: 'flag' },
+  { value: 'cn', label: 'China', icon: 'flag' },
 ];
 
 const cityOptions: SelectOption[] = [
-  { value: 'ny', label: 'New York', icon: 'location_city', description: 'United States - The Big Apple' },
-  { value: 'london', label: 'London', icon: 'location_city', description: 'United Kingdom - Financial district' },
-  { value: 'tokyo', label: 'Tokyo', icon: 'location_city', description: 'Japan - Technology hub' },
-  { value: 'paris', label: 'Paris', icon: 'location_city', description: 'France - City of lights' },
-  { value: 'sydney', label: 'Sydney', icon: 'location_city', description: 'Australia - Harbor city' },
-  { value: 'dubai', label: 'Dubai', icon: 'location_city', description: 'UAE - Modern metropolis' },
-  { value: 'singapore', label: 'Singapore', icon: 'location_city', description: 'Singapore - Garden city' },
-  { value: 'toronto', label: 'Toronto', icon: 'location_city', description: 'Canada - Financial center' },
-  { value: 'berlin', label: 'Berlin', icon: 'location_city', description: 'Germany - Historic capital' },
-  { value: 'mumbai', label: 'Mumbai', icon: 'location_city', description: 'India - Commercial capital' },
-  { value: 'shanghai', label: 'Shanghai', icon: 'location_city', description: 'China - Economic powerhouse' },
-  { value: 'saopaulo', label: 'São Paulo', icon: 'location_city', description: 'Brazil - Business center' },
-  { value: 'melbourne', label: 'Melbourne', icon: 'location_city', description: 'Australia - Cultural hub' },
-  { value: 'amsterdam', label: 'Amsterdam', icon: 'location_city', description: 'Netherlands - Canal city' },
-  { value: 'barcelona', label: 'Barcelona', icon: 'location_city', description: 'Spain - Mediterranean jewel' },
+  { value: 'ny', label: 'New York', icon: 'location_city', description: 'US — The Big Apple' },
+  { value: 'london', label: 'London', icon: 'location_city', description: 'UK — Financial district' },
+  { value: 'tokyo', label: 'Tokyo', icon: 'location_city', description: 'Japan — Tech hub' },
+  { value: 'paris', label: 'Paris', icon: 'location_city', description: 'France — City of lights' },
+  { value: 'sydney', label: 'Sydney', icon: 'location_city', description: 'Australia — Harbor city' },
+  { value: 'dubai', label: 'Dubai', icon: 'location_city', description: 'UAE — Modern metropolis' },
+  { value: 'singapore', label: 'Singapore', icon: 'location_city', description: 'SG — Garden city' },
+  { value: 'toronto', label: 'Toronto', icon: 'location_city', description: 'Canada — Financial center' },
+  { value: 'berlin', label: 'Berlin', icon: 'location_city', description: 'Germany — Historic capital' },
+  { value: 'mumbai', label: 'Mumbai', icon: 'location_city', description: 'India — Commercial capital' },
+  { value: 'shanghai', label: 'Shanghai', icon: 'location_city', description: 'China — Economic hub' },
+  { value: 'saopaulo', label: 'São Paulo', icon: 'location_city', description: 'Brazil — Business center' },
+  { value: 'melbourne', label: 'Melbourne', icon: 'location_city', description: 'Australia — Cultural hub' },
+  { value: 'amsterdam', label: 'Amsterdam', icon: 'location_city', description: 'NL — Canal city' },
+  { value: 'barcelona', label: 'Barcelona', icon: 'location_city', description: 'Spain — Mediterranean jewel' },
 ];
 
-const meta = {
-  title: 'Spectrum/Components/SpectrumSelect',
-  tags: ['autodocs'],
-  parameters: {
-    docs: {
-      description: {
-        component: `
-# Spectrum Select Component
-
-A comprehensive dropdown selection component with advanced features including search functionality, multiple selection, loading states, and accessibility support. Built on Spectrum design system principles with Material Design 3 integration.
-
-## Key Features
-
-### **Selection Modes**
-- **Single Selection**: Choose one option from the dropdown list
-- **Multiple Selection**: Select multiple options with visual checkboxes and count badges
-- **Select All**: Bulk selection functionality for multiple mode
-- **Searchable**: Built-in search and filtering for large datasets
-
-### **Enhanced User Experience**
-- **Material Design Icons**: Visual indicators for better option recognition
-- **Descriptions**: Optional detailed descriptions for each option
-- **Loading States**: Spinner and configurable loading messages
-- **Error Handling**: Error state display with validation messages
-- **Mobile Optimization**: Touch-friendly interactions and fullscreen mode
-
-### **Integration with spectrum-button**
-- Uses spectrum-button as internal trigger for consistent styling
-- Properties pass through directly: variant, size, disabled
-- Button handles all visual states and animations
-- Maintains design system consistency
-
-## Usage Guidelines
-
-### **When to Use**
-- Form inputs requiring selection from predefined options
-- Navigation menus with multiple choices
-- Filtering interfaces with status or category selection
-- Multi-select scenarios like tag selection or preferences
-- Large datasets requiring search functionality
-
-### **Selection Best Practices**
-- Use single selection for mutually exclusive choices
-- Enable search for lists with more than 7-10 options
-- Provide clear option labels and helpful descriptions
-- Group related options logically
-- Use icons to improve visual scanning
-
-### **Accessibility Considerations**
-- All options are keyboard navigable (Arrow keys, Enter, Escape)
-- Screen reader support with proper ARIA attributes
-- Focus management and visual indicators
-- Reduced motion support for sensitive users
-
-## Event System
-
-### **Selection Events**
-- **selectChange**: Emitted when selection changes with full option details
-- **searchChange**: Fires during search input for real-time filtering
-- **dropdownOpen/Close**: Lifecycle events for dropdown state changes
-
-### **Event Payload Structure**
-Each selectChange event includes:
-- **value**: Selected option value(s)
-- **label**: Human-readable label
-- **option**: Complete option object
-- **selectedValues**: Array of all selected values (multiple mode)
-- **selectedOptions**: Array of all selected option objects (multiple mode)
-
-## Data Structure
-
-### **SelectOption Interface**
-Each option should include:
-- **value** (required): Unique identifier for the option
-- **label** (required): Display text for the option  
-- **icon** (optional): Material Design icon name
-- **description** (optional): Additional context or help text
-- **disabled** (optional): Whether the option can be selected
-
-## Performance Features
-
-### **Efficient Rendering**
-- Virtual scrolling for large datasets (when enabled)
-- Debounced search to reduce filtering overhead  
-- Smart option filtering and highlighting
-- Optimized re-rendering for selection changes
-
-### **Mobile Responsiveness**
-- Touch-optimized hit areas and interactions
-- Fullscreen mode on smaller devices
-- Responsive dropdown positioning
-- Gesture-friendly scrolling
-
-## Integration Patterns
-
-### **Form Integration**
-Perfect for form controls requiring validation, required field handling, and error state display.
-
-### **Filter Components**
-Ideal for search interfaces, data tables, and content filtering where users need to select criteria.
-
-### **Navigation Menus**
-Suitable for user preferences, settings panels, and contextual navigation options.
-
-        `
-      }
-    }
-  },
-  args: {
-    variant: 'primary',
-    size: 'base',
-    disabled: false,
-    required: false,
-    invalid: false,
-    loading: false,
-    placeholder: 'Select an option',
-    selectedValue: '',
-    selectedValues: [],
-    multiple: false,
-    selectionsLabel: 'items selected',
-    showIcon: true,
-    showDropdownIcon: true,
-    dropdownIcon: 'expand_more',
-    searchable: false,
-    searchPlaceholder: 'Search options...',
-    maxHeight: '200px',
-    showSelectAll: false,
-    selectAllText: 'Select All',
-    noResultsText: 'No results found',
-    loadingText: 'Loading...',
-    errorText: '',
-    touchOptimized: true,
-    mobileFullscreen: false,
-    debug: false,
-    options: basicOptions,
-  },
-  argTypes: {
-    variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'outline', 'ghost'],
-      description: 'Visual style variant of the select component',
-    },
-    size: {
-      control: 'select', 
-      options: ['sm', 'base', 'lg'],
-      description: 'Size variant affecting padding and font size',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Whether the select is disabled and non-interactive',
-    },
-    required: {
-      control: 'boolean',
-      description: 'Whether selection is required for form validation',
-    },
-    invalid: {
-      control: 'boolean',
-      description: 'Whether the select is in an error state',
-    },
-    loading: {
-      control: 'boolean',
-      description: 'Whether to show loading spinner and disable interaction',
-    },
-    placeholder: {
-      control: 'text',
-      description: 'Text shown when no option is selected',
-    },
-    selectedValue: {
-      control: 'text',
-      description: 'Currently selected value (single selection mode)',
-    },
-    selectedValues: {
-      control: 'object',
-      description: 'Array of selected values (multiple selection mode)',
-    },
-    multiple: {
-      control: 'boolean',
-      description: 'Enable multiple selection with checkboxes',
-    },
-    selectionsLabel: {
-      control: 'text',
-      description: 'Label for the selection count in multiple mode',
-    },
-    showIcon: {
-      control: 'boolean',
-      description: 'Whether to show the icon from selected option',
-    },
-    showDropdownIcon: {
-      control: 'boolean',
-      description: 'Whether to show the dropdown arrow indicator',
-    },
-    dropdownIcon: {
-      control: 'text',
-      description: 'Material Design icon for the dropdown arrow',
-    },
-    searchable: {
-      control: 'boolean',
-      description: 'Enable search functionality within dropdown',
-    },
-    searchPlaceholder: {
-      control: 'text',
-      description: 'Placeholder text for the search input field',
-    },
-    maxHeight: {
-      control: 'text',
-      description: 'Maximum height of the dropdown (CSS value)',
-    },
-    showSelectAll: {
-      control: 'boolean',
-      description: 'Show select all option in multiple selection mode',
-    },
-    selectAllText: {
-      control: 'text',
-      description: 'Text label for the select all option',
-    },
-    noResultsText: {
-      control: 'text',
-      description: 'Message displayed when search returns no results',
-    },
-    loadingText: {
-      control: 'text',
-      description: 'Text displayed during loading state',
-    },
-    errorText: {
-      control: 'text',
-      description: 'Error message displayed below the select',
-    },
-    touchOptimized: {
-      control: 'boolean',
-      description: 'Enable touch-friendly interactions and sizing',
-    },
-    mobileFullscreen: {
-      control: 'boolean',
-      description: 'Use fullscreen mode on mobile devices',
-    },
-    debug: {
-      control: 'boolean',
-      description: 'Enable debug mode to show component boundaries',
-    },
-    options: {
-      control: 'object',
-      description: 'Array of SelectOption objects for the dropdown',
-    },
-  }
-} satisfies Meta;
-
-export default meta;
-
-// Helper function to render the select component
 const renderSelect = (args: SpectrumSelectArgs) => html`
   <spectrum-select
     variant=${args.variant}
@@ -380,363 +129,410 @@ const renderSelect = (args: SpectrumSelectArgs) => html`
   ></spectrum-select>
 `;
 
-// Main playground story
-export const Playground: StoryObj<SpectrumSelectArgs> = {
-  render: renderSelect,
+const meta = {
+  title: 'Spectrum/Components/SpectrumSelect',
+  component: 'spectrum-select',
+  tags: ['autodocs'],
   parameters: {
     docs: {
       description: {
-        story: `
-Interactive playground for testing all spectrum-select features and configurations.
+        component: `
+A comprehensive dropdown selection component with search, multiple selection, loading states, and accessibility.
 
-**Try These Interactions:**
-- Toggle between single and multiple selection modes
-- Enable search functionality for large option lists  
-- Test different variants and sizes
-- Experiment with loading and error states
-- Adjust mobile optimization settings
+### Quick Start
+\`\`\`html
+<spectrum-select
+  placeholder="Choose..."
+  .options=\${[{ value: 'a', label: 'Alpha' }, { value: 'b', label: 'Beta' }]}
+></spectrum-select>
+\`\`\`
 
-**Event Monitoring:**
-All user interactions emit events that are logged in the Actions panel below.
+### Event System
+- **selectChange**: Selection changed — payload includes \`value\`, \`label\`, \`option\`, and arrays for multi-select
+- **searchChange**: Search term updated
+- **dropdownOpen / dropdownClose**: Lifecycle events
+
+### Dependencies
+Uses **spectrum-button** as trigger for consistent styling.
         `
+      }
+    }
+  },
+  args: {
+    variant: 'primary',
+    size: 'base',
+    placeholder: 'Select an option',
+    options: basicOptions,
+    disabled: false,
+    required: false,
+    invalid: false,
+    loading: false,
+    selectedValue: '',
+    selectedValues: [],
+    multiple: false,
+    selectionsLabel: 'items selected',
+    showIcon: true,
+    showDropdownIcon: true,
+    dropdownIcon: 'expand_more',
+    searchable: false,
+    searchPlaceholder: 'Search options...',
+    maxHeight: '200px',
+    showSelectAll: false,
+    selectAllText: 'Select All',
+    noResultsText: 'No results found',
+    loadingText: 'Loading...',
+    errorText: '',
+    touchOptimized: true,
+    mobileFullscreen: false,
+    debug: false,
+  },
+  argTypes: {
+    variant: {
+      control: 'inline-radio',
+      options: ['primary', 'secondary', 'outline', 'ghost'],
+      description: 'Visual style variant (passed to the trigger button)',
+      table: { category: 'Appearance', defaultValue: { summary: 'primary' } },
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'base', 'lg'],
+      description: 'Size of the trigger button',
+      table: { category: 'Appearance', defaultValue: { summary: 'base' } },
+    },
+    showIcon: {
+      control: 'boolean',
+      description: 'Show the selected option\'s icon in the trigger',
+      table: { category: 'Appearance', defaultValue: { summary: 'true' } },
+    },
+    showDropdownIcon: {
+      control: 'boolean',
+      description: 'Show the dropdown arrow indicator',
+      table: { category: 'Appearance', defaultValue: { summary: 'true' } },
+    },
+    dropdownIcon: {
+      control: 'text',
+      description: 'Material icon for the dropdown arrow',
+      table: { category: 'Appearance', defaultValue: { summary: 'expand_more' } },
+      if: { arg: 'showDropdownIcon' },
+    },
+    maxHeight: {
+      control: 'text',
+      description: 'Maximum dropdown height (CSS value)',
+      table: { category: 'Appearance', defaultValue: { summary: '200px' } },
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Text shown when nothing is selected',
+      table: { category: 'Content', defaultValue: { summary: 'Select an option' } },
+    },
+    options: {
+      control: 'object',
+      description: 'Array of SelectOption objects',
+      table: { category: 'Content' },
+    },
+    selectionsLabel: {
+      control: 'text',
+      description: 'Label for selection count in multi-select',
+      table: { category: 'Content', defaultValue: { summary: 'items selected' } },
+      if: { arg: 'multiple' },
+    },
+    noResultsText: {
+      control: 'text',
+      description: 'Message when search returns nothing',
+      table: { category: 'Content', defaultValue: { summary: 'No results found' } },
+      if: { arg: 'searchable' },
+    },
+    loadingText: {
+      control: 'text',
+      description: 'Text shown during loading',
+      table: { category: 'Content', defaultValue: { summary: 'Loading...' } },
+      if: { arg: 'loading' },
+    },
+    errorText: {
+      control: 'text',
+      description: 'Error message below the select',
+      table: { category: 'Content', defaultValue: { summary: '' } },
+      if: { arg: 'invalid' },
+    },
+    selectedValue: {
+      control: 'text',
+      description: 'Currently selected value (single mode)',
+      table: { category: 'State', defaultValue: { summary: '' } },
+    },
+    selectedValues: {
+      control: 'object',
+      description: 'Selected values array (multi mode)',
+      table: { category: 'State', defaultValue: { summary: '[]' } },
+      if: { arg: 'multiple' },
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Disable the select',
+      table: { category: 'State', defaultValue: { summary: 'false' } },
+    },
+    required: {
+      control: 'boolean',
+      description: 'Mark as required for form validation',
+      table: { category: 'State', defaultValue: { summary: 'false' } },
+    },
+    invalid: {
+      control: 'boolean',
+      description: 'Show error styling',
+      table: { category: 'State', defaultValue: { summary: 'false' } },
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Show loading spinner',
+      table: { category: 'State', defaultValue: { summary: 'false' } },
+    },
+    multiple: {
+      control: 'boolean',
+      description: 'Enable multi-selection with checkboxes',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    searchable: {
+      control: 'boolean',
+      description: 'Enable search/filter within dropdown',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    searchPlaceholder: {
+      control: 'text',
+      description: 'Placeholder for the search input',
+      table: { category: 'Behavior', defaultValue: { summary: 'Search options...' } },
+      if: { arg: 'searchable' },
+    },
+    showSelectAll: {
+      control: 'boolean',
+      description: 'Show "Select All" option in multi mode',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+      if: { arg: 'multiple' },
+    },
+    selectAllText: {
+      control: 'text',
+      description: 'Label for the Select All option',
+      table: { category: 'Behavior', defaultValue: { summary: 'Select All' } },
+      if: { arg: 'showSelectAll' },
+    },
+    touchOptimized: {
+      control: 'boolean',
+      description: 'Enable larger touch targets for mobile',
+      table: { category: 'Mobile', defaultValue: { summary: 'true' } },
+    },
+    mobileFullscreen: {
+      control: 'boolean',
+      description: 'Use fullscreen mode on small screens',
+      table: { category: 'Mobile', defaultValue: { summary: 'false' } },
+    },
+    debug: {
+      control: 'boolean',
+      description: 'Enable debug logging',
+      table: { category: 'Advanced', defaultValue: { summary: 'false' } },
+    },
+  },
+  render: renderSelect,
+} satisfies Meta<SpectrumSelectArgs>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// =================================================================
+// PLAYGROUND
+// =================================================================
+
+export const Playground: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: `Fully interactive — use **Controls** to toggle between single/multi select, enable search, change variants and sizes, test loading/error states. All events log to **Actions**.`
       }
     }
   }
 };
 
-// Variant demonstrations
-export const Variants: StoryObj<SpectrumSelectArgs> = {
+// =================================================================
+// VARIANTS
+// =================================================================
+
+export const AllVariants: Story = {
+  render: (args) => html`
+    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
+      ${(['primary', 'secondary', 'outline', 'ghost'] as const).map(v => html`
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <label style="width: 80px; font-weight: 500; font-size: 0.875rem; text-transform: capitalize;">${v}:</label>
+          <spectrum-select
+            variant=${v}
+            .size=${args.size}
+            placeholder="${v} variant"
+            .options=${navigationOptions}
+            @selectChange=${(e: CustomEvent) => action('selectChange')(e.detail)}
+          ></spectrum-select>
+        </div>
+      `)}
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'All four variants side-by-side. Adjust **size** in Controls to compare across scales.'
+      }
+    }
+  }
+};
+
+// =================================================================
+// SIZES
+// =================================================================
+
+export const AllSizes: Story = {
+  render: (args) => html`
+    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
+      ${(['sm', 'base', 'lg'] as const).map(s => html`
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <label style="width: 60px; font-weight: 500; font-size: 0.875rem;">${s === 'sm' ? 'Small' : s === 'base' ? 'Base' : 'Large'}:</label>
+          <spectrum-select
+            .variant=${args.variant}
+            size=${s}
+            placeholder="${s} size"
+            .options=${statusOptions}
+            @selectChange=${(e: CustomEvent) => action('selectChange')(e.detail)}
+          ></spectrum-select>
+        </div>
+      `)}
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'All three sizes. Switch **variant** in Controls to preview different combinations.'
+      }
+    }
+  }
+};
+
+// =================================================================
+// MULTI-SELECT
+// =================================================================
+
+export const MultipleSelection: Story = {
+  args: {
+    multiple: true,
+    searchable: true,
+    showSelectAll: true,
+    options: countryOptions,
+    placeholder: 'Select countries',
+    selectionsLabel: 'countries selected',
+    selectedValues: ['us', 'uk'],
+    maxHeight: '250px',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Multi-select with search, Select All, and pre-selected values. Toggle **showSelectAll** and **searchable** in Controls.'
+      }
+    }
+  }
+};
+
+// =================================================================
+// SEARCHABLE
+// =================================================================
+
+export const SearchableLargeDataset: Story = {
+  args: {
+    searchable: true,
+    options: [...cityOptions, ...Array.from({ length: 30 }, (_, i) => ({
+      value: `gen-${i}`,
+      label: `Generated Item ${i + 1}`,
+      icon: 'star',
+      description: `Auto-generated option ${i + 1}`,
+    }))],
+    placeholder: 'Search from 45 options',
+    maxHeight: '300px',
+    noResultsText: 'No matches — try different keywords',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Searchable single-select with 45 options. Type to filter in real-time.'
+      }
+    }
+  }
+};
+
+// =================================================================
+// STATES
+// =================================================================
+
+export const LoadingState: Story = {
+  args: {
+    loading: true,
+    loadingText: 'Fetching data from server...',
+    options: [],
+    placeholder: 'Loading options...',
+    variant: 'outline',
+  },
+};
+
+export const ErrorState: Story = {
+  args: {
+    invalid: true,
+    required: true,
+    errorText: 'Please select a valid option to continue.',
+  },
+};
+
+export const DisabledState: Story = {
+  args: {
+    disabled: true,
+    selectedValue: 'option2',
+  },
+};
+
+export const AllStates: Story = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <label style="width: 100px; font-weight: 500;">Primary:</label>
-        <spectrum-select
-          variant="primary"
-          placeholder="Primary variant"
-          .options=${navigationOptions}
-          @selectChange=${(e: CustomEvent) => action('primaryChange')(e.detail)}
-        ></spectrum-select>
+    <div style="display: flex; flex-direction: column; gap: 1.25rem; max-width: 300px;">
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;">Loading</label>
+        <spectrum-select .loading=${true} loading-text="Fetching..." .options=${[]} variant="outline"
+          @selectChange=${(e: CustomEvent) => action('selectChange')(e.detail)}></spectrum-select>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <label style="width: 100px; font-weight: 500;">Secondary:</label>
-        <spectrum-select
-          variant="secondary"
-          placeholder="Secondary variant"
-          .options=${navigationOptions}
-          @selectChange=${(e: CustomEvent) => action('secondaryChange')(e.detail)}
-        ></spectrum-select>
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;">Error</label>
+        <spectrum-select .invalid=${true} .required=${true} error-text="Selection required" .options=${basicOptions} placeholder="Select..."
+          @selectChange=${(e: CustomEvent) => action('selectChange')(e.detail)}></spectrum-select>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <label style="width: 100px; font-weight: 500;">Outline:</label>
-        <spectrum-select
-          variant="outline"
-          placeholder="Outline variant"
-          .options=${navigationOptions}
-          @selectChange=${(e: CustomEvent) => action('outlineChange')(e.detail)}
-        ></spectrum-select>
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;">Disabled</label>
+        <spectrum-select .disabled=${true} selected-value="option2" .options=${basicOptions}
+          @selectChange=${(e: CustomEvent) => action('selectChange')(e.detail)}></spectrum-select>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <label style="width: 100px; font-weight: 500;">Ghost:</label>
-        <spectrum-select
-          variant="ghost"
-          placeholder="Ghost variant"
-          .options=${navigationOptions}
-          @selectChange=${(e: CustomEvent) => action('ghostChange')(e.detail)}
-        ></spectrum-select>
+      <div>
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;">Required</label>
+        <spectrum-select .required=${true} placeholder="Required *" .options=${statusOptions}
+          @selectChange=${(e: CustomEvent) => action('selectChange')(e.detail)}></spectrum-select>
       </div>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: `
-Different visual style variants demonstrating the spectrum-button integration.
-
-**Variant Characteristics:**
-- **Primary**: Solid background with high contrast for main actions
-- **Secondary**: Reduced prominence for supporting actions  
-- **Outline**: Border-only style for subtle selections
-- **Ghost**: Minimal styling that blends with background
-
-Each variant inherits hover, focus, and active states from the underlying spectrum-button component.
-        `
+        story: 'All component states: loading, error, disabled, and required.'
       }
     }
-  },
+  }
 };
 
-// Size variations
-export const Sizes: StoryObj<SpectrumSelectArgs> = {
-  render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <label style="width: 80px; font-weight: 500;">Small:</label>
-        <spectrum-select
-          size="sm"
-          placeholder="Small select"
-          .options=${statusOptions}
-          @selectChange=${(e: CustomEvent) => action('smallChange')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <label style="width: 80px; font-weight: 500;">Base:</label>
-        <spectrum-select
-          size="base"
-          placeholder="Base select"
-          .options=${statusOptions}
-          @selectChange=${(e: CustomEvent) => action('baseChange')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <label style="width: 80px; font-weight: 500;">Large:</label>
-        <spectrum-select
-          size="lg"
-          placeholder="Large select"
-          .options=${statusOptions}
-          @selectChange=${(e: CustomEvent) => action('largeChange')(e.detail)}
-        ></spectrum-select>
-      </div>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Size variations demonstrating different scale options for various UI contexts.
+// =================================================================
+// REAL-WORLD: FORM
+// =================================================================
 
-**Size Guidelines:**
-- **Small (sm)**: Compact interfaces, toolbars, dense layouts
-- **Base**: Standard forms, general purpose selections  
-- **Large (lg)**: Touch interfaces, accessibility needs, emphasis
-
-All sizes maintain proper proportions for icons, text, and interactive areas.
-        `
-      }
-    }
-  },
-};
-
-// Multiple selection examples
-export const MultipleSelection: StoryObj<SpectrumSelectArgs> = {
-  render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 24px;">
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Basic Multiple Selection</h4>
-        <spectrum-select
-          placeholder="Select countries"
-          .options=${countryOptions}
-          .multiple=${true}
-          selections-label="countries selected"
-          .selectedValues=${['us', 'uk']}
-          @selectChange=${(e: CustomEvent) => action('countriesChange')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div>
-        <h4 style="margin: 0 0 12px 0;">With Select All</h4>
-        <spectrum-select
-          placeholder="Select statuses"
-          .options=${statusOptions}
-          .multiple=${true}
-          selections-label="statuses"
-          .showSelectAll=${true}
-          select-all-text="Select All Statuses"
-          @selectChange=${(e: CustomEvent) => action('statusesChange')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Searchable Multiple</h4>
-        <spectrum-select
-          placeholder="Search and select cities"
-          .options=${cityOptions}
-          .multiple=${true}
-          .searchable=${true}
-          .showSelectAll=${true}
-          selections-label="cities selected"
-          search-placeholder="Type to filter cities..."
-          max-height="250px"
-          @selectChange=${(e: CustomEvent) => action('citiesChange')(e.detail)}
-          @searchChange=${(e: CustomEvent) => action('citySearch')(e.detail)}
-        ></spectrum-select>
-      </div>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Multiple selection modes with checkboxes, count badges, and bulk selection features.
-
-**Multiple Selection Features:**
-- **Checkbox Indicators**: Visual selection state for each option
-- **Count Badges**: Shows number of selected items in trigger button
-- **Select All**: Bulk selection/deselection functionality
-- **Search Integration**: Filter large lists while maintaining selections
-- **Persistent Dropdown**: Stays open for continuous selection
-
-**User Experience Benefits:**
-- Clear visual feedback for selected states
-- Efficient bulk operations for large datasets
-- Maintains selection context during search
-- Descriptive selection summaries
-        `
-      }
-    }
-  },
-};
-
-// Search functionality
-export const SearchableSelects: StoryObj<SpectrumSelectArgs> = {
-  render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 24px;">
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Single Selection with Search</h4>
-        <spectrum-select
-          placeholder="Search cities"
-          .options=${cityOptions}
-          .searchable=${true}
-          search-placeholder="Type to filter cities..."
-          max-height="200px"
-          @selectChange=${(e: CustomEvent) => action('citySelect')(e.detail)}
-          @searchChange=${(e: CustomEvent) => action('citySearch')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Multiple Selection with Search</h4>
-        <spectrum-select
-          placeholder="Select navigation items"
-          .options=${navigationOptions}
-          .multiple=${true}
-          .searchable=${true}
-          search-placeholder="Search navigation..."
-          selections-label="items selected"
-          @selectChange=${(e: CustomEvent) => action('navSelect')(e.detail)}
-          @searchChange=${(e: CustomEvent) => action('navSearch')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Large Dataset Search</h4>
-        <spectrum-select
-          placeholder="Search from large dataset"
-          .options=${[...cityOptions, ...Array.from({ length: 30 }, (_, i) => ({
-            value: `item-${i}`,
-            label: `Generated Item ${i + 1}`,
-            icon: 'star',
-            description: `Auto-generated option ${i + 1}`
-          }))]}
-          .searchable=${true}
-          search-placeholder="Type to filter options..."
-          max-height="300px"
-          no-results-text="No matches found - try different keywords"
-          @selectChange=${(e: CustomEvent) => action('largeDatasetSelect')(e.detail)}
-          @searchChange=${(e: CustomEvent) => action('largeDatasetSearch')(e.detail)}
-        ></spectrum-select>
-      </div>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Search functionality for efficient navigation of large option lists.
-
-**Search Capabilities:**
-- **Real-time Filtering**: Options filter as you type
-- **Case-insensitive Matching**: Finds options regardless of capitalization
-- **Label and Description Search**: Searches both primary text and descriptions
-- **No Results Handling**: Customizable message when no matches found
-- **Search Event Emission**: Real-time search term updates
-
-**Performance Optimizations:**
-- Debounced search to reduce filtering overhead
-- Efficient string matching algorithms
-- Maintained scroll position during filtering
-- Smart highlighting of matching terms
-        `
-      }
-    }
-  },
-};
-
-// State demonstrations
-export const StateExamples: StoryObj<SpectrumSelectArgs> = {
-  render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 24px;">
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Loading State</h4>
-        <spectrum-select
-          placeholder="Loading options..."
-          .options=${[]}
-          .loading=${true}
-          loading-text="Fetching data from server..."
-          variant="outline"
-          @selectChange=${(e: CustomEvent) => action('loadingSelect')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Error State</h4>
-        <spectrum-select
-          placeholder="Select an option"
-          .options=${basicOptions}
-          .invalid=${true}
-          .required=${true}
-          error-text="Please select a valid option to continue."
-          @selectChange=${(e: CustomEvent) => action('errorSelect')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Disabled State</h4>
-        <spectrum-select
-          placeholder="Disabled select"
-          .options=${basicOptions}
-          .disabled=${true}
-          selected-value="option2"
-          @selectChange=${(e: CustomEvent) => action('disabledSelect')(e.detail)}
-        ></spectrum-select>
-      </div>
-      <div>
-        <h4 style="margin: 0 0 12px 0;">Required Field</h4>
-        <spectrum-select
-          placeholder="Required selection *"
-          .options=${statusOptions}
-          .required=${true}
-          @selectChange=${(e: CustomEvent) => action('requiredSelect')(e.detail)}
-        ></spectrum-select>
-      </div>
-    </div>
-  `,
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Different component states for various interaction scenarios and form validation.
-
-**State Behaviors:**
-- **Loading**: Shows spinner, disables interaction, displays loading message
-- **Error**: Red styling, error message below, validation feedback
-- **Disabled**: Grayed out appearance, no interaction, clear visual indication
-- **Required**: Form validation support, accessible labeling
-
-**Accessibility Features:**
-- Screen reader announcements for state changes
-- Proper ARIA attributes for each state
-- Keyboard navigation preserved where applicable
-- Clear visual and semantic indicators
-        `
-      }
-    }
-  },
-};
-
-// Form integration example
-export const FormIntegration: StoryObj<SpectrumSelectArgs> = {
+export const FormIntegration: Story = {
   render: () => html`
     <div style="max-width: 500px;">
-      <h3 style="margin: 0 0 24px 0;">User Profile Form</h3>
-      <form style="display: flex; flex-direction: column; gap: 20px;">
+      <h3 style="margin: 0 0 1.5rem;">User Profile</h3>
+      <form style="display: flex; flex-direction: column; gap: 1.25rem;">
         <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">
-            Country * <span style="color: #666; font-weight: normal;">(Required)</span>
-          </label>
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Country *</label>
           <spectrum-select
             placeholder="Select your country"
             .options=${countryOptions}
@@ -746,28 +542,22 @@ export const FormIntegration: StoryObj<SpectrumSelectArgs> = {
             @selectChange=${(e: CustomEvent) => action('countrySelection')(e.detail)}
           ></spectrum-select>
         </div>
-        
         <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">
-            Preferred Cities <span style="color: #666; font-weight: normal;">(Optional)</span>
-          </label>
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Preferred Cities</label>
           <spectrum-select
-            placeholder="Select cities you'd like to visit"
+            placeholder="Select cities"
             .options=${cityOptions}
             .multiple=${true}
             .searchable=${true}
             .showSelectAll=${true}
-            selections-label="cities selected"
+            selections-label="cities"
             search-placeholder="Search cities..."
             max-height="200px"
             @selectChange=${(e: CustomEvent) => action('citiesSelection')(e.detail)}
           ></spectrum-select>
         </div>
-        
         <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">
-            Account Status <span style="color: #666; font-weight: normal;">(Current)</span>
-          </label>
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Account Status</label>
           <spectrum-select
             placeholder="Select status"
             .options=${statusOptions}
@@ -776,208 +566,54 @@ export const FormIntegration: StoryObj<SpectrumSelectArgs> = {
             @selectChange=${(e: CustomEvent) => action('statusSelection')(e.detail)}
           ></spectrum-select>
         </div>
-        
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">
-            Navigation Preferences <span style="color: #666; font-weight: normal;">(Accessibility)</span>
-          </label>
-          <spectrum-select
-            placeholder="Select preferred navigation style"
-            .options=${navigationOptions}
-            variant="ghost"
-            @selectChange=${(e: CustomEvent) => action('navigationSelection')(e.detail)}
-          ></spectrum-select>
-        </div>
-        
-        <button 
-          type="submit" 
-          style="
-            padding: 12px 24px; 
-            border: none; 
-            background: #0070d2; 
-            color: white; 
-            border-radius: 8px; 
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 16px;
-          "
-          @click=${(e: Event) => {
-            e.preventDefault();
-            action('formSubmit')('Form submission attempted');
-          }}
-        >
-          Save Profile Settings
-        </button>
       </form>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: `
-Complete form integration demonstrating various select configurations in a real-world context.
-
-**Form Features Demonstrated:**
-- **Required Fields**: Country selection with validation
-- **Multi-select**: Cities with search and bulk selection
-- **Pre-selected Values**: Account status with current value
-- **Different Variants**: Visual hierarchy through variant selection
-- **Accessibility**: Proper labeling and form semantics
-
-**Integration Benefits:**
-- Consistent styling across all form elements
-- Unified event handling and validation
-- Responsive design for various screen sizes
-- Clear visual hierarchy and user guidance
-        `
+        story: 'Complete form with required searchable single-select, multi-select with bulk selection, and pre-selected outline variant.'
       }
     }
-  },
+  }
 };
 
-// Accessibility example
-export const AccessibilityExample: StoryObj<SpectrumSelectArgs> = {
+// =================================================================
+// ACCESSIBILITY
+// =================================================================
+
+export const KeyboardNavigation: Story = {
   render: () => html`
-    <div style="max-width: 600px;">
-      <h3 style="margin: 0 0 16px 0;">Accessibility Features Demo</h3>
-      <p style="color: #666; margin: 0 0 24px 0; line-height: 1.5;">
-        This example demonstrates keyboard navigation, screen reader support, and accessible design patterns.
-        <strong>Try using Tab, Arrow keys, Enter, and Escape to navigate.</strong>
+    <div style="max-width: 400px;">
+      <p style="color: var(--spectrum-sys-color-on-surface-variant); margin: 0 0 1rem; font-size: 0.875rem;">
+        <kbd style="background: var(--spectrum-sys-color-surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline);">Tab</kbd> to focus,
+        <kbd style="background: var(--spectrum-sys-color-surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline);">Enter</kbd> to open,
+        <kbd style="background: var(--spectrum-sys-color-surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline);">Arrow</kbd> keys to navigate,
+        <kbd style="background: var(--spectrum-sys-color-surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--spectrum-sys-color-outline);">Escape</kbd> to close.
       </p>
-      
-      <div style="display: flex; flex-direction: column; gap: 24px;">
-        <div>
-          <label 
-            id="keyboard-nav-label"
-            style="display: block; margin-bottom: 8px; font-weight: 500;"
-          >
-            🎯 Keyboard Navigation Test
-          </label>
-          <p style="color: #666; font-size: 14px; margin: 0 0 8px 0;">
-            Tab to focus → Enter/Space to open → Arrow keys to navigate → Enter to select → Escape to close
-          </p>
-          <spectrum-select
-            placeholder="Try keyboard navigation"
-            .options=${navigationOptions}
-            .searchable=${true}
-            aria-labelledby="keyboard-nav-label"
-            @selectChange=${(e: CustomEvent) => action('keyboardNavSelect')(e.detail)}
-            @dropdownOpen=${() => action('dropdownOpen')('Dropdown opened via keyboard')}
-            @dropdownClose=${() => action('dropdownClose')('Dropdown closed via keyboard')}
-          ></spectrum-select>
-        </div>
-        
-        <div>
-          <label 
-            id="screen-reader-label"
-            style="display: block; margin-bottom: 8px; font-weight: 500;"
-          >
-            🔊 Screen Reader Support
-          </label>
-          <p style="color: #666; font-size: 14px; margin: 0 0 8px 0;">
-            Options are properly announced with descriptions and selection states
-          </p>
-          <spectrum-select
-            placeholder="Screen reader friendly select"
-            .options=${statusOptions}
-            .multiple=${true}
-            aria-labelledby="screen-reader-label"
-            aria-describedby="screen-reader-help"
-            @selectChange=${(e: CustomEvent) => action('screenReaderSelect')(e.detail)}
-          ></spectrum-select>
-          <div 
-            id="screen-reader-help" 
-            style="color: #666; font-size: 12px; margin-top: 4px;"
-          >
-            Multiple selection enabled. Use spacebar to toggle individual options.
-          </div>
-        </div>
-        
-        <div>
-          <label 
-            id="high-contrast-label"
-            style="display: block; margin-bottom: 8px; font-weight: 500;"
-          >
-            🎨 High Contrast Mode
-          </label>
-          <p style="color: #666; font-size: 14px; margin: 0 0 8px 0;">
-            Maintains visibility and contrast in high contrast mode and dark themes
-          </p>
-          <spectrum-select
-            placeholder="High contrast compatible"
-            .options=${cityOptions}
-            .searchable=${true}
-            variant="outline"
-            aria-labelledby="high-contrast-label"
-            @selectChange=${(e: CustomEvent) => action('highContrastSelect')(e.detail)}
-          ></spectrum-select>
-        </div>
-        
-        <div>
-          <label 
-            id="reduced-motion-label"
-            style="display: block; margin-bottom: 8px; font-weight: 500;"
-          >
-            ⚡ Reduced Motion Support
-          </label>
-          <p style="color: #666; font-size: 14px; margin: 0 0 8px 0;">
-            Respects user's reduced motion preferences for animations and transitions
-          </p>
-          <spectrum-select
-            placeholder="Reduced motion friendly"
-            .options=${basicOptions}
-            aria-labelledby="reduced-motion-label"
-            @selectChange=${(e: CustomEvent) => action('reducedMotionSelect')(e.detail)}
-          ></spectrum-select>
-        </div>
-      </div>
-      
-      <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin-top: 24px;">
-        <h4 style="margin: 0 0 12px 0; color: #333;">♿ Accessibility Checklist</h4>
-        <ul style="margin: 0; color: #666; line-height: 1.6;">
-          <li>✅ Full keyboard navigation support</li>
-          <li>✅ Screen reader compatibility with ARIA attributes</li>
-          <li>✅ High contrast mode support</li>
-          <li>✅ Reduced motion preferences respected</li>
-          <li>✅ Focus management and visual indicators</li>
-          <li>✅ Proper semantic markup and labeling</li>
-          <li>✅ Touch-friendly hit areas (44px minimum)</li>
-          <li>✅ Clear error messages and validation feedback</li>
-        </ul>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <spectrum-select
+          placeholder="Try keyboard navigation"
+          .options=${navigationOptions}
+          .searchable=${true}
+          @selectChange=${(e: CustomEvent) => action('keyboardSelect')(e.detail)}
+          @dropdownOpen=${() => action('dropdownOpen')()}
+          @dropdownClose=${() => action('dropdownClose')()}
+        ></spectrum-select>
+        <spectrum-select
+          placeholder="Multi-select (Space to toggle)"
+          .options=${statusOptions}
+          .multiple=${true}
+          @selectChange=${(e: CustomEvent) => action('multiKeyboardSelect')(e.detail)}
+        ></spectrum-select>
       </div>
     </div>
   `,
   parameters: {
     docs: {
       description: {
-        story: `
-Comprehensive demonstration of accessibility features and keyboard navigation patterns.
-
-**Keyboard Navigation:**
-- **Tab**: Focus the select trigger
-- **Enter/Space**: Open dropdown when trigger is focused
-- **Arrow Keys**: Navigate through options
-- **Home/End**: Jump to first/last option
-- **Enter/Space**: Select focused option
-- **Escape**: Close dropdown and return focus
-
-**Screen Reader Support:**
-- Proper ARIA roles and attributes
-- Option descriptions announced
-- Selection state changes communicated
-- Search functionality accessible
-- Error states properly announced
-
-**Visual Accessibility:**
-- High contrast mode compatibility
-- Clear focus indicators
-- Sufficient color contrast ratios
-- Reduced motion support for sensitive users
-- Touch-friendly interaction areas
-
-This component meets WCAG 2.1 AA accessibility standards.
-        `
+        story: 'Test keyboard navigation: Tab to focus, Enter/Space to open, Arrow keys to move, Enter to select, Escape to close.'
       }
     }
-  },
+  }
 };
