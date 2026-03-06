@@ -304,6 +304,201 @@ The Actions panel will show all emitted buttonAction events with their action at
 };
 
 // =================================================================
+// ALL STATES SHOWCASE
+// =================================================================
+
+const VARIANTS = ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost', 'outline', 'fab'] as const;
+const STATES = ['default', 'hover', 'active', 'disabled'] as const;
+const SIZES = ['sm', 'medium', 'lg'] as const;
+
+const sectionStyle = 'margin-bottom: 2.5rem;';
+const sectionTitleStyle = 'color: var(--spectrum-sys-color-on-surface-variant); margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;';
+const gridStyle = 'display: grid; gap: 0.75rem;';
+const headerCellStyle = 'font-size: 0.75rem; font-weight: 600; color: var(--spectrum-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: end; justify-content: center; padding-bottom: 0.5rem;';
+const rowLabelStyle = 'font-size: 0.8rem; font-weight: 500; color: var(--spectrum-sys-color-on-surface-variant); display: flex; align-items: center; text-transform: capitalize;';
+const cellStyle = 'display: flex; align-items: center; justify-content: center;';
+
+/**
+ * Complete showcase of every button variant in every state, size, and configuration.
+ * Use this as a visual reference sheet for the entire button API surface.
+ */
+export const AllStates: Story = {
+  render: () => html`
+    <div style="padding: 2rem; background: var(--spectrum-sys-color-surface-variant); border-radius: 8px;">
+
+      <!-- Variants × States -->
+      <div style=${sectionStyle}>
+        <h3 style=${sectionTitleStyle}>Variants × States</h3>
+        <div style="${gridStyle} grid-template-columns: 120px repeat(4, 1fr);">
+          <div></div>
+          ${STATES.map(s => html`<div style=${headerCellStyle}>${s}</div>`)}
+          ${VARIANTS.map(v => html`
+            <div style=${rowLabelStyle}>${v}</div>
+            ${STATES.map(s => html`
+              <div style=${cellStyle}>
+                <spectrum-button
+                  variant=${v}
+                  state=${s === 'disabled' ? 'default' : s}
+                  ?disabled=${s === 'disabled'}
+                  button-text=${v.charAt(0).toUpperCase() + v.slice(1)}
+                  show-button-text="true"
+                  @buttonAction=${action('buttonAction')}
+                ></spectrum-button>
+              </div>
+            `)}
+          `)}
+        </div>
+      </div>
+
+      <!-- Variants × Sizes -->
+      <div style=${sectionStyle}>
+        <h3 style=${sectionTitleStyle}>Variants × Sizes</h3>
+        <div style="${gridStyle} grid-template-columns: 120px repeat(3, 1fr);">
+          <div></div>
+          ${SIZES.map(s => html`<div style=${headerCellStyle}>${s === 'sm' ? 'Small' : s === 'medium' ? 'Medium' : 'Large'}</div>`)}
+          ${VARIANTS.map(v => html`
+            <div style=${rowLabelStyle}>${v}</div>
+            ${SIZES.map(s => html`
+              <div style=${cellStyle}>
+                <spectrum-button
+                  variant=${v}
+                  size=${s}
+                  button-text=${v.charAt(0).toUpperCase() + v.slice(1)}
+                  show-button-text="true"
+                  @buttonAction=${action('buttonAction')}
+                ></spectrum-button>
+              </div>
+            `)}
+          `)}
+        </div>
+      </div>
+
+      <!-- Variants with Left Icon -->
+      <div style=${sectionStyle}>
+        <h3 style=${sectionTitleStyle}>Variants with Icon</h3>
+        <div style="${gridStyle} grid-template-columns: 120px repeat(4, 1fr);">
+          <div></div>
+          <div style=${headerCellStyle}>Left Icon</div>
+          <div style=${headerCellStyle}>Right Icon</div>
+          <div style=${headerCellStyle}>Both Icons</div>
+          <div style=${headerCellStyle}>Icon Only</div>
+          ${VARIANTS.map(v => html`
+            <div style=${rowLabelStyle}>${v}</div>
+            <div style=${cellStyle}>
+              <spectrum-button
+                variant=${v}
+                button-text=${v.charAt(0).toUpperCase() + v.slice(1)}
+                show-button-text="true"
+                show-left-icon="true"
+                left-icon="favorite"
+                @buttonAction=${action('buttonAction')}
+              ></spectrum-button>
+            </div>
+            <div style=${cellStyle}>
+              <spectrum-button
+                variant=${v}
+                button-text=${v.charAt(0).toUpperCase() + v.slice(1)}
+                show-button-text="true"
+                show-right-icon="true"
+                right-icon="arrow_forward"
+                @buttonAction=${action('buttonAction')}
+              ></spectrum-button>
+            </div>
+            <div style=${cellStyle}>
+              <spectrum-button
+                variant=${v}
+                button-text=${v.charAt(0).toUpperCase() + v.slice(1)}
+                show-button-text="true"
+                show-left-icon="true"
+                left-icon="download"
+                show-right-icon="true"
+                right-icon="expand_more"
+                @buttonAction=${action('buttonAction')}
+              ></spectrum-button>
+            </div>
+            <div style=${cellStyle}>
+              <spectrum-button
+                variant=${v}
+                icon-only="true"
+                show-left-icon="true"
+                left-icon="settings"
+                @buttonAction=${action('buttonAction')}
+              ></spectrum-button>
+            </div>
+          `)}
+        </div>
+      </div>
+
+      <!-- Outline Mode × Variants -->
+      <div style=${sectionStyle}>
+        <h3 style=${sectionTitleStyle}>Outline Mode</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          ${VARIANTS.filter(v => v !== 'outline' && v !== 'ghost' && v !== 'fab').map(v => html`
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+              <spectrum-button
+                variant=${v}
+                outline="true"
+                button-text=${v.charAt(0).toUpperCase() + v.slice(1)}
+                show-button-text="true"
+                @buttonAction=${action('buttonAction')}
+              ></spectrum-button>
+              <small style="color: var(--spectrum-sys-color-on-surface-variant);">${v} outline</small>
+            </div>
+          `)}
+        </div>
+      </div>
+
+      <!-- Special Features -->
+      <div>
+        <h3 style=${sectionTitleStyle}>Special Features</h3>
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Ripple" show-button-text="true" ripple="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small style="color: var(--spectrum-sys-color-on-surface-variant);">Ripple effect</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Minimal" show-button-text="true" minimal-animation="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small style="color: var(--spectrum-sys-color-on-surface-variant);">Minimal animation</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Sound" show-button-text="true" sound="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small style="color: var(--spectrum-sys-color-on-surface-variant);">Sound enabled</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Haptic" show-button-text="true" haptic="true" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small style="color: var(--spectrum-sys-color-on-surface-variant);">Haptic feedback</small>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <spectrum-button variant="primary" button-text="Visit Site" show-button-text="true" href="https://example.com" target="_blank" show-left-icon="true" left-icon="open_in_new" @buttonAction=${action('buttonAction')}></spectrum-button>
+            <small style="color: var(--spectrum-sys-color-on-surface-variant);">Navigation link</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Complete visual reference of every \`spectrum-button\` combination.
+
+**Variants × States** — All 8 variants (primary, secondary, success, warning, danger, ghost, outline, fab) across all 4 states (default, hover, active, disabled).
+
+**Variants × Sizes** — Every variant at small, medium, and large sizes.
+
+**Variants with Icon** — Left icon, right icon, both icons, and icon-only for each variant.
+
+**Outline Mode** — Filled variants rendered in outline style.
+
+**Special Features** — Ripple effect, minimal animation, sound, haptic feedback, and navigation link modes.
+        `
+      }
+    }
+  }
+};
+
+// =================================================================
 // VARIANT EXAMPLES
 // =================================================================
 

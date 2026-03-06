@@ -48,6 +48,168 @@ function findCollectionByName(name) {
   return collections.find(c => c.name.toLowerCase() === name.toLowerCase());
 }
 
+// ============================================================
+// Style Swap: M3 paint/effect styles → Spectrum variable bindings
+// ============================================================
+
+function camelToTitleCase(camel) {
+  const spaced = camel.replace(/([A-Z])/g, ' $1').trim();
+  return spaced.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+const M3_REF_TONE_MAP = {
+  primary:          { low: 'On Primary Container', mid: 'Primary',   high: 'Primary Container',   top: 'On Primary' },
+  secondary:        { low: 'On Secondary Container', mid: 'Secondary', high: 'Secondary Container', top: 'On Secondary' },
+  tertiary:         { low: 'On Tertiary Container', mid: 'Tertiary',  high: 'Tertiary Container',  top: 'On Tertiary' },
+  error:            { low: 'On Error Container', mid: 'Error',     high: 'Error Container',     top: 'On Error' },
+  neutral:          { low: 'On Surface',  mid: 'Outline',  high: 'Surface Variant', top: 'Surface' },
+  'neutral-variant': { low: 'On Surface', mid: 'Outline Variant', high: 'Surface Variant', top: 'Surface' },
+};
+
+function refToneToScheme(family, tone) {
+  const map = M3_REF_TONE_MAP[family];
+  if (!map) return null;
+  if (tone === 0)               return 'Shadow';
+  if (tone >= 10 && tone <= 30) return map.low;
+  if (tone >= 40 && tone <= 70) return map.mid;
+  if (tone >= 80 && tone <= 95) return map.high;
+  if (tone >= 99)               return map.top;
+  return null;
+}
+
+function isElevationStyle(styleName) {
+  return /^M3\/Elevation\s/i.test(styleName);
+}
+
+function m3StyleNameToSpectrumVarName(styleName) {
+  if (styleName === 'M3/black') return 'Schemes/Shadow';
+  if (styleName === 'M3/white') return 'Schemes/Surface';
+
+  const sysMatch = styleName.match(/^M3\/sys\/(?:light|dark)\/(.+)$/);
+  if (sysMatch) {
+    return 'Schemes/' + toTitleCase(sysMatch[1]);
+  }
+
+  const stateMatch = styleName.match(/^M3\/state-layers\/(?:light|dark)\/(.+)\/opacity-(\d+)$/i);
+  if (stateMatch) {
+    return 'State Layers/' + camelToTitleCase(stateMatch[1]) + '/Opacity-' + stateMatch[2];
+  }
+
+  const refMatch = styleName.match(/^M3\/ref\/([^/]+)\/[^/]+?(\d+)$/);
+  if (refMatch) {
+    const family = refMatch[1];
+    const tone = parseInt(refMatch[2], 10);
+    const schemeName = refToneToScheme(family, tone);
+    if (schemeName) return 'Schemes/' + schemeName;
+  }
+
+  return null;
+}
+
+function resolveStyleId(styleId, cache, specByName) {
+  if (cache.varMap.has(styleId)) return cache.varMap.get(styleId);
+  if (cache.checked.has(styleId)) return null;
+  cache.checked.add(styleId);
+
+  const style = figma.getStyleById(styleId);
+  if (!style || !style.name.startsWith('M3/')) return null;
+
+  cache.nameMap.set(styleId, style.name);
+  const specVarName = m3StyleNameToSpectrumVarName(style.name);
+  if (!specVarName) return null;
+
+  let specVar = specByName.get(specVarName);
+  if (!specVar) {
+    const fb = FALLBACKS[specVarName];
+    if (fb) specVar = specByName.get(fb);
+  }
+
+  if (specVar) {
+    cache.varMap.set(styleId, specVar);
+    return specVar;
+  }
+
+  return null;
+}
+
+function trySwapPaintStyle(node, field, cache, specByName, counters) {
+  const styleId = field === 'fills' ? node.fillStyleId : node.strokeStyleId;
+  if (!styleId || typeof styleId !== 'string' || styleId === '') return;
+
+  const bv = node.boundVariables;
+  const hasVar = bv && bv[field] && Array.isArray(bv[field]) && bv[field].length > 0;
+  if (hasVar) return;
+
+  const style = figma.getStyleById(styleId);
+  if (!style || !style.name.startsWith('M3/')) return;
+
+  if (isElevationStyle(style.name)) {
+    counters.skipped++;
+    return;
+  }
+
+  const specVar = resolveStyleId(styleId, cache, specByName);
+  if (specVar) {
+    const paints = field === 'fills' ? node.fills : node.strokes;
+    if (paints && paints !== figma.mixed && paints.length > 0) {
+      const newPaints = [...paints];
+      if (field === 'fills') node.fillStyleId = '';
+      else node.strokeStyleId = '';
+      if (newPaints[0] && newPaints[0].type === 'SOLID') {
+        newPaints[0] = figma.variables.setBoundVariableForPaint(newPaints[0], 'color', specVar);
+        if (field === 'fills') node.fills = newPaints;
+        else node.strokes = newPaints;
+        counters.swapped++;
+        return;
+      }
+    }
+  }
+
+  counters.failed++;
+  counters.failedNames.add(style.name);
+}
+
+function swapNodeStyles(node, cache, specByName, counters) {
+  try { trySwapPaintStyle(node, 'fills', cache, specByName, counters); }
+  catch (e) { /* skip inaccessible fill */ }
+
+  try { trySwapPaintStyle(node, 'strokes', cache, specByName, counters); }
+  catch (e) { /* skip inaccessible stroke */ }
+
+  try {
+    const effectStyleId = node.effectStyleId;
+    if (effectStyleId && typeof effectStyleId === 'string' && effectStyleId !== '') {
+      const bv = node.boundVariables;
+      const hasEffectVar = bv && bv.effects && Array.isArray(bv.effects) && bv.effects.length > 0;
+      if (!hasEffectVar) {
+        const style = figma.getStyleById(effectStyleId);
+        if (style && style.name.startsWith('M3/')) {
+          if (isElevationStyle(style.name)) {
+            counters.skipped++;
+          } else {
+            const specVar = resolveStyleId(effectStyleId, cache, specByName);
+            if (specVar) {
+              const effects = node.effects;
+              if (effects && effects.length > 0) {
+                const newEffects = [...effects];
+                node.effectStyleId = '';
+                if (newEffects[0]) {
+                  newEffects[0] = figma.variables.setBoundVariableForEffect(newEffects[0], 'color', specVar);
+                  node.effects = newEffects;
+                  counters.swapped++;
+                  return;
+                }
+              }
+            }
+            counters.failed++;
+            counters.failedNames.add(style.name);
+          }
+        }
+      }
+    }
+  } catch (e) { /* skip inaccessible effect */ }
+}
+
 function rename() {
   const collection = findCollectionByName(COLLECTION_NAME);
   if (!collection) {
@@ -597,6 +759,9 @@ async function swapAll() {
     if (v) specByName.set(v.name, v);
   }
 
+  const styleCache = { varMap: new Map(), nameMap: new Map(), checked: new Set() };
+  const styleCounters = { swapped: 0, failed: 0, skipped: 0, failedNames: new Set() };
+
   function findMatch(varId) {
     const m3Var = figma.variables.getVariableById(varId);
     if (!m3Var) return null;
@@ -713,6 +878,9 @@ async function swapAll() {
         swapScalarFields(node);
       }
     } catch (e) {}
+    try {
+      swapNodeStyles(node, styleCache, specByName, styleCounters);
+    } catch (e) {}
     if ('children' in node) {
       for (const child of node.children) processNode(child);
     }
@@ -727,18 +895,80 @@ async function swapAll() {
   }
 
   const errorList = [...failedVars].sort().map(n => `  - ${n}`).join('\n');
+  const styleErrorList = [...styleCounters.failedNames].sort().map(n => `  - ${n}`).join('\n');
   const summary = [
-    'Full swap complete.',
+    'Full swap complete (variables + styles).',
     '',
     `Collections processed: ${foundCollections.join(', ')}`,
     `Total M3 variables tracked: ${allM3VarIds.size}`,
     '',
-    `Swapped: ${swappedCount} binding(s)`,
-    `Failed:  ${failedCount} binding(s)`,
+    `Variable bindings swapped: ${swappedCount}`,
+    `Variable bindings failed:  ${failedCount}`,
+    '',
+    `Style references converted: ${styleCounters.swapped}`,
+    `Style references failed:    ${styleCounters.failed}`,
+    `Style references skipped:   ${styleCounters.skipped} (elevation/effect styles)`,
   ];
   if (failedVars.size > 0) {
-    summary.push('', `Unmatched variables (${failedVars.size}):`, errorList);
+    summary.push('', `Unmatched M3 variables (${failedVars.size}):`, errorList);
   }
+  if (styleCounters.failedNames.size > 0) {
+    summary.push('', `Unmatched M3 styles (${styleCounters.failedNames.size}):`, styleErrorList);
+  }
+
+  figma.showUI(
+    `<pre style="font:13px/1.6 monospace;padding:16px;white-space:pre-wrap">${summary.join('\n')}</pre>`,
+    { width: 560, height: 480 }
+  );
+}
+
+async function swapStylesCommand() {
+  const specCol = findCollectionByName('Spectrum');
+  if (!specCol) {
+    figma.notify('Spectrum collection not found.', { error: true });
+    return figma.closePlugin();
+  }
+
+  await figma.loadAllPagesAsync();
+
+  const specByName = new Map();
+  for (const id of specCol.variableIds) {
+    const v = figma.variables.getVariableById(id);
+    if (v) specByName.set(v.name, v);
+  }
+
+  const cache = { varMap: new Map(), nameMap: new Map(), checked: new Set() };
+  const counters = { swapped: 0, failed: 0, skipped: 0, failedNames: new Set() };
+
+  function processNode(node) {
+    try {
+      swapNodeStyles(node, cache, specByName, counters);
+    } catch (e) { /* skip inaccessible nodes */ }
+    if ('children' in node) {
+      for (const child of node.children) processNode(child);
+    }
+  }
+
+  let pageNum = 0;
+  const totalPages = figma.root.children.length;
+  for (const page of figma.root.children) {
+    pageNum++;
+    figma.notify(`Swapping styles ${pageNum}/${totalPages}: ${page.name}...`, { timeout: 500 });
+    processNode(page);
+  }
+
+  const errorList = [...counters.failedNames].sort().map(n => `  - ${n}`).join('\n');
+  const summary = [
+    'M3 style swap complete.',
+    '',
+    `Styles converted to variable bindings: ${counters.swapped}`,
+    `Failed:  ${counters.failed}`,
+    `Skipped: ${counters.skipped} (elevation/effect styles)`,
+  ];
+  if (counters.failedNames.size > 0) {
+    summary.push('', `Unmatched M3 styles (${counters.failedNames.size}):`, errorList);
+  }
+  summary.push('', 'M3 paint/effect styles have been replaced with Spectrum variable bindings.');
 
   figma.showUI(
     `<pre style="font:13px/1.6 monospace;padding:16px;white-space:pre-wrap">${summary.join('\n')}</pre>`,
@@ -754,5 +984,6 @@ switch (figma.command) {
   case 'createStateLayers': createStateLayers(); break;
   case 'createNonColorVars': createNonColorVars(); break;
   case 'swapAll': swapAll(); break;
+  case 'swapStyles': swapStylesCommand(); break;
   default: figma.closePlugin();
 }
