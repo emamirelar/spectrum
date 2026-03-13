@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spectrum Design System - Figma Token Migration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0070d2;
+  --midnight:#005fb2;
+  --white:#ffffff;
+  --light:#f6f6f6;
+  --text:#333333;
+  --green:#2d844a;
+  --green-bg:#edf7f0;
+  --radius:12px;
+  --shadow:0 2px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 4px 24px rgba(0,0,0,.12);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans',system-ui,-apple-system,sans-serif;
+  color:var(--text);
+  background:var(--white);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---- Utility ---- */
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---- Hero ---- */
+.hero{
+  background:linear-gradient(135deg,var(--midnight) 0%,var(--blue) 60%,#3a9bff 100%);
+  color:var(--white);
+  padding:80px 24px 64px;
+  text-align:center;
+}
+.hero__tag{
+  display:inline-block;
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  background:rgba(255,255,255,.15);
+  padding:6px 16px;
+  border-radius:20px;
+  margin-bottom:24px;
+}
+.hero h1{
+  font-size:clamp(1.75rem,4vw,2.75rem);
+  font-weight:700;
+  line-height:1.2;
+  margin-bottom:16px;
+}
+.hero__pitch{
+  font-size:clamp(1rem,2vw,1.2rem);
+  max-width:780px;
+  margin:0 auto 40px;
+  opacity:.92;
+  line-height:1.7;
+}
+.stats{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:16px;
+}
+.stat{
+  background:rgba(255,255,255,.13);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:var(--radius);
+  padding:20px 28px;
+  min-width:180px;
+  text-align:center;
+}
+.stat__number{
+  font-size:1.75rem;
+  font-weight:700;
+  display:block;
+  line-height:1.2;
+}
+.stat__label{
+  font-size:.8rem;
+  opacity:.85;
+  margin-top:4px;
+}
+
+/* ---- Zero Breaking Changes Banner ---- */
+.guarantee{
+  background:var(--blue);
+  color:var(--white);
+  padding:48px 24px;
+}
+.guarantee__inner{
+  max-width:900px;
+  margin:0 auto;
+  text-align:center;
+}
+.guarantee h2{
+  font-size:clamp(1.5rem,3vw,2rem);
+  font-weight:700;
+  margin-bottom:12px;
+}
+.guarantee__shield{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:56px;height:56px;
+  background:rgba(255,255,255,.15);
+  border-radius:50%;
+  font-size:1.75rem;
+  margin-bottom:16px;
+}
+.guarantee p{
+  font-size:1.05rem;
+  opacity:.93;
+  max-width:700px;
+  margin:0 auto 32px;
+  line-height:1.7;
+}
+.guarantee__proof{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  justify-content:center;
+  align-items:stretch;
+}
+.proof-box{
+  background:rgba(0,0,0,.2);
+  border-radius:8px;
+  padding:20px 24px;
+  font-family:'Courier New',monospace;
+  font-size:.85rem;
+  text-align:left;
+  min-width:280px;
+  flex:1;
+  max-width:400px;
+}
+.proof-box__label{
+  font-family:'Noto Sans',sans-serif;
+  font-size:.7rem;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  opacity:.7;
+  margin-bottom:8px;
+  display:block;
+}
+.proof-box code{
+  color:#a8d8ff;
+}
+.proof-box .val{color:#7ddfb0}
+.proof-arrow{
+  display:flex;
+  align-items:center;
+  font-size:1.5rem;
+  opacity:.6;
+}
+
+/* ---- What's Improving ---- */
+.improving{
+  padding:72px 24px;
+  background:var(--light);
+}
+.improving h2{
+  text-align:center;
+  font-size:clamp(1.4rem,3vw,1.9rem);
+  margin-bottom:48px;
+  color:var(--text);
+}
+.improving__grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:24px;
+  max-width:1000px;
+  margin:0 auto;
+}
+.improve-card{
+  background:var(--white);
+  border-radius:var(--radius);
+  padding:32px 28px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+.improve-card__icon{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:rgba(0,112,210,.1);
+  color:var(--blue);
+  display:inline-flex;
+  align-items:center;justify-content:center;
+  font-size:1.5rem;
+  margin-bottom:16px;
+}
+.improve-card h3{
+  font-size:1.1rem;
+  margin-bottom:8px;
+  color:var(--text);
+}
+.improve-card p{
+  font-size:.92rem;
+  color:#555;
+  line-height:1.6;
+}
+
+/* ---- Timeline Section ---- */
+.timeline-section{
+  padding:72px 24px;
+}
+.timeline-section>h2{
+  text-align:center;
+  font-size:clamp(1.4rem,3vw,1.9rem);
+  margin-bottom:12px;
+}
+.timeline-section>p.subtitle{
+  text-align:center;
+  color:#666;
+  max-width:600px;
+  margin:0 auto 56px;
+  font-size:.95rem;
+}
+
+/* Timeline spine */
+.timeline{
+  position:relative;
+  max-width:960px;
+  margin:0 auto;
+}
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:0;bottom:0;
+  width:3px;
+  background:var(--blue);
+  transform:translateX(-50%);
+}
+
+/* Timeline item */
+.tl-item{
+  position:relative;
+  width:50%;
+  padding:0 40px 48px;
+  opacity:0;
+  transition:opacity .6s ease,transform .6s ease;
+}
+.tl-item--left{transform:translateX(-30px)}
+.tl-item--right{transform:translateX(30px)}
+.tl-item.visible{
+  opacity:1;
+  transform:translateX(0);
+}
+.tl-item--left{
+  left:0;
+  text-align:right;
+}
+.tl-item--right{
+  left:50%;
+  text-align:left;
+}
+
+/* Step circle */
+.tl-circle{
+  position:absolute;
+  top:0;
+  width:40px;height:40px;
+  background:var(--blue);
+  color:var(--white);
+  border-radius:50%;
+  display:flex;
+  align-items:center;justify-content:center;
+  font-weight:700;
+  font-size:.95rem;
+  z-index:2;
+  box-shadow:0 0 0 4px var(--white),0 0 0 6px var(--blue);
+}
+.tl-item--left .tl-circle{
+  right:-20px;
+}
+.tl-item--right .tl-circle{
+  left:-20px;
+}
+
+/* Card inside timeline */
+.tl-card{
+  background:var(--white);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:28px;
+  text-align:left;
+}
+.tl-card h3{
+  font-size:1.05rem;
+  color:var(--midnight);
+  margin-bottom:8px;
+}
+.tl-card__desc{
+  font-size:.9rem;
+  color:#555;
+  line-height:1.6;
+  margin-bottom:16px;
+}
+
+/* Visual elements inside cards */
+.tl-visual{
+  background:var(--light);
+  border-radius:8px;
+  padding:16px;
+  margin-bottom:16px;
+  font-size:.82rem;
+  overflow-x:auto;
+}
+.tl-visual code{
+  font-family:'Courier New',monospace;
+  font-size:.8rem;
+}
+.tl-visual pre{
+  margin:0;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.tl-visual__big-number{
+  font-size:2.5rem;
+  font-weight:700;
+  color:var(--blue);
+  line-height:1;
+}
+.tl-visual__caption{
+  font-size:.8rem;
+  color:#777;
+  margin-top:4px;
+}
+
+/* Pie chart (CSS only) */
+.pie-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pie{
+  width:72px;height:72px;
+  border-radius:50%;
+  background:conic-gradient(var(--blue) 0deg 147deg,#f0ad4e 147deg 345deg,#d9534f 345deg 360deg);
+  flex-shrink:0;
+}
+.pie-legend{font-size:.8rem;line-height:1.8}
+.pie-legend span{
+  display:inline-block;
+  width:10px;height:10px;
+  border-radius:2px;
+  margin-right:6px;
+  vertical-align:middle;
+}
+.pie-legend .exact{background:var(--blue)}
+.pie-legend .fallback{background:#f0ad4e}
+.pie-legend .missing{background:#d9534f}
+
+/* Flow diagram */
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.78rem}
+.flow__box{
+  background:var(--white);
+  border:1px solid #ccc;
+  border-radius:6px;
+  padding:6px 10px;
+  font-family:'Courier New',monospace;
+  white-space:nowrap;
+}
+.flow__arrow{color:var(--blue);font-weight:700;font-size:1rem}
+
+/* Token columns */
+.token-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.token-col{text-align:center}
+.token-col__num{font-size:1.6rem;font-weight:700;color:var(--blue)}
+.token-col__label{font-size:.75rem;color:#777;margin-top:2px}
+
+/* Before/after inside cards */
+.before-after{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
+.ba-box{
+  flex:1;
+  min-width:160px;
+  background:var(--white);
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:10px 12px;
+  font-family:'Courier New',monospace;
+  font-size:.78rem;
+}
+.ba-box__label{
+  font-family:'Noto Sans',sans-serif;
+  font-size:.65rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:#999;
+  margin-bottom:4px;
+  display:block;
+}
+.ba-box .old{color:#d9534f;text-decoration:line-through}
+.ba-box .new{color:var(--green)}
+
+/* Status table inside card */
+.status-mini{width:100%;font-size:.82rem;border-collapse:collapse}
+.status-mini th,.status-mini td{text-align:left;padding:6px 10px;border-bottom:1px solid #eee}
+.status-mini th{font-weight:600;color:#555}
+.badge{
+  display:inline-block;
+  padding:2px 10px;
+  border-radius:10px;
+  font-size:.72rem;
+  font-weight:600;
+}
+.badge--mapped{background:rgba(45,132,74,.12);color:var(--green)}
+.badge--partial{background:rgba(240,173,78,.15);color:#a67c00}
+.badge--missing{background:rgba(217,83,79,.12);color:#c0392b}
+
+/* Safety note */
+.safety{
+  border-left:3px solid var(--green);
+  background:var(--green-bg);
+  border-radius:0 6px 6px 0;
+  padding:10px 14px;
+  font-size:.82rem;
+  color:#2a6e3f;
+  line-height:1.55;
+}
+.safety::before{
+  content:'';
+  font-size:.9rem;
+  margin-right:6px;
+}
+
+/* ---- Closing Summary ---- */
+.summary{
+  padding:72px 24px;
+  background:var(--light);
+}
+.summary h2{
+  text-align:center;
+  font-size:clamp(1.4rem,3vw,1.9rem);
+  margin-bottom:16px;
+}
+.summary>p{
+  text-align:center;
+  color:#555;
+  max-width:720px;
+  margin:0 auto 48px;
+  font-size:.95rem;
+  line-height:1.7;
+}
+.summary__grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+  max-width:1000px;
+  margin:0 auto;
+}
+.summary-card{
+  background:var(--white);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:28px;
+}
+.summary-card h3{
+  font-size:1rem;
+  margin-bottom:16px;
+  color:var(--midnight);
+}
+.status-table{width:100%;font-size:.85rem;border-collapse:collapse}
+.status-table th,.status-table td{text-align:left;padding:8px 12px;border-bottom:1px solid #eee}
+.status-table th{font-weight:600;color:#555;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
+.badge--done{background:rgba(45,132,74,.12);color:var(--green)}
+.badge--ready{background:rgba(0,112,210,.1);color:var(--blue)}
+.badge--not{background:rgba(0,0,0,.06);color:#777}
+.tooling-list{list-style:none;padding:0}
+.tooling-list li{
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+  font-size:.9rem;
+}
+.tooling-list li:last-child{border-bottom:none}
+.tooling-list strong{color:var(--midnight)}
+
+/* ---- Footer ---- */
+.footer{
+  text-align:center;
+  padding:32px 24px;
+  font-size:.8rem;
+  color:#999;
+  border-top:1px solid #eee;
+}
+
+/* ---- Responsive ---- */
+@media(max-width:768px){
+  .timeline::before{left:20px}
+  .tl-item{width:100%;left:0!important;text-align:left;padding-left:56px;padding-right:0}
+  .tl-item--left,.tl-item--right{transform:translateY(20px)}
+  .tl-item--left .tl-circle,.tl-item--right .tl-circle{left:0;right:auto}
+  .proof-arrow{display:none}
+  .token-cols{grid-template-columns:1fr}
+  .flow{flex-direction:column;align-items:flex-start}
+  .stats{flex-direction:column;align-items:center}
+  .stat{width:100%;max-width:300px}
+}
+
+/* ---- Reduced Motion ---- */
+@media(prefers-reduced-motion:reduce){
+  .tl-item,.tl-item--left,.tl-item--right{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- HERO                                         -->
+<!-- ============================================ -->
+<section class="hero">
+  <div class="container">
+    <span class="hero__tag">UNOPS Spectrum Design System</span>
+    <h1>Figma Token Migration</h1>
+    <p class="hero__pitch">Bringing the full richness of Material Design 3 components into Spectrum &mdash; so designers can use the M3 library in Figma while everything runs through Spectrum&rsquo;s own variable names and structure, with zero impact on existing projects.</p>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat__number">24,657+</span>
+        <span class="stat__label">Bindings Migrated</span>
+      </div>
+      <div class="stat">
+        <span class="stat__number">304</span>
+        <span class="stat__label">Colour Variables</span>
+      </div>
+      <div class="stat">
+        <span class="stat__number">107</span>
+        <span class="stat__label">Non-Colour Tokens</span>
+      </div>
+      <div class="stat">
+        <span class="stat__number">34</span>
+        <span class="stat__label">Components Mapped</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- ZERO BREAKING CHANGES BANNER                 -->
+<!-- ============================================ -->
+<section class="guarantee">
+  <div class="guarantee__inner">
+    <div class="guarantee__shield" aria-hidden="true">&#x1f6e1;</div>
+    <h2>Zero Breaking Changes</h2>
+    <p>All CSS custom property names (<code>--spectrum-sys-*</code>) remain identical. Projects consuming Spectrum components today will continue to work without any code changes.</p>
+    <div class="guarantee__proof">
+      <div class="proof-box">
+        <span class="proof-box__label">Before migration</span>
+        <code>--spectrum-sys-color-primary</code>: <span class="val">#0070d2</span>;
+      </div>
+      <div class="proof-arrow" aria-hidden="true">&rarr;</div>
+      <div class="proof-box">
+        <span class="proof-box__label">After migration</span>
+        <code>--spectrum-sys-color-primary</code>: <span class="val">#0070d2</span>;<br>
+        <span style="font-family:'Noto Sans',sans-serif;font-size:.72rem;opacity:.7;margin-top:8px;display:inline-block">Same name, now backed by a Figma variable</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- WHAT'S IMPROVING                             -->
+<!-- ============================================ -->
+<section class="improving">
+  <div class="container">
+    <h2>What This Migration Adds</h2>
+    <div class="improving__grid">
+      <div class="improve-card">
+        <div class="improve-card__icon" aria-hidden="true">&#x1f3a8;</div>
+        <h3>M3 Library, Spectrum Structure</h3>
+        <p>Designers can now use components from the Material Design 3 Figma library, but every variable and token follows Spectrum&rsquo;s naming convention &mdash; bridging M3&rsquo;s breadth with our own system.</p>
+      </div>
+      <div class="improve-card">
+        <div class="improve-card__icon" aria-hidden="true">&#x1f4e6;</div>
+        <h3>Expanded Token Coverage</h3>
+        <p>148 state-layer + 90 typescale + 10 shape + 7 font theme tokens added to Spectrum, giving components the same depth that M3 offers &mdash; under our own names.</p>
+      </div>
+      <div class="improve-card">
+        <div class="improve-card__icon" aria-hidden="true">&#x1f9e9;</div>
+        <h3>Component Mapping</h3>
+        <p>34 M3 components mapped to Spectrum equivalents with variant-level detail, so an M3 Button in Figma translates directly to <code>spectrum-button</code> in code.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 9-STEP TIMELINE                              -->
+<!-- ============================================ -->
+<section class="timeline-section">
+  <div class="container">
+    <h2>The 9-Step Migration Process</h2>
+    <p class="subtitle">Each step rewires M3&rsquo;s tokens and components to run through Spectrum&rsquo;s structure &mdash; without renaming or removing any existing CSS variables.</p>
+
+    <div class="timeline" role="list">
+
+      <!-- Step 1 -->
+      <div class="tl-item tl-item--left" role="listitem">
+        <div class="tl-circle">1</div>
+        <div class="tl-card">
+          <h3>Create the Variable Mapping</h3>
+          <p class="tl-card__desc">A structured JSON mapping of all 49 M3 colour variables to their Spectrum equivalents, each tagged with a match status.</p>
+          <div class="tl-visual">
+            <div class="pie-row">
+              <div class="pie" role="img" aria-label="20 exact, 27 fallback, 2 missing"></div>
+              <div class="pie-legend">
+                <div><span class="exact"></span> <strong>20</strong> Exact matches</div>
+                <div><span class="fallback"></span> <strong>27</strong> Fallback mappings</div>
+                <div><span class="missing"></span> <strong>2</strong> No equivalent</div>
+              </div>
+            </div>
+          </div>
+          <div class="safety">Mapping is a reference document only &mdash; no runtime code is changed.</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="tl-item tl-item--right" role="listitem">
+        <div class="tl-circle">2</div>
+        <div class="tl-card">
+          <h3>Temporary Rename for Swap</h3>
+          <p class="tl-card__desc">Spectrum variables are temporarily renamed to match M3 paths so Figma's Swap Variables plugin can find matches, then reverted.</p>
+          <div class="tl-visual">
+            <div class="flow">
+              <div class="flow__box">sys/color/on-primary-container</div>
+              <div class="flow__arrow">&rarr;</div>
+              <div class="flow__box" style="border-color:var(--blue)">On Primary Container</div>
+              <div class="flow__arrow">&rarr;</div>
+              <div class="flow__box" style="background:#edf7f0;border-color:var(--green)">Swap runs</div>
+              <div class="flow__arrow">&rarr;</div>
+              <div class="flow__box">sys/color/on-primary-container</div>
+            </div>
+            <div class="tl-visual__caption">Rename &rarr; Swap &rarr; Revert</div>
+          </div>
+          <div class="safety">Rename is temporary and internal to Figma only. CSS output is untouched.</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="tl-item tl-item--left" role="listitem">
+        <div class="tl-circle">3</div>
+        <div class="tl-card">
+          <h3>Swap M3 Colour Bindings</h3>
+          <p class="tl-card__desc">A custom Figma plugin walks every page and node, rebinding M3 variable references to their Spectrum equivalents in a single automated pass.</p>
+          <div class="tl-visual" style="text-align:center">
+            <div class="tl-visual__big-number">24,657+</div>
+            <div class="tl-visual__caption">Figma bindings swapped from M3 to Spectrum</div>
+          </div>
+          <div class="safety">Bindings are Figma-internal. The CSS variable names consumers use remain identical.</div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="tl-item tl-item--right" role="listitem">
+        <div class="tl-circle">4</div>
+        <div class="tl-card">
+          <h3>Create State Layer Variables</h3>
+          <p class="tl-card__desc">148 new State Layer and Add-on variables created in the Spectrum collection for hover, pressed, and focus states &mdash; bringing the total to 304 colour variables.</p>
+          <div class="tl-visual" style="text-align:center">
+            <div class="tl-visual__big-number">148</div>
+            <div class="tl-visual__caption">New state-layer variables (hover, pressed, focus, etc.)</div>
+          </div>
+          <div class="safety">These are additive &mdash; new variables that did not exist before. No existing variable is renamed or removed.</div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="tl-item tl-item--left" role="listitem">
+        <div class="tl-circle">5</div>
+        <div class="tl-card">
+          <h3>Fill Token Gaps</h3>
+          <p class="tl-card__desc">Non-colour tokens that M3 spreads across three collections are consolidated into Spectrum as a single, organised set.</p>
+          <div class="tl-visual">
+            <div class="token-cols">
+              <div class="token-col">
+                <div class="token-col__num">90</div>
+                <div class="token-col__label">Typescale<br>(15 styles &times; 6 props)</div>
+              </div>
+              <div class="token-col">
+                <div class="token-col__num">7</div>
+                <div class="token-col__label">Font Theme<br>(families &amp; weights)</div>
+              </div>
+              <div class="token-col">
+                <div class="token-col__num">10</div>
+                <div class="token-col__label">Shape<br>(corner radii)</div>
+              </div>
+            </div>
+          </div>
+          <div class="safety">Purely additive. Components already using <code>--spectrum-sys-*</code> tokens are unaffected.</div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="tl-item tl-item--right" role="listitem">
+        <div class="tl-circle">6</div>
+        <div class="tl-card">
+          <h3>Swap ALL Collections</h3>
+          <p class="tl-card__desc">A comprehensive plugin command handles all four M3 collections (colour, font theme, typescale, shape) in a single automated pass across every page.</p>
+          <div class="tl-visual" style="text-align:center">
+            <div class="tl-visual__big-number">4 &rarr; 1</div>
+            <div class="tl-visual__caption">M3 collections consolidated into Spectrum in one pass</div>
+          </div>
+          <div class="safety">Comprehensive Figma-side swap. Code-side CSS custom properties are unchanged.</div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="tl-item tl-item--left" role="listitem">
+        <div class="tl-circle">7</div>
+        <div class="tl-card">
+          <h3>Swap M3 Styles to Spectrum Variables</h3>
+          <p class="tl-card__desc">M3 paint and effect style references (e.g. <code>M3/sys/light/primary</code>) are converted to Spectrum variable bindings so all styling is variable-driven.</p>
+          <div class="tl-visual">
+            <div class="before-after">
+              <div class="ba-box">
+                <span class="ba-box__label">Before</span>
+                <span class="old">M3/sys/light/primary</span><br>
+                <span style="font-size:.72rem;color:#999">(Figma paint style)</span>
+              </div>
+              <div class="ba-box">
+                <span class="ba-box__label">After</span>
+                <span class="new">Schemes/Primary</span><br>
+                <span style="font-size:.72rem;color:#999">(Spectrum variable binding)</span>
+              </div>
+            </div>
+          </div>
+          <div class="safety">Style-to-variable conversion happens inside Figma only. No CSS changes.</div>
+        </div>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="tl-item tl-item--right" role="listitem">
+        <div class="tl-circle">8</div>
+        <div class="tl-card">
+          <h3>CSS Custom Property Sync</h3>
+          <p class="tl-card__desc">All Figma variables are mirrored as CSS custom properties in <code>spectrum-variables.css</code>, following the <code>--spectrum-sys-[category]-[name]</code> convention.</p>
+          <div class="tl-visual">
+            <pre><code><span style="color:var(--blue)">/* Colours */</span>
+--spectrum-sys-color-primary: #0070d2;
+--spectrum-sys-color-on-primary: #ffffff;
+
+<span style="color:var(--blue)">/* Typescale (90 vars) */</span>
+--spectrum-sys-typescale-display-large-size: 57px;
+
+<span style="color:var(--blue)">/* Shape (10 vars) */</span>
+--spectrum-sys-shape-corner-medium: 12px;</code></pre>
+          </div>
+          <div class="safety">Existing property names are preserved; new ones are added alongside them.</div>
+        </div>
+      </div>
+
+      <!-- Step 9 -->
+      <div class="tl-item tl-item--left" role="listitem">
+        <div class="tl-circle">9</div>
+        <div class="tl-card">
+          <h3>Component Mapping</h3>
+          <p class="tl-card__desc">34 M3 components mapped to Spectrum equivalents with variant-level detail, enabling future component instance swaps in Figma.</p>
+          <div class="tl-visual">
+            <table class="status-mini">
+              <thead><tr><th>Status</th><th>Count</th><th>Examples</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="badge badge--mapped">Mapped</span></td>
+                  <td><strong>23</strong></td>
+                  <td>Button, Chip, Card, Dialog, Switch</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--partial">Partial</span></td>
+                  <td><strong>6</strong></td>
+                  <td>Text Field, Search, Navigation Drawer</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--missing">Missing</span></td>
+                  <td><strong>5</strong></td>
+                  <td>Slider, Divider, Date Picker</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="safety">Mapping defines equivalences. Existing Spectrum components keep their current API and props.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- CLOSING SUMMARY                              -->
+<!-- ============================================ -->
+<section class="summary">
+  <div class="container">
+    <h2>Migration Status &amp; Tooling</h2>
+    <p>The M3 library&rsquo;s depth is now accessible through Spectrum&rsquo;s own structure &mdash; with no impact on existing consumers of the component library.</p>
+
+    <div class="summary__grid">
+
+      <div class="summary-card">
+        <h3>Migration Phase Status</h3>
+        <table class="status-table">
+          <thead><tr><th>Phase</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Colour Variable Swap</td><td><span class="badge badge--done">Done</span></td></tr>
+            <tr><td>Token Gap Filling</td><td><span class="badge badge--done">Done</span></td></tr>
+            <tr><td>Non-Colour Variable Creation</td><td><span class="badge badge--ready">Ready</span></td></tr>
+            <tr><td>M3 Style Swap</td><td><span class="badge badge--ready">Ready</span></td></tr>
+            <tr><td>Component Mapping</td><td><span class="badge badge--done">Done</span></td></tr>
+            <tr><td>Component Instance Swap</td><td><span class="badge badge--not">Not Started</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary-card">
+        <h3>Tooling Built</h3>
+        <ul class="tooling-list">
+          <li><strong>Token Swap Plugin</strong> &mdash; 8 commands for variable/style swapping inside Figma</li>
+          <li><strong>Component Migration Plugin</strong> &mdash; Audit and swap M3 component instances to Spectrum</li>
+          <li><strong>Console Scripts</strong> &mdash; 3 Figma Console scripts for temporary variable renaming</li>
+          <li><strong>JSON Mappings</strong> &mdash; 49 colour + 34 component mappings with variant detail</li>
+          <li><strong>CSS Sync</strong> &mdash; All tokens mirrored to <code>spectrum-variables.css</code></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- FOOTER                                       -->
+<!-- ============================================ -->
+<footer class="footer">
+  UNOPS Spectrum Design System &mdash; Figma Token Migration &mdash; March 2026
+</footer>
+
+<!-- ============================================ -->
+<!-- SCROLL ANIMATIONS                            -->
+<!-- ============================================ -->
+<script>
+(function(){
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) {
+    document.querySelectorAll('.tl-item').forEach(function(el) {
+      el.classList.add('visible');
+    });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.tl-item').forEach(function(el) {
+    observer.observe(el);
+  });
+})();
+</script>
+
+</body>
+</html>
