@@ -430,6 +430,121 @@ body{
   margin-right:6px;
 }
 
+/* ---- Component Examples ---- */
+.examples{
+  padding:72px 24px;
+}
+.examples h2{
+  text-align:center;
+  font-size:clamp(1.4rem,3vw,1.9rem);
+  margin-bottom:12px;
+}
+.examples>p{
+  text-align:center;
+  color:#666;
+  max-width:640px;
+  margin:0 auto 48px;
+  font-size:.95rem;
+}
+.example-row{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:0;
+  align-items:stretch;
+  max-width:960px;
+  margin:0 auto 32px;
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.example-side{
+  padding:24px 28px;
+  background:var(--white);
+}
+.example-side--m3{
+  border-right:none;
+}
+.example-side--spectrum{
+  border-left:none;
+}
+.example-side__tag{
+  display:inline-block;
+  font-size:.65rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  padding:3px 10px;
+  border-radius:10px;
+  margin-bottom:12px;
+}
+.example-side--m3 .example-side__tag{
+  background:rgba(0,0,0,.07);
+  color:#666;
+}
+.example-side--spectrum .example-side__tag{
+  background:rgba(0,112,210,.1);
+  color:var(--blue);
+}
+.example-side h4{
+  font-size:.95rem;
+  margin-bottom:10px;
+  color:var(--text);
+}
+.example-side code{
+  font-family:'Courier New',monospace;
+  font-size:.78rem;
+  display:block;
+  background:var(--light);
+  padding:10px 12px;
+  border-radius:6px;
+  margin-bottom:8px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.example-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--light);
+  padding:0 16px;
+  font-size:1.4rem;
+  color:var(--blue);
+  font-weight:700;
+  min-width:48px;
+}
+.variant-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+  font-size:.82rem;
+}
+.variant-row__m3{
+  color:#888;
+  min-width:90px;
+  text-align:right;
+}
+.variant-row__arrow{
+  color:var(--blue);
+  font-size:.85rem;
+}
+.variant-row__spectrum{
+  font-weight:600;
+  color:var(--midnight);
+}
+.example-note{
+  font-size:.78rem;
+  color:#888;
+  margin-top:8px;
+  font-style:italic;
+}
+@media(max-width:768px){
+  .example-row{grid-template-columns:1fr;gap:0}
+  .example-arrow{padding:12px 0;font-size:1rem}
+  .example-side{padding:20px}
+}
+
 /* ---- Closing Summary ---- */
 .summary{
   padding:72px 24px;
@@ -788,6 +903,107 @@ body{
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- COMPONENT EXAMPLES                           -->
+<!-- ============================================ -->
+<section class="examples">
+  <div class="container">
+    <h2>M3 to Spectrum &mdash; Side by Side</h2>
+    <p>Concrete examples of how Material Design 3 components in Figma translate to Spectrum components in code, with every variant accounted for.</p>
+
+    <!-- Button -->
+    <div class="example-row">
+      <div class="example-side example-side--m3">
+        <span class="example-side__tag">Material Design 3</span>
+        <h4>Button</h4>
+        <code>&lt;md-filled-button&gt;Save&lt;/md-filled-button&gt;
+&lt;md-outlined-button&gt;Cancel&lt;/md-outlined-button&gt;
+&lt;md-text-button&gt;Skip&lt;/md-text-button&gt;</code>
+        <div class="variant-row"><span class="variant-row__m3">Filled</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="primary"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Outlined</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="outline"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Text</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="ghost"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Filled Tonal</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="secondary"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Elevated</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="primary"</span></div>
+      </div>
+      <div class="example-arrow" aria-hidden="true">&rarr;</div>
+      <div class="example-side example-side--spectrum">
+        <span class="example-side__tag">Spectrum</span>
+        <h4>spectrum-button</h4>
+        <code>&lt;spectrum-button variant="primary"&gt;Save&lt;/spectrum-button&gt;
+&lt;spectrum-button variant="outline"&gt;Cancel&lt;/spectrum-button&gt;
+&lt;spectrum-button variant="ghost"&gt;Skip&lt;/spectrum-button&gt;</code>
+        <p class="example-note">All 5 M3 button types map to a single Spectrum component with variant props.</p>
+      </div>
+    </div>
+
+    <!-- Chip -->
+    <div class="example-row">
+      <div class="example-side example-side--m3">
+        <span class="example-side__tag">Material Design 3</span>
+        <h4>Chip</h4>
+        <code>&lt;md-assist-chip label="Help"&gt;&lt;/md-assist-chip&gt;
+&lt;md-filter-chip label="Active"&gt;&lt;/md-filter-chip&gt;</code>
+        <div class="variant-row"><span class="variant-row__m3">Assist</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="assist"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Filter</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="filter"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Input</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="input"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Suggestion</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="suggestion"</span></div>
+      </div>
+      <div class="example-arrow" aria-hidden="true">&rarr;</div>
+      <div class="example-side example-side--spectrum">
+        <span class="example-side__tag">Spectrum</span>
+        <h4>spectrum-chip</h4>
+        <code>&lt;spectrum-chip variant="assist"&gt;Help&lt;/spectrum-chip&gt;
+&lt;spectrum-chip variant="filter"&gt;Active&lt;/spectrum-chip&gt;</code>
+        <p class="example-note">1:1 variant mapping. All M3 chip types have a direct Spectrum equivalent.</p>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="example-row">
+      <div class="example-side example-side--m3">
+        <span class="example-side__tag">Material Design 3</span>
+        <h4>Card</h4>
+        <code>&lt;md-elevated-card&gt;...&lt;/md-elevated-card&gt;
+&lt;md-outlined-card&gt;...&lt;/md-outlined-card&gt;</code>
+        <div class="variant-row"><span class="variant-row__m3">Elevated</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="elevated"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Filled</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="filled"</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Outlined</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">variant="outlined"</span></div>
+      </div>
+      <div class="example-arrow" aria-hidden="true">&rarr;</div>
+      <div class="example-side example-side--spectrum">
+        <span class="example-side__tag">Spectrum</span>
+        <h4>spectrum-card</h4>
+        <code>&lt;spectrum-card variant="elevated"&gt;...&lt;/spectrum-card&gt;
+&lt;spectrum-card variant="outlined"&gt;...&lt;/spectrum-card&gt;</code>
+        <p class="example-note">All 3 M3 card variants map directly to Spectrum card variants.</p>
+      </div>
+    </div>
+
+    <!-- Dialog / Switch / Toast (compact) -->
+    <div class="example-row">
+      <div class="example-side example-side--m3">
+        <span class="example-side__tag">Material Design 3</span>
+        <h4>More 1:1 Mappings</h4>
+        <div class="variant-row"><span class="variant-row__m3">Dialog</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">spectrum-dialog</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Switch</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">spectrum-switch</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Snackbar</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">spectrum-toast</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Badge</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">spectrum-badge</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Nav Rail</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">spectrum-rail</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Nav Menu</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">spectrum-menu</span></div>
+        <div class="variant-row"><span class="variant-row__m3">Segmented</span> <span class="variant-row__arrow">&rarr;</span> <span class="variant-row__spectrum">spectrum-segmented-button</span></div>
+      </div>
+      <div class="example-arrow" aria-hidden="true">&rarr;</div>
+      <div class="example-side example-side--spectrum">
+        <span class="example-side__tag">Spectrum</span>
+        <h4>23 of 34 Fully Mapped</h4>
+        <p style="font-size:.88rem;color:#555;line-height:1.6;margin-top:8px">Each M3 component has a direct Spectrum equivalent with matching variant props. Spectrum often adds capabilities beyond M3 &mdash; for example, <code style="display:inline;padding:2px 6px;margin:0;font-size:.78rem">spectrum-switch</code> adds loading states and semantic variants (positive, caution, destructive) that M3 does not have.</p>
+        <p class="example-note">6 partial + 5 missing components identified for future development.</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
