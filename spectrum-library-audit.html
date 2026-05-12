@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spectrum Design System — Library Cleanup Audit</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f9fb;--surface:#fff;--text:#1a1c1e;--text2:#42474e;--text3:#72777f;
+  --primary:#0070d2;--primary-light:#d0e4ff;--primary-dark:#003258;
+  --border:#e2e5ea;--border-light:#f0f2f5;
+  --radius:12px;--radius-sm:8px;--radius-xs:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --font:'Noto Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --success:#2d844a;--warning:#cc6900;--danger:#c41e3a;
+  --ocean:#4ec3e0;--teal:#00a997;--orange:#eb7432;--green:#4c9f38;
+}
+html{font-family:var(--font);font-size:15px;color:var(--text);background:var(--bg);scroll-behavior:smooth}
+body{max-width:1200px;margin:0 auto;padding:2rem 2rem 6rem}
+
+.hero{text-align:center;padding:3.5rem 2rem 2.5rem;margin-bottom:2rem;background:linear-gradient(135deg,#c41e3a 0%,#a01830 50%,#6b1022 100%);color:#fff;border-radius:var(--radius);position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(255,180,180,.2) 0%,transparent 50%)}
+.hero h1{font-size:2.4rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem;position:relative;z-index:1}
+.hero .subtitle{font-size:1.05rem;opacity:.85;font-weight:300;position:relative;z-index:1;max-width:700px;margin:0 auto}
+.hero .date{display:inline-block;margin-top:1rem;padding:.3rem .9rem;background:rgba(255,255,255,.15);border-radius:100px;font-size:.78rem;font-weight:500;backdrop-filter:blur(8px);position:relative;z-index:1}
+
+.nav{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:2.5rem;position:sticky;top:0;z-index:100;background:var(--bg);padding:.75rem 0;border-bottom:1px solid var(--border-light)}
+.nav a{padding:.4rem .9rem;border-radius:100px;font-size:.78rem;font-weight:500;color:var(--text2);text-decoration:none;border:1px solid var(--border);transition:all .2s}
+.nav a:hover,.nav a:focus{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-bottom:2.5rem}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1rem;text-align:center}
+.stat .num{font-size:2rem;font-weight:700;line-height:1}
+.stat .num.red{color:var(--danger)}
+.stat .num.orange{color:var(--warning)}
+.stat .num.blue{color:var(--primary)}
+.stat .num.green{color:var(--success)}
+.stat .lbl{font-size:.72rem;color:var(--text3);margin-top:.25rem;text-transform:uppercase;letter-spacing:.04em;font-weight:500}
+
+section{margin-bottom:3rem}
+section>h2{font-size:1.5rem;font-weight:700;margin-bottom:.2rem;color:var(--text);display:flex;align-items:center;gap:.5rem}
+section>h2 .material-symbols-outlined{font-size:1.3rem;color:var(--primary)}
+section>p.desc{color:var(--text3);font-size:.85rem;margin-bottom:1.25rem;line-height:1.5}
+
+.finding-list{display:flex;flex-direction:column;gap:.75rem}
+.finding{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;transition:box-shadow .2s}
+.finding:hover{box-shadow:var(--shadow-md)}
+.finding-header{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.4rem}
+.finding-id{font-family:var(--mono);font-size:.7rem;font-weight:600;color:#fff;padding:.15rem .5rem;border-radius:var(--radius-xs);flex-shrink:0;margin-top:.1rem}
+.finding-id.ts{background:#3178c6}
+.finding-id.event{background:#e65100}
+.finding-id.css{background:#8b5cf6}
+.finding-id.sb{background:var(--teal)}
+.finding-id.pkg{background:#78716c}
+.finding-id.dom{background:var(--ocean)}
+.finding h3{font-size:.92rem;font-weight:600;color:var(--text);line-height:1.3}
+.finding p{font-size:.82rem;color:var(--text2);line-height:1.55;margin-top:.25rem}
+.finding code{font-family:var(--mono);font-size:.76rem;background:var(--primary-light);color:var(--primary-dark);padding:.1rem .35rem;border-radius:3px}
+.finding ul{margin-top:.4rem;padding-left:1.2rem}
+.finding ul li{font-size:.8rem;color:var(--text2);line-height:1.5;margin-bottom:.15rem}
+.finding ul li code{font-family:var(--mono);font-size:.74rem;background:var(--primary-light);color:var(--primary-dark);padding:.08rem .3rem;border-radius:3px}
+.finding .severity{display:inline-block;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:.12rem .45rem;border-radius:100px;margin-left:.5rem}
+.severity.high{background:#fce4ec;color:#c41e3a}
+.severity.medium{background:#fff3e0;color:#e65100}
+.severity.low{background:#e8f5e9;color:#2d844a}
+
+.table-wrap{overflow-x:auto;margin-top:.5rem}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{text-align:left;padding:.5rem .6rem;border-bottom:2px solid var(--border);color:var(--text3);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--border-light);color:var(--text2)}
+td code{font-family:var(--mono);font-size:.74rem;background:var(--primary-light);color:var(--primary-dark);padding:.08rem .3rem;border-radius:3px}
+tr:hover td{background:var(--border-light)}
+
+.priority-section{margin-top:2rem}
+.priority-band{margin-bottom:1.25rem}
+.priority-label{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.priority-label .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.priority-label .dot.p1{background:var(--danger)}
+.priority-label .dot.p2{background:var(--warning)}
+.priority-label .dot.p3{background:var(--primary)}
+.priority-label .dot.p4{background:var(--text3)}
+.priority-label strong{font-size:.88rem}
+.priority-items{display:flex;flex-wrap:wrap;gap:.4rem;padding-left:1.4rem}
+.priority-items .tag{font-size:.72rem;font-family:var(--mono);padding:.2rem .55rem;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);color:var(--text2);font-weight:500}
+
+.footer-note{margin-top:3rem;text-align:center;color:var(--text3);font-size:.78rem;padding-top:1.5rem;border-top:1px solid var(--border-light)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Library Cleanup Audit</h1>
+  <p class="subtitle">Comprehensive analysis of the Spectrum component library identifying inconsistencies, duplication, conflicts, and improvement opportunities</p>
+  <span class="date">May 12, 2026 &mdash; 42 components scanned</span>
+</div>
+
+<nav class="nav">
+  <a href="#overview">Overview</a>
+  <a href="#typescript">TypeScript API</a>
+  <a href="#events">Events</a>
+  <a href="#css">CSS / SCSS</a>
+  <a href="#storybook">Storybook</a>
+  <a href="#packages">Packages &amp; Exports</a>
+  <a href="#priority">Priority Roadmap</a>
+</nav>
+
+<!-- ─── Overview Stats ─── -->
+<section id="overview">
+  <h2><span class="material-symbols-outlined">query_stats</span> Audit Summary</h2>
+  <p class="desc">Findings across TypeScript APIs, event contracts, CSS architecture, Storybook stories, and package configuration.</p>
+  <div class="stats">
+    <div class="stat"><div class="num red">31</div><div class="lbl">Total Findings</div></div>
+    <div class="stat"><div class="num orange">8</div><div class="lbl">High Priority</div></div>
+    <div class="stat"><div class="num blue">6</div><div class="lbl">Categories</div></div>
+    <div class="stat"><div class="num green">42</div><div class="lbl">Components Scanned</div></div>
+    <div class="stat"><div class="num red">9</div><div class="lbl">Duplicated Spinners</div></div>
+    <div class="stat"><div class="num orange">8</div><div class="lbl">Duplicate Stories</div></div>
+  </div>
+</section>
+
+<!-- ─── A. TypeScript ─── -->
+<section id="typescript">
+  <h2><span class="material-symbols-outlined">code</span> A. TypeScript / Component API Inconsistencies</h2>
+  <p class="desc">Prop signatures, type patterns, naming conventions, and watch decorators across all 42 components.</p>
+  <div class="finding-list">
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id ts">A1</span>
+        <h3>Complex Prop Parsing Pattern &mdash; Incomplete Coverage <span class="severity high">High</span></h3>
+      </div>
+      <p>The workspace rule mandates all complex props accept <code>Type[] | string</code>. Several components violate this:</p>
+      <ul>
+        <li><code>spectrum-rail</code>: <code>moreContextActions: ContextMenuAction[]</code> &mdash; missing <code>| string</code></li>
+        <li><code>spectrum-dialog</code>: <code>buttons</code> prop is object-only</li>
+        <li><code>spectrum-hero</code>: <code>slides</code> is <code>string</code>-only (reversed problem)</li>
+        <li><code>spectrum-conversation-panel</code>: <code>messages</code>, <code>actions</code>, <code>sources</code> all <code>string</code>-only</li>
+        <li><code>spectrum-theme</code>: <code>config</code> is <code>string</code>-only</li>
+        <li><code>spectrum-image-gallery</code>: Uses dual-prop anti-pattern (<code>images</code> + <code>imagesJson</code>)</li>
+        <li><code>spectrum-cookie-compliance</code>: translation/config objects lack <code>| string</code></li>
+        <li><code>spectrum-avatar</code>: <code>customStyle</code> is object-only</li>
+      </ul>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id ts">A2</span>
+        <h3>Union Type Ordering Inconsistency <span class="severity low">Low</span></h3>
+      </div>
+      <p><code>spectrum-accordion</code> and <code>spectrum-menu</code> put <code>string</code> first in their union types (<code>string | Type[]</code>), while every other component uses <code>Type[] | string</code>.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id ts">A3</span>
+        <h3>Missing <code>@Watch</code> Declaration <span class="severity high">High</span></h3>
+      </div>
+      <p><code>spectrum-data-table</code>: <code>defaultSort</code> is parsed in <code>parseInputs()</code> but <code>@Watch</code> only covers <code>data</code>, <code>config</code>, <code>columns</code>. Changes to <code>defaultSort</code> alone won't trigger a re-parse.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id ts">A4</span>
+        <h3>Duplicate <code>@Watch</code> Handlers <span class="severity high">High</span></h3>
+      </div>
+      <p><code>spectrum-select</code> has two separate <code>@Watch('options')</code> handlers: <code>onOptionsChange()</code> and <code>handleOptionsChange()</code>. These should be merged into one.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id ts">A5</span>
+        <h3>Inconsistent <code>size</code> Scales <span class="severity medium">Medium</span></h3>
+      </div>
+      <p>Different components use different size vocabularies:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Component</th><th>Accepted Size Values</th></tr></thead>
+          <tbody>
+            <tr><td><code>spectrum-button</code></td><td><code>'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large'</code> (6 values with aliases)</td></tr>
+            <tr><td><code>spectrum-chip</code></td><td><code>'small' | 'medium' | 'large' | 'extra-small'</code></td></tr>
+            <tr><td><code>spectrum-text-input</code></td><td><code>'small' | 'medium' | 'large'</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Recommendation: Define a canonical <code>SpectrumSize</code> type and deprecate aliases.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id ts">A6</span>
+        <h3>Inconsistent Prop Naming <span class="severity medium">Medium</span></h3>
+      </div>
+      <p><code>spectrum-conversation-panel</code> uses <code>conversationtitle</code> (all lowercase) while every other component uses camelCase (<code>dialogTitle</code>, <code>panelTitle</code>, <code>cardTitle</code>, <code>headerTitle</code>).</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── B. Events ─── -->
+<section id="events">
+  <h2><span class="material-symbols-outlined">bolt</span> B. Event Naming and Payload Conflicts</h2>
+  <p class="desc">Event name collisions, inconsistent payloads, and violations of the component events rule.</p>
+  <div class="finding-list">
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id event">B1</span>
+        <h3>Generic Event Name Collision <span class="severity high">High</span></h3>
+      </div>
+      <p><code>spectrum-conversation-panel</code> emits <code>@Event({ eventName: 'action' })</code>. The name <code>action</code> is too generic and risks collision when events bubble up the DOM.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id event">B2</span>
+        <h3>Shared Event Name, Different Components <span class="severity medium">Medium</span></h3>
+      </div>
+      <p><code>titleChanged</code> is emitted by both <code>spectrum-panel</code> and <code>spectrum-conversation-panel</code>. Listeners cannot distinguish source without checking <code>event.target</code>.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id event">B3</span>
+        <h3>Same Event Name, Different Payload Shapes <span class="severity high">High</span></h3>
+      </div>
+      <p><code>searchChange</code>: On <code>spectrum-rail</code> it emits <code>{ action, value }</code> (object). On <code>spectrum-select</code> it emits a bare <code>string</code>. Consumers expecting a consistent shape will break.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id event">B4</span>
+        <h3>Missing <code>action</code> Field in Event Payloads <span class="severity high">High</span></h3>
+      </div>
+      <p>The events rule requires an <code>action</code> field. Violators:</p>
+      <ul>
+        <li><code>spectrum-breadcrumb</code> <code>breadcrumbClick</code>: emits <code>{ viewId, context, index }</code></li>
+        <li><code>spectrum-menu</code> <code>itemClick</code>: emits <code>{ label, href? }</code></li>
+        <li><code>spectrum-text-input</code> events: emit primitives/void</li>
+      </ul>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id event">B5</span>
+        <h3>Kebab-case Manual Event Dispatch <span class="severity low">Low</span></h3>
+      </div>
+      <p><code>spectrum-context-menu</code> dispatches a raw <code>CustomEvent('menu-open')</code> (kebab-case) alongside formal <code>@Event</code> declarations (<code>actionClick</code>, <code>menuClose</code>), bypassing Stencil's event system.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id event">B6</span>
+        <h3><code>debug</code> State vs Prop <span class="severity high">High</span></h3>
+      </div>
+      <p><code>spectrum-context-menu</code>: <code>debug</code> is declared as <code>@State()</code> defaulting to <code>true</code>. Every other component declares it as <code>@Prop()</code> defaulting to <code>false</code>.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── C. CSS ─── -->
+<section id="css">
+  <h2><span class="material-symbols-outlined">palette</span> C. CSS / SCSS Duplication and Inconsistencies</h2>
+  <p class="desc">Duplicated animations, missing shared partials, inconsistent breakpoints, and token usage across 43 SCSS files.</p>
+  <div class="finding-list">
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id css">C1</span>
+        <h3>Duplicated <code>@keyframes</code> Blocks <span class="severity high">High</span></h3>
+      </div>
+      <p>The spinner animation (<code>rotate 360deg</code>) is copy-pasted across <strong>9 files</strong> with varying names:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>File</th><th>Animation Name</th></tr></thead>
+          <tbody>
+            <tr><td><code>spectrum-search-results.scss</code></td><td><code>spin</code></td></tr>
+            <tr><td><code>spectrum-select.scss</code></td><td><code>spin</code></td></tr>
+            <tr><td><code>spectrum-media-library.scss</code></td><td><code>spin</code></td></tr>
+            <tr><td><code>spectrum-map.scss</code></td><td><code>spin</code></td></tr>
+            <tr><td><code>spectrum-data-table.scss</code></td><td><code>spin</code></td></tr>
+            <tr><td><code>spectrum-chart.scss</code></td><td><code>chart-spin</code></td></tr>
+            <tr><td><code>spectrum-dashboard.scss</code></td><td><code>dashboard-spin</code></td></tr>
+            <tr><td><code>dashboard-widget-host.scss</code></td><td><code>widget-host-spin</code></td></tr>
+            <tr><td><code>spectrum-switch.scss</code></td><td><code>switch-spin</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The <strong>ripple animation</strong> is also duplicated identically between <code>spectrum-button.scss</code> and <code>spectrum-chip.scss</code>.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id css">C2</span>
+        <h3>Duplicated <code>.sr-only</code> Utility <span class="severity high">High</span></h3>
+      </div>
+      <p>Identical screen-reader-only CSS block copy-pasted in <code>spectrum-switch.scss</code>, <code>spectrum-media-library.scss</code>, and <code>spectrum-application-layout.scss</code>.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id css">C3</span>
+        <h3>No Shared SCSS Partials or Mixins <span class="severity medium">Medium</span></h3>
+      </div>
+      <p>The codebase has <strong>zero</strong> <code>@mixin</code> or <code>@use</code> statements. Every component is fully self-contained, leading to heavy duplication of:</p>
+      <ul>
+        <li>Focus ring styles (different tokens per component)</li>
+        <li>Scrollbar styling (<code>::-webkit-scrollbar</code>)</li>
+        <li>Disabled state patterns (<code>opacity: 0.5; pointer-events: none</code>)</li>
+        <li>Transition declarations</li>
+        <li><code>prefers-reduced-motion</code> and <code>prefers-contrast: high</code> media queries</li>
+      </ul>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id css">C4</span>
+        <h3>Inconsistent Breakpoints <span class="severity medium">Medium</span></h3>
+      </div>
+      <p>No single breakpoint scale exists. At least <strong>8 different values</strong> are used:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Breakpoint</th><th>Components Using It</th></tr></thead>
+          <tbody>
+            <tr><td><code>480px</code></td><td>cookie-compliance, container, hero, search-results</td></tr>
+            <tr><td><code>600px</code></td><td>context-menu, image-gallery</td></tr>
+            <tr><td><code>640px</code></td><td>app-layout, cluster</td></tr>
+            <tr><td><code>767px</code></td><td>chart, search-results, dashboard</td></tr>
+            <tr><td><code>768px</code></td><td>menu, wizard, card, dialog, data-table</td></tr>
+            <tr><td><code>900px</code></td><td>image-gallery</td></tr>
+            <tr><td><code>1024px</code></td><td>dashboard, chart, cluster, app-layout, hero, menu</td></tr>
+            <tr><td><code>1100px / 1600px</code></td><td>image-gallery</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The <code>767px</code> vs <code>768px</code> difference creates a 1px gap at the breakpoint boundary.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id css">C5</span>
+        <h3>Inconsistent Focus Ring Tokens <span class="severity medium">Medium</span></h3>
+      </div>
+      <p>Focus outlines reference different tokens across components:</p>
+      <ul>
+        <li><code>var(--spectrum-sys-color-primary)</code> &mdash; hero, search-results</li>
+        <li><code>var(--spectrum-color-primary, #1976d2)</code> &mdash; dialog</li>
+        <li><code>var(--spectrum-color-primary)</code> &mdash; cookie-compliance</li>
+        <li>Hardcoded <code>#005fcc</code> &mdash; application-layout</li>
+        <li><code>rgba(255, 255, 255, 0.5)</code> &mdash; toast</li>
+      </ul>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id css">C6</span>
+        <h3>Orphan Design Token References <span class="severity low">Low</span></h3>
+      </div>
+      <p><code>spectrum-image-gallery.scss</code> references <code>--spectrum-spacing-300</code>, <code>--spectrum-spacing-200</code>, <code>--spectrum-spacing-400</code> which <strong>do not exist</strong> in <code>spectrum-variables.css</code>. The component always falls back to hardcoded pixel values.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id css">C7</span>
+        <h3>BEM Naming Deviations <span class="severity low">Low</span></h3>
+      </div>
+      <ul>
+        <li><code>spectrum-image-gallery.scss</code> uses <code>.gallery</code>, <code>.gallery__grid</code>, <code>.modal-overlay</code> instead of <code>spectrum-image-gallery__*</code></li>
+        <li><code>spectrum-application-layout.scss</code> uses <code>.header-app-id</code>, <code>.content-navigation</code></li>
+        <li><code>spectrum-conversation-panel.scss</code> uses <code>.source-hover-overlay</code></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── D. Storybook ─── -->
+<section id="storybook">
+  <h2><span class="material-symbols-outlined">menu_book</span> D. Storybook Stories Issues</h2>
+  <p class="desc">Duplicate titles, missing stories, phantom component references, and documentation gaps.</p>
+  <div class="finding-list">
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id sb">D1</span>
+        <h3>Duplicate Story Titles &mdash; 8 Pairs <span class="severity high">High</span></h3>
+      </div>
+      <p>Eight layout components have <strong>two story files</strong> with the same <code>title</code>, causing Storybook sidebar conflicts:</p>
+      <ul>
+        <li><code>SpectrumGrid</code>, <code>SpectrumFlex</code>, <code>SpectrumStack</code>, <code>SpectrumCluster</code></li>
+        <li><code>SpectrumContainer</code>, <code>SpectrumAppLayout</code>, <code>SpectrumSidebar</code>, <code>SpectrumApplicationLayout</code></li>
+      </ul>
+      <p>Each has one file under <code>components/</code> and another under <code>layouts/</code>.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id sb">D2</span>
+        <h3>Missing Stories <span class="severity medium">Medium</span></h3>
+      </div>
+      <ul>
+        <li><code>spectrum-breadcrumb</code>: No story file at all</li>
+        <li><code>dashboard-widget-host</code>: No dedicated story (only visible inside dashboard stories)</li>
+      </ul>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id sb">D3</span>
+        <h3>Overlapping MDX Documentation <span class="severity low">Low</span></h3>
+      </div>
+      <p><code>spectrum-search-results</code> has two use-case MDX files with nearly identical purpose: <code>spectrum-search-results-use-cases.mdx</code> and <code>use-cases.mdx</code>.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id sb">D4</span>
+        <h3>Inconsistent Storybook Imports <span class="severity low">Low</span></h3>
+      </div>
+      <p>Most stories import from <code>@storybook/web-components-vite</code>, but a few use the older <code>@storybook/web-components</code>: <code>text-input</code>, <code>score-card</code>, <code>map</code>, <code>css-variables</code>.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id sb">D5</span>
+        <h3>Phantom Component References <span class="severity medium">Medium</span></h3>
+      </div>
+      <p>Storybook MDX docs reference <code>spectrum-carousel</code> and <code>spectrum-megamenu</code> which <strong>do not exist</strong> in the core package.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id sb">D6</span>
+        <h3>Missing argTypes on Layout Stories <span class="severity low">Low</span></h3>
+      </div>
+      <p>Layout stories under <code>layouts/</code> mostly lack <code>argTypes</code> and Storybook controls, making them non-interactive.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── E. Packages ─── -->
+<section id="packages">
+  <h2><span class="material-symbols-outlined">inventory_2</span> E. Package and Export Issues</h2>
+  <p class="desc">Type exports, version drift, dead code, and build configuration.</p>
+  <div class="finding-list">
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id pkg">E1</span>
+        <h3>Incomplete Type Exports from <code>index.ts</code> <span class="severity high">High</span></h3>
+      </div>
+      <p>Only a subset of interfaces are re-exported. Many important types are not available from the barrel:</p>
+      <ul>
+        <li><code>DialogButton</code>, <code>ContextMenuAction</code>, <code>CollapsibleListItem</code>, <code>BreadcrumbItem</code></li>
+        <li><code>FilterDefinition</code>, <code>AccordionSection</code>, <code>TableColumn</code>, <code>TableConfig</code>, <code>DefaultSort</code></li>
+        <li><code>CookieConsent</code>, <code>CookieTranslations</code>, <code>ImageConfig</code></li>
+        <li><code>Message</code>, <code>ContentCard</code>, <code>ExplorationItem</code>, all dashboard types</li>
+      </ul>
+      <p>Consumers must use deep imports or duplicate type definitions.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id pkg">E2</span>
+        <h3>Version Drift Across Workspace Packages <span class="severity medium">Medium</span></h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Package</th><th>Core Version Referenced</th></tr></thead>
+          <tbody>
+            <tr><td>Core (actual)</td><td><code>0.0.1-alpha.48</code></td></tr>
+            <tr><td>Angular</td><td><code>^0.0.1-alpha.39</code></td></tr>
+            <tr><td>Vue / React</td><td><code>^0.0.1-alpha.39</code></td></tr>
+            <tr><td>Storybook</td><td><code>^0.0.1-alpha.42</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id pkg">E3</span>
+        <h3>TypeScript Version Mismatch <span class="severity low">Low</span></h3>
+      </div>
+      <p>Root <code>package.json</code>: <code>^5.6.3</code> &mdash; Core <code>package.json</code>: <code>^5.7.3</code></p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id pkg">E4</span>
+        <h3>Dead Utility Code <span class="severity high">High</span></h3>
+      </div>
+      <p><code>utils.ts</code> exports a <code>format()</code> function that is only used in its own test file &mdash; never by any component.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id pkg">E5</span>
+        <h3><code>stencil.config.ts</code> Minor Issue <span class="severity low">Low</span></h3>
+      </div>
+      <p>Line 27 has a stray character in a comment: <code>footer: '', // hide "Built with StencilJS"c</code></p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── F. Shadow DOM ─── -->
+<section id="shadow-dom" style="margin-bottom:1.5rem">
+  <div class="finding-list">
+    <div class="finding">
+      <div class="finding-header">
+        <span class="finding-id dom">F</span>
+        <h3>Shadow DOM Inconsistency <span class="severity low">Low</span></h3>
+      </div>
+      <p>No documented criteria for when <code>shadow: true</code> vs <code>shadow: false</code> is used. The split is roughly 50/50 across components. Additionally, <code>spectrum-map</code> is the only component that uses <code>scoped: true</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Priority Roadmap ─── -->
+<section id="priority">
+  <h2><span class="material-symbols-outlined">flag</span> Recommended Priority Roadmap</h2>
+  <p class="desc">Findings organized by impact and effort to guide the cleanup sequence.</p>
+
+  <div class="priority-section">
+
+    <div class="priority-band">
+      <div class="priority-label"><span class="dot p1"></span><strong>Priority 1 &mdash; High Impact / Low Effort</strong></div>
+      <div class="priority-items">
+        <span class="tag">B1 Rename action event</span>
+        <span class="tag">A4 Merge duplicate @Watch</span>
+        <span class="tag">A3 Add missing @Watch</span>
+        <span class="tag">B6 Fix debug @State</span>
+        <span class="tag">C1 Shared spinner keyframes</span>
+        <span class="tag">C2 Shared sr-only</span>
+        <span class="tag">D1 Deduplicate story titles</span>
+        <span class="tag">E4 Remove dead format()</span>
+      </div>
+    </div>
+
+    <div class="priority-band">
+      <div class="priority-label"><span class="dot p2"></span><strong>Priority 2 &mdash; High Impact / Medium Effort</strong></div>
+      <div class="priority-items">
+        <span class="tag">A1 Standardize JSON prop pattern</span>
+        <span class="tag">B3-B4 Event payload consistency</span>
+        <span class="tag">C4 Breakpoint standardization</span>
+        <span class="tag">E1 Export all public types</span>
+        <span class="tag">D5 Remove phantom references</span>
+      </div>
+    </div>
+
+    <div class="priority-band">
+      <div class="priority-label"><span class="dot p3"></span><strong>Priority 3 &mdash; Medium Impact / Medium Effort</strong></div>
+      <div class="priority-items">
+        <span class="tag">C3 Create shared SCSS partials</span>
+        <span class="tag">A5 Size scale standardization</span>
+        <span class="tag">C5 Focus ring token</span>
+        <span class="tag">A6 Fix conversationtitle</span>
+        <span class="tag">D2 Add missing stories</span>
+        <span class="tag">E2 Align package versions</span>
+      </div>
+    </div>
+
+    <div class="priority-band">
+      <div class="priority-label"><span class="dot p4"></span><strong>Priority 4 &mdash; Lower Priority</strong></div>
+      <div class="priority-items">
+        <span class="tag">A2 Union ordering</span>
+        <span class="tag">C6 Orphan tokens</span>
+        <span class="tag">C7 BEM alignment</span>
+        <span class="tag">D3-D6 Story polish</span>
+        <span class="tag">F Shadow DOM docs</span>
+        <span class="tag">E3 TS version mismatch</span>
+        <span class="tag">E5 Config typo</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="footer-note">
+  Spectrum Design System &mdash; Library Cleanup Audit &mdash; Generated May 12, 2026
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spectrum Design System — Library Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f9fb;--surface:#fff;--text:#1a1c1e;--text2:#42474e;--text3:#72777f;
+  --primary:#0070d2;--primary-light:#d0e4ff;--primary-dark:#003258;
+  --border:#e2e5ea;--border-light:#f0f2f5;
+  --radius:12px;--radius-sm:8px;--radius-xs:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --font:'Noto Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --success:#2d844a;--warning:#cc6900;--danger:#c41e3a;
+  --ocean:#4ec3e0;--teal:#00a997;--orange:#eb7432;--green:#4c9f38;
+}
+html{font-family:var(--font);font-size:15px;color:var(--text);background:var(--bg);scroll-behavior:smooth}
+body{max-width:1440px;margin:0 auto;padding:2rem 2rem 6rem}
+
+/* ─── Header ─── */
+.hero{text-align:center;padding:4rem 2rem 3rem;margin-bottom:3rem;background:linear-gradient(135deg,var(--primary) 0%,#005fb2 50%,#003258 100%);color:#fff;border-radius:var(--radius);position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(168,200,255,.25) 0%,transparent 50%)}
+.hero h1{font-size:2.8rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem;position:relative;z-index:1}
+.hero .subtitle{font-size:1.1rem;opacity:.85;font-weight:300;position:relative;z-index:1}
+.hero .version{display:inline-block;margin-top:1rem;padding:.35rem 1rem;background:rgba(255,255,255,.15);border-radius:100px;font-size:.8rem;font-weight:500;backdrop-filter:blur(8px);position:relative;z-index:1}
+
+/* ─── Navigation ─── */
+.nav{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:3rem;position:sticky;top:0;z-index:100;background:var(--bg);padding:1rem 0;border-bottom:1px solid var(--border-light)}
+.nav a{padding:.45rem 1rem;border-radius:100px;font-size:.8rem;font-weight:500;color:var(--text2);text-decoration:none;border:1px solid var(--border);transition:all .2s}
+.nav a:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ─── Section ─── */
+section{margin-bottom:3.5rem}
+section>h2{font-size:1.6rem;font-weight:700;margin-bottom:.25rem;color:var(--text);display:flex;align-items:center;gap:.5rem}
+section>h2 .material-symbols-outlined{font-size:1.4rem;color:var(--primary)}
+section>p.desc{color:var(--text3);font-size:.9rem;margin-bottom:1.5rem}
+
+/* ─── Cards grid ─── */
+.grid{display:grid;gap:1rem}
+.grid-2{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.grid-5{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;transition:box-shadow .2s,transform .15s}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card h3{font-size:.95rem;font-weight:600;margin-bottom:.25rem;display:flex;align-items:center;gap:.4rem}
+.card h3 code{font-family:var(--mono);font-size:.8rem;color:var(--primary);font-weight:500}
+.card .tag-name{font-family:var(--mono);font-size:.75rem;color:var(--primary);background:var(--primary-light);padding:.15rem .5rem;border-radius:var(--radius-xs);display:inline-block;margin-bottom:.5rem}
+.card .badge{display:inline-block;padding:.1rem .45rem;border-radius:100px;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.card .badge.atomic{background:#e8f5e9;color:#2e7d32}
+.card .badge.composed{background:#fff3e0;color:#e65100}
+.card .badge.complex{background:#fce4ec;color:#c62828}
+.card .badge.layout{background:#e3f2fd;color:#1565c0}
+.card .badge.infra{background:#f3e5f5;color:#7b1fa2}
+.card .badge.utility{background:#eceff1;color:#455a64}
+.card .badge.standalone{background:#e0f7fa;color:#00695c}
+.card p{font-size:.8rem;color:var(--text3);line-height:1.5;margin-top:.35rem}
+.card ul{list-style:none;margin-top:.5rem}
+.card ul li{font-size:.75rem;color:var(--text2);padding:.2rem 0;border-bottom:1px solid var(--border-light);font-family:var(--mono)}
+.card ul li:last-child{border:none}
+.card ul li span.type{color:var(--text3);font-family:var(--font)}
+
+/* ─── Props table ─── */
+.props{margin-top:.5rem;width:100%}
+.props dt{font-family:var(--mono);font-size:.72rem;color:var(--primary-dark);font-weight:500}
+.props dd{font-size:.72rem;color:var(--text3);margin-bottom:.3rem;padding-left:.75rem}
+
+/* ─── Token Swatches ─── */
+.swatch-row{display:flex;align-items:center;gap:.75rem;padding:.5rem 0;border-bottom:1px solid var(--border-light)}
+.swatch-row:last-child{border:none}
+.swatch{width:36px;height:36px;border-radius:var(--radius-xs);border:1px solid var(--border);flex-shrink:0}
+.swatch-info{flex:1;min-width:0}
+.swatch-info .name{font-family:var(--mono);font-size:.75rem;font-weight:500;color:var(--text)}
+.swatch-info .value{font-family:var(--mono);font-size:.7rem;color:var(--text3)}
+
+/* ─── Color Palette Strips ─── */
+.palette-strip{display:flex;border-radius:var(--radius-sm);overflow:hidden;height:48px;margin-bottom:.75rem}
+.palette-strip .step{flex:1;position:relative;cursor:pointer;transition:flex .2s}
+.palette-strip .step:hover{flex:2}
+.palette-strip .step .tip{position:absolute;bottom:-1.6rem;left:50%;transform:translateX(-50%);font-size:.6rem;font-family:var(--mono);color:var(--text3);white-space:nowrap;opacity:0;transition:opacity .15s}
+.palette-strip .step:hover .tip{opacity:1}
+.palette-label{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:.3rem}
+
+/* ─── Gradient Preview ─── */
+.gradient-preview{height:56px;border-radius:var(--radius-sm);margin-bottom:.2rem}
+.gradient-name{font-family:var(--mono);font-size:.72rem;color:var(--text2);margin-bottom:.75rem}
+
+/* ─── Spacing / Token Visual ─── */
+.spacing-demo{display:flex;align-items:flex-end;gap:1rem;flex-wrap:wrap}
+.spacing-block{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.spacing-block .bar{background:var(--primary);border-radius:3px;width:20px;transition:height .2s}
+.spacing-block .lbl{font-family:var(--mono);font-size:.65rem;color:var(--text3)}
+
+/* ─── Hierarchy Tree ─── */
+.tree{font-family:var(--mono);font-size:.78rem;line-height:2}
+.tree .level{padding-left:1.5rem;border-left:2px solid var(--border)}
+.tree .node{display:flex;align-items:center;gap:.4rem}
+.tree .node .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tree .node .dot.l0{background:#7b1fa2}.tree .node .dot.l1{background:var(--success)}
+.tree .node .dot.l2{background:var(--warning)}.tree .node .dot.l3{background:var(--danger)}
+.tree .node .dot.l4{background:var(--primary)}
+
+/* ─── Stats bar ─── */
+.stats{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:3rem}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;flex:1;min-width:150px;text-align:center}
+.stat .num{font-size:2.2rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .label{font-size:.78rem;color:var(--text3);margin-top:.3rem}
+
+/* ─── Responsive ─── */
+@media(max-width:768px){
+  body{padding:1rem 1rem 4rem}
+  .hero h1{font-size:1.8rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ HERO ═══ -->
+<header class="hero">
+  <h1>Spectrum Design System</h1>
+  <p class="subtitle">UNOPS Component Library — Complete Visual Reference</p>
+  <span class="version">v0.0.1-alpha.48 &nbsp;·&nbsp; @unops-itg-npm/cpit-spectrum &nbsp;·&nbsp; Stencil 4.x</span>
+  <div style="margin-top:1.25rem;position:relative;z-index:1">
+    <a href="./spectrum-showcase.html" style="display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.5rem;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:100px;text-decoration:none;font-size:.9rem;font-weight:500;backdrop-filter:blur(8px);transition:all .2s"
+       onmouseover="this.style.background='rgba(255,255,255,.3)'" onmouseout="this.style.background='rgba(255,255,255,.18)'">
+      <span style="font-family:'Material Symbols Outlined';font-size:1.1rem">play_circle</span>
+      View Live Component Showcase
+    </a>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════ NAV ═══ -->
+<nav class="nav">
+  <a href="#stats">Overview</a>
+  <a href="#hierarchy">Hierarchy</a>
+  <a href="#components">Components</a>
+  <a href="#layouts">Layout Shells</a>
+  <a href="#colors-sys">System Colors</a>
+  <a href="#colors-material">Material Colors</a>
+  <a href="#colors-palette">UNOPS Palettes</a>
+  <a href="#gradients">Gradients</a>
+  <a href="#typography">Typography</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#animation">Animation</a>
+  <a href="#overlay">Overlay &amp; Frost</a>
+  <a href="#icons">Icons</a>
+  <a href="#legacy">Legacy Tokens</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════ STATS ═══ -->
+<div class="stats" id="stats">
+  <div class="stat"><div class="num">44</div><div class="label">Components</div></div>
+  <div class="stat"><div class="num">7</div><div class="label">Layout Shells</div></div>
+  <div class="stat"><div class="num">130+</div><div class="label">Design Tokens</div></div>
+  <div class="stat"><div class="num">6</div><div class="label">Color Palettes</div></div>
+  <div class="stat"><div class="num">8</div><div class="label">Gradients</div></div>
+  <div class="stat"><div class="num">4</div><div class="label">Dependency Levels</div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ HIERARCHY ═══ -->
+<section id="hierarchy">
+  <h2><span class="material-symbols-outlined">account_tree</span> Dependency Hierarchy</h2>
+  <p class="desc">Components are organized in layers. Higher levels depend on lower levels.</p>
+  <div class="card" style="overflow-x:auto">
+    <div class="tree">
+      <div class="node"><span class="dot l0"></span> <strong>Level 0 — Foundation</strong></div>
+      <div class="level">
+        <div class="node"><span class="dot l0"></span> spectrum-theme</div>
+      </div>
+      <br>
+      <div class="node"><span class="dot l1"></span> <strong>Level 1 — Atomic</strong> (no internal dependencies)</div>
+      <div class="level">
+        <div class="node"><span class="dot l1"></span> spectrum-avatar, spectrum-button, spectrum-chip, spectrum-switch, spectrum-badge</div>
+        <div class="node"><span class="dot l1"></span> spectrum-toast, spectrum-panel, spectrum-context-menu, spectrum-wallpaper</div>
+        <div class="node"><span class="dot l1"></span> spectrum-menu, spectrum-media-library, spectrum-text-input, spectrum-card</div>
+        <div class="node"><span class="dot l1"></span> spectrum-chart (chart.js), spectrum-map (leaflet/maplibre)</div>
+      </div>
+      <br>
+      <div class="node"><span class="dot l2"></span> <strong>Level 2 — Composed</strong> (1–3 internal deps)</div>
+      <div class="level">
+        <div class="node"><span class="dot l2"></span> spectrum-accordion → chip</div>
+        <div class="node"><span class="dot l2"></span> spectrum-search-input → button</div>
+        <div class="node"><span class="dot l2"></span> spectrum-rail-item → button</div>
+        <div class="node"><span class="dot l2"></span> spectrum-collapsible-list → context-menu</div>
+        <div class="node"><span class="dot l2"></span> spectrum-select → button</div>
+        <div class="node"><span class="dot l2"></span> spectrum-dialog → button</div>
+        <div class="node"><span class="dot l2"></span> spectrum-search-results → button</div>
+        <div class="node"><span class="dot l2"></span> spectrum-hero → button</div>
+        <div class="node"><span class="dot l2"></span> spectrum-wizard → button, chip, switch</div>
+        <div class="node"><span class="dot l2"></span> spectrum-image-gallery → button, badge, panel</div>
+        <div class="node"><span class="dot l2"></span> spectrum-cookie-compliance → button, toast, dialog</div>
+      </div>
+      <br>
+      <div class="node"><span class="dot l3"></span> <strong>Level 3 — Complex</strong> (multiple internal deps)</div>
+      <div class="level">
+        <div class="node"><span class="dot l3"></span> spectrum-rail → button, search-input, collapsible-list, rail-item, context-menu</div>
+        <div class="node"><span class="dot l3"></span> spectrum-conversation-panel → accordion, button, chip, panel</div>
+        <div class="node"><span class="dot l3"></span> spectrum-dashboard → @stencil/store, widget-host, filter-panel, breadcrumb, score-card</div>
+      </div>
+      <br>
+      <div class="node"><span class="dot l4"></span> <strong>Level 4 — Layout Shells</strong> (pure layout, no component deps)</div>
+      <div class="level">
+        <div class="node"><span class="dot l4"></span> spectrum-app-layout, spectrum-application-layout</div>
+        <div class="node"><span class="dot l4"></span> spectrum-flex, spectrum-grid, spectrum-stack, spectrum-cluster, spectrum-container, spectrum-sidebar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ COMPONENTS ═══ -->
+<section id="components">
+  <h2><span class="material-symbols-outlined">widgets</span> All Components (44)</h2>
+  <p class="desc">Every web component in the library with tag name, level classification, and purpose.</p>
+  <div class="grid grid-2">
+
+    <!-- Foundation -->
+    <div class="card">
+      <span class="badge infra">Foundation</span>
+      <div class="tag-name">&lt;spectrum-theme&gt;</div>
+      <h3>Theme Provider</h3>
+      <p>Material Design 3 color scheme generation, font loading, dark/light mode, wallpaper coordination. Wraps all content.</p>
+      <dl class="props">
+        <dt>color</dt><dd>string = '#0070d2' — seed color for MD3 palette</dd>
+        <dt>override</dt><dd>'light' | 'dark' — force theme mode</dd>
+        <dt>config</dt><dd>string — JSON theme configuration overrides</dd>
+        <dt>autoLoadFonts</dt><dd>boolean = true</dd>
+        <dt>waitForWallpaper</dt><dd>boolean = false — coordinate with wallpaper</dd>
+      </dl>
+    </div>
+
+    <!-- Atomic -->
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-button&gt;</div>
+      <h3>Button</h3>
+      <p>Primary interactive control. Variants, icons, ripple, sound/haptic, optional link mode via href.</p>
+      <dl class="props">
+        <dt>variant</dt><dd>'primary' | 'secondary' | 'success' | 'warning' | 'danger'</dd>
+        <dt>size</dt><dd>'small' | 'base' | 'large'</dd>
+        <dt>outline, iconOnly, disabled, ripple</dt><dd>boolean flags</dd>
+        <dt>leftIcon, rightIcon</dt><dd>Material Symbol names</dd>
+        <dt>href, target, rel</dt><dd>link mode</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-chip&gt;</div>
+      <h3>Chip</h3>
+      <p>Tag/filter chip with optional remove icon, ripple effect, sound and haptic feedback.</p>
+      <dl class="props">
+        <dt>variant</dt><dd>'primary' | 'secondary' | 'success' | 'warning' | 'danger'</dd>
+        <dt>size</dt><dd>'small' | 'medium' | 'large'</dd>
+        <dt>label, leadingIcon, trailingIcon</dt><dd>content</dd>
+        <dt>selected, disabled, outline</dt><dd>state flags</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-avatar&gt;</div>
+      <h3>Avatar</h3>
+      <p>User profile display: image, initials, or icon with status indicator and interactive states.</p>
+      <dl class="props">
+        <dt>src, alt, initials, icon</dt><dd>content sources</dd>
+        <dt>size</dt><dd>'xs' | 'small' | 'base' | 'large' | 'xl'</dd>
+        <dt>shape</dt><dd>'circle' | 'square' | 'rounded'</dd>
+        <dt>status</dt><dd>'none' | 'online' | 'offline' | 'busy' | 'away'</dd>
+        <dt>clickable, disabled</dt><dd>interaction flags</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-badge&gt;</div>
+      <h3>Badge</h3>
+      <p>Status indicator, notification count, or label pill with semantic color variants.</p>
+      <dl class="props">
+        <dt>variant</dt><dd>'primary' | 'secondary' | 'success' | 'warning' | 'danger'</dd>
+        <dt>size</dt><dd>'small' | 'medium' | 'large'</dd>
+        <dt>text</dt><dd>string — badge content</dd>
+        <dt>circular</dt><dd>boolean — round badge</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-switch&gt;</div>
+      <h3>Switch</h3>
+      <p>Accessible toggle control (role="switch") with icons, loading state, and label support.</p>
+      <dl class="props">
+        <dt>checked, disabled, loading</dt><dd>state flags</dd>
+        <dt>variant</dt><dd>'primary' | 'secondary' | 'success' | 'warning' | 'danger'</dd>
+        <dt>size</dt><dd>'small' | 'base' | 'large'</dd>
+        <dt>label, name, value</dt><dd>form integration</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-toast&gt;</div>
+      <h3>Toast</h3>
+      <p>Transient notification with auto-dismiss, action button, and flexible positioning.</p>
+      <dl class="props">
+        <dt>variant</dt><dd>'primary' | 'success' | 'warning' | 'danger'</dd>
+        <dt>position</dt><dd>'top' | 'bottom' | 'top-left' | 'top-right' | …</dd>
+        <dt>duration</dt><dd>number = 4000ms</dd>
+        <dt>toastTitle, message, icon</dt><dd>content</dd>
+        <dt>actionLabel, actionValue</dt><dd>CTA button</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-panel&gt;</div>
+      <h3>Panel</h3>
+      <p>Content container with frost/opaque background levels and optional editable title.</p>
+      <dl class="props">
+        <dt>background</dt><dd>'opaque' | 'frost' | 'transparent'</dd>
+        <dt>size</dt><dd>'small' | 'medium' | 'large' | 'full'</dd>
+        <dt>width, height</dt><dd>custom CSS sizing</dd>
+        <dt>panelTitle, titleEditable</dt><dd>header content</dd>
+        <dt>noPadding</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-card&gt;</div>
+      <h3>Card</h3>
+      <p>MD3-style card with media, header/footer action slots, optional link mode.</p>
+      <dl class="props">
+        <dt>variant</dt><dd>'default' | 'elevated' | 'outlined' | 'filled'</dd>
+        <dt>size</dt><dd>'small' | 'medium' | 'large'</dd>
+        <dt>cardTitle, cardSubtitle, imageUrl</dt><dd>content</dd>
+        <dt>clickable, disabled</dt><dd>interaction</dd>
+        <dt>href, target</dt><dd>link mode</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-text-input&gt;</div>
+      <h3>Text Input</h3>
+      <p>Form text field with label, helper text, error messages, icons, and clearable support.</p>
+      <dl class="props">
+        <dt>type</dt><dd>'text' | 'email' | 'password' | 'number' | …</dd>
+        <dt>label, placeholder, helperText, errorMessage</dt><dd>content</dd>
+        <dt>size</dt><dd>'small' | 'medium' | 'large'</dd>
+        <dt>leadingIcon, trailingIcon</dt><dd>Material Symbol names</dd>
+        <dt>clearable, required, disabled, readonly</dt><dd>flags</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge utility">Utility</span>
+      <div class="tag-name">&lt;spectrum-context-menu&gt;</div>
+      <h3>Context Menu</h3>
+      <p>Positioned popup menu triggered imperatively. Used by collapsible-list and rail.</p>
+      <dl class="props">
+        <dt>position</dt><dd>'right' | 'left' | 'bottom' — alignment</dd>
+        <dt>show() / hide()</dt><dd>imperative methods</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge utility">Utility</span>
+      <div class="tag-name">&lt;spectrum-wallpaper&gt;</div>
+      <h3>Wallpaper</h3>
+      <p>Full-viewport background with color extraction and theme coordination events.</p>
+      <dl class="props">
+        <dt>background</dt><dd>CSS background value (image/gradient/color)</dd>
+        <dt>backgroundPosition</dt><dd>string = 'center'</dd>
+        <dt>backgroundSize</dt><dd>string = 'cover'</dd>
+        <dt>signalReady</dt><dd>boolean — emit coordination event</dd>
+        <dt>applyToRoot</dt><dd>boolean — apply colors to :root</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-menu&gt;</div>
+      <h3>Menu</h3>
+      <p>Responsive navigation: horizontal/vertical, regular submenus or full-width megamenu variant.</p>
+      <dl class="props">
+        <dt>orientation</dt><dd>'horizontal' | 'vertical'</dd>
+        <dt>variant</dt><dd>'default' | 'megamenu'</dd>
+        <dt>items, leftItems, rightItems</dt><dd>JSON menu structure</dd>
+        <dt>mobileBreakpoint</dt><dd>number = 768</dd>
+        <dt>directNavigation</dt><dd>boolean — navigate on click</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge atomic">Atomic</span>
+      <div class="tag-name">&lt;spectrum-media-library&gt;</div>
+      <h3>Media Library</h3>
+      <p>Scrollable media grid with integrated lightbox viewer, YouTube thumbnails, keyboard nav.</p>
+      <dl class="props">
+        <dt>mediaItems</dt><dd>array — images/videos</dd>
+        <dt>thumbnailSize</dt><dd>'small' | 'medium' | 'large'</dd>
+        <dt>horizontal</dt><dd>boolean — scroll direction</dd>
+        <dt>enableLightbox</dt><dd>boolean = true</dd>
+        <dt>showCaptions</dt><dd>boolean = true</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge standalone">Standalone</span>
+      <div class="tag-name">&lt;spectrum-chart&gt;</div>
+      <h3>Chart</h3>
+      <p>Chart.js wrapper: line, bar, pie, doughnut, radar, and more. Dashboard-widget compatible.</p>
+      <dl class="props">
+        <dt>type</dt><dd>'line' | 'bar' | 'pie' | 'doughnut' | 'radar' | …</dd>
+        <dt>data</dt><dd>{ labels, datasets } — Chart.js data</dd>
+        <dt>config</dt><dd>Chart.js configuration object</dd>
+        <dt>chartTitle</dt><dd>string</dd>
+        <dt>loading</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge standalone">Standalone</span>
+      <div class="tag-name">&lt;spectrum-map&gt;</div>
+      <h3>Map</h3>
+      <p>Leaflet or MapLibre maps via adapter pattern. Markers, regions, heatmaps, clustering.</p>
+      <dl class="props">
+        <dt>mapProvider</dt><dd>'leaflet' | 'maplibre'</dd>
+        <dt>config</dt><dd>map configuration object</dd>
+        <dt>data</dt><dd>markers/regions/layers data</dd>
+      </dl>
+    </div>
+
+    <!-- Composed -->
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-accordion&gt;</div>
+      <h3>Accordion</h3>
+      <p>Expandable sections with chip-trigger or standard mode. Single/multi expand.</p>
+      <dl class="props">
+        <dt>variant</dt><dd>'standard' | 'chip'</dd>
+        <dt>expandMode</dt><dd>'single' | 'multiple'</dd>
+        <dt>sections</dt><dd>JSON sections array</dd>
+        <dt>label</dt><dd>string = 'Dive Deeper'</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-search-input&gt;</div>
+      <h3>Search Input</h3>
+      <p>Multi-line search with optional voice input, enter-to-submit, and configurable icon placement.</p>
+      <dl class="props">
+        <dt>maxLines</dt><dd>number = 4</dd>
+        <dt>placeholder</dt><dd>string = 'Ask anything...'</dd>
+        <dt>enableVoiceInput</dt><dd>boolean = true</dd>
+        <dt>enableEnterSubmit</dt><dd>boolean = true</dd>
+        <dt>searchIconPosition</dt><dd>'left' | 'right'</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-select&gt;</div>
+      <h3>Select</h3>
+      <p>Advanced dropdown: single/multi, searchable, virtual scroll, mobile fullscreen mode.</p>
+      <dl class="props">
+        <dt>options</dt><dd>JSON array of option objects</dd>
+        <dt>multiple</dt><dd>boolean — multi-select</dd>
+        <dt>searchable</dt><dd>boolean — filter options</dd>
+        <dt>virtualScrolling</dt><dd>boolean — large lists</dd>
+        <dt>mobileFullscreen</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-dialog&gt;</div>
+      <h3>Dialog</h3>
+      <p>Native &lt;dialog&gt; modal with panel body, configurable buttons, close behaviors.</p>
+      <dl class="props">
+        <dt>open</dt><dd>boolean — visibility</dd>
+        <dt>dialogTitle</dt><dd>string</dd>
+        <dt>size</dt><dd>'small' | 'medium' | 'large' | 'full'</dd>
+        <dt>buttons</dt><dd>JSON button config array</dd>
+        <dt>background</dt><dd>'opaque' | 'frost'</dd>
+        <dt>closeOnEscape, closeOnOutsideClick</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-collapsible-list&gt;</div>
+      <h3>Collapsible List</h3>
+      <p>Hierarchical tree with filter, context menu actions, and inline rename support.</p>
+      <dl class="props">
+        <dt>items</dt><dd>JSON tree structure</dd>
+        <dt>filter</dt><dd>string — text filter</dd>
+        <dt>contextActions</dt><dd>JSON array of actions</dd>
+        <dt>mutuallyExclusive</dt><dd>boolean = true</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-rail-item&gt;</div>
+      <h3>Rail Item</h3>
+      <p>Individual navigation row for the rail. Shows icon or icon+label based on rail state.</p>
+      <dl class="props">
+        <dt>icon</dt><dd>string — Material Symbol (required)</dd>
+        <dt>label</dt><dd>string (required)</dd>
+        <dt>action</dt><dd>string — action identifier</dd>
+        <dt>expanded</dt><dd>boolean — reflects rail state</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-hero&gt;</div>
+      <h3>Hero</h3>
+      <p>Full hero section with carousel slides, image/video backgrounds, text overlays, CTAs.</p>
+      <dl class="props">
+        <dt>slides</dt><dd>JSON slide array</dd>
+        <dt>autoplay</dt><dd>number (ms, 0=off)</dd>
+        <dt>height</dt><dd>string = '100vh'</dd>
+        <dt>carouselMode</dt><dd>boolean — multi-slide</dd>
+        <dt>showDots, showArrows</dt><dd>boolean nav controls</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-wizard&gt;</div>
+      <h3>Wizard</h3>
+      <p>Step-by-step flow with progress tracking, cookie persistence, time estimation, external CSS.</p>
+      <dl class="props">
+        <dt>steps</dt><dd>JSON step array</dd>
+        <dt>currentStep</dt><dd>number = 0</dd>
+        <dt>persistProgress</dt><dd>boolean — cookie storage</dd>
+        <dt>showTimeIndicators</dt><dd>boolean</dd>
+        <dt>allowStepSelection</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-image-gallery&gt;</div>
+      <h3>Image Gallery</h3>
+      <p>Selectable image gallery with upload, URL input, preview modal, and batch actions.</p>
+      <dl class="props">
+        <dt>images</dt><dd>array or JSON string</dd>
+        <dt>selectionMode</dt><dd>'single' | 'multiple' | 'none'</dd>
+        <dt>allowUpload, allowUrlInput, allowDelete</dt><dd>flags</dd>
+        <dt>scrollDirection</dt><dd>'vertical' | 'horizontal'</dd>
+        <dt>primaryActionText</dt><dd>batch action label</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-search-results&gt;</div>
+      <h3>Search Results</h3>
+      <p>Paginated result list with thumbnails, metadata, scores, i18n translations.</p>
+      <dl class="props">
+        <dt>data</dt><dd>{ results, totalResults, query, … }</dd>
+        <dt>resultsPerPage</dt><dd>number = 10</dd>
+        <dt>showThumbnails, showMetadata, showScores</dt><dd>flags</dd>
+        <dt>directNavigation</dt><dd>boolean</dd>
+        <dt>translations</dt><dd>i18n object</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-cookie-compliance&gt;</div>
+      <h3>Cookie Compliance</h3>
+      <p>GDPR banner + preferences dialog, Google Tag Manager integration, persistent consent.</p>
+      <dl class="props">
+        <dt>position</dt><dd>'top' | 'bottom'</dd>
+        <dt>gtmContainerId</dt><dd>string — GTM ID</dd>
+        <dt>autoLoadGTM</dt><dd>boolean</dd>
+        <dt>consentVersion</dt><dd>string = '1.0.0'</dd>
+        <dt>translations</dt><dd>i18n object</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-score-card&gt;</div>
+      <h3>Score Card</h3>
+      <p>KPI display card with trend indicators, comparison, target progress, and number formatting.</p>
+      <dl class="props">
+        <dt>config</dt><dd>JSON config object</dd>
+        <dt>value, label, subtitle</dt><dd>content</dd>
+        <dt>format</dt><dd>'number' | 'currency' | 'percent'</dd>
+        <dt>trend, comparison, target</dt><dd>KPI metrics</dd>
+        <dt>showProgress</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-data-table&gt;</div>
+      <h3>Data Table</h3>
+      <p>Sortable, pageable, selectable table. JSON-friendly columns and data props.</p>
+      <dl class="props">
+        <dt>data</dt><dd>array — row data</dd>
+        <dt>columns</dt><dd>JSON column definitions</dd>
+        <dt>sortable, pageable, selectable</dt><dd>feature flags</dd>
+        <dt>pageSize</dt><dd>number = 10</dd>
+        <dt>loading</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-breadcrumb&gt;</div>
+      <h3>Breadcrumb</h3>
+      <p>Navigation trail for dashboards with home link and configurable separator.</p>
+      <dl class="props">
+        <dt>items</dt><dd>JSON breadcrumb items</dd>
+        <dt>separator</dt><dd>string = '/'</dd>
+        <dt>maxItems</dt><dd>number — truncation</dd>
+        <dt>showHome</dt><dd>boolean = true</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge composed">Composed</span>
+      <div class="tag-name">&lt;spectrum-filter-panel&gt;</div>
+      <h3>Filter Panel</h3>
+      <p>Declarative filter controls bound to dashboard store. Apply/reset pattern.</p>
+      <dl class="props">
+        <dt>filters</dt><dd>JSON filter definitions</dd>
+        <dt>layout</dt><dd>'horizontal' | 'vertical'</dd>
+        <dt>showButtons</dt><dd>boolean = true</dd>
+        <dt>immediate</dt><dd>boolean — auto-apply</dd>
+      </dl>
+    </div>
+
+    <!-- Complex -->
+    <div class="card">
+      <span class="badge complex">Complex</span>
+      <div class="tag-name">&lt;spectrum-rail&gt;</div>
+      <h3>Navigation Rail</h3>
+      <p>Collapsible app rail with search, add button, more menu, context actions, and custom footer slots.</p>
+      <dl class="props">
+        <dt>appName, appLogo, appLogoDark</dt><dd>branding</dd>
+        <dt>expandedWidth</dt><dd>number = 280</dd>
+        <dt>initialExpanded</dt><dd>boolean = false</dd>
+        <dt>showAddButton, showMoreButton</dt><dd>flags</dd>
+        <dt>moreContextActions</dt><dd>JSON actions array</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge complex">Complex</span>
+      <div class="tag-name">&lt;spectrum-conversation-panel&gt;</div>
+      <h3>Conversation Panel</h3>
+      <p>Chat/AI interface with message rendering, source cards, explorations, accordions.</p>
+      <dl class="props">
+        <dt>messages</dt><dd>JSON string — message list</dd>
+        <dt>conversationtitle</dt><dd>string</dd>
+        <dt>sources, actions</dt><dd>JSON strings</dd>
+        <dt>loading</dt><dd>boolean</dd>
+        <dt>background</dt><dd>'opaque' | 'frost'</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge complex">Complex</span>
+      <div class="tag-name">&lt;spectrum-dashboard&gt;</div>
+      <h3>Dashboard</h3>
+      <p>JSON-driven dashboard engine: CSS Grid layout, centralized data management, widget registry, drill-down views.</p>
+      <dl class="props">
+        <dt>config</dt><dd>JSON dashboard definition (required)</dd>
+        <dt>context</dt><dd>object — shared context</dd>
+        <dt>debug</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge complex">Complex</span>
+      <div class="tag-name">&lt;dashboard-widget-host&gt;</div>
+      <h3>Widget Host</h3>
+      <p>Dashboard grid cell: loads data for a widget, renders registered widget tag, handles drill-down.</p>
+      <dl class="props">
+        <dt>area</dt><dd>string — grid area (required)</dd>
+        <dt>widgetConfig</dt><dd>object (required)</dd>
+        <dt>dataSourceManager</dt><dd>object (required)</dd>
+        <dt>globalContext</dt><dd>object</dd>
+      </dl>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ LAYOUTS ═══ -->
+<section id="layouts">
+  <h2><span class="material-symbols-outlined">dashboard</span> Layout Shells (9)</h2>
+  <p class="desc">Pure layout primitives and application shells. No internal component dependencies.</p>
+  <div class="grid grid-2">
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-app-layout&gt;</div>
+      <h3>App Layout</h3>
+      <p>Full application shell: header, collapsible left sidebar, main content, optional right bar, footer. CSS Grid.</p>
+      <dl class="props">
+        <dt>sidebarPosition</dt><dd>'left' | 'right'</dd>
+        <dt>sidebarExpanded</dt><dd>boolean = true</dd>
+        <dt>sidebarExpandedWidth</dt><dd>string = '16rem'</dd>
+        <dt>showHeader, showFooter</dt><dd>boolean = true</dd>
+        <dt>showRightBar</dt><dd>boolean = true</dd>
+        <dt>responsive</dt><dd>boolean = true</dd>
+        <dt>gap</dt><dd>'sm' | 'md' | 'lg'</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-application-layout&gt;</div>
+      <h3>Application Layout</h3>
+      <p>Slot-based semantic page grid: header (3 zones), navigation + main + sidebar, footer (3 zones).</p>
+      <dl class="props">
+        <dt>showHeaderAppId, showHeaderMiddle, showHeaderUtility</dt><dd>boolean</dd>
+        <dt>showContentNavigation, showContentSidebar</dt><dd>boolean</dd>
+        <dt>showFooterLeft, showFooterCenter, showFooterRight</dt><dd>boolean</dd>
+        <dt>leftCollapsed, rightCollapsed</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-flex&gt;</div>
+      <h3>Flex</h3>
+      <p>Flexbox layout utility with responsive direction switching and preset gap sizes.</p>
+      <dl class="props">
+        <dt>direction</dt><dd>'row' | 'column' | 'row-reverse' | 'column-reverse'</dd>
+        <dt>wrap</dt><dd>'nowrap' | 'wrap' | 'wrap-reverse'</dd>
+        <dt>justify, align</dt><dd>standard flexbox values</dd>
+        <dt>gap</dt><dd>'xs' | 'sm' | 'md' | 'lg' | 'xl' | custom</dd>
+        <dt>responsive, mobileDirection</dt><dd>breakpoint behavior</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-grid&gt;</div>
+      <h3>Grid</h3>
+      <p>CSS Grid utility: template columns/rows, areas, auto-fit/fill, responsive mobile fallback.</p>
+      <dl class="props">
+        <dt>columns, rows, areas</dt><dd>CSS Grid template strings</dd>
+        <dt>minColumnWidth</dt><dd>auto-fit minimum</dd>
+        <dt>autoFit, autoFill</dt><dd>boolean — responsive columns</dd>
+        <dt>gap</dt><dd>'xs' | 'sm' | 'md' | 'lg' | 'xl' | custom</dd>
+        <dt>responsive, mobileColumns</dt><dd>breakpoint fallback</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-stack&gt;</div>
+      <h3>Stack</h3>
+      <p>Vertical or horizontal stacking with consistent spacing and optional reverse.</p>
+      <dl class="props">
+        <dt>direction</dt><dd>'vertical' | 'horizontal'</dd>
+        <dt>spacing</dt><dd>'xs' | 'sm' | 'md' | 'lg' | 'xl' | custom</dd>
+        <dt>align</dt><dd>'stretch' | 'start' | 'center' | 'end'</dd>
+        <dt>wrap, reverse</dt><dd>boolean flags</dd>
+        <dt>responsive</dt><dd>boolean</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-cluster&gt;</div>
+      <h3>Cluster</h3>
+      <p>Groups items with natural wrapping and consistent spacing. Great for tags, buttons, badges.</p>
+      <dl class="props">
+        <dt>spacing</dt><dd>'xs' | 'sm' | 'md' | 'lg' | 'xl' | custom</dd>
+        <dt>align, justify</dt><dd>flexbox alignment</dd>
+        <dt>direction</dt><dd>'horizontal' | 'vertical'</dd>
+        <dt>wrap, noWrap</dt><dd>boolean</dd>
+        <dt>stackBelow</dt><dd>boolean — stack at breakpoint</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-container&gt;</div>
+      <h3>Container</h3>
+      <p>Content wrapper with max-width presets, responsive padding, and auto-centering.</p>
+      <dl class="props">
+        <dt>size</dt><dd>'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'</dd>
+        <dt>maxWidth</dt><dd>custom CSS value</dd>
+        <dt>padding</dt><dd>'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'none'</dd>
+        <dt>centered</dt><dd>boolean = true</dd>
+        <dt>fullWidthMobile</dt><dd>boolean = true</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-sidebar&gt;</div>
+      <h3>Sidebar</h3>
+      <p>Two-column layout with main + sidebar. Collapsible, responsive, overlay mode.</p>
+      <dl class="props">
+        <dt>position</dt><dd>'left' | 'right'</dd>
+        <dt>sidebarWidth</dt><dd>'xs' | 'sm' | 'md' | 'lg' | 'xl' | custom</dd>
+        <dt>collapsible, collapsed</dt><dd>boolean</dd>
+        <dt>overlay</dt><dd>boolean — overlay on mobile</dd>
+        <dt>responsive</dt><dd>boolean = true</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="badge layout">Layout</span>
+      <div class="tag-name">&lt;spectrum-rail-alternative&gt;</div>
+      <h3>Rail Alternative</h3>
+      <p>Placeholder shell for alternative rail navigation. Slot-only, basic skeleton.</p>
+      <dl class="props">
+        <dt colspan="2"><em>No props — slot-based only</em></dt>
+      </dl>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SYSTEM COLORS ═══ -->
+<section id="colors-sys">
+  <h2><span class="material-symbols-outlined">palette</span> System Color Tokens</h2>
+  <p class="desc">Core semantic colors from <code>--spectrum-sys-color-*</code> and their UNOPS base values.</p>
+  <div class="card">
+    <div class="swatch-row">
+      <div class="swatch" style="background:#0070d2"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-primary</div><div class="value">#0070d2 (--unops-color-blue)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#005fb2"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-secondary</div><div class="value">#005fb2 (--unops-color-midnight)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#2d844a"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-success</div><div class="value">#2d844a (--unops-color-success)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#cc6900"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-warning</div><div class="value">#cc6900 (--unops-color-warning)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#c41e3a"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-danger</div><div class="value">#c41e3a (--unops-color-danger)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#ffffff;border:1px solid #ddd"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-background</div><div class="value">#ffffff (--unops-color-white)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#f6f6f6"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-surface</div><div class="value">#f6f6f6 (--unops-color-gray)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#333333"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-text</div><div class="value">#333333 (--unops-color-black)</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#ffffff;border:1px solid #ddd"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-on-primary</div><div class="value">#ffffff</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#ffffff;border:1px solid #ddd"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-on-secondary</div><div class="value">#ffffff</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#333333"></div>
+      <div class="swatch-info"><div class="name">--spectrum-sys-color-on-surface</div><div class="value">#333333 (--unops-color-black)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ MATERIAL COLORS ═══ -->
+<section id="colors-material">
+  <h2><span class="material-symbols-outlined">format_paint</span> Material Design 3 Color Scheme</h2>
+  <p class="desc">Full MD3 color tokens from <code>--spectrum-color-*</code>. Light mode defaults shown; dark mode overrides exist.</p>
+  <div class="grid grid-3">
+    <div class="card">
+      <h3>Primary</h3>
+      <div class="swatch-row"><div class="swatch" style="background:#0070d2"></div><div class="swatch-info"><div class="name">--spectrum-color-primary</div><div class="value">#0070d2</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#ffffff;border:1px solid #ddd"></div><div class="swatch-info"><div class="name">on-primary</div><div class="value">#ffffff</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#d0e4ff"></div><div class="swatch-info"><div class="name">primary-container</div><div class="value">#d0e4ff</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#001c3a"></div><div class="swatch-info"><div class="name">on-primary-container</div><div class="value">#001c3a</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Secondary</h3>
+      <div class="swatch-row"><div class="swatch" style="background:#005fb2"></div><div class="swatch-info"><div class="name">--spectrum-color-secondary</div><div class="value">#005fb2</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#ffffff;border:1px solid #ddd"></div><div class="swatch-info"><div class="name">on-secondary</div><div class="value">#ffffff</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#d1e4ff"></div><div class="swatch-info"><div class="name">secondary-container</div><div class="value">#d1e4ff</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#001c3a"></div><div class="swatch-info"><div class="name">on-secondary-container</div><div class="value">#001c3a</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Tertiary</h3>
+      <div class="swatch-row"><div class="swatch" style="background:#7f525d"></div><div class="swatch-info"><div class="name">--spectrum-color-tertiary</div><div class="value">#7f525d</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#ffffff;border:1px solid #ddd"></div><div class="swatch-info"><div class="name">on-tertiary</div><div class="value">#ffffff</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#ffd9e2"></div><div class="swatch-info"><div class="name">tertiary-container</div><div class="value">#ffd9e2</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#321018"></div><div class="swatch-info"><div class="name">on-tertiary-container</div><div class="value">#321018</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Error</h3>
+      <div class="swatch-row"><div class="swatch" style="background:#ba1a1a"></div><div class="swatch-info"><div class="name">--spectrum-color-error</div><div class="value">#ba1a1a</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#ffffff;border:1px solid #ddd"></div><div class="swatch-info"><div class="name">on-error</div><div class="value">#ffffff</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#ffdad6"></div><div class="swatch-info"><div class="name">error-container</div><div class="value">#ffdad6</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#410002"></div><div class="swatch-info"><div class="name">on-error-container</div><div class="value">#410002</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Surface</h3>
+      <div class="swatch-row"><div class="swatch" style="background:#f6f6f6"></div><div class="swatch-info"><div class="name">--spectrum-color-surface</div><div class="value">#f6f6f6</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#333333"></div><div class="swatch-info"><div class="name">on-surface</div><div class="value">#333333</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#dfe2eb"></div><div class="swatch-info"><div class="name">surface-variant</div><div class="value">#dfe2eb</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#42474e"></div><div class="swatch-info"><div class="name">on-surface-variant</div><div class="value">#42474e</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Outline &amp; Inverse</h3>
+      <div class="swatch-row"><div class="swatch" style="background:#72777f"></div><div class="swatch-info"><div class="name">--spectrum-color-outline</div><div class="value">#72777f</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#c2c7cf"></div><div class="swatch-info"><div class="name">outline-variant</div><div class="value">#c2c7cf</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#2f3033"></div><div class="swatch-info"><div class="name">inverse-surface</div><div class="value">#2f3033</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#a8c8ff"></div><div class="swatch-info"><div class="name">inverse-primary</div><div class="value">#a8c8ff</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ UNOPS PALETTES ═══ -->
+<section id="colors-palette">
+  <h2><span class="material-symbols-outlined">gradient</span> UNOPS Extended Palettes</h2>
+  <p class="desc">Brand color scales from <code>--unops-color-*</code> in spectrum-colors.css (50–900 steps).</p>
+
+  <div class="card" style="padding:1.5rem">
+    <div class="palette-label">2Blue</div>
+    <div class="palette-strip">
+      <div class="step" style="background:#bfd9e6"><span class="tip">50</span></div>
+      <div class="step" style="background:#99c2d7"><span class="tip">100</span></div>
+      <div class="step" style="background:#73abc7"><span class="tip">200</span></div>
+      <div class="step" style="background:#4d94b8"><span class="tip">300</span></div>
+      <div class="step" style="background:#00669a"><span class="tip">400</span></div>
+      <div class="step" style="background:#005783"><span class="tip">500</span></div>
+      <div class="step" style="background:#00476c"><span class="tip">600</span></div>
+      <div class="step" style="background:#003855"><span class="tip">700</span></div>
+      <div class="step" style="background:#00293e"><span class="tip">800</span></div>
+      <div class="step" style="background:#001a27"><span class="tip">900</span></div>
+    </div>
+
+    <div class="palette-label">Ocean</div>
+    <div class="palette-strip">
+      <div class="step" style="background:#d3f0f7"><span class="tip">50</span></div>
+      <div class="step" style="background:#b8e7f3"><span class="tip">100</span></div>
+      <div class="step" style="background:#9edeee"><span class="tip">200</span></div>
+      <div class="step" style="background:#83d5e9"><span class="tip">300</span></div>
+      <div class="step" style="background:#4ec3e0"><span class="tip">400</span></div>
+      <div class="step" style="background:#42a6be"><span class="tip">500</span></div>
+      <div class="step" style="background:#37899d"><span class="tip">600</span></div>
+      <div class="step" style="background:#2b6b7b"><span class="tip">700</span></div>
+      <div class="step" style="background:#1f4e5a"><span class="tip">800</span></div>
+      <div class="step" style="background:#143138"><span class="tip">900</span></div>
+    </div>
+
+    <div class="palette-label">Teal</div>
+    <div class="palette-strip">
+      <div class="step" style="background:#bfeae5"><span class="tip">50</span></div>
+      <div class="step" style="background:#99ddd5"><span class="tip">100</span></div>
+      <div class="step" style="background:#73d0c6"><span class="tip">200</span></div>
+      <div class="step" style="background:#4dc3b6"><span class="tip">300</span></div>
+      <div class="step" style="background:#00a997"><span class="tip">400</span></div>
+      <div class="step" style="background:#009080"><span class="tip">500</span></div>
+      <div class="step" style="background:#00766a"><span class="tip">600</span></div>
+      <div class="step" style="background:#005d53"><span class="tip">700</span></div>
+      <div class="step" style="background:#00443c"><span class="tip">800</span></div>
+      <div class="step" style="background:#00121e"><span class="tip">900</span></div>
+    </div>
+
+    <div class="palette-label">Orange</div>
+    <div class="palette-strip">
+      <div class="step" style="background:#f9d6c3"><span class="tip">50</span></div>
+      <div class="step" style="background:#f6be9f"><span class="tip">100</span></div>
+      <div class="step" style="background:#f2a57a"><span class="tip">200</span></div>
+      <div class="step" style="background:#ef8d56"><span class="tip">300</span></div>
+      <div class="step" style="background:#eb7432"><span class="tip">400</span></div>
+      <div class="step" style="background:#c54e0c"><span class="tip">500</span></div>
+      <div class="step" style="background:#a2400a"><span class="tip">600</span></div>
+      <div class="step" style="background:#803308"><span class="tip">700</span></div>
+      <div class="step" style="background:#5d2506"><span class="tip">800</span></div>
+      <div class="step" style="background:#3a1704"><span class="tip">900</span></div>
+    </div>
+
+    <div class="palette-label">Red</div>
+    <div class="palette-strip">
+      <div class="step" style="background:#f6cac6"><span class="tip">50</span></div>
+      <div class="step" style="background:#f0a9a4"><span class="tip">100</span></div>
+      <div class="step" style="background:#eb8982"><span class="tip">200</span></div>
+      <div class="step" style="background:#e56960"><span class="tip">300</span></div>
+      <div class="step" style="background:#e0493e"><span class="tip">400</span></div>
+      <div class="step" style="background:#da291c"><span class="tip">500</span></div>
+      <div class="step" style="background:#991d14"><span class="tip">600</span></div>
+      <div class="step" style="background:#78170f"><span class="tip">700</span></div>
+      <div class="step" style="background:#57100b"><span class="tip">800</span></div>
+      <div class="step" style="background:#370a07"><span class="tip">900</span></div>
+    </div>
+
+    <div class="palette-label">Green</div>
+    <div class="palette-strip">
+      <div class="step" style="background:#d2e7cd"><span class="tip">50</span></div>
+      <div class="step" style="background:#b7d9af"><span class="tip">100</span></div>
+      <div class="step" style="background:#9dca92"><span class="tip">200</span></div>
+      <div class="step" style="background:#82bc74"><span class="tip">300</span></div>
+      <div class="step" style="background:#67ad56"><span class="tip">400</span></div>
+      <div class="step" style="background:#4c9f38"><span class="tip">500</span></div>
+      <div class="step" style="background:#418730"><span class="tip">600</span></div>
+      <div class="step" style="background:#2a571f"><span class="tip">700</span></div>
+      <div class="step" style="background:#1e4016"><span class="tip">800</span></div>
+      <div class="step" style="background:#13280e"><span class="tip">900</span></div>
+    </div>
+
+    <div style="display:flex;gap:1rem;margin-top:1rem">
+      <div style="flex:1">
+        <div class="palette-label">Neutral Cold</div>
+        <div style="height:36px;border-radius:6px;background:#EBF1F8;border:1px solid #ddd"></div>
+        <div style="font-family:var(--mono);font-size:.7rem;color:var(--text3);margin-top:.2rem">--unops-color-n-cold: #EBF1F8</div>
+      </div>
+      <div style="flex:1">
+        <div class="palette-label">Neutral Warm</div>
+        <div style="height:36px;border-radius:6px;background:#ECEFEF;border:1px solid #ddd"></div>
+        <div style="font-family:var(--mono);font-size:.7rem;color:var(--text3);margin-top:.2rem">--unops-color-n-warm: #ECEFEF</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ GRADIENTS ═══ -->
+<section id="gradients">
+  <h2><span class="material-symbols-outlined">looks</span> UNOPS Gradients</h2>
+  <p class="desc">Eight branded gradient tokens from <code>--unops-gradient-*</code>.</p>
+  <div class="grid grid-2">
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:linear-gradient(83deg, #00A997 9%, #C4D600 77%, #F8EA44 100%)"></div>
+      <div class="gradient-name">--unops-gradient-1 &nbsp; Teal → Lime → Yellow</div>
+    </div>
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:linear-gradient(83deg, #4FC3DD 9%, #C4D600 77%, #F8EA44 100%)"></div>
+      <div class="gradient-name">--unops-gradient-2 &nbsp; Cyan → Lime → Yellow</div>
+    </div>
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:radial-gradient(circle at 99.95% 7.97%, #FFA65D 5%, #FFC215 18%, #C4D600 37%, #96C93D 49%, #0092D1 89%)"></div>
+      <div class="gradient-name">--unops-gradient-3 &nbsp; Radial Orange → Green → Blue</div>
+    </div>
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:linear-gradient(87deg, #00A997 15%, #26A2D8 69%, #0092D1 100%)"></div>
+      <div class="gradient-name">--unops-gradient-4 &nbsp; Teal → Blue</div>
+    </div>
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:radial-gradient(circle at 49.15% 18.90%, #F8EA44 10%, #E85C0E 47%, #991E66 93%)"></div>
+      <div class="gradient-name">--unops-gradient-5 &nbsp; Radial Yellow → Orange → Magenta</div>
+    </div>
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:linear-gradient(90deg, #991E66 3%, #C43C3E 52%, #E85C0E 100%)"></div>
+      <div class="gradient-name">--unops-gradient-6 &nbsp; Magenta → Red → Orange</div>
+    </div>
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:linear-gradient(90deg, #FFC215 0%, #E85C0E 100%)"></div>
+      <div class="gradient-name">--unops-gradient-7 &nbsp; Gold → Orange</div>
+    </div>
+    <div class="card" style="padding:.75rem">
+      <div class="gradient-preview" style="background:linear-gradient(80deg, #991E66 0%, #0092D1 100%)"></div>
+      <div class="gradient-name">--unops-gradient-8 &nbsp; Magenta → Blue</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ TYPOGRAPHY ═══ -->
+<section id="typography">
+  <h2><span class="material-symbols-outlined">text_fields</span> Typography Tokens</h2>
+  <p class="desc">Font family, size scale, and weight tokens from <code>--spectrum-sys-font-*</code>.</p>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>Font Family</h3>
+      <div class="swatch-row">
+        <div class="swatch-info">
+          <div class="name">--spectrum-sys-font-family</div>
+          <div class="value">'Noto Sans', sans-serif</div>
+        </div>
+      </div>
+      <p style="font-family:'Noto Sans',sans-serif;font-size:1.1rem;margin-top:.75rem">The quick brown fox jumps over the lazy dog.</p>
+      <p style="font-family:'Noto Sans',sans-serif;font-size:1.1rem;font-weight:700">ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789</p>
+    </div>
+    <div class="card">
+      <h3>Font Sizes</h3>
+      <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem">
+        <div style="display:flex;align-items:baseline;gap:1rem">
+          <code style="font-size:.7rem;min-width:10rem;color:var(--text3)">--spectrum-sys-font-size-x-large</code>
+          <span style="font-size:24px">24px (1.5×)</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:1rem">
+          <code style="font-size:.7rem;min-width:10rem;color:var(--text3)">--spectrum-sys-font-size-large</code>
+          <span style="font-size:20px">20px (1.25×)</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:1rem">
+          <code style="font-size:.7rem;min-width:10rem;color:var(--text3)">--spectrum-sys-font-size</code>
+          <span style="font-size:16px">16px (base)</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:1rem">
+          <code style="font-size:.7rem;min-width:10rem;color:var(--text3)">--spectrum-sys-font-size-small</code>
+          <span style="font-size:14px">14px (0.875×)</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Font Weights</h3>
+      <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem;font-family:'Noto Sans',sans-serif;font-size:1rem">
+        <div><span style="font-weight:300">Light (300)</span> <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-font-weight-light</code></div>
+        <div><span style="font-weight:400">Regular (400)</span> <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-font-weight-regular</code></div>
+        <div><span style="font-weight:500">Medium (500)</span> <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-font-weight-medium</code></div>
+        <div><span style="font-weight:700">Bold (700)</span> <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-font-weight-bold</code></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Icon Font</h3>
+      <div class="swatch-row">
+        <div class="swatch-info">
+          <div class="name">--spectrum-sys-icon-font-family</div>
+          <div class="value">'Material Symbols Outlined'</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:.75rem;font-family:'Material Symbols Outlined';font-size:24px;color:var(--text2)">
+        <span class="material-symbols-outlined">home</span>
+        <span class="material-symbols-outlined">search</span>
+        <span class="material-symbols-outlined">settings</span>
+        <span class="material-symbols-outlined">person</span>
+        <span class="material-symbols-outlined">favorite</span>
+        <span class="material-symbols-outlined">star</span>
+        <span class="material-symbols-outlined">check_circle</span>
+        <span class="material-symbols-outlined">warning</span>
+        <span class="material-symbols-outlined">error</span>
+        <span class="material-symbols-outlined">info</span>
+      </div>
+      <div style="margin-top:.5rem">
+        <code style="font-size:.7rem;color:var(--text3)">Size: 20px &nbsp;|&nbsp; Weight: 400 &nbsp;|&nbsp; Fill: 0 &nbsp;|&nbsp; Grade: 0 &nbsp;|&nbsp; Optical: 24</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SPACING ═══ -->
+<section id="spacing">
+  <h2><span class="material-symbols-outlined">space_bar</span> Spacing &amp; Sizing Tokens</h2>
+  <p class="desc">Spacing scale from <code>--spectrum-sys-spacing-*</code> and padding from <code>--spectrum-sys-padding-*</code>.</p>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>Spacing Scale</h3>
+      <div class="spacing-demo" style="margin-top:1rem;align-items:flex-end">
+        <div class="spacing-block">
+          <div class="bar" style="height:8px;width:8px;border-radius:50%"></div>
+          <div class="lbl">small</div>
+          <div class="lbl">0.5rem</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:16px"></div>
+          <div class="lbl">base</div>
+          <div class="lbl">1rem</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:32px"></div>
+          <div class="lbl">large</div>
+          <div class="lbl">2rem</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:48px"></div>
+          <div class="lbl">x-large</div>
+          <div class="lbl">3rem</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:64px"></div>
+          <div class="lbl">xx-large</div>
+          <div class="lbl">4rem</div>
+        </div>
+      </div>
+      <div style="margin-top:1rem">
+        <code style="font-size:.7rem;color:var(--text3)">Base: --spectrum-sys-spacing: 1rem (16px)</code>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Padding Scale</h3>
+      <div class="spacing-demo" style="margin-top:1rem;align-items:flex-end">
+        <div class="spacing-block">
+          <div class="bar" style="height:8px;width:8px;border-radius:50%;background:var(--warning)"></div>
+          <div class="lbl">small</div>
+          <div class="lbl">0.5em</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:16px;background:var(--warning)"></div>
+          <div class="lbl">base</div>
+          <div class="lbl">1em</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:32px;background:var(--warning)"></div>
+          <div class="lbl">large</div>
+          <div class="lbl">2em</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:48px;background:var(--warning)"></div>
+          <div class="lbl">x-large</div>
+          <div class="lbl">3em</div>
+        </div>
+        <div class="spacing-block">
+          <div class="bar" style="height:64px;background:var(--warning)"></div>
+          <div class="lbl">xx-large</div>
+          <div class="lbl">4em</div>
+        </div>
+      </div>
+      <div style="margin-top:1rem">
+        <code style="font-size:.7rem;color:var(--text3)">Base: --spectrum-sys-padding: 1em (relative to font-size)</code>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Border &amp; Radius</h3>
+      <div style="display:flex;gap:2rem;margin-top:.75rem;align-items:center">
+        <div style="text-align:center">
+          <div style="width:64px;height:64px;border:1px solid var(--primary);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.7rem;color:var(--primary)">4px</div>
+          <code style="font-size:.65rem;color:var(--text3);display:block;margin-top:.3rem">--spectrum-sys-border-radius</code>
+        </div>
+        <div style="text-align:center">
+          <div style="width:64px;height:64px;border:1px solid var(--text3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.7rem;color:var(--text3)">1px</div>
+          <code style="font-size:.65rem;color:var(--text3);display:block;margin-top:.3rem">--spectrum-sys-border</code>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Legacy Sizing</h3>
+      <div style="margin-top:.5rem">
+        <div class="swatch-row"><div class="swatch-info"><div class="name">--baseSize</div><div class="value">8px</div></div></div>
+        <div class="swatch-row"><div class="swatch-info"><div class="name">--buttonSize</div><div class="value">calc(8px × 6) = 48px</div></div></div>
+        <div class="swatch-row"><div class="swatch-info"><div class="name">--standard-padding</div><div class="value">24px</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ ANIMATION ═══ -->
+<section id="animation">
+  <h2><span class="material-symbols-outlined">animation</span> Animation Tokens</h2>
+  <p class="desc">Duration and easing tokens from <code>--spectrum-sys-animation-*</code>.</p>
+  <div class="grid grid-3">
+    <div class="card" style="text-align:center">
+      <h3>Fast</h3>
+      <div style="font-size:2rem;font-weight:700;color:var(--primary)">200ms</div>
+      <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-animation-duration-fast</code>
+    </div>
+    <div class="card" style="text-align:center">
+      <h3>Default</h3>
+      <div style="font-size:2rem;font-weight:700;color:var(--primary)">300ms</div>
+      <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-animation-duration</code>
+    </div>
+    <div class="card" style="text-align:center">
+      <h3>Slow</h3>
+      <div style="font-size:2rem;font-weight:700;color:var(--primary)">400ms</div>
+      <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-animation-duration-slow</code>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>Easing Function</h3>
+    <div style="display:flex;align-items:center;gap:1.5rem;margin-top:.5rem">
+      <code style="font-size:.8rem;color:var(--primary)">cubic-bezier(0.4, 0, 0.2, 1)</code>
+      <span style="font-size:.8rem;color:var(--text3)">— Material Design standard easing</span>
+    </div>
+    <div style="margin-top:.75rem">
+      <code style="font-size:.7rem;color:var(--text3)">--spectrum-sys-animation-timing-function</code>
+    </div>
+    <div style="margin-top:.5rem;font-size:.7rem;color:var(--text3)">
+      Legacy: <code>--animationTime: 0.33s</code>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ OVERLAY & FROST ═══ -->
+<section id="overlay">
+  <h2><span class="material-symbols-outlined">blur_on</span> Overlay &amp; Frost Tokens</h2>
+  <p class="desc">Backdrop, frost tint, shadow, and scrim tokens from <code>--spectrum-sys-overlay-*</code> and <code>--spectrum-sys-frost-*</code>.</p>
+  <div class="grid grid-3">
+    <div class="card">
+      <h3>Overlays</h3>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(0,0,0,0.03)"></div><div class="swatch-info"><div class="name">overlay-subtle</div><div class="value">rgba(0,0,0,0.03)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(0,0,0,0.1)"></div><div class="swatch-info"><div class="name">overlay-medium</div><div class="value">rgba(0,0,0,0.1)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(0,0,0,0.5)"></div><div class="swatch-info"><div class="name">overlay-heavy</div><div class="value">rgba(0,0,0,0.5)</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Frost Tints</h3>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(255,255,255,0.33);border:1px solid #ddd"></div><div class="swatch-info"><div class="name">frost-tint</div><div class="value">rgba(255,255,255,0.33)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(255,255,255,0.66);border:1px solid #ddd"></div><div class="swatch-info"><div class="name">frost-tint-heavy</div><div class="value">rgba(255,255,255,0.66)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(255,255,255,0.225);border:1px solid #ddd"></div><div class="swatch-info"><div class="name">frost-border</div><div class="value">rgba(255,255,255,0.225)</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Shadows</h3>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(0,0,0,0.15)"></div><div class="swatch-info"><div class="name">shadow-color</div><div class="value">rgba(0,0,0,0.15)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(0,0,0,0.25)"></div><div class="swatch-info"><div class="name">shadow-color-heavy</div><div class="value">rgba(0,0,0,0.25)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:#000"></div><div class="swatch-info"><div class="name">scrim / shadow</div><div class="value">#000000</div></div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>Megamenu Frost</h3>
+    <div style="display:flex;gap:2rem;margin-top:.5rem;flex-wrap:wrap">
+      <div><code style="font-size:.75rem">--spectrum-comp-megamenu-background-color</code><br><span style="font-size:.7rem;color:var(--text3)">color-mix(in srgb, background 80%, transparent)</span></div>
+      <div><code style="font-size:.75rem">--spectrum-comp-megamenu-background-filter</code><br><span style="font-size:.7rem;color:var(--text3)">blur(5px)</span></div>
+      <div><code style="font-size:.75rem">--spectrum-comp-megamenu-width</code><br><span style="font-size:.7rem;color:var(--text3)">60em</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ ICONS ═══ -->
+<section id="icons">
+  <h2><span class="material-symbols-outlined">emoji_symbols</span> Icon System</h2>
+  <p class="desc">Material Symbols Outlined with variable font settings from <code>--spectrum-sys-icon-*</code>.</p>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:1rem;margin-top:.5rem;text-align:center">
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">home</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">home</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">search</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">search</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">settings</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">settings</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">person</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">person</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">add</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">add</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">close</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">close</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">expand_more</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">expand_more</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">check_circle</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">check_circle</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">warning</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">warning</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">error</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">error</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">info</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">info</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">favorite</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">favorite</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">star</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">star</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">delete</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">delete</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">edit</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">edit</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">visibility</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">visibility</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">arrow_back</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">arrow_back</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">arrow_forward</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">arrow_forward</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">menu</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">menu</div></div>
+      <div><span class="material-symbols-outlined" style="font-size:32px;color:var(--text2)">dashboard</span><div style="font-size:.65rem;color:var(--text3);margin-top:.2rem">dashboard</div></div>
+    </div>
+    <div style="margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border-light)">
+      <h3 style="font-size:.85rem">Variable Font Axes</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:.5rem">
+        <div><code style="font-size:.72rem">FILL: 0</code><span style="font-size:.7rem;color:var(--text3)"> (outlined)</span></div>
+        <div><code style="font-size:.72rem">wght: 400</code><span style="font-size:.7rem;color:var(--text3)"> (regular)</span></div>
+        <div><code style="font-size:.72rem">GRAD: 0</code><span style="font-size:.7rem;color:var(--text3)"> (default grade)</span></div>
+        <div><code style="font-size:.72rem">opsz: 24</code><span style="font-size:.7rem;color:var(--text3)"> (optical size)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ LEGACY ═══ -->
+<section id="legacy">
+  <h2><span class="material-symbols-outlined">history</span> Legacy Tokens</h2>
+  <p class="desc">Older CSS custom properties still defined in spectrum-variables.css for backward compatibility.</p>
+  <div class="grid grid-3">
+    <div class="card">
+      <h3>Colors (Legacy)</h3>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(0,0,0,0)"></div><div class="swatch-info"><div class="name">--primary</div><div class="value">rgba(0,0,0,0)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(0,0,0,0)"></div><div class="swatch-info"><div class="name">--secondary</div><div class="value">rgba(0,0,0,0)</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:white;border:1px solid #ddd"></div><div class="swatch-info"><div class="name">--surface</div><div class="value">white</div></div></div>
+      <div class="swatch-row"><div class="swatch" style="background:rgba(255,255,255,0.6);border:1px solid #ddd"></div><div class="swatch-info"><div class="name">--frostColor</div><div class="value">rgba(255,255,255,0.6)</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Sizing (Legacy)</h3>
+      <div class="swatch-row"><div class="swatch-info"><div class="name">--baseSize</div><div class="value">8px</div></div></div>
+      <div class="swatch-row"><div class="swatch-info"><div class="name">--buttonSize</div><div class="value">48px (8px × 6)</div></div></div>
+      <div class="swatch-row"><div class="swatch-info"><div class="name">--standard-padding</div><div class="value">24px</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Effects (Legacy)</h3>
+      <div class="swatch-row"><div class="swatch-info"><div class="name">--frostBlur</div><div class="value">6px</div></div></div>
+      <div class="swatch-row"><div class="swatch-info"><div class="name">--animationTime</div><div class="value">0.33s</div></div></div>
+      <div class="swatch-row"><div class="swatch-info"><div class="name">--wallpaper</div><div class="value">url(unsplash…) default background</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ FOOTER ═══ -->
+<footer style="text-align:center;padding:3rem 0 1rem;border-top:1px solid var(--border);margin-top:4rem;color:var(--text3);font-size:.8rem">
+  <p><strong>Spectrum Design System</strong> &nbsp;·&nbsp; @unops-itg-npm/cpit-spectrum v0.0.1-alpha.48</p>
+  <p style="margin-top:.3rem">Stencil 4.x &nbsp;·&nbsp; 44 Components &nbsp;·&nbsp; 7 Layout Shells &nbsp;·&nbsp; 130+ Design Tokens</p>
+  <p style="margin-top:.3rem">Framework wrappers: React, Vue, Angular &nbsp;·&nbsp; Storybook 9</p>
+</footer>
+
+</body>
+</html>
