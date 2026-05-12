@@ -147,6 +147,48 @@ table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-lig
 .mock-token-swatch{width:24px;height:24px;border-radius:4px;border:1px solid rgba(0,0,0,.1)}
 .mock-token-val{color:var(--text3)}
 
+/* Audit section */
+.audit-category{margin-bottom:2rem}
+.audit-category>h3{font-size:1rem;font-weight:600;margin-bottom:.75rem;padding:.6rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;gap:.5rem}
+.audit-category>h3 .cat-badge{font-size:.65rem;font-weight:700;color:#fff;padding:.15rem .5rem;border-radius:var(--radius-xs);flex-shrink:0}
+.audit-category>h3 .cat-badge.ts{background:#3178c6}
+.audit-category>h3 .cat-badge.event{background:#e65100}
+.audit-category>h3 .cat-badge.css{background:#8b5cf6}
+.audit-category>h3 .cat-badge.sb{background:#00a997}
+.audit-category>h3 .cat-badge.pkg{background:#78716c}
+.audit-category>h3 .cat-badge.dom{background:#4ec3e0}
+
+.audit-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:.6rem;position:relative;overflow:hidden;transition:box-shadow .2s}
+.audit-item:hover{box-shadow:var(--shadow-md)}
+.audit-item::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px}
+.audit-item.sev-high::before{background:var(--risk-high-border)}
+.audit-item.sev-medium::before{background:var(--risk-medium-border)}
+.audit-item.sev-low::before{background:var(--risk-none-border)}
+
+.audit-item-header{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;margin-bottom:.4rem}
+.audit-item-header h4{font-size:.88rem;font-weight:600;display:flex;align-items:center;gap:.4rem;flex:1}
+.audit-item-header .id-tag{font-family:var(--mono);font-size:.65rem;font-weight:700;color:#fff;padding:.12rem .4rem;border-radius:3px;flex-shrink:0}
+.audit-item-header .id-tag.ts{background:#3178c6}
+.audit-item-header .id-tag.event{background:#e65100}
+.audit-item-header .id-tag.css{background:#8b5cf6}
+.audit-item-header .id-tag.sb{background:#00a997}
+.audit-item-header .id-tag.pkg{background:#78716c}
+.audit-item-header .id-tag.dom{background:#4ec3e0}
+
+.audit-item .sev-badge{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em;padding:.12rem .4rem;border-radius:100px;flex-shrink:0}
+.audit-item .sev-badge.high{background:#fce4ec;color:#c41e3a}
+.audit-item .sev-badge.medium{background:#fff3e0;color:#e65100}
+.audit-item .sev-badge.low{background:#e8f5e9;color:#2d844a}
+
+.audit-item .description{font-size:.8rem;color:var(--text2);line-height:1.55;margin-bottom:.5rem}
+.audit-item .description code{font-family:var(--mono);font-size:.72rem;background:var(--primary-light);color:var(--primary-dark);padding:.08rem .3rem;border-radius:3px}
+
+.impact-box{display:flex;gap:.5rem;align-items:flex-start;padding:.5rem .75rem;border-radius:var(--radius-xs);font-size:.76rem;line-height:1.5;margin-top:.4rem}
+.impact-box.positive{background:#e8f5e9;border:1px solid #a5d6a7}
+.impact-box.positive .material-symbols-outlined{color:#2e7d32;font-size:1rem;flex-shrink:0;margin-top:.1rem}
+.impact-box.neutral{background:#e3f2fd;border:1px solid #90caf9}
+.impact-box.neutral .material-symbols-outlined{color:#1565c0;font-size:1rem;flex-shrink:0;margin-top:.1rem}
+
 @media(max-width:768px){
   body{padding:1rem 1rem 4rem}
   .hero h1{font-size:1.6rem}
@@ -175,6 +217,7 @@ table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-lig
   <a href="#variants">Component Fixes</a>
   <a href="#layouts">Layout Shells</a>
   <a href="#naming">Variant Naming</a>
+  <a href="#audit">Audit Fixes</a>
   <a href="#order">Execution Order</a>
 </nav>
 
@@ -184,9 +227,9 @@ table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-lig
   <p class="desc">Summary of all changes, ranked by risk to existing consumers of the library.</p>
   <div class="summary-grid">
     <div class="summary-stat"><div class="num">~140</div><div class="label">New Tokens Added</div></div>
-    <div class="summary-stat"><div class="num">3</div><div class="label">Component Fixes</div></div>
+    <div class="summary-stat"><div class="num">3</div><div class="label">Component Enrichments</div></div>
     <div class="summary-stat"><div class="num">3</div><div class="label">New Layout Shells</div></div>
-    <div class="summary-stat"><div class="num">1</div><div class="label">Bug-Fix (Sidebar)</div></div>
+    <div class="summary-stat"><div class="num">31</div><div class="label">Audit Fixes</div></div>
     <div class="summary-stat"><div class="num">0</div><div class="label">Tokens Removed</div></div>
     <div class="summary-stat"><div class="num">0</div><div class="label">Props Removed</div></div>
   </div>
@@ -1001,39 +1044,494 @@ table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-lig
   </div>
 </section>
 
+<!-- PART 5: AUDIT FIXES -->
+<section id="audit">
+  <h2><span class="material-symbols-outlined">checklist</span> Part 5: Library Audit Fixes</h2>
+  <p class="desc">31 findings from the comprehensive library audit, organized by category with impact assessment for each fix. Same principles apply: add rather than modify or delete.</p>
+
+  <!-- A. TypeScript API -->
+  <div class="audit-category">
+    <h3><span class="cat-badge ts">TS</span> A. TypeScript / Component API</h3>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag ts">A1</span> Complex Prop Parsing &mdash; Incomplete Coverage</h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description">8 components violate the workspace rule requiring <code>Type[] | string</code> for complex props. Includes <code>spectrum-rail</code>, <code>spectrum-dialog</code>, <code>spectrum-hero</code>, <code>spectrum-conversation-panel</code>, <code>spectrum-theme</code>, <code>spectrum-image-gallery</code>, <code>spectrum-cookie-compliance</code>, <code>spectrum-avatar</code>.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Enables pure HTML usage of components without JavaScript. Teams can paste component tags in CMS templates, server-rendered pages, or no-build setups. Removes the dual-prop anti-pattern (<code>images</code> + <code>imagesJson</code>) from image-gallery.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag ts">A2</span> Union Type Ordering Inconsistency</h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description"><code>spectrum-accordion</code> and <code>spectrum-menu</code> use <code>string | Type[]</code> while every other component uses <code>Type[] | string</code>.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Consistent developer experience. IDE autocompletion shows the primary type first across all components, reducing confusion when working with multiple components.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag ts">A3</span> Missing <code>@Watch</code> on <code>defaultSort</code></h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description"><code>spectrum-data-table</code>: changing <code>defaultSort</code> at runtime has no effect because <code>@Watch</code> only covers <code>data</code>, <code>config</code>, <code>columns</code>.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Dynamic sort control works as expected. Teams can programmatically change sort order without forcing a full component re-render. Fixes a silent bug in data-heavy applications.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag ts">A4</span> Duplicate <code>@Watch('options')</code> Handlers</h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description"><code>spectrum-select</code> has two separate handlers for the same prop: <code>onOptionsChange()</code> and <code>handleOptionsChange()</code>. Race condition potential.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Eliminates potential race condition in select rendering. Options changes trigger one predictable code path. Reduces bundle size by removing dead code.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag ts">A5</span> Inconsistent <code>size</code> Scales</h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description">Button accepts 6 values (<code>'sm' | 'small' | 'base' | 'medium' | 'lg' | 'large'</code>), chip uses 4, text-input uses 3. No canonical <code>SpectrumSize</code> type.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Teams stop guessing which size string works where. A shared <code>SpectrumSize</code> type provides IDE autocomplete consistency across all components. Existing aliases kept via union types (non-breaking).</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag ts">A6</span> Prop Naming: <code>conversationtitle</code></h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description"><code>spectrum-conversation-panel</code> uses all-lowercase <code>conversationtitle</code> while every other component uses camelCase (<code>dialogTitle</code>, <code>panelTitle</code>).</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Removes a naming inconsistency that forces developers to check docs. Add camelCase alias <code>conversationTitle</code> and deprecate the old name (non-breaking, both work).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- B. Events -->
+  <div class="audit-category">
+    <h3><span class="cat-badge event">EVT</span> B. Event Naming and Payloads</h3>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag event">B1</span> Generic Event Name Collision: <code>'action'</code></h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description"><code>spectrum-conversation-panel</code> emits a bare <code>'action'</code> event. This name is too generic and collides when events bubble up the DOM.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Fixes event listener conflicts in composite layouts. Parent components no longer accidentally catch unrelated <code>'action'</code> events. Rename to <code>'conversationAction'</code> with old name kept as deprecated alias.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag event">B2</span> Shared Event Name: <code>titleChanged</code></h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description">Both <code>spectrum-panel</code> and <code>spectrum-conversation-panel</code> emit <code>titleChanged</code>. Listeners cannot distinguish source without checking <code>event.target</code>.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Unambiguous event handling. Prefix with component name (<code>panelTitleChanged</code>, <code>conversationTitleChanged</code>) so event delegation patterns work reliably.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag event">B3</span> <code>searchChange</code>: Conflicting Payload Shapes</h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description"><code>spectrum-rail</code> emits <code>{ action, value }</code> (object). <code>spectrum-select</code> emits a bare <code>string</code>. Same event name, incompatible types.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Consistent event typing. Listeners can rely on a single interface. Fix by normalizing select's payload to <code>{ action: 'search', value: string }</code> (additive wrapper, bare string still accessible via <code>.detail.value</code>).</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag event">B4</span> Missing <code>action</code> Field in Payloads</h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description">Rule requires <code>action</code> field. Violators: <code>spectrum-breadcrumb</code> (<code>breadcrumbClick</code>), <code>spectrum-menu</code> (<code>itemClick</code>), <code>spectrum-text-input</code> (primitives/void).</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Unified event handling patterns. Teams can build generic event processors that switch on <code>e.detail.action</code> across all Spectrum components. Reduces per-component event handling boilerplate.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag event">B5</span> Kebab-case Manual <code>CustomEvent</code></h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description"><code>spectrum-context-menu</code> dispatches raw <code>CustomEvent('menu-open')</code> (kebab-case) alongside formal <code>@Event</code> declarations, bypassing Stencil's event system.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> All events go through Stencil's system consistently. Enables proper event documentation in generated docs and ensures <code>composed: true</code> propagation works across shadow DOM boundaries.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag event">B6</span> <code>debug</code> as <code>@State()</code> defaulting <code>true</code></h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description"><code>spectrum-context-menu</code>: <code>debug</code> is <code>@State()</code> defaulting to <code>true</code>. Every other component uses <code>@Prop()</code> defaulting to <code>false</code>.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Removes unexpected console.log noise in production. The context menu currently logs debug info by default in every project using it. Fix: change to <code>@Prop() debug = false</code>.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- C. CSS -->
+  <div class="audit-category">
+    <h3><span class="cat-badge css">CSS</span> C. CSS / SCSS Architecture</h3>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag css">C1</span> Duplicated <code>@keyframes</code> (9 spinners + ripple)</h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description">Identical spinner animation copy-pasted across 9 component SCSS files with varying names (<code>spin</code>, <code>chart-spin</code>, <code>dashboard-spin</code>, etc.). Ripple also duplicated between button and chip.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Smaller bundle size (~2KB savings). Single animation definition means consistent spinner speed/easing everywhere. Future changes (e.g. branded loader) apply globally. Creates <code>_animations.scss</code> partial.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag css">C2</span> Duplicated <code>.sr-only</code> Utility</h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description">Identical screen-reader-only CSS in <code>spectrum-switch</code>, <code>spectrum-media-library</code>, and <code>spectrum-application-layout</code>.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Consistent accessibility support. A shared <code>_utilities.scss</code> partial ensures the sr-only pattern is always correct and up to date. New components get it for free.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag css">C3</span> No Shared SCSS Partials or Mixins</h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description">Zero <code>@mixin</code> or <code>@use</code> statements. Heavy duplication of focus rings, scrollbar styling, disabled states, transitions, and media queries.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Development speed and consistency. New components can <code>@use</code> shared partials instead of copying 20+ lines of boilerplate. Global fixes (e.g. focus ring update) propagate automatically.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag css">C4</span> Inconsistent Breakpoints (8 different values)</h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description">No single breakpoint scale. Values range from 480px to 1600px with a problematic 767px vs 768px gap. Components respond at different viewport widths unpredictably.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Predictable responsive behavior. Components within the same view breakpoint together instead of at random widths. Define canonical breakpoint tokens in <code>spectrum-variables.css</code> and migrate gradually (non-breaking: existing px values still work).</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag css">C5</span> Inconsistent Focus Ring Tokens</h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description">Focus outlines reference 5 different tokens/hardcoded values across components: <code>--spectrum-sys-color-primary</code>, <code>--spectrum-color-primary</code>, <code>#005fcc</code>, <code>rgba(255,255,255,0.5)</code>.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Consistent focus visibility for accessibility compliance (WCAG 2.4.7). One token change updates all focus rings. High contrast mode support works uniformly. Create <code>_focus.scss</code> mixin.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag css">C6</span> Orphan Token References</h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description"><code>spectrum-image-gallery</code> references <code>--spectrum-spacing-300</code>, <code>--spectrum-spacing-200</code>, <code>--spectrum-spacing-400</code> which don't exist.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Component uses its fallback values today; defining these or migrating to the canonical tokens means future token overrides actually work as expected.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag css">C7</span> BEM Naming Deviations</h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description"><code>spectrum-image-gallery</code> uses <code>.gallery</code> instead of <code>.spectrum-image-gallery__*</code>. Similar deviations in application-layout and conversation-panel.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Predictable class names for testing selectors (e2e, visual regression). Eliminates risk of global CSS collision for light-DOM components. Non-breaking inside shadow DOM components.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- D. Storybook -->
+  <div class="audit-category">
+    <h3><span class="cat-badge sb">SB</span> D. Storybook Documentation</h3>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag sb">D1</span> Duplicate Story Titles &mdash; 8 Pairs</h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description">8 layout components have two story files with the same title (one under <code>components/</code> and another under <code>layouts/</code>), causing Storybook sidebar conflicts.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Fixes broken Storybook navigation. Teams can find the correct story without confusion. Chromatic visual regression tests work correctly instead of silently testing only one of the duplicates.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag sb">D2</span> Missing Stories</h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description"><code>spectrum-breadcrumb</code> has no story file. <code>dashboard-widget-host</code> is only visible nested inside dashboard stories.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Complete library documentation. Teams can discover and test all components in isolation. Unblocks Chromatic coverage for these components.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag sb">D3</span> Overlapping MDX Documentation</h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description"><code>spectrum-search-results</code> has two nearly identical use-case MDX files.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Reduces maintenance confusion. Contributors know which file to update. Eliminates stale/conflicting documentation.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag sb">D4</span> Inconsistent Storybook Imports</h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description">Some stories import from <code>@storybook/web-components</code> (old) instead of <code>@storybook/web-components-vite</code>.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Prevents future build failures when the legacy package is deprecated. Ensures consistent HMR behavior during development.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag sb">D5</span> Phantom Component References</h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description">MDX docs reference <code>spectrum-carousel</code> and <code>spectrum-megamenu</code> which don't exist in the core package.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Eliminates team confusion about what components actually ship. Prevents developers from trying to use non-existent components and filing false bug reports.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag sb">D6</span> Missing argTypes on Layout Stories</h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description">Layout stories lack <code>argTypes</code> and Storybook controls, making them non-interactive.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Teams can experiment with layout props interactively in the Storybook UI without reading source code. Faster onboarding for new developers.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- E. Packages -->
+  <div class="audit-category">
+    <h3><span class="cat-badge pkg">PKG</span> E. Package and Export Issues</h3>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag pkg">E1</span> Incomplete Type Exports from <code>index.ts</code></h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description">~15 important interfaces (<code>DialogButton</code>, <code>ContextMenuAction</code>, <code>TableColumn</code>, <code>Message</code>, etc.) are not exported from the barrel. Consumers use deep imports or duplicate types.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> TypeScript consumers get full autocompletion and type safety from a single import path. Eliminates duplicated interface definitions across consuming projects. Improves IDE experience significantly.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-medium">
+      <div class="audit-item-header">
+        <h4><span class="id-tag pkg">E2</span> Version Drift Across Packages</h4>
+        <span class="sev-badge medium">Medium</span>
+      </div>
+      <div class="description">Angular/Vue/React wrappers reference <code>^0.0.1-alpha.39</code>, Storybook references <code>^0.0.1-alpha.42</code>, but core is at <code>.48</code>.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Framework wrappers get latest components and bug fixes. Prevents "works in Storybook but not in Angular" discrepancies. Aligning versions also validates the wrapper generation pipeline.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag pkg">E3</span> TypeScript Version Mismatch</h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description">Root uses <code>^5.6.3</code>, core uses <code>^5.7.3</code>. Minor mismatch but can cause unexpected behavior in CI.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Prevents "works on my machine" issues. CI and all developers compile with the same TypeScript features and strictness checks.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-high">
+      <div class="audit-item-header">
+        <h4><span class="id-tag pkg">E4</span> Dead Utility Code: <code>format()</code></h4>
+        <span class="sev-badge high">High</span>
+      </div>
+      <div class="description"><code>utils.ts</code> exports a <code>format()</code> function only used in its own test file. Never called by any component.</div>
+      <div class="impact-box positive">
+        <span class="material-symbols-outlined">bolt</span>
+        <span><strong>Impact:</strong> Reduces confusion for contributors (dead code looks intentional). Marginally smaller bundle. Cleaner codebase signals quality to the team.</span>
+      </div>
+    </div>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag pkg">E5</span> Stray Character in <code>stencil.config.ts</code></h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description">Line 27 has a stray character in a comment: <code>footer: '', // hide "Built with StencilJS"c</code></div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Code quality housekeeping. Demonstrates attention to detail in the shared library.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- F. Shadow DOM -->
+  <div class="audit-category">
+    <h3><span class="cat-badge dom">DOM</span> F. Shadow DOM Consistency</h3>
+
+    <div class="audit-item sev-low">
+      <div class="audit-item-header">
+        <h4><span class="id-tag dom">F1</span> No Documented Criteria for <code>shadow: true</code> vs <code>false</code></h4>
+        <span class="sev-badge low">Low</span>
+      </div>
+      <div class="description">~50/50 split across components with no documented rationale. <code>spectrum-map</code> is the only component using <code>scoped: true</code>.</div>
+      <div class="impact-box neutral">
+        <span class="material-symbols-outlined">code</span>
+        <span><strong>Impact:</strong> Clear decision framework for new components. Teams know when to use shadow DOM (style encapsulation needed) vs light DOM (form participation, external styling). Documented in contributing guide.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- EXECUTION ORDER -->
 <section id="order">
   <h2><span class="material-symbols-outlined">timeline</span> Execution Order (Risk-Ranked)</h2>
-  <p class="desc">Steps ordered by: lowest risk first, dependencies respected. This ensures existing projects are never affected until the single documented breaking fix (sidebar).</p>
+  <p class="desc">All work ordered by risk level. Lowest risk first, dependencies respected. Existing projects are never affected until explicitly documented breaking fixes. Audit items integrated by priority.</p>
 
+  <h3 style="font-size:.9rem;font-weight:600;margin:1.25rem 0 .5rem;color:var(--risk-none-text)">Phase 1 &mdash; No Risk (purely additive, zero impact on existing projects)</h3>
   <table>
-    <tr><th>Order</th><th>Step</th><th>Risk</th><th>Rationale</th></tr>
-    <tr><td>1</td><td>Elevation tokens</td><td style="color:var(--risk-none-text)">None</td><td>Purely additive, unlocks other steps</td></tr>
-    <tr><td>2</td><td>Shape corner tokens</td><td style="color:var(--risk-none-text)">None</td><td>Purely additive</td></tr>
-    <tr><td>3</td><td>Typescale tokens</td><td style="color:var(--risk-none-text)">None</td><td>Purely additive</td></tr>
-    <tr><td>4</td><td>Motion tokens</td><td style="color:var(--risk-none-text)">None</td><td>New namespace, zero existing references</td></tr>
-    <tr><td>5</td><td>State layers + surface containers</td><td style="color:var(--risk-none-text)">None</td><td>Additive, fixes hero nav background</td></tr>
-    <tr><td>6</td><td>Wire spectrum-colors.css</td><td style="color:var(--risk-none-text)">None</td><td>No conflicts found</td></tr>
-    <tr><td>7</td><td>Deprecate legacy (comments)</td><td style="color:var(--risk-none-text)">None</td><td>No-op change</td></tr>
-    <tr><td>8</td><td>Sync copies</td><td style="color:var(--risk-none-text)">None</td><td>Housekeeping</td></tr>
-    <tr><td>9</td><td>Spacing expansion</td><td style="color:var(--risk-low-text)">Low</td><td>Fixed 4px for 2xs avoids score-card regression</td></tr>
-    <tr><td>10</td><td>Chip selected state</td><td style="color:var(--risk-low-text)">Low</td><td>Shadow DOM protects; additive class</td></tr>
-    <tr><td>11</td><td>Dialog full-screen type</td><td style="color:var(--risk-low-text)">Low</td><td>New prop, default=current behavior</td></tr>
-    <tr><td>12</td><td>New layout: spectrum-list-detail</td><td style="color:var(--risk-none-text)">None</td><td>New component</td></tr>
-    <tr><td>13</td><td>New layout: spectrum-supporting-pane</td><td style="color:var(--risk-none-text)">None</td><td>New component</td></tr>
-    <tr><td>14</td><td>New layout: spectrum-feed</td><td style="color:var(--risk-none-text)">None</td><td>New component</td></tr>
-    <tr><td>15</td><td>Mobile-adaptive behavior</td><td style="color:var(--risk-low-text)">Low</td><td>New props default to off</td></tr>
-    <tr><td>16</td><td>Text-input filled variant</td><td style="color:var(--risk-medium-text)">Medium</td><td>shadow:false; keep base rules untouched</td></tr>
-    <tr><td>17</td><td><strong>Sidebar SCSS fix</strong></td><td style="color:var(--risk-high-text)">High</td><td>Visual change for existing consumers (documented bug fix)</td></tr>
-    <tr><td>18</td><td>Button variant aliases (optional)</td><td style="color:var(--risk-low-text)">Low</td><td>Union types, internal mapping</td></tr>
-    <tr><td>19</td><td>Badge dot type (optional)</td><td style="color:var(--risk-none-text)">None</td><td>New prop, default=current</td></tr>
-    <tr><td>20</td><td>Chip filter enrichment (optional)</td><td style="color:var(--risk-none-text)">None</td><td>Additive CSS on selected state</td></tr>
+    <tr><th style="width:40px">#</th><th>Step</th><th style="width:65px">Source</th><th>Rationale</th></tr>
+    <tr><td>1</td><td>Elevation tokens (6)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Purely additive, unlocks other steps</td></tr>
+    <tr><td>2</td><td>Shape corner tokens (10)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Purely additive, matches existing fallbacks</td></tr>
+    <tr><td>3</td><td>Typescale tokens (90)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Purely additive, derived from Figma export</td></tr>
+    <tr><td>4</td><td>Motion tokens (22)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>New namespace, zero existing references</td></tr>
+    <tr><td>5</td><td>State layers + surface containers</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Additive, fixes hero nav background</td></tr>
+    <tr><td>6</td><td>Wire spectrum-colors.css</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>No conflicts found</td></tr>
+    <tr><td>7</td><td>Deprecate legacy tokens (comments only)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>No-op runtime change</td></tr>
+    <tr><td>8</td><td>Sync variable file copies</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Housekeeping</td></tr>
+    <tr><td>9</td><td>New layout: spectrum-list-detail</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>New component, nothing to break</td></tr>
+    <tr><td>10</td><td>New layout: spectrum-supporting-pane</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>New component</td></tr>
+    <tr><td>11</td><td>New layout: spectrum-feed</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>New component</td></tr>
+    <tr><td>12</td><td>Remove dead <code>format()</code> utility</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit E4</span></td><td>Unused code, no consumers</td></tr>
+    <tr><td>13</td><td>Fix stencil.config.ts typo</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit E5</span></td><td>Comment-only fix</td></tr>
+    <tr><td>14</td><td>Badge dot type prop (optional)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>New prop, default=current behavior</td></tr>
+    <tr><td>15</td><td>Chip filter enrichment (optional)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Additive CSS on new selected state</td></tr>
+  </table>
+
+  <h3 style="font-size:.9rem;font-weight:600;margin:1.25rem 0 .5rem;color:var(--risk-low-text)">Phase 2 &mdash; Low Risk (additive with safeguards, shadow DOM protects)</h3>
+  <table>
+    <tr><th style="width:40px">#</th><th>Step</th><th style="width:65px">Source</th><th>Rationale</th></tr>
+    <tr><td>16</td><td>Spacing expansion (xs, 2xs=4px, 3xl)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Fixed 4px for 2xs avoids score-card regression</td></tr>
+    <tr><td>17</td><td>Chip selected state (wire class + SCSS)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Shadow DOM protects; additive class only renders when selected=true</td></tr>
+    <tr><td>18</td><td>Dialog full-screen type prop</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>New prop, default=current behavior</td></tr>
+    <tr><td>19</td><td>Mobile-adaptive behavior (drawer + bottom-nav)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>New props default to off</td></tr>
+    <tr><td>20</td><td>Button variant aliases (optional)</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Union types with internal mapping, old names kept</td></tr>
+    <tr><td>21</td><td>Union type ordering (A2)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit A2</span></td><td>Type-only change, no runtime effect</td></tr>
+    <tr><td>22</td><td>Kebab-case event migration (B5)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit B5</span></td><td>Keep old event as deprecated alias</td></tr>
+    <tr><td>23</td><td>Remove duplicate MDX (D3)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit D3</span></td><td>Documentation-only change</td></tr>
+    <tr><td>24</td><td>Fix Storybook imports (D4)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit D4</span></td><td>Import path update, no behavior change</td></tr>
+    <tr><td>25</td><td>Add missing argTypes to layout stories (D6)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit D6</span></td><td>Storybook-only, no library code change</td></tr>
+    <tr><td>26</td><td>Orphan token references (C6)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit C6</span></td><td>Map to canonical tokens, fallbacks still work</td></tr>
+    <tr><td>27</td><td>BEM naming alignment (C7)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit C7</span></td><td>Shadow DOM encapsulates; non-breaking</td></tr>
+    <tr><td>28</td><td>Shadow DOM documentation (F1)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit F1</span></td><td>Documentation-only, no code change</td></tr>
+    <tr><td>29</td><td>TypeScript version alignment (E3)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit E3</span></td><td>Dev dependency only</td></tr>
+  </table>
+
+  <h3 style="font-size:.9rem;font-weight:600;margin:1.25rem 0 .5rem;color:var(--risk-medium-text)">Phase 3 &mdash; Medium Risk (requires careful default alignment)</h3>
+  <table>
+    <tr><th style="width:40px">#</th><th>Step</th><th style="width:65px">Source</th><th>Rationale</th></tr>
+    <tr><td>30</td><td>Text-input filled variant</td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>shadow:false; keep base rules untouched, default=outlined</td></tr>
+    <tr><td>31</td><td>Standardize complex prop parsing (A1)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit A1</span></td><td>Additive string support; but image-gallery dual-prop removal needs alias period</td></tr>
+    <tr><td>32</td><td>Size scale standardization (A5)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit A5</span></td><td>Keep all existing values; add canonical SpectrumSize as preferred</td></tr>
+    <tr><td>33</td><td>Prop naming: conversationtitle (A6)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit A6</span></td><td>Add camelCase alias, deprecate old (both work)</td></tr>
+    <tr><td>34</td><td>Event name: titleChanged (B2)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit B2</span></td><td>Add prefixed name, keep old as deprecated</td></tr>
+    <tr><td>35</td><td>searchChange payload alignment (B3)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit B3</span></td><td>Normalize to object; bare string still accessible via .detail.value</td></tr>
+    <tr><td>36</td><td>Add action field to event payloads (B4)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit B4</span></td><td>Additive field; existing fields unchanged</td></tr>
+    <tr><td>37</td><td>Breakpoint token standardization (C4)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit C4</span></td><td>Define canonical tokens; migrate components gradually</td></tr>
+    <tr><td>38</td><td>Focus ring token unification (C5)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit C5</span></td><td>Single mixin; visual output may shift slightly for hardcoded components</td></tr>
+    <tr><td>39</td><td>Missing stories: breadcrumb, widget-host (D2)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit D2</span></td><td>Additive but needs design review for correct story config</td></tr>
+    <tr><td>40</td><td>Remove phantom references (D5)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit D5</span></td><td>Removing doc content; needs team agreement</td></tr>
+    <tr><td>41</td><td>Version alignment across packages (E2)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit E2</span></td><td>Wrapper regeneration needed; test across frameworks</td></tr>
+  </table>
+
+  <h3 style="font-size:.9rem;font-weight:600;margin:1.25rem 0 .5rem;color:var(--risk-high-text)">Phase 4 &mdash; High Risk (visual or behavioral change for existing consumers)</h3>
+  <table>
+    <tr><th style="width:40px">#</th><th>Step</th><th style="width:65px">Source</th><th>Rationale</th></tr>
+    <tr><td>42</td><td><strong>Sidebar SCSS implementation</strong></td><td><span style="font-size:.65rem;background:var(--primary-light);color:var(--primary-dark);padding:2px 6px;border-radius:3px">M3</span></td><td>Visual change: empty → functional layout (documented bug fix)</td></tr>
+    <tr><td>43</td><td>Rename generic 'action' event (B1)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit B1</span></td><td>Breaking for listeners on 'action'; keep deprecated alias with console.warn</td></tr>
+    <tr><td>44</td><td>Fix debug @State → @Prop (B6)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit B6</span></td><td>Behavioral: stops logging by default (improvement, but technically breaking)</td></tr>
+    <tr><td>45</td><td>Add missing @Watch for defaultSort (A3)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit A3</span></td><td>May trigger unexpected re-sorts in apps that mutate defaultSort prop</td></tr>
+    <tr><td>46</td><td>Merge duplicate @Watch handlers (A4)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit A4</span></td><td>Behavioral: removes double execution; may affect timing-dependent code</td></tr>
+    <tr><td>47</td><td>Create shared SCSS partials (C3)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit C3</span></td><td>Large refactor touching many files; risk of unintended visual shifts</td></tr>
+    <tr><td>48</td><td>Deduplicate @keyframes (C1)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit C1</span></td><td>Shared partial changes animation names; may break external CSS targeting</td></tr>
+    <tr><td>49</td><td>Deduplicate sr-only (C2)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit C2</span></td><td>Shared partial; minor risk if class name changes</td></tr>
+    <tr><td>50</td><td>Deduplicate story titles (D1)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit D1</span></td><td>Removing story files changes Storybook URLs (may break bookmarks/links)</td></tr>
+    <tr><td>51</td><td>Export all public types (E1)</td><td><span style="font-size:.65rem;background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:3px">Audit E1</span></td><td>Additive exports but may surface type conflicts in consumers using deep imports</td></tr>
   </table>
 </section>
 
 <footer style="text-align:center;padding:2rem;color:var(--text3);font-size:.8rem;border-top:1px solid var(--border-light);margin-top:3rem">
-  <p><strong>Spectrum Design System</strong> &mdash; M3 Richness Migration Plan</p>
-  <p>Generated from repository analysis &middot; github.com/emamirelar/spectrum</p>
+  <p><strong>Spectrum Design System</strong> &mdash; M3 Migration + Library Audit Plan</p>
+  <p>Generated from repository analysis &middot; 51 action items across 4 risk phases</p>
   <p style="margin-top:.5rem">Guiding principle: <strong>Add rather than modify or delete existing.</strong></p>
 </footer>
 
