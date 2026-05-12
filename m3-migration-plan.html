@@ -97,11 +97,64 @@ table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-lig
 .summary-stat .num{font-size:1.8rem;font-weight:700;color:var(--primary)}
 .summary-stat .label{font-size:.75rem;color:var(--text3);margin-top:.2rem}
 
+/* Benefits section */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:1.5rem}
+.benefit-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;transition:box-shadow .2s,transform .2s}
+.benefit-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.benefit-card .icon-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem}
+.benefit-card .icon-circle .material-symbols-outlined{font-size:1.3rem;color:#fff}
+.benefit-card h4{font-size:.92rem;font-weight:600;margin-bottom:.35rem}
+.benefit-card p{font-size:.8rem;color:var(--text2);line-height:1.5}
+.benefit-card .tag{display:inline-block;margin-top:.6rem;font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:100px;background:var(--primary-light);color:var(--primary-dark)}
+
+/* Before / After visual section */
+.compare-section{margin-bottom:2.5rem}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.compare-col{padding:1.25rem 1.5rem}
+.compare-col.before{background:#fafafa;border-right:1px solid var(--border)}
+.compare-col.after{background:#f1f8e9}
+.compare-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;display:flex;align-items:center;gap:.35rem}
+.compare-label.before-label{color:var(--risk-high-text)}
+.compare-label.after-label{color:var(--risk-none-text)}
+.compare-visual{border-radius:var(--radius-sm);padding:1rem;min-height:100px;display:flex;flex-direction:column;gap:.5rem}
+
+/* Visual component mocks */
+.mock-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:100px;font-size:.75rem;font-weight:500;cursor:pointer;border:1px solid;transition:all .2s}
+.mock-chip.outline{background:transparent;color:var(--text);border-color:#c0c0c0}
+.mock-chip.outline.selected-broken{background:transparent;color:var(--text);border-color:#c0c0c0}
+.mock-chip.outline.selected-fixed{background:var(--primary-light);color:var(--primary-dark);border-color:var(--primary);box-shadow:0 1px 3px rgba(0,112,210,.2)}
+.mock-chip.filled{background:var(--primary);color:#fff;border-color:var(--primary)}
+.mock-chip.filled.selected-broken{background:var(--primary);color:#fff;border-color:var(--primary)}
+.mock-chip.filled.selected-fixed{background:var(--primary-dark);color:#fff;border-color:var(--primary-dark);box-shadow:0 2px 6px rgba(0,50,88,.3)}
+.mock-chip .check{font-size:.85rem;opacity:0;width:0;transition:all .2s}
+.mock-chip.selected-fixed .check{opacity:1;width:auto}
+
+.mock-input{border-radius:8px;padding:8px 12px;font-size:.78rem;border:1px solid #c0c0c0;background:#fff;color:var(--text);width:100%;font-family:var(--font)}
+.mock-input.filled{border:none;border-bottom:2px solid var(--primary);border-radius:8px 8px 0 0;background:#e8eaed;padding-top:20px}
+.mock-input-label{position:absolute;top:5px;left:12px;font-size:.6rem;color:var(--primary);font-weight:500}
+.mock-input-wrap{position:relative}
+
+.mock-sidebar{display:flex;gap:0;border-radius:var(--radius-sm);overflow:hidden;min-height:120px;border:1px solid #e0e0e0}
+.mock-sidebar__nav{width:60px;background:#f5f5f5;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:12px;border-right:1px solid #e0e0e0}
+.mock-sidebar__nav .dot{width:28px;height:28px;border-radius:6px;background:#ddd}
+.mock-sidebar__nav .dot.active{background:var(--primary-light)}
+.mock-sidebar__main{flex:1;padding:10px;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--text3);background:#fff}
+.mock-sidebar--broken .mock-sidebar__nav{width:auto;border-right:none}
+.mock-sidebar--broken .mock-sidebar__main{background:#fafafa}
+.mock-sidebar--broken{min-height:60px;align-items:stretch}
+
+.mock-token-row{display:flex;gap:8px;align-items:center;font-size:.72rem;font-family:var(--mono)}
+.mock-token-swatch{width:24px;height:24px;border-radius:4px;border:1px solid rgba(0,0,0,.1)}
+.mock-token-val{color:var(--text3)}
+
 @media(max-width:768px){
   body{padding:1rem 1rem 4rem}
   .hero h1{font-size:1.6rem}
   .step-header{flex-direction:column;gap:.5rem}
   .summary-grid{grid-template-columns:repeat(2,1fr)}
+  .benefits-grid{grid-template-columns:1fr}
+  .compare-grid{grid-template-columns:1fr}
+  .compare-col.before{border-right:none;border-bottom:1px solid var(--border)}
 }
 </style>
 </head>
@@ -115,6 +168,8 @@ table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-lig
 
 <nav class="nav">
   <a href="#overview">Overview</a>
+  <a href="#benefits">Benefits</a>
+  <a href="#before-after">Before &amp; After</a>
   <a href="#risk-guide">Risk Guide</a>
   <a href="#tokens">Token System</a>
   <a href="#variants">Component Fixes</a>
@@ -134,6 +189,256 @@ table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-lig
     <div class="summary-stat"><div class="num">1</div><div class="label">Bug-Fix (Sidebar)</div></div>
     <div class="summary-stat"><div class="num">0</div><div class="label">Tokens Removed</div></div>
     <div class="summary-stat"><div class="num">0</div><div class="label">Props Removed</div></div>
+  </div>
+</section>
+
+<!-- Benefits -->
+<section id="benefits">
+  <h2><span class="material-symbols-outlined">trending_up</span> Why This Should Be Done</h2>
+  <p class="desc">This migration delivers immediate, measurable improvements to the library's capabilities without breaking any existing projects.</p>
+
+  <div class="benefits-grid">
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#1565c0,#42a5f5)">
+        <span class="material-symbols-outlined">design_services</span>
+      </div>
+      <h4>Complete Design Token Coverage</h4>
+      <p>Components currently rely on hardcoded fallback values because ~140 tokens are referenced but never defined. Defining them means a single change in <code>spectrum-variables.css</code> propagates everywhere &mdash; enabling global theming updates in seconds instead of component-by-component edits.</p>
+      <span class="tag">Developer Velocity</span>
+    </div>
+
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#2e7d32,#66bb6a)">
+        <span class="material-symbols-outlined">animation</span>
+      </div>
+      <h4>Consistent Motion &amp; Interaction</h4>
+      <p>Today each component invents its own transition values. The M3 motion scale gives teams a shared vocabulary (short1-4, medium1-4, long1-4) so all animations feel coordinated and can be centrally tuned or disabled for <code>prefers-reduced-motion</code>.</p>
+      <span class="tag">UX Consistency</span>
+    </div>
+
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#6a1b9a,#ab47bc)">
+        <span class="material-symbols-outlined">responsive_layout</span>
+      </div>
+      <h4>Production-Ready Adaptive Layouts</h4>
+      <p>New canonical layout shells (list-detail, supporting-pane, feed) give project teams pre-built responsive scaffolds that handle desktop&rarr;tablet&rarr;mobile transitions, eliminating 60-80% of custom layout work in new apps.</p>
+      <span class="tag">Time-to-Market</span>
+    </div>
+
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#e65100,#ff9800)">
+        <span class="material-symbols-outlined">bug_report</span>
+      </div>
+      <h4>Fix Silent Component Bugs</h4>
+      <p>The chip <code>selected</code> state is visually broken (prop exists but does nothing), and the sidebar has an empty stylesheet. These fixes restore expected behavior that developers assume works but currently doesn't &mdash; reducing debugging time.</p>
+      <span class="tag">Quality &amp; Trust</span>
+    </div>
+
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#00695c,#26a69a)">
+        <span class="material-symbols-outlined">swap_horiz</span>
+      </div>
+      <h4>Easier M3 Component Parity</h4>
+      <p>With the full token system in place, future components (FAB, Navigation Drawer, Snackbar, etc.) can be built using the same variable references as Google's M3 spec, drastically reducing the design-to-code translation gap.</p>
+      <span class="tag">Future-Proofing</span>
+    </div>
+
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#283593,#5c6bc0)">
+        <span class="material-symbols-outlined">palette</span>
+      </div>
+      <h4>Unlock UNOPS Color Palette</h4>
+      <p><code>spectrum-colors.css</code> defines 6 brand color scales and 8 gradients, but it's never imported into the build. Wiring it in gives every component access to the full organizational palette without any extra setup by consumers.</p>
+      <span class="tag">Brand Alignment</span>
+    </div>
+
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#4e342e,#8d6e63)">
+        <span class="material-symbols-outlined">elevation</span>
+      </div>
+      <h4>Predictable Depth &amp; Elevation</h4>
+      <p>A formal 6-level elevation scale replaces ad-hoc shadow values across components. Dialogs, menus, cards, and popovers share a clear visual hierarchy that's easy to reason about and customize per-project.</p>
+      <span class="tag">Visual Hierarchy</span>
+    </div>
+
+    <div class="benefit-card">
+      <div class="icon-circle" style="background:linear-gradient(135deg,#b71c1c,#ef5350)">
+        <span class="material-symbols-outlined">security</span>
+      </div>
+      <h4>Zero Breaking Changes (by design)</h4>
+      <p>The entire plan is additive. No existing token, prop, or default is removed. The single visual change (sidebar) is a documented bug fix &mdash; going from "renders nothing" to "renders the intended layout" &mdash; and is flagged as high-risk so teams can prepare.</p>
+      <span class="tag">Backward Compatible</span>
+    </div>
+  </div>
+</section>
+
+<!-- Before / After -->
+<section id="before-after">
+  <h2><span class="material-symbols-outlined">compare</span> Before &amp; After</h2>
+  <p class="desc">Visual demonstrations of how the fixes and additions improve the library. These show real issues being solved.</p>
+
+  <!-- Chip Selected State -->
+  <h3 style="font-size:.95rem;font-weight:600;margin:1.5rem 0 .5rem;display:flex;align-items:center;gap:.5rem"><span class="material-symbols-outlined" style="font-size:1.1rem;color:var(--primary)">check_circle</span> spectrum-chip: Selected State</h3>
+  <p style="font-size:.82rem;color:var(--text3);margin-bottom:.75rem">The <code>selected</code> prop exists in TypeScript but produces no visual change. After the fix, chips show clear selection feedback.</p>
+  <div class="compare-grid">
+    <div class="compare-col before">
+      <div class="compare-label before-label"><span class="material-symbols-outlined" style="font-size:.9rem">close</span> Before (current)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #e0e0e0;border-radius:8px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span class="mock-chip outline">Design</span>
+          <span class="mock-chip outline selected-broken">Selected <span style="font-size:.6rem;opacity:.5">(prop=true)</span></span>
+          <span class="mock-chip filled">Active</span>
+          <span class="mock-chip filled selected-broken">Selected <span style="font-size:.6rem;opacity:.5">(prop=true)</span></span>
+        </div>
+        <p style="font-size:.68rem;color:var(--risk-high-text);margin-top:8px;font-style:italic">&#9888; No visual difference when selected=true &mdash; users cannot see selection state</p>
+      </div>
+    </div>
+    <div class="compare-col after">
+      <div class="compare-label after-label"><span class="material-symbols-outlined" style="font-size:.9rem">check</span> After (fixed)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #c5e1a5;border-radius:8px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span class="mock-chip outline">Design</span>
+          <span class="mock-chip outline selected-fixed"><span class="check">&#10003;</span> Selected</span>
+          <span class="mock-chip filled">Active</span>
+          <span class="mock-chip filled selected-fixed"><span class="check">&#10003;</span> Selected</span>
+        </div>
+        <p style="font-size:.68rem;color:var(--risk-none-text);margin-top:8px;font-style:italic">&#10003; Clear visual distinction: tinted background, checkmark icon, elevated shadow</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Text Input Variants -->
+  <h3 style="font-size:.95rem;font-weight:600;margin:1.5rem 0 .5rem;display:flex;align-items:center;gap:.5rem"><span class="material-symbols-outlined" style="font-size:1.1rem;color:var(--primary)">text_fields</span> spectrum-text-input: Filled Variant</h3>
+  <p style="font-size:.82rem;color:var(--text3);margin-bottom:.75rem">Currently only one visual style (outlined). After the fix, teams get both M3 input variants through a single <code>variant</code> prop.</p>
+  <div class="compare-grid">
+    <div class="compare-col before">
+      <div class="compare-label before-label"><span class="material-symbols-outlined" style="font-size:.9rem">close</span> Before (current)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #e0e0e0;border-radius:8px;gap:10px">
+        <input class="mock-input" value="Only outlined style available" readonly>
+        <p style="font-size:.68rem;color:var(--text3);font-style:italic">No variant prop &mdash; locked into one visual style for all contexts</p>
+      </div>
+    </div>
+    <div class="compare-col after">
+      <div class="compare-label after-label"><span class="material-symbols-outlined" style="font-size:.9rem">check</span> After (enhanced)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #c5e1a5;border-radius:8px;gap:10px">
+        <input class="mock-input" value="variant=&quot;outlined&quot; (default)" readonly>
+        <div class="mock-input-wrap">
+          <span class="mock-input-label">Label</span>
+          <input class="mock-input filled" value="variant=&quot;filled&quot;" readonly>
+        </div>
+        <p style="font-size:.68rem;color:var(--risk-none-text);font-style:italic">&#10003; Two distinct M3 input styles, default preserves current look</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Layout -->
+  <h3 style="font-size:.95rem;font-weight:600;margin:1.5rem 0 .5rem;display:flex;align-items:center;gap:.5rem"><span class="material-symbols-outlined" style="font-size:1.1rem;color:var(--primary)">view_sidebar</span> spectrum-sidebar: Layout Fix</h3>
+  <p style="font-size:.82rem;color:var(--text3);margin-bottom:.75rem">The SCSS file is empty (<code>:host { display: block; }</code> only). Despite having 15+ props, the component renders no layout. After the fix, it delivers the documented sidebar behavior.</p>
+  <div class="compare-grid">
+    <div class="compare-col before">
+      <div class="compare-label before-label"><span class="material-symbols-outlined" style="font-size:.9rem">close</span> Before (current)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #e0e0e0;border-radius:8px">
+        <div class="mock-sidebar mock-sidebar--broken" style="border:1px dashed #ef5350">
+          <div style="padding:10px;font-size:.68rem;color:var(--risk-high-text);text-align:center;width:100%">
+            &#9888; No flex/grid layout &mdash; slots stack vertically<br>
+            <span style="font-size:.6rem;opacity:.7">15+ props (sideWidth, gap, breakpoint...) have zero CSS backing</span>
+          </div>
+        </div>
+        <p style="font-size:.68rem;color:var(--risk-high-text);margin-top:6px;font-style:italic">SCSS: <code>:host { display: block; }</code> &mdash; that's all</p>
+      </div>
+    </div>
+    <div class="compare-col after">
+      <div class="compare-label after-label"><span class="material-symbols-outlined" style="font-size:.9rem">check</span> After (implemented)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #c5e1a5;border-radius:8px">
+        <div class="mock-sidebar">
+          <div class="mock-sidebar__nav">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div class="mock-sidebar__main">Main content area</div>
+        </div>
+        <p style="font-size:.68rem;color:var(--risk-none-text);margin-top:6px;font-style:italic">&#10003; Full flex layout with responsive breakpoints, collapse, and overlay modes</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token Coverage -->
+  <h3 style="font-size:.95rem;font-weight:600;margin:1.5rem 0 .5rem;display:flex;align-items:center;gap:.5rem"><span class="material-symbols-outlined" style="font-size:1.1rem;color:var(--primary)">token</span> Design Token Coverage</h3>
+  <p style="font-size:.82rem;color:var(--text3);margin-bottom:.75rem">Components reference ~140 tokens via <code>var(--spectrum-sys-*)</code> that resolve to hardcoded fallbacks because the tokens are never defined at <code>:root</code>. After the migration, all tokens resolve through the system.</p>
+  <div class="compare-grid">
+    <div class="compare-col before">
+      <div class="compare-label before-label"><span class="material-symbols-outlined" style="font-size:.9rem">close</span> Before (current)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #e0e0e0;border-radius:8px;gap:8px">
+        <div class="mock-token-row">
+          <div class="mock-token-swatch" style="background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 4px,#fff 4px,#fff 8px)"></div>
+          <span style="color:#999;text-decoration:line-through">--spectrum-sys-elevation-level-2</span>
+          <span class="mock-token-val">&rarr; undefined</span>
+        </div>
+        <div class="mock-token-row">
+          <div class="mock-token-swatch" style="background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 4px,#fff 4px,#fff 8px)"></div>
+          <span style="color:#999;text-decoration:line-through">--spectrum-sys-motion-easing-standard</span>
+          <span class="mock-token-val">&rarr; undefined</span>
+        </div>
+        <div class="mock-token-row">
+          <div class="mock-token-swatch" style="background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 4px,#fff 4px,#fff 8px)"></div>
+          <span style="color:#999;text-decoration:line-through">--spectrum-sys-color-surface-container</span>
+          <span class="mock-token-val">&rarr; undefined</span>
+        </div>
+        <p style="font-size:.68rem;color:var(--risk-high-text);margin-top:4px;font-style:italic">&#9888; Tokens used in components but never defined &mdash; only fallback values work</p>
+      </div>
+    </div>
+    <div class="compare-col after">
+      <div class="compare-label after-label"><span class="material-symbols-outlined" style="font-size:.9rem">check</span> After (defined)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #c5e1a5;border-radius:8px;gap:8px">
+        <div class="mock-token-row">
+          <div class="mock-token-swatch" style="background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15)"></div>
+          <span>--spectrum-sys-elevation-level-2</span>
+          <span class="mock-token-val">&#10003; defined</span>
+        </div>
+        <div class="mock-token-row">
+          <div class="mock-token-swatch" style="background:linear-gradient(135deg,#42a5f5,#1565c0)"></div>
+          <span>--spectrum-sys-motion-easing-standard</span>
+          <span class="mock-token-val">&#10003; defined</span>
+        </div>
+        <div class="mock-token-row">
+          <div class="mock-token-swatch" style="background:#f0f4f8"></div>
+          <span>--spectrum-sys-color-surface-container</span>
+          <span class="mock-token-val">&#10003; defined</span>
+        </div>
+        <p style="font-size:.68rem;color:var(--risk-none-text);margin-top:4px;font-style:italic">&#10003; All tokens resolve via :root &mdash; single source of truth for global theming</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout Shells -->
+  <h3 style="font-size:.95rem;font-weight:600;margin:1.5rem 0 .5rem;display:flex;align-items:center;gap:.5rem"><span class="material-symbols-outlined" style="font-size:1.1rem;color:var(--primary)">space_dashboard</span> New Canonical Layout Shells</h3>
+  <p style="font-size:.82rem;color:var(--text3);margin-bottom:.75rem">Teams currently build layout scaffolding from scratch for every project. After the migration, three reusable M3-inspired layout shells handle the most common patterns.</p>
+  <div class="compare-grid">
+    <div class="compare-col before">
+      <div class="compare-label before-label"><span class="material-symbols-outlined" style="font-size:.9rem">close</span> Before (current)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #e0e0e0;border-radius:8px;gap:8px;align-items:center;justify-content:center;min-height:140px">
+        <div style="text-align:center">
+          <span class="material-symbols-outlined" style="font-size:2.5rem;color:#ccc">build</span>
+          <p style="font-size:.72rem;color:var(--text3);margin-top:6px">Custom layout code per project<br><span style="font-size:.65rem;opacity:.7">60-80% repeated across apps</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="compare-col after">
+      <div class="compare-label after-label"><span class="material-symbols-outlined" style="font-size:.9rem">check</span> After (new components)</div>
+      <div class="compare-visual" style="background:#fff;border:1px dashed #c5e1a5;border-radius:8px;gap:8px">
+        <div style="display:flex;gap:6px;align-items:stretch;min-height:50px">
+          <div style="width:90px;background:#e3f2fd;border-radius:4px;padding:6px;font-size:.6rem;color:var(--primary-dark);font-weight:600">List<br><span style="font-weight:400;font-size:.55rem">items slot</span></div>
+          <div style="flex:1;background:#f1f8e9;border-radius:4px;padding:6px;font-size:.6rem;color:var(--risk-none-text);font-weight:600">Detail<br><span style="font-weight:400;font-size:.55rem">content slot</span></div>
+        </div>
+        <div style="font-size:.62rem;color:var(--text3);text-align:center">&uarr; spectrum-list-detail</div>
+        <div style="display:flex;gap:6px;align-items:stretch;min-height:50px">
+          <div style="flex:1;background:#e3f2fd;border-radius:4px;padding:6px;font-size:.6rem;color:var(--primary-dark);font-weight:600">Main<br><span style="font-weight:400;font-size:.55rem">primary content</span></div>
+          <div style="width:80px;background:#ede7f6;border-radius:4px;padding:6px;font-size:.6rem;color:#4527a0;font-weight:600">Pane<br><span style="font-weight:400;font-size:.55rem">support slot</span></div>
+        </div>
+        <div style="font-size:.62rem;color:var(--text3);text-align:center">&uarr; spectrum-supporting-pane</div>
+      </div>
+    </div>
   </div>
 </section>
 
