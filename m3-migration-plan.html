@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spectrum M3 Migration Plan — Risk-Ranked Implementation Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f9fb;--surface:#fff;--text:#1a1c1e;--text2:#42474e;--text3:#72777f;
+  --primary:#0070d2;--primary-light:#d0e4ff;--primary-dark:#003258;
+  --border:#e2e5ea;--border-light:#f0f2f5;
+  --radius:12px;--radius-sm:8px;--radius-xs:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --font:'Noto Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --risk-none:#e8f5e9;--risk-none-text:#1b5e20;--risk-none-border:#a5d6a7;
+  --risk-low:#fff8e1;--risk-low-text:#e65100;--risk-low-border:#ffcc02;
+  --risk-medium:#fff3e0;--risk-medium-text:#bf360c;--risk-medium-border:#ff9800;
+  --risk-high:#fce4ec;--risk-high-text:#b71c1c;--risk-high-border:#ef5350;
+}
+html{font-family:var(--font);font-size:15px;color:var(--text);background:var(--bg);scroll-behavior:smooth}
+body{max-width:1200px;margin:0 auto;padding:2rem 2rem 6rem}
+
+.hero{text-align:center;padding:3.5rem 2rem 2.5rem;margin-bottom:2.5rem;background:linear-gradient(135deg,#1a237e 0%,#0070d2 50%,#00897b 100%);color:#fff;border-radius:var(--radius);position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.15) 0%,transparent 50%)}
+.hero h1{font-size:2.4rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem;position:relative;z-index:1}
+.hero .subtitle{font-size:1rem;opacity:.85;font-weight:300;position:relative;z-index:1}
+.hero .meta{margin-top:1rem;font-size:.8rem;opacity:.7;position:relative;z-index:1}
+
+.nav{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:2.5rem;position:sticky;top:0;z-index:100;background:var(--bg);padding:.75rem 0;border-bottom:1px solid var(--border-light)}
+.nav a{padding:.4rem .9rem;border-radius:100px;font-size:.78rem;font-weight:500;color:var(--text2);text-decoration:none;border:1px solid var(--border);transition:all .2s}
+.nav a:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+section{margin-bottom:3rem}
+section>h2{font-size:1.5rem;font-weight:700;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+section>h2 .material-symbols-outlined{font-size:1.3rem;color:var(--primary)}
+section>.desc{color:var(--text3);font-size:.88rem;margin-bottom:1.25rem}
+
+.risk-legend{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:2rem;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.risk-legend .item{display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:500}
+.risk-legend .dot{width:12px;height:12px;border-radius:50%;border:2px solid}
+.risk-legend .dot.none{background:var(--risk-none);border-color:var(--risk-none-border)}
+.risk-legend .dot.low{background:var(--risk-low);border-color:var(--risk-low-border)}
+.risk-legend .dot.medium{background:var(--risk-medium);border-color:var(--risk-medium-border)}
+.risk-legend .dot.high{background:var(--risk-high);border-color:var(--risk-high-border)}
+
+.step-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;transition:box-shadow .2s;position:relative;overflow:hidden}
+.step-card:hover{box-shadow:var(--shadow-md)}
+.step-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px}
+.step-card.risk-none::before{background:var(--risk-none-border)}
+.step-card.risk-low::before{background:var(--risk-low-border)}
+.step-card.risk-medium::before{background:var(--risk-medium-border)}
+.step-card.risk-high::before{background:var(--risk-high-border)}
+
+.step-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.75rem}
+.step-header h3{font-size:1.05rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.step-header .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;font-size:.72rem;font-weight:700;flex-shrink:0}
+.step-header .risk-badge{padding:.2rem .6rem;border-radius:100px;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+.step-header .risk-badge.none{background:var(--risk-none);color:var(--risk-none-text);border:1px solid var(--risk-none-border)}
+.step-header .risk-badge.low{background:var(--risk-low);color:var(--risk-low-text);border:1px solid var(--risk-low-border)}
+.step-header .risk-badge.medium{background:var(--risk-medium);color:var(--risk-medium-text);border:1px solid var(--risk-medium-border)}
+.step-header .risk-badge.high{background:var(--risk-high);color:var(--risk-high-text);border:1px solid var(--risk-high-border)}
+
+.step-body{font-size:.85rem;color:var(--text2);line-height:1.6}
+.step-body p{margin-bottom:.5rem}
+.step-body strong{color:var(--text)}
+
+.file-path{font-family:var(--mono);font-size:.72rem;color:var(--primary-dark);background:var(--primary-light);padding:.15rem .5rem;border-radius:var(--radius-xs);display:inline-block;margin:.2rem .2rem .2rem 0}
+
+.code-block{background:#1e1e2e;color:#cdd6f4;border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:.75rem 0;overflow-x:auto;font-family:var(--mono);font-size:.75rem;line-height:1.7}
+.code-block .comment{color:#6c7086}
+.code-block .prop{color:#89b4fa}
+.code-block .value{color:#a6e3a1}
+.code-block .string{color:#f9e2af}
+.code-block .keyword{color:#cba6f7}
+.code-block .tag{color:#89dceb}
+
+.mitigation{background:#f1f8e9;border:1px solid #c5e1a5;border-radius:var(--radius-sm);padding:.75rem 1rem;margin:.75rem 0;font-size:.8rem;display:flex;gap:.5rem;align-items:flex-start}
+.mitigation .material-symbols-outlined{color:#558b2f;font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+
+.warning{background:#fff8e1;border:1px solid #ffe082;border-radius:var(--radius-sm);padding:.75rem 1rem;margin:.75rem 0;font-size:.8rem;display:flex;gap:.5rem;align-items:flex-start}
+.warning .material-symbols-outlined{color:#f57f17;font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+
+.optional-badge{display:inline-block;padding:.15rem .5rem;border-radius:100px;font-size:.65rem;font-weight:600;background:#ede7f6;color:#4527a0;border:1px solid #b39ddb;margin-left:.5rem;vertical-align:middle}
+
+table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.8rem}
+table th{background:var(--bg);text-align:left;padding:.5rem .75rem;font-weight:600;border-bottom:2px solid var(--border)}
+table td{padding:.5rem .75rem;border-bottom:1px solid var(--border-light);vertical-align:top}
+table code{font-family:var(--mono);font-size:.72rem;background:var(--primary-light);color:var(--primary-dark);padding:.1rem .4rem;border-radius:3px}
+
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-bottom:2rem}
+.summary-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;text-align:center}
+.summary-stat .num{font-size:1.8rem;font-weight:700;color:var(--primary)}
+.summary-stat .label{font-size:.75rem;color:var(--text3);margin-top:.2rem}
+
+@media(max-width:768px){
+  body{padding:1rem 1rem 4rem}
+  .hero h1{font-size:1.6rem}
+  .step-header{flex-direction:column;gap:.5rem}
+  .summary-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>M3 Richness Migration Plan</h1>
+  <p class="subtitle">Bringing Material Design 3 token depth, component variants, and canonical layouts into Spectrum</p>
+  <p class="meta">@unops-itg-npm/cpit-spectrum &middot; Risk-ranked for existing project safety &middot; v0.0.1-alpha.48+</p>
+</header>
+
+<nav class="nav">
+  <a href="#overview">Overview</a>
+  <a href="#risk-guide">Risk Guide</a>
+  <a href="#tokens">Token System</a>
+  <a href="#variants">Component Fixes</a>
+  <a href="#layouts">Layout Shells</a>
+  <a href="#naming">Variant Naming</a>
+  <a href="#order">Execution Order</a>
+</nav>
+
+<!-- Overview -->
+<section id="overview">
+  <h2><span class="material-symbols-outlined">dashboard</span> Plan Overview</h2>
+  <p class="desc">Summary of all changes, ranked by risk to existing consumers of the library.</p>
+  <div class="summary-grid">
+    <div class="summary-stat"><div class="num">~140</div><div class="label">New Tokens Added</div></div>
+    <div class="summary-stat"><div class="num">3</div><div class="label">Component Fixes</div></div>
+    <div class="summary-stat"><div class="num">3</div><div class="label">New Layout Shells</div></div>
+    <div class="summary-stat"><div class="num">1</div><div class="label">Bug-Fix (Sidebar)</div></div>
+    <div class="summary-stat"><div class="num">0</div><div class="label">Tokens Removed</div></div>
+    <div class="summary-stat"><div class="num">0</div><div class="label">Props Removed</div></div>
+  </div>
+</section>
+
+<!-- Risk Guide -->
+<section id="risk-guide">
+  <h2><span class="material-symbols-outlined">shield</span> Risk Classification</h2>
+  <p class="desc">Every change is classified by its potential to affect existing projects consuming the library.</p>
+  <div class="risk-legend">
+    <div class="item"><span class="dot none"></span> <strong>No Risk</strong> &mdash; Purely additive, no existing code affected</div>
+    <div class="item"><span class="dot low"></span> <strong>Low Risk</strong> &mdash; Additive with minor edge cases (shadow DOM protects)</div>
+    <div class="item"><span class="dot medium"></span> <strong>Medium Risk</strong> &mdash; New prop default must match current appearance exactly</div>
+    <div class="item"><span class="dot high"></span> <strong>High Risk</strong> &mdash; Visual output changes for existing consumers</div>
+  </div>
+</section>
+
+<!-- PART 1: TOKENS -->
+<section id="tokens">
+  <h2><span class="material-symbols-outlined">palette</span> Part 1: Full M3 Token System</h2>
+  <p class="desc">Add ~140 new CSS custom properties to spectrum-variables.css. All are purely additive &mdash; no existing token is modified or removed.</p>
+
+  <!-- Step 1 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">1</span> Elevation Scale (6 tokens)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Components like <code>spectrum-menu</code>, <code>spectrum-dialog</code>, and <code>spectrum-card</code> already reference <code>--spectrum-sys-elevation-level-*</code> with hardcoded fallbacks. Adding real definitions means fallbacks become redundant &mdash; visual output stays identical.</p>
+      <span class="file-path">packages/core/src/styles/spectrum-variables.css</span>
+      <div class="code-block">
+<span class="comment">/* M3 Elevation Scale */</span>
+<span class="prop">--spectrum-sys-elevation-level-0</span>: <span class="value">none</span>;
+<span class="prop">--spectrum-sys-elevation-level-1</span>: <span class="value">0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15)</span>;
+<span class="prop">--spectrum-sys-elevation-level-2</span>: <span class="value">0 1px 2px 0 rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15)</span>;
+<span class="prop">--spectrum-sys-elevation-level-3</span>: <span class="value">0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px 0 rgba(0,0,0,0.3)</span>;
+<span class="prop">--spectrum-sys-elevation-level-4</span>: <span class="value">0 6px 10px 4px rgba(0,0,0,0.15), 0 2px 3px 0 rgba(0,0,0,0.3)</span>;
+<span class="prop">--spectrum-sys-elevation-level-5</span>: <span class="value">0 8px 12px 6px rgba(0,0,0,0.15), 0 4px 4px 0 rgba(0,0,0,0.3)</span>;
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> No existing :root or component defines these. Values match fallbacks already in use. spectrum-theme does not set these at runtime.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">2</span> Shape Corner Scale (10 tokens)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Components reference <code>--spectrum-sys-shape-corner-medium</code> (e.g. spectrum-menu, spectrum-card) with px fallbacks. Adding definitions makes those resolve properly.</p>
+      <span class="file-path">packages/core/src/styles/spectrum-variables.css</span>
+      <div class="code-block">
+<span class="comment">/* M3 Shape Corner Scale */</span>
+<span class="prop">--spectrum-sys-shape-corner-none</span>: <span class="value">0px</span>;
+<span class="prop">--spectrum-sys-shape-corner-extra-small</span>: <span class="value">4px</span>;
+<span class="prop">--spectrum-sys-shape-corner-small</span>: <span class="value">8px</span>;
+<span class="prop">--spectrum-sys-shape-corner-medium</span>: <span class="value">12px</span>;
+<span class="prop">--spectrum-sys-shape-corner-large</span>: <span class="value">16px</span>;
+<span class="prop">--spectrum-sys-shape-corner-large-increased</span>: <span class="value">20px</span>;
+<span class="prop">--spectrum-sys-shape-corner-extra-large</span>: <span class="value">28px</span>;
+<span class="prop">--spectrum-sys-shape-corner-extra-large-increased</span>: <span class="value">32px</span>;
+<span class="prop">--spectrum-sys-shape-corner-extra-extra-large</span>: <span class="value">48px</span>;
+<span class="prop">--spectrum-sys-shape-corner-full</span>: <span class="value">9999px</span>;
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> Existing <code>--spectrum-sys-border-radius: 4px</code> is NOT changed. These are new, separate tokens. Components that reference them currently fall back to the same px values.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">3</span> Full Typescale (90 tokens)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>15 type styles &times; 6 properties each (font, weight, weight-emphasized, size, line-height, tracking). Components already reference these (e.g. <code>spectrum-menu</code> uses <code>--spectrum-sys-typescale-body-medium-size</code>) with fallbacks.</p>
+      <div class="code-block">
+<span class="comment">/* Example: Display Large (1 of 15 styles) */</span>
+<span class="prop">--spectrum-sys-typescale-display-large-font</span>: <span class="value">var(--spectrum-sys-font-family)</span>;
+<span class="prop">--spectrum-sys-typescale-display-large-weight</span>: <span class="value">400</span>;
+<span class="prop">--spectrum-sys-typescale-display-large-weight-emphasized</span>: <span class="value">700</span>;
+<span class="prop">--spectrum-sys-typescale-display-large-size</span>: <span class="value">57px</span>;
+<span class="prop">--spectrum-sys-typescale-display-large-line-height</span>: <span class="value">64px</span>;
+<span class="prop">--spectrum-sys-typescale-display-large-tracking</span>: <span class="value">-0.25px</span>;
+<span class="comment">/* ... repeated for display-medium, display-small, headline-*, title-*, body-*, label-* */</span>
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> No definitions exist today. Values match the fallbacks components already use. Derived from PROJECT_HISTORY Phase 12 Figma token export.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">4</span> Motion System (22 tokens)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>M3's full duration + easing scale. No component currently references <code>--spectrum-sys-motion-*</code> &mdash; entirely new namespace. Existing <code>--spectrum-sys-animation-duration</code> tokens remain unchanged.</p>
+      <div class="code-block">
+<span class="comment">/* M3 Duration Scale */</span>
+<span class="prop">--spectrum-sys-motion-duration-short1</span>: <span class="value">50ms</span>;
+<span class="prop">--spectrum-sys-motion-duration-short2</span>: <span class="value">100ms</span>;
+<span class="prop">--spectrum-sys-motion-duration-short3</span>: <span class="value">150ms</span>;
+<span class="prop">--spectrum-sys-motion-duration-short4</span>: <span class="value">200ms</span>;
+<span class="prop">--spectrum-sys-motion-duration-medium1</span>: <span class="value">250ms</span>;
+<span class="prop">--spectrum-sys-motion-duration-medium2</span>: <span class="value">300ms</span>;
+<span class="comment">/* ... through extra-long4: 1000ms */</span>
+
+<span class="comment">/* M3 Easing Curves */</span>
+<span class="prop">--spectrum-sys-motion-easing-standard</span>: <span class="value">cubic-bezier(0.2, 0, 0, 1)</span>;
+<span class="prop">--spectrum-sys-motion-easing-standard-decelerate</span>: <span class="value">cubic-bezier(0, 0, 0, 1)</span>;
+<span class="prop">--spectrum-sys-motion-easing-standard-accelerate</span>: <span class="value">cubic-bezier(0.3, 0, 1, 1)</span>;
+<span class="prop">--spectrum-sys-motion-easing-emphasized</span>: <span class="value">cubic-bezier(0.2, 0, 0, 1)</span>;
+<span class="prop">--spectrum-sys-motion-easing-emphasized-decelerate</span>: <span class="value">cubic-bezier(0.05, 0.7, 0.1, 1)</span>;
+<span class="prop">--spectrum-sys-motion-easing-emphasized-accelerate</span>: <span class="value">cubic-bezier(0.3, 0, 0.8, 0.15)</span>;
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">5</span> State Layers + Surface Containers (9 tokens)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>State-layer opacities for hover/focus/pressed/dragged states, plus M3 surface container hierarchy for elevated surfaces in dark mode.</p>
+      <div class="code-block">
+<span class="comment">/* State Layer Opacities */</span>
+<span class="prop">--spectrum-sys-state-hover-opacity</span>: <span class="value">0.08</span>;
+<span class="prop">--spectrum-sys-state-focus-opacity</span>: <span class="value">0.12</span>;
+<span class="prop">--spectrum-sys-state-pressed-opacity</span>: <span class="value">0.12</span>;
+<span class="prop">--spectrum-sys-state-dragged-opacity</span>: <span class="value">0.16</span>;
+
+<span class="comment">/* Surface Container Hierarchy */</span>
+<span class="prop">--spectrum-sys-color-surface-container-lowest</span>: <span class="value">#ffffff</span>;
+<span class="prop">--spectrum-sys-color-surface-container-low</span>: <span class="value">#f7f8fa</span>;
+<span class="prop">--spectrum-sys-color-surface-container</span>: <span class="value">#f1f3f5</span>;
+<span class="prop">--spectrum-sys-color-surface-container-high</span>: <span class="value">#ecedf0</span>;
+<span class="prop">--spectrum-sys-color-surface-container-highest</span>: <span class="value">#e6e8eb</span>;
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> <code>--spectrum-sys-state-*</code> has zero matches in codebase. <code>--spectrum-sys-color-surface-container</code> is referenced by spectrum-hero without a fallback &mdash; defining it is an <em>improvement</em> (hero nav background will finally resolve instead of being transparent).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step-card risk-low">
+    <div class="step-header">
+      <h3><span class="step-num">6</span> Spacing Scale Expansion (3 tokens)</h3>
+      <span class="risk-badge low">Low Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Add finer spacing values below <code>--spectrum-sys-spacing-small</code> and one above <code>--spectrum-sys-spacing-xx-large</code>.</p>
+      <div class="code-block">
+<span class="prop">--spectrum-sys-spacing-xs</span>: <span class="value">calc(var(--spectrum-sys-spacing) / 4)</span>;  <span class="comment">/* 0.25rem at default */</span>
+<span class="prop">--spectrum-sys-spacing-2xs</span>: <span class="value">4px</span>;  <span class="comment">/* FIXED value, not derived */</span>
+<span class="prop">--spectrum-sys-spacing-3xl</span>: <span class="value">calc(var(--spectrum-sys-spacing) * 6)</span>;  <span class="comment">/* 6rem at default */</span>
+      </div>
+      <div class="warning">
+        <span class="material-symbols-outlined">warning</span>
+        <span><strong>Edge case:</strong> <code>spectrum-score-card.scss</code> uses <code>var(--spectrum-sys-spacing-2xs, 4px)</code>. If we derived from base (<code>spacing/8 = 2px</code>), gaps would shrink. <strong>Solution:</strong> Define as fixed <code>4px</code> to match existing fallback exactly.</span>
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Mitigation applied:</strong> <code>--spectrum-sys-spacing-2xs</code> uses a fixed <code>4px</code> value instead of a calc formula. <code>--spectrum-sys-spacing-xs</code> computes to <code>0.25rem</code> which matches the fallback already used in 6 components (flex, stack, grid, chip, app-layout, data-table).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 7 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">7</span> Wire spectrum-colors.css into Build</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>The palette file (70 tokens: 6 color scales + 8 gradients) exists but is not imported into the bundle. Consumers don't get UNOPS palettes unless they manually import.</p>
+      <span class="file-path">packages/core/src/global/global.css</span>
+      <div class="code-block">
+<span class="keyword">@import</span> <span class="string">'../styles/spectrum-variables.css'</span>;
+<span class="keyword">@import</span> <span class="string">'../styles/spectrum-colors.css'</span>;  <span class="comment">/* NEW */</span>
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> No component defines any <code>--unops-color-*</code> or <code>--unops-gradient-*</code> tokens locally. The import adds new names without colliding with anything.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 8 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">8</span> Deprecate Legacy Tokens (comments only)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Mark old tokens with deprecation comments. No values changed, no tokens removed.</p>
+      <div class="code-block">
+<span class="comment">/* @deprecated Use --spectrum-color-primary instead */</span>
+<span class="prop">--primary</span>: <span class="value">rgba(0, 0, 0, 0)</span>;
+<span class="comment">/* @deprecated Use --spectrum-color-on-primary instead */</span>
+<span class="prop">--onPrimary</span>: <span class="value">rgba(0, 0, 0, 0)</span>;
+<span class="comment">/* @deprecated Use --spectrum-sys-spacing instead */</span>
+<span class="prop">--standard-padding</span>: <span class="value">24px</span>;
+<span class="comment">/* ... etc for --surface, --frostColor, --baseSize, --buttonSize, --frostBlur, --animationTime, --wallpaper */</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 9 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">9</span> Sync Secondary Copies</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Copy updated <code>spectrum-variables.css</code> to the two secondary locations that must stay in sync:</p>
+      <span class="file-path">packages/core/styles/spectrum-variables.css</span>
+      <span class="file-path">packages/storybook/styles/spectrum-variables.css</span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2: COMPONENT FIXES -->
+<section id="variants">
+  <h2><span class="material-symbols-outlined">build</span> Part 2: Component Variant Fixes</h2>
+  <p class="desc">Targeted fixes for broken or missing variant behavior. Strategy: add new styles and props without modifying existing defaults.</p>
+
+  <!-- Step 10 -->
+  <div class="step-card risk-low">
+    <div class="step-header">
+      <h3><span class="step-num">10</span> spectrum-chip: Wire <code>selected</code> State</h3>
+      <span class="risk-badge low">Low Risk</span>
+    </div>
+    <div class="step-body">
+      <p>The <code>selected</code> prop exists but <code>getChipClasses()</code> never adds a CSS class for it. Chips with <code>selected={true}</code> look identical to unselected.</p>
+      <span class="file-path">packages/core/src/components/spectrum-chip/spectrum-chip.tsx</span>
+      <span class="file-path">packages/core/src/components/spectrum-chip/spectrum-chip.scss</span>
+      <div class="code-block">
+<span class="comment">// TSX fix: add to getChipClasses() after disabled check</span>
+<span class="keyword">if</span> (<span class="keyword">this</span>.selected) {
+  classes.push(<span class="string">'spectrum-chip--selected'</span>);
+}
+      </div>
+      <div class="code-block">
+<span class="comment">/* SCSS: new selected state (additive) */</span>
+.spectrum-chip<span class="prop">--selected</span> {
+  <span class="prop">background</span>: <span class="value">var(--spectrum-sys-color-secondary-container, #d1e4ff)</span>;
+  <span class="prop">color</span>: <span class="value">var(--spectrum-color-on-secondary-container, #001c3a)</span>;
+  <span class="prop">border-color</span>: <span class="value">transparent</span>;
+  <span class="prop">box-shadow</span>: <span class="value">var(--spectrum-sys-elevation-level-1)</span>;
+}
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> Component uses <code>shadow: true</code> &mdash; external CSS cannot target internal classes. Default <code>selected={false}</code> means no class is added unless explicitly opted in. No visual change for existing consumers.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 11 -->
+  <div class="step-card risk-medium">
+    <div class="step-header">
+      <h3><span class="step-num">11</span> spectrum-text-input: Filled / Outlined Variants</h3>
+      <span class="risk-badge medium">Medium Risk</span>
+    </div>
+    <div class="step-body">
+      <p>M3 has two field styles. Spectrum currently ships one (outlined). Add <code>variant</code> prop with <code>'outlined'</code> as default to preserve current look.</p>
+      <span class="file-path">packages/core/src/components/spectrum-text-input/spectrum-text-input.tsx</span>
+      <div class="code-block">
+<span class="comment">// New prop (default preserves current appearance)</span>
+@<span class="keyword">Prop</span>() variant: <span class="string">'outlined'</span> | <span class="string">'filled'</span> = <span class="string">'outlined'</span>;
+      </div>
+      <div class="code-block">
+<span class="comment">/* SCSS strategy: existing rules stay as-is (= outlined default) */</span>
+<span class="comment">/* Only .spectrum-text-input--filled adds NEW overrides */</span>
+
+.spectrum-text-input<span class="prop">--filled</span> .spectrum-text-input__wrapper {
+  <span class="prop">background</span>: <span class="value">var(--spectrum-sys-color-surface-container-highest)</span>;
+  <span class="prop">border</span>: <span class="value">none</span>;
+  <span class="prop">border-bottom</span>: <span class="value">1px solid var(--input-border-color)</span>;
+  <span class="prop">border-radius</span>: <span class="value">var(--spectrum-sys-shape-corner-extra-small) var(--spectrum-sys-shape-corner-extra-small) 0 0</span>;
+}
+      </div>
+      <div class="warning">
+        <span class="material-symbols-outlined">warning</span>
+        <span><strong>Caution:</strong> This component uses <code>shadow: false</code> &mdash; external CSS CAN target internal classes. If consumers have selectors like <code>.spectrum-text-input__wrapper { ... }</code>, those still apply. The modifier class is new and won't conflict, but keep existing base selectors untouched.</span>
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Mitigation:</strong> Default <code>variant='outlined'</code> renders <em>exactly</em> the same DOM and class structure as today. The <code>--filled</code> modifier class is additive. Do NOT refactor existing wrapper rules into the <code>--outlined</code> block &mdash; leave them as the base.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 12 -->
+  <div class="step-card risk-low">
+    <div class="step-header">
+      <h3><span class="step-num">12</span> spectrum-dialog: Full-Screen Type</h3>
+      <span class="risk-badge low">Low Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Add <code>type</code> prop. Default <code>'basic'</code> = current behavior. <code>'full-screen'</code> = edge-to-edge (distinct from <code>size="full"</code> which is 90vw&times;90vh with standard chrome).</p>
+      <span class="file-path">packages/core/src/components/spectrum-dialog/spectrum-dialog.tsx</span>
+      <div class="code-block">
+<span class="comment">// New prop (default = no change)</span>
+@<span class="keyword">Prop</span>() type: <span class="string">'basic'</span> | <span class="string">'full-screen'</span> = <span class="string">'basic'</span>;
+      </div>
+      <table>
+        <tr><th>Attribute</th><th><code>size="full"</code> (existing)</th><th><code>type="full-screen"</code> (new)</th></tr>
+        <tr><td>Dimensions</td><td>90vw &times; 90vh</td><td>100vw &times; 100vh (safe-area inset)</td></tr>
+        <tr><td>Border radius</td><td>Standard (from panel)</td><td>0</td></tr>
+        <tr><td>Backdrop</td><td>Blur + scrim</td><td>No blur, solid scrim</td></tr>
+        <tr><td>Close button</td><td>Optional (prop)</td><td>Always visible in top bar</td></tr>
+      </table>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> Default <code>type='basic'</code> follows the exact same code path as today. <code>full-screen</code> is opt-in only. Component uses <code>shadow: true</code>.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 3: LAYOUTS -->
+<section id="layouts">
+  <h2><span class="material-symbols-outlined">grid_view</span> Part 3: Canonical Layout Shells</h2>
+  <p class="desc">New layout components inspired by M3 canonical patterns, plus fixing the broken spectrum-sidebar.</p>
+
+  <!-- Step 13 -->
+  <div class="step-card risk-high">
+    <div class="step-header">
+      <h3><span class="step-num">13</span> Fix spectrum-sidebar SCSS (Bug Fix)</h3>
+      <span class="risk-badge high">High Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Current SCSS is literally <code>:host { display: block; }</code>. The component has full TSX logic (flex layout, widths, gaps, responsive, overlay, collapsed) but <strong>zero CSS implementation</strong>. Consumers today get vertically stacked <code>&lt;aside&gt;</code> + <code>&lt;main&gt;</code> (browser block flow).</p>
+      <div class="code-block">
+<span class="comment">/* TODAY (broken) */</span>
+:host {
+  <span class="prop">display</span>: <span class="value">block</span>;
+}
+
+<span class="comment">/* AFTER FIX (implements documented behavior) */</span>
+:host {
+  <span class="prop">display</span>: <span class="value">block</span>;
+}
+.spectrum-sidebar {
+  <span class="prop">display</span>: <span class="value">flex</span>;
+  <span class="prop">min-height</span>: <span class="value">0</span>;
+  <span class="prop">gap</span>: <span class="value">var(--sidebar-gap, 1rem)</span>;
+}
+.spectrum-sidebar<span class="prop">--right</span> {
+  <span class="prop">flex-direction</span>: <span class="value">row-reverse</span>;
+}
+.spectrum-sidebar__sidebar {
+  <span class="prop">flex-shrink</span>: <span class="value">0</span>;
+  <span class="prop">width</span>: <span class="value">var(--sidebar-width, 280px)</span>;
+}
+.spectrum-sidebar__content {
+  <span class="prop">flex</span>: <span class="value">1</span>;
+  <span class="prop">min-width</span>: <span class="value">0</span>;
+}
+<span class="comment">/* + collapsed, overlay, responsive breakpoint rules */</span>
+      </div>
+      <div class="warning">
+        <span class="material-symbols-outlined">warning</span>
+        <span><strong>Breaking for existing consumers:</strong> Anyone using <code>&lt;spectrum-sidebar&gt;</code> today sees a vertical stack. After this fix, they'll see a proper sidebar layout. However: the component was <em>never functional</em> &mdash; its documented purpose is "sidebar + main content layout" which it never delivered. This is a bug fix, not a behavior change from its API contract.</span>
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Mitigation:</strong> Component uses <code>shadow: true</code> so external CSS isn't involved. Ship as part of a documented minor version bump. Consumers who relied on the broken vertical stacking (unlikely) can switch to <code>&lt;spectrum-stack&gt;</code> for that pattern.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 14 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">14</span> spectrum-list-detail (New Component)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>M3 canonical "list-detail" pattern. Two-pane adaptive layout that responds to viewport size.</p>
+      <table>
+        <tr><th>Breakpoint</th><th>Behavior</th></tr>
+        <tr><td>Expanded (840px+)</td><td>Side-by-side: list panel + detail panel</td></tr>
+        <tr><td>Medium (600-840px)</td><td>Narrower list, wider detail</td></tr>
+        <tr><td>Compact (&lt;600px)</td><td>Show one pane at a time (list OR detail) with navigation</td></tr>
+      </table>
+      <div class="code-block">
+<span class="comment">&lt;!-- Usage --&gt;</span>
+&lt;<span class="tag">spectrum-list-detail</span>&gt;
+  &lt;<span class="tag">div</span> <span class="prop">slot</span>=<span class="string">"list"</span>&gt;
+    <span class="comment">&lt;!-- Navigation list items --&gt;</span>
+  &lt;/<span class="tag">div</span>&gt;
+  &lt;<span class="tag">div</span> <span class="prop">slot</span>=<span class="string">"detail"</span>&gt;
+    <span class="comment">&lt;!-- Detail content --&gt;</span>
+  &lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">spectrum-list-detail</span>&gt;
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> Brand new component. Does not exist in any project. Purely additive to the library.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 15 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">15</span> spectrum-supporting-pane (New Component)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Main content + auxiliary side panel that can overlay or collapse on smaller viewports.</p>
+      <div class="code-block">
+&lt;<span class="tag">spectrum-supporting-pane</span> <span class="prop">pane-position</span>=<span class="string">"right"</span> <span class="prop">pane-width</span>=<span class="string">"360px"</span>&gt;
+  &lt;<span class="tag">main</span>&gt;Primary content&lt;/<span class="tag">main</span>&gt;
+  &lt;<span class="tag">aside</span> <span class="prop">slot</span>=<span class="string">"pane"</span>&gt;Auxiliary info&lt;/<span class="tag">aside</span>&gt;
+&lt;/<span class="tag">spectrum-supporting-pane</span>&gt;
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 16 -->
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">16</span> spectrum-feed (New Component)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Single-column constrained content stream with optional sticky header/footer. Think social feed, activity log, or article list.</p>
+      <div class="code-block">
+&lt;<span class="tag">spectrum-feed</span> <span class="prop">max-width</span>=<span class="string">"680px"</span> <span class="prop">sticky-header</span>&gt;
+  &lt;<span class="tag">header</span> <span class="prop">slot</span>=<span class="string">"header"</span>&gt;Feed Title&lt;/<span class="tag">header</span>&gt;
+  <span class="comment">&lt;!-- Feed items (default slot) --&gt;</span>
+  &lt;<span class="tag">spectrum-card</span>&gt;...&lt;/<span class="tag">spectrum-card</span>&gt;
+  &lt;<span class="tag">spectrum-card</span>&gt;...&lt;/<span class="tag">spectrum-card</span>&gt;
+&lt;/<span class="tag">spectrum-feed</span>&gt;
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 17 -->
+  <div class="step-card risk-low">
+    <div class="step-header">
+      <h3><span class="step-num">17</span> Mobile-Adaptive Behavior</h3>
+      <span class="risk-badge low">Low Risk</span>
+    </div>
+    <div class="step-body">
+      <p>Add drawer overlay mode and <code>bottom-nav</code> slot to layout shells. Opt-in via props &mdash; existing behavior unchanged unless activated.</p>
+      <div class="code-block">
+<span class="comment">&lt;!-- Drawer mode: sidebar becomes overlay on compact --&gt;</span>
+&lt;<span class="tag">spectrum-app-layout</span> <span class="prop">drawer-mobile</span>&gt;
+  &lt;<span class="tag">nav</span> <span class="prop">slot</span>=<span class="string">"sidebar"</span>&gt;...&lt;/<span class="tag">nav</span>&gt;
+  &lt;<span class="tag">nav</span> <span class="prop">slot</span>=<span class="string">"bottom-nav"</span>&gt;
+    <span class="comment">&lt;!-- Shown only on compact viewports --&gt;</span>
+  &lt;/<span class="tag">nav</span>&gt;
+  &lt;<span class="tag">main</span>&gt;Content&lt;/<span class="tag">main</span>&gt;
+&lt;/<span class="tag">spectrum-app-layout</span>&gt;
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> New props default to <code>false</code> / empty. The <code>bottom-nav</code> slot is new and won't render if not filled. Existing <code>spectrum-app-layout</code> usage is unaffected.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 4: NAMING -->
+<section id="naming">
+  <h2><span class="material-symbols-outlined">swap_horiz</span> Part 4: Variant Naming Alignment <span class="optional-badge">Optional</span></h2>
+  <p class="desc">Add M3-standard variant names as aliases alongside existing Spectrum names. Non-breaking via union types. Old names kept, new names added.</p>
+
+  <div class="step-card risk-low">
+    <div class="step-header">
+      <h3><span class="step-num">18</span> Button: Add M3 Aliases + Elevated Variant</h3>
+      <span class="risk-badge low">Low Risk</span>
+    </div>
+    <div class="step-body">
+      <table>
+        <tr><th>Current Name (kept)</th><th>New M3 Alias (added)</th><th>Resolves To</th></tr>
+        <tr><td><code>variant="primary"</code></td><td><code>variant="filled"</code></td><td>Same styles</td></tr>
+        <tr><td><code>variant="secondary"</code></td><td><code>variant="tonal"</code></td><td>Same styles</td></tr>
+        <tr><td><code>variant="ghost"</code></td><td><code>variant="text"</code></td><td>Same styles</td></tr>
+        <tr><td><code>variant="outline"</code></td><td>(already M3 name)</td><td>No change</td></tr>
+        <tr><td><code>variant="fab"</code></td><td>(already M3 name)</td><td>No change</td></tr>
+        <tr><td>&mdash;</td><td><code>variant="elevated"</code></td><td><strong>New:</strong> surface bg + shadow</td></tr>
+      </table>
+      <div class="code-block">
+<span class="comment">// Implementation: union type with internal normalization</span>
+@<span class="keyword">Prop</span>() variant:
+  | <span class="string">'primary'</span> | <span class="string">'filled'</span>       <span class="comment">// aliases</span>
+  | <span class="string">'secondary'</span> | <span class="string">'tonal'</span>     <span class="comment">// aliases</span>
+  | <span class="string">'ghost'</span> | <span class="string">'text'</span>           <span class="comment">// aliases</span>
+  | <span class="string">'outline'</span> | <span class="string">'fab'</span>
+  | <span class="string">'elevated'</span>                   <span class="comment">// new</span>
+  | <span class="string">'success'</span> | <span class="string">'warning'</span> | <span class="string">'danger'</span>
+  = <span class="string">'primary'</span>;
+
+<span class="comment">// Internal mapping (no external behavior change)</span>
+<span class="keyword">private</span> normalizeVariant(v: <span class="keyword">string</span>): <span class="keyword">string</span> {
+  <span class="keyword">const</span> aliases = { filled: <span class="string">'primary'</span>, tonal: <span class="string">'secondary'</span>, text: <span class="string">'ghost'</span> };
+  <span class="keyword">return</span> aliases[v] || v;
+}
+      </div>
+      <div class="mitigation">
+        <span class="material-symbols-outlined">verified</span>
+        <span><strong>Why safe:</strong> Existing variant names continue to work identically. New names are aliases that resolve to the same CSS classes. <code>"elevated"</code> is purely additive (new styles). Can deprecate old names in JSDoc and remove in next major version.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">19</span> Badge: Add <code>type</code> Prop (dot vs label)</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>M3 distinguishes "small dot" (notification indicator) from "large badge with text". Add a <code>type</code> prop to expose this. Default <code>'label'</code> = current behavior.</p>
+      <div class="code-block">
+@<span class="keyword">Prop</span>() type: <span class="string">'dot'</span> | <span class="string">'label'</span> = <span class="string">'label'</span>;
+
+<span class="comment">/* dot: fixed 8px circle, ignores text prop */</span>
+<span class="comment">/* label: current behavior (shows text) */</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card risk-none">
+    <div class="step-header">
+      <h3><span class="step-num">20</span> Chip Filter: Richer Selected States</h3>
+      <span class="risk-badge none">No Risk</span>
+    </div>
+    <div class="step-body">
+      <p>After Step 10 wires <code>selected</code>, enrich the filter chip specifically: checkmark icon appears, elevation lifts, distinct selected palette per M3 spec.</p>
+      <div class="code-block">
+<span class="comment">/* Filter chip selected state (additive CSS) */</span>
+.spectrum-chip<span class="prop">--filter</span>.spectrum-chip<span class="prop">--selected</span> {
+  <span class="prop">--chip-background</span>: <span class="value">var(--spectrum-sys-color-secondary-container)</span>;
+  <span class="prop">--chip-color</span>: <span class="value">var(--spectrum-color-on-secondary-container)</span>;
+}
+.spectrum-chip<span class="prop">--filter</span>.spectrum-chip<span class="prop">--selected</span> .spectrum-chip__icon--leading {
+  <span class="comment">/* Show checkmark icon via content swap */</span>
+}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXECUTION ORDER -->
+<section id="order">
+  <h2><span class="material-symbols-outlined">timeline</span> Execution Order (Risk-Ranked)</h2>
+  <p class="desc">Steps ordered by: lowest risk first, dependencies respected. This ensures existing projects are never affected until the single documented breaking fix (sidebar).</p>
+
+  <table>
+    <tr><th>Order</th><th>Step</th><th>Risk</th><th>Rationale</th></tr>
+    <tr><td>1</td><td>Elevation tokens</td><td style="color:var(--risk-none-text)">None</td><td>Purely additive, unlocks other steps</td></tr>
+    <tr><td>2</td><td>Shape corner tokens</td><td style="color:var(--risk-none-text)">None</td><td>Purely additive</td></tr>
+    <tr><td>3</td><td>Typescale tokens</td><td style="color:var(--risk-none-text)">None</td><td>Purely additive</td></tr>
+    <tr><td>4</td><td>Motion tokens</td><td style="color:var(--risk-none-text)">None</td><td>New namespace, zero existing references</td></tr>
+    <tr><td>5</td><td>State layers + surface containers</td><td style="color:var(--risk-none-text)">None</td><td>Additive, fixes hero nav background</td></tr>
+    <tr><td>6</td><td>Wire spectrum-colors.css</td><td style="color:var(--risk-none-text)">None</td><td>No conflicts found</td></tr>
+    <tr><td>7</td><td>Deprecate legacy (comments)</td><td style="color:var(--risk-none-text)">None</td><td>No-op change</td></tr>
+    <tr><td>8</td><td>Sync copies</td><td style="color:var(--risk-none-text)">None</td><td>Housekeeping</td></tr>
+    <tr><td>9</td><td>Spacing expansion</td><td style="color:var(--risk-low-text)">Low</td><td>Fixed 4px for 2xs avoids score-card regression</td></tr>
+    <tr><td>10</td><td>Chip selected state</td><td style="color:var(--risk-low-text)">Low</td><td>Shadow DOM protects; additive class</td></tr>
+    <tr><td>11</td><td>Dialog full-screen type</td><td style="color:var(--risk-low-text)">Low</td><td>New prop, default=current behavior</td></tr>
+    <tr><td>12</td><td>New layout: spectrum-list-detail</td><td style="color:var(--risk-none-text)">None</td><td>New component</td></tr>
+    <tr><td>13</td><td>New layout: spectrum-supporting-pane</td><td style="color:var(--risk-none-text)">None</td><td>New component</td></tr>
+    <tr><td>14</td><td>New layout: spectrum-feed</td><td style="color:var(--risk-none-text)">None</td><td>New component</td></tr>
+    <tr><td>15</td><td>Mobile-adaptive behavior</td><td style="color:var(--risk-low-text)">Low</td><td>New props default to off</td></tr>
+    <tr><td>16</td><td>Text-input filled variant</td><td style="color:var(--risk-medium-text)">Medium</td><td>shadow:false; keep base rules untouched</td></tr>
+    <tr><td>17</td><td><strong>Sidebar SCSS fix</strong></td><td style="color:var(--risk-high-text)">High</td><td>Visual change for existing consumers (documented bug fix)</td></tr>
+    <tr><td>18</td><td>Button variant aliases (optional)</td><td style="color:var(--risk-low-text)">Low</td><td>Union types, internal mapping</td></tr>
+    <tr><td>19</td><td>Badge dot type (optional)</td><td style="color:var(--risk-none-text)">None</td><td>New prop, default=current</td></tr>
+    <tr><td>20</td><td>Chip filter enrichment (optional)</td><td style="color:var(--risk-none-text)">None</td><td>Additive CSS on selected state</td></tr>
+  </table>
+</section>
+
+<footer style="text-align:center;padding:2rem;color:var(--text3);font-size:.8rem;border-top:1px solid var(--border-light);margin-top:3rem">
+  <p><strong>Spectrum Design System</strong> &mdash; M3 Richness Migration Plan</p>
+  <p>Generated from repository analysis &middot; github.com/emamirelar/spectrum</p>
+  <p style="margin-top:.5rem">Guiding principle: <strong>Add rather than modify or delete existing.</strong></p>
+</footer>
+
+</body>
+</html>
